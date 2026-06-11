@@ -25,6 +25,18 @@ jobs:
       - name: Setup Android-SDK
         uses: android-actions/setup-android@v3
 
+      - name: Prepare Android SDK for Gradle
+        run: |
+          set -euo pipefail
+          SDK_DIR="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          if [ -z "$SDK_DIR" ] || [ ! -d "$SDK_DIR" ]; then
+            echo "Android SDK path was not exported by setup-android." >&2
+            exit 1
+          fi
+          yes | sdkmanager --licenses >/dev/null
+          sdkmanager "platform-tools" "platforms;android-37"
+          printf 'sdk.dir=%s\n' "$SDK_DIR" > local.properties
+
       - name: Create private.properties for build
         env:
           PRIVATE_PROPERTIES: ${{ secrets.PRIVATE_PROPERTIES }}
