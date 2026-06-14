@@ -39,7 +39,7 @@ fun HypothesisCard(
     val statusColor = when (statusEnum) {
         HypothesisStatus.SUPPORTED -> MaterialTheme.colorScheme.primary
         HypothesisStatus.CONTRADICTED -> MaterialTheme.colorScheme.error
-        HypothesisStatus.INCONCLUSIVE -> RhythmColors.warning
+        HypothesisStatus.INCONCLUSIVE -> MaterialTheme.colorScheme.primary
         HypothesisStatus.UNTESTED -> MaterialTheme.colorScheme.surfaceVariant
     }
 
@@ -112,13 +112,13 @@ fun HypothesisStatusBadge(
     val backgroundColor = when (statusEnum) {
         HypothesisStatus.SUPPORTED -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
         HypothesisStatus.CONTRADICTED -> MaterialTheme.colorScheme.error.copy(alpha = 0.15f)
-        HypothesisStatus.INCONCLUSIVE -> (MaterialTheme.colorScheme.warning ?: MaterialTheme.colorScheme.primary).copy(alpha = 0.15f)
+        HypothesisStatus.INCONCLUSIVE -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
         HypothesisStatus.UNTESTED -> MaterialTheme.colorScheme.surfaceVariant
     }
     val textColor = when (statusEnum) {
         HypothesisStatus.SUPPORTED -> MaterialTheme.colorScheme.primary
         HypothesisStatus.CONTRADICTED -> MaterialTheme.colorScheme.error
-        HypothesisStatus.INCONCLUSIVE -> MaterialTheme.colorScheme.warning ?: MaterialTheme.colorScheme.primary
+        HypothesisStatus.INCONCLUSIVE -> MaterialTheme.colorScheme.primary
         HypothesisStatus.UNTESTED -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 

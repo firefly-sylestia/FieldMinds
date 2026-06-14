@@ -34,7 +34,11 @@ fun WeatherDatabaseScreen(
 
     val stats = remember(weatherObs) {
         val temps = weatherObs.mapNotNull { it.weatherTemperature }
-        val humidities = weatherObs.mapNotNull { it.weatherHumidity?.toDoubleOrNull() }
+        val humidities = weatherObs.mapNotNull { 
+            it.weatherHumidity?.let { humidity ->
+                if (humidity is Number) humidity.toDouble() else humidity.toString().toDoubleOrNull()
+            }
+        }
         mapOf(
             "avg_temp" to if (temps.isNotEmpty()) temps.average() else null,
             "min_temp" to temps.minOrNull(),

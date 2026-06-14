@@ -125,8 +125,8 @@ fun ConfidenceSummaryCard(
     }
     val confidenceColor = when {
         confidencePercent >= 80 -> MaterialTheme.colorScheme.primary
-        confidencePercent >= 60 -> MaterialTheme.colorScheme.info ?: MaterialTheme.colorScheme.primary
-        confidencePercent >= 40 -> MaterialTheme.colorScheme.warning ?: MaterialTheme.colorScheme.primary
+        confidencePercent >= 60 -> MaterialTheme.colorScheme.primary
+        confidencePercent >= 40 -> MaterialTheme.colorScheme.primary
         else -> MaterialTheme.colorScheme.error
     }
 
