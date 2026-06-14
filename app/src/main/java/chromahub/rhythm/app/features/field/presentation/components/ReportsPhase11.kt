@@ -133,6 +133,10 @@ fun ReportPreviewCard(
                     AssistChip(onClick = {}, label = { Text("+${sections.size - 3}") })
                 }
             }
+                if (sections.size > 3) {
+                    AssistChip(onClick = {}, label = { Text("+${sections.size - 3}") })
+                }
+            }
         }
     }
 }
@@ -206,8 +210,6 @@ fun AutoGenerateReportOption(
                 Text("Generate draft report", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                 Text("Auto-create from your observations, data, and hypotheses", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            Icon(imageVector = Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-        }
             Icon(imageVector = Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
         }
     }

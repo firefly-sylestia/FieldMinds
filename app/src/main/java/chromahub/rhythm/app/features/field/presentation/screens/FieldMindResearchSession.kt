@@ -216,7 +216,7 @@ fun ResearchSessionScreen(
             startedAt = sessionStartedAt.takeIf { it > 0L },
             endedAt = System.currentTimeMillis(),
             durationMs = sessionElapsedMs,
-            timeNote = "Captured at ${formatTime(sessionElapsedMs)} in $sessionName"
+            timeNote = "Captured at ${formatSessionTime(sessionElapsedMs)} in $sessionName"
         ) { observationId ->
             activeSessionId?.let { viewModel.linkObservationToSession(it, observationId) }
             observationCount++
@@ -257,7 +257,7 @@ fun ResearchSessionScreen(
                         Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             Text("Session Complete", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                                MetricTile("Duration", formatTime(sessionElapsedMs), FieldMindIcons.Calendar, Modifier.weight(1f))
+                                MetricTile("Duration", formatSessionTime(sessionElapsedMs), FieldMindIcons.Calendar, Modifier.weight(1f))
                                 MetricTile("Observations", "$observationCount", FieldMindIcons.Observation, Modifier.weight(1f))
                             }
                             if (sessionName.isNotBlank()) {
@@ -307,7 +307,7 @@ fun ResearchSessionScreen(
                             Box(Modifier.size(16.dp).clip(CircleShape).background(MaterialTheme.colorScheme.error.copy(alpha = pulseAlpha)))
                             Column(Modifier.weight(1f)) {
                                 Text(sessionName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                                Text(formatTime(sessionElapsedMs), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                Text(formatSessionTime(sessionElapsedMs), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                                 Text("$observationCount observation${if (observationCount != 1) "s" else ""} captured", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f))
                             }
                         }

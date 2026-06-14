@@ -907,7 +907,7 @@ fun GoalStatChip(icon: MaterialSymbolIcon, label: String, tint: androidx.compose
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Icon(icon = icon, contentDescription = null, tint = tint, size = 14.dp)
+        Icon(icon = icon, contentDescription = null, tint = tint, modifier = Modifier.size(14.dp))
         Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = tint)
     }
 }
@@ -935,7 +935,6 @@ fun HomeWidgetGrid(
     FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp), maxItemsInEachRow = 2) {
         widgets.forEach { widget -> HomeWidgetCard(widget, Modifier.weight(1f)) { onNavigate(widget.screen) } }
     }
-}
 }
 
 
