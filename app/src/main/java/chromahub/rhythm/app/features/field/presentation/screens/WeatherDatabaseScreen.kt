@@ -35,20 +35,24 @@ fun WeatherDatabaseScreen(
     val observations by viewModel.observations.collectAsState()
     val colors = FieldMindTheme.colors
 
-    // ── Live current weather with auto-refresh ──
-    var currentWeather by remember { mutableStateOf<WeatherSnapshot?>(null) }
-    var weatherError by remember { mutableStateOf(false) }
-    var isRefreshing by remember { mutableStateOf(false) }
+    // ── Shared live weather state (hoisted in the ViewModel) ──
+    val currentWeather by viewModel.currentWeather.collectAsState()
+    val weatherError by viewModel.weatherError.collectAsState()
+    val isRefreshing by viewModel.weatherLoading.collectAsState()
 
-    // Refresh on screen open and every 30 minutes
+    // ── Customizable metrics ──
+    val metricsCsv by viewModel.fieldSettings.weatherDashboardMetrics.collectAsState()
+    val visibleMetrics = remember(metricsCsv) {
+        metricsCsv.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet()
+    }
+    var showCustomize by remember { mutableStateOf(false) }
+
+    // Refresh on screen open (no-op if already loaded), then auto-refresh every 30 minutes.
     LaunchedEffect(Unit) {
+        viewModel.refreshWeather(force = false)
         while (true) {
-            isRefreshing = true
-            val snapshot = viewModel.refreshWeatherFromLocation()
-            currentWeather = snapshot
-            weatherError = snapshot == null
-            isRefreshing = false
             delay(30 * 60 * 1000L) // 30 minutes
+            viewModel.refreshWeather()
         }
     }
 
@@ -91,7 +95,32 @@ fun WeatherDatabaseScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
             // ── Live Current Weather Card ──
-            item { LiveCurrentWeatherCard(currentWeather, weatherError, isRefreshing) }
+            item { LiveCurrentWeatherCard(currentWeather, weatherError, isRefreshing, visibleMetrics) }
+
+            // ── Customize which metrics appear ──
+            item {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(14.dp))
+                        .clickable { showCustomize = true }
+                        .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Icon(FieldMindIcons.Settings, null, tint = colors.info, size = 20.dp)
+                    Column(Modifier.weight(1f)) {
+                        Text("Customize metrics", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                        Text(
+                            "${visibleMetrics.size} of ${FieldMindSettings.WEATHER_METRIC_KEYS.size} shown",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Icon(FieldMindIcons.Edit, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
+                }
+            }
 
             // Stats summary
             item {

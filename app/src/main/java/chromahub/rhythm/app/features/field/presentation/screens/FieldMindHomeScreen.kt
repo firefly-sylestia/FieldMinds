@@ -26,7 +26,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.data.database.entity.*
-import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
 import fieldmind.research.app.features.field.data.learn.LearnResource
 import fieldmind.research.app.features.field.data.learn.LearnLibrary
 import fieldmind.research.app.features.field.data.stats.FieldMindStreaks
@@ -91,7 +90,13 @@ fun HomeScreen(
         item { HomeHeroSection(todayCount, goal, currentStreak, observations.size, questions.size, onOpenSettings, onNavigate) }
 
         // ── Live Weather Dashboard Widget ──
-        item { LiveWeatherDashboardWidget(viewModel, observations) }
+        item {
+            LiveWeatherDashboardWidget(
+                viewModel = viewModel,
+                observations = observations,
+                onOpenDashboard = { onNavigate(FieldMindScreen.WeatherDatabase) }
+            )
+        }
 
         // ── Daily Goal ──
         item { DailyGoalCard(todayCount, goal, currentStreak) { onNavigate(FieldMindScreen.Observe) } }
@@ -360,34 +365,35 @@ private fun timeOfDay(): String {
 @Composable
 private fun LiveWeatherDashboardWidget(
     viewModel: FieldMindViewModel,
-    observations: List<ObservationEntity>
+    observations: List<ObservationEntity>,
+    onOpenDashboard: () -> Unit
 ) {
     val colors = FieldMindTheme.colors
-    var currentWeather by remember { mutableStateOf<WeatherSnapshot?>(null) }
-    var weatherLoading by remember { mutableStateOf(false) }
-    var weatherError by remember { mutableStateOf(false) }
-    var isRotating by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
+    // Weather state is hoisted in the ViewModel so it survives this widget being scrolled
+    // off-screen (and disposed) — no more reload/flicker when scrolling back to the top.
+    val currentWeather by viewModel.currentWeather.collectAsState()
+    val weatherLoading by viewModel.weatherLoading.collectAsState()
+    val weatherError by viewModel.weatherError.collectAsState()
     val refreshRotation = remember { Animatable(0f) }
 
-    // Load weather on composition
+    // Load weather once on first composition (no-op if already loaded).
     LaunchedEffect(Unit) {
-        weatherLoading = true
-        val snapshot = viewModel.refreshWeatherFromLocation()
-        currentWeather = snapshot
-        weatherError = snapshot == null
-        weatherLoading = false
+        viewModel.refreshWeather(force = false)
     }
 
-    // Auto-refresh every 30 minutes
+    // Auto-refresh every 30 minutes while the widget is on-screen.
     LaunchedEffect(Unit) {
         while (true) {
             delay(30 * 60 * 1000L)
-            weatherLoading = true
-            val snapshot = viewModel.refreshWeatherFromLocation()
-            currentWeather = snapshot
-            weatherError = snapshot == null
-            weatherLoading = false
+            viewModel.refreshWeather()
+        }
+    }
+
+    // Spin the refresh icon whenever a load is in progress.
+    LaunchedEffect(weatherLoading) {
+        if (weatherLoading) {
+            refreshRotation.snapTo(0f)
+            refreshRotation.animateTo(360f, tween(700, easing = LinearEasing))
         }
     }
 
@@ -431,21 +437,7 @@ private fun LiveWeatherDashboardWidget(
             .animateContentSize(
                 animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing)
             )
-            .clickable {
-                if (!weatherLoading) {
-                    scope.launch {
-                        isRotating = true
-                        refreshRotation.animateTo(360f, tween(400))
-                        refreshRotation.snapTo(0f)
-                        isRotating = false
-                        weatherLoading = true
-                        val snapshot = viewModel.refreshWeatherFromLocation()
-                        currentWeather = snapshot
-                        weatherError = snapshot == null
-                        weatherLoading = false
-                    }
-                }
-            },
+            .clickable { onOpenDashboard() },
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
@@ -512,7 +504,7 @@ private fun LiveWeatherDashboardWidget(
                     Text(
                         when {
                             weatherLoading -> "Updating…"
-                            currentWeather != null -> "Tap to refresh • ${currentWeather?.weatherDescription ?: ""}"
+                            currentWeather != null -> "Tap to open dashboard • ${currentWeather?.weatherDescription ?: ""}"
                             weatherError -> "Enable location for live weather"
                             else -> "Weather unavailable"
                         },
@@ -520,13 +512,14 @@ private fun LiveWeatherDashboardWidget(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                // Refresh button
+                // Refresh button — tapping the icon refreshes (without opening the dashboard)
                 Icon(
-                    FieldMindIcons.Weather,
+                    FieldMindIcons.Refresh,
                     null,
                     tint = if (currentWeather != null) conditionColor else MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
                         .clip(CircleShape)
+                        .clickable(enabled = !weatherLoading) { viewModel.refreshWeather() }
                         .background(
                             if (currentWeather != null) conditionColor.copy(alpha = 0.12f)
                             else MaterialTheme.colorScheme.surfaceContainerHigh

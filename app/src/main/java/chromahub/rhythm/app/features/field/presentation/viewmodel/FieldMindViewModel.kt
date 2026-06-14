@@ -9,8 +9,10 @@ import fieldmind.research.app.features.field.data.repository.FieldMindRepository
 import fieldmind.research.app.features.field.data.export.FieldMindExport
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -341,6 +343,35 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
     private val weatherService = fieldmind.research.app.features.field.data.weather.WeatherApiService()
     var lastWeatherSnapshot: fieldmind.research.app.features.field.data.weather.WeatherSnapshot? = null
         private set
+
+    // Hoisted live-weather state so the Today widget and Weather dashboard share a single
+    // source of truth that survives composable disposal (e.g. scrolling the widget off-screen)
+    // instead of re-fetching on every recomposition.
+    private val _currentWeather = MutableStateFlow<WeatherSnapshot?>(null)
+    val currentWeather: StateFlow<WeatherSnapshot?> = _currentWeather.asStateFlow()
+
+    private val _weatherLoading = MutableStateFlow(false)
+    val weatherLoading: StateFlow<Boolean> = _weatherLoading.asStateFlow()
+
+    private val _weatherError = MutableStateFlow(false)
+    val weatherError: StateFlow<Boolean> = _weatherError.asStateFlow()
+
+    /**
+     * Refreshes live weather from the device location and publishes it to [currentWeather].
+     * Safe to call repeatedly — concurrent calls are ignored while one is in flight.
+     * When [force] is false and weather is already loaded, this is a no-op (used for the
+     * initial load so re-entering the screen doesn't trigger an unnecessary fetch).
+     */
+    fun refreshWeather(force: Boolean = true) = viewModelScope.launch {
+        if (_weatherLoading.value) return@launch
+        if (!force && _currentWeather.value != null) return@launch
+        _weatherLoading.value = true
+        val snapshot = refreshWeatherFromLocation()
+        _currentWeather.value = snapshot
+        _weatherError.value = snapshot == null
+        _weatherLoading.value = false
+    }
+
     fun fetchWeatherForLocation(latitude: Double, longitude: Double) = viewModelScope.launch {
         lastWeatherSnapshot = weatherService.fetchWeather(latitude, longitude)
     }

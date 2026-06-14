@@ -115,6 +115,13 @@ class FieldMindSettings private constructor(context: Context) {
     private val _gpsMode = MutableStateFlow(prefs.getString(KEY_GPS_MODE, "On capture only") ?: "On capture only")
     val gpsMode: StateFlow<String> = _gpsMode.asStateFlow()
 
+    /**
+     * Comma-separated list of weather metrics the user wants shown on the Weather dashboard's
+     * "current conditions" card. Defaults to all metrics. See [DEFAULT_WEATHER_METRICS].
+     */
+    private val _weatherDashboardMetrics = MutableStateFlow(prefs.getString(KEY_WEATHER_METRICS, DEFAULT_WEATHER_METRICS) ?: DEFAULT_WEATHER_METRICS)
+    val weatherDashboardMetrics: StateFlow<String> = _weatherDashboardMetrics.asStateFlow()
+
     // ── Security settings ──
     private val _lockTimeout = MutableStateFlow(prefs.getString(KEY_LOCK_TIMEOUT, "Immediate") ?: "Immediate")
     val lockTimeout: StateFlow<String> = _lockTimeout.asStateFlow()
@@ -175,6 +182,7 @@ class FieldMindSettings private constructor(context: Context) {
     fun setTempUnit(value: String) = edit(KEY_TEMP_UNIT, value) { _tempUnit.value = value }
     fun setWeatherRefreshInterval(value: String) = edit(KEY_WEATHER_REFRESH, value) { _weatherRefreshInterval.value = value }
     fun setGpsMode(value: String) = edit(KEY_GPS_MODE, value) { _gpsMode.value = value }
+    fun setWeatherDashboardMetrics(value: String) = edit(KEY_WEATHER_METRICS, value) { _weatherDashboardMetrics.value = value }
     fun setLockTimeout(value: String) = edit(KEY_LOCK_TIMEOUT, value) { _lockTimeout.value = value }
     fun setAutoLockOnBackground(value: Boolean) = edit(KEY_AUTO_LOCK_BACKGROUND, value) { _autoLockOnBackground.value = value }
 
@@ -222,6 +230,19 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_TEMP_UNIT = "temp_unit"
         private const val KEY_WEATHER_REFRESH = "weather_refresh"
         private const val KEY_GPS_MODE = "gps_mode"
+        private const val KEY_WEATHER_METRICS = "weather_dashboard_metrics"
+        /** All available metric keys, in display order. */
+        val WEATHER_METRIC_KEYS = listOf("temperature", "condition", "humidity", "wind", "cloud", "pressure")
+        const val DEFAULT_WEATHER_METRICS = "temperature,condition,humidity,wind,cloud,pressure"
+        fun weatherMetricLabel(key: String): String = when (key) {
+            "temperature" -> "Temperature"
+            "condition" -> "Condition"
+            "humidity" -> "Humidity"
+            "wind" -> "Wind"
+            "cloud" -> "Cloud cover"
+            "pressure" -> "Pressure"
+            else -> key.replaceFirstChar { it.uppercase() }
+        }
         private const val KEY_LOCK_TIMEOUT = "lock_timeout"
         private const val KEY_AUTO_LOCK_BACKGROUND = "auto_lock_background"
     }
