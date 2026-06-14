@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,23 +56,23 @@ fun ResearchSessionScreen(
     val defaultConfidence by viewModel.fieldSettings.defaultConfidence.collectAsState()
 
     // Session state
-    var sessionActive by remember { mutableStateOf(false) }
-    var sessionName by remember { mutableStateOf("") }
-    var selectedProjectId by remember { mutableStateOf<Long?>(null) }
-    var sessionElapsedMs by remember { mutableLongStateOf(0L) }
-    var observationCount by remember { mutableIntStateOf(0) }
-    var sessionStartedAt by remember { mutableLongStateOf(0L) }
-    var showSummary by remember { mutableStateOf(false) }
+    var sessionActive by rememberSaveable { mutableStateOf(false) }
+    var sessionName by rememberSaveable { mutableStateOf("") }
+    var selectedProjectId by rememberSaveable { mutableStateOf<Long?>(null) }
+    var sessionElapsedMs by rememberSaveable { mutableLongStateOf(0L) }
+    var observationCount by rememberSaveable { mutableIntStateOf(0) }
+    var sessionStartedAt by rememberSaveable { mutableLongStateOf(0L) }
+    var showSummary by rememberSaveable { mutableStateOf(false) }
 
     // Quick observation input
-    var quickSubject by remember { mutableStateOf("") }
-    var quickFacts by remember { mutableStateOf("") }
-    var quickCategory by remember { mutableStateOf("Other") }
+    var quickSubject by rememberSaveable { mutableStateOf("") }
+    var quickFacts by rememberSaveable { mutableStateOf("") }
+    var quickCategory by rememberSaveable { mutableStateOf("Other") }
 
-    // Timer
-    LaunchedEffect(sessionActive) {
+    // Timer survives navigation/recomposition by preserving the original start time.
+    LaunchedEffect(sessionActive, sessionStartedAt) {
         if (sessionActive) {
-            sessionStartedAt = System.currentTimeMillis()
+            if (sessionStartedAt == 0L) sessionStartedAt = System.currentTimeMillis()
             while (sessionActive) {
                 delay(1000)
                 sessionElapsedMs = System.currentTimeMillis() - sessionStartedAt
@@ -88,11 +89,24 @@ fun ResearchSessionScreen(
         else "%d:%02d".format(minutes, seconds)
     }
 
+    fun smartSessionName(): String {
+        val project = projects.firstOrNull { it.id == selectedProjectId }
+        val dominant = when {
+            quickCategory != "Other" -> quickCategory
+            project?.topicType?.isNotBlank() == true -> project.topicType
+            project?.title?.isNotBlank() == true -> project.title
+            else -> "Field"
+        }
+        val time = java.text.SimpleDateFormat("MMM d • HH:mm", java.util.Locale.getDefault()).format(java.util.Date())
+        return "$dominant session — $time"
+    }
+
     fun startSession() {
         sessionActive = true
         sessionElapsedMs = 0
         observationCount = 0
-        sessionName = sessionName.ifBlank { "Session ${java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date())}" }
+        sessionStartedAt = System.currentTimeMillis()
+        sessionName = sessionName.ifBlank { smartSessionName() }
         haptics.confirm()
     }
 

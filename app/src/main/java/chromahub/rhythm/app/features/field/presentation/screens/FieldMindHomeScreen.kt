@@ -87,16 +87,6 @@ fun HomeScreen(
         // ── Hero Section ──
         item { HomeHeroSection(todayCount, goal, currentStreak, observations.size, questions.size, onOpenSettings, onNavigate) }
 
-        // ── Quick Actions Row ──
-        item {
-            QuickActionsRow(onNavigate)
-        }
-
-        // ── Research Pulse Card (when there's data) ──
-        if (observations.isNotEmpty()) {
-            item { ResearchPulseCard(observations, questions, projects, onNavigate) }
-        }
-
         // ── Weather Card (when observations have weather data) ──
         if (weatherObs != null) {
             item { WeatherStatusCard(observations, viewModel, onNavigate) }
@@ -173,160 +163,76 @@ private fun HomeHeroSection(
     val colors = FieldMindTheme.colors
     val isNewUser = totalObs == 0
 
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                        MaterialTheme.colorScheme.background
-                    )
-                )
-            )
-            .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 8.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            // Top row: Greeting + Settings
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.SpaceBetween
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Box(
+                Modifier
+                    .size(74.dp)
+                    .clip(RoundedCornerShape(22.dp))
+                    .background(colors.observation.copy(alpha = if (colors.isDark) 0.38f else 0.16f)),
+                contentAlignment = Alignment.Center
             ) {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(
-                        if (isNewUser) "Welcome to FieldMind" else "Good ${timeOfDay()}",
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        if (isNewUser) "Start your first observation to begin."
-                        else "You have ${totalObs} observation${if (totalObs != 1) "s" else ""} across your research.",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                Surface(
-                    onClick = onOpenSettings,
-                    shape = RoundedCornerShape(16.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(FieldMindIcons.Settings, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 24.dp)
-                    }
-                }
+                Icon(FieldMindIcons.Nature, null, tint = colors.observation, size = 38.dp)
             }
-
-            // Animated stats row
-            if (!isNewUser) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    HeroStatBubble(
-                        value = todayCount.toString(),
-                        label = "Today",
-                        accent = colors.observation,
-                        modifier = Modifier.weight(1f)
-                    )
-                    HeroStatBubble(
-                        value = "$streakDays",
-                        label = "Day streak",
-                        accent = colors.warning,
-                        modifier = Modifier.weight(1f)
-                    )
-                    HeroStatBubble(
-                        value = "$goal",
-                        label = "Daily goal",
-                        accent = colors.positive,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    "FieldMind",
+                    style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1
+                )
+                Text(
+                    "Observe. Question. Research clearly.",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
-
-            // Quick action chips
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                item {
-                    HeroActionChip(
-                        icon = FieldMindIcons.Camera,
-                        label = "Capture",
-                        accent = colors.observation
-                    ) { onNavigate(FieldMindScreen.Observe) }
-                }
-                item {
-                    HeroActionChip(
-                        icon = FieldMindIcons.Note,
-                        label = "Note",
-                        accent = colors.source
-                    ) { onNavigate(FieldMindScreen.Library) }
-                }
-                item {
-                    HeroActionChip(
-                        icon = FieldMindIcons.Question,
-                        label = "Question",
-                        accent = colors.question
-                    ) { onNavigate(FieldMindScreen.Questions) }
-                }
-                item {
-                    HeroActionChip(
-                        icon = FieldMindIcons.Project,
-                        label = "Project",
-                        accent = colors.project
-                    ) { onNavigate(FieldMindScreen.Projects) }
-                }
-                item {
-                    HeroActionChip(
-                        icon = FieldMindIcons.Session,
-                        label = "Session",
-                        accent = colors.positive
-                    ) { onNavigate(FieldMindScreen.ResearchSession) }
+            Surface(
+                onClick = onOpenSettings,
+                shape = RoundedCornerShape(22.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                tonalElevation = 0.dp,
+                modifier = Modifier.size(64.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(FieldMindIcons.Settings, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 30.dp)
                 }
             }
         }
-    }
-}
 
-@Composable
-private fun HeroStatBubble(
-    value: String,
-    label: String,
-    accent: androidx.compose.ui.graphics.Color,
-    modifier: Modifier = Modifier
-) {
-    // Simple count-up animation
-    val animatedValue = remember { Animatable(0f) }
-    val targetFloat = value.toFloatOrNull() ?: 0f
-    LaunchedEffect(targetFloat) {
-        animatedValue.animateTo(
-            targetValue = targetFloat,
-            animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-        )
-    }
-
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
-        color = accent.copy(alpha = 0.1f),
-        tonalElevation = 0.dp
-    ) {
-        Column(
-            Modifier.padding(16.dp, 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(28.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
-            Text(
-                if (value.toIntOrNull() != null) animatedValue.value.roundToInt().toString() else value,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.ExtraBold,
-                color = accent
-            )
-            Text(
-                label,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text(
+                    if (isNewUser) "Welcome, researcher" else "Good ${timeOfDay()}, researcher",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    if (isNewUser) "Start with one clear observation and build your field story from there."
+                    else "You've logged ${totalObs} observation${if (totalObs == 1) "" else "s"} across your research.",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    HeroActionChip(FieldMindIcons.Camera, "Capture", colors.observation, Modifier.weight(1f)) { onNavigate(FieldMindScreen.Observe) }
+                    HeroActionChip(FieldMindIcons.Note, "Note", colors.source, Modifier.weight(1f)) { onNavigate(FieldMindScreen.Library) }
+                }
+            }
         }
     }
 }
@@ -336,22 +242,25 @@ private fun HeroActionChip(
     icon: MaterialSymbolIcon,
     label: String,
     accent: androidx.compose.ui.graphics.Color,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     val haptics = rememberFieldMindHaptics()
     Surface(
         onClick = { haptics.light(); onClick() },
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        modifier = modifier,
+        shape = RoundedCornerShape(18.dp),
+        color = accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.20f else 0.12f),
         tonalElevation = 0.dp
     ) {
         Row(
-            Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.Center
         ) {
-            Icon(icon, null, tint = accent, size = 20.dp)
-            Text(label, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+            Icon(icon, null, tint = accent, size = 22.dp)
+            Spacer(Modifier.width(8.dp))
+            Text(label, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
@@ -827,12 +736,11 @@ private fun HomeWidgetGrid(
     onNavigate: (FieldMindScreen) -> Unit
 ) {
     val widgets = listOf(
-        HomeWidget("Capture", "${observations.size} observations", FieldMindIcons.Camera, FieldMindTheme.colors.observation, FieldMindScreen.Observe),
-        HomeWidget("Notes", "${notes.size} free-form", FieldMindIcons.Note, FieldMindTheme.colors.source, FieldMindScreen.Library),
         HomeWidget("Questions", "${questions.count { it.status != "Answered" }} open", FieldMindIcons.Question, FieldMindTheme.colors.question, FieldMindScreen.Questions),
         HomeWidget("Sources", "${sources.count { it.readingStatus == "Read" }}/${sources.size} read", FieldMindIcons.Source, FieldMindTheme.colors.source, FieldMindScreen.Library),
         HomeWidget("Projects", "${projects.count { it.status == "Active" }} active", FieldMindIcons.Project, FieldMindTheme.colors.project, FieldMindScreen.Projects),
-        HomeWidget("Outputs", "${data.size} data • ${reports.size} reports", FieldMindIcons.Report, FieldMindTheme.colors.report, FieldMindScreen.Insights)
+        HomeWidget("Data", "${data.size} records", FieldMindIcons.Data, FieldMindTheme.colors.data, FieldMindScreen.Insights),
+        HomeWidget("Outputs", "${reports.size} reports", FieldMindIcons.Report, FieldMindTheme.colors.report, FieldMindScreen.Insights)
     )
     FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp), maxItemsInEachRow = 2) {
         widgets.forEach { widget -> HomeWidgetCard(widget, Modifier.weight(1f)) { onNavigate(widget.screen) } }
