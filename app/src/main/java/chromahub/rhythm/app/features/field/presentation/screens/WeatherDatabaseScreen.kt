@@ -2,6 +2,7 @@ package fieldmind.research.app.features.field.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -11,11 +12,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.data.database.entity.ObservationEntity
+import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.FieldScreenHeader
@@ -201,6 +204,44 @@ fun WeatherDatabaseScreen(
             }
         }
     }
+
+    // ── Metric Customization Dialog ──
+    if (showCustomize) {
+        AlertDialog(
+            onDismissRequest = { showCustomize = false },
+            title = { Text("Show metrics on current conditions card") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    FieldMindSettings.WEATHER_METRIC_KEYS.forEach { metric ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable { 
+                                    val newMetrics = visibleMetrics.toMutableSet()
+                                    if (metric in newMetrics) newMetrics.remove(metric) else newMetrics.add(metric)
+                                    viewModel.fieldSettings.setWeatherDashboardMetrics(newMetrics.joinToString(","))
+                                }
+                                .padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Checkbox(
+                                checked = metric in visibleMetrics,
+                                onCheckedChange = null,
+                                modifier = Modifier.scale(0.9f)
+                            )
+                            Text(FieldMindSettings.weatherMetricLabel(metric), style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showCustomize = false }) {
+                    Text("Done")
+                }
+            }
+        )
+    }
 }
 }
 
@@ -208,7 +249,8 @@ fun WeatherDatabaseScreen(
 private fun LiveCurrentWeatherCard(
     weather: WeatherSnapshot?,
     hasError: Boolean,
-    isRefreshing: Boolean
+    isRefreshing: Boolean,
+    visibleMetrics: Set<String> = FieldMindSettings.WEATHER_METRIC_KEYS.toSet()
 ) {
     val colors = FieldMindTheme.colors
 
@@ -263,7 +305,7 @@ private fun LiveCurrentWeatherCard(
                 }
             }
 
-            // Weather data row
+            // Weather data row (filtered by visible metrics)
             if (weather != null) {
                 Row(
                     Modifier.fillMaxWidth(),
@@ -271,18 +313,20 @@ private fun LiveCurrentWeatherCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Temperature
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            "${weather.temperature?.let { "%.0f°".format(it) } ?: "--"}",
-                            style = MaterialTheme.typography.displaySmall,
-                            fontWeight = FontWeight.Bold,
-                            color = colors.info
-                        )
-                        Text("Temperature", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if ("temperature" in visibleMetrics) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                "${weather.temperature?.let { "%.0f°".format(it) } ?: "--"}",
+                                style = MaterialTheme.typography.displaySmall,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.info
+                            )
+                            Text("Temperature", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
 
                     // Condition
-                    if (weather.weatherDescription.isNotBlank()) {
+                    if ("condition" in visibleMetrics && weather.weatherDescription.isNotBlank()) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
                                 weatherIconForCode(weather.weatherCode),
@@ -294,7 +338,66 @@ private fun LiveCurrentWeatherCard(
                                 weather.weatherDescription,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+
+                    // Humidity
+                    if ("humidity" in visibleMetrics && weather.humidity != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                "${weather.humidity.toInt()}%",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.success
+                            )
+                            Text("Humidity", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+
+                    // Wind
+                    if ("wind" in visibleMetrics && weather.windSpeed != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                "${String.format("%.1f", weather.windSpeed)}m/s",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.warning
+                            )
+                            Text("Wind", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+
+                    // Cloud cover
+                    if ("cloud" in visibleMetrics && weather.cloudCover != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                "${weather.cloudCover.toInt()}%",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.secondary
+                            )
+                            Text("Cloud", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+
+                    // Pressure
+                    if ("pressure" in visibleMetrics && weather.pressure != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                "${weather.pressure.toInt()}hPa",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.tertiary
+                            )
+                            Text("Pressure", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                        }
+                    }
+                }
+            }
                             )
                         }
                     }
