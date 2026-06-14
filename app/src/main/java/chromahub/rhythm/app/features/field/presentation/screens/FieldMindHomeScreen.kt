@@ -40,7 +40,7 @@ import java.time.LocalTime
 import kotlin.math.roundToInt
 
 // ══════════════════════════════════════════════════════════════════════
-//  Today (Home) — Redesigned with Hero Section & Research Pulse
+//  Today (Home) — Research app dashboard
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -53,94 +53,75 @@ fun HomeScreen(
 ) {
     val observations by viewModel.observations.collectAsState()
     val notes by viewModel.notes.collectAsState()
-    val questions by viewModel.questions.collectAsState()
     val projects by viewModel.projects.collectAsState()
     val sources by viewModel.sources.collectAsState()
     val reports by viewModel.reports.collectAsState()
-    val flashcards by viewModel.flashcards.collectAsState()
+    val hypotheses by viewModel.hypotheses.collectAsState()
     val data by viewModel.dataRecords.collectAsState()
-    val tags by viewModel.commonTags.collectAsState()
-    val goal by viewModel.fieldSettings.dailyObservationGoal.collectAsState()
-    val streaksEnabled by viewModel.fieldSettings.streaksEnabled.collectAsState()
-    val todayKey = remember { today() }
-    val todayCount = observations.count { it.date == todayKey }
-    val currentStreak = remember(observations, streaksEnabled) { if (streaksEnabled) FieldMindStreaks.currentStreakDays(observations.map { it.date }) else 0 }
     val activeProject = projects.firstOrNull { it.status == "Active" } ?: projects.firstOrNull()
-    val learnSignals = remember(observations, questions, projects) {
-        buildList {
-            observations.sortedByDescending { it.timestamp }.take(10).forEach { add(it.category); add(it.subject); add(it.tags) }
-            questions.sortedByDescending { it.updatedAt }.take(10).forEach { add(it.category); add(it.questionText) }
-            projects.take(6).forEach { add(it.topicType); add(it.title) }
-        }
-    }
-    val researchSessions by viewModel.researchSessions.collectAsState()
-    val recommendations = remember(learnSignals) { recommendedResources(learnSignals) }
 
-    val lastSession = remember(researchSessions) {
-        researchSessions.filter { it.status == "Completed" }.maxByOrNull { it.endedAt ?: it.createdAt }
-    }
-
-
-    val weatherObs = remember(observations) { observations.firstOrNull { it.weatherTemperature != null } }
-
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 0.dp, 20.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        // ── Hero Section ──
-        item { HomeHeroSection(todayCount, goal, currentStreak, observations.size, questions.size, onOpenSettings, onNavigate) }
-
-        // ── Weather Card (when observations have weather data) ──
-        if (weatherObs != null) {
-            item { WeatherStatusCard(observations, viewModel, onNavigate) }
-        }
-
-        // ── Daily Goal ──
-        item { DailyGoalCard(todayCount, goal, currentStreak) { onNavigate(FieldMindScreen.Observe) } }
-
-        // ── Research Session CTA ──
+    LazyColumn(
+        Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(24.dp, 0.dp, 24.dp, 96.dp),
+        verticalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
         item {
-            ResearchSessionCtaCard(                    lastSessionLabel = if (lastSession != null) "Resume your last session" else null,
-                onStartSession = { onNavigate(FieldMindScreen.ResearchSession) }
+            HomeHeroSection(
+                totalObs = observations.size,
+                onOpenSettings = onOpenSettings,
+                onCapture = { onNavigate(FieldMindScreen.Observe) },
+                onNote = {
+                    viewModel.addNote(
+                        title = "Untitled Note",
+                        body = "",
+                        category = "Journal",
+                        tags = "journal"
+                    ) { noteId -> onOpenDetail("note", noteId) }
+                }
             )
         }
 
-        // ── Widget Grid ──
-        item { SectionHeader("Research areas", "Quick overview of your work") }
-        item { HomeWidgetGrid(observations, notes, questions, sources, projects, reports, data) { onNavigate(it) } }
         item { HomeDataOptionsCard(data) { onNavigate(FieldMindScreen.DataTools) } }
 
-        // ── Learning & Reading ──
-        item { RecommendedLearningCard(recommendations, onOpenReader, onSeeAll = { onNavigate(FieldMindScreen.Learn) }) }
-        item { ReadingReviewCard(sources, flashcards, onNavigate) }
+        item {
+            RecentCapturesCard(
+                observations = observations.sortedByDescending { it.timestamp }.take(4),
+                onOpenDetail = onOpenDetail,
+                onCapture = { onNavigate(FieldMindScreen.Observe) }
+            )
+        }
 
-        // ── Current Project ──
+        item {
+            ObservationTimelinePreview(
+                observations = observations.sortedByDescending { it.timestamp },
+                notes = notes.sortedByDescending { it.updatedAt },
+                onOpenDetail = onOpenDetail
+            )
+        }
+
         if (activeProject != null) {
-            item { SectionHeader("Current project", "Your active research focus") }
             item {
-                EntityCard(
-                    title = activeProject.title,
-                    kind = "project",
-                    body = activeProject.objective.ifBlank { activeProject.researchQuestion.ifBlank { "Open the project workspace." } },
-                    meta = listOf(activeProject.status, activeProject.topicType),
-                    onClick = { onOpenDetail("project", activeProject.id) }
+                CurrentProjectResearchCard(
+                    project = activeProject,
+                    observations = observations,
+                    sources = sources,
+                    data = data,
+                    hypotheses = hypotheses,
+                    reports = reports,
+                    onOpen = { onOpenDetail("project", activeProject.id) }
                 )
             }
         }
 
-        // ── Recent Activity ──
-        val activity = buildList {
-            observations.forEach { add(RecentEntry("observation", it.id, it.timestamp, it.subject.ifBlank { "Observation" }, "${it.category} • ${it.date} ${it.time}", it.category)) }
-            notes.forEach { add(RecentEntry("note", it.id, it.updatedAt, it.title.ifBlank { "Untitled note" }, it.body.ifBlank { it.category }, it.category)) }
-            questions.forEach { add(RecentEntry("question", it.id, it.updatedAt, it.questionText, "${it.status} • ${it.priority}", it.status)) }
-            sources.forEach { add(RecentEntry("source", it.id, it.updatedAt, it.title, "${it.type} • ${it.readingStatus}", it.type)) }
-        }.sortedByDescending { it.time }
-
-        if (activity.isNotEmpty()) {
-            item { SectionHeader("Recent activity", if (tags.isNotEmpty()) "Top tag: ${tags.first().name}" else "Latest actions across all tools") }
-            val groups = activity.groupBy { "${it.kind}:${it.group}" }.values.map { it.sortedByDescending { entry -> entry.time } }.sortedByDescending { it.first().time }.take(7)
-            items(groups, key = { "${it.first().kind}-${it.first().group}" }) { group ->
-                RecentActivityGroupCard(group, onOpenDetail)
+        if (observations.isEmpty() && notes.isEmpty()) {
+            item {
+                EmptyState(
+                    "Start your field story",
+                    "Capture an observation or create a note. FieldMind will build the timeline, project context, and insights from there.",
+                    icon = FieldMindIcons.Observation,
+                    actionLabel = "Capture observation"
+                ) { onNavigate(FieldMindScreen.Observe) }
             }
-        } else {
-            item { EmptyState("No activity yet", "Start with one factual observation or a free-form note. Both stay clearly separated.", icon = FieldMindIcons.Observation, actionLabel = "Open capture") { onNavigate(FieldMindScreen.Observe) } }
         }
 
         item { Spacer(Modifier.height(24.dp)) }
@@ -153,13 +134,10 @@ fun HomeScreen(
 
 @Composable
 private fun HomeHeroSection(
-    todayCount: Int,
-    goal: Int,
-    streakDays: Int,
     totalObs: Int,
-    totalQuestions: Int,
     onOpenSettings: () -> Unit,
-    onNavigate: (FieldMindScreen) -> Unit
+    onCapture: () -> Unit,
+    onNote: () -> Unit
 ) {
     val colors = FieldMindTheme.colors
     Surface(
@@ -171,10 +149,7 @@ private fun HomeHeroSection(
         tonalElevation = 0.dp,
         shadowElevation = 0.dp
     ) {
-        Column(
-            Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
+        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -186,32 +161,13 @@ private fun HomeHeroSection(
                         .clip(RoundedCornerShape(22.dp))
                         .background(colors.positive.copy(alpha = if (colors.isDark) 0.34f else 0.16f)),
                     contentAlignment = Alignment.Center
-                ) {
-                    Icon(FieldMindIcons.Nature, null, tint = colors.positive, size = 34.dp)
-                }
+                ) { Icon(FieldMindIcons.Nature, null, tint = colors.positive, size = 34.dp) }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    Text(
-                        "FieldMind",
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        "Observe. Question. Research clearly.",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Text("FieldMind", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onSurface)
+                    Text("Observe. Question. Research clearly.", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Surface(
-                    onClick = onOpenSettings,
-                    shape = RoundedCornerShape(20.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    tonalElevation = 0.dp,
-                    modifier = Modifier.size(56.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(FieldMindIcons.Settings, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 28.dp)
-                    }
+                Surface(onClick = onOpenSettings, shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh, tonalElevation = 0.dp, modifier = Modifier.size(56.dp)) {
+                    Box(contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Settings, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 28.dp) }
                 }
             }
 
@@ -223,18 +179,8 @@ private fun HomeHeroSection(
             )
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                HeroActionChip(
-                    icon = FieldMindIcons.Camera,
-                    label = "Capture",
-                    accent = colors.observation,
-                    modifier = Modifier.weight(1f)
-                ) { onNavigate(FieldMindScreen.Observe) }
-                HeroActionChip(
-                    icon = FieldMindIcons.Note,
-                    label = "Note",
-                    accent = colors.source,
-                    modifier = Modifier.weight(1f)
-                ) { onNavigate(FieldMindScreen.Library) }
+                HeroActionChip(FieldMindIcons.Camera, "Capture", colors.observation, Modifier.weight(1f), onCapture)
+                HeroActionChip(FieldMindIcons.Note, "Note", colors.source, Modifier.weight(1f), onNote)
             }
         }
     }
@@ -580,6 +526,178 @@ private fun MiniActionTile(title: String, value: String, subtitle: String, icon:
             Text(value, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
+    }
+}
+
+
+@Composable
+private fun RecentCapturesCard(
+    observations: List<ObservationEntity>,
+    onOpenDetail: (String, Long) -> Unit,
+    onCapture: () -> Unit
+) {
+    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(FieldMindIcons.Camera, null, tint = FieldMindTheme.colors.observation, size = 22.dp)
+                Column(Modifier.weight(1f)) {
+                    Text("Recent captures", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text("Latest evidence-rich observations", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                TextButton(onClick = onCapture) { Text("Capture") }
+            }
+            if (observations.isEmpty()) {
+                Text("No captures yet. Start with a photo, location, and facts.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            } else {
+                observations.forEach { observation ->
+                    RecentCaptureRow(observation) { onOpenDetail("observation", observation.id) }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RecentCaptureRow(observation: ObservationEntity, onClick: () -> Unit) {
+    val colors = FieldMindTheme.colors
+    Surface(onClick = onClick, shape = RoundedCornerShape(18.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh, tonalElevation = 0.dp) {
+        Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Box(Modifier.size(54.dp).clip(RoundedCornerShape(16.dp)).background(colors.observation.copy(alpha = if (colors.isDark) 0.24f else 0.14f)), contentAlignment = Alignment.Center) {
+                Icon(FieldMindIcons.Observation, null, tint = colors.observation, size = 26.dp)
+            }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(observation.subject.ifBlank { "Untitled observation" }, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text("${observation.category} • ${observation.date} ${observation.time}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                val evidenceCount = listOf(observation.evidenceSummary, observation.structuredDetailsJson, observation.tags).count { it.isNotBlank() }
+                Text(
+                    listOfNotNull(
+                        observation.manualLocation.ifBlank { null },
+                        "$evidenceCount evidence item${if (evidenceCount == 1) "" else "s"}",
+                        observation.confidenceLevel
+                    ).joinToString(" • "),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            ConfidencePill(observation.confidenceLevel)
+        }
+    }
+}
+
+@Composable
+private fun ConfidencePill(confidence: String) {
+    val color = FieldMindTheme.colors.confidenceColor(confidence)
+    Text(
+        confidence,
+        modifier = Modifier.clip(RoundedCornerShape(99.dp)).background(color.copy(alpha = 0.14f)).padding(horizontal = 8.dp, vertical = 4.dp),
+        style = MaterialTheme.typography.labelSmall,
+        color = color,
+        fontWeight = FontWeight.SemiBold,
+        maxLines = 1
+    )
+}
+
+@Composable
+private fun ObservationTimelinePreview(
+    observations: List<ObservationEntity>,
+    notes: List<NoteEntity>,
+    onOpenDetail: (String, Long) -> Unit
+) {
+    val events = buildList {
+        observations.take(8).forEach { add(TimelinePreviewEvent("observation", it.id, it.date, it.time, it.subject.ifBlank { "Observation" }, it.category)) }
+        notes.take(4).forEach { note ->
+            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(note.updatedAt))
+            val time = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(note.updatedAt))
+            add(TimelinePreviewEvent("note", note.id, date, time, note.title.ifBlank { "Untitled note" }, "Journal"))
+        }
+    }.sortedWith(compareByDescending<TimelinePreviewEvent> { it.date }.thenByDescending { it.time }).take(8)
+
+    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(FieldMindIcons.Calendar, null, tint = FieldMindTheme.colors.project, size = 22.dp)
+                Column(Modifier.weight(1f)) {
+                    Text("Observation timeline", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text("Date-grouped research story preview", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            if (events.isEmpty()) {
+                Text("Your timeline will group observations and notes by day.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            } else {
+                events.groupBy { it.date }.entries.take(3).forEach { (date, dayEvents) ->
+                    Text(date, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = FieldMindTheme.colors.project)
+                    dayEvents.take(3).forEach { event ->
+                        Row(
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { onOpenDetail(event.kind, event.id) }.padding(horizontal = 10.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Box(Modifier.size(8.dp).clip(CircleShape).background(if (event.kind == "note") FieldMindTheme.colors.source else FieldMindTheme.colors.observation))
+                            Column(Modifier.weight(1f)) {
+                                Text(event.title, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                Text("${event.time} • ${event.meta}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private data class TimelinePreviewEvent(val kind: String, val id: Long, val date: String, val time: String, val title: String, val meta: String)
+
+@Composable
+private fun CurrentProjectResearchCard(
+    project: ProjectEntity,
+    observations: List<ObservationEntity>,
+    sources: List<SourceEntity>,
+    data: List<DataRecordEntity>,
+    hypotheses: List<HypothesisEntity>,
+    reports: List<ReportEntity>,
+    onOpen: () -> Unit
+) {
+    val projectObservations = observations.filter { it.projectId == project.id }
+    val connectedObservations = projectObservations.size
+    val evidenceCount = projectObservations.count { it.evidenceSummary.isNotBlank() } + project.attachmentUris.split(",").count { it.trim().isNotBlank() }
+    val connectedData = data.count { it.projectId == project.id }
+    val connectedSources = sources.count { it.relatedProjectId == project.id }
+    val connectedReports = reports.count { it.projectId == project.id }
+
+    Card(onClick = onOpen, shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(FieldMindIcons.Project, null, tint = FieldMindTheme.colors.project, size = 24.dp)
+                Column(Modifier.weight(1f)) {
+                    Text("Current project", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(project.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+                Text(project.status, style = MaterialTheme.typography.labelSmall, color = FieldMindTheme.colors.project)
+            }
+            Text(project.researchQuestion.ifBlank { project.objective.ifBlank { "Open the workspace to define the research question." } }, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                ProjectAssetChip("Observations", connectedObservations, FieldMindIcons.Observation, FieldMindTheme.colors.observation)
+                ProjectAssetChip("Evidence", evidenceCount, FieldMindIcons.Camera, FieldMindTheme.colors.observation)
+                ProjectAssetChip("Data", connectedData, FieldMindIcons.Data, FieldMindTheme.colors.data)
+                ProjectAssetChip("Sources", connectedSources, FieldMindIcons.Source, FieldMindTheme.colors.source)
+                ProjectAssetChip("Hypotheses", hypotheses.size, FieldMindIcons.Hypothesis, FieldMindTheme.colors.hypothesis)
+                ProjectAssetChip("Reports", connectedReports, FieldMindIcons.Report, FieldMindTheme.colors.report)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProjectAssetChip(label: String, count: Int, icon: MaterialSymbolIcon, color: androidx.compose.ui.graphics.Color) {
+    Row(
+        Modifier.clip(RoundedCornerShape(99.dp)).background(color.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.12f)).padding(horizontal = 10.dp, vertical = 7.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        Icon(icon, null, tint = color, size = 14.dp)
+        Text("$count $label", style = MaterialTheme.typography.labelSmall, color = color, fontWeight = FontWeight.SemiBold)
     }
 }
 
