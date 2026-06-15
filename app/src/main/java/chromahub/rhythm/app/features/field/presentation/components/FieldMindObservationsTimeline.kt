@@ -215,7 +215,7 @@ fun ObservationsTimelineSection(
             var showSortMenu by remember { mutableStateOf(false) }
             Box {
                 IconButton(onClick = { showSortMenu = true }, modifier = Modifier.size(32.dp)) {
-                    Icon(FieldMindIcons.Sort, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
+                    Icon(androidx.compose.material.icons.filled.UnfoldMore, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
                 }
                 DropdownMenu(expanded = showSortMenu, onDismissRequest = { showSortMenu = false }) {
                     listOf("Date (newest)", "Date (oldest)", "Confidence", "Category").forEach { sort ->
