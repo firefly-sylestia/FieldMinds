@@ -38,6 +38,7 @@ import java.util.Locale
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import androidx.activity.compose.BackHandler
 
 // ══════════════════════════════════════════════════════════════════════
 //  Research Dashboard — Insights Redesign
@@ -49,8 +50,11 @@ import java.time.format.DateTimeFormatter
 fun InsightsScreen(
     viewModel: FieldMindViewModel,
     onNavigate: (FieldMindScreen) -> Unit = {},
-    onOpenDetail: (String, Long) -> Unit = { _, _ -> }
+    onOpenDetail: (String, Long) -> Unit = { _, _ -> },
+    onBack: () -> Unit = {}
 ) {
+    // Handle device back button
+    BackHandler(enabled = true) { onBack() }
     val observations by viewModel.observations.collectAsState()
     val questions by viewModel.questions.collectAsState()
     val hypotheses by viewModel.hypotheses.collectAsState()
@@ -671,7 +675,7 @@ private fun CollapsibleAchievements(
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier.pressScale(scaleDown = 0.98f).clickable { expanded = !expanded }.animateContentSize()
+        modifier = Modifier.pressScale(scaleDown = 0.98f).clickable { expanded = !expanded }
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -695,7 +699,7 @@ private fun CollapsibleAchievements(
 private fun AchievementCardV2(item: ResearchAchievement, modifier: Modifier = Modifier) {
     val animatedProgress by animateFloatAsState(targetValue = item.fraction, animationSpec = tween(600), label = "achieve")
     Card(
-        modifier = modifier.animateContentSize(),
+        modifier = modifier,
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (item.unlocked) item.accent.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surfaceContainerHigh

@@ -37,6 +37,7 @@ import fieldmind.research.app.features.field.data.canvas.CanvasBlockEntity
 import fieldmind.research.app.features.field.data.database.entity.NoteEntity
 import fieldmind.research.app.features.field.data.database.entity.ObservationEntity
 import fieldmind.research.app.features.field.presentation.canvas.*
+import fieldmind.research.app.features.field.presentation.canvas.CanvasMode
 import fieldmind.research.app.features.field.presentation.canvas.FigureSidePanel
 import fieldmind.research.app.features.field.presentation.canvas.LinkToEntityDialog
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
@@ -46,6 +47,7 @@ import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindVie
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import org.json.JSONObject
+import androidx.activity.compose.BackHandler
 
 /**
  * Full-screen canvas editor for a single note.
@@ -69,6 +71,9 @@ fun CanvasScreen(
     onBack: () -> Unit,
     onOpenLinkedEntity: ((String, Long) -> Unit)? = null
 ) {
+    // Handle device back button
+    BackHandler(enabled = true) { onBack() }
+
     val canvasViewModel: CanvasViewModel = viewModel()
     val haptics = rememberFieldMindHaptics()
     val clipboard = LocalClipboardManager.current
@@ -150,9 +155,15 @@ fun CanvasScreen(
                     canRedo = canRedo,
                     undoLabel = undoLabel,
                     redoLabel = redoLabel,
+                    zoom = canvasViewModel.canvasState.zoom,
+                    canvasMode = canvasViewModel.canvasState.canvasMode,
                     onBack = onBack,
                     onUndo = { haptics.light(); canvasViewModel.undo() },
                     onRedo = { haptics.light(); canvasViewModel.redo() },
+                    onZoomIn = { canvasViewModel.canvasState.applyZoom(1.2f, androidx.compose.ui.geometry.Offset(100f, 100f)) },
+                    onZoomOut = { canvasViewModel.canvasState.applyZoom(0.83f, androidx.compose.ui.geometry.Offset(100f, 100f)) },
+                    onZoomReset = { canvasViewModel.canvasState.resetView() },
+                    onToggleCanvasMode = { canvasViewModel.canvasState.toggleCanvasMode() },
                     onToggleGallery = { showFigureGallery = !showFigureGallery }
                 )
 
@@ -375,9 +386,15 @@ private fun CanvasTopBar(
     canRedo: Boolean,
     undoLabel: String?,
     redoLabel: String?,
+    zoom: Float = 1f,
+    canvasMode: CanvasMode = CanvasMode.INFINITE,
     onBack: () -> Unit,
     onUndo: () -> Unit,
     onRedo: () -> Unit,
+    onZoomIn: () -> Unit = {},
+    onZoomOut: () -> Unit = {},
+    onZoomReset: () -> Unit = {},
+    onToggleCanvasMode: () -> Unit = {},
     onToggleGallery: (() -> Unit)? = null
 ) {
     Surface(
@@ -466,6 +483,23 @@ private fun CanvasTopBar(
                 }
             }
 
+            // Canvas mode toggle (Infinite vs Pages)
+            Surface(
+                onClick = onToggleCanvasMode,
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                modifier = Modifier.size(36.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        MaterialSymbolIcon(if (canvasMode == CanvasMode.INFINITE) "view_week" else "unfold_more"),
+                        "Toggle canvas mode",
+                        size = 18.dp,
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+
             // Gallery button
             if (onToggleGallery != null) {
                 Surface(
@@ -478,6 +512,60 @@ private fun CanvasTopBar(
                         Icon(
                             MaterialSymbolIcon("collections_bookmark"),
                             "Figure Gallery",
+                            size = 18.dp,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+            }
+
+            // Zoom controls
+            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                // Zoom out
+                Surface(
+                    onClick = onZoomOut,
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            MaterialSymbolIcon("zoom_out"),
+                            "Zoom out",
+                            size = 18.dp,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+                
+                // Zoom level display
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .clickable { onZoomReset() }
+                        .padding(horizontal = 8.dp, vertical = 6.dp)
+                ) {
+                    Text(
+                        "${(zoom * 100).toInt()}%",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(4.dp)
+                    )
+                }
+
+                // Zoom in
+                Surface(
+                    onClick = onZoomIn,
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            MaterialSymbolIcon("zoom_in"),
+                            "Zoom in",
                             size = 18.dp,
                             tint = MaterialTheme.colorScheme.onSurface
                         )
@@ -811,9 +899,9 @@ private fun AddBlockMenu(
 
             blockTypes.forEach { (type, label) ->
                 Surface(
-                    onClick = { onSelect(type) },
                     shape = RoundedCornerShape(10.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    modifier = Modifier.clickable { onSelect(type) }
                 ) {
                     Row(
                         modifier = Modifier
