@@ -49,7 +49,7 @@ android {
             buildConfigField("boolean", "ENABLE_DEEZER", "true")
             buildConfigField("boolean", "ENABLE_LRCLIB", "true")
             buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
-            buildConfigField("String", "FLAVOR", "\"fdroid\"")
+            buildConfigField("String", "FLAVOR", ""fdroid"")
             
             versionNameSuffix = "-fdroid"
         }
@@ -64,7 +64,7 @@ android {
             buildConfigField("boolean", "ENABLE_DEEZER", "true")
             buildConfigField("boolean", "ENABLE_LRCLIB", "true")
             buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
-            buildConfigField("String", "FLAVOR", "\"github\"")
+            buildConfigField("String", "FLAVOR", ""github"")
             
             versionNameSuffix = "-gh"
         }
@@ -263,6 +263,16 @@ dependencies {
 
     // Google Play Services location for geo-fencing
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    
+    // Google Play Services for Google Maps and Drive
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.maps.android:maps-compose:4.3.3")
+    implementation("com.google.api-client:google-api-client-android:2.2.0")
+    implementation("com.google.apis:google-api-services-drive:v3-rev20230822-2.0.0") {
+        exclude(group = "org.apache.httpcomponents")
+    }
+
 
     // CameraX for in-app camera capture (replaces system camera intent)
     implementation("androidx.camera:camera-core:1.4.1")
@@ -362,7 +372,7 @@ fun Properties.hasValidSigningMaterial(rootDir: File): Boolean {
     val alias = getProperty("key_alias")?.takeIf { it.isNotBlank() } ?: return false
     val keyPassword = getProperty("key_password")?.takeIf { it.isNotBlank() } ?: return false
     val storePassword = getProperty("store_password")?.takeIf { it.isNotBlank() } ?: return false
-    val storePath = getProperty("store_file")?.takeIf { it.isNotBlank() } ?: return false
+    val storePath = getP roperty("store_file")?.takeIf { it.isNotBlank() } ?: return false
     val storeFile = File(storePath).let { if (it.isAbsolute) it else File(rootDir, storePath) }
     if (!storeFile.isFile || storeFile.length() == 0L) return false
 

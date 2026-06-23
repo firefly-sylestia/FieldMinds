@@ -88,7 +88,7 @@ Do **not** update design docs: `WHATS_NEW_STRUCTURE.md`, `WHATS_NEW_IMPLEMENTATI
 ## Child DOX Index
 
 - [app/AGENTS.md](app/AGENTS.md) — Android app module: FieldMind features, architecture, conventions
-- [web/AGENTS.md](web/AGENTS.md) — Web landing page: Next.js, Tailwind, Vercel deployment
+- [app/src/main/java/fieldmind/research/app/features/gdrive/AGENTS.md](app/src/main/java/fieldmind/research/app/features/gdrive/AGENTS.md) - Google Drive integration
 - [gradle/AGENTS.md](gradle/AGENTS.md) — Gradle build system: version catalog, plugin versions
 - [wiki/AGENTS.md](wiki/AGENTS.md) — Wiki documentation: user/contributor docs
 - [fastlane/AGENTS.md](fastlane/AGENTS.md) — App store metadata and deployment

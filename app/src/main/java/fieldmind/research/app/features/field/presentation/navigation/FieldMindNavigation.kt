@@ -939,7 +939,7 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.Analysis.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { ProjectsScreen(viewModel = viewModel, startTab = 0, onOpenDetail = openDetail, onNavigate = { navController.navigateToDestination(it.route) }) } }
             composable(FieldMindScreen.Reports.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { FieldMindReportScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.Search.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { ArchiveScreen(viewModel = viewModel, onOpenDetail = openDetail, onOpenReader = openReader) } }
-            composable(FieldMindScreen.MapScreen.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { MapFieldScreen(viewModel = viewModel, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
+            composable(FieldMindScreen.MapScreen.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { FieldMindMapScreen() } }
             composable(FieldMindScreen.ExportStudio.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { BackupAndRestoreScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.Changelog.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { FieldMindChangelogScreen(onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.Progress.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { InsightsScreen(viewModel = viewModel, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
@@ -1074,4 +1074,3 @@ fun WithSharedTransitionScope(
     @Suppress("FunctionName")
     content(scope)
 }
-
