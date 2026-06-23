@@ -31,7 +31,7 @@ import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.delay
-import androidx.compose.animation.shared.SharedTransitionScope
+import androidx.compose.animation.SharedTransitionScope
 
 // ── Category accent colors ──
 @Composable
@@ -455,7 +455,7 @@ internal fun SpeciesCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
-            .animateContentSize()
+            
     ) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),

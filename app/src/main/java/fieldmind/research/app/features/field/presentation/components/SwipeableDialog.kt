@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.shape.Shape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -75,8 +75,7 @@ fun SwipeableAlertDialog(
     var isAnimatingAway by remember { mutableStateOf(false) }
     var dialogWidth by remember { mutableFloatStateOf(1f) }
 
-    val dismissThreshold: Float
-        get() = dialogWidth * 0.35f
+    val dismissThreshold = dialogWidth * 0.35f
 
     // Rubber-band: compute the effective (resisted) offset so position,
     // scale, and alpha all respond consistently beyond the threshold.

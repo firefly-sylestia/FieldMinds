@@ -71,7 +71,8 @@ import java.time.temporal.ChronoUnit
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import fieldmind.research.app.features.field.presentation.components.ObservationStatsDashboard
-import androidx.compose.animation.shared.SharedTransitionScope
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.runtime.saveable.rememberSaveable
 
 /**
  * Loads a PNG image from Android assets folder as an ImageBitmap for display.
@@ -1635,7 +1636,7 @@ private fun ResearchPulseCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .animateContentSize(),
+            ,
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -1901,7 +1902,7 @@ private fun RecentActivityGroupCard(group: List<RecentEntry>, onOpenDetail: (Str
     var expanded by remember { mutableStateOf(false) }
     val newest = group.first()
     val more = group.size - 1
-    Column(Modifier.animateContentSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(Modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         EntityCard(
             title = newest.title,
             kind = newest.kind,
@@ -1996,7 +1997,7 @@ private fun DailyGoalCard(todayCount: Int, goal: Int, streakDays: Int, deltaLabe
             .background(bg)
             .pressScale(scaleDown = 0.98f)
             .clickable(onClick = onClick)
-            .animateContentSize()
+            
     ) {
         Row(Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(18.dp)) {
             GradientProgressRing(
@@ -2053,7 +2054,7 @@ private fun ResearchSessionCtaCard(
     
     val colors = FieldMindTheme.colors
     Card(
-        modifier = Modifier.fillMaxWidth().animateContentSize().clickable { haptics.light(); onStartSession() },
+        modifier = Modifier.fillMaxWidth().clickable { haptics.light(); onStartSession() },
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isActive) colors.observation.copy(alpha = 0.14f) else colors.positive.copy(alpha = 0.08f)
@@ -2182,7 +2183,7 @@ private fun SessionObservationsCard(
                 } ?: ""
 
                 Card(
-                    modifier = Modifier.fillMaxWidth().animateContentSize().clickable {
+                    modifier = Modifier.fillMaxWidth().clickable {
                         expandedSessions = if (isExpanded) expandedSessions - sessionName
                         else expandedSessions + sessionName
                     },
@@ -2511,7 +2512,7 @@ private fun computeFieldworkNudge(weather: WeatherSnapshot): String {
 
 // ══════════════════════════════════════════════════════════════════════
 //  Recent Captures Card
-// ══════════════════════════════════════════════════════════════════════
+// ════════════════════════════��═══════════════════���═════════════════════
 
 @Composable
 private fun RecentCapturesCard(observations: List<ObservationEntity>, onOpenDetail: (String, Long) -> Unit) {

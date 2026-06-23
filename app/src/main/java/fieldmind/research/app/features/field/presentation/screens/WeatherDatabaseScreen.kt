@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +40,7 @@ import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import androidx.compose.ui.platform.LocalContext
+import androidx.activity.compose.BackHandler
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,6 +53,8 @@ fun WeatherDatabaseScreen(
     onOpenSettings: () -> Unit = {},
     onOpenDetail: (String, Long) -> Unit = { _, _ -> }
 ) {
+    // Handle device back button
+    BackHandler(enabled = true) { onBack() }
     val observations by viewModel.observations.collectAsState()
     val colors = FieldMindTheme.colors
     val tempUnit by viewModel.fieldSettings.tempUnit.collectAsState()
@@ -819,7 +823,7 @@ private fun ForecastDashboard(
                         .clickable { expandedIdx = if (isExpanded) -1 else forecasts.indexOf(day) }
                         .background(textOnScene.copy(alpha = 0.08f))
                         .padding(10.dp)
-                        .animateContentSize(),
+                        ,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {

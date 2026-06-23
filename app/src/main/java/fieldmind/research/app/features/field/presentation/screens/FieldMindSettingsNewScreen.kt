@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +24,7 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
+import androidx.activity.compose.BackHandler
 
 // ─── Data models ──────────────────────────────────────────────────────
 
@@ -155,6 +157,9 @@ fun FieldMindSettingsNewScreen(
     onOpenScreenVisibility: (() -> Unit)? = null,
     onOpenScreenCaptureProtection: (() -> Unit)? = null
 ) {
+    // Handle device back button
+    BackHandler(enabled = true) { onBack() }
+
     val colors = FieldMindTheme.colors
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
