@@ -45,7 +45,7 @@ export default function Home() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <a
-              href="https://play.google.com/store/apps/details?id=chromahub.rhythm"
+              href="https://play.google.com/store/apps/details?id=fieldmind.research.app"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary flex items-center justify-center gap-2"
@@ -132,7 +132,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <a
-              href="https://play.google.com/store/apps/details?id=chromahub.rhythm"
+              href="https://play.google.com/store/apps/details?id=fieldmind.research.app"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary flex items-center justify-center gap-2"
@@ -170,13 +170,13 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-3 text-sm text-on-surface-variant">
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">Features</a>
+                  <a href="/" className="hover:text-primary transition-colors">Features</a>
+                </li>
+                 <li>
+                  <a href="/updates.html" className="hover:text-primary transition-colors">Updates</a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">Pricing</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition-colors">Documentation</a>
+                  <a href="/help.html" className="hover:text-primary transition-colors">Documentation</a>
                 </li>
               </ul>
             </div>
@@ -191,10 +191,7 @@ export default function Home() {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">Issues</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition-colors">Discussions</a>
+                  <a href="https://github.com/firefly-sylestia/FieldMinds/issues" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Issues</a>
                 </li>
               </ul>
             </div>
@@ -204,13 +201,7 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Legal</h4>
               <ul className="space-y-3 text-sm text-on-surface-variant">
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition-colors">Terms</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition-colors">License</a>
+                  <a href="/privacy.html" className="hover:text-primary transition-colors">Privacy</a>
                 </li>
               </ul>
             </div>
