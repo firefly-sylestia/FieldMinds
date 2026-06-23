@@ -49,7 +49,7 @@ android {
             buildConfigField("boolean", "ENABLE_DEEZER", "true")
             buildConfigField("boolean", "ENABLE_LRCLIB", "true")
             buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
-            buildConfigField("String", "FLAVOR", ""fdroid"")
+            buildConfigField("String", "FLAVOR", "\"fdroid\"")
             
             versionNameSuffix = "-fdroid"
         }
@@ -64,7 +64,7 @@ android {
             buildConfigField("boolean", "ENABLE_DEEZER", "true")
             buildConfigField("boolean", "ENABLE_LRCLIB", "true")
             buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
-            buildConfigField("String", "FLAVOR", ""github"")
+            buildConfigField("String", "FLAVOR", "\"github\"")
             
             versionNameSuffix = "-gh"
         }
@@ -364,7 +364,7 @@ object Version {
 }
 
 fun String.sanitizeForApkFileName(): String =
-    replace(Regex("[\"*:<>?|\r\n]+"), "-")
+    replace(Regex("[\\"*:<>?|\\r\\n]+"), "-")
         .trim('-', ' ', '.')
         .ifBlank { "1.0.0" }
 
@@ -372,7 +372,7 @@ fun Properties.hasValidSigningMaterial(rootDir: File): Boolean {
     val alias = getProperty("key_alias")?.takeIf { it.isNotBlank() } ?: return false
     val keyPassword = getProperty("key_password")?.takeIf { it.isNotBlank() } ?: return false
     val storePassword = getProperty("store_password")?.takeIf { it.isNotBlank() } ?: return false
-    val storePath = getP roperty("store_file")?.takeIf { it.isNotBlank() } ?: return false
+    val storePath = getProperty("store_file")?.takeIf { it.isNotBlank() } ?: return false
     val storeFile = File(storePath).let { if (it.isAbsolute) it else File(rootDir, storePath) }
     if (!storeFile.isFile || storeFile.length() == 0L) return false
 
