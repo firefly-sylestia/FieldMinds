@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rhythm Music Player - Privacy Policy</title>
+    <title>FieldMind - Privacy Policy</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -44,86 +44,81 @@
 </head>
 <body>
     <div class="container">
-        <h1>Privacy Policy for Rhythm Music Player</h1>
+        <h1>Privacy Policy for FieldMind</h1>
         <p class="last-updated">Last Updated: January 19, 2026</p>
         
         <div class="highlight">
-            <strong>Privacy-First Approach:</strong> Rhythm is designed with your privacy in mind. We do not collect, store, or share any personal information from our users.
+            <strong>Privacy-First Approach:</strong> FieldMind is designed with your privacy in mind. We do not collect, store, or share any personal information from our users.
         </div>
 
         <h2>1. Introduction</h2>
         <p>
-            Rhythm Music Player ("we," "our," or "the app") is a free, open-source music player for Android. 
+            FieldMind ("we," "our," or "the app") is a free, open-source research and field note-taking tool for Android. 
             This Privacy Policy explains how the app handles data when you use it.
         </p>
 
         <h2>2. Information We Do NOT Collect</h2>
-        <p>Rhythm does not collect or transmit any of the following:</p>
+        <p>FieldMind does not collect or transmit any of the following:</p>
         <ul>
             <li>Personal information (name, email, phone number, etc.)</li>
             <li>Device identifiers (IMEI, Android ID, advertising ID)</li>
-            <li>Location data</li>
             <li>Usage analytics or crash reports</li>
-            <li>Listening history or playback statistics</li>
-            <li>Contact information</li>
             <li>Any other personally identifiable information</li>
         </ul>
 
         <h2>3. Data Stored Locally on Your Device</h2>
         <p>All app data is stored locally on your device and never transmitted to external servers:</p>
         <ul>
-            <li><strong>Music Library:</strong> The app scans your device's local music files to create a playable library</li>
-            <li><strong>Playback Statistics:</strong> Play counts, last played times, and favorites are stored locally</li>
-            <li><strong>App Settings:</strong> Your preferences (theme, equalizer settings, etc.) are saved locally</li>
-            <li><strong>Playlists:</strong> Custom playlists you create are stored only on your device</li>
-            <li><strong>Downloaded Artwork:</strong> Album covers and artist images fetched from online sources are cached locally</li>
+            <li><strong>Field Notes & Observations:</strong> The app stores your research notes, observations, and other data on your device's local storage.</li>
+            <li><strong>App Settings:</strong> Your preferences (theme, etc.) are saved locally</li>
+            <li><strong>Imported/Exported Data:</strong> Data you import or export is stored only on your device</li>
         </ul>
 
         <h2>4. Internet Access and Third-Party Services</h2>
         <p>
-            Rhythm may use internet connectivity for optional features. These features are disabled by default and require your explicit opt-in:
+            FieldMind may use internet connectivity for optional features. These features are disabled by default and require your explicit opt-in:
         </p>
 
         <h3>4.1 Optional Online Features (User Configurable)</h3>
         <ul>
-            <li><strong>Deezer API:</strong> To fetch album artwork and artist images (if enabled in settings)</li>
-            <li><strong>LRCLib:</strong> To download synchronized lyrics for songs (if enabled in settings)</li>
-            <li><strong>Spotify Search API:</strong> For enhanced metadata search (requires user-provided credentials)</li>
+            <li><strong>Open-Meteo API:</strong> To fetch weather data (if enabled in settings)</li>
+            <li><strong>Perenual API:</strong> To identify plant species from images (if enabled in settings)</li>
         </ul>
 
         <h3>4.2 Data Sent to Third-Party Services</h3>
         <p>When you enable online features, the following minimal data may be sent:</p>
         <ul>
-            <li><strong>Song Metadata:</strong> Artist name, song title, album name (for artwork/lyrics lookup)</li>
-            <li><strong>API Requests:</strong> Standard HTTP requests to retrieve images or lyrics</li>
+            <li><strong>Location Data:</strong> Latitude and longitude for weather data lookup.</li>
+            <li><strong>Image Data:</strong> Images sent for species identification.</li>
         </ul>
         <p>
-            <strong>Important:</strong> No personal information is included in these requests. The data is only used to enhance your music listening experience.
+            <strong>Important:</strong> No personal information is included in these requests. The data is only used to enhance your research experience.
         </p>
 
         <h3>4.3 Third-Party Privacy Policies</h3>
         <p>When you use optional online features, the following third-party services may be contacted:</p>
         <ul>
-            <li><strong>Deezer:</strong> <a href="https://www.deezer.com/legal/privacy">Deezer Privacy Policy</a></li>
-            <li><strong>LRCLib:</strong> Open-source lyrics service with no tracking</li>
-            <li><strong>Spotify:</strong> <a href="https://www.spotify.com/privacy">Spotify Privacy Policy</a> (only if you configure your own API credentials)</li>
+            <li><strong>Open-Meteo:</strong> <a href="https://open-meteo.com/en/privacy">Open-Meteo Privacy Policy</a></li>
+            <li><strong>Perenual:</strong> <a href="https://perenual.com/privacy-policy">Perenual Privacy Policy</a></li>
         </ul>
 
         <h2>5. Permissions Used by the App</h2>
-        <p>Rhythm requests the following Android permissions:</p>
+        <p>FieldMind requests the following Android permissions:</p>
         <ul>
-            <li><strong>READ_MEDIA_AUDIO / READ_EXTERNAL_STORAGE:</strong> To access and play your local music files</li>
-            <li><strong>WRITE_EXTERNAL_STORAGE:</strong> To save downloaded artwork and playlists (Android 9 and below)</li>
-            <li><strong>INTERNET:</strong> For optional online features (artwork, lyrics)</li>
-            <li><strong>FOREGROUND_SERVICE:</strong> To play music in the background</li>
-            <li><strong>POST_NOTIFICATIONS:</strong> To display playback notifications (Android 13+)</li>
-            <li><strong>WAKE_LOCK:</strong> To keep music playing when screen is off</li>
+            <li><strong>READ_EXTERNAL_STORAGE / READ_MEDIA_IMAGES / READ_MEDIA_VIDEO:</strong> To access and attach media files to your notes.</li>
+            <li><strong>WRITE_EXTERNAL_STORAGE:</strong> To save exported data.</li>
+            <li><strong>INTERNET:</strong> For optional online features.</li>
+            <li><strong>FOREGROUND_SERVICE:</strong> To run background tasks like timers or data synchronization.</li>
+            <li><strong>POST_NOTIFICATIONS:</strong> To display notifications for reminders or background tasks.</li>
+            <li><strong>WAKE_LOCK:</strong> To keep background tasks running.</li>
+            <li><strong>ACCESS_COARSE_LOCATION / ACCESS_FINE_LOCATION:</strong> To get location for weather and observations.</li>
+            <li><strong>CAMERA:</strong> To take photos and videos to attach to notes.</li>
         </ul>
         <p>All permissions are used solely for app functionality and not for data collection.</p>
 
         <h2>6. Children's Privacy</h2>
         <p>
-            Rhythm does not knowingly collect information from children under 13. The app does not require any account creation or personal information.
+            FieldMind does not knowingly collect information from children under 13. The app does not require any account creation or personal information.
         </p>
 
         <h2>7. Data Security</h2>
@@ -134,9 +129,7 @@
 
         <h2>8. Open Source and Transparency</h2>
         <p>
-            Rhythm is fully open-source under the GPL v3 license. You can review the entire source code at:
-            <br>
-            <a href="https://github.com/cromaguy/Rhythm">https://github.com/cromaguy/Rhythm</a>
+            FieldMind is fully open-source. You can review the entire source code on our GitHub repository.
         </p>
 
         <h2>9. Changes to This Privacy Policy</h2>
@@ -146,7 +139,7 @@
         </p>
 
         <h2>10. Your Rights</h2>
-        <p>Since Rhythm does not collect any personal data, there is no data to:</p>
+        <p>Since FieldMind does not collect any personal data, there is no data to:</p>
         <ul>
             <li>Request access to</li>
             <li>Request deletion of</li>
@@ -156,11 +149,7 @@
         <p>All your data remains under your control on your device.</p>
 
         <h2>11. Contact Us</h2>
-        <p>If you have questions about this Privacy Policy or the app, you can contact us:</p>
-        <ul>
-            <li><strong>GitHub:</strong> <a href="https://github.com/cromaguy/Rhythm/issues">Open an issue</a></li>
-            <li><strong>Telegram:</strong> <a href="https://t.me/RhythmSupport">@RhythmSupport</a></li>
-        </ul>
+        <p>If you have questions about this Privacy Policy or the app, you can contact us via our GitHub repository.</p>
 
         <h2>12. Compliance</h2>
         <p>This app complies with:</p>
@@ -174,8 +163,7 @@
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
         
         <p style="text-align: center; color: #666; font-size: 14px;">
-            <strong>Made with ❤️ by Team ChromaHub</strong><br>
-            Rhythm Music Player is free and open-source software.
+            FieldMind is free and open-source software.
         </p>
     </div>
 </body>

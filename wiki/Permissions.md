@@ -1,10 +1,10 @@
 # Permissions Guide
 
-This guide explains all permissions requested by Rhythm Music Player, why they're needed, and how they're used.
+This guide explains all permissions requested by FieldMind, why they're needed, and how they're used.
 
 ## 🔒 Privacy First
 
-Rhythm is **100% FOSS-compliant** and respects your privacy:
+FieldMind is **100% FOSS-compliant** and respects your privacy:
 - ✅ No analytics or tracking
 - ✅ No personal data collection
 - ✅ No internet requirement for core functionality
@@ -19,25 +19,36 @@ Rhythm is **100% FOSS-compliant** and respects your privacy:
 
 **Permissions:**
 - `READ_EXTERNAL_STORAGE` (Android ≤12)
-- `READ_MEDIA_AUDIO` (Android 13+)
-- `READ_MEDIA_IMAGES` (Android 13+)
-- `READ_MEDIA_VISUAL_USER_SELECTED` (Android 14+)
+- `READ_MEDIA_IMAGES` / `READ_MEDIA_VIDEO` (Android 13+)
 
 **Why Needed:**
-- Scan and index your music files
-- Display album artwork
-- Read audio metadata (title, artist, album)
-- Access playlists from storage
+- To access and attach media files to your notes.
 
 **Where Used:**
-- Media library scanning
-- Music playback
-- Album art display
-- Playlist management
-- Metadata reading
+- Attaching images and videos to field notes.
 
-**Android 14+ Partial Access:**
-You can grant access to only selected photos/media instead of full library access.
+### 📸 Camera
+
+**Permission:** `CAMERA`
+
+**Why Needed:**
+- To take photos and videos to attach to your notes.
+
+**Where Used:**
+- In the note editor to capture new images and videos.
+
+### 📍 Location
+
+**Permissions:**
+- `ACCESS_COARSE_LOCATION`
+- `ACCESS_FINE_LOCATION`
+
+**Why Needed:**
+- To get your location for weather data and to tag observations with a location.
+
+**Where Used:**
+- When creating a new observation to automatically add the current location.
+- To fetch weather data for your current location.
 
 ---
 
@@ -48,19 +59,13 @@ You can grant access to only selected photos/media instead of full library acces
 **Permission:** `POST_NOTIFICATIONS` (Android 13+)
 
 **Why Needed:**
-- Display playback notification with controls
-- Show update availability alerts
-- Persistent playback notification
+- To display notifications for reminders or background tasks.
 
 **Where Used:**
-- Media notification (play/pause, skip)
-- Background playback status
-- Update notifications
-- Download progress
+- Reminders for scheduled observations.
+- Notifications for long-running tasks like data exports.
 
-**Can be disabled:** Yes, but you'll lose playback controls in notifications.
-
----
+**Can be disabled:** Yes, but you'll miss reminders and task notifications.
 
 ### 📶 Internet Access
 
@@ -69,258 +74,57 @@ You can grant access to only selected photos/media instead of full library acces
 - `ACCESS_NETWORK_STATE`
 
 **Why Needed:**
-- Fetch synchronized lyrics from LRCLib
-- Download album artwork from Deezer/YouTube Music
-- Check for app updates from GitHub
-- Access online features
+- To fetch weather data from Open-Meteo.
+- To identify plant species from images using the Perenual API.
 
 **Where Used:**
-- LRCLib lyrics integration
-- Online album artwork fetch
-- GitHub update checking
-- Deezer API integration
+- When fetching weather data for a location.
+- When using the species identification feature.
 
-**Data Usage:** Minimal (lyrics ~1-5KB, artwork ~50-200KB)
+**Data Usage:** Minimal, only for the specific features you use.
 
-**Can be disabled:** Yes (via firewall), but you'll lose online features.
+**Can be disabled:** Yes, but you'll lose online features.
 
----
-
-### 🎧 Audio Settings
-
-**Permission:** `MODIFY_AUDIO_SETTINGS`
-
-**Why Needed:**
-- Adjust audio routing
-- Manage volume levels
-- Configure audio focus
-- Enable equalizer
-
-**Where Used:**
-- Audio focus management (pausing for calls)
-- Bluetooth device switching
-- Volume control integration
-- Equalizer and audio effects
-
-**Can be disabled:** No, required for proper audio playback.
-
----
-
-### 📱 Bluetooth
-
-**Permissions:**
-- `BLUETOOTH` (All versions)
-- `BLUETOOTH_ADMIN` (Android ≤11)
-- `BLUETOOTH_CONNECT` (Android 12+)
-- `BLUETOOTH_SCAN` (Android 12+)
-
-**Why Needed:**
-- Detect Bluetooth audio devices
-- Auto-play when headphones connect
-- Display device name in UI
-- Switch between audio outputs
-
-**Where Used:**
-- Bluetooth speaker/headphone support
-- Auto-resume on device connection
-- Audio output device selection
-- Wireless playback controls
-
-**Can be disabled:** Yes, if you don't use Bluetooth audio.
-
----
-
-### 📲 Install Packages
-
-**Permission:** `REQUEST_INSTALL_PACKAGES`
-
-**Why Needed:**
-- Install app updates automatically
-- In-app update deployment
-
-**Where Used:**
-- Automatic update installation
-- GitHub release downloads
-
-**Can be disabled:** Yes, you can update manually.
-
----
-
-### 🏠 Widgets
-
-**Permissions:**
-- `BIND_APPWIDGET`
-- `UPDATE_APPWIDGET`
-
-**Why Needed:**
-- Create home screen widgets
-- Update widget content in background
-
-**Where Used:**
-- Legacy RemoteViews widgets
-- Modern Glance widgets
-- Real-time playback state
-- Background widget updates via WorkManager
-
-**Can be disabled:** No, required for widgets to function.
-
----
-
-### 🎵 Foreground Service
+### ⚙️ Foreground Service
 
 **Permissions:**
 - `FOREGROUND_SERVICE`
-- `FOREGROUND_SERVICE_MEDIA_PLAYBACK` (Android 14+)
 
 **Why Needed:**
-- Continuous background music playback
-- Prevent Android from killing playback
-- Lock screen controls
+- To run background tasks like timers or data synchronization.
 
 **Where Used:**
-- Background music playback
-- Media notification service
-- Lock screen controls
+- Timers for observations.
+- Background data export/import.
 
-**Can be disabled:** No, required for background playback.
+**Can be disabled:** No, required for background tasks to function correctly.
 
 ---
 
 ## 🚫 Removed Permissions
 
-Rhythm **does NOT** request these permissions (removed for privacy):
+FieldMind **does NOT** request these permissions:
 
-❌ `MANAGE_EXTERNAL_STORAGE` - Broad file access (not needed for music)
+❌ `MANAGE_EXTERNAL_STORAGE` - Broad file access (not needed)
 ❌ `ACCESS_MEDIA_LOCATION` - GPS coordinates in photos (not needed)
-❌ `RECORD_AUDIO` - Microphone access (never needed)
-❌ `CAMERA` - Camera access (never needed)
-❌ `LOCATION` - GPS/location (never needed)
 ❌ `CONTACTS` - Contact list (never needed)
 ❌ `PHONE` - Phone calls/SMS (never needed)
 
 ---
 
-## ⚙️ Managing Permissions
-
-### Granting Permissions
-
-#### During First Launch
-1. Open Rhythm
-2. Follow onboarding wizard
-3. Grant requested permissions when prompted
-
-#### Manual Grant (Android Settings)
-1. Open **Settings** → **Apps**
-2. Find and tap **Rhythm Music**
-3. Tap **Permissions**
-4. Enable required permissions
-
-#### Android 14+ Partial Media Access
-1. When prompted for storage, select **"Select photos and videos"**
-2. Choose your music folder(s)
-3. Tap **Allow** for selected items
-
-### Revoking Permissions
-
-To revoke a permission:
-1. **Settings** → **Apps** → **Rhythm Music** → **Permissions**
-2. Tap the permission to revoke
-3. Select **Don't allow**
-
-**Impact:**
-- **Storage**: App won't play music
-- **Notifications**: No playback controls
-- **Internet**: No online features
-- **Bluetooth**: No wireless audio
-
-### Permission Reset
-
-If permissions are messed up:
-1. **Settings** → **Apps** → **Rhythm Music**
-2. Tap **Storage & cache** → **Clear data**
-3. Reopen app and grant permissions again
-
-⚠️ **Warning:** This will reset all app settings and playlists. Backup first!
-
----
-
-## 🔍 Permission Audit
-
-### How to Verify What Rhythm Accesses
-
-#### Using Android Permission Manager
-1. **Settings** → **Privacy** → **Permission manager**
-2. Tap each permission type (Files, Notifications, etc.)
-3. Find **Rhythm Music** in the list
-4. Verify granted permissions
-
-#### Using ADB (Advanced)
-```bash
-# List all permissions for Rhythm
-adb shell dumpsys package fieldmind.research.app | grep permission
-
-# Check runtime permissions
-adb shell pm list permissions -g
-```
-
-#### Using Apps
-- **[App Manager](https://github.com/MuntashirAkon/AppManager)**: Open-source permission auditor
-- **[Exodus Privacy](https://reports.exodus-privacy.eu.org/)**: Check app for trackers
-
----
-
-## 🛡️ Privacy Best Practices
-
-### Minimize Permissions
-1. Grant only essential permissions (Storage, Audio Settings)
-2. Deny optional permissions if you don't need features:
-   - Internet → No online lyrics/artwork
-   - Bluetooth → No wireless audio auto-play
-   - Notifications → No playback controls in shade
-
-### Use Firewall (Advanced)
-Block internet access if you want offline-only:
-- **[NetGuard](https://netguard.me/)**: No-root firewall
-- **[AFWall+](https://github.com/ukanth/afwall)**: Requires root
-- **[RethinkDNS](https://rethinkdns.com/)**: DNS + Firewall
-
-### Scoped Storage (Android 11+)
-Rhythm uses **Scoped Storage** on Android 11+:
-- Access limited to music files only
-- No access to documents, photos, or other file types
-- Enhanced privacy and security
-
----
-
 ## ❓ FAQ
 
-### Why does Rhythm need internet access?
-For optional online features: lyrics (LRCLib), artwork (Deezer), and updates (GitHub). The app works fully offline without internet.
+### Why does FieldMind need internet access?
+For optional online features like weather data (Open-Meteo) and plant species identification (Perenual). The app works fully offline without internet.
 
-### Can I use Rhythm without granting notifications?
-Yes, but you won't see playback controls in the notification shade. Player screen still works normally.
+### Can I use FieldMind without granting location permissions?
+Yes, but you won't be able to automatically tag observations with your location or get local weather data. You can still manually enter locations.
 
-### Does Rhythm access my photos?
-No. Even though `READ_MEDIA_IMAGES` is requested (for album art embedded in music files), Rhythm only accesses images associated with audio files, not your photo gallery.
+### Does FieldMind access my photos?
+Only when you specifically choose to attach an image to a note. It does not access your photo gallery otherwise.
 
-### Why Bluetooth permissions?
-To detect when you connect Bluetooth headphones/speakers and auto-resume playback. Optional feature.
-
-### Is my listening data sent anywhere?
-**No.** Rhythm stores all data locally on your device. Nothing is uploaded or shared.
+### Is my research data sent anywhere?
+**No.** FieldMind stores all data locally on your device. Nothing is uploaded or shared unless you explicitly export it.
 
 ### Can I audit the code?
-**Yes!** Rhythm is fully open-source: [GitHub Repository](https://github.com/cromaguy/Rhythm)
-
----
-
-## 🔗 Related Documentation
-
-- [Installation Guide](https://github.com/cromaguy/Rhythm/wiki/Installation-Guide)
-- [Getting Started](https://github.com/cromaguy/Rhythm/wiki/Getting-Started)
-- [Troubleshooting](https://github.com/cromaguy/Rhythm/wiki/Troubleshooting)
-- [Security Policy](https://github.com/cromaguy/Rhythm/blob/main/docs/SECURITY.md)
-
----
-
-**Still have questions?** Ask in our [Telegram Community](https://t.me/RhythmSupport).
+**Yes!** FieldMind is fully open-source. You can find the code on our GitHub repository.
