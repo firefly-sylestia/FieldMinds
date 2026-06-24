@@ -64,6 +64,7 @@ import fieldmind.research.app.features.field.presentation.components.SwipeableAl
 import fieldmind.research.app.features.field.presentation.components.TabSwipeHost
 import androidx.compose.runtime.CompositionLocalProvider
 
+import fieldmind.research.app.features.field.presentation.utils.AppLifecycleManager
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
@@ -111,6 +112,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object Settings : FieldMindScreen("field_settings", "Settings", FieldMindIcons.Settings)
     data object SettingsProfile : FieldMindScreen("field_settings_profile", "Profile", FieldMindIcons.Nature)
     data object SettingsAppearance : FieldMindScreen("field_settings_appearance", "Appearance", FieldMindIcons.Palette)
+    data object SettingsEntityColors : FieldMindScreen("field_settings_entity_colors", "Entity Colors", MaterialSymbolIcon("palette"))
     data object SettingsCapture : FieldMindScreen("field_settings_capture", "Capture", FieldMindIcons.Capture)
     data object SettingsAi : FieldMindScreen("field_settings_ai", "AI Assistant", FieldMindIcons.Sparkle)
     data object SettingsLocalModel : FieldMindScreen("field_settings_local_model", "Local Model", FieldMindIcons.Download)
@@ -195,8 +197,17 @@ private val bottomTabs = listOf(
 fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, requestedDestination: String? = null) {
     val onboardingCompleted by appSettings.onboardingCompleted.collectAsState()
     var appUnlocked by remember { mutableStateOf(!viewModel.fieldSettings.privacyLockEnabled.value) }
+    var isDecoyMode by remember { mutableStateOf(false) }
     val privacyEnabled by viewModel.fieldSettings.privacyLockEnabled.collectAsState()
     LaunchedEffect(privacyEnabled) { if (!privacyEnabled) appUnlocked = true }
+    // Observe auto-lock from AppLifecycleManager
+    val shouldAutoLock by AppLifecycleManager.shouldShowLock.collectAsState()
+    LaunchedEffect(shouldAutoLock) {
+        if (shouldAutoLock) {
+            appUnlocked = false
+        }
+    }
+
     if (!onboardingCompleted) {
         FieldMindOnboardingScreen(
             settings = viewModel.fieldSettings,
@@ -206,7 +217,9 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
         FieldMindAppLock(
             settings = viewModel.fieldSettings,
             isUnlocked = appUnlocked,
-            onUnlock = { appUnlocked = true }
+            isDecoyMode = isDecoyMode,
+            onUnlock = { appUnlocked = true },
+            onDecoyUnlock = { isDecoyMode = true }
         ) {
             val privacyTyping by viewModel.fieldSettings.privacyTypingEnabled.collectAsState()
             CompositionLocalProvider(LocalPrivacyTypingEnabled provides privacyTyping) {
@@ -1020,7 +1033,8 @@ private fun FieldMindNavHost(
                 }
             }
             composable(FieldMindScreen.SettingsProfile.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { ProfileSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
-            composable(FieldMindScreen.SettingsAppearance.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { AppearanceSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
+            composable(FieldMindScreen.SettingsAppearance.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { AppearanceSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenEntityColors = { navController.navigateToDestination(FieldMindScreen.SettingsEntityColors.route) }) } }
+            composable(FieldMindScreen.SettingsEntityColors.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { EntityAccentColorsPage(settings = viewModel.fieldSettings, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.SettingsCapture.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { CaptureDefaultsSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.SettingsAi.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { AiAssistantSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.SettingsLocalModel.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { LocalModelSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }) } }

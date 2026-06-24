@@ -48,11 +48,11 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     val projectIcons = listOf("🌿", "🦋", "🐦", "🌲", "📷")
     val colorOptions = listOf(
-        0xFF4CAF50L to Color(0xFF4CAF50L),  // Green
-        0xFF2196F3L to Color(0xFF2196F3L),  // Blue
-        0xFF9C27B0L to Color(0xFF9C27B0L),  // Purple
-        0xFFFF9800L to Color(0xFFFF9800L),  // Orange
-        0xFFF44336L to Color(0xFFF44336L)   // Red
+        0xFF2E7D32L to FieldMindTheme.colors.observation,  // Observation green
+        0xFF1565C0L to FieldMindTheme.colors.question,    // Question blue
+        0xFF5E35B1L to FieldMindTheme.colors.source,      // Source violet
+        0xFF8B5000L to FieldMindTheme.colors.hypothesis,  // Hypothesis amber
+        0xFFE91E63L to FieldMindTheme.colors.flashcard    // Flashcard pink
     )
     val templates = listOf(
         "Empty Project",
@@ -1216,6 +1216,7 @@ private fun AttachmentTypeItem(
 
 @Composable
 fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+    val colors = FieldMindTheme.colors
     var folderName by remember { mutableStateOf("") }
     var selectedColor by remember { mutableStateOf(0xFF5F7F52) }
     val haptics = rememberFieldMindHaptics()
@@ -1227,7 +1228,6 @@ fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         0xFFFF9800L to "Orange",
         0xFFF44336L to "Red"
     )
-    val colors = FieldMindTheme.colors
 
     Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
         StandardScreenHeader(
@@ -1264,11 +1264,10 @@ fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             Spacer(Modifier.height(8.dp))
             Button(onClick = {
                 if (folderName.isNotBlank()) {
-                    viewModel.addNote(
-                        title = "📁 $folderName",
-                        body = "Folder created on ${java.text.SimpleDateFormat("MMM d, yyyy", java.util.Locale.getDefault()).format(java.util.Date())}",
-                        category = "Folder",
-                        tags = "folder, ${folderName.lowercase().replace(" ", "-")}",
+                    viewModel.addFolder(
+                        name = folderName.trim(),
+                        color = selectedColor,
+                        projectId = null,
                         onSaved = { onBack() }
                     )
                 }
