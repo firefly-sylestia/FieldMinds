@@ -41,8 +41,8 @@ import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.components.pressScale
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.BorderStroke
@@ -93,7 +93,6 @@ fun FieldMindSettingsScreen(
     onOpenAutoGen: (() -> Unit)? = null,
     onOpenScreenVisibility: (() -> Unit)? = null
 ) {
-    BackHandler(enabled = true) { onBack() }
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
     val settingsScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
@@ -189,6 +188,7 @@ fun FieldMindSettingsScreen(
         item { SectionHeader("About & advanced", "Developer tools, changelog, and app info") }
         item { SettingsNavCard("What’s new", "FieldMind redesign notes and migration changes", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenChangelog?.invoke() } }
         item { SettingsNavCard("About", "Credits, acknowledgements, and version", FieldMindIcons.Info, FieldMindTheme.colors.source) { onOpenAbout?.invoke() } }
+        item { SettingsNavCard("Developer options", "Debug tools, logging, performance stats, and test data", MaterialSymbolIcon("tune"), FieldMindTheme.colors.hypothesis) { onOpenDeveloper?.invoke() } }
 
         item {
             OutlinedButton(onClick = onResetOnboarding, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {

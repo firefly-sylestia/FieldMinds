@@ -127,6 +127,10 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object SettingsSpeciesId : FieldMindScreen("field_settings_species_id", "Species ID", FieldMindIcons.Nature)
     data object SettingsAutoGen : FieldMindScreen("field_settings_auto_gen", "Auto generation", FieldMindIcons.Sparkle)
 
+    // ── Tasks screen ──
+    data object Tasks : FieldMindScreen("field_tasks", "Tasks", MaterialSymbolIcon("checklist"))
+    data object NewTask : FieldMindScreen("field_new_task", "New Task", MaterialSymbolIcon("checklist"))
+
     // ── Creation screens (converted from dialogs) ──
     data object NewProject : FieldMindScreen("field_new_project", "New Project", FieldMindIcons.Project)
     data object NewQuestion : FieldMindScreen("field_new_question", "New Question", FieldMindIcons.Question)
@@ -147,6 +151,24 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object TaxonomicBrowser : FieldMindScreen("field_taxonomic_browser", "Taxonomic Browser", FieldMindIcons.Category)
     data object FieldLog : FieldMindScreen("field_log", "Field Log", FieldMindIcons.List)
     data object TimerTool : FieldMindScreen("field_timer", "Timer", FieldMindIcons.Timer)
+
+    // ── Task detail screen ──
+    data object TaskDetail : FieldMindScreen("field_task_detail/{taskId}", "Task", MaterialSymbolIcon("checklist"))
+
+    // ── Question detail screen ──
+    data object QuestionDetail : FieldMindScreen("field_question_detail/{questionId}", "Question", FieldMindIcons.Question)
+
+    // ── Project detail screen ──
+    data object ProjectDetail : FieldMindScreen("field_project_detail/{projectId}", "Project", FieldMindIcons.Project)
+
+    // ── Hypothesis detail screen ──
+    data object HypothesisDetail : FieldMindScreen("field_hypothesis_detail/{hypothesisId}", "Hypothesis", FieldMindIcons.Hypothesis)
+
+    // ── Project relations screen ──
+    data object ProjectRelations : FieldMindScreen("field_project_relations/{projectId}", "Relations", MaterialSymbolIcon("hub"))
+
+    // ── Project settings screen ──
+    data object ProjectSettings : FieldMindScreen("field_project_settings/{projectId}", "Project Settings", MaterialSymbolIcon("settings"))
 
     // ── Canvas note editor ──
     data object Canvas : FieldMindScreen("field_canvas/{noteId}", "Canvas", MaterialSymbolIcon("dashboard_customize"))
@@ -859,7 +881,15 @@ private fun FieldMindNavHost(
     onNavigateToTabRoute: ((String) -> Unit)? = null
 ) {
     var readerTarget by remember { mutableStateOf("" to "") }
-    val openDetail: (String, Long) -> Unit = { kind, id -> navController.navigateToDestination("field_detail/$kind/$id") }
+    val openDetail: (String, Long) -> Unit = { kind, id ->
+        when (kind) {
+            "question" -> navController.navigateToDestination("field_question_detail/$id")
+            "task" -> navController.navigateToDestination("field_task_detail/$id")
+            "species" -> navController.navigateToDestination("field_species_detail/$id")
+            "hypothesis" -> navController.navigateToDestination("field_hypothesis_detail/$id")
+            else -> navController.navigateToDestination("field_detail/$kind/$id")
+        }
+    }
     val openReader: (String, String) -> Unit = { url: String, title: String ->
         readerTarget = url to title
         navController.navigateToDestination(FieldMindScreen.Reader.route)
@@ -918,7 +948,12 @@ private fun FieldMindNavHost(
             }
             composable(FieldMindScreen.Projects.route) {
                 TabSwipeHost(onSwipeBack = onSwipeToPrevTab, onSwipeForward = onSwipeToNextTab, onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
-                    ProjectsScreen(viewModel = viewModel, onOpenDetail = openDetail, onStartSession = { navController.navigateToDestination(FieldMindScreen.ResearchSession.route) }, onNavigate = { navController.navigateToDestination(it.route) })
+                    ProjectsScreen(
+                        viewModel = viewModel,
+                        onOpenDetail = { _, id -> navController.navigateToDestination("field_project_detail/$id") },
+                        onStartSession = { navController.navigateToDestination(FieldMindScreen.ResearchSession.route) },
+                        onNavigate = { navController.navigateToDestination(it.route) }
+                    )
                 }
             }
             composable(FieldMindScreen.Library.route) {
@@ -937,10 +972,10 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.Questions.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { QuestionsScreen(viewModel = viewModel, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Hypotheses.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { QuestionsScreen(viewModel = viewModel, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.DataTools.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { DataToolsHubScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
-            composable(FieldMindScreen.Analysis.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { ProjectsScreen(viewModel = viewModel, startTab = 0, onOpenDetail = openDetail, onNavigate = { navController.navigateToDestination(it.route) }) } }
+            composable(FieldMindScreen.Analysis.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { ProjectsScreen(viewModel = viewModel, startTab = 0, onOpenDetail = { _, id -> navController.navigateToDestination("field_project_detail/$id") }, onNavigate = { navController.navigateToDestination(it.route) }) } }
             composable(FieldMindScreen.Reports.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { FieldMindReportScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.Search.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { ArchiveScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenDetail = openDetail, onOpenReader = openReader) } }
-            composable(FieldMindScreen.MapScreen.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { MapFieldScreen(viewModel = viewModel, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
+            composable(FieldMindScreen.MapScreen.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { MapFieldScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.ExportStudio.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { BackupAndRestoreScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.Changelog.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { FieldMindChangelogScreen(onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.Progress.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { InsightsScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
@@ -1015,6 +1050,8 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.NewQuestion.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { NewQuestionScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.NewHypothesis.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { NewHypothesisScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.NewDataRecord.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { NewDataRecordScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
+            composable(FieldMindScreen.Tasks.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { TasksScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenDetail = openDetail, onNavigate = { route -> navController.navigateToDestination(route) }) } }
+            composable(FieldMindScreen.NewTask.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { NewTaskScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.NewReport.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { NewReportScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.SpeciesTool.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { SpeciesToolScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenBrowser = { navController.navigateToDestination(FieldMindScreen.SpeciesBrowser.route) }, onOpenTaxonomicBrowser = { navController.navigateToDestination(FieldMindScreen.TaxonomicBrowser.route) }) } }
             composable(FieldMindScreen.ChecklistTool.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { ChecklistToolScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
@@ -1022,6 +1059,64 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.SiteLogTool.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { SiteLogToolScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.ComparisonTable.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { ComparisonTableScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.TimerTool.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { TimerToolScreen(onBack = { navController.popBackStack() }) } }
+            composable("field_task_detail/{taskId}") { entry ->
+                val taskId = entry.arguments?.getString("taskId")?.toLongOrNull() ?: 0L
+                SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
+                    TaskDetailScreen(
+                        taskId = taskId,
+                        viewModel = viewModel,
+                        onBack = { navController.popBackStack() },
+                        onOpenDetail = openDetail
+                    )
+                }
+            }
+            composable("field_question_detail/{questionId}") { entry ->
+                val questionId = entry.arguments?.getString("questionId")?.toLongOrNull() ?: 0L
+                SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
+                    QuestionDetailScreen(
+                        questionId = questionId,
+                        viewModel = viewModel,
+                        onBack = { navController.popBackStack() },
+                        onOpenDetail = openDetail
+                    )
+                }
+            }
+            composable("field_project_detail/{projectId}") { entry ->
+                val projectId = entry.arguments?.getString("projectId")?.toLongOrNull() ?: 0L
+                SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
+                    ProjectDetailScreen(
+                        projectId = projectId,
+                        viewModel = viewModel,
+                        onBack = { navController.popBackStack() },
+                        onOpenDetail = openDetail,
+                        onNavigate = { navController.navigateToDestination(it.route) },
+                        onOpenRelations = { navController.navigateToDestination("field_project_relations/$projectId") },
+                        onOpenSettings = { id -> navController.navigateToDestination("field_project_settings/$id") }
+                    )
+                }
+            }
+            composable("field_project_relations/{projectId}") { entry ->
+                val projectId = entry.arguments?.getString("projectId")?.toLongOrNull() ?: 0L
+                SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
+                    ProjectRelationsScreen(
+                        projectId = projectId,
+                        viewModel = viewModel,
+                        onBack = { navController.popBackStack() },
+                        onOpenDetail = openDetail
+                    )
+                }
+            }
+            composable("field_project_settings/{projectId}") { entry ->
+                val projectId = entry.arguments?.getString("projectId")?.toLongOrNull() ?: 0L
+                SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
+                    ProjectSettingsScreen(
+                        projectId = projectId,
+                        viewModel = viewModel,
+                        onBack = { navController.popBackStack() },
+                        onOpenBackupSettings = { navController.navigateToDestination(FieldMindScreen.SettingsBackup.route) }
+                    )
+                }
+            }
             composable("field_canvas/{noteId}") { entry ->
                 val noteId = entry.arguments?.getString("noteId")?.toLongOrNull() ?: 0L
                 SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
