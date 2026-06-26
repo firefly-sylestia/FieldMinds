@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎯  Target"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Let another device control this screen"
+            android:textSize="13sp"
+            android:textColor="@color/textMuted"
+            android:layout_marginBottom="28dp" />
+
+        <!-- IP Address Card -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ip_display"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="YOUR IP ADDRESS"
+                    android:textSize="11sp"
+                    android:textColor="@color/accent"
+                    android:letterSpacing="0.08" />
+
+                <TextView
+                    android:id="@+id/tvIpAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="192.168.1.45"
+                    android:textSize="34sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary"
+                    android:layout_marginTop="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="tap to copy · long-press for all interfaces"
+                    android:textSize="11sp"
+                    android:textColor="@color/textMuted"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <!-- Start Hosting Button (with screen sharing) -->
+        <Button
+            android:id="@+id/btnStartHosting"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="▶  START HOSTING"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:background="@drawable/bg_button_primary"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Start Input-Only Hosting Button (no screen sharing) -->
+        <Button
+            android:id="@+id/btnInputOnlyHosting"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="🔌  INPUT ONLY (no video)"
+            android:textSize="13sp"
+            android:textColor="@color/textPrimary"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:background="@drawable/bg_button_secondary"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Stop Hosting Button -->
+        <Button
+            android:id="@+id/btnStopHosting"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="■  STOP HOSTING"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:background="@drawable/bg_button_danger"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone" />
+
+        <!-- Quality Selector Card (hidden when input-only) -->
+        <FrameLayout
+            android:id="@+id/qualityCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="STREAM QUALITY"
+                    android:textSize="11sp"
+                    android:textColor="@color/textMuted"
+                    android:letterSpacing="0.08" />
+
+                <Spinner
+                    android:id="@+id/spinnerQuality"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/textPrimary"
+                    android:backgroundTint="@color/divider" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <!-- Status Card -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="○  Idle"
+                    android:textSize="14sp"
+                    android:textColor="@color/textMuted" />
+
+                <TextView
+                    android:id="@+id/tvSessions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sessions: 0"
+                    android:textSize="13sp"
+                    android:textColor="@color/textMuted"
+                    android:layout_marginTop="6dp" />
+
+                <TextView
+                    android:id="@+id/tvFps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="13sp"
+                    android:textColor="@color/textMuted"
+                    android:layout_marginTop="2dp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <!-- Help Button -->
+        <TextView
+            android:id="@+id/tvWifiHelp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp"
+            android:background="@drawable/bg_card"
+            android:text="📶  Can't connect? Tap for help"
+            android:textSize="13sp"
+            android:textColor="@color/textSecondary"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground" />
+
+    </LinearLayout>
+
+</ScrollView>

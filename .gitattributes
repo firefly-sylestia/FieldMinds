@@ -1,2 +1,7 @@
-# Auto detect text files and perform LF normalization
 * text=auto
+*.kt text diff=kotlin
+*.kts text
+*.xml text
+*.properties text
+*.jar binary
+*.png binary

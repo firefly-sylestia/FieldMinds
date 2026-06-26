@@ -1,14 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFD0BCFF</color>
-    <color name="purple_500">#FF6750A4</color>
-    <color name="purple_700">#FF4F378B</color>
-    <color name="teal_200">#FFEFB8C8</color>
-    <color name="teal_700">#FF633B48</color>
+    <!-- ════════════════════════════════════
+         Material Design 3 — Purple Palette
+         Seed color: #6750A4
+         ════════════════════════════════════ -->
+
+    <!-- Primary — M3 purple -->
+    <color name="primary">#D0BCFF</color>
+    <color name="onPrimary">#381E72</color>
+    <color name="primaryContainer">#4F378B</color>
+    <color name="onPrimaryContainer">#EADDFF</color>
+
+    <!-- Secondary — neutral violet -->
+    <color name="secondary">#CCC2DC</color>
+    <color name="onSecondary">#332D41</color>
+    <color name="secondaryContainer">#4A4458</color>
+    <color name="onSecondaryContainer">#E8DEF8</color>
+
+    <!-- Tertiary — rosy pink accent -->
+    <color name="tertiary">#EFB8C8</color>
+    <color name="onTertiary">#492532</color>
+    <color name="tertiaryContainer">#633B48</color>
+    <color name="onTertiaryContainer">#FFD8E4</color>
+
+    <!-- Error -->
+    <color name="error">#F2B8B5</color>
+    <color name="onError">#601410</color>
+    <color name="errorContainer">#8C1D18</color>
+    <color name="onErrorContainer">#F9DEDC</color>
+
+    <!-- Background & Surface (dark theme) -->
+    <color name="backgroundDark">#141218</color>
+    <color name="onBackground">#E6E1E5</color>
+    <color name="surface">#141218</color>
+    <color name="onSurface">#E6E1E5</color>
+    <color name="surfaceVariant">#49454F</color>
+    <color name="onSurfaceVariant">#CAC4D0</color>
+
+    <!-- Surface container elevation layers -->
+    <color name="surfaceContainerLowest">#0D0B10</color>
+    <color name="surfaceContainerLow">#1A1820</color>
+    <color name="surfaceContainer">#201E25</color>
+    <color name="surfaceHigh">#2A282F</color>
+    <color name="surfaceHighest">#35333A</color>
+
+    <!-- Outline / Divider -->
+    <color name="outline">#938F99</color>
+    <color name="outlineVariant">#49454F</color>
+
+    <!-- Legacy texture names kept for compatibility -->
+    <color name="accent">#D0BCFF</color>
+    <color name="accentDark">#4F378B</color>
+    <color name="primaryDark">#4F378B</color>
+    <color name="primaryLight">#EADDFF</color>
+    <color name="primarySurface">#201E25</color>
+    <color name="backgroundCard">#1A1820</color>
+    <color name="backgroundCardElevated">#2A282F</color>
+    <color name="textPrimary">#E6E1E5</color>
+    <color name="textSecondary">#CAC4D0</color>
+    <color name="textMuted">#938F99</color>
+    <color name="statusConnected">#81C784</color>
+    <color name="statusDisconnected">#F2B8B5</color>
+    <color name="statusWaiting">#FFD666</color>
+    <color name="surfaceOverlay">#990D0B10</color>
+    <color name="divider">#49454F</color>
+    <color name="rippleEffect">#33D0BCFF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="splash_primary">#6750A4</color>
-    <color name="splash_secondary_depth">#21005D</color>
-    <color name="splash_content_on_primary">#FFFFFF</color>
-    <color name="launcher_bg">#1F6B4C</color>
 </resources>

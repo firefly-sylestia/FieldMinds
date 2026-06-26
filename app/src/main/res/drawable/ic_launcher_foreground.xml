@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scale xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/fieldmind_logo"
-    android:scaleGravity="center"
-    android:scaleHeight="8%"
-    android:scaleWidth="8%" />
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer ring — device/phone shape -->
+    <path
+        android:fillColor="@color/primaryContainer"
+        android:pathData="M36,28 C33.2,28 31,30.2 31,33 L31,75 C31,77.8 33.2,80 36,80 L72,80 C74.8,80 77,77.8 77,75 L77,33 C77,30.2 74.8,28 72,28 Z" />
+    <!-- Inner screen — the mirror/display -->
+    <path
+        android:fillColor="@color/backgroundDark"
+        android:pathData="M38,33 L70,33 C71.1,33 72,33.9 72,35 L72,70 C72,71.1 71.1,72 70,72 L38,72 C36.9,72 36,71.1 36,70 L36,35 C36,33.9 36.9,33 38,33 Z" />
+    <!-- Reflection arrows — two curved arrows indicating mirroring -->
+    <path
+        android:fillColor="@color/primary"
+        android:pathData="M46,48 C46,43.6 49.6,40 54,40 L54,44 C51.2,44 49,46.2 49,48 C49,49.8 50.2,51.4 52,52 L52,48 Z" />
+    <path
+        android:fillColor="@color/tertiary"
+        android:pathData="M62,55 C62,59.4 58.4,63 54,63 L54,59 C56.8,59 59,56.8 59,55 C59,53.2 57.8,51.6 56,51 L56,55 Z" />
+    <!-- Screen content — subtle lines on the display -->
+    <path
+        android:fillColor="@color/onSurfaceVariant"
+        android:pathData="M42,40 L66,40"
+        android:strokeWidth="1.8"
+        android:strokeColor="@color/onSurfaceVariant" />
+    <path
+        android:fillColor="@color/onSurfaceVariant"
+        android:pathData="M42,45 L60,45"
+        android:strokeWidth="1.8"
+        android:strokeColor="@color/onSurfaceVariant" />
+    <path
+        android:fillColor="@color/onSurfaceVariant"
+        android:pathData="M42,50 L55,50"
+        android:strokeWidth="1.8"
+        android:strokeColor="@color/onSurfaceVariant" />
+    <!-- Bottom bar/home indicator -->
+    <path
+        android:fillColor="@color/primary"
+        android:pathData="M50,68 L58,68"
+        android:strokeWidth="2"
+        android:strokeColor="@color/primary"
+        android:strokeLineCap="round" />
+</vector>
