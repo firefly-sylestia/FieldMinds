@@ -134,14 +134,29 @@ class ScreenCaptureService : Service() {
             return
         }
 
-        // Determine the actual encoding resolution from the selected quality preset
+        // Determine the actual encoding resolution from the selected quality preset.
+        // CRITICAL: Match the device's actual display orientation so the captured
+        // content isn't squished/stretched. If the preset dimensions don't match
+        // the display aspect ratio, swap them to match orientation.
         val quality = selectedQuality
+        val dm = resources.displayMetrics
+        val displayWidth = dm.widthPixels
+        val displayHeight = dm.heightPixels
+
         val (encWidth, encHeight) = if (quality.width == 0 || quality.height == 0) {
             // Native: use the device's actual display resolution
-            val dm = resources.displayMetrics
-            Pair(dm.widthPixels, dm.heightPixels)
+            Pair(displayWidth, displayHeight)
         } else {
-            Pair(quality.width, quality.height)
+            // Match the preset's LONGER side to the display's longer side
+            val displayIsLandscape = displayWidth > displayHeight
+            val presetIsLandscape = quality.width > quality.height
+            if (displayIsLandscape == presetIsLandscape) {
+                // Orientation matches — use as-is
+                Pair(quality.width, quality.height)
+            } else {
+                // Orientation differs — swap to match display
+                Pair(quality.height, quality.width)
+            }
         }
         val bitrate = quality.bitrate
 

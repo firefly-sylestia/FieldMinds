@@ -111,49 +111,69 @@ class InputReceiverService : Service() {
             try {
                 Log.d(TAG, "Listening for input connections on port $INPUT_PORT...")
                 socketServer = ServerSocket(INPUT_PORT)
-                clientSocket = socketServer!!.accept()
-                clientSocket!!.tcpNoDelay = true
 
-                Log.d(TAG, "Controller connected for input!")
+                // Reconnection loop: accept connections one at a time.
+                // When the controller disconnects (EOFException in handleInputStream),
+                // accept() the next controller without restarting the service.
+                while (scope.isActive) {
+                    try {
+                        Log.d(TAG, "Waiting for controller connection...")
+                        clientSocket = socketServer!!.accept()
+                        clientSocket!!.tcpNoDelay = true
 
-                // ── CRITICAL: coordinate mapping setup ──
-                // The controller maps touch coordinates to the target's screen dimensions
-                // (from the handshake below). On the target side, InputInjector.scaleToScreen()
-                // maps from video resolution to screen resolution.
-                //
-                // If ScreenCaptureService IS running: syncVideoResolution() will read the
-                // actual video resolution (e.g. 720x1280) and set videoWidth/videoHeight.
-                // Then scaleToScreen correctly maps incoming video-space coords to screen.
-                //
-                // If ScreenCaptureService is NOT running (input-only mode): syncVideoResolution()
-                // finds no video source, so videoWidth stays at its default (720x1280). But the
-                // controller sends coords already in SCREEN space — we'd double-scale them.
-                //
-                // Fix: set video res = screen res FIRST, then syncVideoResolution OVERWRITES
-                // if ScreenCaptureService is running. If not running, video res stays =
-                // screen res → scaleToScreen becomes identity → correct.
+                        Log.d(TAG, "Controller connected for input!")
 
-                // Step 1: Get target screen dimensions
-                val targetW = inputInjector.getTargetWidth()
-                val targetH = inputInjector.getTargetHeight()
+                        // ── CRITICAL: coordinate mapping setup ──
+                        // The controller maps touch coordinates to the target's screen dimensions
+                        // (from the handshake below). On the target side, InputInjector.scaleToScreen()
+                        // maps from video resolution to screen resolution.
+                        //
+                        // If ScreenCaptureService IS running: syncVideoResolution() will read the
+                        // actual video resolution (e.g. 720x1280) and set videoWidth/videoHeight.
+                        // Then scaleToScreen correctly maps incoming video-space coords to screen.
+                        //
+                        // If ScreenCaptureService is NOT running (input-only mode): syncVideoResolution()
+                        // finds no video source, so videoWidth stays at its default (720x1280). But the
+                        // controller sends coords already in SCREEN space — we'd double-scale them.
+                        //
+                        // Fix: set video res = screen res FIRST, then syncVideoResolution OVERWRITES
+                        // if ScreenCaptureService is running. If not running, video res stays =
+                        // screen res → scaleToScreen becomes identity → correct.
 
-                // Step 2: Set video resolution = screen resolution (safe default for input-only)
-                inputInjector.setVideoResolution(targetW, targetH)
+                        // Step 1: Get target screen dimensions
+                        val targetW = inputInjector.getTargetWidth()
+                        val targetH = inputInjector.getTargetHeight()
 
-                // Step 3: syncVideoResolution WILL OVERWRITE video res with actual video
-                // dimensions if ScreenCaptureService is running (normal mode)
-                inputInjector.syncVideoResolution()
+                        // Step 2: Set video resolution = screen resolution (safe default for input-only)
+                        inputInjector.setVideoResolution(targetW, targetH)
 
-                // Step 4: Send handshake
-                val output = DataOutputStream(clientSocket!!.getOutputStream())
-                output.writeInt(targetW)
-                output.writeInt(targetH)
-                output.flush()
-                Log.d(TAG, "Sent handshake: ${targetW}x${targetH}")
+                        // Step 3: syncVideoResolution WILL OVERWRITE video res with actual video
+                        // dimensions if ScreenCaptureService is running (normal mode)
+                        inputInjector.syncVideoResolution()
 
-                handleInputStream()
+                        // Step 4: Send handshake
+                        val output = DataOutputStream(clientSocket!!.getOutputStream())
+                        output.writeInt(targetW)
+                        output.writeInt(targetH)
+                        output.flush()
+                        Log.d(TAG, "Sent handshake: ${targetW}x${targetH}")
+
+                        handleInputStream()
+                    } catch (e: java.io.EOFException) {
+                        Log.d(TAG, "Controller disconnected, waiting for reconnection...")
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Input receiver error", e)
+                        if (scope.isActive) {
+                            Log.d(TAG, "Will retry connection...")
+                        }
+                    } finally {
+                        // Clean up the old client socket before accepting a new one
+                        try { clientSocket?.close() } catch (_: Exception) {}
+                        clientSocket = null
+                    }
+                }
             } catch (e: Exception) {
-                Log.e(TAG, "Input receiver error", e)
+                Log.e(TAG, "Input receiver server error", e)
             }
         }
 
