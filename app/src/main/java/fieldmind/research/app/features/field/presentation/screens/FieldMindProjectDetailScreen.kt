@@ -869,7 +869,7 @@ private fun NewTaskDialog(viewModel: FieldMindViewModel, projectId: Long, onDism
             Text("Priority", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 listOf("Low", "Medium", "High").forEach { level ->
-                    val isSelected = priority == level; val accent = priorityColor[level]!!
+                    val isSelected = priority == level; val accent = priorityColor[level] ?: colors.positive
                     Surface(onClick = { haptics.light(); priority = level }, shape = RoundedCornerShape(14.dp), color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh, border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null, modifier = Modifier.weight(1f)) {
                         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Box(modifier = Modifier.size(18.dp).clip(CircleShape).background(if (isSelected) accent else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) { if (isSelected) Box(Modifier.size(8.dp).clip(CircleShape).background(accent)) }
@@ -915,7 +915,7 @@ private fun NewAttachmentDialog(viewModel: FieldMindViewModel, onDismiss: () -> 
             Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
                 Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Icon(MaterialSymbolIcon("check_circle"), null, tint = colors.positive, size = 24.dp)
-                    Column(Modifier.weight(1f)) { Text("$capturedType attached", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold); Text(capturedUri!!.substringAfterLast("/").take(40), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                    Column(Modifier.weight(1f)) { Text("$capturedType attached", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold); Text(capturedUri?.substringAfterLast("/")?.take(40) ?: "", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis) }
                 }
             }
         }

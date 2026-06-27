@@ -101,7 +101,11 @@ object PatternDetectionEngine {
             var added = false
             for (site in sites) {
                 val first = site.first()
-                if (distanceMeters(obs.latitude!!, obs.longitude!!, first.latitude!!, first.longitude!!) <= SAME_LOCATION_RADIUS_M) {
+                val obsLat = obs.latitude ?: continue
+                val obsLng = obs.longitude ?: continue
+                val firstLat = first.latitude ?: continue
+                val firstLng = first.longitude ?: continue
+                if (distanceMeters(obsLat, obsLng, firstLat, firstLng) <= SAME_LOCATION_RADIUS_M) {
                     site.add(obs)
                     added = true
                     break

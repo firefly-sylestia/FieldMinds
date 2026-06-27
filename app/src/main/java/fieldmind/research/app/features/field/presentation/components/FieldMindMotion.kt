@@ -782,74 +782,20 @@ fun SwipeBackHost(
                             }
                         }
 
-                        // ── Mock screen content area ──
-                        Column(
+                        // ── Clean background behind the sliding screen ──
+                        // No mock placeholder content — just a clean surface.
+                        Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(20.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            // Placeholder content cards
-                            repeat(3) { idx ->
-                                val cardAlpha = 1f - idx * 0.12f
-                                Surface(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(if (idx == 0) 80.dp else 60.dp),
-                                    shape = RoundedCornerShape(12.dp),
-                                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha * 0.35f)
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(16.dp),
-                                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        // Mock avatar circle
-                                        Box(
-                                            modifier = Modifier
-                                                .size(if (idx == 0) 40.dp else 32.dp)
-                                                .background(
-                                                    screenColor.copy(alpha = cardAlpha * 0.15f),
-                                                    RoundedCornerShape(50)
-                                                )
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(
+                                            screenColor.copy(alpha = 0.03f),
+                                            Color.Transparent
                                         )
-                                        // Mock text lines
-                                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .width((80 + idx * 30).dp)
-                                                    .height(10.dp)
-                                                    .background(
-                                                        MaterialTheme.colorScheme.onSurface.copy(alpha = cardAlpha * 0.15f),
-                                                        RoundedCornerShape(4.dp)
-                                                    )
-                                            )
-                                            Box(
-                                                modifier = Modifier
-                                                    .width((120 + idx * 20).dp)
-                                                    .height(8.dp)
-                                                    .background(
-                                                        MaterialTheme.colorScheme.onSurface.copy(alpha = cardAlpha * 0.09f),
-                                                        RoundedCornerShape(4.dp)
-                                                    )
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-
-                            Spacer(Modifier.weight(1f))
-
-                            // Bottom hint
-                            Text(
-                                "Swipe to go back",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-                        }
+                                    )
+                                )
+                        )
                     }
                 }
             }

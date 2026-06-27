@@ -515,7 +515,7 @@ class SpeciesDatabase(private val context: Context) {
     }
 
     private suspend fun getCatalog(): List<SpeciesRecord> = withContext(Dispatchers.Default) {
-        if (speciesCache != null) return@withContext speciesCache!!
+        speciesCache?.let { return@withContext it }
 
         // Load from bundled species JSON asset
         val records = try {

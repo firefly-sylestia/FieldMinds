@@ -136,8 +136,9 @@ fun SpeciesBrowserScreen(
         isLoading = true
 
         // Get base results (by category or full search)
-        val base = if (selectedCategory != null) {
-            val byCategory = database.getByCategory(selectedCategory!!)
+        val cat = selectedCategory
+        val base = if (cat != null) {
+            val byCategory = database.getByCategory(cat)
             if (searchQuery.isBlank()) byCategory
             else byCategory.filter {
                 val q = searchQuery.lowercase()
@@ -597,7 +598,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                 }
             }
         } else {
-            val record = species!!
+            val record = species ?: return@Scaffold
             val accent = categoryColor(record.category)
 
             LazyColumn(

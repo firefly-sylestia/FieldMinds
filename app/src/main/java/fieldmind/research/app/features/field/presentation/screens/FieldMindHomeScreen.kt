@@ -809,12 +809,12 @@ private fun CompactHomeHeader(
             ) {
                 Box(
                     Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(20.dp))
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(14.dp))
                         .background(colors.positive.copy(alpha = if (colors.isDark) 0.34f else 0.16f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(FieldMindIcons.Nature, null, tint = colors.positive, size = 42.dp)
+                    Icon(FieldMindIcons.Nature, null, tint = colors.positive, size = 26.dp)
                 }
                 Column(Modifier.weight(1f)) {
                     Text(
@@ -837,7 +837,13 @@ private fun CompactHomeHeader(
                 }
             }
 
-            // ── Row 2: Horizontal progress bar + goal ──
+            // ── Row 2: Animated progress bar ──
+            val animatedProgress by animateFloatAsState(
+                targetValue = progress,
+                animationSpec = tween(800, easing = FastOutSlowInEasing),
+                label = "homeProgress"
+            )
+
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(
                     Modifier.fillMaxWidth(),
@@ -845,7 +851,7 @@ private fun CompactHomeHeader(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        if (complete) "Goal met ✓" else "Today's observations",
+                        if (complete) "✓ Complete" else "Today's observations",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -866,24 +872,46 @@ private fun CompactHomeHeader(
                     }
                 }
 
-                // Horizontal gradient progress bar
+                // Animated horizontal gradient progress bar with glow
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(4.dp))
+                        .height(10.dp)
+                        .clip(RoundedCornerShape(5.dp))
                         .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 ) {
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(progress)
+                            .fillMaxWidth(animatedProgress)
                             .fillMaxHeight()
-                            .clip(RoundedCornerShape(4.dp))
+                            .clip(RoundedCornerShape(5.dp))
                             .background(
                                 if (complete) Brush.horizontalGradient(listOf(colors.positive, colors.confidenceSure))
                                 else Brush.horizontalGradient(listOf(colors.observation, colors.data))
                             )
                     )
+                    // Leading-edge glow
+                    if (animatedProgress > 0f && animatedProgress < 1f) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(20.dp)
+                                .align(Alignment.CenterStart)
+                                .graphicsLayer {
+                                    translationX = (animatedProgress * size.width / density) - 10.dp.toPx()
+                                    alpha = 0.4f
+                                }
+                                .background(
+                                    Brush.horizontalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            Color.White.copy(alpha = 0.35f),
+                                            Color.Transparent
+                                        )
+                                    )
+                                )
+                        )
+                    }
                 }
 
                 Row(
@@ -892,8 +920,8 @@ private fun CompactHomeHeader(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        if (complete) "Great work! Keep the streak going."
-                        else "$remaining more to hit today's goal of $goal.",
+                        if (complete) "Great work! Keep going."
+                        else "$remaining remaining today",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.weight(1f)
@@ -1271,9 +1299,9 @@ private fun LiveWeatherDashboardWidget(
                         )
                 ) {AnimatedWeatherScene(
         weatherCode = displayWeatherCode,
-        temperature = currentWeather!!.temperature,
-        sunrise = currentWeather!!.sunrise,
-        sunset = currentWeather!!.sunset,
+        temperature = currentWeather?.temperature ?: 0.0,
+        sunrise = currentWeather?.sunrise,
+        sunset = currentWeather?.sunset,
         compact = false,
         forceNight = if (developerMode && testIsNight) true else if (developerMode) false else null,
         showCloudAnimation = showCloudAnimation
@@ -1381,7 +1409,7 @@ private fun LiveWeatherDashboardWidget(
             // ── Time-of-day greeting ──
             if (currentWeather != null) {
                 Text(
-                    "$timeGreeting. ${currentWeather!!.weatherDescription.ifBlank { "Clear skies" }}.",
+                    "$timeGreeting. ${currentWeather?.weatherDescription?.ifBlank { "Clear skies" }}.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = textOnScene.copy(alpha = 0.75f),
                     fontWeight = FontWeight.Medium
@@ -1390,7 +1418,7 @@ private fun LiveWeatherDashboardWidget(
 
             // ── Weather data when available ──
             if (currentWeather != null) {
-                val w = currentWeather!!
+                val w = currentWeather
 
                 // Main temperature + condition (always visible)
                 Row(

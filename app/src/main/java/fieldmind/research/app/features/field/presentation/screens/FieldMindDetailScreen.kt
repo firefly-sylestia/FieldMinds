@@ -835,7 +835,7 @@ private fun ObservationStructuredDetailsSection(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                 Text("Checklist", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    details!!.observationChecklist.split(",").filter { it.isNotBlank() }.forEach { item ->
+                    details.observationChecklist.split(",").filter { it.isNotBlank() }.forEach { item ->
                         TagChip(item.trim())
                     }
                 }
@@ -845,7 +845,7 @@ private fun ObservationStructuredDetailsSection(
             if (hasMeasurements) {
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                 Text("Measurements", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                details!!.measurements.split(";").filter { it.isNotBlank() }.forEach { entry ->
+                details.measurements.split(";").filter { it.isNotBlank() }.forEach { entry ->
                     val parts = entry.split("=", limit = 2)
                     if (parts.size == 2) {
                         Row(

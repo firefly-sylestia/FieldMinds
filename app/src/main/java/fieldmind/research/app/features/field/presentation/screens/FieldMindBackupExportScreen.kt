@@ -362,47 +362,49 @@ fun BackupAndRestoreScreen(
                             },
                             onImport = {
                                                 scope.launch {
-                                    if (importFileUri == null) return@launch
+                                    val importUri = importFileUri ?: return@launch
                                     isImporting = true
                                     importStepText = "Reading archive…"
                                     importProgress = 0.1f
                                     var decryptedTempFile: File? = null
                                     try {
                                         val raw = withContext(Dispatchers.IO) {
-                                            importStepText = "Extracting data…"
-                                            importProgress = 0.3f
-                                            val isFieldMind = importFileName.endsWith(".fieldmind") || importFileName.endsWith(".zip") || importFileName.endsWith(".encrypted")
-                                            val uriToRead = if (importFileName.endsWith(".encrypted")) {
-                                                // If already decrypted in password prompt, reuse the extracted data
-                                                if (importedPackage != null && importedPackage!!.archiveJson.isNotBlank()) {
-                                                    importStepText = "Using previously decrypted data…"
-                                                    importProgress = 0.5f
-                                                    return@withContext importedPackage!!.archiveJson
-                                                }
-                                                // Decrypt first
-                                                importStepText = "Decrypting with password…"
-                                                importProgress = 0.2f
-                                                val tempDir = File(context.cacheDir, "import_decrypt")
-                                                tempDir.mkdirs()
-                                                val encryptedFile = File(context.cacheDir, "import_encrypted_${System.currentTimeMillis()}")
-                                                context.contentResolver.openInputStream(importFileUri!!)?.use { input ->
-                                                    encryptedFile.outputStream().use { output -> input.copyTo(output) }
-                                                }
-                                                val decrypted = FieldMindExportEncryption.decryptToFile(encryptedFile, importPassword, tempDir)
-                                                decryptedTempFile = decrypted
-                                                encryptedFile.delete()
-                                                Uri.fromFile(decrypted)
+                                            // Check for existing decrypted data
+                                            val existingPkg = importedPackage
+                                            if (existingPkg != null && existingPkg.archiveJson.isNotBlank()) {
+                                                importStepText = "Using previously decrypted data…"
+                                                importProgress = 0.5f
+                                                existingPkg.archiveJson
                                             } else {
-                                                importFileUri!!
-                                            }
-                                            if (isFieldMind) {
-                                                val extracted = FieldMindExportMediaPacker.extractPackage(context, uriToRead)
-                                                importedPackage = extracted
-                                                extracted?.archiveJson ?: run {
+                                                importStepText = "Extracting data…"
+                                                importProgress = 0.3f
+                                                val isFieldMind = importFileName.endsWith(".fieldmind") || importFileName.endsWith(".zip") || importFileName.endsWith(".encrypted")
+                                                val uriToRead = if (importFileName.endsWith(".encrypted")) {
+                                                    // Decrypt first
+                                                    importStepText = "Decrypting with password…"
+                                                    importProgress = 0.2f
+                                                    val tempDir = File(context.cacheDir, "import_decrypt")
+                                                    tempDir.mkdirs()
+                                                    val encryptedFile = File(context.cacheDir, "import_encrypted_${System.currentTimeMillis()}")
+                                                    context.contentResolver.openInputStream(importUri)?.use { input ->
+                                                        encryptedFile.outputStream().use { output -> input.copyTo(output) }
+                                                    }
+                                                    val decrypted = FieldMindExportEncryption.decryptToFile(encryptedFile, importPassword, tempDir)
+                                                    decryptedTempFile = decrypted
+                                                    encryptedFile.delete()
+                                                    Uri.fromFile(decrypted)
+                                                } else {
+                                                    importUri
+                                                }
+                                                if (isFieldMind) {
+                                                    val extracted = FieldMindExportMediaPacker.extractPackage(context, uriToRead)
+                                                    importedPackage = extracted
+                                                    extracted?.archiveJson ?: run {
+                                                        context.contentResolver.openInputStream(uriToRead)?.bufferedReader()?.readText() ?: ""
+                                                    }
+                                                } else {
                                                     context.contentResolver.openInputStream(uriToRead)?.bufferedReader()?.readText() ?: ""
                                                 }
-                                            } else {
-                                                context.contentResolver.openInputStream(uriToRead)?.bufferedReader()?.readText() ?: ""
                                             }
                                         }
                                         importProgress = 0.6f
@@ -617,7 +619,7 @@ fun BackupAndRestoreScreen(
                         // Parse preview with decryption
                         scope.launch {
                             try {
-                                val uri = importFileUri!!
+                                val uri = importFileUri ?: return@launch
                                 val raw = withContext(Dispatchers.IO) {
                                     val tempDir = File(context.cacheDir, "import_decrypt")
                                     tempDir.mkdirs()
@@ -720,7 +722,7 @@ fun BackupAndRestoreScreen(
 
     // ── Import result dialog ──
     if (showImportResultDialog && importResult != null) {
-        val result = importResult!!
+        val result = importResult ?: return
         AlertDialog(
             onDismissRequest = {
                 showImportResultDialog = false

@@ -1998,7 +1998,7 @@ private fun NativeAudioPlayer(uri: Uri, title: String, modifier: Modifier = Modi
             Spacer(Modifier.size(8.dp))
 
             if (errorMsg != null) {
-                Text(errorMsg!!, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
+                Text(errorMsg ?: "", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
             } else if (!isPrepared) {
                 LinearProgressIndicator(Modifier.fillMaxWidth(0.6f))
                 Spacer(Modifier.size(8.dp))
@@ -2069,7 +2069,7 @@ private fun NativeVideoPlayer(uri: Uri, modifier: Modifier = Modifier) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    errorMsg!!,
+                    errorMsg ?: "",
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.White,
                     textAlign = TextAlign.Center
