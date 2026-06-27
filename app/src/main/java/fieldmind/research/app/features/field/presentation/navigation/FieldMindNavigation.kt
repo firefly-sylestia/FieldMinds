@@ -64,7 +64,7 @@ import fieldmind.research.app.features.field.presentation.components.SwipeableAl
 import androidx.activity.compose.BackHandler
 import androidx.activity.ExperimentalActivityApi
 import androidx.activity.compose.PredictiveBackHandler
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.CompositionLocalProvider
 import kotlinx.coroutines.CancellationException
@@ -1398,29 +1398,62 @@ private fun AllTabScreen(
         )
 
         // ── Swipe gesture overlay (for tab switching) ──
+        // Uses awaitEachGesture with requireUnconsumed=false so the initial touch
+        // is NOT consumed, allowing taps, clicks, and vertical scrolls to pass
+        // through to the tab content below. Only starts consuming pointer events
+        // after confirming the gesture is clearly horizontal (x > 1.5x y).
         if (!reduceMotion) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .pointerInput(Unit) {
-                        detectDragGestures(
-                            onDrag = { change, dragAmount ->
-                                // Only consume horizontal drags to allow vertical scrolling
-                                // through to nested scrollable content. A ratio of 1.5x means
-                                // horizontal movement must be 50% larger than vertical to be
-                                // treated as a tab-switch gesture.
-                                if (abs(dragAmount.x) > abs(dragAmount.y) * 1.5f) {
+                        awaitEachGesture {
+                            // Don't consume the initial down — let content receive taps/clicks
+                            awaitFirstDown(requireUnconsumed = false)
+
+                            var isHorizontalDrag = false
+                            var accumulatedX = 0f
+                            var accumulatedY = 0f
+                            val directionThresholdPx = 8.dp.toPx()
+
+                            do {
+                                val event = awaitPointerEvent()
+                                val change = event.changes.firstOrNull() ?: break
+
+                                // Early exit when finger lifts — prevents infinite hang
+                                if (!change.pressed) break
+
+                                if (!isHorizontalDrag) {
+                                    accumulatedX += change.positionChange().x
+                                    accumulatedY += change.positionChange().y
+
+                                    if (abs(accumulatedX) > directionThresholdPx || abs(accumulatedY) > directionThresholdPx) {
+                                        if (abs(accumulatedX) > abs(accumulatedY) * 1.5f) {
+                                            // Confirmed horizontal — start consuming
+                                            isHorizontalDrag = true
+                                            change.consume()
+                                            val initialDrag = accumulatedX
+                                                .coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
+                                            scope.launch { animX.snapTo(initialDrag) }
+                                        } else {
+                                            // Confirmed vertical — let it pass, break out
+                                            break
+                                        }
+                                    }
+                                } else {
                                     change.consume()
-                                    val canDragBack = activeTabIndex > 0 && dragAmount.x > 0
-                                    val canDragForward = activeTabIndex < visibleTabs.size - 1 && dragAmount.x < 0
+                                    val canDragBack = activeTabIndex > 0 && change.positionChange().x > 0
+                                    val canDragForward = activeTabIndex < visibleTabs.size - 1 && change.positionChange().x < 0
                                     if (canDragBack || canDragForward) {
-                                        val newX = (animX.value + dragAmount.x)
+                                        val newX = (animX.value + change.positionChange().x)
                                             .coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
                                         scope.launch { animX.snapTo(newX) }
                                     }
                                 }
-                            },
-                            onDragEnd = {
+                            } while (isHorizontalDrag)
+
+                            // Gesture ended — commit or snap back
+                            if (isHorizontalDrag) {
                                 if (animX.value > contentWidth * 0.20f && activeTabIndex > 0) {
                                     haptics.confirm()
                                     scope.launch { animX.snapTo(0f) }
@@ -1432,9 +1465,8 @@ private fun AllTabScreen(
                                 } else {
                                     scope.launch { animX.snapTo(0f) }
                                 }
-                            },
-                            onDragCancel = { scope.launch { animX.snapTo(0f) } }
-                        )
+                            }
+                        }
                     }
             )
         }
