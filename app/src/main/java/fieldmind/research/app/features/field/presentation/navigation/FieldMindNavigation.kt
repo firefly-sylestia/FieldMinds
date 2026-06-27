@@ -1306,11 +1306,12 @@ private fun AllTabScreen(
     }
 
     // ── System back gesture (left edge): handle all tabs ──
-    // First tab: predictive peek → exit app on commit.
-    // Other tabs: predictive peek → switch to previous tab on commit.
+    // First tab: predictive peek → exit app on commit (full screen reveal).
+    // Other tabs: predictive peek → show REAL adjacent tab content behind current
+    // tab (reveals 60% of previous tab), then switch to it on commit.
     PredictiveBackHandler(enabled = !reduceMotion) { progressFlow ->
         try {
-            val maxOffset = if (isFirstTab) contentWidth else contentWidth * 0.4f
+            val maxOffset = if (isFirstTab) contentWidth else contentWidth * 0.6f
             progressFlow.collect { backEvent ->
                 val offset = (maxOffset * backEvent.progress).coerceAtLeast(0f)
                 animX.snapTo(offset)
@@ -1361,8 +1362,10 @@ private fun AllTabScreen(
             TabContentBox(
                 screen = screen,
                 offsetX = when {
-                    isLeftAdjacent -> -(contentWidth) + animX.value * 0.7f
-                    isRightAdjacent -> contentWidth + animX.value * 0.7f
+                    // Adjacent tab moves in sync with active tab — flush reveal
+                    // (no parallax gap) so REAL content is visible behind current tab
+                    isLeftAdjacent -> -(contentWidth) + animX.value
+                    isRightAdjacent -> contentWidth + animX.value
                     index < activeTabIndex -> -(contentWidth * 2f)
                     else -> contentWidth * 2f
                 },
