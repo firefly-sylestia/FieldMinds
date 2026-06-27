@@ -386,7 +386,7 @@ fun BackupAndRestoreScreen(
                                                 val tempDir = File(context.cacheDir, "import_decrypt")
                                                 tempDir.mkdirs()
                                                 val encryptedFile = File(context.cacheDir, "import_encrypted_${System.currentTimeMillis()}")
-                                                context.contentResolver.openInputStream(uri)?.use { input ->
+                                                context.contentResolver.openInputStream(importFileUri ?: return@withContext)?.use { input ->
                                                     encryptedFile.outputStream().use { output -> input.copyTo(output) }
                                                 }
                                                 val decrypted = FieldMindExportEncryption.decryptToFile(encryptedFile, importPassword, tempDir)
@@ -394,7 +394,7 @@ fun BackupAndRestoreScreen(
                                                 encryptedFile.delete()
                                                 Uri.fromFile(decrypted)
                                             } else {
-                                                uri
+                                                importFileUri ?: return@withContext
                                             }
                                             if (isFieldMind) {
                                                 val extracted = FieldMindExportMediaPacker.extractPackage(context, uriToRead)

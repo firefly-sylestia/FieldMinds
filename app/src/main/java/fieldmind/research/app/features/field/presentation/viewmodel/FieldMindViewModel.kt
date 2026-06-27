@@ -854,7 +854,7 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         val permFile = java.io.File(permDir, media.fileName)
         try {
             val tempUri = android.net.Uri.parse(media.uri)
-            val tempPath = tempUri.path ?: continue
+            val tempPath = tempUri.path ?: return@runCatching
             val srcFile = java.io.File(tempPath)
             if (srcFile.exists()) {
                 srcFile.copyTo(permFile, overwrite = true)

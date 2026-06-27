@@ -152,7 +152,7 @@ class TrackRecorder(private val context: Context) {
                         provider,
                         MIN_TIME_MS,
                         MIN_DISTANCE_M,
-                        locationListener ?: return,
+                        locationListener ?: return@runCatching,
                         Looper.getMainLooper()
                     )
                 }
@@ -192,7 +192,7 @@ class TrackRecorder(private val context: Context) {
                         provider,
                         MIN_TIME_MS,
                         MIN_DISTANCE_M,
-                        locationListener ?: return,
+                        locationListener ?: return@runCatching,
                         Looper.getMainLooper()
                     )
                 }

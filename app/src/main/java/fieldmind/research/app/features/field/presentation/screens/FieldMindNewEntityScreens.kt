@@ -327,7 +327,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     listOf("Low", "Medium", "High").forEach { level ->
                         val isSelected = priority == level
-                        val accent = priorityColor[level] ?: colors.positive
+                        val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
                         Surface(
                             onClick = { haptics.light(); priority = level },
                             shape = RoundedCornerShape(14.dp),
@@ -604,7 +604,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     listOf("Low", "Medium", "High").forEach { level ->
                         val isSelected = priority == level
-                        val accent = priorityColor[level] ?: colors.positive
+                        val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
                         Surface(
                             onClick = { haptics.light(); priority = level },
                             shape = RoundedCornerShape(14.dp),
@@ -1170,7 +1170,7 @@ fun NewAttachmentScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         Icon(MaterialSymbolIcon("check_circle"), null, tint = FieldMindTheme.colors.positive, size = 24.dp)
                         Column(Modifier.weight(1f)) {
                             Text("$capturedType attached", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
-                            Text(capturedUri?.substringAfterLast("/")?.take(40), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(capturedUri?.substringAfterLast("/")?.take(40) ?: "", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
                     }
                 }

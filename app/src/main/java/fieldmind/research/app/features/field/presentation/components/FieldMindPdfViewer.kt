@@ -312,7 +312,7 @@ fun PdfViewerDialog(
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 Image(
-                                    painter = BitmapPainter(pageBitmap ?: return.asImageBitmap()),
+                                    painter = BitmapPainter(pageBitmap.asImageBitmap()),
                                     contentDescription = "PDF page ${currentPage + 1}",
                                     modifier = Modifier.fillMaxWidth().padding(8.dp).graphicsLayer {
                                         scaleX = scale; scaleY = scale; translationX = panX; translationY = panY

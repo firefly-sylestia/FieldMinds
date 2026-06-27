@@ -1418,7 +1418,7 @@ private fun LiveWeatherDashboardWidget(
 
             // ── Weather data when available ──
             if (currentWeather != null) {
-                val w = currentWeather ?: return
+                val w = currentWeather
 
                 // Main temperature + condition (always visible)
                 Row(

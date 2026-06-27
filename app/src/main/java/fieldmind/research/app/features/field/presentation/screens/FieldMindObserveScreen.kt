@@ -1378,7 +1378,8 @@ private fun QuickObservationForm(
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(FieldMindIcons.Data, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
                     Text(
-                        if (selectedProtocol != null) "Protocol: ${selectedProtocol.name}" else "Start from protocol",
+                        val selProtocol = selectedProtocol
+                        if (selProtocol != null) "Protocol: ${selProtocol.name}" else "Start from protocol",
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.SemiBold
                     )

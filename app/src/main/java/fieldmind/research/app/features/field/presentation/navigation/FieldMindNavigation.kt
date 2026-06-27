@@ -1223,7 +1223,7 @@ private fun TabContentBox(
                         onNavigate = { screen -> onNavigateToDestination(screen.route) },
                         onOpenDetail = openDetail,
                         onOpenReader = openReader,
-                        onOpenCanvas = onOpenCanvas
+                        onOpenCanvas = { onOpenCanvas(0L) }
                     )
                 }
             }
