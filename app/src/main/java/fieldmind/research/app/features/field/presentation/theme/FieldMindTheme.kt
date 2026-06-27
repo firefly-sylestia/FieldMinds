@@ -14,6 +14,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.getTypographyForFont
 
 /**
  * FieldMind brand theme.
@@ -391,10 +392,12 @@ fun FieldMindTheme(
     val semantic = (if (darkTheme) DarkFieldMindColors else LightFieldMindColors)
         .applyOverrides(entityColorOverrides)
 
+    val geomTypography = getTypographyForFont("Geom")
+
     CompositionLocalProvider(LocalFieldMindColors provides semantic) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = MaterialTheme.typography,
+            typography = geomTypography,
             shapes = MaterialTheme.shapes,
             content = content
         )

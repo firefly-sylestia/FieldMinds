@@ -201,24 +201,50 @@ fun ProjectRelationsScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         // ════════════════════════════════════════════════════════════
-        //  Header
+        //  Header — redesigned to match project detail style
         // ════════════════════════════════════════════════════════════
         item {
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+            Surface(
+                shape = RoundedCornerShape(24.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                tonalElevation = 0.dp,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                IconButton(onClick = onBack, modifier = Modifier.size(40.dp)) {
-                    Icon(MaterialSymbolIcon("arrow_back"), "Back", size = 22.dp)
+                Row(
+                    Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    Surface(
+                        onClick = onBack,
+                        shape = RoundedCornerShape(14.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(MaterialSymbolIcon("arrow_back"), "Back", size = 22.dp)
+                        }
+                    }
+                    Box(
+                        Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                            .background(FieldMindTheme.colors.project.copy(alpha = 0.14f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(MaterialSymbolIcon("hub"), null, tint = FieldMindTheme.colors.project, size = 24.dp)
+                    }
+                    Column(Modifier.weight(1f)) {
+                        Text(
+                            "Relations",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            "Entity connections and linked data",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
-                Text(
-                    "Relations",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(Modifier.size(40.dp)) // Balance the row
             }
         }
 
