@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.components
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -45,6 +46,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +57,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -617,8 +620,22 @@ fun StandardScreenHeader(
     trailing: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    // ── Entrance animation: fade-in + slide-up ──
+    val alpha = remember { Animatable(0f) }
+    val density = LocalDensity.current
+    val translateY = remember { Animatable(with(density) { 20.dp.toPx() }) }
+    LaunchedEffect(Unit) {
+        launch { translateY.animateTo(0f, tween(500, easing = FastOutSlowInEasing)) }
+        alpha.animateTo(1f, tween(500, easing = FastOutSlowInEasing))
+    }
+
     Surface(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .graphicsLayer {
+                this.alpha = alpha.value
+                translationY = translateY.value
+            },
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp
