@@ -798,30 +798,36 @@ private fun CompactHomeHeader(
         shadowElevation = 0.dp
     ) {
         Column(
-            Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            Modifier.padding(22.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            // ── Row 1: Compact branding + settings ──
+            // ── Row 1: Enhanced branding with larger icon ──
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 Box(
                     Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(14.dp))
+                        .size(52.dp)
+                        .clip(RoundedCornerShape(16.dp))
                         .background(colors.positive.copy(alpha = if (colors.isDark) 0.34f else 0.16f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(FieldMindIcons.Nature, null, tint = colors.positive, size = 26.dp)
+                    Icon(FieldMindIcons.Nature, null, tint = colors.positive, size = 28.dp)
                 }
                 Column(Modifier.weight(1f)) {
                     Text(
                         "FieldMind",
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        "Field research companion",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1
                     )
                 }
                 Surface(

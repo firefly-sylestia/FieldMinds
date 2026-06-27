@@ -600,11 +600,12 @@ fun SectionHeader(
 // ──────────────────────────────────────────────────────────────────────
 
 /**
- * Standardized screen header for the redesign.
- * A rounded card at the top of every screen with:
- * - Semantic accent color icon
- * - Title + optional subtitle
+ * Enhanced standardized screen header for the redesign.
+ * A polished rounded card at the top of every screen with:
+ * - Large semantic accent color icon (48dp)
+ * - Bold headlineSmall title + optional subtitle
  * - Optional trailing action
+ * - Subtle surfaceContainerLow fill with improved spacing
  * Consistent height and padding across all screens.
  */
 @Composable
@@ -613,39 +614,38 @@ fun StandardScreenHeader(
     subtitle: String? = null,
     icon: MaterialSymbolIcon,
     heroColor: Color = FieldMindTheme.colors.accentFor(title),
-    backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     trailing: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        color = backgroundColor.copy(alpha = 0.25f),
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp
     ) {
         Row(
-            Modifier.padding(16.dp),
+            Modifier.padding(18.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Box(
                 Modifier
-                    .size(46.dp)
+                    .size(48.dp)
                     .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), RoundedCornerShape(14.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon = icon, contentDescription = null, tint = heroColor, size = 24.dp)
+                Icon(icon = icon, contentDescription = null, tint = heroColor, size = 26.dp)
             }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(
                     title,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.ExtraBold
                 )
                 if (!subtitle.isNullOrBlank()) {
                     Text(
                         subtitle,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
