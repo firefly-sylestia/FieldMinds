@@ -200,16 +200,16 @@ fun WeatherDatabaseScreen(
                     .fillMaxWidth()
                     .statusBarsPadding()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                shape = RoundedCornerShape(22.dp),
-                color = colors.info.copy(alpha = 0.08f),
+                shape = RoundedCornerShape(24.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp
             ) {
                 Row(
-                    Modifier.padding(start = 8.dp, end = 12.dp, top = 12.dp, bottom = 12.dp),
+                    Modifier.padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // ── Back button (properly padded, won't clip) ──
+                    // ── Back button ──
                     Surface(
                         onClick = onBack,
                         shape = RoundedCornerShape(14.dp),
@@ -221,18 +221,18 @@ fun WeatherDatabaseScreen(
                                 FieldMindIcons.Back,
                                 contentDescription = "Back",
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                size = 20.dp
+                                size = 22.dp
                             )
                         }
                     }
 
-                    // ── Weather icon ──
+                    // ── Weather icon — matching StandardScreenHeader ──
                     Box(
                         Modifier
-                            .size(40.dp)
+                            .size(48.dp)
                             .background(
                                 colors.info.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f),
-                                RoundedCornerShape(12.dp)
+                                RoundedCornerShape(14.dp)
                             ),
                         contentAlignment = Alignment.Center
                     ) {
@@ -240,27 +240,27 @@ fun WeatherDatabaseScreen(
                             FieldMindIcons.Weather,
                             contentDescription = null,
                             tint = colors.info,
-                            size = 22.dp
+                            size = 26.dp
                         )
                     }
 
-                    // ── Title + subtitle ──
-                    Column(Modifier.weight(1f)) {
+                    // ── Title + subtitle — matching StandardScreenHeader ──
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(
                             "Weather Database",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.ExtraBold
                         )
                         Text(
                             "${weatherObs.size} weather records collected offline",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                     }
 
-                    // ── Settings button (moved to header) ──
+                    // ── Settings button ──
                     Surface(
                         onClick = onOpenSettings,
                         shape = RoundedCornerShape(14.dp),
@@ -272,7 +272,7 @@ fun WeatherDatabaseScreen(
                                 FieldMindIcons.Settings,
                                 contentDescription = "Settings",
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                size = 20.dp
+                                size = 22.dp
                             )
                         }
                     }

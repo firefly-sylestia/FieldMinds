@@ -141,42 +141,44 @@ fun SpeciesIdentificationSheet(
                     )
                 }
 
-                // ── Header ──
-                Row(
-                    Modifier
+                // ── Header — StandardScreenHeader style ──
+                Surface(
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    shape = RoundedCornerShape(24.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    tonalElevation = 0.dp
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        Modifier.padding(18.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Box(
                             Modifier
-                                .size(40.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
+                                .size(48.dp)
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(FieldMindTheme.colors.observation.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.observation, size = 22.dp)
+                            Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.observation, size = 26.dp)
                         }
-                        Column {
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                             Text(
                                 "Species Identification",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.ExtraBold
                             )
                             Text(
                                 if (imageUri != null) "From photo" else "Search species",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
-                    }
-                    IconButton(onClick = onDismiss) {
-                        Icon(FieldMindIcons.Close, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        IconButton(onClick = onDismiss) {
+                            Icon(FieldMindIcons.Close, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                 }
 
