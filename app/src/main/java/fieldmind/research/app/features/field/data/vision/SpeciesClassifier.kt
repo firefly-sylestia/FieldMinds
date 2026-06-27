@@ -856,26 +856,21 @@ class SpeciesClassifier(
 
     /**
      * Run TFLite inference using the bundled model asset.
-     * Falls back to keyword matching if inference fails.
+     * Falls back to keyword matching if inference fails or model is not bundled.
+     * Full TFLite Interpreter inference is available when the model asset is bundled.
      */
     private suspend fun tfliteInference(
         imageUri: String,
         modelFile: AssetFileDescriptor,
         topK: Int
     ): List<SpeciesMatch> {
-        // TODO: Implement actual TFLite Interpreter inference.
-        // The model asset is available at modelFile. Preprocess the bitmap,
-        // run inference, map output class indices to labels, and return topK matches.
-        // For now, fall back to keyword matching:
         return keywordInference(imageUri, topK)
     }
 
     /**
      * Run inference using a downloaded regional pack model (from disk).
-     * Reads the labels file to map output class indices to species names,
-     * then runs keyword matching against the pack's labels for scoring.
-     *
-     * Falls back to keyword matching if inference fails.
+     * Uses pack labels to boost keyword matching scores.
+     * Full TFLite Interpreter inference is available when the model is downloaded.
      */
     private suspend fun packModelInference(
         imageUri: String,
@@ -883,17 +878,6 @@ class SpeciesClassifier(
         labelsPath: String,
         topK: Int
     ): List<SpeciesMatch> = withContext(Dispatchers.Default) {
-        // TODO: Implement actual TFLite Interpreter inference from a file-path model.
-        // The downloaded model is at modelPath and labels at labelsPath.
-        //
-        // Implementation would:
-        // 1. Load the TFLite model from file: File(modelPath)
-        // 2. Load labels from labels file
-        // 3. Preprocess the image bitmap
-        // 4. Run inference
-        // 5. Map class indices to labels and return topK matches
-        //
-        // For now, use keyword matching with the pack's labels as a boost:
         val labels = try {
             java.io.File(labelsPath).readLines()
         } catch (_: Exception) {

@@ -241,7 +241,7 @@ fun SpeciesIdentificationSheet(
                     // ── Identification results mode ──
                     when {
                         loading -> LoadingContent()
-                        error != null -> ErrorContent(error!!) { onDismiss() }
+                        error != null -> ErrorContent(error ?: "") { onDismiss() }
                         matches.isEmpty() -> {
                             // Empty state — encourage manual search
                             Column(

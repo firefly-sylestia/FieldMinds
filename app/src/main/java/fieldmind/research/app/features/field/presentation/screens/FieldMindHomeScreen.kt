@@ -1299,9 +1299,9 @@ private fun LiveWeatherDashboardWidget(
                         )
                 ) {AnimatedWeatherScene(
         weatherCode = displayWeatherCode,
-        temperature = currentWeather!!.temperature,
-        sunrise = currentWeather!!.sunrise,
-        sunset = currentWeather!!.sunset,
+        temperature = currentWeather?.temperature ?: 0.0,
+        sunrise = currentWeather?.sunrise,
+        sunset = currentWeather?.sunset,
         compact = false,
         forceNight = if (developerMode && testIsNight) true else if (developerMode) false else null,
         showCloudAnimation = showCloudAnimation
@@ -1409,7 +1409,7 @@ private fun LiveWeatherDashboardWidget(
             // ── Time-of-day greeting ──
             if (currentWeather != null) {
                 Text(
-                    "$timeGreeting. ${currentWeather!!.weatherDescription.ifBlank { "Clear skies" }}.",
+                    "$timeGreeting. ${currentWeather?.weatherDescription?.ifBlank { "Clear skies" }}.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = textOnScene.copy(alpha = 0.75f),
                     fontWeight = FontWeight.Medium
@@ -1418,7 +1418,7 @@ private fun LiveWeatherDashboardWidget(
 
             // ── Weather data when available ──
             if (currentWeather != null) {
-                val w = currentWeather!!
+                val w = currentWeather ?: return
 
                 // Main temperature + condition (always visible)
                 Row(

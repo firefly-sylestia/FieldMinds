@@ -307,8 +307,9 @@ fun CanvasScreen(
                 // ── Shared open linked entity callback ──
                 val onBlockOpenLinkedCallback: (Long) -> Unit = { id ->
                     val b = blocks.firstOrNull { it.id == id }
-                    if (b != null && b.linkedEntityType.isNotBlank() && b.linkedEntityId != null) {
-                        onOpenLinkedEntity?.invoke(b.linkedEntityType, b.linkedEntityId!!)
+                    val entityId = b.linkedEntityId
+                    if (b != null && b.linkedEntityType.isNotBlank() && entityId != null) {
+                        onOpenLinkedEntity?.invoke(b.linkedEntityType, entityId)
                     }
                 }
 

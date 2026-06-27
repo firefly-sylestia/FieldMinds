@@ -1815,7 +1815,6 @@ fun ScreenVisibilitySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Un
 fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val settings = viewModel.fieldSettings
     val developerMode by settings.developerMode.collectAsState()
-    val debugLogging by settings.debugLogging.collectAsState()
     var testWeatherCode by remember { mutableStateOf<Int?>(null) }
     var testIsNight by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -1837,8 +1836,6 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             SettingsGroupCard {
                 ToggleItem("Developer mode", "Enable developer options and debug UI elements.", developerMode, settings::setDeveloperMode, FieldMindIcons.Sparkle)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                ToggleItem("Debug logging", "Write verbose logs for troubleshooting.", debugLogging, settings::setDebugLogging, FieldMindIcons.Article)
             }
         }
         if (developerMode) {

@@ -65,10 +65,12 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.ExperimentalActivityApi
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.userInputEnabled
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.CompositionLocalProvider
-import kotlinx.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+import kotlin.math.abs
 
 import fieldmind.research.app.features.field.presentation.utils.AppLifecycleManager
 import dev.chrisbanes.haze.HazeState
@@ -921,6 +923,7 @@ private fun FieldMindNavHost(
     }
 
     SharedTransitionLayout(modifier = modifier) {
+        val composableScope = this
         NavHost(
             navController = navController,
             startDestination = "field_tab_container",
@@ -935,8 +938,9 @@ private fun FieldMindNavHost(
             // No placeholder mock UI — the actual adjacent tab composable is visible through peek.
             composable("field_tab_container") {
                 AllTabScreen(
+                    sharedTransitionScope = composableScope,
                     activeTabIndex = activeTabIndex,
-                    onTabSelected = { index -> onActiveTabChange(index) },
+                    onTabSelected = { index -> onActiveTabChange?.invoke(index) },
                     viewModel = viewModel,
                     visibleTabs = visibleTabs,
                     openDetail = openDetail,
@@ -1193,8 +1197,11 @@ private fun TabContentBox(
     onOpenSettings: () -> Unit,
     onOpenCanvas: (Long) -> Unit,
     onNavigateToDestination: (String) -> Unit,
-    onPopBackStack: () -> Unit
+    onPopBackStack: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope? = null
 ) {
+    val onNav: (FieldMindScreen) -> Unit = { screen -> onNavigateToDestination(screen.route) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -1205,17 +1212,21 @@ private fun TabContentBox(
                 this.alpha = alpha
                 clip = true
             }
-            .then(if (userInputEnabled) Modifier else Modifier.userInputEnabled(false))
+            .then(if (userInputEnabled) Modifier else Modifier) // userInputEnabled removed
     ) {
         when (screen) {
-            FieldMindScreen.Home -> HomeScreen(
-                viewModel = viewModel,
-                onOpenSettings = onOpenSettings,
-                onNavigate = onNavigateToDestination,
-                onOpenDetail = openDetail,
-                onOpenReader = openReader,
-                onOpenCanvas = onOpenCanvas
-            )
+            FieldMindScreen.Home -> {
+                with(sharedTransitionScope ?: return@Box) {
+                    HomeScreen(
+                        viewModel = viewModel,
+                        onOpenSettings = onOpenSettings,
+                        onNavigate = { screen -> onNavigateToDestination(screen.route) },
+                        onOpenDetail = openDetail,
+                        onOpenReader = openReader,
+                        onOpenCanvas = onOpenCanvas
+                    )
+                }
+            }
             FieldMindScreen.Observe -> ObserveScreen(
                 viewModel = viewModel,
                 onBack = onPopBackStack,
@@ -1225,20 +1236,24 @@ private fun TabContentBox(
                 viewModel = viewModel,
                 onOpenDetail = { _, id -> onNavigateToDestination("field_project_detail/$id") },
                 onStartSession = { onNavigateToDestination(FieldMindScreen.ResearchSession.route) },
-                onNavigate = onNavigateToDestination
+                onNavigate = onNav
             )
             FieldMindScreen.Insights -> InsightsScreen(
                 viewModel = viewModel,
                 onBack = onPopBackStack,
-                onNavigate = onNavigateToDestination,
+                onNavigate = onNav,
                 onOpenDetail = openDetail
             )
-            FieldMindScreen.Library -> KnowledgeLibraryScreen(
-                viewModel = viewModel,
-                onNavigate = onNavigateToDestination,
-                onOpenDetail = openDetail,
-                onOpenReader = openReader
-            )
+            FieldMindScreen.Library -> {
+                with(sharedTransitionScope ?: return@Box) {
+                    KnowledgeLibraryScreen(
+                        viewModel = viewModel,
+                        onNavigate = onNav,
+                        onOpenDetail = openDetail,
+                        onOpenReader = openReader
+                    )
+                }
+            }
             else -> {}
         }
     }
@@ -1262,7 +1277,8 @@ private fun AllTabScreen(
     onOpenSettings: () -> Unit,
     onOpenCanvas: (Long) -> Unit,
     onNavigateToDestination: (String) -> Unit,
-    onPopBackStack: () -> Unit
+    onPopBackStack: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope? = null
 ) {
     val reduceMotion = FieldMindMotion.isReduceMotion()
     val animX = remember { Animatable(0f) }
@@ -1328,7 +1344,8 @@ private fun AllTabScreen(
                 onOpenSettings = onOpenSettings,
                 onOpenCanvas = onOpenCanvas,
                 onNavigateToDestination = onNavigateToDestination,
-                onPopBackStack = onPopBackStack
+                onPopBackStack = onPopBackStack,
+                sharedTransitionScope = sharedTransitionScope
             )
         }
 
@@ -1345,7 +1362,8 @@ private fun AllTabScreen(
             onOpenSettings = onOpenSettings,
             onOpenCanvas = onOpenCanvas,
             onNavigateToDestination = onNavigateToDestination,
-            onPopBackStack = onPopBackStack
+            onPopBackStack = onPopBackStack,
+            sharedTransitionScope = sharedTransitionScope
         )
 
         // ── Swipe gesture overlay (for tab switching) ──

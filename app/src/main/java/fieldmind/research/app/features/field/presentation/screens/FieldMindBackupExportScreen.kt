@@ -374,10 +374,11 @@ fun BackupAndRestoreScreen(
                                             val isFieldMind = importFileName.endsWith(".fieldmind") || importFileName.endsWith(".zip") || importFileName.endsWith(".encrypted")
                                             val uriToRead = if (importFileName.endsWith(".encrypted")) {
                                                 // If already decrypted in password prompt, reuse the extracted data
-                                                if (importedPackage != null && importedPackage!!.archiveJson.isNotBlank()) {
+                                                val pkg = importedPackage
+                                                if (pkg != null && pkg.archiveJson.isNotBlank()) {
                                                     importStepText = "Using previously decrypted data…"
                                                     importProgress = 0.5f
-                                                    return@withContext importedPackage!!.archiveJson
+                                                    return@withContext pkg.archiveJson
                                                 }
                                                 // Decrypt first
                                                 importStepText = "Decrypting with password…"
@@ -385,7 +386,7 @@ fun BackupAndRestoreScreen(
                                                 val tempDir = File(context.cacheDir, "import_decrypt")
                                                 tempDir.mkdirs()
                                                 val encryptedFile = File(context.cacheDir, "import_encrypted_${System.currentTimeMillis()}")
-                                                context.contentResolver.openInputStream(importFileUri!!)?.use { input ->
+                                                context.contentResolver.openInputStream(uri)?.use { input ->
                                                     encryptedFile.outputStream().use { output -> input.copyTo(output) }
                                                 }
                                                 val decrypted = FieldMindExportEncryption.decryptToFile(encryptedFile, importPassword, tempDir)
@@ -393,7 +394,7 @@ fun BackupAndRestoreScreen(
                                                 encryptedFile.delete()
                                                 Uri.fromFile(decrypted)
                                             } else {
-                                                importFileUri!!
+                                                uri
                                             }
                                             if (isFieldMind) {
                                                 val extracted = FieldMindExportMediaPacker.extractPackage(context, uriToRead)
@@ -617,7 +618,7 @@ fun BackupAndRestoreScreen(
                         // Parse preview with decryption
                         scope.launch {
                             try {
-                                val uri = importFileUri!!
+                                val uri = importFileUri ?: return@launch
                                 val raw = withContext(Dispatchers.IO) {
                                     val tempDir = File(context.cacheDir, "import_decrypt")
                                     tempDir.mkdirs()
@@ -720,7 +721,7 @@ fun BackupAndRestoreScreen(
 
     // ── Import result dialog ──
     if (showImportResultDialog && importResult != null) {
-        val result = importResult!!
+        val result = importResult ?: return
         AlertDialog(
             onDismissRequest = {
                 showImportResultDialog = false

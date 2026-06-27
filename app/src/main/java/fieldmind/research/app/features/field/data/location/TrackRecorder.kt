@@ -147,16 +147,15 @@ class TrackRecorder(private val context: Context) {
 
         locationListener = createLocationListener()
         val provider = bestProvider()
-        if (provider != null) {
-            runCatching {
-                locationManager.requestLocationUpdates(
-                    provider,
-                    MIN_TIME_MS,
-                    MIN_DISTANCE_M,
-                    locationListener!!,
-                    Looper.getMainLooper()
-                )
-            }
+        if (provider != null) {                runCatching {
+                    locationManager.requestLocationUpdates(
+                        provider,
+                        MIN_TIME_MS,
+                        MIN_DISTANCE_M,
+                        locationListener ?: return,
+                        Looper.getMainLooper()
+                    )
+                }
         }
     }
 
@@ -193,7 +192,7 @@ class TrackRecorder(private val context: Context) {
                         provider,
                         MIN_TIME_MS,
                         MIN_DISTANCE_M,
-                        locationListener!!,
+                        locationListener ?: return,
                         Looper.getMainLooper()
                     )
                 }
