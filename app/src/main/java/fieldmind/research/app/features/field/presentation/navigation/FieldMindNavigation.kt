@@ -1212,7 +1212,19 @@ private fun TabContentBox(
                 this.alpha = alpha
                 clip = true
             }
-            .then(if (userInputEnabled) Modifier else Modifier) // userInputEnabled removed
+            .then(
+                if (!userInputEnabled) {
+                    Modifier.pointerInput(screen.route) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                // Consume all pointer events so inactive tabs
+                                // behind the active tab cannot capture touches
+                                awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Main)
+                            }
+                        }
+                    }
+                } else Modifier
+            )
     ) {
         when (screen) {
             FieldMindScreen.Home -> {
@@ -1293,18 +1305,37 @@ private fun AllTabScreen(
         onTabSelected(activeTabIndex - 1)
     }
 
-    // ── System back gesture (left edge): exit app from first tab only ──
-    PredictiveBackHandler(enabled = !reduceMotion && isFirstTab) { progressFlow ->
+    // ── System back gesture (left edge): handle all tabs ──
+    // First tab: predictive peek → exit app on commit.
+    // Other tabs: predictive peek → switch to previous tab on commit.
+    PredictiveBackHandler(enabled = !reduceMotion) { progressFlow ->
         try {
+            val maxOffset = if (isFirstTab) contentWidth else contentWidth * 0.4f
             progressFlow.collect { backEvent ->
-                val offset = (contentWidth * backEvent.progress).coerceAtLeast(0f)
+                val offset = (maxOffset * backEvent.progress).coerceAtLeast(0f)
                 animX.snapTo(offset)
             }
+            // Gesture committed — snap back before navigating
             animX.snapTo(0f)
             haptics.confirm()
-            onPopBackStack()
+            if (isFirstTab) {
+                // Root tab — exit app via caller
+                onPopBackStack()
+            } else {
+                // Non-root tab — go to previous tab
+                onTabSelected(activeTabIndex - 1)
+            }
         } catch (_: CancellationException) {
-            animX.snapTo(0f)
+            // Gesture cancelled — spring animation back to 0
+            scope.launch {
+                animX.animateTo(
+                    0f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    )
+                )
+            }
         }
     }
 
@@ -1374,13 +1405,19 @@ private fun AllTabScreen(
                     .pointerInput(Unit) {
                         detectDragGestures(
                             onDrag = { change, dragAmount ->
-                                change.consume()
-                                val canDragBack = activeTabIndex > 0 && dragAmount.x > 0
-                                val canDragForward = activeTabIndex < visibleTabs.size - 1 && dragAmount.x < 0
-                                if (canDragBack || canDragForward) {
-                                    val newX = (animX.value + dragAmount.x)
-                                        .coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
-                                    scope.launch { animX.snapTo(newX) }
+                                // Only consume horizontal drags to allow vertical scrolling
+                                // through to nested scrollable content. A ratio of 1.5x means
+                                // horizontal movement must be 50% larger than vertical to be
+                                // treated as a tab-switch gesture.
+                                if (abs(dragAmount.x) > abs(dragAmount.y) * 1.5f) {
+                                    change.consume()
+                                    val canDragBack = activeTabIndex > 0 && dragAmount.x > 0
+                                    val canDragForward = activeTabIndex < visibleTabs.size - 1 && dragAmount.x < 0
+                                    if (canDragBack || canDragForward) {
+                                        val newX = (animX.value + dragAmount.x)
+                                            .coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
+                                        scope.launch { animX.snapTo(newX) }
+                                    }
                                 }
                             },
                             onDragEnd = {
