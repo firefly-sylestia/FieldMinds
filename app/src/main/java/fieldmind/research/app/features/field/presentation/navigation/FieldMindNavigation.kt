@@ -61,8 +61,14 @@ import fieldmind.research.app.features.field.presentation.components.LocalPrivac
 import fieldmind.research.app.features.field.presentation.components.PrivacyTextInputWrapper
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
-import fieldmind.research.app.features.field.presentation.components.TabSwipeHost
+import androidx.activity.compose.BackHandler
+import androidx.activity.ExperimentalActivityApi
+import androidx.activity.compose.PredictiveBackHandler
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.userInputEnabled
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.CompositionLocalProvider
+import kotlinx.coroutines.cancellation.CancellationException
 
 import fieldmind.research.app.features.field.presentation.utils.AppLifecycleManager
 import dev.chrisbanes.haze.HazeState
@@ -251,45 +257,45 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
     val currentDestination = backStackEntry?.destination
     val currentRoute = currentDestination?.route
     val haptics = rememberFieldMindHaptics()
-    // Positive-list approach: only show bottom nav on the 5 main tab routes.
-    // Hide on everything else (settings, tools, detail screens, etc.) to avoid
-    // bottom nav appearing on screens where it doesn't belong.
-    val showChrome = currentRoute in listOf(
-        FieldMindScreen.Home.route,
-        FieldMindScreen.Observe.route,
-        FieldMindScreen.Projects.route,
-        FieldMindScreen.Insights.route,
-        FieldMindScreen.Library.route
-    ) && !(currentRoute == FieldMindScreen.Observe.route && viewModel.captureSessionActive)
+
+    // ── Active tab index — tabs are rendered simultaneously inside TabContentHost ──
+    var activeTabIndex by remember { mutableIntStateOf(0) }
+
+    // Observe screen visibility settings so nav bar reflects user customizations
+    val screenVisibility by viewModel.fieldSettings.screenVisibility.collectAsState()
+
+    // Filter bottom tabs based on user's screen visibility preferences
+    val visibleTabs = remember(bottomTabs, screenVisibility) {
+        bottomTabs.filter { tab ->
+            when (tab.route) {
+                FieldMindScreen.Observe.route -> screenVisibility.showCapture
+                FieldMindScreen.Projects.route -> screenVisibility.showProjects
+                FieldMindScreen.FieldMode.route -> true
+                FieldMindScreen.Insights.route -> screenVisibility.showInsights
+                FieldMindScreen.Library.route -> screenVisibility.showLibrary
+                else -> true // Home always visible
+            }
+        }
+    }
+
+    // Positive-list approach: only show bottom nav on the tab container route.
+    val showChrome = currentRoute == "field_tab_container" && !(activeTabIndex == 1 && viewModel.captureSessionActive)
     val hideChrome = !showChrome
 
     // ── Capture session navigation guard ──
     var showNavigateConfirm by remember { mutableStateOf(false) }
     var pendingNavRoute by remember { mutableStateOf<String?>(null) }
 
-    fun navigateToTab(route: String) {
-        // Skip navigation if already on the target tab — prevents the
-        // inclusive=true + restoreState=true cycle that causes flickering
-        // and state-restoration failures when tapping the current tab.
-        if (currentRoute == route) return
+    fun navigateToTab(index: Int) {
+        if (index == activeTabIndex) return
 
         // Protect against accidental navigation while a capture session is active
-        if (currentRoute == FieldMindScreen.Observe.route && viewModel.captureSessionActive) {
-            pendingNavRoute = route
+        if (activeTabIndex == 1 && viewModel.captureSessionActive) {
+            pendingNavRoute = visibleTabs.getOrNull(index)?.route
             showNavigateConfirm = true
             return
         }
-        // Pop everything up to the start destination then navigate to the target tab.
-        // Only use inclusive=true when navigating to a non-start tab that's nested
-        // below it. For the start destination itself, skip entirely (handled above).
-        val startDest = navController.graph.startDestinationRoute ?: FieldMindScreen.Home.route
-        navController.navigate(route) {
-            popUpTo(startDest) {
-                saveState = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        }
+        activeTabIndex = index
     }
 
     LaunchedEffect(requestedDestination) {
@@ -300,7 +306,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
     }
 
     fun isSelected(screen: FieldMindScreen) =
-        currentDestination?.hierarchy?.any { it.route == screen.route } == true
+        visibleTabs.getOrNull(activeTabIndex) == screen
 
     // ── Navigation confirmation dialog (for active capture session) ──
     if (showNavigateConfirm) {
@@ -322,14 +328,10 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                     onClick = {
                         viewModel.setCaptureSessionActive(false)
                         showNavigateConfirm = false
-                        pendingNavRoute?.let { navController.navigate(it) {
-                            popUpTo(navController.graph.startDestinationRoute ?: FieldMindScreen.Home.route) {
-                                inclusive = false
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        } }
+                        pendingNavRoute?.let { route ->
+                            val targetIndex = visibleTabs.indexOfFirst { it.route == route }
+                            if (targetIndex >= 0) activeTabIndex = targetIndex
+                        }
                         pendingNavRoute = null
                     },
                     shape = RoundedCornerShape(14.dp),
@@ -343,23 +345,6 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                 }) { Text("Stay on Capture") }
             }
         )
-    }
-
-    // Observe screen visibility settings so nav bar reflects user customizations
-    val screenVisibility by viewModel.fieldSettings.screenVisibility.collectAsState()
-
-    // Filter bottom tabs based on user's screen visibility preferences
-    val visibleTabs = remember(bottomTabs, screenVisibility) {
-        bottomTabs.filter { tab ->
-            when (tab.route) {
-                FieldMindScreen.Observe.route -> screenVisibility.showCapture
-                FieldMindScreen.Projects.route -> screenVisibility.showProjects
-                FieldMindScreen.FieldMode.route -> true
-                FieldMindScreen.Insights.route -> screenVisibility.showInsights
-                FieldMindScreen.Library.route -> screenVisibility.showLibrary
-                else -> true // Home always visible
-            }
-        }
     }
 
     // ── HazeState for backdrop blur on the floating nav pill ──
@@ -411,10 +396,13 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                         ) {
                             visibleTabs.forEach { screen ->
                                 val selected = isSelected(screen)
-                                RailNavTabItem(
+                                                RailNavTabItem(
                                     screen = screen,
                                     selected = selected,
-                                    onClick = { haptics.light(); navigateToTab(screen.route) }
+                                    onClick = {
+                                        val idx = visibleTabs.indexOf(screen)
+                                        if (idx >= 0) { haptics.light(); navigateToTab(idx) }
+                                    }
                                 )
                             }
                         }
@@ -426,7 +414,9 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                     viewModel = viewModel,
                     onResetOnboarding = onResetOnboarding,
                     visibleTabs = visibleTabs,
-                    onNavigateToTabRoute = { route -> navigateToTab(route) },
+                    onNavigateToTabRoute = null,
+                    activeTabIndex = activeTabIndex,
+                    onActiveTabChange = { index -> activeTabIndex = index },
                     modifier = Modifier.weight(1f).haze(state = hazeState)
                 )
             }
@@ -451,7 +441,9 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                     viewModel = viewModel,
                     onResetOnboarding = onResetOnboarding,
                     visibleTabs = visibleTabs,
-                    onNavigateToTabRoute = { route -> navigateToTab(route) },
+                    onNavigateToTabRoute = null,
+                    activeTabIndex = activeTabIndex,
+                    onActiveTabChange = { index -> activeTabIndex = index },
                     modifier = Modifier.fillMaxSize().haze(state = hazeState)
                 )
 
@@ -497,8 +489,8 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                                 visibleTabs = visibleTabs,
                                 isSelected = { screen -> isSelected(screen) },
                                 onTabClick = { screen ->
-                                    haptics.light()
-                                    navigateToTab(screen.route)
+                                    val idx = visibleTabs.indexOf(screen)
+                                    if (idx >= 0) { haptics.light(); navigateToTab(idx) }
                                 }
                             )
                         }
@@ -733,9 +725,7 @@ private fun primaryTabDirection(fromRoute: String?, toRoute: String?): Int {
 private enum class RouteCategory { Tab, SettingsHub, SettingsSubPage, Detail, Tool, Creation, Other }
 
 private fun categorizeRoute(route: String): RouteCategory = when (route) {
-    FieldMindScreen.Home.route, FieldMindScreen.Observe.route,
-    FieldMindScreen.Projects.route, FieldMindScreen.Library.route,
-    FieldMindScreen.Insights.route -> RouteCategory.Tab
+    "field_tab_container" -> RouteCategory.Tab
     FieldMindScreen.Settings.route -> RouteCategory.SettingsHub
     FieldMindScreen.MapScreen.route, FieldMindScreen.ExportStudio.route,
     FieldMindScreen.Reader.route -> RouteCategory.Other
@@ -900,7 +890,9 @@ private fun FieldMindNavHost(
     onResetOnboarding: () -> Unit,
     modifier: Modifier = Modifier,
     visibleTabs: List<FieldMindScreen> = emptyList(),
-    onNavigateToTabRoute: ((String) -> Unit)? = null
+    onNavigateToTabRoute: ((String) -> Unit)? = null,
+    activeTabIndex: Int = 0,
+    onActiveTabChange: ((Int) -> Unit)? = null
 ) {
     var readerTarget by remember { mutableStateOf("" to "") }
     val openDetail: (String, Long) -> Unit = { kind, id ->
@@ -917,22 +909,6 @@ private fun FieldMindNavHost(
         navController.navigateToDestination(FieldMindScreen.Reader.route)
     }
 
-    // Tab swipe callbacks — navigate to adjacent tab
-    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val currentTabIndex = remember(currentRoute, visibleTabs) {
-        visibleTabs.indexOfFirst { it.route == currentRoute }
-    }
-    val onSwipeToPrevTab: (() -> Unit)? = remember(currentTabIndex, visibleTabs, onNavigateToTabRoute) {
-        if (currentTabIndex > 0 && onNavigateToTabRoute != null) {
-            { onNavigateToTabRoute(visibleTabs[currentTabIndex - 1].route) }
-        } else null
-    }
-    val onSwipeToNextTab: (() -> Unit)? = remember(currentTabIndex, visibleTabs, onNavigateToTabRoute) {
-        if (currentTabIndex < visibleTabs.size - 1 && onNavigateToTabRoute != null) {
-            { onNavigateToTabRoute(visibleTabs[currentTabIndex + 1].route) }
-        } else null
-    }
-
     // ── Compute previous screen info for peek animation ──
     // Used by SwipeBackHost to show the previous destination behind the current screen
     // during the predictive back gesture.
@@ -947,46 +923,29 @@ private fun FieldMindNavHost(
     SharedTransitionLayout(modifier = modifier) {
         NavHost(
             navController = navController,
-            startDestination = "field_today",
+            startDestination = "field_tab_container",
             modifier = Modifier,
             enterTransition = { routeEnterTransition() },
             exitTransition = { routeExitTransition() },
             popEnterTransition = { routePopEnterTransition() },
             popExitTransition = { routePopExitTransition() }
         ) {
-            // ── 5 bottom tabs — all use TabSwipeHost for left/right tab swiping ──
-            // Edge tabs (Home=first, Library=last) gracefully handle missing directions:
-            // canSwipeBack=false on Home, canSwipeForward=false on Library.
-            // System back gesture (left edge) handled by PredictiveBackHandler with peek preview.
-            composable(FieldMindScreen.Home.route) {
-                TabSwipeHost(onSwipeBack = onSwipeToPrevTab, onSwipeForward = onSwipeToNextTab, onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
-                    HomeScreen(viewModel = viewModel, onOpenSettings = { navController.navigateToDestination(FieldMindScreen.Settings.route) }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail, onOpenReader = openReader, onOpenCanvas = { viewModel.addNote(title = "Canvas", body = "", category = "Other", tags = "canvas") { noteId -> navController.navigateToDestination("field_canvas/$noteId") } })
-                }
-            }
-            composable(FieldMindScreen.Observe.route) {
-                TabSwipeHost(onSwipeBack = onSwipeToPrevTab, onSwipeForward = onSwipeToNextTab, onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
-                    ObserveScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenDetail = openDetail)
-                }
-            }
-            composable(FieldMindScreen.Projects.route) {
-                TabSwipeHost(onSwipeBack = onSwipeToPrevTab, onSwipeForward = onSwipeToNextTab, onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
-                    ProjectsScreen(
-                        viewModel = viewModel,
-                        onOpenDetail = { _, id -> navController.navigateToDestination("field_project_detail/$id") },
-                        onStartSession = { navController.navigateToDestination(FieldMindScreen.ResearchSession.route) },
-                        onNavigate = { navController.navigateToDestination(it.route) }
-                    )
-                }
-            }
-            composable(FieldMindScreen.Library.route) {
-                TabSwipeHost(onSwipeBack = onSwipeToPrevTab, onSwipeForward = onSwipeToNextTab, onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
-                    KnowledgeLibraryScreen(viewModel = viewModel, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail, onOpenReader = openReader)
-                }
-            }
-            composable(FieldMindScreen.Insights.route) {
-                TabSwipeHost(onSwipeBack = onSwipeToPrevTab, onSwipeForward = onSwipeToNextTab, onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) {
-                    InsightsScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail)
-                }
+            // ── Single tab container: all 5 tabs rendered simultaneously ──
+            // Swipe gestures reveal the real adjacent tab content behind the current one.
+            // No placeholder mock UI — the actual adjacent tab composable is visible through peek.
+            composable("field_tab_container") {
+                AllTabScreen(
+                    activeTabIndex = activeTabIndex,
+                    onTabSelected = { index -> onActiveTabChange(index) },
+                    viewModel = viewModel,
+                    visibleTabs = visibleTabs,
+                    openDetail = openDetail,
+                    openReader = openReader,
+                    onOpenSettings = { navController.navigateToDestination(FieldMindScreen.Settings.route) },
+                    onOpenCanvas = { viewModel.addNote(title = "Canvas", body = "", category = "Other", tags = "canvas") { noteId -> navController.navigateToDestination("field_canvas/$noteId") } },
+                    onNavigateToDestination = { route -> navController.navigateToDestination(route) },
+                    onPopBackStack = { navController.popBackStack() }
+                )
             }
             composable(FieldMindScreen.Learn.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { FieldMindLearnScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenReader = openReader) } }
             composable(FieldMindScreen.Reader.route) { SwipeBackHost(onBack = { navController.popBackStack() }, previousScreen = previousScreenInfo) { LearnReaderScreen(url = readerTarget.first, title = readerTarget.second, onBack = { navController.popBackStack() }) } }
@@ -1191,27 +1150,240 @@ private fun FieldMindNavHost(
 }
 
 /** Map a route string to a [PreviousScreenInfo] for the peek animation preview. */
-private fun previousScreenLabel(route: String): PreviousScreenInfo {
-    val knownRoutes = listOf(
-        FieldMindScreen.Home to "Today",
-        FieldMindScreen.Observe to "Capture",
-        FieldMindScreen.Projects to "Workspace",
-        FieldMindScreen.Library to "Library",
-        FieldMindScreen.Insights to "Insights",
-        FieldMindScreen.Settings to "Settings",
-    )
-    val known = knownRoutes.firstOrNull { (screen, _) -> screen.route == route }
-    if (known != null) return PreviousScreenInfo(known.second, known.first.route)
+private fun previousScreenLabel(route: String): PreviousScreenInfo = when (route) {
+    "field_tab_container" -> PreviousScreenInfo("Home", route)
+    else -> {
+        val knownRoutes = listOf(
+            FieldMindScreen.Home to "Today",
+            FieldMindScreen.Observe to "Capture",
+            FieldMindScreen.Projects to "Workspace",
+            FieldMindScreen.Library to "Library",
+            FieldMindScreen.Insights to "Insights",
+            FieldMindScreen.Settings to "Settings",
+        )
+        val known = knownRoutes.firstOrNull { (screen, _) -> screen.route == route }
+        if (known != null) return PreviousScreenInfo(known.second, known.first.route)
 
-    // Fallback: humanize the route string
-    val humanized = route
-        .removePrefix("field_")
-        .removeSuffix("/{noteId}")
-        .removeSuffix("/{kind}/{id}")
-        .removeSuffix("/{speciesId}")
-        .split("_")
-        .joinToString(" ") { w -> w.replaceFirstChar { c -> c.uppercase() } }
-    return PreviousScreenInfo(humanized, route)
+        // Fallback: humanize the route string
+        val humanized = route
+            .removePrefix("field_")
+            .removeSuffix("/{noteId}")
+            .removeSuffix("/{kind}/{id}")
+            .removeSuffix("/{speciesId}")
+            .split("_")
+            .joinToString(" ") { w -> w.replaceFirstChar { c -> c.uppercase() } }
+        PreviousScreenInfo(humanized, route)
+    }
+}
+
+/**
+ * Renders a single tab screen at a given offset/scale/alpha.
+ * Used by [AllTabScreen] to position tabs in a horizontal stack.
+ */
+@Composable
+private fun TabContentBox(
+    screen: FieldMindScreen,
+    offsetX: Float,
+    scale: Float,
+    alpha: Float,
+    userInputEnabled: Boolean,
+    viewModel: FieldMindViewModel,
+    openDetail: (String, Long) -> Unit,
+    openReader: (String, String) -> Unit,
+    onOpenSettings: () -> Unit,
+    onOpenCanvas: (Long) -> Unit,
+    onNavigateToDestination: (String) -> Unit,
+    onPopBackStack: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .offset { IntOffset(offsetX.roundToInt(), 0) }
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+                this.alpha = alpha
+                clip = true
+            }
+            .then(if (userInputEnabled) Modifier else Modifier.userInputEnabled(false))
+    ) {
+        when (screen) {
+            FieldMindScreen.Home -> HomeScreen(
+                viewModel = viewModel,
+                onOpenSettings = onOpenSettings,
+                onNavigate = onNavigateToDestination,
+                onOpenDetail = openDetail,
+                onOpenReader = openReader,
+                onOpenCanvas = onOpenCanvas
+            )
+            FieldMindScreen.Observe -> ObserveScreen(
+                viewModel = viewModel,
+                onBack = onPopBackStack,
+                onOpenDetail = openDetail
+            )
+            FieldMindScreen.Projects -> ProjectsScreen(
+                viewModel = viewModel,
+                onOpenDetail = { _, id -> onNavigateToDestination("field_project_detail/$id") },
+                onStartSession = { onNavigateToDestination(FieldMindScreen.ResearchSession.route) },
+                onNavigate = onNavigateToDestination
+            )
+            FieldMindScreen.Insights -> InsightsScreen(
+                viewModel = viewModel,
+                onBack = onPopBackStack,
+                onNavigate = onNavigateToDestination,
+                onOpenDetail = openDetail
+            )
+            FieldMindScreen.Library -> KnowledgeLibraryScreen(
+                viewModel = viewModel,
+                onNavigate = onNavigateToDestination,
+                onOpenDetail = openDetail,
+                onOpenReader = openReader
+            )
+            else -> {}
+        }
+    }
+}
+
+/**
+ * Renders all visible tabs simultaneously in a horizontal stack.
+ * The active tab is on top and interactive; adjacent tabs sit behind it.
+ * During a swipe gesture, the active tab slides to reveal the REAL adjacent
+ * tab content — no mock placeholder cards or labels.
+ */
+@OptIn(ExperimentalActivityApi::class)
+@Composable
+private fun AllTabScreen(
+    activeTabIndex: Int,
+    onTabSelected: (Int) -> Unit,
+    viewModel: FieldMindViewModel,
+    visibleTabs: List<FieldMindScreen>,
+    openDetail: (String, Long) -> Unit,
+    openReader: (String, String) -> Unit,
+    onOpenSettings: () -> Unit,
+    onOpenCanvas: (Long) -> Unit,
+    onNavigateToDestination: (String) -> Unit,
+    onPopBackStack: () -> Unit
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animX = remember { Animatable(0f) }
+    var contentWidth by remember { mutableFloatStateOf(1f) }
+    val scope = rememberCoroutineScope()
+    val haptics = rememberFieldMindHaptics()
+
+    val isFirstTab = activeTabIndex == 0
+
+    // ── Device back button: previous tab, or exit on first tab ──
+    BackHandler(enabled = !isFirstTab) {
+        onTabSelected(activeTabIndex - 1)
+    }
+
+    // ── System back gesture (left edge): exit app from first tab only ──
+    PredictiveBackHandler(enabled = !reduceMotion && isFirstTab) { progressFlow ->
+        try {
+            progressFlow.collect { backEvent ->
+                val offset = (contentWidth * backEvent.progress).coerceAtLeast(0f)
+                animX.snapTo(offset)
+            }
+            animX.snapTo(0f)
+            haptics.confirm()
+            onPopBackStack()
+        } catch (_: CancellationException) {
+            animX.snapTo(0f)
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .onGloballyPositioned { coords ->
+                contentWidth = coords.size.width.toFloat().coerceAtLeast(1f)
+            }
+    ) {
+        // ── Render all tabs in a horizontal stack ──
+        // Non-active tabs rendered FIRST (behind in z-order), active tab LAST (on top).
+        val swipeProgress = abs(animX.value / contentWidth).coerceIn(0f, 1f)
+
+        // Phase 1: Non-active tabs (behind)
+        visibleTabs.forEachIndexed { index, screen ->
+            if (index == activeTabIndex) return@forEachIndexed
+            val isLeftAdjacent = index == activeTabIndex - 1
+            val isRightAdjacent = index == activeTabIndex + 1
+            val isAdjacent = isLeftAdjacent || isRightAdjacent
+            val adjAlpha = 0.94f + 0.06f * (1f - swipeProgress)
+
+            TabContentBox(
+                screen = screen,
+                offsetX = when {
+                    isLeftAdjacent -> -(contentWidth) + animX.value * 0.7f
+                    isRightAdjacent -> contentWidth + animX.value * 0.7f
+                    index < activeTabIndex -> -(contentWidth * 2f)
+                    else -> contentWidth * 2f
+                },
+                scale = if (isAdjacent) 0.94f else 1f,
+                alpha = if (isAdjacent) adjAlpha else 0f,
+                userInputEnabled = false,
+                viewModel = viewModel,
+                openDetail = openDetail,
+                openReader = openReader,
+                onOpenSettings = onOpenSettings,
+                onOpenCanvas = onOpenCanvas,
+                onNavigateToDestination = onNavigateToDestination,
+                onPopBackStack = onPopBackStack
+            )
+        }
+
+        // Phase 2: Active tab (on top)
+        TabContentBox(
+            screen = visibleTabs[activeTabIndex],
+            offsetX = animX.value,
+            scale = 1f - swipeProgress * 0.08f,
+            alpha = 1f,
+            userInputEnabled = true,
+            viewModel = viewModel,
+            openDetail = openDetail,
+            openReader = openReader,
+            onOpenSettings = onOpenSettings,
+            onOpenCanvas = onOpenCanvas,
+            onNavigateToDestination = onNavigateToDestination,
+            onPopBackStack = onPopBackStack
+        )
+
+        // ── Swipe gesture overlay (for tab switching) ──
+        if (!reduceMotion) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectDragGestures(
+                            onDrag = { change, dragAmount ->
+                                change.consume()
+                                val canDragBack = activeTabIndex > 0 && dragAmount.x > 0
+                                val canDragForward = activeTabIndex < visibleTabs.size - 1 && dragAmount.x < 0
+                                if (canDragBack || canDragForward) {
+                                    val newX = (animX.value + dragAmount.x)
+                                        .coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
+                                    scope.launch { animX.snapTo(newX) }
+                                }
+                            },
+                            onDragEnd = {
+                                if (animX.value > contentWidth * 0.20f && activeTabIndex > 0) {
+                                    haptics.confirm()
+                                    scope.launch { animX.snapTo(0f) }
+                                    onTabSelected(activeTabIndex - 1)
+                                } else if (animX.value < -contentWidth * 0.20f && activeTabIndex < visibleTabs.size - 1) {
+                                    haptics.confirm()
+                                    scope.launch { animX.snapTo(0f) }
+                                    onTabSelected(activeTabIndex + 1)
+                                } else {
+                                    scope.launch { animX.snapTo(0f) }
+                                }
+                            },
+                            onDragCancel = { scope.launch { animX.snapTo(0f) } }
+                        )
+                    }
+            )
+        }
+    }
 }
 
 /**
