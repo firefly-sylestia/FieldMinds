@@ -700,6 +700,12 @@ private fun DayCloudyScene(
         ThunderPhysicsSystem()
     }
     
+    // Wind speed multiplier: clouds drift faster during storms (high intensity = high wind)
+    // Range: 1.5x at partly cloudy (0.25) to 2.7x at overcast/storm (0.85)
+    val windSpeed = 1f + cloudIntensity * 2f
+    val cloudDriftDuration1 = (18000f / windSpeed).toInt()
+    val cloudDriftDuration2 = (28000f / windSpeed).toInt()
+    
     val infiniteTransition = rememberInfiniteTransition(label = "dayClouds")
     val sunRotation by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -715,20 +721,20 @@ private fun DayCloudyScene(
     )
     val windGust by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 0.5f,
+        targetValue = 0.2f + cloudIntensity * 0.6f,
         animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "windGust"
     )
     val cloudOffset1 by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(18000, easing = LinearEasing), RepeatMode.Restart),
+        animationSpec = infiniteRepeatable(tween(cloudDriftDuration1, easing = LinearEasing), RepeatMode.Restart),
         label = "cloudDrift1"
     )
     val cloudOffset2 by infiniteTransition.animateFloat(
         initialValue = 0.3f,
         targetValue = 1.3f,
-        animationSpec = infiniteRepeatable(tween(28000, easing = LinearEasing), RepeatMode.Restart),
+        animationSpec = infiniteRepeatable(tween(cloudDriftDuration2, easing = LinearEasing), RepeatMode.Restart),
         label = "cloudDrift2"
     )
     // Cloud morph — slow shape evolution for lifelike drift

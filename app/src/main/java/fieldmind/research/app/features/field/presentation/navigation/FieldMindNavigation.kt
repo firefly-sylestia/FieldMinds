@@ -1423,7 +1423,7 @@ private fun AllTabScreen(
                     .pointerInput(Unit) {
                         awaitEachGesture {
                             // Don't block the initial down — let content receive taps/clicks
-                            val down = awaitFirstDown()
+                            val down = awaitFirstDown(requireUnconsumed = false)
 
                             var isHorizontalDrag = false
                             var accumulatedX = 0f
