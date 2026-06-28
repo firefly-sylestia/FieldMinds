@@ -1309,8 +1309,13 @@ private fun AllTabScreen(
     // Other tabs: predictive peek → show REAL adjacent tab content behind current
     // tab (reveals 60% of previous tab), then switch to it on commit.
     //
-    PredictiveBackHandler(enabled = !reduceMotion && !isFirstTab) { progressFlow ->
+    // ── Predictive back gesture (system swipe from left edge) ──
+    // Drives animX to reveal the previous tab behind the current one.
+    // Uses the system's PredictiveBackHandler instead of a custom gesture overlay
+    // to avoid breaking taps, clicks, and vertical scrolls in tab content.
+    PredictiveBackHandler(enabled = !reduceMotion) { progressFlow ->
         try {
+            // First tab: reveal full screen behind (exit). Other tabs: reveal 60% of previous.
             val maxOffset = if (isFirstTab) contentWidth else contentWidth * 0.6f
             progressFlow.collect { backEvent ->
                 val offset = (maxOffset * backEvent.progress).coerceAtLeast(0f)
@@ -1320,10 +1325,8 @@ private fun AllTabScreen(
             animX.snapTo(0f)
             haptics.confirm()
             if (isFirstTab) {
-                // Root tab — exit app via caller
                 onPopBackStack()
             } else {
-                // Non-root tab — go to previous tab
                 onTabSelected(activeTabIndex - 1)
             }
         } catch (_: CancellationException) {
@@ -1337,7 +1340,6 @@ private fun AllTabScreen(
                     )
                 )
             }
-        } finally {
         }
     }
 
