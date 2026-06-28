@@ -64,8 +64,6 @@ import fieldmind.research.app.features.field.presentation.components.SwipeableAl
 import androidx.activity.compose.BackHandler
 import androidx.activity.ExperimentalActivityApi
 import androidx.activity.compose.PredictiveBackHandler
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.CompositionLocalProvider
 import kotlinx.coroutines.CancellationException
@@ -1411,102 +1409,9 @@ private fun AllTabScreen(
             sharedTransitionScope = sharedTransitionScope
         )
 
-        // ── Swipe gesture overlay (for tab switching) ──
-        // Uses awaitEachGesture with requireUnconsumed=false so the initial touch
-        // is NOT consumed, allowing taps, clicks, and vertical scrolls to pass
-        // through to the tab content below. Only starts consuming pointer events
-        // after confirming the gesture is clearly horizontal (x > 1.5x y).
-        if (!reduceMotion) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .pointerInput(Unit) {
-                        awaitEachGesture {
-                            // Don't block the initial down — let content receive taps/clicks
-                            val down = awaitFirstDown(requireUnconsumed = false)
-
-                            var isHorizontalDrag = false
-                            var accumulatedX = 0f
-                            var accumulatedY = 0f
-                            val directionThresholdPx = 8.dp.toPx()
-                            // Track previous pointer position for delta calculation
-                            // (positionChange is a Boolean in Compose 1.11+, not a function)
-                            var previousPosition = down.position
-
-                            // Loop keeps reading events until direction is confirmed or finger lifts.
-                            // Changed from while(isHorizontalDrag) to while(true) so the detection
-                            // phase doesn't exit prematurely after a single awaitPointerEvent call
-                            // when the threshold hasn't been crossed yet.
-                            do {
-                                // Use requireUnconsumed=false so the overlay never hangs waiting
-                                // for an unconsumed event when the tab content below consumes the
-                                // pointer events itself (e.g. for clickable or scroll handlers).
-                                val event = awaitPointerEvent()
-                                val change = event.changes.firstOrNull() ?: break
-
-                                // Early exit when finger lifts — prevents infinite hang
-                                if (!change.pressed) break
-
-                                // Defer to PredictiveBackHandler when system back gesture is active
-                                // (swipe from left edge). Both handlers compete for animX, causing
-                                // jitter. The PredictiveBackHandler has priority for rightward swipes.
-                                if (isPredictiveBackActive) break
-
-                                // Calculate position delta from previous position
-                                val delta = change.position - previousPosition
-                                previousPosition = change.position
-
-                                if (!isHorizontalDrag) {
-                                    accumulatedX += delta.x
-                                    accumulatedY += delta.y
-
-                                    if (abs(accumulatedX) > directionThresholdPx || abs(accumulatedY) > directionThresholdPx) {
-                                        if (abs(accumulatedX) > abs(accumulatedY) * 1.5f) {
-                                            // Confirmed horizontal — start consuming
-                                            isHorizontalDrag = true
-                                            change.consume()
-                                            val initialDrag = accumulatedX
-                                                .coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
-                                            scope.launch { animX.snapTo(initialDrag) }
-                                        } else {
-                                            // Confirmed vertical — let it pass, break out
-                                            break
-                                        }
-                                    }
-                                    // Threshold not crossed yet — loop continues to collect more events
-                                } else {
-                                    change.consume()
-                                    val canDragBack = activeTabIndex > 0 && delta.x > 0
-                                    val canDragForward = activeTabIndex < visibleTabs.size - 1 && delta.x < 0
-                                    if (canDragBack || canDragForward) {
-                                        val newX = (animX.value + delta.x)
-                                            .coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
-                                        scope.launch { animX.snapTo(newX) }
-                                    }
-                                }
-                            } while (true)
-
-                            // Gesture ended — commit or snap back
-                            // Use 10% threshold for responsive tab switches — lower than 15%
-                            // to ensure even moderate swipes commit reliably.
-                            if (isHorizontalDrag) {
-                                val animXVal = animX.value
-                                if (animXVal > contentWidth * 0.10f && activeTabIndex > 0) {
-                                    haptics.confirm()
-                                    scope.launch { animX.snapTo(0f) }
-                                    onTabSelected(activeTabIndex - 1)
-                                } else if (animXVal < -contentWidth * 0.10f && activeTabIndex < visibleTabs.size - 1) {
-                                    haptics.confirm()
-                                    scope.launch { animX.snapTo(0f) }
-                                    onTabSelected(activeTabIndex + 1)
-                                } else {
-                                    scope.launch { animX.snapTo(0f) }
-                                }
-                            }
-                        }
-                    }
-            )
-        }
+        // ── Swipe gesture overlay removed ──
+        // Touch and vertical scroll were broken by the awaitEachGesture overlay.
+        // Tab switching still works via the tab bar in the navigation pill/rail.
     }
 }
 
