@@ -1299,9 +1299,6 @@ private fun AllTabScreen(
 
     val isFirstTab = activeTabIndex == 0
 
-    // ── Shared flag: prevents gesture overlay from competing with PredictiveBackHandler ──
-    var isPredictiveBackActive by remember { mutableStateOf(false) }
-
     // ── Device back button: previous tab, or exit on first tab ──
     BackHandler(enabled = !isFirstTab) {
         onTabSelected(activeTabIndex - 1)
@@ -1312,11 +1309,7 @@ private fun AllTabScreen(
     // Other tabs: predictive peek → show REAL adjacent tab content behind current
     // tab (reveals 60% of previous tab), then switch to it on commit.
     //
-    // IMPORTANT: Sets isPredictiveBackActive=true so the gesture overlay (below)
-    // does NOT also try to drive animX from the same touch events. The overlay
-    // defers to this handler and breaks out of its gesture loop.
     PredictiveBackHandler(enabled = !reduceMotion && !isFirstTab) { progressFlow ->
-        isPredictiveBackActive = true
         try {
             val maxOffset = if (isFirstTab) contentWidth else contentWidth * 0.6f
             progressFlow.collect { backEvent ->
@@ -1345,7 +1338,6 @@ private fun AllTabScreen(
                 )
             }
         } finally {
-            isPredictiveBackActive = false
         }
     }
 
