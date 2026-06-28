@@ -182,7 +182,7 @@ object FieldMindMotion {
 
     const val swipeEdgeWidthDp = 30f
     const val swipeEdgeHeightDp = 30f
-    const val swipeThreshold = 0.30f
+    const val swipeThreshold = 0.20f
     const val swipeScaleFactor = 0.92f
     const val swipeScrimAlpha = 0.35f
     const val swipeShadowElevationDp = 24f

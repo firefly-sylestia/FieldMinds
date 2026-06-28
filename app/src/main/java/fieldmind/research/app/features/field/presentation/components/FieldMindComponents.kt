@@ -1,6 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -620,23 +619,9 @@ fun StandardScreenHeader(
     trailing: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    // ── Entrance animation: fade-in + slide-up ──
-    val alpha = remember { Animatable(0f) }
-    val density = LocalDensity.current
-    val translateY = remember { Animatable(with(density) { 20.dp.toPx() }) }
-    LaunchedEffect(Unit) {
-        // Animate translateY first, then alpha fades in
-        translateY.animateTo(0f, tween(500, easing = FastOutSlowInEasing))
-        alpha.animateTo(1f, tween(500, easing = FastOutSlowInEasing))
-    }
-
     Surface(
         modifier = modifier
-            .fillMaxWidth()
-            .graphicsLayer {
-                this.alpha = alpha.value
-                translationY = translateY.value
-            },
+            .fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp

@@ -1438,7 +1438,10 @@ private fun AllTabScreen(
                             // phase doesn't exit prematurely after a single awaitPointerEvent call
                             // when the threshold hasn't been crossed yet.
                             do {
-                                val event = awaitPointerEvent()
+                                // Use requireUnconsumed=false so the overlay never hangs waiting
+                                // for an unconsumed event when the tab content below consumes the
+                                // pointer events itself (e.g. for clickable or scroll handlers).
+                                val event = awaitPointerEvent(requireUnconsumed = false)
                                 val change = event.changes.firstOrNull() ?: break
 
                                 // Early exit when finger lifts — prevents infinite hang
@@ -1484,12 +1487,15 @@ private fun AllTabScreen(
                             } while (true)
 
                             // Gesture ended — commit or snap back
+                            // Use 10% threshold for responsive tab switches — lower than 15%
+                            // to ensure even moderate swipes commit reliably.
                             if (isHorizontalDrag) {
-                                if (animX.value > contentWidth * 0.20f && activeTabIndex > 0) {
+                                val animXVal = animX.value
+                                if (animXVal > contentWidth * 0.10f && activeTabIndex > 0) {
                                     haptics.confirm()
                                     scope.launch { animX.snapTo(0f) }
                                     onTabSelected(activeTabIndex - 1)
-                                } else if (animX.value < -contentWidth * 0.20f && activeTabIndex < visibleTabs.size - 1) {
+                                } else if (animXVal < -contentWidth * 0.10f && activeTabIndex < visibleTabs.size - 1) {
                                     haptics.confirm()
                                     scope.launch { animX.snapTo(0f) }
                                     onTabSelected(activeTabIndex + 1)
