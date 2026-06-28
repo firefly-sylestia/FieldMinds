@@ -1,2 +1,5 @@
-• Added statusBarPadding to 6 screens (Observe, Onboarding, Map, ResearchSession, SettingsNew, FieldLog)
-• Fixed Compose 2026.05.01 API changes — positionChange(), awaitFirstDown, launch
+• All 5 tabs render simultaneously — predictive peek shows real content behind current tab
+• Unified StandardScreenHeader, Geom font, and 15-color semantic palette across all screens
+• Added statusBarPadding to 6 screens (Observe, Onboarding, Map, ResearchSession, NewSettings, FieldLog)
+• Redesigned creation screens: Project, Note, Question, Source with full-screen forms
+• Fixed 50+ CI compilation errors for Compose 2026.05.01 and Kotlin 2.3.21
