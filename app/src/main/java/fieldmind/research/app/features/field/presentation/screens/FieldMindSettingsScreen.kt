@@ -1972,6 +1972,10 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     }
                 }
             }
+            // ── Debug gesture thresholds, animation state, and tap test ──
+            item { GestureThresholdsCard() }
+            item { AnimationStateCard() }
+            item { TapTestCard() }
         }
         item {
             Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
