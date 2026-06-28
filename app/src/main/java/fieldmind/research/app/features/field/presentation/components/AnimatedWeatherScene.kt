@@ -3826,15 +3826,32 @@ private fun ThunderstormScene(
         label = "stormTree"
     )
 
-    // Lightning state
+    // ── Lightning state ──
     var flashIntensity by remember { mutableStateOf(0f) }
-    var boltSeed by remember { mutableStateOf(0f) }
-    var boltCloudIndex by remember { mutableStateOf(0) }
-    var hasDoubleFlash by remember { mutableStateOf(false) }
     var afterglow by remember { mutableStateOf(0f) }
-    var cloudGlowIntensity by remember { mutableStateOf(0f) }
-    var cloudGlowIndex by remember { mutableStateOf(0) }
+    var groundFlash by remember { mutableStateOf(0f) }
     var thunderRingProgress by remember { mutableStateOf(0f) }
+    var thunderRingIndex by remember { mutableStateOf(0) }
+    
+    // Cloud glow state (one per cloud position)
+    val cloudGlows = remember { mutableStateListOf(0f, 0f, 0f) }
+    
+    // Active bolt data for multi-bolt support
+    data class BoltData(
+        val seed: Float,
+        val cloudIndex: Int,
+        val power: Float,        // 0.3-1.0: determines width, branches, flash
+        val startX: Float,
+        val startY: Float,
+        val endX: Float,
+        val endY: Float,
+        val isCloudToCloud: Boolean,
+        val branches: Int        // Number of branch forks (3-8)
+    )
+    var activeBolts by remember { mutableStateOf<List<BoltData>>(emptyList()) }
+    
+    // Cloud-to-cloud bolt connection
+    var c2cBolt by remember { mutableStateOf<Pair<Int, Int>?>(null) }
 
     // Pre-computed cloud positions (towering cumulonimbus)
     val cloudPositions = remember {
@@ -3850,56 +3867,118 @@ private fun ThunderstormScene(
     val cloudDarkColor = if (isDark) Color(0xFF1A1A28).copy(alpha = 0.45f) else Color(0xFF2A2A38).copy(alpha = 0.40f)
     val cloudMidColor = if (isDark) Color(0xFF222236).copy(alpha = 0.50f) else Color(0xFF353548).copy(alpha = 0.45f)
 
-    // Lightning timing
+    // ── Lightning timing ──
     LaunchedEffect(Unit) {
         while (true) {
-            val delayMs = if (compact) 5000L + (8000..16000).random() else 2000L + (1000..5000).random()
+            val delayMs = if (compact) 4000L + (5000..14000).random() else 1500L + (800..4000).random()
             delay(delayMs)
 
-            boltSeed = Random.nextFloat() * 100f
-            boltCloudIndex = Random.nextInt(cloudPositions.size)
-            hasDoubleFlash = Random.nextFloat() > 0.55f
-            cloudGlowIndex = boltCloudIndex
+            // Random power level for this strike
+            val isSevere = weatherCode >= 98
+            val power = if (isSevere) 0.7f + Random.nextFloat() * 0.3f else 0.4f + Random.nextFloat() * 0.6f
 
-            // Thunder rumble starts BEFORE the flash (deep rumbling from clouds)
-            thunderRingProgress = 0.01f
-
-            // Main flash
-            cloudGlowIntensity = 1f
-            flashIntensity = 1f
-            delay(100)
-            flashIntensity = 0.2f
-            cloudGlowIntensity = 0.5f
-            delay(50)
-            flashIntensity = 0.7f
-            cloudGlowIntensity = 0.8f
-            delay(40)
-            flashIntensity = 0f
-            cloudGlowIntensity = 0.2f
-
-            // Expanding thunder ring from cloud center
-            for (ri in 0..20) { thunderRingProgress = 0.05f + ri * 0.045f; delay(60) }; thunderRingProgress = 0f
-
-            // Double flash
-            if (hasDoubleFlash) {
-                delay(150 + Random.nextLong(250))
-                flashIntensity = 0.5f
-                cloudGlowIntensity = 0.7f
-                delay(60)
-                flashIntensity = 0f
-                cloudGlowIntensity = 0.1f
+            // Determine number of bolts (1-3 based on power)
+            val boltCount = when {
+                power > 0.85f -> 3
+                power > 0.65f -> 2
+                else -> 1
             }
 
-            afterglow = 1f
+            // Generate bolt data
+            val bolts = mutableListOf<BoltData>()
+            val usedIndices = mutableSetOf<Int>()
+            for (b in 0 until boltCount) {
+                val ci = Random.nextInt(cloudPositions.size)
+                usedIndices.add(ci)
+                val (cx, cy) = cloudPositions[ci]
+                val boltPower = (power * (0.7f + Random.nextFloat() * 0.3f)).coerceAtMost(1f)
+                val branchCount = (3 + (boltPower * 5f).toInt()).coerceIn(3, 8)
+                val groundX = cx + (Random.nextFloat() - 0.5f) * 0.15f
+
+                bolts.add(BoltData(
+                    seed = Random.nextFloat() * 100f,
+                    cloudIndex = ci,
+                    power = boltPower,
+                    startX = cx,
+                    startY = cy,
+                    endX = groundX,
+                    endY = 0.84f,
+                    isCloudToCloud = false,
+                    branches = branchCount
+                ))
+            }
+            activeBolts = bolts
+
+            // Cloud-to-cloud lightning between two different clouds (40% chance for strong strikes)
+            c2cBolt = if (power > 0.6f && Random.nextFloat() > 0.6f && cloudPositions.size >= 2) {
+                val idx1 = Random.nextInt(cloudPositions.size)
+                var idx2 = Random.nextInt(cloudPositions.size)
+                while (idx2 == idx1) idx2 = Random.nextInt(cloudPositions.size)
+                Pair(idx1, idx2)
+            } else null
+
+            // Set cloud glow for all involved clouds
+            usedIndices.forEach { i -> cloudGlows[i] = power }
+
+            // Main flash sequence - intensity scales with power
+            thunderRingIndex = usedIndices.first()
+            thunderRingProgress = 0.01f
+
+            cloudGlows[usedIndices.first()] = power
+            flashIntensity = power
+            delay((80 + (power * 40f).toInt()).toLong())
+            flashIntensity = power * 0.3f
+            delay((40 + (power * 30f).toInt()).toLong())
+            flashIntensity = power * 0.6f
+            delay((30 + (power * 20f).toInt()).toLong())
+            flashIntensity = 0f
+
+            // Ground flash for strong strikes
+            if (power > 0.6f) {
+                groundFlash = power * 0.5f
+            }
+
+            // Expanding thunder ring
+            val ringSteps = (15 + (power * 10f).toInt()).coerceAtMost(25)
+            for (ri in 0..ringSteps) {
+                thunderRingProgress = 0.03f + ri * (0.7f / ringSteps)
+                delay((40 + (power * 20f).toInt()).toLong())
+            }
+            thunderRingProgress = 0f
+
+            // Secondary flash / double strike (more likely with higher power)
+            val doubleStrikeChance = if (isSevere) 0.8f else if (power > 0.7f) 0.6f else 0.35f
+            if (Random.nextFloat() < doubleStrikeChance) {
+                delay((100 + Random.nextLong(200) * (1f / power).toLong()).coerceAtMost(400))
+                flashIntensity = power * 0.5f
+                delay(50)
+                flashIntensity = 0f
+            }
+
+            // Afterglow - duration scales with power (3-5 seconds)
+            afterglow = power
         }
     }
 
-    // Afterglow fade
+    // ── Afterglow fade ──
     LaunchedEffect(afterglow) {
         if (afterglow > 0f) {
-            delay(1800)
+            val durationMs = (2800 + (afterglow * 2200f).toInt()).toLong()  // 2.8-5.0s
+            val steps = 60
+            for (i in 1..steps) {
+                delay(durationMs / steps)
+                val fade = 1f - (i.toFloat() / steps)
+                val expFade = fade * fade * fade  // Cubic ease-out
+                afterglow = expFade * afterglow
+                groundFlash = if (i < steps / 2) {
+                    (groundFlash * 0.85f).coerceAtLeast(0f)
+                } else 0f
+            }
             afterglow = 0f
-            cloudGlowIntensity = 0f
+            groundFlash = 0f
+            cloudGlows.forEachIndexed { i, _ -> cloudGlows[i] = 0f }
+            activeBolts = emptyList()
+            c2cBolt = null
             thunderRingProgress = 0f
         }
     }
@@ -3917,16 +3996,17 @@ private fun ThunderstormScene(
             val (cloudCx, cy) = entry.value
             val baseX = ((cloudCx + drift * 0.8f + i * 0.15f) % 1f) * size.width
             val scaleMul = 0.8f + i * 0.15f
-            val isLit = cloudGlowIndex == i && cloudGlowIntensity > 0f
+            val isLit = cloudGlows[i] > 0f
+            val glowIntensity = cloudGlows[i]
 
             // Base cloud layer
             drawCumulus(
                 baseX, size.height * cy, cloudScale * scaleMul,
                 if (isLit) cloudMidColor.copy(
-                    red = (cloudMidColor.red + 0.3f * cloudGlowIntensity).coerceAtMost(1f),
-                    green = (cloudMidColor.green + 0.3f * cloudGlowIntensity).coerceAtMost(1f),
-                    blue = (cloudMidColor.blue + 0.4f * cloudGlowIntensity).coerceAtMost(1f),
-                    alpha = (cloudMidColor.alpha + 0.2f * cloudGlowIntensity).coerceAtMost(0.7f)
+                    red = (cloudMidColor.red + 0.3f * glowIntensity).coerceAtMost(1f),
+                    green = (cloudMidColor.green + 0.3f * glowIntensity).coerceAtMost(1f),
+                    blue = (cloudMidColor.blue + 0.5f * glowIntensity).coerceAtMost(1f),
+                    alpha = (cloudMidColor.alpha + 0.2f * glowIntensity).coerceAtMost(0.7f)
                 ) else cloudMidColor,
                 cloudDrift * 3f + i * 2f
             )
@@ -3938,7 +4018,7 @@ private fun ThunderstormScene(
                 cloudDrift * 2f + i * 1.5f
             )
 
-            // Bright towering top (sunlight hitting upper turrets)
+            // Bright towering top
             val topColor = if (isDark) Color(0xFF3A3A50).copy(alpha = 0.35f) else Color(0xFF6A6A80).copy(alpha = 0.30f)
             drawCumulus(
                 baseX + size.width * 0.02f, size.height * (cy - 0.05f), cloudScale * scaleMul * 0.7f,
@@ -3947,36 +4027,87 @@ private fun ThunderstormScene(
             )
 
             // ── Cloud interior glow (lightning illuminating from within) ──
-            if (isLit && cloudGlowIntensity > 0.05f) {
-                val glowRadius = size.width * (0.08f + cloudGlowIntensity * 0.10f)
+            if (isLit && glowIntensity > 0.05f) {
+                val glowRadius = size.width * (0.08f + glowIntensity * 0.15f)
                 drawCircle(
-                    color = Color(0xFFAADDFF).copy(alpha = cloudGlowIntensity * 0.12f),
+                    color = Color(0xFFAADDFF).copy(alpha = glowIntensity * 0.18f),
                     radius = glowRadius,
                     center = Offset(baseX, size.height * (cy + 0.02f))
                 )
                 drawCircle(
-                    color = Color.White.copy(alpha = cloudGlowIntensity * 0.06f),
+                    color = Color.White.copy(alpha = glowIntensity * 0.10f),
                     radius = glowRadius * 1.5f,
                     center = Offset(baseX, size.height * (cy + 0.02f))
                 )
             }
         }
 
+        // ── Cloud-to-cloud lightning arc ──
+        c2cBolt?.let { (idx1, idx2) ->
+            val (cx1, cy1) = cloudPositions[idx1]
+            val (cx2, cy2) = cloudPositions[idx2]
+            val x1 = ((cx1 + drift * 0.8f + idx1 * 0.15f) % 1f) * size.width
+            val y1 = size.height * (cy1 + 0.06f)
+            val x2 = ((cx2 + drift * 0.8f + idx2 * 0.15f) % 1f) * size.width
+            val y2 = size.height * (cy2 + 0.06f)
+            
+            val c2cAlpha = (flashIntensity + afterglow * 0.3f).coerceIn(0f, 1f) * 0.5f
+            if (c2cAlpha > 0.01f) {
+                val arcPath = Path()
+                arcPath.moveTo(x1, y1)
+                var ax = x1
+                var ay = y1
+                val segments = 8
+                for (s in 0..segments) {
+                    val t = (s + 1).toFloat() / (segments + 1)
+                    val midX = x1 + (x2 - x1) * t
+                    val midY = y1 + (y2 - y1) * t + Math.sin(t * Math.PI).toFloat() * size.height * 0.08f
+                    ax += (midX - ax) * 0.5f + (Random(c2cAlpha.toInt() + s).nextFloat() - 0.5f) * size.width * 0.02f
+                    ay += (midY - ay) * 0.5f + (Random(c2cAlpha.toInt() + s * 3).nextFloat() - 0.5f) * size.height * 0.01f
+                    arcPath.lineTo(ax, ay)
+                }
+                arcPath.lineTo(x2, y2)
+                
+                val arcGlow = Color(0xFFAADDFF).copy(alpha = c2cAlpha * 0.5f)
+                val arcCore = Color.White.copy(alpha = c2cAlpha * 0.8f)
+                drawPath(arcPath, arcGlow, style = Stroke(width = 6f * c2cAlpha, cap = StrokeCap.Round))
+                drawPath(arcPath, arcCore, style = Stroke(width = 2f * c2cAlpha, cap = StrokeCap.Round))
+            }
+        }
+
         // ── Storm darkness overlay ──
-        val stormDark = Color(0xFF0A0A18).copy(alpha = (0.22f + afterglow * 0.12f) * (1f - flashIntensity * 0.4f))
+        val stormDark = Color(0xFF0A0A18).copy(alpha = (0.22f + afterglow * 0.15f) * (1f - flashIntensity * 0.4f))
         drawRect(color = stormDark, size = size)
 
         // ── Full screen flash ──
         if (flashIntensity > 0.01f) {
-            drawRect(color = Color.White.copy(alpha = flashIntensity * 0.22f), size = size)
+            val flashColor = if (flashIntensity > 0.7f) Color(0xFFFFEEEE).copy(alpha = flashIntensity * 0.25f) else Color.White.copy(alpha = flashIntensity * 0.18f)
+            drawRect(color = flashColor, size = size)
+        }
+
+        // ── Ground flash (illumination where lightning strikes) ──
+        if (groundFlash > 0.01f) {
+            activeBolts.forEach { bolt ->
+                val (cx, _) = cloudPositions[bolt.cloudIndex]
+                val gx = ((cx + drift * 0.8f + bolt.cloudIndex * 0.15f) % 1f) * size.width
+                drawRect(
+                    brush = Brush.radialGradient(
+                        colors = listOf(Color.White.copy(alpha = groundFlash * 0.12f), Color.Transparent),
+                        center = Offset(gx, size.height * 0.84f),
+                        radius = size.width * 0.15f
+                    ),
+                    topLeft = Offset(gx - size.width * 0.15f, size.height * 0.82f),
+                    size = Size(size.width * 0.30f, size.height * 0.16f)
+                )
+            }
         }
 
         // ── Thunder expanding ring from cloud origin ──
         if (thunderRingProgress > 0.01f) {
-            val (tcx, tcy) = cloudPositions[boltCloudIndex]
+            val (tcx, tcy) = cloudPositions[thunderRingIndex]
             val ringCenter = Offset(tcx * size.width, tcy * size.height)
-            val ringRadius = size.maxDimension * thunderRingProgress * 0.25f
-            val ringAlpha = (1f - thunderRingProgress) * 0.06f
+            val ringRadius = size.maxDimension * thunderRingProgress * 0.28f
+            val ringAlpha = (1f - thunderRingProgress) * 0.08f
             drawCircle(
                 color = Color(0xFFCCDDFF).copy(alpha = ringAlpha),
                 radius = ringRadius,
@@ -3991,78 +4122,74 @@ private fun ThunderstormScene(
             )
         }
 
-        // ── Lightning bolt (originates from inside the cloud) ──
-        if (flashIntensity > 0f || afterglow > 0f) {
-            val (cloudBaseX, cloudBaseY) = cloudPositions[boltCloudIndex]
-            val startX = cloudBaseX * size.width + (Random(boltSeed.toInt()).nextFloat() - 0.5f) * size.width * 0.04f
-            val startY = cloudBaseY * size.height + size.height * 0.04f
+        // ── Lightning bolts (multiple simultaneous) ──
+        val boltAlpha = (flashIntensity + afterglow * 0.3f).coerceIn(0f, 1f)
+        if (boltAlpha > 0.01f) {
+            activeBolts.forEach { bolt ->
+                val boltPower = bolt.power
+                val (cloudBaseX, cloudBaseY) = cloudPositions[bolt.cloudIndex]
+                
+                // Bolt originates from cloud and strikes toward ground
+                val startX = ((cloudBaseX + drift * 0.8f + bolt.cloudIndex * 0.15f) % 1f) * size.width +
+                    (Random(bolt.seed.toInt()).nextFloat() - 0.5f) * size.width * 0.04f
+                val startY = cloudBaseY * size.height + size.height * 0.04f
 
-            val boltAlpha = (flashIntensity + afterglow * 0.25f).coerceIn(0f, 1f)
-            val boltColor = Color.White.copy(alpha = boltAlpha)
-            val glowColor = Color(0xFFAADDFF).copy(alpha = boltAlpha * 0.35f)
+                val boltColor = Color.White.copy(alpha = boltAlpha)
+                val glowColor = Color(0xFFAADDFF).copy(alpha = boltAlpha * 0.4f)
 
-            val boltPath = Path()
-            boltPath.moveTo(startX, startY)
+                // Main bolt path
+                val boltPath = Path()
+                boltPath.moveTo(startX, startY)
 
-            var bx = startX
-            var by = startY
-            for (segment in 0..14) {
-                val nextX = bx + (Random(boltSeed.toInt() + segment).nextFloat() - 0.5f) * size.width * 0.05f
-                val nextY = by + size.height * (0.05f + Random(boltSeed.toInt() + segment * 2).nextFloat() * 0.04f)
-                boltPath.lineTo(nextX, nextY)
-                bx = nextX
-                by = nextY
-            }
-
-            // Glow aura
-            drawPath(boltPath, glowColor, style = Stroke(width = 10f * boltAlpha, cap = StrokeCap.Round))
-            drawPath(boltPath, glowColor.copy(alpha = glowColor.alpha * 0.5f), style = Stroke(width = 20f * boltAlpha, cap = StrokeCap.Round))
-            // Bright core
-            drawPath(boltPath, boltColor, style = Stroke(width = 2.5f * boltAlpha, cap = StrokeCap.Round))
-
-            // Branch forks
-            for (branch in 0..4) {
-                val forkPoint = branch * 3 + 1
-                if (forkPoint > 14) continue
-                val branchPath = Path()
-                var fbx = startX
-                var fby = startY
-                for (seg in 0 until forkPoint) {
-                    val nextX = fbx + (Random(boltSeed.toInt() + seg * 3).nextFloat() - 0.5f) * size.width * 0.05f
-                    val nextY = fby + size.height * (0.05f + Random(boltSeed.toInt() + seg * 5).nextFloat() * 0.04f)
-                    fbx = nextX
-                    fby = nextY
+                var bx = startX
+                var by = startY
+                val segments = 12 + (boltPower * 6f).toInt()  // 12-18 segments based on power
+                for (segment in 0 until segments) {
+                    val nextX = bx + (Random(bolt.seed.toInt() + segment).nextFloat() - 0.5f) * size.width * (0.04f + (1f - boltPower) * 0.03f)
+                    val nextY = by + size.height * (0.04f + Random(bolt.seed.toInt() + segment * 2).nextFloat() * 0.035f)
+                    boltPath.lineTo(nextX, nextY)
+                    bx = nextX
+                    by = nextY
                 }
-                branchPath.moveTo(fbx, fby)
-                for (seg in 0..2) {
-                    val nextX = fbx + (Random(boltSeed.toInt() + branch * 10 + seg).nextFloat() - 0.6f) * size.width * 0.04f
-                    val nextY = fby + size.height * (0.02f + Random(boltSeed.toInt() + branch * 10 + seg * 2).nextFloat() * 0.03f)
-                    branchPath.lineTo(nextX, nextY)
-                    fbx = nextX
-                    fby = nextY
-                }
-                drawPath(branchPath, glowColor.copy(alpha = glowColor.alpha * 0.4f), style = Stroke(width = 5f * boltAlpha))
-                drawPath(branchPath, boltColor.copy(alpha = boltAlpha * 0.5f), style = Stroke(width = 1.2f * boltAlpha))
-            }
 
-            // Reflection on ground
-            if (boltAlpha > 0.1f) {
-                drawRect(
-                    brush = Brush.radialGradient(
-                        colors = listOf(Color.White.copy(alpha = boltAlpha * 0.06f), Color.Transparent),
-                        center = Offset(startX, size.height * 0.84f),
-                        radius = size.width * 0.12f
-                    ),
-                    topLeft = Offset(startX - size.width * 0.12f, size.height * 0.83f),
-                    size = Size(size.width * 0.24f, size.height * 0.15f)
-                )
+                // Glow aura (width scales with power)
+                val glowWidth = 8f + boltPower * 8f
+                drawPath(boltPath, glowColor, style = Stroke(width = glowWidth * boltAlpha, cap = StrokeCap.Round))
+                drawPath(boltPath, glowColor.copy(alpha = glowColor.alpha * 0.5f), style = Stroke(width = glowWidth * 2f * boltAlpha, cap = StrokeCap.Round))
+                // Bright core
+                drawPath(boltPath, boltColor, style = Stroke(width = 2f * boltAlpha, cap = StrokeCap.Round))
+
+                // Branch forks (count scales with power)
+                for (branch in 0 until bolt.branches) {
+                    val forkPoint = (branch * (segments / bolt.branches)).coerceAtMost(segments - 2)
+                    val branchPath = Path()
+                    var fbx = startX
+                    var fby = startY
+                    for (seg in 0 until forkPoint) {
+                        val nextX = fbx + (Random(bolt.seed.toInt() + seg * 7).nextFloat() - 0.5f) * size.width * 0.05f
+                        val nextY = fby + size.height * (0.05f + Random(bolt.seed.toInt() + seg * 9).nextFloat() * 0.04f)
+                        fbx = nextX
+                        fby = nextY
+                    }
+                    branchPath.moveTo(fbx, fby)
+                    for (seg in 0..3) {
+                        val nextX = fbx + (Random(bolt.seed.toInt() + branch * 13 + seg).nextFloat() - 0.6f) * size.width * 0.04f
+                        val nextY = fby + size.height * (0.02f + Random(bolt.seed.toInt() + branch * 13 + seg * 2).nextFloat() * 0.03f)
+                        branchPath.lineTo(nextX, nextY)
+                        fbx = nextX
+                        fby = nextY
+                    }
+                    val branchAlpha = boltAlpha * (0.4f + (1f - branch.toFloat() / bolt.branches) * 0.3f)
+                    drawPath(branchPath, glowColor.copy(alpha = glowColor.alpha * 0.4f), style = Stroke(width = 4f * branchAlpha))
+                    drawPath(branchPath, boltColor.copy(alpha = branchAlpha * 0.6f), style = Stroke(width = 1.2f * branchAlpha))
+                }
             }
         }
 
         // ── Edge vignette ──
         drawRect(
             brush = Brush.radialGradient(
-                colors = listOf(Color.Transparent, Color(0xFF0A0A1E).copy(alpha = 0.12f)),
+                colors = listOf(Color.Transparent, Color(0xFF0A0A1E).copy(alpha = 0.15f + afterglow * 0.10f)),
                 center = Offset(size.width * 0.5f, size.height * 0.5f),
                 radius = size.maxDimension * 0.35f
             ),
