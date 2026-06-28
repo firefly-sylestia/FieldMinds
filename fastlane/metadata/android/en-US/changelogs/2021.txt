@@ -1,0 +1,2 @@
+• Added statusBarPadding to 6 screens (Observe, Onboarding, Map, ResearchSession, SettingsNew, FieldLog)
+• Fixed Compose 2026.05.01 API changes — positionChange(), awaitFirstDown, launch

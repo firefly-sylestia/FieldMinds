@@ -42,7 +42,24 @@ internal data class FieldMindChangelogEntry(
     val sections: List<Pair<String, List<String>>>
 )
 
-private val fieldMindChangelog = listOf(        FieldMindChangelogEntry(
+private val fieldMindChangelog = listOf(
+    FieldMindChangelogEntry(
+        version = "2.3.26.24",
+        date = "2026-06-28",
+        title = "Status Bar Fixes & Compile Cleanup",
+        importance = "Patch",
+        tags = listOf("Status Bar", "Fixes", "Compose"),
+        sections = listOf(
+            "📱 Status Bar Padding Added to 6 Screens" to listOf(
+                "Added statusBarsPadding() to Observe, Onboarding, Map, ResearchSession, SettingsNew, and FieldLog screens — no more content hidden behind the status bar."
+            ),
+            "🔧 Compile Fixes for Compose 2026.05.01" to listOf(
+                "Fixed `positionChange()` API migration: replaced with manual position tracking in tab swipe gesture.",
+                "Added `awaitFirstDown` import and removed nested `launch` inside `LaunchedEffect` for Kotlin 2.3.21 compatibility."
+            )
+        )
+    ),
+    FieldMindChangelogEntry(
         version = "2.2.26.28",
         date = "2026-06-24",
         title = "Security & Auto-Lock Overhaul",
