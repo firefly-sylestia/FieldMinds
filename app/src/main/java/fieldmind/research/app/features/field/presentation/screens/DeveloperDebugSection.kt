@@ -102,7 +102,7 @@ fun AnimationStateCard() {
             // Animation spec overview
             Text("Animation specs", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             SpecRow("Expressive spring", damping = "${FieldMindMotion.expressiveSpring.dampingRatio}", stiffness = "${FieldMindMotion.expressiveSpring.stiffness}")
-            SpecRow("Expressive snap", damping = "${FieldMindMotion.expressiveSnap.delayMillis}ms delay", stiffness = "${FieldMindMotion.expressiveSnap.durationMillis}ms duration")
+            SpecRow("Expressive snap", damping = "${FieldMindMotion.expressiveSnap.dampingRatio}", stiffness = "${FieldMindMotion.expressiveSnap.stiffness}")
             SpecRow("Expressive soft", damping = "${FieldMindMotion.expressiveSoft.dampingRatio}", stiffness = "${FieldMindMotion.expressiveSoft.stiffness}")
             SpecRow("Press spring", damping = "${FieldMindMotion.pressSpring.dampingRatio}", stiffness = "${FieldMindMotion.pressSpring.stiffness}")
             SpecRow("Stagger", damping = "${FieldMindMotion.staggerInitialDelayMs}ms initial", stiffness = "${FieldMindMotion.staggerItemDelayMs}ms item")
