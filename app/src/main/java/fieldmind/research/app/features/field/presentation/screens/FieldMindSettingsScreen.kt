@@ -1970,8 +1970,12 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 DevWeatherTestPanel(
                     testCode = testWeatherCode,
                     testNight = testIsNight,
+                    testTemperature = null,
+                    testHumidity = null,
                     onCodeChange = { testWeatherCode = it },
-                    onNightChange = { testIsNight = it }
+                    onNightChange = { testIsNight = it },
+                    onTemperatureChange = {},
+                    onHumidityChange = {}
                 )
             }
             item {
