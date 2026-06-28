@@ -157,7 +157,7 @@ fun FieldMindOnboardingScreen(
     }
 
     FieldMindTheme(darkTheme = isDarkTheme, dynamicColor = useDynamicColors) {
-    BoxWithConstraints(Modifier.fillMaxSize()) {
+    BoxWithConstraints(Modifier.fillMaxSize().statusBarsPadding()) {
         // Animated page content with sliding transitions
         AnimatedContent(
             targetState = currentPage,

@@ -65,6 +65,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.ExperimentalActivityApi
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.CompositionLocalProvider
 import kotlinx.coroutines.CancellationException
@@ -1422,12 +1423,15 @@ private fun AllTabScreen(
                     .pointerInput(Unit) {
                         awaitEachGesture {
                             // Don't consume the initial down — let content receive taps/clicks
-                            awaitFirstDown(requireUnconsumed = false)
+                            val down = awaitFirstDown(requireUnconsumed = false)
 
                             var isHorizontalDrag = false
                             var accumulatedX = 0f
                             var accumulatedY = 0f
                             val directionThresholdPx = 8.dp.toPx()
+                            // Track previous pointer position for delta calculation
+                            // (positionChange is a Boolean in Compose 1.11+, not a function)
+                            var previousPosition = down.position
 
                             do {
                                 val event = awaitPointerEvent()
@@ -1441,9 +1445,13 @@ private fun AllTabScreen(
                                 // jitter. The PredictiveBackHandler has priority for rightward swipes.
                                 if (isPredictiveBackActive) break
 
+                                // Calculate position delta from previous position
+                                val delta = change.position - previousPosition
+                                previousPosition = change.position
+
                                 if (!isHorizontalDrag) {
-                                    accumulatedX += change.positionChange().x
-                                    accumulatedY += change.positionChange().y
+                                    accumulatedX += delta.x
+                                    accumulatedY += delta.y
 
                                     if (abs(accumulatedX) > directionThresholdPx || abs(accumulatedY) > directionThresholdPx) {
                                         if (abs(accumulatedX) > abs(accumulatedY) * 1.5f) {
@@ -1460,10 +1468,10 @@ private fun AllTabScreen(
                                     }
                                 } else {
                                     change.consume()
-                                    val canDragBack = activeTabIndex > 0 && change.positionChange().x > 0
-                                    val canDragForward = activeTabIndex < visibleTabs.size - 1 && change.positionChange().x < 0
+                                    val canDragBack = activeTabIndex > 0 && delta.x > 0
+                                    val canDragForward = activeTabIndex < visibleTabs.size - 1 && delta.x < 0
                                     if (canDragBack || canDragForward) {
-                                        val newX = (animX.value + change.positionChange().x)
+                                        val newX = (animX.value + delta.x)
                                             .coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
                                         scope.launch { animX.snapTo(newX) }
                                     }

@@ -101,6 +101,7 @@ fun MapFieldScreen(
 
     // ── Main screen with tabs ──
     Scaffold(
+        modifier = Modifier.statusBarsPadding(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             Surface(color = MaterialTheme.colorScheme.surface) {

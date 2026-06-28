@@ -625,7 +625,8 @@ fun StandardScreenHeader(
     val density = LocalDensity.current
     val translateY = remember { Animatable(with(density) { 20.dp.toPx() }) }
     LaunchedEffect(Unit) {
-        launch { translateY.animateTo(0f, tween(500, easing = FastOutSlowInEasing)) }
+        // Animate translateY first, then alpha fades in
+        translateY.animateTo(0f, tween(500, easing = FastOutSlowInEasing))
         alpha.animateTo(1f, tween(500, easing = FastOutSlowInEasing))
     }
 

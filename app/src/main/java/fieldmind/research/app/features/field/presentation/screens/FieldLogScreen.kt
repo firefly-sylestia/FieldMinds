@@ -158,6 +158,7 @@ fun FieldLogScreen(
     var isRefreshing by remember { mutableStateOf(false) }
 
     Scaffold(
+        modifier = Modifier.statusBarsPadding(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             CenterAlignedTopAppBar(
