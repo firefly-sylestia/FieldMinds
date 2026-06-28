@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -3840,7 +3841,7 @@ private fun ThunderstormScene(
     var thunderRingIndex by remember { mutableStateOf(0) }
     
     // Cloud glow state (one per cloud position)
-    val cloudGlows = remember { mutableStateListOf(0f, 0f, 0f) }
+    val cloudGlows = remember { mutableStateListOf<Float>(0f, 0f, 0f) }
     
     // Active bolt data for multi-bolt support
     data class BoltData(

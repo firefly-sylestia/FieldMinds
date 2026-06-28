@@ -2290,8 +2290,8 @@ internal fun DevWeatherTestPanel(
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.weather.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
-                    Icon(FieldMindIcons.Weather, null, tint = FieldMindTheme.colors.weather, size = 18.dp)
+                Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                    Icon(FieldMindIcons.Weather, null, tint = FieldMindTheme.colors.info, size = 18.dp)
                 }
                 Text("Test weather conditions", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                 Spacer(Modifier.weight(1f))
@@ -2359,7 +2359,7 @@ internal fun DevWeatherTestPanel(
                     value = ((testTemperature ?: 20) + 10).toFloat() / 55f,
                     onValueChange = { onTemperatureChange((it * 55).toInt() - 10) },
                     modifier = Modifier.weight(1f),
-                    colors = SliderDefaults.colors(thumbColor = FieldMindTheme.colors.weather, activeTrackColor = FieldMindTheme.colors.weather)
+                    colors = SliderDefaults.colors(thumbColor = FieldMindTheme.colors.info, activeTrackColor = FieldMindTheme.colors.info)
                 )
                 Text("45°", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -2382,7 +2382,7 @@ internal fun DevWeatherTestPanel(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                 Text("Preview", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                 Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
-                    Row(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
                         WeatherConditionImage(code = testCode, isNight = testNight, compact = false, size = 48.dp)
                         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                             Text(currentLabel, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyLarge)
