@@ -70,7 +70,9 @@ private val fieldMindChangelog = listOf(
                 "Fixed Compose 2026.05.01 API changes: positionChange() → manual delta tracking, awaitFirstDown import, nested launch fix.",
                 "Resolved 50+ CI compilation errors across navigation, settings, canvas, and data layer: !! crashes, return labels, delegated properties, TFLite stubs.",
                 "Replaced fake Modifier.blur() with real RenderEffect.createBlurEffect() for proper GPU-backed blur.",
-                "Similar species cards now navigate to the tapped species detail screen instead of doing nothing."
+                "Fixed similar species arrow tap: LaunchedEffect was loading from stale speciesId param instead of state — now correctly loads tapped species data.",
+                "Fixed tab swipe gesture overlay: do-while(isHorizontalDrag) exited after one pointer event — changed to do-while(true) so detection collects events until threshold is crossed.",
+                "Fixed PredictiveBackHandler on first tab: commit called no-op popBackStack — now disabled for first tab so system handles back-to-exit properly."
             ),
             "✏️ Creation Screen Redesigns" to listOf(
                 "Redesigned New Project screen with icon/color/template picker, consistent with the app's design language.",

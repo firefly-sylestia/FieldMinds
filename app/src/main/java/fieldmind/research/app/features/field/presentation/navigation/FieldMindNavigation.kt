@@ -1317,7 +1317,7 @@ private fun AllTabScreen(
     // IMPORTANT: Sets isPredictiveBackActive=true so the gesture overlay (below)
     // does NOT also try to drive animX from the same touch events. The overlay
     // defers to this handler and breaks out of its gesture loop.
-    PredictiveBackHandler(enabled = !reduceMotion) { progressFlow ->
+    PredictiveBackHandler(enabled = !reduceMotion && !isFirstTab) { progressFlow ->
         isPredictiveBackActive = true
         try {
             val maxOffset = if (isFirstTab) contentWidth else contentWidth * 0.6f
@@ -1433,6 +1433,10 @@ private fun AllTabScreen(
                             // (positionChange is a Boolean in Compose 1.11+, not a function)
                             var previousPosition = down.position
 
+                            // Loop keeps reading events until direction is confirmed or finger lifts.
+                            // Changed from while(isHorizontalDrag) to while(true) so the detection
+                            // phase doesn't exit prematurely after a single awaitPointerEvent call
+                            // when the threshold hasn't been crossed yet.
                             do {
                                 val event = awaitPointerEvent()
                                 val change = event.changes.firstOrNull() ?: break
@@ -1466,6 +1470,7 @@ private fun AllTabScreen(
                                             break
                                         }
                                     }
+                                    // Threshold not crossed yet — loop continues to collect more events
                                 } else {
                                     change.consume()
                                     val canDragBack = activeTabIndex > 0 && delta.x > 0
@@ -1476,7 +1481,7 @@ private fun AllTabScreen(
                                         scope.launch { animX.snapTo(newX) }
                                     }
                                 }
-                            } while (isHorizontalDrag)
+                            } while (true)
 
                             // Gesture ended — commit or snap back
                             if (isHorizontalDrag) {

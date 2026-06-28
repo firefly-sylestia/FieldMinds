@@ -580,7 +580,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
     var internalSpeciesId by remember { mutableStateOf(speciesId) }
 
     LaunchedEffect(internalSpeciesId) {
-        val record = database.getById(speciesId)
+        val record = database.getById(internalSpeciesId)
         species = record
         if (record != null && record.similarSpecies.isNotEmpty()) {
             // Load similar species data

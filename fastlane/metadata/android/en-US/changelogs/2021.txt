@@ -1,5 +1,6 @@
-• All 5 tabs render simultaneously — predictive peek shows real content behind current tab
-• Unified StandardScreenHeader, Geom font, and 15-color semantic palette across all screens
-• Added statusBarPadding to 6 screens (Observe, Onboarding, Map, ResearchSession, NewSettings, FieldLog)
-• Redesigned creation screens: Project, Note, Question, Source with full-screen forms
-• Fixed 50+ CI compilation errors for Compose 2026.05.01 and Kotlin 2.3.21
+• Simultaneous 5-tab rendering with real content predictive peek
+• UI consistency pass: StandardScreenHeader, Geom font, 15-color palette
+• Status bar padding on 6 screens + 50+ CI compilation fixes
+• Creation screens redesigned: Project, Note, Question, Source
+• Gesture overlay loop fix and first-tab back exit fix
+• Similar species arrow navigation now works correctly
