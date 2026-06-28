@@ -775,7 +775,7 @@ private fun DayCloudyScene(
         thunderSystem.update(deltaTime = 0.016f)
         
         // Trigger occasional lightning during overcast conditions
-        if (cloudIntensity > 0.7f && (cloudOffset1 * 100f).toInt() % 300 == 0) {
+        if (cloudIntensity > 0.7f && (cloudOffset1 * 50f).toInt() % 25 == 0) {
             thunderSystem.triggerLightning(
                 cx + (cloudOffset1 * 400f - 200f),
                 cy - size.height * 0.3f,
@@ -795,9 +795,9 @@ private fun DayCloudyScene(
                 cloudColor.copy(alpha = cloud.opacity * cloudAlphaMul * 0.7f)
             }
             drawCloud(
-                offset = (cloud.x + cloud.driftOffset) / size.width,
-                baseX = cloud.x,
-                baseY = cloud.y,
+                offset = cloud.driftOffset / size.width,
+                baseX = cloud.x * size.width,
+                baseY = cloud.y * size.height,
                 scale = cloud.width,
                 color = cloudDrawColor,
                 morph = cloudMorph + cloud.depth * 2f

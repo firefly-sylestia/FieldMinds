@@ -142,7 +142,7 @@ data class LightningBolt(
     val branches: List<LightningBolt> = emptyList(),
     val intensity: Float = 1f,
     val creationTime: Float = 0f,
-    val duration: Float = 0.15f
+    val duration: Float = 0.4f
 )
 
 class ThunderPhysicsSystem {
