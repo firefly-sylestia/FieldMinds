@@ -1422,8 +1422,8 @@ private fun AllTabScreen(
                     .fillMaxSize()
                     .pointerInput(Unit) {
                         awaitEachGesture {
-                            // Don't consume the initial down — let content receive taps/clicks
-                            val down = awaitFirstDown(requireUnconsumed = false)
+                            // Don't block the initial down — let content receive taps/clicks
+                            val down = awaitFirstDown()
 
                             var isHorizontalDrag = false
                             var accumulatedX = 0f
@@ -1441,7 +1441,7 @@ private fun AllTabScreen(
                                 // Use requireUnconsumed=false so the overlay never hangs waiting
                                 // for an unconsumed event when the tab content below consumes the
                                 // pointer events itself (e.g. for clickable or scroll handlers).
-                                val event = awaitPointerEvent(requireUnconsumed = false)
+                                val event = awaitPointerEvent()
                                 val change = event.changes.firstOrNull() ?: break
 
                                 // Early exit when finger lifts — prevents infinite hang
