@@ -99,11 +99,6 @@ class SpeciesImageAnalyzer(
                 ColorProfile(0f, 360f, 0f, 0.15f, 0.80f, 1.0f, 2.0f),       // White tail tip/chest
                 ColorProfile(0f, 10f, 0f, 0.10f, 0.05f, 0.25f, 2.0f)        // Black ears/legs
             ),
-            "Monarch Butterfly" to listOf(
-                ColorProfile(25f, 35f, 0.60f, 1.0f, 0.40f, 0.90f, 3.0f),
-                ColorProfile(0f, 10f, 0f, 0.15f, 0.05f, 0.30f, 2.5f),
-                ColorProfile(0f, 360f, 0f, 0.10f, 0.80f, 1.0f, 2.0f)
-            ),
             "Honey Bee" to listOf(
                 ColorProfile(40f, 15f, 0.50f, 0.90f, 0.50f, 0.85f, 3.0f),   // Yellow bands
                 ColorProfile(0f, 10f, 0f, 0.15f, 0.05f, 0.25f, 3.0f),       // Black bands
