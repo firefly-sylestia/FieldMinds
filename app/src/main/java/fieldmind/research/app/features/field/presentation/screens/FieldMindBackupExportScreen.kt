@@ -21,7 +21,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -252,8 +254,11 @@ fun BackupAndRestoreScreen(
             )
         }
     ) { padding ->
+        val backupScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
+
         LazyColumn(
-            Modifier
+            state = backupScrollState,
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
             contentPadding = PaddingValues(20.dp, 20.dp, 20.dp, 8.dp),
