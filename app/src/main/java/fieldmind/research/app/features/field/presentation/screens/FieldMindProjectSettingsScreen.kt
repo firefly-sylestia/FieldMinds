@@ -105,47 +105,81 @@ fun ProjectSettingsScreen(
     val hasUnsaved = hasNameChanges || hasDescChanges
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().statusBarsPadding(),
         contentPadding = PaddingValues(20.dp, 8.dp, 20.dp, 96.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         // ════════════════════════════════════════════════════════════
         //  Header
         // ════════════════════════════════════════════════════════════
+        // ════════════════════════════════════════════════════════════
+        //  Header with status bar padding
+        // ════════════════════════════════════════════════════════════
         item {
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+            Surface(
+                shape = RoundedCornerShape(24.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                tonalElevation = 0.dp,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                IconButton(onClick = onBack, modifier = Modifier.size(40.dp)) {
-                    Icon(MaterialSymbolIcon("arrow_back"), "Back", size = 22.dp)
-                }
-                Text(
-                    "Project Settings",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                // Save button (visible when there are unsaved changes)
-                if (hasUnsaved) {
-                    TextButton(
-                        onClick = {
-                            haptics.confirm()
-                            if (hasNameChanges) {
-                                viewModel.updateProjectEntity(project.copy(title = projectName.trim()))
-                            }
-                            if (hasDescChanges) {
-                                viewModel.updateProjectEntity(project.copy(objective = projectDescription.trim()))
-                            }
-                        },
-                        shape = RoundedCornerShape(12.dp)
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Icon(MaterialSymbolIcon("save"), null, size = 16.dp)
-                        Spacer(Modifier.size(4.dp))
-                        Text("Save", fontWeight = FontWeight.SemiBold)
+                        Surface(
+                            onClick = onBack,
+                            shape = RoundedCornerShape(14.dp),
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(MaterialSymbolIcon("arrow_back"), "Back", size = 22.dp)
+                            }
+                        }
+                        Text(
+                            "Project Settings",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        // Save button (visible when there are unsaved changes)
+                        if (hasUnsaved) {
+                            TextButton(
+                                onClick = {
+                                    haptics.confirm()
+                                    if (hasNameChanges) {
+                                        viewModel.updateProjectEntity(project.copy(title = projectName.trim()))
+                                    }
+                                    if (hasDescChanges) {
+                                        viewModel.updateProjectEntity(project.copy(objective = projectDescription.trim()))
+                                    }
+                                },
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Icon(MaterialSymbolIcon("save"), null, size = 16.dp)
+                                Spacer(Modifier.size(4.dp))
+                                Text("Save", fontWeight = FontWeight.SemiBold)
+                            }
+                        } else {
+                            Spacer(Modifier.size(40.dp))
+                        }
                     }
-                } else {
-                    Spacer(Modifier.size(40.dp))
+
+                    // Project identity
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                        Box(
+                            Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                                .background(colors.project.copy(alpha = 0.14f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(MaterialSymbolIcon("settings"), null, tint = colors.project, size = 24.dp)
+                        }
+                        Column(Modifier.weight(1f)) {
+                            Text(project.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                            Text("Project settings and configuration", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
                 }
             }
         }

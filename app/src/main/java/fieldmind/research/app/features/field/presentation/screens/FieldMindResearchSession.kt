@@ -473,6 +473,7 @@ fun ResearchSessionScreen(
     }
 
     Scaffold(
+        modifier = Modifier.statusBarsPadding(),
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         LazyColumn(

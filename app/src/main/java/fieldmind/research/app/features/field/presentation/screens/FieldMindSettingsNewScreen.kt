@@ -216,6 +216,7 @@ fun FieldMindSettingsNewScreen(
     val settingsScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
 
     Scaffold(
+        modifier = Modifier.statusBarsPadding(),
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         LazyColumn(

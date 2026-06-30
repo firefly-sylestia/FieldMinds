@@ -176,45 +176,57 @@ fun SpeciesBrowserScreen(
                 shadowElevation = 0.dp
             ) {
                 Column(Modifier.fillMaxWidth()) {
-                    // ── Species Browser Header (expanded) ──
-                    Row(
-                        Modifier
+                    // ── Species Browser Header — matching StandardScreenHeader style ──
+                    Surface(
+                        shape = RoundedCornerShape(24.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerLow,
+                        tonalElevation = 0.dp,
+                        modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, end = 20.dp, top = 12.dp, bottom = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                            .padding(horizontal = 20.dp)
                     ) {
-                        BackButton(onClick = onBack)
-                        
-                        // Icon badge
-                        Box(
+                        Row(
                             Modifier
-                                .size(48.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(FieldMindTheme.colors.info.copy(alpha = 0.14f)),
-                            contentAlignment = Alignment.Center
+                                .fillMaxWidth()
+                                .padding(18.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.info, size = 28.dp)
-                        }
-                        
-                        Column(Modifier.weight(1f)) {
-                            Text(
-                                "Species Browser",
-                                style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            if (totalCount > 0) {
+                            BackButton(onClick = onBack)
+                            
+                            // Icon badge — matching StandardScreenHeader
+                            Box(
+                                Modifier
+                                    .size(48.dp)
+                                    .clip(RoundedCornerShape(14.dp))
+                                    .background(FieldMindTheme.colors.info.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.info, size = 26.dp)
+                            }
+                            
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                                 Text(
-                                    "$totalCount species in catalog",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    "Species Browser",
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    fontWeight = FontWeight.ExtraBold
                                 )
+                                if (totalCount > 0) {
+                                    Text(
+                                        "$totalCount species in catalog",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                            if (isLoading) {
+                                CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
                             }
                         }
-                        if (isLoading) {
-                            CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
-                        }
                     }
+
+                    // Spacer between header and search
+                    Spacer(Modifier.height(8.dp))
 
                     // Search bar
                     OutlinedTextField(
@@ -568,7 +580,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
     var internalSpeciesId by remember { mutableStateOf(speciesId) }
 
     LaunchedEffect(internalSpeciesId) {
-        val record = database.getById(speciesId)
+        val record = database.getById(internalSpeciesId)
         species = record
         if (record != null && record.similarSpecies.isNotEmpty()) {
             // Load similar species data

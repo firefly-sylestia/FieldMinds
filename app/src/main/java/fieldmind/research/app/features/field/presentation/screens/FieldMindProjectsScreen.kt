@@ -180,7 +180,7 @@ fun ProjectsScreen(
 
     Box(Modifier.fillMaxSize()) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().statusBarsPadding(),
         contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 96.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {

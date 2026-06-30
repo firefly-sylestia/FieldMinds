@@ -798,30 +798,36 @@ private fun CompactHomeHeader(
         shadowElevation = 0.dp
     ) {
         Column(
-            Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            Modifier.padding(22.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            // ── Row 1: Compact branding + settings ──
+            // ── Row 1: Enhanced branding with larger icon ──
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 Box(
                     Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(14.dp))
+                        .size(52.dp)
+                        .clip(RoundedCornerShape(16.dp))
                         .background(colors.positive.copy(alpha = if (colors.isDark) 0.34f else 0.16f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(FieldMindIcons.Nature, null, tint = colors.positive, size = 26.dp)
+                    Icon(FieldMindIcons.Nature, null, tint = colors.positive, size = 28.dp)
                 }
                 Column(Modifier.weight(1f)) {
                     Text(
                         "FieldMind",
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        "Field research companion",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1
                     )
                 }
                 Surface(
@@ -1531,7 +1537,7 @@ private fun LiveWeatherDashboardWidget(
 
                         // ── Developer: Test weather conditions ──
                         if (developerMode) {
-                            DevWeatherTestPanel(testWeatherCode, testIsNight, { testWeatherCode = it }, { testIsNight = it })
+                            DevWeatherTestPanel(testWeatherCode, testIsNight, null, null, { testWeatherCode = it }, { testIsNight = it }, {}, {})
                         }
                     }
                     // Pressure
@@ -2253,99 +2259,139 @@ private fun SessionObservationsCard(
 internal fun DevWeatherTestPanel(
     testCode: Int?,
     testNight: Boolean,
+    testTemperature: Int?,
+    testHumidity: Int?,
     onCodeChange: (Int?) -> Unit,
-    onNightChange: (Boolean) -> Unit
+    onNightChange: (Boolean) -> Unit,
+    onTemperatureChange: (Int?) -> Unit,
+    onHumidityChange: (Int?) -> Unit
 ) {
     val colors = FieldMindTheme.colors
-    val weatherCodes = listOf(
-        0 to "Clear", 1 to "Mainly Clear", 2 to "Cloudy", 3 to "Overcast",
-        45 to "Fog", 48 to "Rime Fog", 51 to "Drizzle", 61 to "Rain",
-        71 to "Snow", 80 to "Rain Showers", 85 to "Snow Showers", 95 to "Thunderstorm", 99 to "Severe TS"
+    
+    // Grouped weather codes by category
+    data class WeatherGroup(val label: String, val emoji: String, val codes: List<Pair<Int, String>>)
+    val groups = listOf(
+        WeatherGroup("Clear", "☀️", listOf(0 to "Clear", 1 to "Mainly Clear")),
+        WeatherGroup("Cloudy", "☁️", listOf(2 to "Cloudy", 3 to "Overcast")),
+        WeatherGroup("Fog", "🌫️", listOf(45 to "Fog", 48 to "Rime Fog")),
+        WeatherGroup("Rain", "🌧️", listOf(51 to "Drizzle", 61 to "Rain", 80 to "Rain Showers")),
+        WeatherGroup("Snow", "❄️", listOf(71 to "Snow", 85 to "Snow Showers")),
+        WeatherGroup("Storm", "⛈️", listOf(95 to "Thunderstorm", 99 to "Severe TS"))
     )
-
-    // Night-specific preset codes
-    val nightCodes = listOf(
-        0 to "Night Clear", 45 to "Night Fog", 95 to "Night Storm"
-    )
+    val allCodes = groups.flatMap { it.codes }
+    val nightCodes = listOf(0 to "Night Clear", 45 to "Night Fog", 95 to "Night Storm")
     val currentLabel = if (testNight && testCode != null) {
         nightCodes.firstOrNull { it.first == testCode }?.second ?: "Custom ($testCode)"
     } else if (testCode != null) {
-        weatherCodes.firstOrNull { it.first == testCode }?.second ?: "Custom ($testCode)"
-    } else {
-        "Live (${testCode ?: "-"})"
-    }
-
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
-        )
-    ) {
-        Column(
-            Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Icon(FieldMindIcons.Sparkle, null, tint = colors.info, size = 16.dp)
-                Text(
-                    "Dev: Test conditions",
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = colors.info
-                )
+        allCodes.firstOrNull { it.first == testCode }?.second ?: "Custom ($testCode)"
+    } else { "Live" }
+    
+    Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            // Header
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                    Icon(FieldMindIcons.Weather, null, tint = FieldMindTheme.colors.info, size = 18.dp)
+                }
+                Text("Test weather conditions", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                 Spacer(Modifier.weight(1f))
-                Text(
-                    if (testCode != null) "Override: $currentLabel" else "Using live data",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            // Weather condition chips
-            Text("Weather codes:", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                items(weatherCodes) { (code, label) ->
-                    FilterChip(
-                        selected = testCode == code && !testNight,
-                        onClick = {
-                            if (testCode == code && !testNight) {
-                                onCodeChange(null)
-                            } else {
-                                onCodeChange(code)
-                                onNightChange(false)
-                            }
-                        },
-                        label = { Text(label, style = MaterialTheme.typography.labelSmall) },
-                        leadingIcon = if (testCode == code && !testNight) {{ Icon(FieldMindIcons.Check, null, size = 14.dp) }} else null
+                Surface(shape = RoundedCornerShape(8.dp), color = if (testCode != null || testTemperature != null || testHumidity != null) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh) {
+                    Text(
+                        if (testCode != null || testTemperature != null || testHumidity != null) "Override active" else "Live data",
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (testCode != null || testTemperature != null || testHumidity != null) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
-
-            // Night mode toggle
+            
+            // Grouped weather code chips
+            Text("Weather condition", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                groups.forEach { group ->
+                    Text("${group.emoji} ${group.label}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        group.codes.forEach { (code, label) ->
+                            FilterChip(
+                                selected = testCode == code && !testNight,
+                                onClick = {
+                                    if (testCode == code && !testNight) onCodeChange(null)
+                                    else { onCodeChange(code); onNightChange(false) }
+                                },
+                                label = { Text(label, style = MaterialTheme.typography.labelSmall) },
+                                leadingIcon = if (testCode == code && !testNight) {{ Icon(FieldMindIcons.Check, null, size = 14.dp) }} else null
+                            )
+                        }
+                    }
+                }
+            }
+            
+            // Custom code input + Night mode + Reset
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = testCode?.toString() ?: "",
+                    onValueChange = { input -> onCodeChange(input.filter { it.isDigit() }.take(3).toIntOrNull()) },
+                    label = { Text("Custom WMO code") },
+                    placeholder = { Text("e.g. 96") },
+                    modifier = Modifier.width(140.dp),
+                    singleLine = true,
+                    shape = RoundedCornerShape(12.dp),
+                    textStyle = MaterialTheme.typography.bodySmall,
+                    keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number)
+                )
                 FilterChip(
                     selected = testNight,
-                    onClick = {
-                        onNightChange(!testNight)
-                        if (testCode == null) onCodeChange(0)
-                    },
+                    onClick = { onNightChange(!testNight); if (testCode == null) onCodeChange(0) },
                     label = { Text("Night mode", style = MaterialTheme.typography.labelSmall) },
                     leadingIcon = if (testNight) {{ Icon(FieldMindIcons.MoonNew, null, size = 14.dp) }} else null
                 )
-                // Reset button
-                TextButton(onClick = { onCodeChange(null); onNightChange(false) }) {
-                    Text("Reset", style = MaterialTheme.typography.labelSmall)
+                TextButton(onClick = { onCodeChange(null); onNightChange(false); onTemperatureChange(null); onHumidityChange(null) }) {
+                    Text("Reset all", style = MaterialTheme.typography.labelSmall)
                 }
             }
-
-            // Show preview of the selected icons8 PNG
+            
+            // Temperature slider
+            Text("Temperature: ${testTemperature ?: "Live"}°C", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("-10°", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Slider(
+                    value = ((testTemperature ?: 20) + 10).toFloat() / 55f,
+                    onValueChange = { onTemperatureChange((it * 55).toInt() - 10) },
+                    modifier = Modifier.weight(1f),
+                    colors = SliderDefaults.colors(thumbColor = FieldMindTheme.colors.info, activeTrackColor = FieldMindTheme.colors.info)
+                )
+                Text("45°", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            
+            // Humidity slider
+            Text("Humidity: ${testHumidity ?: "Live"}%", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("0%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Slider(
+                    value = (testHumidity ?: 50).toFloat() / 100f,
+                    onValueChange = { onHumidityChange((it * 100).toInt()) },
+                    modifier = Modifier.weight(1f),
+                    colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary, activeTrackColor = MaterialTheme.colorScheme.primary)
+                )
+                Text("100%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            
+            // Live preview
             if (testCode != null) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    WeatherConditionImage(code = testCode, isNight = testNight, compact = true, size = 32.dp)
-                    val todayDate = remember { LocalDate.now() }; Icon(moonPhaseIcon(getMoonPhase(todayDate)), null, tint = Color.White, size = 24.dp)
-                    Column {
-                        Text("Icon preview (${testCode})", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text("Night: ${if (testNight) "ON" else "OFF"}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Text("Preview", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+                    Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                        WeatherConditionImage(code = testCode, isNight = testNight, compact = false, size = 48.dp)
+                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(currentLabel, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyLarge)
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                if (testTemperature != null) Text("${testTemperature}°C", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                if (testHumidity != null) Text("${testHumidity}% humidity", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            Text("Night: ${if (testNight) "ON" else "OFF"}  •  Code: ${testCode}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                 }
             }

@@ -42,13 +42,13 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var selectedIcon by remember { mutableStateOf("🌿") }
-    var selectedColor by remember { mutableStateOf(0xFF4CAF50L) }
+    var selectedColor by remember { mutableStateOf(0xFF1F6B4CL) }
     var selectedTemplate by remember { mutableStateOf("Empty Project") }
     var showTemplatePicker by remember { mutableStateOf(false) }
 
     val projectIcons = listOf("🌿", "🦋", "🐦", "🌲", "📷")
     val colorOptions = listOf(
-        0xFF2E7D32L to FieldMindTheme.colors.observation,  // Observation green
+        0xFF1F6B4CL to FieldMindTheme.colors.observation,  // Observation green
         0xFF1565C0L to FieldMindTheme.colors.question,    // Question blue
         0xFF5E35B1L to FieldMindTheme.colors.source,      // Source violet
         0xFF8B5000L to FieldMindTheme.colors.hypothesis,  // Hypothesis amber
@@ -1218,11 +1218,11 @@ private fun AttachmentTypeItem(
 fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val colors = FieldMindTheme.colors
     var folderName by remember { mutableStateOf("") }
-    var selectedColor by remember { mutableStateOf(0xFF5F7F52) }
+    var selectedColor by remember { mutableStateOf(0xFF1F6B4C) }
     val haptics = rememberFieldMindHaptics()
 
     val colorOptions = listOf(
-        0xFF4CAF50L to "Green",
+        0xFF1F6B4CL to "Green",
         0xFF2196F3L to "Blue",
         0xFF9C27B0L to "Purple",
         0xFFFF9800L to "Orange",

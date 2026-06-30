@@ -45,6 +45,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +56,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -600,11 +602,12 @@ fun SectionHeader(
 // ──────────────────────────────────────────────────────────────────────
 
 /**
- * Standardized screen header for the redesign.
- * A rounded card at the top of every screen with:
- * - Semantic accent color icon
- * - Title + optional subtitle
+ * Enhanced standardized screen header for the redesign.
+ * A polished rounded card at the top of every screen with:
+ * - Large semantic accent color icon (48dp)
+ * - Bold headlineSmall title + optional subtitle
  * - Optional trailing action
+ * - Subtle surfaceContainerLow fill with improved spacing
  * Consistent height and padding across all screens.
  */
 @Composable
@@ -613,39 +616,39 @@ fun StandardScreenHeader(
     subtitle: String? = null,
     icon: MaterialSymbolIcon,
     heroColor: Color = FieldMindTheme.colors.accentFor(title),
-    backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     trailing: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        color = backgroundColor.copy(alpha = 0.25f),
+        modifier = modifier
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp
     ) {
         Row(
-            Modifier.padding(16.dp),
+            Modifier.padding(18.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Box(
                 Modifier
-                    .size(46.dp)
+                    .size(48.dp)
                     .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), RoundedCornerShape(14.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon = icon, contentDescription = null, tint = heroColor, size = 24.dp)
+                Icon(icon = icon, contentDescription = null, tint = heroColor, size = 26.dp)
             }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(
                     title,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.ExtraBold
                 )
                 if (!subtitle.isNullOrBlank()) {
                     Text(
                         subtitle,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis

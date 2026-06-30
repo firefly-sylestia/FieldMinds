@@ -1,0 +1,6 @@
+• Simultaneous 5-tab rendering with real content predictive peek
+• UI consistency pass: StandardScreenHeader, Geom font, 15-color palette
+• Status bar padding on 6 screens + 50+ CI compilation fixes
+• Creation screens redesigned: Project, Note, Question, Source
+• Gesture overlay loop fix and first-tab back exit fix
+• Similar species arrow navigation now works correctly

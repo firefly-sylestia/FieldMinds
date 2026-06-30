@@ -6,7 +6,6 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -22,12 +21,13 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,26 +39,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
-import androidx.activity.BackEventCompat
 import androidx.activity.ExperimentalActivityApi
 import androidx.activity.compose.PredictiveBackHandler
 import fieldmind.research.app.shared.presentation.components.icons.Icon
@@ -182,7 +179,7 @@ object FieldMindMotion {
 
     const val swipeEdgeWidthDp = 30f
     const val swipeEdgeHeightDp = 30f
-    const val swipeThreshold = 0.30f
+    const val swipeThreshold = 0.20f
     const val swipeScaleFactor = 0.92f
     const val swipeScrimAlpha = 0.35f
     const val swipeShadowElevationDp = 24f
@@ -333,294 +330,17 @@ fun Modifier.pressCardScale(): Modifier = composed {
     this.pressScale(scaleDown = 0.97f)
 }
 
-// -- Tab Swipe Host -- switch between adjacent tabs with horizontal swipe --
-
-/**
- * Wraps content with a horizontal swipe gesture that triggers tab switching.
- * Unlike [SwipeBackHost] which only activates from the left edge, this detects
- * swipes anywhere on the content area (like iOS springboard).
- *
- * Swipe left → calls [onSwipeForward] (next tab)
- * Swipe right → calls [onSwipeBack] (previous tab)
- * System back gesture (edge) → drives predictive peek animation via [PredictiveBackHandler];
- * on commit, navigates back via [onBack].
- *
- * Shows visual feedback (offset, scale, gradient scrim) during the swipe.
- */
-@OptIn(ExperimentalActivityApi::class)
-@Composable
-fun TabSwipeHost(
-    onSwipeBack: (() -> Unit)?,
-    onSwipeForward: (() -> Unit)?,
-    onBack: (() -> Unit)? = null,
-    previousScreen: PreviousScreenInfo? = null,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    val reduceMotion = FieldMindMotion.isReduceMotion()
-    val scope = rememberCoroutineScope()
-    val haptics = rememberFieldMindHaptics()
-
-    val animX = remember { Animatable(0f) }
-    var contentWidth by remember { mutableFloatStateOf(1f) }
-
-    // Detect keyboard visibility reactively via InputMethodManager
-    val context = LocalContext.current
-    var isImeVisible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        while (true) {
-            val imm = context.getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as? android.view.inputmethod.InputMethodManager
-            isImeVisible = imm?.isAcceptingText ?: false
-            delay(100)
-        }
-    }
-
-    // Check if swipe directions are available
-    val canSwipeBack = onSwipeBack != null
-    val canSwipeForward = onSwipeForward != null
-
-    // ── Track whether the current gesture is a system back or tab swipe ──
-    var isSystemBack by remember { mutableStateOf(false) }
-
-    // Predictive back gesture (Android 14+) — drives peek animation from system back gesture
-    PredictiveBackHandler(enabled = !reduceMotion && onBack != null && !isImeVisible) { progressFlow ->
-        isSystemBack = true
-        try {
-            progressFlow.collect { backEvent ->
-                val offset = (contentWidth * backEvent.progress).coerceAtLeast(0f)
-                animX.snapTo(offset)
-            }
-            // Flow completed → gesture committed
-            isSystemBack = false
-            animX.snapTo(0f)
-            haptics.confirm()
-            onBack?.invoke()
-        } catch (_: CancellationException) {
-            isSystemBack = false
-            animX.snapTo(0f)
-        }
-    }
-
-    val progress = abs(animX.value / contentWidth).coerceIn(0f, 1f)
-    val scrimAlpha = progress * 0.25f
-    val scale = 1f - progress * (1f - FieldMindMotion.swipeScaleFactor)
-    val swipeCornerRadius = (FieldMindMotion.swipeBaseCornerRadiusDp + progress * (FieldMindMotion.swipeCornerRadiusDp - FieldMindMotion.swipeBaseCornerRadiusDp)).dp
-
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .onGloballyPositioned { coords ->
-                contentWidth = coords.size.width.toFloat().coerceAtLeast(1f)
-            }
-    ) {
-        // ── Previous screen peek preview (system back gesture only) ──
-        if (progress > 0.01f && previousScreen != null && isSystemBack) {
-            val previewWidth = contentWidth * 0.85f
-            val previewOffset = animX.value - previewWidth
-            val previewScale = 0.94f + (1f - 0.94f) * (1f - progress)
-            val screenColor = MaterialTheme.colorScheme.primary
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .offset { IntOffset(previewOffset.roundToInt(), 0) }
-                    .width(Dp(previewWidth))
-                    .fillMaxHeight()
-                    .graphicsLayer {
-                        scaleX = previewScale
-                        scaleY = previewScale
-                        transformOrigin = TransformOrigin(1f, 0.5f)
-                    }
-            ) {
-                // Main preview surface — full-height rounded card like a real screen
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp),
-                    tonalElevation = 3.dp,
-                    shadowElevation = 16.dp,
-                    border = androidx.compose.foundation.BorderStroke(
-                        0.5.dp,
-                        MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        // ── Mock status bar area ──
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(screenColor.copy(alpha = 0.08f))
-                                .padding(horizontal = 20.dp, vertical = 14.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Icon(
-                                        FieldMindIcons.ChevronLeft,
-                                        "Back",
-                                        size = 22.dp,
-                                        tint = screenColor.copy(alpha = 0.8f)
-                                    )
-                                    Text(
-                                        previousScreen.label,
-                                        style = MaterialTheme.typography.titleMedium,
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
-                            }
-                        }
-
-                        // ── Mock screen content cards ──
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(20.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            repeat(3) { idx ->
-                                val cardAlpha = 1f - idx * 0.12f
-                                Surface(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(if (idx == 0) 80.dp else 60.dp),
-                                    shape = RoundedCornerShape(12.dp),
-                                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha * 0.35f)
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(16.dp),
-                                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(if (idx == 0) 40.dp else 32.dp)
-                                                .background(
-                                                    screenColor.copy(alpha = cardAlpha * 0.15f),
-                                                    RoundedCornerShape(50)
-                                                )
-                                        )
-                                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .width((80 + idx * 30).dp)
-                                                    .height(10.dp)
-                                                    .background(
-                                                        MaterialTheme.colorScheme.onSurface.copy(alpha = cardAlpha * 0.15f),
-                                                        RoundedCornerShape(4.dp)
-                                                    )
-                                            )
-                                            Box(
-                                                modifier = Modifier
-                                                    .width((120 + idx * 20).dp)
-                                                    .height(8.dp)
-                                                    .background(
-                                                        MaterialTheme.colorScheme.onSurface.copy(alpha = cardAlpha * 0.09f),
-                                                        RoundedCornerShape(4.dp)
-                                                    )
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-
-                            Spacer(Modifier.weight(1f))
-
-                            Text(
-                                "Swipe to go back",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        // ── Gradient scrim on the side opposite the swipe direction ──
-        if (progress > 0.01f) {
-            Box(
-                modifier = Modifier.fillMaxSize().background(
-                    if (animX.value > 0) {
-                        Brush.horizontalGradient(
-                            colors = listOf(Color.Black.copy(alpha = scrimAlpha * 0.9f), Color.Black.copy(alpha = scrimAlpha * 0.4f), Color.Transparent),
-                            startX = 0f, endX = contentWidth * 0.5f
-                        )
-                    } else {
-                        Brush.horizontalGradient(
-                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = scrimAlpha * 0.4f), Color.Black.copy(alpha = scrimAlpha * 0.9f)),
-                            startX = contentWidth * 0.5f, endX = contentWidth
-                        )
-                    }
-                )
-            )
-        }
-
-        // ── Current screen content (transformed) ──
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(swipeCornerRadius))
-                .graphicsLayer {
-                    translationX = animX.value
-                    scaleX = scale
-                    scaleY = scale
-                    clip = true
-                }
-                .then(
-                    if (!reduceMotion && !isImeVisible) {
-                        Modifier.pointerInput(Unit) {
-                            detectDragGestures(
-                                onDragStart = { /* swipe anywhere */ },
-                                onDrag = { change, dragAmount ->
-                                    change.consume()
-                                    // Only allow drag in directions that have valid callbacks
-                                    if ((dragAmount.x > 0 && canSwipeBack) || (dragAmount.x < 0 && canSwipeForward)) {
-                                        val newX = (animX.value + dragAmount.x).coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
-                                        scope.launch { animX.snapTo(newX) }
-                                    }
-                                },
-                                onDragEnd = {
-                                    val threshold = contentWidth * 0.20f
-                                    if (animX.value > threshold && canSwipeBack) {
-                                        haptics.confirm()
-                                        onSwipeBack?.invoke()
-                                    } else if (animX.value < -threshold && canSwipeForward) {
-                                        haptics.confirm()
-                                        onSwipeForward?.invoke()
-                                    } else {
-                                        scope.launch { animX.snapTo(0f) }
-                                    }
-                                },
-                                onDragCancel = {
-                                    scope.launch { animX.snapTo(0f) }
-                                }
-                            )
-                        }
-                    } else {
-                        Modifier
-                    }
-                ),
-            contentAlignment = Alignment.TopStart
-        ) {
-            content()
-        }
-    }
-}
-
 // -- Swipe-back Gesture Host -- iOS-style with predictive peek --
 
 private enum class SwipeDirection { Horizontal, Vertical }
+
+/**
+ * Categorizes the previous screen for its peek preview mock content.
+ * Each type produces a different visual placeholder during the back gesture.
+ */
+enum class PeekScreenType {
+    Settings, Detail, Tool, Creation, Generic
+}
 
 /**
  * Previous screen peek state for the navigation peek animation.
@@ -629,11 +349,268 @@ private enum class SwipeDirection { Horizontal, Vertical }
  *
  * @param label Human-readable name of the previous destination
  * @param route Route string of the previous destination (for matching icons)
+ * @param screenType Categorizes the screen for a type-appropriate peek preview
  */
 data class PreviousScreenInfo(
     val label: String,
-    val route: String = ""
+    val route: String = "",
+    val screenType: PeekScreenType = PeekScreenType.Generic
 )
+
+// ── Screen-type-specific peek preview content ──
+
+/**
+ * Renders a mock preview of the previous screen's content during the back-gesture peek.
+ * The mock style depends on [screenType], giving the user a visual hint of what
+ * screen they're navigating back to without needing the real composable.
+ */
+@Composable
+private fun PeekPreviewContent(
+    screenType: PeekScreenType,
+    label: String,
+    accentColor: Color
+) {
+    val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
+    val onSurface = MaterialTheme.colorScheme.onSurface
+    val outlineAlpha = 0.12f
+
+    Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            when (screenType) {
+                PeekScreenType.Settings -> {
+                    // ── Settings-style mock: labeled rows with toggles/chevrons ──
+                    Text(
+                        label,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = onSurface.copy(alpha = 0.6f),
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                    repeat(4) { idx ->
+                        val rowColor = if (idx == 0) accentColor else surfaceVariant
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // Icon placeholder
+                                Box(
+                                    Modifier.size(22.dp).background(
+                                        rowColor.copy(alpha = outlineAlpha),
+                                        RoundedCornerShape(6.dp)
+                                    )
+                                )
+                                Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                                    Box(
+                                        Modifier.width((80 + idx * 20).dp).height(8.dp).background(
+                                            onSurface.copy(alpha = 0.10f),
+                                            RoundedCornerShape(4.dp)
+                                        )
+                                    )
+                                    Box(
+                                        Modifier.width((40 + idx * 10).dp).height(6.dp).background(
+                                            onSurface.copy(alpha = 0.06f),
+                                            RoundedCornerShape(3.dp)
+                                        )
+                                    )
+                                }
+                            }
+                            // Toggle / chevron placeholder
+                            Box(
+                                Modifier.size(16.dp).background(
+                                    onSurface.copy(alpha = 0.08f),
+                                    RoundedCornerShape(4.dp)
+                                )
+                            )
+                        }
+                        if (idx < 3) {
+                            Spacer(
+                                Modifier.fillMaxWidth().height(1.dp).background(
+                                    onSurface.copy(alpha = 0.04f)
+                                )
+                            )
+                        }
+                    }
+                }
+
+                PeekScreenType.Detail -> {
+                    // ── Detail-style mock: header + content cards ──
+                    // Header area
+                    Box(
+                        Modifier.fillMaxWidth().height(80.dp).background(
+                            accentColor.copy(alpha = 0.06f),
+                            RoundedCornerShape(12.dp)
+                        ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Box(
+                                Modifier.size(28.dp).background(
+                                    accentColor.copy(alpha = 0.15f),
+                                    RoundedCornerShape(8.dp)
+                                )
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            Box(
+                                Modifier.width(80.dp).height(8.dp).background(
+                                    onSurface.copy(alpha = 0.12f),
+                                    RoundedCornerShape(4.dp)
+                                )
+                            )
+                        }
+                    }
+                    // Content cards
+                    repeat(3) { idx ->
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            color = surfaceVariant.copy(alpha = 0.3f)
+                        ) {
+                            Row(
+                                Modifier.padding(12.dp),
+                                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Box(
+                                    Modifier.size(36.dp).background(
+                                        accentColor.copy(alpha = 0.08f * (3 - idx)),
+                                        RoundedCornerShape(8.dp)
+                                    )
+                                )
+                                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Box(
+                                        Modifier.width((60 + idx * 30).dp).height(8.dp).background(
+                                            onSurface.copy(alpha = 0.10f),
+                                            RoundedCornerShape(4.dp)
+                                        )
+                                    )
+                                    Box(
+                                        Modifier.width((100 + idx * 20).dp).height(6.dp).background(
+                                            onSurface.copy(alpha = 0.06f),
+                                            RoundedCornerShape(3.dp)
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                PeekScreenType.Tool -> {
+                    // ── Tool-style mock: input field + controls ──
+                    Text(
+                        label,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = onSurface.copy(alpha = 0.6f),
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                    // Large value display
+                    Box(
+                        Modifier.fillMaxWidth().height(64.dp).background(
+                            surfaceVariant.copy(alpha = 0.25f),
+                            RoundedCornerShape(14.dp)
+                        ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Box(
+                            Modifier.width(48.dp).height(20.dp).background(
+                                onSurface.copy(alpha = 0.08f),
+                                RoundedCornerShape(6.dp)
+                            )
+                        )
+                    }
+                    // Control row
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        repeat(3) {
+                            Box(
+                                Modifier.weight(1f).height(36.dp).background(
+                                    surfaceVariant.copy(alpha = 0.3f),
+                                    RoundedCornerShape(10.dp)
+                                )
+                            )
+                        }
+                    }
+                    // Entry list
+                    repeat(2) {
+                        Box(
+                            Modifier.fillMaxWidth().height(40.dp).background(
+                                surfaceVariant.copy(alpha = 0.15f),
+                                RoundedCornerShape(10.dp)
+                            )
+                        )
+                    }
+                }
+
+                PeekScreenType.Creation -> {
+                    // ── Creation-style mock: form fields ──
+                    Text(
+                        label,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = onSurface.copy(alpha = 0.6f),
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                    repeat(4) { idx ->
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Box(
+                                Modifier.width((50 + idx * 15).dp).height(6.dp).background(
+                                    onSurface.copy(alpha = 0.07f),
+                                    RoundedCornerShape(3.dp)
+                                )
+                            )
+                            Box(
+                                Modifier.fillMaxWidth().height(if (idx == 3) 56.dp else 40.dp).background(
+                                    surfaceVariant.copy(alpha = 0.2f),
+                                    RoundedCornerShape(if (idx == 3) 10.dp else 8.dp)
+                                )
+                            )
+                        }
+                    }
+                    // Button placeholder
+                    Box(
+                        Modifier.fillMaxWidth().height(40.dp).background(
+                            accentColor.copy(alpha = 0.15f),
+                            RoundedCornerShape(10.dp)
+                        ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Box(
+                            Modifier.width(50.dp).height(8.dp).background(
+                                accentColor.copy(alpha = 0.25f),
+                                RoundedCornerShape(4.dp)
+                            )
+                        )
+                    }
+                }
+
+                PeekScreenType.Generic -> {
+                    // ── Generic clean gradient fallback (same as before) ──
+                    Box(
+                        modifier = Modifier.fillMaxSize().background(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    accentColor.copy(alpha = 0.03f),
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                    )
+                }
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalActivityApi::class)
 @Composable
@@ -653,27 +630,24 @@ fun SwipeBackHost(
     var contentWidth by remember { mutableFloatStateOf(1f) }
     var contentHeight by remember { mutableFloatStateOf(1f) }
 
-    // Detect keyboard visibility reactively via InputMethodManager
-    val context = LocalContext.current
-    var isImeVisible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        while (true) {
-            val imm = context.getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as? android.view.inputmethod.InputMethodManager
-            isImeVisible = imm?.isAcceptingText ?: false
-            delay(100)
-        }
-    }
+    // Reactively detect keyboard visibility via WindowInsets (no polling needed)
+    val density = LocalDensity.current
+    val imeBottom = with(density) { WindowInsets.ime.getBottom(density) }
+    val isImeVisible = imeBottom > 0
+
+    // ── Flag to prevent detectDragGestures from competing with PredictiveBackHandler ──
+    var isPredictiveBackActive by remember { mutableStateOf(false) }
 
     // Predictive back gesture (Android 14+) — drives peek animation from system back gesture
     PredictiveBackHandler(enabled = !reduceMotion && !isImeVisible) { progressFlow ->
+        isPredictiveBackActive = true
         try {
-            var hadProgress = false
             // Inside PredictiveBackHandler coroutine — snapTo is suspend, call directly
             progressFlow.collect { backEvent ->
-                hadProgress = true
                 animX.snapTo((contentWidth * backEvent.progress).coerceAtLeast(0f))
             }
             // Flow completed → gesture committed
+            isPredictiveBackActive = false
             // Reset offset before navigating to prevent blank/offset screen
             // during the pop exit transition.
             animX.snapTo(0f)
@@ -684,8 +658,17 @@ fun SwipeBackHost(
             haptics.confirm()
             onBack()
         } catch (_: CancellationException) {
-            // Gesture cancelled — snap back via spring animation
-            animX.snapTo(0f)
+            // Gesture cancelled — smooth spring animation back to 0
+            isPredictiveBackActive = false
+            scope.launch {
+                animX.animateTo(
+                    0f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessMediumLow
+                    )
+                )
+            }
         }
     }
 
@@ -782,19 +765,11 @@ fun SwipeBackHost(
                             }
                         }
 
-                        // ── Clean background behind the sliding screen ──
-                        // No mock placeholder content — just a clean surface.
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(
-                                    Brush.verticalGradient(
-                                        colors = listOf(
-                                            screenColor.copy(alpha = 0.03f),
-                                            Color.Transparent
-                                        )
-                                    )
-                                )
+                        // ── Screen-type-specific peek preview content ──
+                        PeekPreviewContent(
+                            screenType = previousScreen.screenType,
+                            label = previousScreen.label,
+                            accentColor = screenColor
                         )
                     }
                 }
@@ -861,6 +836,9 @@ fun SwipeBackHost(
                         Modifier.pointerInput(Unit) {
                             detectDragGestures(
                                 onDragStart = { startPos ->
+                                    // Skip manual drag if PredictiveBackHandler is already active
+                                    // to prevent competing animation drivers.
+                                    if (isPredictiveBackActive) return@detectDragGestures
                                     if (startPos.x <= FieldMindMotion.swipeEdgeWidthDp) {
                                         activeDirection = SwipeDirection.Horizontal
                                     } else if (startPos.y <= FieldMindMotion.swipeEdgeHeightDp) {
@@ -868,6 +846,9 @@ fun SwipeBackHost(
                                     }
                                 },
                                 onDrag = { change, dragAmount ->
+                                    // Safety net: if PredictiveBackHandler became active after
+                                    // onDragStart, skip to prevent competing animation drivers.
+                                    if (isPredictiveBackActive) return@detectDragGestures
                                     change.consume()
                                     when (activeDirection) {
                                         SwipeDirection.Horizontal -> {
@@ -892,6 +873,16 @@ fun SwipeBackHost(
                                     }
                                 },
                                 onDragEnd = {
+                                    // Safety net: if PredictiveBackHandler became active,
+                                    // don't navigate — PredictiveBackHandler already handles it.
+                                    if (isPredictiveBackActive) {
+                                        activeDirection = null
+                                        scope.launch {
+                                            animX.snapTo(0f)
+                                            animY.snapTo(0f)
+                                        }
+                                        return@detectDragGestures
+                                    }
                                     val maxVal = when (activeDirection) {
                                         SwipeDirection.Horizontal -> contentWidth
                                         SwipeDirection.Vertical -> contentHeight
@@ -913,19 +904,19 @@ fun SwipeBackHost(
                                             onBack()
                                         }
                                     } else {
-                                        // Snap back to 0
+                                        // Smooth spring back to 0
                                         activeDirection = null
                                         scope.launch {
-                                            animX.snapTo(0f)
-                                            animY.snapTo(0f)
+                                            animX.animateTo(0f, FieldMindMotion.swipeBackSpring)
+                                            animY.animateTo(0f, FieldMindMotion.swipeBackSpring)
                                         }
                                     }
                                 },
                                 onDragCancel = {
                                     activeDirection = null
                                     scope.launch {
-                                        animX.snapTo(0f)
-                                        animY.snapTo(0f)
+                                        animX.animateTo(0f, FieldMindMotion.swipeBackSpring)
+                                        animY.animateTo(0f, FieldMindMotion.swipeBackSpring)
                                     }
                                 }
                             )

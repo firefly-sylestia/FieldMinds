@@ -30,7 +30,7 @@ data class FormatOption(
 val exportFormats = listOf(
     FormatOption("JSON", "Structured archive with media", FieldMindIcons.Archive, Color(0xFF1F6B4C), "data"),
     FormatOption("CSV", "Tabular data for spreadsheets", FieldMindIcons.Data, Color(0xFF006D7A), "data"),
-    FormatOption("Markdown", "Readable text for docs & notes", FieldMindIcons.Article, Color(0xFF2E7D32), "document"),
+    FormatOption("Markdown", "Readable text for docs & notes", FieldMindIcons.Article, Color(0xFF1F6B4C), "document"),
     FormatOption("HTML", "Print-ready web layout", FieldMindIcons.Article, Color(0xFF1565C0), "document"),
     FormatOption("PDF", "Portable document format", FieldMindIcons.Report, Color(0xFF1F6B4C), "document"),
     FormatOption(".fieldmind", "Package with images & encryption", FieldMindIcons.Archive, Color(0xFF1F6B4C), "package"),

@@ -30,7 +30,10 @@ class WeatherWidgetTest {
                     testCode = null,
                     testNight = false,
                     onCodeChange = {},
-                    onNightChange = {}
+                    onNightChange = {},                    testTemperature = null,
+                    testHumidity = null,
+                    onTemperatureChange = {},
+                    onHumidityChange = {}
                 )
             }
         }
@@ -57,7 +60,10 @@ class WeatherWidgetTest {
                     testCode = testCode.value,
                     testNight = false,
                     onCodeChange = { testCode.value = it },
-                    onNightChange = {}
+                    onNightChange = {},                    testTemperature = null,
+                    testHumidity = null,
+                    onTemperatureChange = {},
+                    onHumidityChange = {}
                 )
             }
         }
@@ -79,7 +85,10 @@ class WeatherWidgetTest {
                     testCode = testCode.value,
                     testNight = false,
                     onCodeChange = { testCode.value = it },
-                    onNightChange = {}
+                    onNightChange = {},                    testTemperature = null,
+                    testHumidity = null,
+                    onTemperatureChange = {},
+                    onHumidityChange = {}
                 )
             }
         }
@@ -105,6 +114,10 @@ class WeatherWidgetTest {
                     testNight = testNight.value,
                     onCodeChange = { testCode.value = it },
                     onNightChange = { testNight.value = it }
+                    testTemperature = null,
+                    testHumidity = null,
+                    onTemperatureChange = {},
+                    onHumidityChange = {}
                 )
             }
         }
@@ -126,6 +139,10 @@ class WeatherWidgetTest {
                     testNight = testNight.value,
                     onCodeChange = { testCode.value = it },
                     onNightChange = { testNight.value = it }
+                    testTemperature = null,
+                    testHumidity = null,
+                    onTemperatureChange = {},
+                    onHumidityChange = {}
                 )
             }
         }
@@ -147,6 +164,10 @@ class WeatherWidgetTest {
                     testNight = testNight.value,
                     onCodeChange = { testCode.value = it },
                     onNightChange = { testNight.value = it }
+                    testTemperature = null,
+                    testHumidity = null,
+                    onTemperatureChange = {},
+                    onHumidityChange = {}
                 )
             }
         }

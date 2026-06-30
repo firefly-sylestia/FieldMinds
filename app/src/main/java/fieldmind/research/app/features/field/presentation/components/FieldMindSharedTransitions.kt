@@ -1,172 +1,161 @@
 package fieldmind.research.app.features.field.presentation.components
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.IntOffset
 
+// ────────────────────────────────────────────────────────────────────────────
+//  CompositionLocal for SharedTransitionScope
+// ────────────────────────────────────────────────────────────────────────────
+
 /**
- * Shared element transition helpers for card-to-detail navigation,
- * container transforms, and animated content transitions.
- *
- * Follows M3 expressive motion patterns:
- * - Container transforms: elements morph from card → detail
- * - Fade-through: content fades between states with a brief cross-fade
- * - Shared axis: content slides along a shared horizontal/vertical axis
+ * CompositionLocal that provides the [SharedTransitionScope] from the nearest
+ * [SharedTransitionLayout] ancestor. Screens use this to apply
+ * [Modifier.sharedElement] or [Modifier.sharedBounds] for hero-style morph
+ * transitions without needing explicit parameter threading through the
+ * composable hierarchy.
  */
-object FieldMindTransitions {
+val LocalSharedTransitionScope: ProvidableCompositionLocal<SharedTransitionScope?> =
+    compositionLocalOf { null }
 
-    // ── Spring Specs ──
+// ────────────────────────────────────────────────────────────────────────────
+//  Transition Helpers
+// ────────────────────────────────────────────────────────────────────────────
 
-    /** Spring for shared element transitions (card → detail). */
-    val sharedElementSpring = spring<Float>(
-        dampingRatio = 0.7f,
-        stiffness = 600f
-    )
+/**
+ * A shared-axis horizontal transition — slides content in/out along the X axis.
+ *
+ * [direction] indicates the slide direction:
+ *   - `1`  → slides in from the right, out to the left
+ *   - `-1` → slides in from the left, out to the right
+ *   - `0`  → uses a gentle fade + scale (no directional bias)
+ *
+ * Uses [FieldMindMotion.slideSpring] for smooth spring physics on the
+ * slide offset and [FieldMindMotion.fadeThroughSpring] for the fade.
+ */
+fun AnimatedContentTransitionScope<*>.sharedAxisHorizontal(
+    direction: Int,
+    initialScale: Float = 0.97f
+): ContentTransform {
+    val slideSpec = FieldMindMotion.slideOffsetSpring
 
-    /** Spring for container transform bounds animation. */
-    val containerTransformSpring = spring<Float>(
-        dampingRatio = 0.65f,
-        stiffness = 500f
-    )
-
-    /** Spring for axis slide transitions. */
-    val axisSlideSpring = spring<Float>(
-        dampingRatio = 0.75f,
-        stiffness = 700f
-    )
-
-    // ── Screen Transition Specs ──
-
-    /**
-     * Fade-through transition: brief cross-fade between content states.
-     * Use for non-sequential state changes (settings hub → settings page).
-     * @param durationMs Fade duration; default 250ms
-     */
-    fun fadeThrough(durationMs: Int = 250): ContentTransform =
-        fadeIn(animationSpec = tween(durationMs, easing = FastOutSlowInEasing)) togetherWith
-        fadeOut(animationSpec = tween(durationMs, easing = FastOutSlowInEasing))
-
-    /**
-     * Scale-in + fade for modal-style screens (dialogs, overlays).
-     * Content enters from slightly smaller and fades up.
-     */
-    val scaleFade: ContentTransform =
-        scaleIn(initialScale = 0.92f, animationSpec = tween(250, easing = FastOutSlowInEasing)) +
-        fadeIn(animationSpec = tween(200, easing = FastOutSlowInEasing)) togetherWith
-        scaleOut(targetScale = 0.95f, animationSpec = tween(180)) +
-        fadeOut(animationSpec = tween(150))
-
-    /**
-     * Shared axis (horizontal): slides from the right on forward nav,
-     * from the left on back nav. Use for list→detail navigation.
-     * @param slideFraction How much of the screen width to slide (default 1/4)
-     */
-    fun sharedAxisHorizontal(slideFraction: Float = 0.25f): ContentTransform {
-        val slideSpec = tween<IntOffset>(350, easing = FastOutSlowInEasing)
-        val fadeSpec = tween<Float>(200, easing = FastOutSlowInEasing)
-        return slideInHorizontally(animationSpec = slideSpec) { (it * slideFraction).toInt() } +
-            fadeIn(animationSpec = fadeSpec) togetherWith
-            slideOutHorizontally(animationSpec = slideSpec) { -(it * slideFraction * 0.8f).toInt() } +
-            fadeOut(animationSpec = fadeSpec)
+    val enter: EnterTransition = if (direction != 0) {
+        slideInHorizontally(slideSpec) { direction * it } +
+            fadeIn(animationSpec = FieldMindMotion.expressiveFloat)
+    } else {
+        fadeIn(animationSpec = FieldMindMotion.expressiveFloat) +
+            scaleIn(
+                initialScale = initialScale,
+                animationSpec = FieldMindMotion.expressiveFloat
+            )
     }
 
-    /**
-     * Shared axis (vertical): content slides up/down along shared vertical axis.
-     * Use for sequential content changes (expand/collapse, steps).
-     */
-    val sharedAxisVertical: ContentTransform = slideInVertically(
-        animationSpec = spring(dampingRatio = 0.7f, stiffness = 500f)
-    ) { it / 6 } + fadeIn(
-        animationSpec = tween(200)
-    ) togetherWith slideOutVertically(
-        animationSpec = spring(dampingRatio = 0.8f, stiffness = 800f)
-    ) { -it / 8 } + fadeOut(
-        animationSpec = tween(150)
-    )
-
-    /**
-     * Fade-through + slight scale for hub→page transitions.
-     * New content fades in while old fades out, with a quick cross-fade moment.
-     */
-    val fadeThroughScale: ContentTransform =
-        scaleIn(initialScale = 0.97f, animationSpec = tween(250, easing = FastOutSlowInEasing)) +
-        fadeIn(animationSpec = tween(250, easing = FastOutSlowInEasing)) togetherWith
-        scaleOut(targetScale = 1.03f, animationSpec = tween(180)) +
-        fadeOut(animationSpec = tween(180))
-
-    /**
-     * List item entrance: slide up + fade in with configurable offset.
-     * @param offsetFraction vertical slide distance as fraction of height
-     */
-    fun itemEnter(offsetFraction: Int = 4): ContentTransform = slideInVertically(
-        animationSpec = spring(dampingRatio = 0.7f, stiffness = 500f)
-    ) { it / offsetFraction } + fadeIn(
-        animationSpec = tween(250)
-    ) togetherWith fadeOut(
-        animationSpec = tween(200)
-    )
-
-    /**
-     * Default crossfade for inline AnimatedContent.
-     */
-    val fadeThroughInline: ContentTransform =
-        fadeIn(animationSpec = tween(250)) togetherWith
-        fadeOut(animationSpec = tween(200))
-
-    /**
-     * Animated content wrapper that animates transitions between states.
-     * Use with key(state) to animate content changes.
-     */
-    @Composable
-    fun AnimatedContent(
-        targetState: Any?,
-        transition: ContentTransform = fadeThroughInline,
-        content: @Composable () -> Unit
-    ) {
-        key(targetState) {
-            androidx.compose.animation.AnimatedContent(
-                targetState = targetState,
-                transitionSpec = { transition },
-                label = "fieldmindTransition"
-            ) { content() }
-        }
+    val exit: ExitTransition = if (direction != 0) {
+        slideOutHorizontally(slideSpec) { -direction * it } +
+            fadeOut(animationSpec = FieldMindMotion.expressiveFloat)
+    } else {
+        fadeOut(animationSpec = FieldMindMotion.expressiveFloat)
     }
+
+    return enter togetherWith exit
 }
 
 /**
- * A modifier extension to apply shared element visual hints.
- * Apply to entity cards to give them a subtle press animation
- * with expressive spring bounce.
+ * A fade-through transition — the current screen fades out while the next
+ * screen fades in, with a subtle cross-fade overlap.
+ *
+ * Uses [FieldMindMotion.expressiveFloat] for a smooth, non-bouncy fade.
  */
-fun Modifier.sharedElementHint(isPressed: Boolean): Modifier = this
-    .scale(
-        scale = if (isPressed) 0.97f else 1f
-    )
-    .graphicsLayer {
-        val targetAlpha = if (isPressed) 0.85f else 1f
-        this.alpha = targetAlpha
+fun AnimatedContentTransitionScope<*>.fadeThrough(
+    fadeDurationMs: Int = FieldMindMotion.durationEmphasized
+): ContentTransform {
+    val spec = tween<Float>(durationMillis = fadeDurationMs, easing = FastOutSlowInEasing)
+    val enter = fadeIn(animationSpec = spec)
+    val exit = fadeOut(animationSpec = spec)
+    return enter togetherWith exit
+}
+
+/**
+ * A scale-in entry transition for screens that don't have a directional slide.
+ * Content scales up from [initialScale] with a subtle fade.
+ */
+fun scaleEnter(
+    initialScale: Float = 0.97f,
+    spec: FiniteAnimationSpec<Float> = FieldMindMotion.expressiveFloat
+): EnterTransition = fadeIn(animationSpec = spec) +
+    scaleIn(initialScale = initialScale, animationSpec = spec)
+
+/**
+ * A simple fade-out exit transition.
+ */
+fun fadeExit(
+    spec: FiniteAnimationSpec<Float> = FieldMindMotion.expressiveFloat
+): ExitTransition = fadeOut(animationSpec = spec)
+
+// ────────────────────────────────────────────────────────────────────────────
+//  Route Transition Spec Map
+// ────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Route category pairs mapped to their transition type.
+ * Used by callers to select the appropriate transition for a given route pair.
+ */
+enum class RouteTransitionType {
+    /** No directional slide — gentle fade + scale */
+    Neutral,
+    /** Slide to the right (forward navigation) */
+    SlideRight,
+    /** Slide to the left (back navigation) */
+    SlideLeft,
+    /** Fade-through with cross-fade overlap */
+    FadeThrough
+}
+
+/**
+ * Maps a route category pair to a [RouteTransitionType].
+ * Categories are ordered — [fromCategory] is the route we're leaving,
+ * [toCategory] is the route we're entering.
+ *
+ * This provides a single source of truth for transition direction decisions
+ * that were previously duplicated across enter/exit/popEnter/popExit functions.
+ */
+fun routeTransitionType(
+    fromCategory: String,
+    toCategory: String,
+    fromIndex: Int = -1,
+    toIndex: Int = -1
+): RouteTransitionType = when {
+    // Tab → Tab: Slide based on index direction
+    fromCategory == "Tab" && toCategory == "Tab" -> {
+        if (fromIndex == -1 || toIndex == -1 || fromIndex == toIndex) RouteTransitionType.Neutral
+        else if (toIndex > fromIndex) RouteTransitionType.SlideRight
+        else RouteTransitionType.SlideLeft
     }
+    // Tab → sub-screen: Slide left (forward)
+    fromCategory == "Tab" && toCategory in listOf("SettingsHub", "SettingsSubPage", "Tool", "Detail", "Creation", "Other") ->
+        RouteTransitionType.SlideLeft
+    // Sub-screen → Tab (back): Slide right (reverse)
+    toCategory == "Tab" && fromCategory in listOf("SettingsHub", "SettingsSubPage", "Tool", "Detail", "Creation", "Other") ->
+        RouteTransitionType.SlideRight
+    // Settings hub ↔ sub-page: Fade-through
+    fromCategory == "SettingsHub" && toCategory == "SettingsSubPage" -> RouteTransitionType.FadeThrough
+    fromCategory == "SettingsSubPage" && toCategory == "SettingsHub" -> RouteTransitionType.FadeThrough
+    // Default
+    else -> RouteTransitionType.Neutral
+}

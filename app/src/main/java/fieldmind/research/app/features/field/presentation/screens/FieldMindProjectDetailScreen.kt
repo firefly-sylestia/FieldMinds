@@ -291,7 +291,7 @@ fun ProjectDetailScreen(
                         }
                     }
 
-                    // Project identity
+                    // Project identity — refined with Geom font
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                         Box(
                             Modifier.size(52.dp).clip(RoundedCornerShape(16.dp))
@@ -309,9 +309,16 @@ fun ProjectDetailScreen(
                         }
                     }
 
-                    // Stats line
+                    // Stats line — refined layout
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                        Text("$totalRecords Records • Updated $timeAgo", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Icon(MaterialSymbolIcon("inventory_2"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 14.dp)
+                            Text("$totalRecords records", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Icon(MaterialSymbolIcon("schedule"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 14.dp)
+                            Text("Updated $timeAgo", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
 
                     // Description
@@ -937,10 +944,10 @@ private fun AttachmentTypeButton(label: String, icon: MaterialSymbolIcon, accent
 @Composable
 private fun NewFolderDialog(viewModel: FieldMindViewModel, projectId: Long, onDismiss: () -> Unit) {
     var folderName by remember { mutableStateOf("") }
-    var selectedColor by remember { mutableStateOf(0xFF5F7F52) }
+    var selectedColor by remember { mutableStateOf(0xFF1F6B4C) }
     val haptics = rememberFieldMindHaptics()
 
-    val colorOptions = listOf(0xFF4CAF50L to "Green", 0xFF2196F3L to "Blue", 0xFF9C27B0L to "Purple", 0xFFFF9800L to "Orange", 0xFFF44336L to "Red")
+    val colorOptions = listOf(0xFF1F6B4CL to "Green", 0xFF2196F3L to "Blue", 0xFF9C27B0L to "Purple", 0xFFFF9800L to "Orange", 0xFFF44336L to "Red")
 
     DialogWrapper(onDismiss = onDismiss, isDirty = { folderName.isNotBlank() }) {
         DialogHeader(icon = MaterialSymbolIcon("folder"), title = "New Folder", subtitle = "Organize project entities into a folder.", accent = colors.hypothesis)

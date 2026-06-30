@@ -42,7 +42,48 @@ internal data class FieldMindChangelogEntry(
     val sections: List<Pair<String, List<String>>>
 )
 
-private val fieldMindChangelog = listOf(        FieldMindChangelogEntry(
+private val fieldMindChangelog = listOf(
+    FieldMindChangelogEntry(
+        version = "2.3.26.24",
+        date = "2026-06-28",
+        title = "Tab Overhaul, UI Consistency & Status Bar Fixes",
+        importance = "Major",
+        tags = listOf("Navigation", "UI", "Redesign", "Fixes", "Compose"),
+        sections = listOf(
+            "🔄 Simultaneous 5-Tab Rendering & Predictive Peek" to listOf(
+                "All 5 tabs render simultaneously behind the active tab — predictive back peek shows REAL adjacent tab content, not placeholder cards.",
+                "Inactive tabs consume zero pointer events so taps, scrolls, and clicks pass through to the active tab.",
+                "System back gesture (PredictiveBackHandler) reveals 60% of the previous tab; commit switches to it, cancel springs back.",
+                "First tab (Today) predictive peek shows full-screen reveal for device back gesture — commit exits the app.",
+                "Shared animation flag prevents the gesture overlay from competing with PredictiveBackHandler."
+            ),
+            "🎨 Unified UI Consistency Pass" to listOf(
+                "StandardScreenHeader with fade-in + slide-up entrance animation applied across all screens (Canvas, Weather, Species, headers).",
+                "Consistent header design: 48dp accent-colored icon, headlineSmall extra-bold title, surfaceContainerLow fill.",
+                "Unified color system with 15 distinct entity/state/confidence colors and semantic accent functions.",
+                "Geom font applied throughout for a cleaner, more consistent reading experience.",
+                "Swipe gesture system replaced detectDragGestures with awaitEachGesture for reliable taps, clicks, and vertical scrolls.",
+                "Liquid nav bar blob indicator with spring-physics animation between tabs on both phone (pill) and tablet (rail) layouts."
+            ),
+            "📱 Status Bar & Compile Fixes" to listOf(
+                "Added statusBarsPadding() to 6 screens (Observe, Onboarding, Map, ResearchSession, SettingsNew, FieldLog).",
+                "Fixed Compose 2026.05.01 API changes: positionChange() → manual delta tracking, awaitFirstDown import, nested launch fix.",
+                "Resolved 50+ CI compilation errors across navigation, settings, canvas, and data layer: !! crashes, return labels, delegated properties, TFLite stubs.",
+                "Replaced fake Modifier.blur() with real RenderEffect.createBlurEffect() for proper GPU-backed blur.",
+                "Fixed similar species arrow tap: LaunchedEffect was loading from stale speciesId param instead of state — now correctly loads tapped species data.",
+                "Fixed tab swipe gesture overlay: do-while(isHorizontalDrag) exited after one pointer event — changed to do-while(true) so detection collects events until threshold is crossed.",
+                "Fixed PredictiveBackHandler on first tab: commit called no-op popBackStack — now disabled for first tab so system handles back-to-exit properly."
+            ),
+            "✏️ Creation Screen Redesigns" to listOf(
+                "Redesigned New Project screen with icon/color/template picker, consistent with the app's design language.",
+                "Redesigned Note, Question, Source creation screens with full-screen rich forms, proper headers, and consistent visual style.",
+                "Added navigation routes for NewObservation, NewNote, NewSource, NewAttachment, NewFolder screens.",
+                "Redesigned Workspace Create button with grouped entity menu and project selector.",
+                "Fixed Projects screen header, enlarged FieldMind icon, unsquished action buttons."
+            )
+        )
+    ),
+    FieldMindChangelogEntry(
         version = "2.2.26.28",
         date = "2026-06-24",
         title = "Security & Auto-Lock Overhaul",

@@ -19,6 +19,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -43,6 +44,8 @@ import androidx.navigation.compose.rememberNavController
 import fieldmind.research.app.features.field.presentation.components.FieldMindSnackbarProvider
 import fieldmind.research.app.features.field.presentation.components.SwipeBackHost
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
+import fieldmind.research.app.features.field.presentation.components.LocalSharedTransitionScope
+import fieldmind.research.app.features.field.presentation.components.PeekScreenType
 import fieldmind.research.app.features.field.presentation.components.PreviousScreenInfo
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
 import fieldmind.research.app.features.field.presentation.screens.*
@@ -64,7 +67,6 @@ import fieldmind.research.app.features.field.presentation.components.SwipeableAl
 import androidx.activity.compose.BackHandler
 import androidx.activity.ExperimentalActivityApi
 import androidx.activity.compose.PredictiveBackHandler
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.CompositionLocalProvider
 import kotlinx.coroutines.CancellationException
@@ -924,7 +926,8 @@ private fun FieldMindNavHost(
 
     SharedTransitionLayout(modifier = modifier) {
         val composableScope = this
-        NavHost(
+        CompositionLocalProvider(LocalSharedTransitionScope provides composableScope) {
+            NavHost(
             navController = navController,
             startDestination = "field_tab_container",
             modifier = Modifier,
@@ -1149,13 +1152,14 @@ private fun FieldMindNavHost(
                     )
                 }
             }
-        }
-    }
+        } // end NavHost
+        } // end CompositionLocalProvider
+    } // end SharedTransitionLayout
 }
 
 /** Map a route string to a [PreviousScreenInfo] for the peek animation preview. */
 private fun previousScreenLabel(route: String): PreviousScreenInfo = when (route) {
-    "field_tab_container" -> PreviousScreenInfo("Home", route)
+    "field_tab_container" -> PreviousScreenInfo("Home", route, PeekScreenType.Generic)
     else -> {
         val knownRoutes = listOf(
             FieldMindScreen.Home to "Today",
@@ -1166,7 +1170,16 @@ private fun previousScreenLabel(route: String): PreviousScreenInfo = when (route
             FieldMindScreen.Settings to "Settings",
         )
         val known = knownRoutes.firstOrNull { (screen, _) -> screen.route == route }
-        if (known != null) return PreviousScreenInfo(known.second, known.first.route)
+        if (known != null) return PreviousScreenInfo(known.second, known.first.route, PeekScreenType.Generic)
+
+        // Derive screen type from route category
+        val screenType = when (categorizeRoute(route)) {
+            RouteCategory.SettingsHub, RouteCategory.SettingsSubPage -> PeekScreenType.Settings
+            RouteCategory.Detail -> PeekScreenType.Detail
+            RouteCategory.Tool -> PeekScreenType.Tool
+            RouteCategory.Creation -> PeekScreenType.Creation
+            else -> PeekScreenType.Generic
+        }
 
         // Fallback: humanize the route string
         val humanized = route
@@ -1176,7 +1189,7 @@ private fun previousScreenLabel(route: String): PreviousScreenInfo = when (route
             .removeSuffix("/{speciesId}")
             .split("_")
             .joinToString(" ") { w -> w.replaceFirstChar { c -> c.uppercase() } }
-        PreviousScreenInfo(humanized, route)
+        PreviousScreenInfo(humanized, route, screenType)
     }
 }
 
@@ -1212,7 +1225,19 @@ private fun TabContentBox(
                 this.alpha = alpha
                 clip = true
             }
-            .then(if (userInputEnabled) Modifier else Modifier) // userInputEnabled removed
+            .then(
+                if (!userInputEnabled) {
+                    Modifier.pointerInput(screen.route) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                // Consume all pointer events so inactive tabs
+                                // behind the active tab cannot capture touches
+                                awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Main)
+                            }
+                        }
+                    }
+                } else Modifier
+            )
     ) {
         when (screen) {
             FieldMindScreen.Home -> {
@@ -1227,23 +1252,35 @@ private fun TabContentBox(
                     )
                 }
             }
-            FieldMindScreen.Observe -> ObserveScreen(
-                viewModel = viewModel,
-                onBack = onPopBackStack,
-                onOpenDetail = openDetail
-            )
-            FieldMindScreen.Projects -> ProjectsScreen(
-                viewModel = viewModel,
-                onOpenDetail = { _, id -> onNavigateToDestination("field_project_detail/$id") },
-                onStartSession = { onNavigateToDestination(FieldMindScreen.ResearchSession.route) },
-                onNavigate = onNav
-            )
-            FieldMindScreen.Insights -> InsightsScreen(
-                viewModel = viewModel,
-                onBack = onPopBackStack,
-                onNavigate = onNav,
-                onOpenDetail = openDetail
-            )
+            FieldMindScreen.Observe -> {
+                with(sharedTransitionScope ?: return@Box) {
+                    ObserveScreen(
+                        viewModel = viewModel,
+                        onBack = onPopBackStack,
+                        onOpenDetail = openDetail
+                    )
+                }
+            }
+            FieldMindScreen.Projects -> {
+                with(sharedTransitionScope ?: return@Box) {
+                    ProjectsScreen(
+                        viewModel = viewModel,
+                        onOpenDetail = { _, id -> onNavigateToDestination("field_project_detail/$id") },
+                        onStartSession = { onNavigateToDestination(FieldMindScreen.ResearchSession.route) },
+                        onNavigate = onNav
+                    )
+                }
+            }
+            FieldMindScreen.Insights -> {
+                with(sharedTransitionScope ?: return@Box) {
+                    InsightsScreen(
+                        viewModel = viewModel,
+                        onBack = onPopBackStack,
+                        onNavigate = onNav,
+                        onOpenDetail = openDetail
+                    )
+                }
+            }
             FieldMindScreen.Library -> {
                 with(sharedTransitionScope ?: return@Box) {
                     KnowledgeLibraryScreen(
@@ -1293,20 +1330,49 @@ private fun AllTabScreen(
         onTabSelected(activeTabIndex - 1)
     }
 
-    // ── System back gesture (left edge): exit app from first tab only ──
-    PredictiveBackHandler(enabled = !reduceMotion && isFirstTab) { progressFlow ->
+    // ── System back gesture (left edge): handle all tabs ──
+    // First tab: predictive peek → exit app on commit (full screen reveal).
+    // Other tabs: predictive peek → show REAL adjacent tab content behind current
+    // tab (reveals 60% of previous tab), then switch to it on commit.
+    //
+    // ── Predictive back gesture (system swipe from left edge) ──
+    // Drives animX to reveal the previous tab behind the current one.
+    // Uses the system's PredictiveBackHandler instead of a custom gesture overlay
+    // to avoid breaking taps, clicks, and vertical scrolls in tab content.
+    PredictiveBackHandler(enabled = !reduceMotion) { progressFlow ->
         try {
+            // First tab: reveal full screen behind (exit). Other tabs: reveal 60% of previous.
+            val maxOffset = if (isFirstTab) contentWidth else contentWidth * 0.6f
             progressFlow.collect { backEvent ->
-                val offset = (contentWidth * backEvent.progress).coerceAtLeast(0f)
+                val offset = (maxOffset * backEvent.progress).coerceAtLeast(0f)
                 animX.snapTo(offset)
             }
+            // Gesture committed — snap back before navigating
             animX.snapTo(0f)
             haptics.confirm()
-            onPopBackStack()
+            if (isFirstTab) {
+                onPopBackStack()
+            } else {
+                onTabSelected(activeTabIndex - 1)
+            }
         } catch (_: CancellationException) {
-            animX.snapTo(0f)
+            // Gesture cancelled — spring animation back to 0
+            scope.launch {
+                animX.animateTo(
+                    0f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    )
+                )
+            }
         }
     }
+
+    // ── Determine if we can swipe left/right ──
+    val canSwipeLeft = activeTabIndex < visibleTabs.size - 1
+    val canSwipeRight = activeTabIndex > 0
+    val hasSwipeDirection = canSwipeLeft || canSwipeRight
 
     Box(
         modifier = Modifier
@@ -1314,6 +1380,63 @@ private fun AllTabScreen(
             .onGloballyPositioned { coords ->
                 contentWidth = coords.size.width.toFloat().coerceAtLeast(1f)
             }
+            .then(
+                if (!reduceMotion && hasSwipeDirection) {
+                    // Tab swipe gesture on the content layer — uses
+                    // detectHorizontalDragGestures which properly distinguishes
+                    // taps from drags; taps pass through to interactive content.
+                    Modifier.pointerInput(activeTabIndex, visibleTabs.size) {
+                        detectHorizontalDragGestures(
+                            onHorizontalDrag = { change, dragAmount ->
+                                change.consume()
+                                val maxSwipe = contentWidth * 0.35f
+                                val rawTarget = animX.value + dragAmount
+                                val clampedTarget = when {
+                                    rawTarget > 0f && !canSwipeRight -> 0f
+                                    rawTarget < 0f && !canSwipeLeft -> 0f
+                                    else -> rawTarget.coerceIn(-maxSwipe, maxSwipe)
+                                }
+                                scope.launch { animX.snapTo(clampedTarget) }
+                            },
+                            onDragEnd = {
+                                val threshold = contentWidth * 0.18f
+                                if (animX.value > threshold && canSwipeRight) {
+                                    haptics.confirm()
+                                    scope.launch { animX.snapTo(0f) }
+                                    onTabSelected(activeTabIndex - 1)
+                                } else if (animX.value < -threshold && canSwipeLeft) {
+                                    haptics.confirm()
+                                    scope.launch { animX.snapTo(0f) }
+                                    onTabSelected(activeTabIndex + 1)
+                                } else {
+                                    scope.launch {
+                                        animX.animateTo(
+                                            0f,
+                                            animationSpec = spring(
+                                                dampingRatio = Spring.DampingRatioMediumBouncy,
+                                                stiffness = Spring.StiffnessMediumLow
+                                            )
+                                        )
+                                    }
+                                }
+                            },
+                            onDragCancel = {
+                                scope.launch {
+                                    animX.animateTo(
+                                        0f,
+                                        animationSpec = spring(
+                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                                            stiffness = Spring.StiffnessMediumLow
+                                        )
+                                    )
+                                }
+                            }
+                        )
+                    }
+                } else {
+                    Modifier
+                }
+            )
     ) {
         // ── Render all tabs in a horizontal stack ──
         // Non-active tabs rendered FIRST (behind in z-order), active tab LAST (on top).
@@ -1330,8 +1453,8 @@ private fun AllTabScreen(
             TabContentBox(
                 screen = screen,
                 offsetX = when {
-                    isLeftAdjacent -> -(contentWidth) + animX.value * 0.7f
-                    isRightAdjacent -> contentWidth + animX.value * 0.7f
+                    isLeftAdjacent -> -(contentWidth) + animX.value
+                    isRightAdjacent -> contentWidth + animX.value
                     index < activeTabIndex -> -(contentWidth * 2f)
                     else -> contentWidth * 2f
                 },
@@ -1365,42 +1488,6 @@ private fun AllTabScreen(
             onPopBackStack = onPopBackStack,
             sharedTransitionScope = sharedTransitionScope
         )
-
-        // ── Swipe gesture overlay (for tab switching) ──
-        if (!reduceMotion) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .pointerInput(Unit) {
-                        detectDragGestures(
-                            onDrag = { change, dragAmount ->
-                                change.consume()
-                                val canDragBack = activeTabIndex > 0 && dragAmount.x > 0
-                                val canDragForward = activeTabIndex < visibleTabs.size - 1 && dragAmount.x < 0
-                                if (canDragBack || canDragForward) {
-                                    val newX = (animX.value + dragAmount.x)
-                                        .coerceIn(-contentWidth * 0.4f, contentWidth * 0.4f)
-                                    scope.launch { animX.snapTo(newX) }
-                                }
-                            },
-                            onDragEnd = {
-                                if (animX.value > contentWidth * 0.20f && activeTabIndex > 0) {
-                                    haptics.confirm()
-                                    scope.launch { animX.snapTo(0f) }
-                                    onTabSelected(activeTabIndex - 1)
-                                } else if (animX.value < -contentWidth * 0.20f && activeTabIndex < visibleTabs.size - 1) {
-                                    haptics.confirm()
-                                    scope.launch { animX.snapTo(0f) }
-                                    onTabSelected(activeTabIndex + 1)
-                                } else {
-                                    scope.launch { animX.snapTo(0f) }
-                                }
-                            },
-                            onDragCancel = { scope.launch { animX.snapTo(0f) } }
-                        )
-                    }
-            )
-        }
     }
 }
 
