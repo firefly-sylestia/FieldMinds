@@ -19,6 +19,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -43,6 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import fieldmind.research.app.features.field.presentation.components.FieldMindSnackbarProvider
 import fieldmind.research.app.features.field.presentation.components.SwipeBackHost
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
+import fieldmind.research.app.features.field.presentation.components.PeekScreenType
 import fieldmind.research.app.features.field.presentation.components.PreviousScreenInfo
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
 import fieldmind.research.app.features.field.presentation.screens.*
@@ -1154,7 +1156,7 @@ private fun FieldMindNavHost(
 
 /** Map a route string to a [PreviousScreenInfo] for the peek animation preview. */
 private fun previousScreenLabel(route: String): PreviousScreenInfo = when (route) {
-    "field_tab_container" -> PreviousScreenInfo("Home", route)
+    "field_tab_container" -> PreviousScreenInfo("Home", route, PeekScreenType.Generic)
     else -> {
         val knownRoutes = listOf(
             FieldMindScreen.Home to "Today",
@@ -1165,7 +1167,16 @@ private fun previousScreenLabel(route: String): PreviousScreenInfo = when (route
             FieldMindScreen.Settings to "Settings",
         )
         val known = knownRoutes.firstOrNull { (screen, _) -> screen.route == route }
-        if (known != null) return PreviousScreenInfo(known.second, known.first.route)
+        if (known != null) return PreviousScreenInfo(known.second, known.first.route, PeekScreenType.Generic)
+
+        // Derive screen type from route category
+        val screenType = when (categorizeRoute(route)) {
+            RouteCategory.SettingsHub, RouteCategory.SettingsSubPage -> PeekScreenType.Settings
+            RouteCategory.Detail -> PeekScreenType.Detail
+            RouteCategory.Tool -> PeekScreenType.Tool
+            RouteCategory.Creation -> PeekScreenType.Creation
+            else -> PeekScreenType.Generic
+        }
 
         // Fallback: humanize the route string
         val humanized = route
@@ -1175,7 +1186,7 @@ private fun previousScreenLabel(route: String): PreviousScreenInfo = when (route
             .removeSuffix("/{speciesId}")
             .split("_")
             .joinToString(" ") { w -> w.replaceFirstChar { c -> c.uppercase() } }
-        PreviousScreenInfo(humanized, route)
+        PreviousScreenInfo(humanized, route, screenType)
     }
 }
 
@@ -1343,12 +1354,74 @@ private fun AllTabScreen(
         }
     }
 
+    // ── Determine if we can swipe left/right ──
+    val canSwipeLeft = activeTabIndex < visibleTabs.size - 1
+    val canSwipeRight = activeTabIndex > 0
+    val hasSwipeDirection = canSwipeLeft || canSwipeRight
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .onGloballyPositioned { coords ->
                 contentWidth = coords.size.width.toFloat().coerceAtLeast(1f)
             }
+            .then(
+                if (!reduceMotion && hasSwipeDirection) {
+                    // Tab swipe gesture on the content layer — uses
+                    // detectHorizontalDragGestures which properly distinguishes
+                    // taps from drags; taps pass through to interactive content.
+                    Modifier.pointerInput(activeTabIndex, visibleTabs.size) {
+                        detectHorizontalDragGestures(
+                            onHorizontalDrag = { change, dragAmount ->
+                                change.consume()
+                                val maxSwipe = contentWidth * 0.35f
+                                val rawTarget = animX.value + dragAmount
+                                val clampedTarget = when {
+                                    rawTarget > 0f && !canSwipeRight -> 0f
+                                    rawTarget < 0f && !canSwipeLeft -> 0f
+                                    else -> rawTarget.coerceIn(-maxSwipe, maxSwipe)
+                                }
+                                scope.launch { animX.snapTo(clampedTarget) }
+                            },
+                            onDragEnd = {
+                                val threshold = contentWidth * 0.18f
+                                if (animX.value > threshold && canSwipeRight) {
+                                    haptics.confirm()
+                                    scope.launch { animX.snapTo(0f) }
+                                    onTabSelected(activeTabIndex - 1)
+                                } else if (animX.value < -threshold && canSwipeLeft) {
+                                    haptics.confirm()
+                                    scope.launch { animX.snapTo(0f) }
+                                    onTabSelected(activeTabIndex + 1)
+                                } else {
+                                    scope.launch {
+                                        animX.animateTo(
+                                            0f,
+                                            animationSpec = spring(
+                                                dampingRatio = Spring.DampingRatioMediumBouncy,
+                                                stiffness = Spring.StiffnessMediumLow
+                                            )
+                                        )
+                                    }
+                                }
+                            },
+                            onDragCancel = {
+                                scope.launch {
+                                    animX.animateTo(
+                                        0f,
+                                        animationSpec = spring(
+                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                                            stiffness = Spring.StiffnessMediumLow
+                                        )
+                                    )
+                                }
+                            }
+                        )
+                    }
+                } else {
+                    Modifier
+                }
+            )
     ) {
         // ── Render all tabs in a horizontal stack ──
         // Non-active tabs rendered FIRST (behind in z-order), active tab LAST (on top).
@@ -1365,8 +1438,6 @@ private fun AllTabScreen(
             TabContentBox(
                 screen = screen,
                 offsetX = when {
-                    // Adjacent tab moves in sync with active tab — flush reveal
-                    // (no parallax gap) so REAL content is visible behind current tab
                     isLeftAdjacent -> -(contentWidth) + animX.value
                     isRightAdjacent -> contentWidth + animX.value
                     index < activeTabIndex -> -(contentWidth * 2f)
@@ -1402,10 +1473,6 @@ private fun AllTabScreen(
             onPopBackStack = onPopBackStack,
             sharedTransitionScope = sharedTransitionScope
         )
-
-        // ── Swipe gesture overlay removed ──
-        // Touch and vertical scroll were broken by the awaitEachGesture overlay.
-        // Tab switching still works via the tab bar in the navigation pill/rail.
     }
 }
 
