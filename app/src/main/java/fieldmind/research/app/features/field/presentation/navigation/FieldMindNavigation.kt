@@ -1578,7 +1578,7 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         }
         route.startsWith("field_project_detail/") -> {
             val id = route.removePrefix("field_project_detail/").toLongOrNull() ?: return
-            ProjectDetailScreen(projectId = id, viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onNavigate = null, onOpenRelations = noop, onOpenSettings = noopStr)
+            ProjectDetailScreen(projectId = id, viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onNavigate = null, onOpenRelations = noop, onOpenSettings = noopLong)
         }
         route.startsWith("field_project_relations/") -> {
             val id = route.removePrefix("field_project_relations/").toLongOrNull() ?: return
@@ -1594,7 +1594,9 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         }
         route.startsWith("field_species_detail/") -> {
             val speciesId = route.removePrefix("field_species_detail/")
-            SpeciesDetailScreen(speciesId = speciesId, onBack = noop)
+            with(LocalSharedTransitionScope.current ?: return) {
+                SpeciesDetailScreen(speciesId = speciesId, onBack = noop)
+            }
         }
         route.startsWith("field_detail/") -> {
             // Routes like "field_detail/observation/42" → kind="observation", id=42
@@ -1602,7 +1604,9 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
             if (parts.size < 2) return
             val kind = parts[0]
             val id = parts[1].toLongOrNull() ?: return
-            DetailScreen(kind = kind, id = id, viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onOpenReader = noopReader, onOpenCanvas = noopLong)
+            with(LocalSharedTransitionScope.current ?: return) {
+                DetailScreen(kind = kind, id = id, viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onOpenReader = noopReader, onOpenCanvas = noopLong)
+            }
         }
 
         // ── Exact-match static routes ──
@@ -1692,7 +1696,7 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         route == FieldMindScreen.NewHypothesis.route -> NewHypothesisScreen(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.NewDataRecord.route -> NewDataRecordScreen(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.NewReport.route -> NewReportScreen(viewModel = viewModel, onBack = noop)
-        route == FieldMindScreen.Tasks.route -> TasksScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onNavigate = noopNav)
+        route == FieldMindScreen.Tasks.route -> TasksScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onNavigate = noopStr)
         route == FieldMindScreen.NewTask.route -> NewTaskScreen(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.NewObservation.route -> NewObservationScreen(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.NewNote.route -> NewNoteScreen(viewModel = viewModel, onBack = noop)

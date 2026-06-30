@@ -127,7 +127,8 @@ fun QuestionDetailScreen(
         targetValue = confidenceLevel / 100f,
         animationSpec = spring(stiffness = androidx.compose.animation.core.Spring.StiffnessMediumLow),
         label = "confidence"
-    )    val questionScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
+    )
+    val questionScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
 
     LazyColumn(
         state = questionScrollState,
