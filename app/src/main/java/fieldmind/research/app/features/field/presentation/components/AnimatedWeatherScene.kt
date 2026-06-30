@@ -717,7 +717,7 @@ private fun DayCloudyScene(
     val sunGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "sunGlow"
     )
     val windGust by infiniteTransition.animateFloat(
@@ -758,7 +758,7 @@ private fun DayCloudyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(6000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(9000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "treeSway"
     )
 
@@ -937,7 +937,7 @@ private fun NightSkyScene(
     val moonGlow by infiniteTransition.animateFloat(
         initialValue = 0.7f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "moonGlow"
     )
     val cloudMorph by infiniteTransition.animateFloat(
@@ -963,7 +963,7 @@ private fun NightSkyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "nightTreeSway"
     )
     // Bird animation (dawn/twilight only)
@@ -1114,7 +1114,7 @@ private fun NightCloudyScene(
     val moonGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "ncMoonGlow"
     )
     val cloudMorph by infiniteTransition.animateFloat(
@@ -1140,7 +1140,7 @@ private fun NightCloudyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(6500, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "ncTreeSway"
     )
     val shootingStarProgress by infiniteTransition.animateFloat(
@@ -1315,7 +1315,7 @@ private fun ClearSkyScene(
     val sunGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "sunGlow"
     )
     // Shooting stars for night mode — less frequent
@@ -1336,7 +1336,7 @@ private fun ClearSkyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(6500, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "clearTreeSway"
     )
     val birdProgress by infiniteTransition.animateFloat(
@@ -1541,13 +1541,13 @@ private fun EveningScene(
     val sunGlow by infiniteTransition.animateFloat(
         initialValue = 0.5f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "eveningSunGlow"
     )
     val moonGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "eveningMoonGlow"
     )
     val starTwinkle by infiniteTransition.animateFloat(
@@ -1571,7 +1571,7 @@ private fun EveningScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "eveningTreeSway"
     )
     val birdProgress by infiniteTransition.animateFloat(
@@ -1696,7 +1696,7 @@ private fun CloudyScene(
     val sunGlow by infiniteTransition.animateFloat(
         initialValue = 0.3f,
         targetValue = 0.7f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "cloudSunGlow"
     )
     val cloudOffset by infiniteTransition.animateFloat(
@@ -1715,7 +1715,7 @@ private fun CloudyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(5500, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(8000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "cloudTreeSway"
     )
     val birdProgress by infiniteTransition.animateFloat(
@@ -3233,7 +3233,7 @@ private fun FogScene(
     )
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "fogTreeSway"
     )
     val isRimeFog = weatherCode == 48
@@ -3404,12 +3404,12 @@ private fun RainScene(
     )
     val intensity by infiniteTransition.animateFloat(
         initialValue = 0.6f, targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "intensity"
     )
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "rainTreeSway"
     )
 
@@ -3450,7 +3450,7 @@ private fun RainScene(
     val moonGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "rainNightMoonGlow"
     )
 
@@ -3643,7 +3643,7 @@ private fun SnowScene(
     )
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "snowTreeSway"
     )
 
@@ -3829,7 +3829,7 @@ private fun ThunderstormScene(
     )
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "stormTree"
     )
 
