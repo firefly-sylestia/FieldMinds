@@ -450,7 +450,7 @@ fun ResearchSessionScreen(
                         endSession()
                         onBack()
                     },
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 ) { Text("Save and exit") }
             },
             dismissButton = {
@@ -500,7 +500,7 @@ fun ResearchSessionScreen(
                 // Session summary
                 item {
                     Card(
-                        shape = RoundedCornerShape(28.dp),
+                        shape = RoundedCornerShape(36.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -513,7 +513,7 @@ fun ResearchSessionScreen(
                             if (sessionName.isNotBlank()) {
                                 Text("Session: $sessionName", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                             }
-                            Button(onClick = { showSummary = false; sessionElapsedMs = 0; observationCount = 0; activeSessionId = null; sessionStartedAt = 0L }, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+                            Button(onClick = { showSummary = false; sessionElapsedMs = 0; observationCount = 0; activeSessionId = null; sessionStartedAt = 0L }, shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth()) {
                                 Text("Start new session")
                             }
                         }
@@ -523,7 +523,7 @@ fun ResearchSessionScreen(
                 // Loading while session is being created
                 item {
                     Card(
-                        shape = RoundedCornerShape(28.dp),
+                        shape = RoundedCornerShape(36.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -553,7 +553,7 @@ fun ResearchSessionScreen(
             } else if (!sessionActive) {
                 // Session setup
                 item {
-                    Card(shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+                    Card(shape = RoundedCornerShape(36.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                             Text("Start a research session", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                             Text("Capture observations rapidly while the timer tracks your field time.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -562,7 +562,7 @@ fun ResearchSessionScreen(
                                 Text("Link to project", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 OptionPickerField(label = "Project", selected = projects.firstOrNull { it.id == selectedProjectId }?.title ?: "No project", options = listOf("No project") + projects.map { it.title }, onSelected = { selected -> selectedProjectId = projects.firstOrNull { it.title == selected }?.id }, icon = FieldMindIcons.Project, modifier = Modifier.fillMaxWidth())
                             }
-                            Button(onClick = ::startSession, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+                            Button(onClick = ::startSession, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
                                 Icon(FieldMindIcons.Bolt, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Start session")
                             }
                         }
@@ -577,7 +577,7 @@ fun ResearchSessionScreen(
                     }
                     items(completedSessions.take(10)) { session ->
                         Card(
-                            shape = RoundedCornerShape(20.dp),
+                            shape = RoundedCornerShape(30.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                             modifier = Modifier.fillMaxWidth().clickable { onOpenDetail("research_session", session.id) }
@@ -588,7 +588,7 @@ fun ResearchSessionScreen(
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 Box(
-                                    Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                                         .background(FieldMindTheme.colors.positive.copy(alpha = 0.12f)),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -624,7 +624,7 @@ fun ResearchSessionScreen(
                 // Active session — timer card with pause/end
                 item {
                     Card(
-                        shape = RoundedCornerShape(28.dp),
+                        shape = RoundedCornerShape(36.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -699,7 +699,7 @@ fun ResearchSessionScreen(
                 // ── Location & Weather Status (MOVED TO TOP) ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -715,7 +715,7 @@ fun ResearchSessionScreen(
                                 if (quickLocation == null && !metadataAutoFetching) {
                                     Surface(
                                         onClick = { performAutoFetch() },
-                                        shape = RoundedCornerShape(12.dp),
+                                        shape = RoundedCornerShape(20.dp),
                                         color = FieldMindTheme.colors.info.copy(alpha = 0.12f)
                                     ) {
                                         Row(Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -761,7 +761,7 @@ fun ResearchSessionScreen(
                 // ── Evidence Tools — separate box below metadata ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(28.dp),
+                        shape = RoundedCornerShape(36.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -844,7 +844,7 @@ fun ResearchSessionScreen(
                 if (activeSessionId != null) {
                     item {
                         Card(
-                            shape = RoundedCornerShape(28.dp),
+                            shape = RoundedCornerShape(36.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
@@ -859,7 +859,7 @@ fun ResearchSessionScreen(
                                         showLinkObservationsDialog = true
                                     },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(14.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = FieldMindTheme.colors.observation.copy(alpha = 0.12f),
                                         contentColor = FieldMindTheme.colors.observation
@@ -876,7 +876,7 @@ fun ResearchSessionScreen(
 
                 // Quick observation form
                 item {
-                    Card(shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+                    Card(shape = RoundedCornerShape(36.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             Text("Quick observation", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             Text("Type what you see. Tap save. Repeat.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -956,7 +956,7 @@ fun ResearchSessionScreen(
                             Button(
                                 onClick = ::saveQuickObservation,
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(16.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 enabled = quickSubject.isNotBlank() || quickFacts.isNotBlank()
                             ) {
                                 Icon(FieldMindIcons.Add, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save observation")
@@ -1050,7 +1050,7 @@ private fun SessionMetadataConfirmCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
         ),
@@ -1062,7 +1062,7 @@ private fun SessionMetadataConfirmCard(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                         .background(FieldMindTheme.colors.info.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -1080,14 +1080,14 @@ private fun SessionMetadataConfirmCard(
                 OutlinedButton(
                     onClick = onSkip,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 ) {
                     Text("Skip", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Button(
                     onClick = onConfirm,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 ) {
                     Icon(FieldMindIcons.Location, null, size = 18.dp)
                     Spacer(Modifier.size(6.dp))
@@ -1114,7 +1114,7 @@ private fun SessionMetaChip(
 ) {
     Surface(
         onClick = { if (onTap != null) onTap() },
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         color = if (acquired) accent.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = 0.dp,
         modifier = modifier
@@ -1159,7 +1159,7 @@ private fun SessionEvidenceButton(
 ) {
     Card(
         modifier = modifier.height(44.dp).clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.10f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1189,7 +1189,7 @@ private fun RecordingIndicator(seconds: Int) {
     val transition = rememberInfiniteTransition(label = "rec")
     val alpha by transition.animateFloat(initialValue = 1f, targetValue = 0.25f, animationSpec = infiniteRepeatable(tween(700), RepeatMode.Reverse), label = "recDot")
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 4.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.errorContainer).padding(horizontal = 12.dp, vertical = 8.dp),
+        Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 4.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.errorContainer).padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(Modifier.size(10.dp).graphicsLayer { this.alpha = alpha }.clip(CircleShape).background(MaterialTheme.colorScheme.error))
@@ -1247,7 +1247,7 @@ private fun LinkObservationsSheet(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Search observations…") },
                 leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 singleLine = true
             )
 
@@ -1288,7 +1288,7 @@ private fun LinkObservationsSheet(
                                     selectedIds = if (isSelected) selectedIds - obs.id
                                     else selectedIds + obs.id
                                 },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = if (isSelected)
                                     MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
@@ -1306,7 +1306,7 @@ private fun LinkObservationsSheet(
                                 Box(
                                     Modifier
                                         .size(24.dp)
-                                        .clip(RoundedCornerShape(6.dp))
+                                        .clip(RoundedCornerShape(12.dp))
                                         .background(
                                             if (isSelected) MaterialTheme.colorScheme.primary
                                             else MaterialTheme.colorScheme.surfaceContainerHigh
@@ -1350,7 +1350,7 @@ private fun LinkObservationsSheet(
                 OutlinedButton(
                     onClick = { onDismiss() },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 ) {
                     Text("Cancel")
                 }
@@ -1362,7 +1362,7 @@ private fun LinkObservationsSheet(
                         onDismiss()
                     },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     enabled = selectedIds.isNotEmpty()
                 ) {
                     Icon(FieldMindIcons.Session, null, size = 18.dp)

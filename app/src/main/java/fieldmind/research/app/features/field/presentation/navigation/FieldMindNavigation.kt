@@ -340,7 +340,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                         }
                         pendingNavRoute = null
                     },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Discard & navigate") }
             },
@@ -365,7 +365,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                 // .liquidGlassRefraction() applies GPU displacement & specular.
                 if (!hideChrome) {
                     Surface(
-                        shape = RoundedCornerShape(size = 30.dp),
+                        shape = RoundedCornerShape(size = 38.dp),
                         color = Color.Transparent,
                         tonalElevation = 0.dp,
                         shadowElevation = 12.dp,
@@ -625,7 +625,7 @@ private fun LiquidNavRow(
                             }
                             tabBounds[index] = TabBounds(x, width)
                         }
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(RoundedCornerShape(30.dp))
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
@@ -691,7 +691,7 @@ private fun RailNavTabItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(24.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -700,7 +700,7 @@ private fun RailNavTabItem(
             .defaultMinSize(minHeight = 48.dp)
             .background(
                 color = if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) else Color.Transparent,
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(24.dp)
             )
             .padding(vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -231,7 +231,7 @@ fun VoiceBlock(
                 ) {
                     Button(
                         onClick = { startRecording() },
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(20.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error
                         ),
@@ -243,7 +243,7 @@ fun VoiceBlock(
                     }
                     OutlinedButton(
                         onClick = { audioPicker.launch(arrayOf("audio/*")) },
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(20.dp),
                         modifier = Modifier.heightIn(min = 36.dp)
                     ) {
                         Icon(MaterialSymbolIcon("audio_file"), null, size = 16.dp)
@@ -285,7 +285,7 @@ fun VoiceBlock(
                 Spacer(Modifier.height(8.dp))
                 Button(
                     onClick = { stopRecording() },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error
                     )

@@ -126,7 +126,7 @@ fun SharedTransitionScope.DetailScreen(
                 ) {
                     Surface(
                         onClick = onBack,
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(44.dp)
                     ) { Box(contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Back, null, size = 22.dp) } }
@@ -252,7 +252,7 @@ fun ObservationDetailContent(
     val clipboard = LocalClipboardManager.current
     
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -263,7 +263,7 @@ fun ObservationDetailContent(
             // ── 2. Header with subject and badges ��─
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                         .background(colors.observation.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Observation, null, tint = colors.observation, size = 26.dp) }
@@ -278,7 +278,7 @@ fun ObservationDetailContent(
 
             // ── 3. Date / GPS / Weather stat bar ──
             Row(
-                Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f))
                     .padding(vertical = 10.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -363,7 +363,7 @@ fun ObservationDetailContent(
             var showProvenance by remember { mutableStateOf(false) }
             Card(
                 modifier = Modifier.fillMaxWidth().clickable { showProvenance = !showProvenance },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -427,7 +427,7 @@ private fun ReObservationLink(
         val parent = observations.firstOrNull { it.id == parentId }
         if (parent != null) {
             Card(
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(30.dp),
                 colors = CardDefaults.cardColors(containerColor = colors.hypothesis.copy(alpha = 0.08f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -453,7 +453,7 @@ private fun ReObservationLink(
     val children = observations.filter { it.parentObservationId == o.id }
     if (children.isNotEmpty()) {
         Card(
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(30.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -533,7 +533,7 @@ private fun ObservationSpeciesInfoSection(
     if (!hasAnyInfo) return
 
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = colors.observation.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -583,7 +583,7 @@ private fun ObservationSpeciesInfoSection(
                             }
                             Text("Conservation", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Box(
-                                Modifier.clip(RoundedCornerShape(8.dp))
+                                Modifier.clip(RoundedCornerShape(16.dp))
                                     .background(statusColor.copy(alpha = 0.15f))
                                     .padding(horizontal = 8.dp, vertical = 4.dp)
                             ) {
@@ -669,7 +669,7 @@ private fun ObservationBehaviorSection(
     if (!hasAny) return
     
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = colors.hypothesis.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -684,7 +684,7 @@ private fun ObservationBehaviorSection(
             ) {
                 if (behaviorData.behavior.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(18.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), 
@@ -697,7 +697,7 @@ private fun ObservationBehaviorSection(
                 }
                 if (behaviorData.lifeStage.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(18.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -710,7 +710,7 @@ private fun ObservationBehaviorSection(
                 }
                 if (behaviorData.sex.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(18.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -808,7 +808,7 @@ private fun ObservationStructuredDetailsSection(
     if (!hasAnyContent) return
 
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = colors.data.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -897,7 +897,7 @@ private fun QualityScoreCard(score: Int) {
     }
 
     Card(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = scoreColor.copy(alpha = 0.08f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -915,7 +915,7 @@ private fun QualityScoreCard(score: Int) {
             }
             LinearProgressIndicator(
                 progress = { score.coerceIn(0, 100) / 100f },
-                modifier = Modifier.width(100.dp).height(6.dp).clip(RoundedCornerShape(3.dp)),
+                modifier = Modifier.width(100.dp).height(6.dp).clip(RoundedCornerShape(8.dp)),
                 color = scoreColor,
                 trackColor = scoreColor.copy(alpha = 0.12f)
             )
@@ -959,7 +959,7 @@ private fun ObservationEvidenceCountsRow(
     
     val colors = FieldMindTheme.colors
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.3f))
             .padding(vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
@@ -1015,7 +1015,7 @@ private fun ObservationWeatherLocationSection(
     if (!hasWeather && !hasLocation) return
     
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = colors.info.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1135,7 +1135,7 @@ private fun ObservationAiAnalysisCard(
     if (analysisResult == null) return
     
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = colors.project.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1148,7 +1148,7 @@ private fun ObservationAiAnalysisCard(
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 // Top match
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                 ) {
                     Row(
@@ -1218,7 +1218,7 @@ private fun ObservationExportSection(
     val haptics = rememberFieldMindHaptics()
     
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1237,7 +1237,7 @@ private fun ObservationExportSection(
                             showFastSnackbar(snackbar, scope, "PDF export coming soon")
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     ) {
                         Icon(FieldMindIcons.Article, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
@@ -1249,7 +1249,7 @@ private fun ObservationExportSection(
                             showFastSnackbar(snackbar, scope, "CSV export coming soon")
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     ) {
                         Icon(FieldMindIcons.Data, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
@@ -1264,7 +1264,7 @@ private fun ObservationExportSection(
                             showFastSnackbar(snackbar, scope, "JSON export coming soon")
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     ) {
                         Icon(FieldMindIcons.Data, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
@@ -1277,7 +1277,7 @@ private fun ObservationExportSection(
                             sharePlainText(context, exportText)
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     ) {
                         Icon(FieldMindIcons.Export, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
@@ -1292,7 +1292,7 @@ private fun ObservationExportSection(
 private fun WeatherChip(text: String, color: androidx.compose.ui.graphics.Color) {
     Box(
         Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(color.copy(alpha = 0.15f))
             .padding(horizontal = 8.dp, vertical = 4.dp),
         contentAlignment = Alignment.Center
@@ -1351,7 +1351,7 @@ private fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(28.dp))
+                    .clip(RoundedCornerShape(36.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainerHighest)
                     .clickable {
                         imageViewerUri = displayUri
@@ -1384,7 +1384,7 @@ private fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId
         if (media.size > 1) {
             Surface(
                 modifier = Modifier.align(Alignment.TopEnd).padding(12.dp),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.85f)
             ) {
                 Text(
@@ -1428,7 +1428,7 @@ private fun NoteDetailContent(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1436,7 +1436,7 @@ private fun NoteDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                         .background(colors.source.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Note, null, tint = colors.note, size = 26.dp) }
@@ -1471,7 +1471,7 @@ private fun NoteDetailContent(
                 Button(
                     onClick = { onOpenCanvas(n.id) },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colors.note.cardBg(colors.isDark),
                         contentColor = colors.note
@@ -1503,7 +1503,7 @@ private fun QuestionDetailContent(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1511,7 +1511,7 @@ private fun QuestionDetailContent(
             // Header with icon and badges
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                         .background(colors.question.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Question, null, tint = colors.question, size = 26.dp) }
@@ -1542,7 +1542,7 @@ private fun QuestionDetailContent(
                 Text("Hypotheses (${linked.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = colors.hypothesis)
                 linked.forEach { h ->
                     Row(
-                        Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
+                        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp))
                             .background(colors.hypothesis.copy(alpha = 0.08f)).padding(12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -1572,7 +1572,7 @@ private fun HypothesisDetailContent(
     }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1580,7 +1580,7 @@ private fun HypothesisDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                         .background(colors.hypothesis.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Hypothesis, null, tint = colors.hypothesis, size = 26.dp) }
@@ -1627,7 +1627,7 @@ private fun HypothesisDetailContent(
             }
             LinearProgressIndicator(
                 progress = { (h.confidencePercent).coerceIn(0, 100) / 100f },
-                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)),
                 color = resultColor,
                 trackColor = resultColor.copy(alpha = 0.12f)
             )
@@ -1667,7 +1667,7 @@ private fun ProjectDetailContent(
     var showNewReport by remember { mutableStateOf(false) }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1675,7 +1675,7 @@ private fun ProjectDetailContent(
             // Header with action bar
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                         .background(colors.project.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Project, null, tint = colors.project, size = 26.dp) }
@@ -1731,7 +1731,7 @@ private fun ProjectDetailContent(
                         Text("No questions for this project yet.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     } else {
                         projectQs.forEach { q ->
-                            Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(colors.question.copy(alpha = 0.06f)).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(colors.question.copy(alpha = 0.06f)).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Icon(FieldMindIcons.Question, null, tint = colors.question, size = 18.dp)
                                 Column(Modifier.weight(1f)) {
                                     Text(q.questionText, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -1744,7 +1744,7 @@ private fun ProjectDetailContent(
                     OutlinedButton(
                         onClick = { showNewQuestion = true },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     ) {
                         Icon(FieldMindIcons.Add, null, size = 18.dp)
                         Spacer(Modifier.size(6.dp))
@@ -1770,7 +1770,7 @@ private fun ProjectDetailContent(
                     OutlinedButton(
                         onClick = { showNewObservation = true },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     ) {
                         Icon(FieldMindIcons.Add, null, size = 18.dp)
                         Spacer(Modifier.size(6.dp))
@@ -1796,7 +1796,7 @@ private fun ProjectDetailContent(
                     OutlinedButton(
                         onClick = { showNewReport = true },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     ) {
                         Icon(FieldMindIcons.Add, null, size = 18.dp)
                         Spacer(Modifier.size(6.dp))
@@ -1815,7 +1815,7 @@ private fun ProjectDetailContent(
                     OutlinedButton(
                         onClick = { showNewSource = true },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     ) {
                         Icon(FieldMindIcons.Add, null, size = 18.dp)
                         Spacer(Modifier.size(6.dp))
@@ -1906,7 +1906,7 @@ private fun ObservationQuickAddDialog(
                     label = { Text("Subject *") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 )
                 ExposedDropdownMenuBox(
                     expanded = showCategoryMenu,
@@ -1919,7 +1919,7 @@ private fun ObservationQuickAddDialog(
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showCategoryMenu) },
                         modifier = Modifier.fillMaxWidth().menuAnchor(),
                         readOnly = true,
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     )
                     ExposedDropdownMenu(expanded = showCategoryMenu, onDismissRequest = { showCategoryMenu = false }) {
                         categories.forEach { cat ->
@@ -1937,7 +1937,7 @@ private fun ObservationQuickAddDialog(
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 2,
                     maxLines = 4,
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 )
             }
         },
@@ -1959,7 +1959,7 @@ private fun ObservationQuickAddDialog(
                     onDismiss()
                 },
                 enabled = subject.isNotBlank(),
-                shape = RoundedCornerShape(14.dp)
+                shape = RoundedCornerShape(22.dp)
             ) {
                 Text("Save")
             }
@@ -1969,7 +1969,7 @@ private fun ObservationQuickAddDialog(
                 Text("Cancel")
             }
         },
-        shape = RoundedCornerShape(24.dp)
+        shape = RoundedCornerShape(34.dp)
     )
 }
 
@@ -2010,7 +2010,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
         Button(
             onClick = { showForm = !showForm; if (!showForm) { commonName = ""; scientificName = ""; speciesName = "" } },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(14.dp)
+            shape = RoundedCornerShape(22.dp)
         ) {
             Icon(FieldMindIcons.Add, null, size = 18.dp)
             Spacer(Modifier.size(6.dp))
@@ -2018,7 +2018,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
         }
 
         if (showForm) {
-            Card(shape = RoundedCornerShape(18.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+            Card(shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                 Column(modifier = Modifier.padding(14.dp).heightIn(max = 600.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("Add Species to Registry", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = colors.observation)
                     Text("Fill in common name and taxonomy (scroll for more fields).", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -2063,7 +2063,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
                         leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         trailingIcon = {
                             if (speciesSearchQuery.isNotBlank()) {
                                 IconButton(onClick = { speciesSearchQuery = ""; speciesSuggestions = emptyList(); showGenusSuggestions = false }) {
@@ -2074,7 +2074,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
                     )
                     if (showGenusSuggestions && speciesSuggestions.isNotEmpty()) {
                         Card(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                         ) {
@@ -2097,7 +2097,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
                                             showGenusSuggestions = false
                                             haptics.confirm()
                                         },
-                                        shape = RoundedCornerShape(8.dp),
+                                        shape = RoundedCornerShape(16.dp),
                                         color = MaterialTheme.colorScheme.surfaceContainerLow
                                     ) {
                                         Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
@@ -2143,7 +2143,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
                             kingdom = ""; phylum = ""; classs = ""
                             order = ""; family = ""; genus = ""
                         },
-                        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp),
+                        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
                         enabled = commonName.isNotBlank()
                     ) { Text("Save to Registry") }
                 }
@@ -2152,7 +2152,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
 
         Text("Species Registry (${projectSpecies.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         if (projectSpecies.isEmpty()) {
-            Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+            Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
                 Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Nature, null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 40.dp)
@@ -2163,7 +2163,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
             }
         } else {
             projectSpecies.forEach { sp ->
-                Card(shape = RoundedCornerShape(14.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+                Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(FieldMindIcons.Nature, null, tint = colors.observation, size = 18.dp)
@@ -2177,14 +2177,14 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
                                     sp.conservationStatus.contains("Vulnerable") || sp.conservationStatus.contains("Near") -> colors.warning
                                     else -> colors.positive
                                 }
-                                Surface(shape = RoundedCornerShape(8.dp), color = statusColor.copy(alpha = 0.12f)) {
+                                Surface(shape = RoundedCornerShape(16.dp), color = statusColor.copy(alpha = 0.12f)) {
                                     Text(sp.conservationStatus.take(12), modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = statusColor)
                                 }
                             }
                         }
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             listOfNotNull(sp.genus.takeIf { it.isNotBlank() }, sp.family.takeIf { it.isNotBlank() }, sp.order.takeIf { it.isNotBlank() }).forEach { tax ->
-                                Surface(shape = RoundedCornerShape(6.dp), color = MaterialTheme.colorScheme.surfaceContainerHighest) {
+                                Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceContainerHighest) {
                                     Text(tax, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
                             }
@@ -2226,7 +2226,7 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Button(
             onClick = { showForm = !showForm; if (!showForm) { taskTitle = ""; taskDesc = ""; subtasks = emptyList() } },
-            modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)
+            modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp)
         ) {
             Icon(FieldMindIcons.Add, null, size = 18.dp)
             Spacer(Modifier.size(6.dp))
@@ -2234,7 +2234,7 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
         }
 
         if (showForm) {
-            Card(shape = RoundedCornerShape(18.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+            Card(shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                 Column(modifier = Modifier.padding(14.dp).heightIn(max = 420.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("Create Project Task", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = colors.project)
                     FieldTextField(taskTitle, { taskTitle = it }, "Task Title *", supportingText = "e.g. Survey Zone A")
@@ -2271,10 +2271,10 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                             value = subtaskInput, onValueChange = { subtaskInput = it },
                             modifier = Modifier.weight(1f),
                             placeholder = { Text("Add subtask...") },
-                            shape = RoundedCornerShape(12.dp), singleLine = true,
+                            shape = RoundedCornerShape(20.dp), singleLine = true,
                             textStyle = MaterialTheme.typography.bodySmall
                         )
-                        FilledTonalButton(onClick = { if (subtaskInput.isNotBlank()) { subtasks = subtasks + subtaskInput; subtaskInput = "" } }, shape = RoundedCornerShape(12.dp)) {
+                        FilledTonalButton(onClick = { if (subtaskInput.isNotBlank()) { subtasks = subtasks + subtaskInput; subtaskInput = "" } }, shape = RoundedCornerShape(20.dp)) {
                             Icon(FieldMindIcons.Add, null, size = 18.dp)
                         }
                     }
@@ -2313,7 +2313,7 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                             showForm = false
                             taskTitle = ""; taskDesc = ""; subtasks = emptyList()
                         },
-                        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp),
+                        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
                         enabled = taskTitle.isNotBlank()
                     ) { Text(if (subtasks.isEmpty()) "Save Task" else "Save Task with ${subtasks.size} Subtasks") }
                 }
@@ -2322,7 +2322,7 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
 
         Text("Project Tasks (${projectTasks.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         if (projectTasks.isEmpty()) {
-            Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+            Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
                 Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Check, null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 40.dp)
@@ -2338,7 +2338,7 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                     "medium" -> colors.warning
                     else -> colors.positive
                 }
-                Card(shape = RoundedCornerShape(14.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+                Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                     Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(
                             if (task.status == "Completed") FieldMindIcons.Check else FieldMindIcons.List,
@@ -2349,10 +2349,10 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                         Column(Modifier.weight(1f)) {
                             Text(task.title, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                                Surface(shape = RoundedCornerShape(6.dp), color = colors.project.copy(alpha = 0.1f)) {
+                                Surface(shape = RoundedCornerShape(12.dp), color = colors.project.copy(alpha = 0.1f)) {
                                     Text(task.taskType, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), style = MaterialTheme.typography.labelSmall, color = colors.project)
                                 }
-                                Surface(shape = RoundedCornerShape(6.dp), color = priorityColor.copy(alpha = 0.1f)) {
+                                Surface(shape = RoundedCornerShape(12.dp), color = priorityColor.copy(alpha = 0.1f)) {
                                     Text(task.priority, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = priorityColor)
                                 }
                             }
@@ -2368,7 +2368,7 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                                         status = if (task.status == "Completed") "Pending" else "Completed"
                                     ))
                                 },
-                                shape = RoundedCornerShape(10.dp),
+                                shape = RoundedCornerShape(18.dp),
                                 contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
                                 colors = if (task.status != "Completed") ButtonDefaults.filledTonalButtonColors(
                                     containerColor = colors.positive.copy(alpha = 0.15f),
@@ -2408,7 +2408,7 @@ private fun DataRecordDetailContent(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2416,7 +2416,7 @@ private fun DataRecordDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                         .background(colors.data.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Data, null, tint = colors.data, size = 26.dp) }
@@ -2475,7 +2475,7 @@ private fun ReportDetailContent(
     }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2483,7 +2483,7 @@ private fun ReportDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                         .background(colors.report.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Report, null, tint = colors.report, size = 26.dp) }
@@ -2513,7 +2513,7 @@ private fun ReportDetailContent(
             // Full report preview
             Text("Full report", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Card(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -2535,7 +2535,7 @@ private fun FlashcardDetailContent(
     val colors = FieldMindTheme.colors
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2543,7 +2543,7 @@ private fun FlashcardDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                         .background(colors.flashcard.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Flashcard, null, tint = colors.flashcard, size = 26.dp) }
@@ -2559,7 +2559,7 @@ private fun FlashcardDetailContent(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(24.dp))
                     .background(colors.flashcard.copy(alpha = 0.08f))
                     .padding(16.dp)
             ) {
@@ -2573,7 +2573,7 @@ private fun FlashcardDetailContent(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(24.dp))
                     .background(colors.info.copy(alpha = 0.08f))
                     .padding(16.dp)
             ) {
@@ -2604,7 +2604,7 @@ private fun ResearchSessionDetailContent(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = colors.surfaceVariant.copy(alpha = 0.5f)),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(24.dp)
         ) {
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(session.name.ifBlank { "Research Session" }, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
@@ -2627,7 +2627,7 @@ private fun ResearchSessionDetailContent(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = colors.surfaceVariant.copy(alpha = 0.3f)),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(20.dp)
             ) {
                 Text(
                     "No linked observations found.",
@@ -2643,7 +2643,7 @@ private fun ResearchSessionDetailContent(
                         .fillMaxWidth()
                         .clickable { onOpenDetail("observation", obs.id) },
                     colors = CardDefaults.cardColors(containerColor = colors.surface),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Row(Modifier.fillMaxWidth()) {
@@ -2703,7 +2703,7 @@ private fun AssetCountChip(label: String, count: Int, icon: MaterialSymbolIcon, 
 private fun StatusChip(status: String, color: androidx.compose.ui.graphics.Color) {
     Row(
         Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(color.copy(alpha = 0.12f))
             .padding(horizontal = 8.dp, vertical = 3.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -2727,13 +2727,13 @@ private fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
             .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        FilledTonalButton(onClick = { haptics.light(); onEdit() }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(16.dp)) {
+        FilledTonalButton(onClick = { haptics.light(); onEdit() }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(24.dp)) {
             Icon(icon = FieldMindIcons.Edit, contentDescription = null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Edit")
         }
         OutlinedButton(
             onClick = { haptics.light(); onDelete() },
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(24.dp),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
         ) {
             Icon(icon = FieldMindIcons.Delete, contentDescription = null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Delete")
@@ -2749,7 +2749,7 @@ private fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
 private fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Unit) {
     var editing by remember(question.id, question.answer) { mutableStateOf(question.answer.isBlank()) }
     var draft by remember(question.id) { mutableStateOf(question.answer) }
-    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(icon = FieldMindIcons.Answer, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -2758,7 +2758,7 @@ private fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Uni
             if (editing) {
                 FieldTextField(draft, { draft = it }, "What did you conclude?", minLines = 3, supportingText = "Saving marks this question as Answered.")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = { onSave(draft); editing = false }, shape = RoundedCornerShape(14.dp), enabled = draft.isNotBlank()) { Text("Save answer") }
+                    Button(onClick = { onSave(draft); editing = false }, shape = RoundedCornerShape(22.dp), enabled = draft.isNotBlank()) { Text("Save answer") }
                     if (question.answer.isNotBlank()) TextButton(onClick = { draft = question.answer; editing = false }) { Text("Cancel") }
                 }
             } else {
@@ -2850,7 +2850,7 @@ private fun SourceDetailContent(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2858,7 +2858,7 @@ private fun SourceDetailContent(
             // ── Header ──
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                         .background(colors.source.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Source, null, tint = colors.source, size = 26.dp) }
@@ -2943,7 +2943,7 @@ private fun SourceDetailContent(
 
 @Composable
 private fun DetailBody(title: String, kind: String, fields: List<Pair<String, String>>) {
-    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 EntityBadge(kind)
@@ -2967,12 +2967,12 @@ private fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity
     val haptics = rememberFieldMindHaptics()
     var showProjects by remember { mutableStateOf(false) }
     val citation = remember(source) { viewModel.buildSourceCitation(source) }
-    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             SectionHeader("Source actions", "Open, cite, prioritize, and turn reading into review cards.")
             SourcePreviewCard(source.link, source.fileUri)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilledTonalButton(onClick = { haptics.light(); runCatching { uriHandler.openUri(source.link) } }, enabled = source.link.isNotBlank(), modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
+                FilledTonalButton(onClick = { haptics.light(); runCatching { uriHandler.openUri(source.link) } }, enabled = source.link.isNotBlank(), modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
                     Icon(FieldMindIcons.OpenLink, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Open link")
                 }
                 var showPdfViewer by remember { mutableStateOf(false) }
@@ -3003,7 +3003,7 @@ private fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity
                         "audio" -> showAudioPlayer = true
                         else -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(source.fileUri.orEmpty())).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)) }
                     }
-                }, enabled = source.fileUri.isNotBlank(), modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
+                }, enabled = source.fileUri.isNotBlank(), modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
                     Icon(FieldMindIcons.File, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Open file")
                 }
                 if (showPdfViewer) {
@@ -3017,15 +3017,15 @@ private fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity
                 }
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = { haptics.light(); clipboard.setText(AnnotatedString(citation)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
+                OutlinedButton(onClick = { haptics.light(); clipboard.setText(AnnotatedString(citation)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
                     Icon(FieldMindIcons.Article, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Copy citation")
                 }
-                OutlinedButton(onClick = { haptics.confirm(); viewModel.toggleSourceImportant(source) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
+                OutlinedButton(onClick = { haptics.confirm(); viewModel.toggleSourceImportant(source) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
                     Icon(FieldMindIcons.Favorite, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text(if (source.importance == "Normal") "Important" else "Normal")
                 }
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = { haptics.confirm(); viewModel.markSourceRead(source) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp), enabled = source.readingStatus != "Read") {
+                OutlinedButton(onClick = { haptics.confirm(); viewModel.markSourceRead(source) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp), enabled = source.readingStatus != "Read") {
                     Icon(FieldMindIcons.Done, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Mark read")
                 }
                 OutlinedButton(onClick = {
@@ -3033,7 +3033,7 @@ private fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity
                     if (source.title.isNotBlank() && source.whatThisSourceTaughtMe.isNotBlank()) viewModel.addFlashcard(source.title, source.whatThisSourceTaughtMe, "source-takeaway", source.id, source.relatedProjectId)
                     if (source.keyFindings.isNotBlank()) viewModel.addFlashcard("Key finding from ${source.title}", source.keyFindings, "source-finding", source.id, source.relatedProjectId)
                     if (source.questionsGenerated.isNotBlank()) viewModel.addFlashcard("Question from ${source.title}", source.questionsGenerated, "source-question", source.id, source.relatedProjectId)
-                }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
+                }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
                     Icon(FieldMindIcons.Flashcard, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Smart cards")
                 }
             }
@@ -3064,7 +3064,7 @@ private fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observati
     var showAudioPlayer by remember { mutableStateOf(false) }
     var viewerUri by remember { mutableStateOf("") }
     var viewerCaption by remember { mutableStateOf("") }
-    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(icon = FieldMindIcons.Gallery, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -3079,7 +3079,7 @@ private fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observati
                                 model = displayUri,
                                 contentDescription = img.caption.ifBlank { "Observation photo" },
                                 contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxWidth().height(140.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest).clickable {
+                                modifier = Modifier.fillMaxWidth().height(140.dp).clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest).clickable {
                                     viewerUri = displayUri
                                     viewerCaption = img.caption.ifBlank { "Observation image" }
                                     showImageViewer = true
@@ -3092,7 +3092,7 @@ private fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observati
             }
             others.forEach { att ->
                 val displayUri = att.localPath ?: att.uri
-                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable {
+                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).clickable {
                     if (att.type.equals("Audio", true)) {
                         viewerUri = displayUri
                         viewerCaption = att.caption.ifBlank { "Audio evidence" }
@@ -3105,7 +3105,7 @@ private fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observati
                         onOpenReader(displayUri, att.caption.ifBlank { att.type })
                     }
                 }.padding(4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Box(Modifier.size(38.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
+                    Box(Modifier.size(38.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
                         Icon(icon = if (att.type.equals("Audio", true)) FieldMindIcons.Mic else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
                     }
                     Column(Modifier.weight(1f)) {
@@ -3138,11 +3138,11 @@ private fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, Stri
     val target = source.fileUri.ifBlank { source.link }
     if (target.isBlank()) return
     var showImageViewer by remember { mutableStateOf(false) }
-    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text("Source preview", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             if (source.type.equals("Image", true) || uriLooksImage(target)) {
-                AsyncImage(model = target, contentDescription = source.title, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest).clickable { showImageViewer = true })
+                AsyncImage(model = target, contentDescription = source.title, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(28.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest).clickable { showImageViewer = true })
             }
             AttachmentOpenRow(target, source.title, source.type, onOpenReader)
         }
@@ -3161,7 +3161,7 @@ private fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, Stri
 
 @Composable
 private fun AttachmentOpenRow(uri: String, title: String, type: String, onOpenReader: (String, String) -> Unit) {
-    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable { onOpenReader(uri, title) }.background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).clickable { onOpenReader(uri, title) }.background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Icon(icon = if (type.equals("Image", true) || type.equals("Gallery", true) || type.equals("Photo", true) || uriLooksImage(uri)) FieldMindIcons.Gallery else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)

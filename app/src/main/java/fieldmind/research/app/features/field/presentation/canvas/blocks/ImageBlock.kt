@@ -61,7 +61,7 @@ fun ImageBlock(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .then(
                 if (imageUri.isNotBlank()) {

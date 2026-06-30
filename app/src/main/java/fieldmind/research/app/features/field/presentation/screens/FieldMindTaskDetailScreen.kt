@@ -193,7 +193,7 @@ fun TaskDetailScreen(
                 ) {
                     // Priority badge
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = priorityColor.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -215,7 +215,7 @@ fun TaskDetailScreen(
                         } catch (_: Exception) { false }
 
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(16.dp),
                             color = if (isOverdue) MaterialTheme.colorScheme.error.copy(alpha = 0.12f)
                                     else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                         ) {
@@ -249,7 +249,7 @@ fun TaskDetailScreen(
                     // Status badge
                     if (task.status == "Done") {
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(16.dp),
                             color = FieldMindTheme.colors.positive.copy(alpha = 0.12f)
                         ) {
                             Text(
@@ -272,7 +272,7 @@ fun TaskDetailScreen(
         if (task.status != "Done") {
             item {
                 Card(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(30.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -287,7 +287,7 @@ fun TaskDetailScreen(
                         }
                         LinearProgressIndicator(
                             progress = { animatedProgress },
-                            modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
+                            modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
                             color = priorityColor,
                             trackColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         )
@@ -345,7 +345,7 @@ fun TaskDetailScreen(
                                     }
                                     viewModel.updateTaskEntity(task.copy(checklistJson = arr.toString()))
                                 },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -407,7 +407,7 @@ fun TaskDetailScreen(
                         linkedObs.forEach { obs ->
                             Surface(
                                 onClick = { onOpenDetail("observation", obs.id) },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -417,7 +417,7 @@ fun TaskDetailScreen(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(8.dp))
+                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -446,7 +446,7 @@ fun TaskDetailScreen(
                 Spacer(Modifier.size(8.dp))
                 OutlinedButton(
                     onClick = { showObservationPicker = true },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -468,7 +468,7 @@ fun TaskDetailScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         attachments.forEach { uri ->
                             Surface(
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -486,7 +486,7 @@ fun TaskDetailScreen(
                                         else -> MaterialSymbolIcon("attachment")
                                     }
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(8.dp))
+                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                             .background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -590,7 +590,7 @@ private fun <T> EntityPickerDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             modifier = Modifier
@@ -622,7 +622,7 @@ private fun <T> EntityPickerDialog(
                     placeholder = { Text("Search...") },
                     leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) },
                     singleLine = true,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -653,7 +653,7 @@ private fun <T> EntityPickerDialog(
                         items(items) { item ->
                             Surface(
                                 onClick = { onSelect(item) },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh
                             ) {
                                 Row(
@@ -666,7 +666,7 @@ private fun <T> EntityPickerDialog(
                                     Box(
                                         Modifier
                                             .size(32.dp)
-                                            .clip(RoundedCornerShape(8.dp))
+                                            .clip(RoundedCornerShape(16.dp))
                                             .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -717,7 +717,7 @@ private fun SectionCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

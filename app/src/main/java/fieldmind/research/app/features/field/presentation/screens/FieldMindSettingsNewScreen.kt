@@ -258,7 +258,7 @@ fun FieldMindSettingsNewScreen(
                         categories.forEach { cat ->
                             Surface(
                                 onClick = { selectedCategory = cat.id },
-                                shape = RoundedCornerShape(16.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 color = if (selectedCategory == cat.id) cat.accentColor.copy(alpha = 0.14f)
                                     else MaterialTheme.colorScheme.surfaceContainerHigh,
                                 border = if (selectedCategory == cat.id) androidx.compose.foundation.BorderStroke(1.5.dp, cat.accentColor) else null
@@ -304,7 +304,7 @@ fun FieldMindSettingsNewScreen(
                     item {
                         Surface(
                             onClick = { selectedCategory = null },
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(20.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerLow
                         ) {
                             Row(
@@ -327,7 +327,7 @@ fun FieldMindSettingsNewScreen(
                 if (filteredItems.isEmpty()) {
                     item {
                         Card(
-                            shape = RoundedCornerShape(24.dp),
+                            shape = RoundedCornerShape(34.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
@@ -358,7 +358,7 @@ fun FieldMindSettingsNewScreen(
                 Spacer(Modifier.height(8.dp))
                 Surface(
                     onClick = onResetOnboarding,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)
                 ) {
                     Row(
@@ -390,7 +390,7 @@ private fun SettingsSearchBar(
     placeholder: String = "Search…"
 ) {
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = if (isActive) 2.dp else 0.dp,
         shadowElevation = if (isActive) 4.dp else 0.dp
@@ -435,7 +435,7 @@ private fun CategoryCard(
     onCategoryClick: () -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -449,7 +449,7 @@ private fun CategoryCard(
                 Box(
                     modifier = Modifier
                         .size(36.dp)
-                        .clip(RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(18.dp))
                         .background(category.accentColor.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -471,7 +471,7 @@ private fun CategoryCard(
             items.forEach { item ->
                 Surface(
                     onClick = { onItemClick(item) },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f)
                 ) {
                     Row(
@@ -503,7 +503,7 @@ private fun SettingItemCard(
     val onClick = item.onClick
     Surface(
         onClick = { onClick?.invoke() },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         enabled = !item.isToggle && onClick != null
     ) {
@@ -515,7 +515,7 @@ private fun SettingItemCard(
             Box(
                 modifier = Modifier
                     .size(42.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(20.dp))
                     .background(accentColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {

@@ -154,7 +154,7 @@ fun FieldMindAppLock(
     Box(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
         Card(
             modifier = Modifier.fillMaxWidth(0.88f),
-            shape = RoundedCornerShape(32.dp),
+            shape = RoundedCornerShape(40.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -164,7 +164,7 @@ fun FieldMindAppLock(
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 // Lock icon
-                Box(Modifier.size(64.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(64.dp).clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                     Icon(FieldMindIcons.Lock, null, tint = MaterialTheme.colorScheme.primary, size = 32.dp)
                 }
 
@@ -224,7 +224,7 @@ fun FieldMindAppLock(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword, imeAction = ImeAction.Done).withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                         supportingText = if (pinError) {{ Text("Incorrect PIN. Try again.") }} else null,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         textStyle = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center, letterSpacing = 8.sp),
                         trailingIcon = {
                             if (LocalPrivacyTypingEnabled.current) {
@@ -251,7 +251,7 @@ fun FieldMindAppLock(
                         OutlinedButton(
                             onClick = { usePinLock = true },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(16.dp)
+                            shape = RoundedCornerShape(24.dp)
                         ) {
                             Text(if (usePinLock) "Using PIN" else "Use PIN")
                         }
@@ -260,7 +260,7 @@ fun FieldMindAppLock(
                         Button(
                             onClick = { startBiometricAuth() },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(16.dp)
+                            shape = RoundedCornerShape(24.dp)
                         ) {
                             Text(if (hasBiometric) "Retry biometric" else "Retry device lock")
                         }
@@ -295,7 +295,7 @@ fun DecoyAppContent(
         ) {
             // Decoy brand icon
             Box(
-                Modifier.size(80.dp).clip(RoundedCornerShape(24.dp)).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.12f)),
+                Modifier.size(80.dp).clip(RoundedCornerShape(34.dp)).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.hypothesis, size = 44.dp)
@@ -320,7 +320,7 @@ fun DecoyAppContent(
             // Empty state illustration
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {

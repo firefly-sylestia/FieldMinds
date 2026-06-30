@@ -300,11 +300,11 @@ fun FieldMindOnboardingScreen(
         if (showFinishDialog) {
             SwipeableAlertDialog(
                 onDismissRequest = { showFinishDialog = false },
-                shape = RoundedCornerShape(28.dp),
+                shape = RoundedCornerShape(36.dp),
                 containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Box(Modifier.size(40.dp).clip(RoundedCornerShape(14.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(40.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                             Icon(FieldMindIcons.Check, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                         }
                         Text("You're all set!", fontWeight = FontWeight.Bold)
@@ -342,7 +342,7 @@ fun FieldMindOnboardingScreen(
                 confirmButton = {
                     Button(
                         onClick = { showFinishDialog = false; finishOnboarding() },
-                        shape = RoundedCornerShape(16.dp)
+                        shape = RoundedCornerShape(24.dp)
                     ) { Text("Start exploring") }
                 },
                 dismissButton = {                        TextButton(onClick = {
@@ -386,7 +386,7 @@ private fun PageIndicator(current: Int, total: Int, modifier: Modifier = Modifie
                     }
                     .background(
                         if (i <= current) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHighest,
-                        RoundedCornerShape(3.dp)
+                        RoundedCornerShape(8.dp)
                     )
             )
         }
@@ -450,7 +450,7 @@ private fun OnboardingWelcomePage(
                     Box(
                         Modifier.size(72.dp).background(
                             Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.tertiary)),
-                            RoundedCornerShape(24.dp)
+                            RoundedCornerShape(34.dp)
                         ),
                         contentAlignment = Alignment.Center
                     ) {
@@ -492,7 +492,7 @@ private fun OnboardingWelcomePage(
                         label = { Text("Your name (optional)") },
                         placeholder = { Text("e.g. Alex") },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.Words,
@@ -518,7 +518,7 @@ private fun OnboardingWelcomePage(
                             label = { Text("I am a…") },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = roleExpanded) },
                             modifier = Modifier.fillMaxWidth().menuAnchor(),
-                            shape = RoundedCornerShape(18.dp),
+                            shape = RoundedCornerShape(28.dp),
                             leadingIcon = { Icon(icon = FieldMindIcons.School, contentDescription = null, size = 20.dp) }
                         )
                         ExposedDropdownMenu(
@@ -545,7 +545,7 @@ private fun OnboardingWelcomePage(
                 Button(
                     onClick = onNext,
                     modifier = Modifier.fillMaxWidth().height(54.dp).expressivePress(scaleDown = 0.96f),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = RoundedCornerShape(28.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     )
@@ -654,7 +654,7 @@ private fun OnboardingInterestsPage(
                                         }
                                     )
                                 },
-                                shape = RoundedCornerShape(16.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 color = bgColor,
                                 border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, borderCol) else null,
                                 modifier = Modifier.fillMaxWidth()
@@ -664,7 +664,7 @@ private fun OnboardingInterestsPage(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                                 ) {
-                                    Box(Modifier.size(36.dp).clip(RoundedCornerShape(12.dp)).background(accent.copy(if (isSelected) 0.22f else 0.1f)), contentAlignment = Alignment.Center) {
+                                    Box(Modifier.size(36.dp).clip(RoundedCornerShape(20.dp)).background(accent.copy(if (isSelected) 0.22f else 0.1f)), contentAlignment = Alignment.Center) {
                                         Icon(icon, null, tint = accent, size = 20.dp)
                                     }
                                     Text(label, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
@@ -687,7 +687,7 @@ private fun OnboardingInterestsPage(
                             label = { Text("Add custom field") },
                             placeholder = { Text("e.g. Mycology, Entomology, Hydrology…") },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                             keyboardActions = KeyboardActions(onDone = {
@@ -709,7 +709,7 @@ private fun OnboardingInterestsPage(
                                         },
                                         label = { Text(item, style = MaterialTheme.typography.labelMedium) },
                                         trailingIcon = { Icon(FieldMindIcons.Close, null, size = 16.dp) },
-                                        shape = RoundedCornerShape(12.dp)
+                                        shape = RoundedCornerShape(20.dp)
                                     )
                                 }
                             }
@@ -726,13 +726,13 @@ private fun OnboardingInterestsPage(
             ) {
                 OutlinedButton(
                     onClick = onBack,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     modifier = Modifier.expressivePress(scaleDown = 0.96f)
                 ) { Text("Back") }
                 PageIndicator(current = 1, total = 5, modifier = Modifier.weight(1f))
                 Button(
                     onClick = onNext,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     modifier = Modifier.height(48.dp).expressivePress(scaleDown = 0.96f)
                 ) { Text("Continue") }
             }
@@ -761,7 +761,7 @@ private fun <T> InterestCategorySection(
                 val fieldName = (field as? ZoologySubfield)?.displayName ?: (field as? BotanySubfield)?.displayName ?: field.name
                 Surface(
                     onClick = { onToggle(field) },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     color = if (isSelected) accent.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceContainerHighest,
                     border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent.copy(alpha = 0.4f)) else null
                 ) {
@@ -845,9 +845,9 @@ private fun OnboardingPermissionsPage(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(16.dp)) { Text("Back") }
+                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(24.dp)) { Text("Back") }
                 PageIndicator(current = 2, total = 5, modifier = Modifier.weight(1f))
-                Button(onClick = onNext, shape = RoundedCornerShape(16.dp), modifier = Modifier.height(48.dp)) { Text("Continue") }
+                Button(onClick = onNext, shape = RoundedCornerShape(24.dp), modifier = Modifier.height(48.dp)) { Text("Continue") }
             }
         }
     }
@@ -865,7 +865,7 @@ private data class PermissionItem(
 @Composable
 private fun PermissionCard(item: PermissionItem) {
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (item.granted) item.accent.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surfaceContainerHigh
         ),
@@ -878,7 +878,7 @@ private fun PermissionCard(item: PermissionItem) {
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Box(
-                Modifier.size(44.dp).clip(RoundedCornerShape(14.dp)).background(
+                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(
                     if (item.granted) item.accent.copy(alpha = 0.2f) else item.accent.copy(alpha = 0.1f)
                 ),
                 contentAlignment = Alignment.Center
@@ -889,7 +889,7 @@ private fun PermissionCard(item: PermissionItem) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(item.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     if (item.granted) {
-                        Surface(shape = RoundedCornerShape(8.dp), color = item.accent.copy(alpha = 0.15f)) {
+                        Surface(shape = RoundedCornerShape(16.dp), color = item.accent.copy(alpha = 0.15f)) {
                             Text("Granted", style = MaterialTheme.typography.labelSmall, color = item.accent, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
                         }
                     }
@@ -899,7 +899,7 @@ private fun PermissionCard(item: PermissionItem) {
             if (!item.granted) {
                 Button(
                     onClick = item.onRequest,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = item.accent)
                 ) { Text("Grant", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold) }
@@ -960,7 +960,7 @@ private fun OnboardingThemePage(
                                 val isSelected = selectedTheme == theme
                                 Surface(
                                     onClick = { onThemeChange(theme) },
-                                    shape = RoundedCornerShape(16.dp),
+                                    shape = RoundedCornerShape(24.dp),
                                     color = when {
                                         isSelected && theme == "Dark" -> Color(0xFF1A1A2E)
                                         isSelected && theme == "Light" -> Color(0xFFF5F0E8)
@@ -1067,9 +1067,9 @@ private fun OnboardingThemePage(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(16.dp)) { Text("Back") }
+                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(24.dp)) { Text("Back") }
                 PageIndicator(current = 3, total = 5, modifier = Modifier.weight(1f))
-                Button(onClick = onNext, shape = RoundedCornerShape(16.dp), modifier = Modifier.height(48.dp)) { Text("Continue") }
+                Button(onClick = onNext, shape = RoundedCornerShape(24.dp), modifier = Modifier.height(48.dp)) { Text("Continue") }
             }
         }
     }
@@ -1084,9 +1084,9 @@ private fun SegmentedButtonRow(options: List<String>, selected: String, onSelect
             val isLast = index == options.lastIndex
             Surface(
                 onClick = { onSelect(option) },
-                shape = if (isFirst && isLast) RoundedCornerShape(12.dp)
-                    else if (isFirst) RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp)
-                    else if (isLast) RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp)
+                shape = if (isFirst && isLast) RoundedCornerShape(20.dp)
+                    else if (isFirst) RoundedCornerShape(topStart = 16.dp, bottomStart = 20.dp)
+                    else if (isLast) RoundedCornerShape(topEnd = 16.dp, bottomEnd = 20.dp)
                     else RoundedCornerShape(0.dp),
                 color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHighest,
                 border = androidx.compose.foundation.BorderStroke(0.5.dp, MaterialTheme.colorScheme.outlineVariant)
@@ -1150,7 +1150,7 @@ private fun OnboardingReviewPage(
                         Box(
                             Modifier.size(80.dp).background(
                                 Brush.linearGradient(listOf(Color(0xFF1F6B4C), Color(0xFF4CAF50))),
-                                RoundedCornerShape(28.dp)
+                                RoundedCornerShape(36.dp)
                             ),
                             contentAlignment = Alignment.Center
                         ) {
@@ -1169,7 +1169,7 @@ private fun OnboardingReviewPage(
                 // Summary card
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat) + slideInVertically { it / 4 }) {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -1211,12 +1211,12 @@ private fun OnboardingReviewPage(
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         OutlinedButton(
                             onClick = onBack,
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             modifier = Modifier.weight(1f)
                         ) { Text("Back") }
                         Button(
                             onClick = onContinueTour,
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             modifier = Modifier.weight(1f),
                             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                         ) { Text("Continue tour") }
@@ -1224,7 +1224,7 @@ private fun OnboardingReviewPage(
                     Button(
                         onClick = onFinish,
                         modifier = Modifier.fillMaxWidth().height(54.dp).expressivePress(scaleDown = 0.96f),
-                        shape = RoundedCornerShape(18.dp)
+                        shape = RoundedCornerShape(28.dp)
                     ) {
                         Text("Finish tour", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
                     }
@@ -1299,7 +1299,7 @@ private fun OnboardingScreenVisibilityPage(
                 screenToggles.forEach { toggle ->
                     AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                         Row(
-                            Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(horizontal = 16.dp, vertical = 4.dp),
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(horizontal = 16.dp, vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
@@ -1319,10 +1319,10 @@ private fun OnboardingScreenVisibilityPage(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(16.dp)) { Text("Back") }
+                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(24.dp)) { Text("Back") }
                 Spacer(Modifier.weight(1f))
                 TextButton(onClick = onSkip) { Text("Skip") }
-                Button(onClick = { onApply(currentVis) }, shape = RoundedCornerShape(16.dp)) { Text("Apply & continue") }
+                Button(onClick = { onApply(currentVis) }, shape = RoundedCornerShape(24.dp)) { Text("Apply & continue") }
             }
         }
     }
@@ -1370,13 +1370,13 @@ private fun OnboardingAiFeaturesPage(
                 // AI Assistant Configuration
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                     Icon(FieldMindIcons.Sparkle, null, tint = FieldMindTheme.colors.observation, size = 22.dp)
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -1391,7 +1391,7 @@ private fun OnboardingAiFeaturesPage(
                                     listOf("None", "Gemini", "OpenAI").forEach { provider ->
                                         Surface(
                                             onClick = { selectedProvider = provider },
-                                            shape = RoundedCornerShape(12.dp),
+                                            shape = RoundedCornerShape(20.dp),
                                             color = if (selectedProvider == provider) FieldMindTheme.colors.observation.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                             border = if (selectedProvider == provider) BorderStroke(1.5.dp, FieldMindTheme.colors.observation) else null,
                                             modifier = Modifier.weight(1f)
@@ -1410,7 +1410,7 @@ private fun OnboardingAiFeaturesPage(
                                     placeholder = { Text("sk-...") },
                                     visualTransformation = PasswordVisualTransformation(),
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(20.dp),
                                     singleLine = true,
                                     colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh, unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                                 )
@@ -1423,7 +1423,7 @@ private fun OnboardingAiFeaturesPage(
                                     placeholder = { Text("sk-...") },
                                     visualTransformation = PasswordVisualTransformation(),
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(20.dp),
                                     singleLine = true,
                                     colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh, unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                                 )
@@ -1433,7 +1433,7 @@ private fun OnboardingAiFeaturesPage(
                                 Button(
                                     onClick = { testingConnection = true; testResult = null },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(20.dp),
                                     enabled = (selectedProvider == "Gemini" && geminiKey.isNotBlank()) || (selectedProvider == "OpenAI" && openaiKey.isNotBlank())
                                 ) {
                                     if (testingConnection) {
@@ -1444,7 +1444,7 @@ private fun OnboardingAiFeaturesPage(
                                 }
                                 
                                 testResult?.let { isValid ->
-                                    Surface(shape = RoundedCornerShape(10.dp), color = if (isValid) FieldMindTheme.colors.positive.copy(alpha = 0.15f) else MaterialTheme.colorScheme.error.copy(alpha = 0.15f)) {
+                                    Surface(shape = RoundedCornerShape(18.dp), color = if (isValid) FieldMindTheme.colors.positive.copy(alpha = 0.15f) else MaterialTheme.colorScheme.error.copy(alpha = 0.15f)) {
                                         Row(Modifier.fillMaxWidth().padding(10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                             Icon(if (isValid) MaterialSymbolIcon("check_circle") else MaterialSymbolIcon("error"), null, size = 18.dp, tint = if (isValid) FieldMindTheme.colors.positive else MaterialTheme.colorScheme.error)
                                             Text(if (isValid) "API key validated" else "Invalid API key", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
@@ -1464,7 +1464,7 @@ private fun OnboardingAiFeaturesPage(
                 featureOptions.forEach { (title, enabled, description) ->
                     AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                         Card(
-                            shape = RoundedCornerShape(20.dp),
+                            shape = RoundedCornerShape(30.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
@@ -1473,7 +1473,7 @@ private fun OnboardingAiFeaturesPage(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                                     Icon(if (title.contains("Species")) FieldMindIcons.Nature else FieldMindIcons.Lock, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -1492,9 +1492,9 @@ private fun OnboardingAiFeaturesPage(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(16.dp)) { Text("Back") }
+                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(24.dp)) { Text("Back") }
                 Spacer(Modifier.weight(1f))
-                Button(onClick = onNext, shape = RoundedCornerShape(16.dp)) { Text("Continue") }
+                Button(onClick = onNext, shape = RoundedCornerShape(24.dp)) { Text("Continue") }
             }
         }
     }
@@ -1537,7 +1537,7 @@ private fun OnboardingBackupOptionsPage(
                 // Cloud Sync
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -1547,7 +1547,7 @@ private fun OnboardingBackupOptionsPage(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(FieldMindTheme.colors.positive.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.positive.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                     Icon(FieldMindIcons.Cloud, null, tint = FieldMindTheme.colors.positive, size = 22.dp)
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -1564,7 +1564,7 @@ private fun OnboardingBackupOptionsPage(
                                         listOf("Hourly", "Daily", "Weekly").forEach { interval ->
                                             Surface(
                                                 onClick = { autoBackupInterval = interval },
-                                                shape = RoundedCornerShape(10.dp),
+                                                shape = RoundedCornerShape(18.dp),
                                                 color = if (autoBackupInterval == interval) FieldMindTheme.colors.positive.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                                 border = if (autoBackupInterval == interval) BorderStroke(1.5.dp, FieldMindTheme.colors.positive) else null,
                                                 modifier = Modifier.weight(1f)
@@ -1583,7 +1583,7 @@ private fun OnboardingBackupOptionsPage(
                 // Local Archive
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -1593,7 +1593,7 @@ private fun OnboardingBackupOptionsPage(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                                     Icon(FieldMindIcons.Export, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -1606,7 +1606,7 @@ private fun OnboardingBackupOptionsPage(
                             if (localArchiveEnabled) {
                                 Surface(
                                     onClick = { /* TODO: Open folder selector */ },
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(20.dp),
                                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                                     modifier = Modifier.fillMaxWidth().padding(start = 52.dp)
                                 ) {
@@ -1627,7 +1627,7 @@ private fun OnboardingBackupOptionsPage(
                                 ) {
                                     Surface(
                                         onClick = { encryptLocal = !encryptLocal },
-                                        shape = RoundedCornerShape(10.dp),
+                                        shape = RoundedCornerShape(18.dp),
                                         color = if (encryptLocal) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         border = if (encryptLocal) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                                     ) {
@@ -1645,13 +1645,13 @@ private fun OnboardingBackupOptionsPage(
                 // Export Options
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                                     Icon(FieldMindIcons.Share, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -1660,7 +1660,7 @@ private fun OnboardingBackupOptionsPage(
                                 }
                                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     listOf("PDF", "CSV", "ZIP", "JSON").forEach { format ->
-                                        Surface(shape = RoundedCornerShape(10.dp), color = MaterialTheme.colorScheme.surfaceContainerLow) {
+                                        Surface(shape = RoundedCornerShape(18.dp), color = MaterialTheme.colorScheme.surfaceContainerLow) {
                                             Text(format, modifier = Modifier.padding(vertical = 8.dp, horizontal = 12.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
                                         }
                                     }
@@ -1676,9 +1676,9 @@ private fun OnboardingBackupOptionsPage(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(16.dp)) { Text("Back") }
+                OutlinedButton(onClick = onBack, shape = RoundedCornerShape(24.dp)) { Text("Back") }
                 Spacer(Modifier.weight(1f))
-                Button(onClick = onNext, shape = RoundedCornerShape(16.dp)) { Text("Finish") }
+                Button(onClick = onNext, shape = RoundedCornerShape(24.dp)) { Text("Finish") }
             }
         }
     }
@@ -1711,7 +1711,7 @@ fun OnboardingBackupPage(
                         Box(
                             Modifier.size(72.dp).background(
                                 Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)),
-                                RoundedCornerShape(24.dp)
+                                RoundedCornerShape(34.dp)
                             ),
                             contentAlignment = Alignment.Center
                         ) {
@@ -1732,12 +1732,12 @@ fun OnboardingBackupPage(
                 features.forEach { (title, desc, icon) ->
                     AnimatedVisibility(visible = showContent, enter = fadeIn(tween(300)) + slideInHorizontally(tween(300), initialOffsetX = { 50 })) {
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             tonalElevation = 0.dp
                         ) {
                             Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Box(Modifier.size(48.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(48.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                                     Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 24.dp)
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -1755,8 +1755,8 @@ fun OnboardingBackupPage(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedButton(onClick = onBack, Modifier.weight(1f), shape = RoundedCornerShape(16.dp)) { Text("Back") }
-                Button(onClick = onNext, Modifier.weight(1f), shape = RoundedCornerShape(16.dp)) { Text("Continue") }
+                OutlinedButton(onClick = onBack, Modifier.weight(1f), shape = RoundedCornerShape(24.dp)) { Text("Back") }
+                Button(onClick = onNext, Modifier.weight(1f), shape = RoundedCornerShape(24.dp)) { Text("Continue") }
             }
         }
     }
@@ -1792,7 +1792,7 @@ fun OnboardingDataToolsPage(
                         Box(
                             Modifier.size(72.dp).background(
                                 Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.tertiary)),
-                                RoundedCornerShape(24.dp)
+                                RoundedCornerShape(34.dp)
                             ),
                             contentAlignment = Alignment.Center
                         ) {
@@ -1815,12 +1815,12 @@ fun OnboardingDataToolsPage(
                     val (title, desc, icon) = info
                     AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                         Card(
-                            shape = RoundedCornerShape(20.dp),
+                            shape = RoundedCornerShape(30.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
                             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                                Box(Modifier.size(44.dp).clip(RoundedCornerShape(14.dp)).background(accent.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(accent.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                                     Icon(icon, null, tint = accent, size = 24.dp)
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -1840,11 +1840,11 @@ fun OnboardingDataToolsPage(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        OutlinedButton(onClick = onBack, shape = RoundedCornerShape(16.dp), modifier = Modifier.weight(1f)) { Text("Back") }
+                        OutlinedButton(onClick = onBack, shape = RoundedCornerShape(24.dp), modifier = Modifier.weight(1f)) { Text("Back") }
                         Button(
                             onClick = onFinish,
                             modifier = Modifier.weight(1f).height(48.dp),
-                            shape = RoundedCornerShape(16.dp)
+                            shape = RoundedCornerShape(24.dp)
                         ) { Text("Start exploring") }
                     }
                     Text(
@@ -1894,7 +1894,7 @@ fun OnboardingSpeciesIdPage(
                         Box(
                             Modifier.size(72.dp).background(
                                 Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.tertiary)),
-                                RoundedCornerShape(24.dp)
+                                RoundedCornerShape(34.dp)
                             ),
                             contentAlignment = Alignment.Center
                         ) {
@@ -1909,12 +1909,12 @@ fun OnboardingSpeciesIdPage(
                 // Offline identification card
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                            Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                                 Icon(FieldMindIcons.Nature, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                             }
                             Column(Modifier.weight(1f)) {
@@ -1928,12 +1928,12 @@ fun OnboardingSpeciesIdPage(
                 // Built-in species catalog
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                            Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                                 Icon(FieldMindIcons.Book, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                             }
                             Column(Modifier.weight(1f)) {
@@ -1947,12 +1947,12 @@ fun OnboardingSpeciesIdPage(
                 // Confirmation learning
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                            Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                                 Icon(FieldMindIcons.Streak, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                             }
                             Column(Modifier.weight(1f)) {
@@ -1970,8 +1970,8 @@ fun OnboardingSpeciesIdPage(
                     Modifier.fillMaxWidth().padding(bottom = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    OutlinedButton(onClick = onBack, shape = RoundedCornerShape(16.dp), modifier = Modifier.weight(1f)) { Text("Back") }
-                    Button(onClick = onNext, modifier = Modifier.weight(1f), shape = RoundedCornerShape(16.dp)) { Text("Continue") }
+                    OutlinedButton(onClick = onBack, shape = RoundedCornerShape(24.dp), modifier = Modifier.weight(1f)) { Text("Back") }
+                    Button(onClick = onNext, modifier = Modifier.weight(1f), shape = RoundedCornerShape(24.dp)) { Text("Continue") }
                 }
             }
         }
@@ -2011,7 +2011,7 @@ fun OnboardingFinalPage(
                         Box(
                             Modifier.size(80.dp).background(
                                 Brush.linearGradient(listOf(Color(0xFF43A047), Color(0xFF66BB6A))),
-                                RoundedCornerShape(28.dp)
+                                RoundedCornerShape(36.dp)
                             ),
                             contentAlignment = Alignment.Center
                         ) {
@@ -2031,7 +2031,7 @@ fun OnboardingFinalPage(
                 // Quick start cards
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat) + slideInVertically { it / 4 }) {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -2056,13 +2056,13 @@ fun OnboardingFinalPage(
 
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat) + slideInVertically { it / 5 }) {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                Box(Modifier.size(36.dp).clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(36.dp).clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                                     Icon(FieldMindIcons.Share, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
                                 }
                                 Text("Have existing research?", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -2075,7 +2075,7 @@ fun OnboardingFinalPage(
                             Button(
                                 onClick = { /* TODO: Open import dialog */ },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(20.dp)
                             ) {
                                 Text("Import Data")
                             }
@@ -2085,13 +2085,13 @@ fun OnboardingFinalPage(
 
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat) + slideInVertically { it / 6 }) {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                Box(Modifier.size(36.dp).clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(36.dp).clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                                     Icon(FieldMindIcons.Info, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
                                 }
                                 Text("Your data stays on this device", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -2115,7 +2115,7 @@ fun OnboardingFinalPage(
                     Button(
                         onClick = onFinish,
                         modifier = Modifier.fillMaxWidth().height(54.dp),
-                        shape = RoundedCornerShape(18.dp)
+                        shape = RoundedCornerShape(28.dp)
                     ) {
                         Text("Start exploring!", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
                     }

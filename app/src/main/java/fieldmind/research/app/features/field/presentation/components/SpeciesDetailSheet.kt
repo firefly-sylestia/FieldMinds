@@ -50,7 +50,7 @@ fun SpeciesDetailSheet(
             // Sheet content
             Surface(
                 modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+                shape = RoundedCornerShape(topStart = 36.dp, topEnd = 40.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 tonalElevation = 4.dp
             ) {
@@ -68,7 +68,7 @@ fun SpeciesDetailSheet(
                     ) {
                         Box(
                             Modifier.width(40.dp).height(4.dp)
-                                .clip(RoundedCornerShape(2.dp))
+                                .clip(RoundedCornerShape(6.dp))
                                 .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
                         )
                     }
@@ -80,7 +80,7 @@ fun SpeciesDetailSheet(
                         horizontalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         Box(
-                            Modifier.size(56.dp).clip(RoundedCornerShape(18.dp))
+                            Modifier.size(56.dp).clip(RoundedCornerShape(28.dp))
                                 .background(accent.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -89,7 +89,7 @@ fun SpeciesDetailSheet(
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             // Category badge
                             Surface(
-                                shape = RoundedCornerShape(8.dp),
+                                shape = RoundedCornerShape(16.dp),
                                 color = accent.copy(alpha = 0.12f)
                             ) {
                                 Text(
@@ -136,7 +136,7 @@ fun SpeciesDetailSheet(
                     ) {
                         if (record.habitat.isNotBlank()) {
                             Card(
-                                shape = RoundedCornerShape(16.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 modifier = Modifier.weight(1f)
@@ -150,7 +150,7 @@ fun SpeciesDetailSheet(
                         }
                         if (record.diet.isNotBlank()) {
                             Card(
-                                shape = RoundedCornerShape(16.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 modifier = Modifier.weight(1f)
@@ -189,7 +189,7 @@ fun SpeciesDetailSheet(
                     Button(
                         onClick = onDismiss,
                         modifier = Modifier.fillMaxWidth().height(48.dp),
-                        shape = RoundedCornerShape(16.dp)
+                        shape = RoundedCornerShape(24.dp)
                     ) {
                         Text("Close", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
                     }
@@ -225,7 +225,7 @@ fun TaxonomySection(
     if (taxonomyLevels.isEmpty()) return
 
     Card(
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -255,7 +255,7 @@ fun TaxonomySection(
                 ) {
                     // Level label
                     Surface(
-                        shape = RoundedCornerShape(6.dp),
+                        shape = RoundedCornerShape(12.dp),
                         color = colors.observation.copy(alpha = 0.08f)
                     ) {
                         Text(
@@ -303,7 +303,7 @@ fun SpeciesInfoCard(
     val accent = categoryColor(record.category)
 
     Card(
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = colors.observation.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -316,7 +316,7 @@ fun SpeciesInfoCard(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                         .background(accent.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -343,7 +343,7 @@ fun SpeciesInfoCard(
                 // Detail button
                 Surface(
                     onClick = onOpenDetail,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.size(36.dp)
                 ) {
@@ -380,7 +380,7 @@ fun SpeciesInfoCard(
                 ) {
                     if (record.genus.isNotBlank()) {
                         Surface(
-                            shape = RoundedCornerShape(6.dp),
+                            shape = RoundedCornerShape(12.dp),
                             color = colors.info.copy(alpha = 0.1f)
                         ) {
                             Text(
@@ -394,7 +394,7 @@ fun SpeciesInfoCard(
                     }
                     if (record.conservationStatus.isNotBlank()) {
                         Surface(
-                            shape = RoundedCornerShape(6.dp),
+                            shape = RoundedCornerShape(12.dp),
                             color = MaterialTheme.colorScheme.error.copy(alpha = if (record.conservationStatus.contains("Least Concern", ignoreCase = true)) 0.0f else 0.1f)
                         ) {
                             Text(

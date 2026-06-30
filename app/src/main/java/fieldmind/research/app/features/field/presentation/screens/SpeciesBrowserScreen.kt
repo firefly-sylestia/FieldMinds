@@ -178,7 +178,7 @@ fun SpeciesBrowserScreen(
                 Column(Modifier.fillMaxWidth()) {
                     // ── Species Browser Header — matching StandardScreenHeader style ──
                     Surface(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerLow,
                         tonalElevation = 0.dp,
                         modifier = Modifier
@@ -198,7 +198,7 @@ fun SpeciesBrowserScreen(
                             Box(
                                 Modifier
                                     .size(48.dp)
-                                    .clip(RoundedCornerShape(14.dp))
+                                    .clip(RoundedCornerShape(22.dp))
                                     .background(FieldMindTheme.colors.info.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -242,7 +242,7 @@ fun SpeciesBrowserScreen(
                             }
                         },
                         singleLine = true,
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                         ),
@@ -265,7 +265,7 @@ fun SpeciesBrowserScreen(
                                 selected = selectedCategory == null,
                                 onClick = { selectedCategory = null },
                                 label = { Text("All ($totalCount)", fontWeight = FontWeight.SemiBold) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = RoundedCornerShape(30.dp),
                                 leadingIcon = if (selectedCategory == null) {{ Icon(FieldMindIcons.Check, null, size = 16.dp) }} else null
                             )
                             categories.forEach { (cat, count) ->
@@ -274,7 +274,7 @@ fun SpeciesBrowserScreen(
                                     selected = selectedCategory == cat,
                                     onClick = { selectedCategory = if (selectedCategory == cat) null else cat },
                                     label = { Text("$cat ($count)", fontWeight = FontWeight.SemiBold) },
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = RoundedCornerShape(30.dp),
                                     leadingIcon = if (selectedCategory == cat) {{ Icon(FieldMindIcons.Check, null, size = 16.dp, tint = accent) }} else null,
                                     colors = FilterChipDefaults.filterChipColors(
                                         selectedContainerColor = accent.copy(alpha = 0.12f),
@@ -299,7 +299,7 @@ fun SpeciesBrowserScreen(
                                 selected = selectedContinent == null,
                                 onClick = { selectedContinent = null },
                                 label = { Text("All regions", fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.labelSmall) },
-                                shape = RoundedCornerShape(16.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 leadingIcon = if (selectedContinent == null) {{ Icon(FieldMindIcons.Check, null, size = 14.dp) }} else null,
                                 colors = FilterChipDefaults.filterChipColors(
                                     selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
@@ -312,7 +312,7 @@ fun SpeciesBrowserScreen(
                                     selected = isSelected,
                                     onClick = { selectedContinent = if (isSelected) null else c },
                                     label = { Text(c, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal, style = MaterialTheme.typography.labelSmall) },
-                                    shape = RoundedCornerShape(16.dp),
+                                    shape = RoundedCornerShape(24.dp),
                                     leadingIcon = if (isSelected) {{ Icon(FieldMindIcons.Check, null, size = 14.dp) }} else null
                                 )
                             }
@@ -367,7 +367,7 @@ fun SpeciesBrowserScreen(
                         Box {
                             Surface(
                                 onClick = { showSortDropdown = !showSortDropdown },
-                                shape = RoundedCornerShape(10.dp),
+                                shape = RoundedCornerShape(18.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 tonalElevation = 0.dp
                             ) {
@@ -462,7 +462,7 @@ internal fun SpeciesCard(
 
     ClickableCard(
         onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
@@ -477,7 +477,7 @@ internal fun SpeciesCard(
             Box(
                 Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(24.dp))
                     .background(accent.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -515,7 +515,7 @@ internal fun SpeciesCard(
                 ) {
                     // Category tag
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = accent.copy(alpha = 0.1f)
                     ) {
                         Text(
@@ -535,7 +535,7 @@ internal fun SpeciesCard(
                             else -> MaterialTheme.colorScheme.onSurfaceVariant
                         }
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(16.dp),
                             color = statusColor.copy(alpha = 0.12f)
                         ) {
                             Text(
@@ -635,7 +635,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 Surface(
                                     onClick = onBack,
-                                    shape = RoundedCornerShape(14.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                     modifier = Modifier.size(44.dp)
                                 ) {
@@ -654,7 +654,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 // Category badge
                                 Surface(
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(20.dp),
                                     color = accent.copy(alpha = 0.15f)
                                 ) {
                                     Row(
@@ -752,7 +752,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                     ) {
                         if (record.habitat.isNotBlank()) {
                             Card(
-                                shape = RoundedCornerShape(18.dp),
+                                shape = RoundedCornerShape(28.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 modifier = Modifier.weight(1f)
@@ -777,7 +777,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                         }
                         if (record.diet.isNotBlank()) {
                             Card(
-                                shape = RoundedCornerShape(18.dp),
+                                shape = RoundedCornerShape(28.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 modifier = Modifier.weight(1f)
@@ -819,7 +819,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 record.keyFeatures.forEach { feature ->
                                     Surface(
-                                        shape = RoundedCornerShape(12.dp),
+                                        shape = RoundedCornerShape(20.dp),
                                         color = accent.copy(alpha = 0.08f)
                                     ) {
                                         Row(
@@ -858,7 +858,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 record.tags.forEach { tag ->
                                     Surface(
-                                        shape = RoundedCornerShape(10.dp),
+                                        shape = RoundedCornerShape(18.dp),
                                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                                     ) {
                                         Text(
@@ -890,7 +890,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 similarSpecies.forEach { similar ->
                                     Card(
-                                        shape = RoundedCornerShape(16.dp),
+                                        shape = RoundedCornerShape(24.dp),
                                         colors = CardDefaults.cardColors(
                                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                                         ),
@@ -907,7 +907,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                                             Box(
                                                 Modifier
                                                     .size(40.dp)
-                                                    .clip(RoundedCornerShape(12.dp))
+                                                    .clip(RoundedCornerShape(20.dp))
                                                     .background(categoryColor(similar.category).copy(alpha = 0.1f)),
                                                 contentAlignment = Alignment.Center
                                             ) {
@@ -977,7 +977,7 @@ private fun DetailSection(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
@@ -992,7 +992,7 @@ private fun DetailSection(
                 Box(
                     Modifier
                         .size(36.dp)
-                        .clip(RoundedCornerShape(11.dp))
+                        .clip(RoundedCornerShape(18.dp))
                         .background(accent.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {

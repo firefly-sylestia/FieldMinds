@@ -111,7 +111,7 @@ fun FieldMindSubNavBar(
     ) {
         // Pill container
         Surface(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
             tonalElevation = 0.dp,
             shadowElevation = 0.dp
@@ -137,7 +137,7 @@ fun FieldMindSubNavBar(
                                 onTabSelected(index)
                             }
                         },
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         color = if (selected)
                             MaterialTheme.colorScheme.primaryContainer
                         else
@@ -244,7 +244,7 @@ fun OptionPickerDialog(
                 .fillMaxWidth(0.94f)
                 .wrapContentHeight()
                 .padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
+            shape = RoundedCornerShape(40.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
@@ -255,7 +255,7 @@ fun OptionPickerDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     Box(
-                        Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                        Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                             .background(accentColor.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -281,7 +281,7 @@ fun OptionPickerDialog(
                         leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp)
+                        shape = RoundedCornerShape(28.dp)
                     )
                 }
 
@@ -303,7 +303,7 @@ fun OptionPickerDialog(
                                 onDismiss()
                             }
                         },
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         color = if (isSelected) accentColor.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = if (isSelected) BorderStroke(1.5.dp, accentColor) else null,
                         tonalElevation = 0.dp,
@@ -316,7 +316,7 @@ fun OptionPickerDialog(
                         ) {
                             if (icon != null) {
                                 Box(
-                                    Modifier.size(36.dp).clip(RoundedCornerShape(12.dp))
+                                    Modifier.size(36.dp).clip(RoundedCornerShape(20.dp))
                                         .background(accentColor.copy(alpha = if (isSelected) 0.18f else 0.08f)),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -360,7 +360,7 @@ fun OptionPickerDialog(
                             onDismiss()
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         enabled = selectedMulti.isNotEmpty()
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -399,7 +399,7 @@ fun MultiSelectPickerField(
 
         Surface(
             onClick = { haptics.light(); showDialog = true },
-            shape = RoundedCornerShape(18.dp),
+            shape = RoundedCornerShape(28.dp),
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
             modifier = Modifier.pressScale(scaleDown = 0.97f)
@@ -478,7 +478,7 @@ fun OptionPickerField(
         
         Surface(
             onClick = { haptics.light(); showDialog = true },
-            shape = RoundedCornerShape(18.dp),
+            shape = RoundedCornerShape(28.dp),
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
             modifier = Modifier.pressScale(scaleDown = 0.97f)
@@ -539,7 +539,7 @@ fun FieldScreenHeader(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.6f),
         tonalElevation = 0.dp
     ) {
@@ -552,7 +552,7 @@ fun FieldScreenHeader(
                 Box(
                     Modifier
                         .size(42.dp)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(12.dp)),
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(20.dp)),
                     contentAlignment = Alignment.Center
                 ) { Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp) }
             }
@@ -565,7 +565,7 @@ fun FieldScreenHeader(
             if (actionIcon != null && onAction != null) {
                 Surface(
                     onClick = onAction,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.pressScale(scaleDown = 0.90f)
                 ) {
@@ -622,7 +622,7 @@ fun StandardScreenHeader(
     Surface(
         modifier = modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp
     ) {
@@ -634,7 +634,7 @@ fun StandardScreenHeader(
             Box(
                 Modifier
                     .size(48.dp)
-                    .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), RoundedCornerShape(14.dp)),
+                    .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), RoundedCornerShape(22.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(icon = icon, contentDescription = null, tint = heroColor, size = 26.dp)
@@ -674,7 +674,7 @@ fun BackButton(
     modifier: Modifier = Modifier,
     icon: MaterialSymbolIcon = FieldMindIcons.Back,
     contentDescription: String? = null,
-    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(14.dp),
+    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(22.dp),
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh
 ) {
     Surface(
@@ -819,11 +819,11 @@ fun EntityCard(
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .then(
                 if (selected) Modifier
-                    .border(1.5.dp, accent.copy(alpha = 0.6f), RoundedCornerShape(24.dp))
-                    .background(accent.copy(alpha = 0.06f), RoundedCornerShape(24.dp))
+                    .border(1.5.dp, accent.copy(alpha = 0.6f), RoundedCornerShape(34.dp))
+                    .background(accent.copy(alpha = 0.06f), RoundedCornerShape(34.dp))
                 else Modifier
             ),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -831,7 +831,7 @@ fun EntityCard(
             Box(
                 Modifier
                     .size(42.dp)
-                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(13.dp)),
+                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(20.dp)),
                 contentAlignment = Alignment.Center
             ) { Icon(icon = FieldMindIcons.iconFor(kind), contentDescription = null, tint = accent, size = 22.dp) }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -874,7 +874,7 @@ fun MetricTile(
         modifier = modifier
             .then(if (onClick != null) Modifier.expressivePress(scaleDown = 0.96f) else Modifier)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -905,7 +905,7 @@ fun EmptyState(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainerLow, RoundedCornerShape(24.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerLow, RoundedCornerShape(34.dp))
             .padding(28.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -913,7 +913,7 @@ fun EmptyState(
         Box(
             Modifier
                 .size(56.dp)
-                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(18.dp)),
+                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(28.dp)),
             contentAlignment = Alignment.Center
         ) { Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 28.dp) }
         Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -967,7 +967,7 @@ fun FieldTextField(
             }
         },
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         enabled = enabled
     )
 }
@@ -1073,7 +1073,7 @@ fun NumberField(
                         }
                     },
                     modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(20.dp)
                 ) {
                     Text("−", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 }
@@ -1090,7 +1090,7 @@ fun NumberField(
                     else if (supportingText != null) Text(supportingText)
                 },
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(28.dp),
                 enabled = enabled
             )
 
@@ -1107,7 +1107,7 @@ fun NumberField(
                         }
                     },
                     modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(20.dp)
                 ) {
                     Text("+", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 }
@@ -1127,7 +1127,7 @@ fun NumberField(
                     else if (supportingText != null) Text(supportingText)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(28.dp),
                 enabled = enabled
             )
         }
@@ -1143,7 +1143,7 @@ fun NumberField(
 fun OutlinedSection(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         color = Color.Transparent,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) { Box(Modifier.padding(14.dp)) { content() } }
@@ -1322,7 +1322,7 @@ fun ProtocolStepField(
                 Text(step.instruction, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1352,7 +1352,7 @@ fun ProtocolPicker(
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).wrapContentHeight().padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
+            shape = RoundedCornerShape(40.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -1365,7 +1365,7 @@ fun ProtocolPicker(
                             .fillMaxWidth()
                             .expressivePress(scaleDown = 0.97f)
                             .clickable { onSelect(protocol) },
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh
                         ),
@@ -1373,7 +1373,7 @@ fun ProtocolPicker(
                         border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                     ) {
                         Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Box(Modifier.size(42.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(42.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                 Icon(protocol.icon, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                             }
                             Column(Modifier.weight(1f)) {
@@ -1438,7 +1438,7 @@ fun NoteComposerCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1446,7 +1446,7 @@ fun NoteComposerCard(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                         .background(FieldMindTheme.colors.note.cardBg(FieldMindTheme.colors.isDark)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Note, null, tint = FieldMindTheme.colors.note, size = 22.dp) }
@@ -1455,7 +1455,7 @@ fun NoteComposerCard(
                         Text("New note", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                         Surface(
                             onClick = { haptics.light(); showTemplates = !showTemplates },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(18.dp),
                             color = if (showTemplates) FieldMindTheme.colors.warning.cardBg(FieldMindTheme.colors.isDark) else MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1503,7 +1503,7 @@ fun NoteComposerCard(
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 6,
                 placeholder = { Text("Start writing your note...", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
-                shape = RoundedCornerShape(18.dp)
+                shape = RoundedCornerShape(28.dp)
             )
 
             // Category & save row
@@ -1515,7 +1515,7 @@ fun NoteComposerCard(
                 ChoiceChips(categories, category, modifier = Modifier.weight(1f), onSelected = onCategoryChange)
                 Button(
                     onClick = { haptics.confirm(); onSave() },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     enabled = saveEnabled && (title.isNotBlank() || body.isNotBlank())
                 ) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp)

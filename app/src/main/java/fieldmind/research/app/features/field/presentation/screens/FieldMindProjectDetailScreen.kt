@@ -240,7 +240,7 @@ fun ProjectDetailScreen(
         // ════════════════════════════════════════════════════════════════
         item {
             Surface(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp,
                 modifier = Modifier.fillMaxWidth()
@@ -254,7 +254,7 @@ fun ProjectDetailScreen(
                     ) {
                         Surface(
                             onClick = onBack,
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.size(40.dp)
                         ) {
@@ -265,7 +265,7 @@ fun ProjectDetailScreen(
                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Surface(
                                 onClick = { haptics.light(); showSearch = !showSearch },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = if (showSearch) colors.project.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.size(40.dp)
                             ) {
@@ -276,7 +276,7 @@ fun ProjectDetailScreen(
                             }
                             Surface(
                                 onClick = { haptics.light(); showCreateSheet = true },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(40.dp)
                             ) {
@@ -286,7 +286,7 @@ fun ProjectDetailScreen(
                             }
                             Surface(
                                 onClick = { showRenameDialog = true },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.size(40.dp)
                             ) {
@@ -300,7 +300,7 @@ fun ProjectDetailScreen(
                     // Project identity — refined with Geom font
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                         Box(
-                            Modifier.size(52.dp).clip(RoundedCornerShape(16.dp))
+                            Modifier.size(52.dp).clip(RoundedCornerShape(24.dp))
                                 .background(colors.project.copy(alpha = 0.16f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -341,7 +341,7 @@ fun ProjectDetailScreen(
                             placeholder = { Text("Search all project records…") },
                             leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) },
                             singleLine = true,
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -357,7 +357,7 @@ fun ProjectDetailScreen(
         // ════════════════════════════════════════════════════════════════
         item {
             Card(
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(30.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -393,7 +393,7 @@ fun ProjectDetailScreen(
                     val isSelected = selectedTab == tab
                     Surface(
                         onClick = { haptics.light(); selectedTab = tab; searchQuery = "" },
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(20.dp),
                         color = if (isSelected) colors.project.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = if (isSelected) androidx.compose.foundation.BorderStroke(1.dp, colors.project.copy(alpha = 0.4f)) else null,
                         modifier = Modifier.weight(1f)
@@ -462,7 +462,7 @@ fun ProjectDetailScreen(
                     OutlinedButton(
                         onClick = { onNavigate?.invoke(FieldMindScreen.Tasks) },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp)
+                        shape = RoundedCornerShape(24.dp)
                     ) {
                         Icon(MaterialSymbolIcon("checklist"), null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
@@ -480,7 +480,7 @@ fun ProjectDetailScreen(
             Button(
                 onClick = { haptics.light(); showCreateSheet = true },
                 modifier = Modifier.fillMaxWidth().height(52.dp),
-                shape = RoundedCornerShape(18.dp)
+                shape = RoundedCornerShape(28.dp)
             ) {
                 Icon(MaterialSymbolIcon("add"), null, size = 20.dp)
                 Spacer(Modifier.size(8.dp))
@@ -531,7 +531,7 @@ fun ProjectDetailScreen(
                     TextButton(
                         onClick = { showRenameDialog = false; onOpenRelations?.invoke() },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(20.dp)
                     ) {
                         Icon(FieldMindIcons.Search, null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
@@ -540,7 +540,7 @@ fun ProjectDetailScreen(
                     TextButton(
                         onClick = { showRenameDialog = false; onOpenSettings?.invoke(project.id) },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(20.dp)
                     ) {
                         Icon(FieldMindIcons.Settings, null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
@@ -550,7 +550,7 @@ fun ProjectDetailScreen(
                     TextButton(
                         onClick = { showRenameDialog = false },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(20.dp)
                     ) {
                         Icon(MaterialSymbolIcon("close"), null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
@@ -636,7 +636,7 @@ private fun FeedItemCard(item: FeedItem, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { haptics.light(); onClick() },
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -648,7 +648,7 @@ private fun FeedItemCard(item: FeedItem, onClick: () -> Unit) {
             ) {
                 // Kind icon
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                         .background(item.accentColor.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -684,7 +684,7 @@ private fun FeedItemCard(item: FeedItem, onClick: () -> Unit) {
                     if (item.tags.isNotEmpty()) {
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             item.tags.take(4).forEach { tag ->
-                                Surface(shape = RoundedCornerShape(6.dp), color = item.accentColor.copy(alpha = 0.1f)) {
+                                Surface(shape = RoundedCornerShape(12.dp), color = item.accentColor.copy(alpha = 0.1f)) {
                                     Text(tag, style = MaterialTheme.typography.labelSmall, color = item.accentColor, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
                                 }
                             }
@@ -722,7 +722,7 @@ private fun ProjectCreateSheetV2(
             // Sheet
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+                shape = RoundedCornerShape(topStart = 36.dp, topEnd = 40.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 tonalElevation = 4.dp,
                 shadowElevation = 8.dp
@@ -733,7 +733,7 @@ private fun ProjectCreateSheetV2(
                 ) {
                     // Handle
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Box(Modifier.width(40.dp).height(4.dp).clip(RoundedCornerShape(2.dp))
+                        Box(Modifier.width(40.dp).height(4.dp).clip(RoundedCornerShape(6.dp))
                             .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)))
                     }
                     // Header
@@ -793,12 +793,12 @@ private fun CreateOptionRow(icon: MaterialSymbolIcon, label: String, subtitle: S
     val haptics = rememberFieldMindHaptics()
     Surface(
         onClick = { haptics.light(); onClick() },
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         color = accent.copy(alpha = 0.06f),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(icon, null, tint = accent, size = 22.dp)
             }
             Column(Modifier.weight(1f)) {
@@ -823,7 +823,7 @@ internal fun StatusBadge(status: String) {
         "Complete" -> colors.observation
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
-    Surface(shape = RoundedCornerShape(8.dp), color = color.copy(alpha = 0.12f), tonalElevation = 0.dp) {
+    Surface(shape = RoundedCornerShape(16.dp), color = color.copy(alpha = 0.12f), tonalElevation = 0.dp) {
         Text(status, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = color, modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp))
     }
 }
@@ -883,7 +883,7 @@ private fun NewTaskDialog(viewModel: FieldMindViewModel, projectId: Long, onDism
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 listOf("Low", "Medium", "High").forEach { level ->
                     val isSelected = priority == level; val accent = priorityColor[level] ?: colors.positive
-                    Surface(onClick = { haptics.light(); priority = level }, shape = RoundedCornerShape(14.dp), color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh, border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null, modifier = Modifier.weight(1f)) {
+                    Surface(onClick = { haptics.light(); priority = level }, shape = RoundedCornerShape(22.dp), color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh, border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null, modifier = Modifier.weight(1f)) {
                         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Box(modifier = Modifier.size(18.dp).clip(CircleShape).background(if (isSelected) accent else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) { if (isSelected) Box(Modifier.size(8.dp).clip(CircleShape).background(accent)) }
                             Text(level, style = MaterialTheme.typography.labelMedium, fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal, color = if (isSelected) accent else MaterialTheme.colorScheme.onSurfaceVariant)
@@ -925,7 +925,7 @@ private fun NewAttachmentDialog(viewModel: FieldMindViewModel, onDismiss: () -> 
             }
         }
         if (capturedUri != null) {
-            Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
                 Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Icon(MaterialSymbolIcon("check_circle"), null, tint = colors.positive, size = 24.dp)
                     Column(Modifier.weight(1f)) { Text("$capturedType attached", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold); Text(capturedUri?.substringAfterLast("/")?.take(40) ?: "", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis) }
@@ -938,9 +938,9 @@ private fun NewAttachmentDialog(viewModel: FieldMindViewModel, onDismiss: () -> 
 
 @Composable
 private fun AttachmentTypeButton(label: String, icon: MaterialSymbolIcon, accent: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(modifier = modifier.clickable(onClick = onClick), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = accent.copy(alpha = 0.10f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(modifier = modifier.clickable(onClick = onClick), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = accent.copy(alpha = 0.10f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.fillMaxWidth().padding(vertical = 16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(icon, null, tint = accent, size = 22.dp) }
+            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(icon, null, tint = accent, size = 22.dp) }
             Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = accent)
         }
     }
@@ -963,8 +963,8 @@ private fun NewFolderDialog(viewModel: FieldMindViewModel, projectId: Long, onDi
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 colorOptions.forEach { (colorLong, _) ->
                     val isSelected = selectedColor == colorLong; val color = Color(colorLong)
-                    val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(14.dp)) else Modifier
-                    Box(modifier = Modifier.size(48.dp).clip(RoundedCornerShape(14.dp)).background(color).then(borderMod).clickable { haptics.light(); selectedColor = colorLong }, contentAlignment = Alignment.Center) { if (isSelected) Icon(MaterialSymbolIcon("check"), null, tint = Color.White, size = 22.dp) }
+                    val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(22.dp)) else Modifier
+                    Box(modifier = Modifier.size(48.dp).clip(RoundedCornerShape(22.dp)).background(color).then(borderMod).clickable { haptics.light(); selectedColor = colorLong }, contentAlignment = Alignment.Center) { if (isSelected) Icon(MaterialSymbolIcon("check"), null, tint = Color.White, size = 22.dp) }
                 }
             }
         }
@@ -982,17 +982,17 @@ private fun <T> EntityPickerDialog(
     itemSecondaryText: @Composable (T) -> String, onSelect: (T) -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-        Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = 8.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)) {
+        Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = 8.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)) {
             Column(modifier = Modifier.fillMaxWidth().heightIn(max = 420.dp).padding(top = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 16.dp))
-                OutlinedTextField(value = searchQuery, onValueChange = onSearchChange, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), placeholder = { Text("Search...") }, leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) }, singleLine = true, shape = RoundedCornerShape(14.dp), colors = OutlinedTextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh, unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh))
+                OutlinedTextField(value = searchQuery, onValueChange = onSearchChange, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), placeholder = { Text("Search...") }, leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) }, singleLine = true, shape = RoundedCornerShape(22.dp), colors = OutlinedTextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh, unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh))
                 if (items.isEmpty()) { Box(Modifier.fillMaxWidth().height(100.dp), contentAlignment = Alignment.Center) { Text("No items found", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) } }
                 else {
                     LazyColumn(modifier = Modifier.fillMaxWidth().weight(1f), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         items(items) { item ->
-                            Surface(onClick = { onSelect(item) }, shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+                            Surface(onClick = { onSelect(item) }, shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
                                 Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                    Box(Modifier.size(32.dp).clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) { itemIcon(item) }
+                                    Box(Modifier.size(32.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) { itemIcon(item) }
                                     Column(Modifier.weight(1f)) { Text(itemPrimaryText(item), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis); Text(itemSecondaryText(item), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                                 }
                             }
@@ -1017,13 +1017,13 @@ private fun ProjectEntityCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.size(36.dp).clip(RoundedCornerShape(10.dp)).background(accentColor.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(36.dp).clip(RoundedCornerShape(18.dp)).background(accentColor.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(
                         when (kind) {
                             "observation" -> FieldMindIcons.Observation; "note" -> MaterialSymbolIcon("edit_note")
@@ -1041,7 +1041,7 @@ private fun ProjectEntityCard(
             if (tags.isNotEmpty()) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     tags.take(4).forEach { tag ->
-                        Surface(shape = RoundedCornerShape(6.dp), color = accentColor.copy(alpha = 0.1f)) {
+                        Surface(shape = RoundedCornerShape(12.dp), color = accentColor.copy(alpha = 0.1f)) {
                             Text(tag, style = MaterialTheme.typography.labelSmall, color = accentColor, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
                         }
                     }

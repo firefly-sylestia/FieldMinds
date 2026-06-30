@@ -221,7 +221,7 @@ fun QuestionDetailScreen(
                 ) {
                     // Status badge
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = statusColor.copy(alpha = 0.12f)
                     ) {
                         Row(
@@ -252,7 +252,7 @@ fun QuestionDetailScreen(
 
                     // Priority badge
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = priorityColor.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -267,7 +267,7 @@ fun QuestionDetailScreen(
 
                     // Category badge
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                     ) {
                         Text(
@@ -327,7 +327,7 @@ fun QuestionDetailScreen(
                         linkedObservations.forEach { obs ->
                             Surface(
                                 onClick = { onOpenDetail("observation", obs.id) },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -337,7 +337,7 @@ fun QuestionDetailScreen(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(8.dp))
+                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -373,7 +373,7 @@ fun QuestionDetailScreen(
                 Spacer(Modifier.size(8.dp))
                 OutlinedButton(
                     onClick = { showObservationPicker = true },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -403,7 +403,7 @@ fun QuestionDetailScreen(
                         linkedSources.forEach { src ->
                             Surface(
                                 onClick = { onOpenDetail("source", src.id) },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -413,7 +413,7 @@ fun QuestionDetailScreen(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(8.dp))
+                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                             .background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -450,7 +450,7 @@ fun QuestionDetailScreen(
                 Spacer(Modifier.size(8.dp))
                 OutlinedButton(
                     onClick = { showSourcePicker = true },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -482,7 +482,7 @@ fun QuestionDetailScreen(
                     },
                     minLines = 3,
                     maxLines = 6,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -520,7 +520,7 @@ fun QuestionDetailScreen(
                         }
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Surface(
-                                shape = RoundedCornerShape(8.dp),
+                                shape = RoundedCornerShape(16.dp),
                                 color = confColor.copy(alpha = 0.12f)
                             ) {
                                 Row(
@@ -554,7 +554,7 @@ fun QuestionDetailScreen(
                                 confidenceLevel = question.confidence
                                 showAnswerEditor = true
                             },
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(20.dp)
                         ) {
                             Icon(MaterialSymbolIcon("edit"), null, size = 16.dp)
                             Spacer(Modifier.size(6.dp))
@@ -577,7 +577,7 @@ fun QuestionDetailScreen(
                             },
                             minLines = 3,
                             maxLines = 6,
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -633,7 +633,7 @@ fun QuestionDetailScreen(
                         // Confidence visual indicator
                         LinearProgressIndicator(
                             progress = { animatedConfidence },
-                            modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
+                            modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)),
                             color = when {
                                 confidenceLevel >= 80 -> FieldMindTheme.colors.positive
                                 confidenceLevel >= 50 -> FieldMindTheme.colors.warning
@@ -651,7 +651,7 @@ fun QuestionDetailScreen(
                                         answerText = question.answer
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(14.dp)
+                                    shape = RoundedCornerShape(22.dp)
                                 ) {
                                     Text("Cancel")
                                 }
@@ -663,7 +663,7 @@ fun QuestionDetailScreen(
                                     showAnswerEditor = false
                                 },
                                 modifier = if (question.answer.isNotBlank()) Modifier.weight(1f) else Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 enabled = answerText.isNotBlank()
                             ) {
                                 Icon(MaterialSymbolIcon("save"), null, size = 16.dp)
@@ -792,7 +792,7 @@ private fun <T> EntityPickerDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             modifier = Modifier
@@ -824,7 +824,7 @@ private fun <T> EntityPickerDialog(
                     placeholder = { Text("Search...") },
                     leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) },
                     singleLine = true,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -855,7 +855,7 @@ private fun <T> EntityPickerDialog(
                         items(items) { item ->
                             Surface(
                                 onClick = { onSelect(item) },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh
                             ) {
                                 Row(
@@ -868,7 +868,7 @@ private fun <T> EntityPickerDialog(
                                     Box(
                                         Modifier
                                             .size(32.dp)
-                                            .clip(RoundedCornerShape(8.dp))
+                                            .clip(RoundedCornerShape(16.dp))
                                             .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -926,7 +926,7 @@ private fun HypothesisMiniCard(
 
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -982,7 +982,7 @@ private fun SectionCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -995,7 +995,7 @@ private fun SectionCard(
                 Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                 if (badge != null) {
                     Surface(
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(18.dp),
                         color = FieldMindTheme.colors.hypothesis.copy(alpha = 0.12f)
                     ) {
                         Text(

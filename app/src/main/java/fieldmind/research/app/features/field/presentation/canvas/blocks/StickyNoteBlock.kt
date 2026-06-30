@@ -112,7 +112,7 @@ fun StickyNoteBlock(
             }
             .shadow(
                 elevation = elevation.dp,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 ambientColor = Color(0x40000000),
                 spotColor = Color(0x28000000),
                 clip = false
@@ -125,7 +125,7 @@ fun StickyNoteBlock(
                     .fillMaxWidth()
                     .background(
                         bgColor.copy(alpha = 0.3f),
-                        shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 20.dp)
                     )
                     .padding(horizontal = 8.dp, vertical = 2.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -175,7 +175,7 @@ fun StickyNoteBlock(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             color = bgColor,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(20.dp),
             tonalElevation = 0.dp
         ) {
             // ── Text editor ──

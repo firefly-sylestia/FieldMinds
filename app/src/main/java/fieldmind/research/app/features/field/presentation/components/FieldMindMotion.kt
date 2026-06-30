@@ -548,7 +548,7 @@ fun SwipeBackHost(
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(topEnd = 28.dp, bottomEnd = 28.dp),
+                        shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 36.dp),
                         tonalElevation = 3.dp,
                         shadowElevation = 16.dp,
                         border = androidx.compose.foundation.BorderStroke(
@@ -722,7 +722,7 @@ fun SwipeBackHost(
                         .padding(start = 4.dp)
                         .align(Alignment.CenterStart)
                         .size(40.dp)
-                        .clip(RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(20.dp))
                         .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -737,7 +737,7 @@ fun SwipeBackHost(
                         .padding(top = 4.dp)
                         .align(Alignment.TopCenter)
                         .size(40.dp)
-                        .clip(RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(20.dp))
                         .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f)),
                     contentAlignment = Alignment.Center
                 ) {

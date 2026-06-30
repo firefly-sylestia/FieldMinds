@@ -68,7 +68,7 @@ fun TaxonomyPickerDialog(
             modifier = Modifier
                 .fillMaxWidth(0.92f)
                 .fillMaxHeight(0.7f),
-            shape = RoundedCornerShape(28.dp),
+            shape = RoundedCornerShape(36.dp),
             color = MaterialTheme.colorScheme.surface,
             tonalElevation = 4.dp
         ) {
@@ -108,7 +108,7 @@ fun TaxonomyPickerDialog(
                     placeholder = { Text("Search $rankLabel...") },
                     leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary
@@ -166,7 +166,7 @@ fun TaxonomyPickerDialog(
                             onClick = {
                                 selectedValue = option
                             },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (isSelected)
                                 MaterialTheme.colorScheme.primaryContainer
                             else
@@ -216,7 +216,7 @@ fun TaxonomyPickerDialog(
                             onSelected(selectedValue)
                             onDismiss()
                         },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         enabled = selectedValue.isNotBlank()
                     ) {
                         Text("Select $rankLabel")
@@ -246,7 +246,7 @@ fun TaxonTextField(
         placeholder = { Text("Enter $label...") },
         supportingText = supportingText?.let { { Text(it) } },
         modifier = modifier,
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         singleLine = true
     )
 }
@@ -268,7 +268,7 @@ fun TaxonomyPickerField(
 
     Surface(
         onClick = { showPicker = true },
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         color = if (value.isNotBlank())
             MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
         else

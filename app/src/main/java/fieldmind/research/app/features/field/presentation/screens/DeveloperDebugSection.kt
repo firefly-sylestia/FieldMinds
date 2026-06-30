@@ -38,13 +38,13 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 @Composable
 fun GestureThresholdsCard() {
     Card(
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("gesture"), null, tint = FieldMindTheme.colors.hypothesis, size = 18.dp)
                 }
                 Text("Gesture thresholds", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
@@ -73,13 +73,13 @@ fun AnimationStateCard() {
     val reduceMotion = FieldMindMotion.isReduceMotion()
 
     Card(
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("motion_photos_on"), null, tint = FieldMindTheme.colors.observation, size = 18.dp)
                 }
                 Text("Animation state", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
@@ -87,7 +87,7 @@ fun AnimationStateCard() {
 
             // Reduce-motion indicator
             Row(
-                Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(
                     if (reduceMotion) MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f)
                     else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
                 ).padding(12.dp),
@@ -143,13 +143,13 @@ fun AnimationTuningCard(
     val tabStiffness by settings.animTabEntranceStiffness.collectAsState()
 
     Card(
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("tune"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
                 }
                 Text("Animation tuning", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
@@ -280,7 +280,7 @@ fun AnimationTuningCard(
                     settings.setAnimTabEntranceDamping(def.tabEntranceDampingRatio)
                     settings.setAnimTabEntranceStiffness(def.tabEntranceStiffness)
                 },
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -314,13 +314,13 @@ fun TapTestCard() {
     )
 
     Card(
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("touch_app"), null, tint = FieldMindTheme.colors.info, size = 18.dp)
                 }
                 Text("Tap test area", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
@@ -338,7 +338,7 @@ fun TapTestCard() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(24.dp))
                     .background(bgColor)
                     .pointerInput(Unit) {
                         detectTapGestures { offset ->
@@ -403,7 +403,7 @@ private fun ThresholdRow(label: String, value: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
-        Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+        Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
             Text(
                 value,
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
@@ -463,7 +463,7 @@ private fun AnimationPreviewDemo() {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
-            Modifier.size(28.dp).clip(RoundedCornerShape(8.dp))
+            Modifier.size(28.dp).clip(RoundedCornerShape(16.dp))
                 .background(colors.flashcard.copy(alpha = 0.14f)),
             contentAlignment = Alignment.Center
         ) {
@@ -491,7 +491,7 @@ private fun AnimationPreviewDemo() {
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(24.dp))
             .background(
                 Brush.linearGradient(
                     colors = listOf(
@@ -512,7 +512,7 @@ private fun AnimationPreviewDemo() {
                     translationX = offsetXAnim.value
                     translationY = offsetYAnim.value
                 }
-                .clip(RoundedCornerShape(18.dp))
+                .clip(RoundedCornerShape(28.dp))
                 .background(
                     Brush.sweepGradient(
                         colors = listOf(
@@ -553,7 +553,7 @@ private fun AnimationPreviewDemo() {
                 }
             },
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(20.dp),
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
         ) {
             Text("Entrance", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
@@ -570,7 +570,7 @@ private fun AnimationPreviewDemo() {
                 }
             },
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(20.dp),
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
         ) {
             Text("Snap back", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
@@ -591,7 +591,7 @@ private fun AnimationPreviewDemo() {
                 }
             },
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(20.dp),
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
         ) {
             Text("Dismiss", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)

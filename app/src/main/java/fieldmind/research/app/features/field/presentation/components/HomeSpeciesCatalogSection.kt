@@ -45,7 +45,7 @@ fun HomeSpeciesCatalogSection(
 
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -57,7 +57,7 @@ fun HomeSpeciesCatalogSection(
         ) {
             // Icon
             Box(
-                Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                     .background(accentColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -73,7 +73,7 @@ fun HomeSpeciesCatalogSection(
                     Text("Species catalog", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     if (!isLoading) {
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(16.dp),
                             color = accentColor.copy(alpha = 0.1f)
                         ) {
                             Text(
@@ -96,7 +96,7 @@ fun HomeSpeciesCatalogSection(
             // Browse button
             FilledTonalButton(
                 onClick = { onNavigate(FieldMindScreen.SpeciesBrowser) },
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(22.dp),
                 colors = ButtonDefaults.filledTonalButtonColors(
                     containerColor = accentColor.copy(alpha = 0.12f)
                 )

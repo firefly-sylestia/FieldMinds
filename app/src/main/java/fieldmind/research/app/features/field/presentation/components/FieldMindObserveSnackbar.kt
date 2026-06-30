@@ -178,7 +178,7 @@ fun FieldMindSnackbarOverlay(
                     .fillMaxWidth()
                     .offset { IntOffset(offsetX.toInt(), 0) }
                     .graphicsLayer { scaleX = scale; scaleY = scale }
-                    .shadow(12.dp, RoundedCornerShape(20.dp))
+                    .shadow(12.dp, RoundedCornerShape(30.dp))
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
@@ -194,7 +194,7 @@ fun FieldMindSnackbarOverlay(
                             }
                         )
                     },
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(30.dp),
                 color = bgColor,
                 tonalElevation = 6.dp
             ) {

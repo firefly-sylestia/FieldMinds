@@ -61,7 +61,7 @@ fun CompletenessIndicator(observation: ObservationEntity) {
     val completenessPercent = (completedCount * 100) / checks.size
 
     Card(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f))
     ) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -76,12 +76,12 @@ fun CompletenessIndicator(observation: ObservationEntity) {
             }
             LinearProgressIndicator(
                 progress = { completenessPercent / 100f },
-                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp))
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp))
             )
             LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 items(checks) { (label, completed) ->
                     Box(
-                        Modifier.clip(RoundedCornerShape(6.dp))
+                        Modifier.clip(RoundedCornerShape(12.dp))
                             .background(
                                 if (completed) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                                 else MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)
@@ -115,7 +115,7 @@ fun BulkSelectionToolbar(
 ) {
     AnimatedVisibility(visible = selectedCount > 0, enter = slideInVertically(), exit = slideOutVertically()) {
         Card(
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(30.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -143,7 +143,7 @@ fun BulkSelectionToolbar(
                         FilledTonalButton(
                             onClick = action,
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(20.dp)
                         ) {
                             Icon(icon, null, size = 16.dp)
                             Spacer(Modifier.width(4.dp))
@@ -243,7 +243,7 @@ fun EvidenceGridCard(
     onClick: () -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
             else MaterialTheme.colorScheme.surfaceContainerLow

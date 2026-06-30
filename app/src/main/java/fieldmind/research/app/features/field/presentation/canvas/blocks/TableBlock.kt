@@ -359,7 +359,7 @@ private fun TableToolbar(
     onExportMarkdown: () -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         shadowElevation = 4.dp,
         modifier = Modifier

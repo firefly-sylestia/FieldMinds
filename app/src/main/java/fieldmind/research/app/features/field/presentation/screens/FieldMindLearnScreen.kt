@@ -97,7 +97,7 @@ fun FieldMindLearnScreen(
                 subtitle = "Discover resources matched to your research journey.",
                 icon = FieldMindIcons.School,
                 trailing = {
-                    BackButton(onClick = onBack, shape = RoundedCornerShape(12.dp), containerColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.6f), contentDescription = "Back")
+                    BackButton(onClick = onBack, shape = RoundedCornerShape(20.dp), containerColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.6f), contentDescription = "Back")
                 }
             )
         }
@@ -155,7 +155,7 @@ private fun NextStepHero(
     onOpenReader: (String, String) -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -172,7 +172,7 @@ private fun NextStepHero(
                 Box(
                     Modifier
                         .size(52.dp)
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(24.dp))
                         .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -209,7 +209,7 @@ private fun NextStepHero(
             // Personalized badge
             if (signals.isNotBlank()) {
                 Surface(
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(18.dp),
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.10f)
                 ) {
                     Row(
@@ -235,7 +235,7 @@ private fun NextStepHero(
             // CTA button
             Button(
                 onClick = { onOpenReader(milestone.resource.url, milestone.resource.title) },
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(22.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.15f),
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -265,7 +265,7 @@ private fun ActivityRecommendationCard(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -281,7 +281,7 @@ private fun ActivityRecommendationCard(
             Box(
                 Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(22.dp))
                     .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -307,7 +307,7 @@ private fun ActivityRecommendationCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Surface(
-                        shape = RoundedCornerShape(6.dp),
+                        shape = RoundedCornerShape(12.dp),
                         color = accent.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -356,7 +356,7 @@ private fun LearnCategoryCardCompact(
         modifier = Modifier
             .fillMaxWidth()
             ,
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -381,7 +381,7 @@ private fun LearnCategoryCardCompact(
                         .size(36.dp)
                         .background(
                             accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f),
-                            RoundedCornerShape(11.dp)
+                            RoundedCornerShape(18.dp)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -412,7 +412,7 @@ private fun LearnCategoryCardCompact(
                 // Topic count badge + expand arrow
                 Column(horizontalAlignment = Alignment.End) {
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f)
                     ) {
                         Text(
@@ -467,7 +467,7 @@ private fun TopicCard(
     var topicExpanded by rememberSaveable(topic.name) { mutableStateOf(false) }
 
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.7f)
     ) {
         Column(
@@ -485,7 +485,7 @@ private fun TopicCard(
                 Box(
                     Modifier
                         .size(26.dp)
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(16.dp))
                         .background(accent.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -503,7 +503,7 @@ private fun TopicCard(
                     modifier = Modifier.weight(1f)
                 )
                 Surface(
-                    shape = RoundedCornerShape(6.dp),
+                    shape = RoundedCornerShape(12.dp),
                     color = accent.copy(alpha = 0.10f)
                 ) {
                     Text(
@@ -551,7 +551,7 @@ private fun ResourceRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(20.dp))
             .clickable(onClick = onClick)
             .padding(horizontal = 6.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,

@@ -115,7 +115,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         // ── Custom header: back button + title/subtitle ──
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(30.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f),
             tonalElevation = 0.dp
         ) {
@@ -126,7 +126,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             ) {
                 Surface(
                     onClick = onBack,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.size(44.dp)
                 ) {
@@ -168,7 +168,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val isSelected = selectedIcon == icon
                         Surface(
                             onClick = { haptics.light(); selectedIcon = icon },
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             color = if (isSelected) FieldMindTheme.colors.project.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) androidx.compose.foundation.BorderStroke(2.dp, FieldMindTheme.colors.project) else null,
                             modifier = Modifier.size(60.dp)
@@ -187,11 +187,11 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     colorOptions.forEach { (colorLong, color) ->
                         val isSelected = selectedColor == colorLong
-                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(16.dp)) else Modifier
+                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(24.dp)) else Modifier
                         Box(
                             modifier = Modifier
                                 .size(52.dp)
-                                .clip(RoundedCornerShape(16.dp))
+                                .clip(RoundedCornerShape(24.dp))
                                 .background(color)
                                 .then(borderMod)
                                 .clickable { haptics.light(); selectedColor = colorLong },
@@ -210,7 +210,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Text("Template", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Surface(
                     onClick = { haptics.light(); showTemplatePicker = true },
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(
@@ -220,7 +220,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             Box(
-                                Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                                     .background(FieldMindTheme.colors.project.copy(alpha = 0.12f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -242,7 +242,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             Button(
                 onClick = ::save,
                 modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(28.dp),
                 enabled = title.isNotBlank()
             ) {
                 Icon(FieldMindIcons.Project, null, size = 20.dp)
@@ -269,7 +269,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val isSelected = selectedTemplate == template
                         Surface(
                             onClick = { haptics.light(); selectedTemplate = template; showTemplatePicker = false },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (isSelected) FieldMindTheme.colors.project.copy(alpha = 0.10f) else MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(
@@ -374,7 +374,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
                         Surface(
                             onClick = { haptics.light(); priority = level },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
                             modifier = Modifier.weight(1f)
@@ -412,7 +412,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
             Spacer(Modifier.height(8.dp))
 
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(16.dp), enabled = question.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = question.isNotBlank()) {
                 Icon(FieldMindIcons.Question, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             }
         }
@@ -497,12 +497,12 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Text("${confidence.toInt()}%", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
             }
             Slider(confidence, { confidence = it }, valueRange = 0f..100f)
-            LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)), color = MaterialTheme.colorScheme.primary)
+            LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = MaterialTheme.colorScheme.primary)
             CollapsibleSection("Advanced options", "Result status tracking", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
                 ChoiceChipsField("Result status", listOf("Unknown", "Supported", "Weakened", "Inconclusive"), resultStatus) { resultStatus = it }
             }
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = prediction.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = prediction.isNotBlank()) {
                 Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create hypothesis")
             }
         }
@@ -582,7 +582,7 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             ChoiceChips(contextPresets, notes) { notes = if (notes.isBlank()) it else "$notes, $it" }
             FieldTextField(notes, { notes = it }, "Notes", minLines = 3)
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = label.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = label.isNotBlank()) {
                 Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save record")
             }
         }
@@ -714,7 +714,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
                         Surface(
                             onClick = { haptics.light(); priority = level },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
                             modifier = Modifier.weight(1f)
@@ -777,7 +777,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val isSelected = reminder == mins
                         Surface(
                             onClick = { haptics.light(); reminder = mins },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(18.dp),
                             color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.weight(1f)
                         ) {
@@ -803,7 +803,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val isSelected = repeatUnit == unit
                         Surface(
                             onClick = { haptics.light(); repeatUnit = unit; repeatInterval = interval },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(18.dp),
                             color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.weight(1f)
                         ) {
@@ -847,7 +847,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                                 checklistItems = checklistItems.toMutableList().also { it[index] = newVal }
                             },
                             placeholder = { Text("Checklist item", style = MaterialTheme.typography.bodySmall) },
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(20.dp),
                             modifier = Modifier.weight(1f),
                             singleLine = true,
                             textStyle = MaterialTheme.typography.bodySmall
@@ -932,7 +932,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             Button(
                 onClick = ::save,
                 modifier = Modifier.fillMaxWidth().height(50.dp),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 enabled = title.isNotBlank()
             ) {
                 Icon(FieldMindIcons.Check, null, size = 20.dp)
@@ -1018,7 +1018,7 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             FieldTextField(limitations, { limitations = it }, "Limitations", minLines = 2)
             FieldTextField(next, { next = it }, "Next steps", minLines = 2)
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = title.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
                 Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Build report")
             }
         }
@@ -1109,7 +1109,7 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 FieldTextField(fieldContext, { fieldContext = it }, "Field context", minLines = 2)
             }
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = subject.isNotBlank() || facts.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = subject.isNotBlank() || facts.isNotBlank()) {
                 Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save observation")
             }
         }
@@ -1185,7 +1185,7 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 FieldTextField(location, { location = it }, "Location", supportingText = "Where was this note taken?")
             }
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(16.dp), enabled = title.isNotBlank() || body.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank() || body.isNotBlank()) {
                 Icon(FieldMindIcons.Note, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             }
         }
@@ -1293,7 +1293,7 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 }
             }
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(16.dp), enabled = title.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
                 Icon(FieldMindIcons.Source, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             }
         }
@@ -1377,7 +1377,7 @@ fun NewAttachmentScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 }
             }
             if (capturedUri != null) {
-                Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = FieldMindTheme.colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = FieldMindTheme.colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(MaterialSymbolIcon("check_circle"), null, tint = FieldMindTheme.colors.positive, size = 24.dp)
                         Column(Modifier.weight(1f)) {
@@ -1397,7 +1397,7 @@ fun NewAttachmentScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         onSaved = { onBack() }
                     )
                 }
-            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = capturedUri != null) {
+            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = capturedUri != null) {
                 Icon(MaterialSymbolIcon("attach_file"), null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Attach")
             }
         }
@@ -1411,12 +1411,12 @@ private fun AttachmentTypeItem(
 ) {
     Card(
         modifier = modifier.clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = accent.copy(alpha = 0.10f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.fillMaxWidth().padding(vertical = 16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(icon, null, tint = accent, size = 22.dp) }
+            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(icon, null, tint = accent, size = 22.dp) }
             Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = accent)
         }
     }
@@ -1480,9 +1480,9 @@ fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     colorOptions.forEach { (colorLong, colorName) ->
                         val isSelected = selectedColor == colorLong
-                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(14.dp)) else Modifier
+                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(22.dp)) else Modifier
                         Box(
-                            modifier = Modifier.size(48.dp).clip(RoundedCornerShape(14.dp)).background(Color(colorLong))
+                            modifier = Modifier.size(48.dp).clip(RoundedCornerShape(22.dp)).background(Color(colorLong))
                                 .then(borderMod)
                                 .clickable { haptics.light(); selectedColor = colorLong },
                             contentAlignment = Alignment.Center
@@ -1504,7 +1504,7 @@ fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         onSaved = { onBack() }
                     )
                 }
-            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = folderName.isNotBlank()) {
+            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = folderName.isNotBlank()) {
                 Icon(MaterialSymbolIcon("folder"), null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create Folder")
             }
         }

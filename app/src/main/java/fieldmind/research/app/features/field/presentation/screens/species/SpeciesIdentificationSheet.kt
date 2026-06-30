@@ -118,7 +118,7 @@ fun SpeciesIdentificationSheet(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 40.dp),
-            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+            shape = RoundedCornerShape(topStart = 36.dp, topEnd = 40.dp),
             color = MaterialTheme.colorScheme.surface,
             tonalElevation = 2.dp
         ) {
@@ -136,7 +136,7 @@ fun SpeciesIdentificationSheet(
                     Box(
                         Modifier
                             .size(40.dp, 4.dp)
-                            .clip(RoundedCornerShape(2.dp))
+                            .clip(RoundedCornerShape(6.dp))
                             .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
                     )
                 }
@@ -146,7 +146,7 @@ fun SpeciesIdentificationSheet(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                     tonalElevation = 0.dp
                 ) {
@@ -158,7 +158,7 @@ fun SpeciesIdentificationSheet(
                         Box(
                             Modifier
                                 .size(48.dp)
-                                .clip(RoundedCornerShape(14.dp))
+                                .clip(RoundedCornerShape(22.dp))
                                 .background(FieldMindTheme.colors.observation.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -274,7 +274,7 @@ fun SpeciesIdentificationSheet(
                                 Spacer(Modifier.height(16.dp))
                                 OutlinedButton(
                                     onClick = { searchMode = true },
-                                    shape = RoundedCornerShape(14.dp)
+                                    shape = RoundedCornerShape(22.dp)
                                 ) {
                                     Icon(FieldMindIcons.Search, null, size = 18.dp)
                                     Spacer(Modifier.size(8.dp))
@@ -294,7 +294,7 @@ fun SpeciesIdentificationSheet(
                                 // Info header
                                 item {
                                     Surface(
-                                        shape = RoundedCornerShape(14.dp),
+                                        shape = RoundedCornerShape(22.dp),
                                         color = FieldMindTheme.colors.info.copy(alpha = 0.1f)
                                     ) {
                                         Row(
@@ -349,7 +349,7 @@ fun SpeciesIdentificationSheet(
                                     Spacer(Modifier.height(8.dp))
                                     Surface(
                                         onClick = { searchMode = true },
-                                        shape = RoundedCornerShape(16.dp),
+                                        shape = RoundedCornerShape(24.dp),
                                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                                     ) {
                                         Row(
@@ -408,7 +408,7 @@ private fun SpeciesMatchCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onSelect),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected)
                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
@@ -427,7 +427,7 @@ private fun SpeciesMatchCard(
                 Box(
                     Modifier
                         .size(56.dp)
-                        .clip(RoundedCornerShape(14.dp))
+                        .clip(RoundedCornerShape(22.dp))
                         .background(categoryColor.copy(alpha = if (colors.isDark) 0.22f else 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -491,7 +491,7 @@ private fun SpeciesMatchCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(4.dp)
-                    .clip(RoundedCornerShape(2.dp)),
+                    .clip(RoundedCornerShape(6.dp)),
                 color = confidenceColor,
                 trackColor = confidenceColor.copy(alpha = 0.12f)
             )
@@ -510,7 +510,7 @@ private fun SpeciesMatchCard(
                 Button(
                     onClick = onConfirm,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = categoryColor
                     )
@@ -555,7 +555,7 @@ private fun SearchModeContent(
                 leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(18.dp)
+                shape = RoundedCornerShape(28.dp)
             )
         }
 
@@ -589,7 +589,7 @@ private fun SearchModeContent(
         if (filtered.isEmpty()) {
             item {
                 Surface(
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerLow
                 ) {
                     Column(
@@ -624,7 +624,7 @@ private fun SpeciesSearchResultCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onSelect),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
@@ -638,7 +638,7 @@ private fun SpeciesSearchResultCard(
             Box(
                 Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(20.dp))
                     .background(color.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -712,7 +712,7 @@ private fun LoadingContent() {
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .height(4.dp)
-                .clip(RoundedCornerShape(2.dp))
+                .clip(RoundedCornerShape(6.dp))
         )
     }
 }
@@ -744,10 +744,10 @@ private fun ErrorContent(message: String, onDismiss: () -> Unit) {
             textAlign = TextAlign.Center
         )
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            OutlinedButton(onClick = onDismiss, shape = RoundedCornerShape(14.dp)) {
+            OutlinedButton(onClick = onDismiss, shape = RoundedCornerShape(22.dp)) {
                 Text("Close")
             }
-            Button(onClick = { /* retry with different image */ }, shape = RoundedCornerShape(14.dp)) {
+            Button(onClick = { /* retry with different image */ }, shape = RoundedCornerShape(22.dp)) {
                 Text("Try again")
             }
         }

@@ -42,7 +42,7 @@ fun HeroStatusCard(
     val totalRecords = entityCounts.values.sum()
 
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -68,7 +68,7 @@ fun HeroStatusCard(
                 Box(
                     Modifier
                         .size(52.dp)
-                        .clip(RoundedCornerShape(18.dp))
+                        .clip(RoundedCornerShape(28.dp))
                         .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -145,7 +145,7 @@ fun HeroStatusCard(
                     Column(
                         Modifier
                             .weight(1f)
-                            .clip(RoundedCornerShape(14.dp))
+                            .clip(RoundedCornerShape(22.dp))
                             .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.4f))
                             .padding(vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -186,7 +186,7 @@ fun TabPillSelector(
     )
 
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp
     ) {
@@ -198,7 +198,7 @@ fun TabPillSelector(
                 val selected = activeTab == tab
                 Surface(
                     onClick = { onTabChange(tab) },
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     color = if (selected) MaterialTheme.colorScheme.primaryContainer
                     else Color.Transparent,
                     tonalElevation = 0.dp
@@ -261,7 +261,7 @@ fun ExportHistoryItemCard(
     }
 
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.clickable { onShare() }
@@ -272,7 +272,7 @@ fun ExportHistoryItemCard(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Box(
-                Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                     .background(formatColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -334,7 +334,7 @@ fun BackupConfirmationDialog(
             confirmButton = {
                 Button(
                     onClick = onConfirm,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     )
@@ -343,7 +343,7 @@ fun BackupConfirmationDialog(
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(28.dp)
+            shape = RoundedCornerShape(36.dp)
         )
     }
 }
@@ -371,13 +371,13 @@ fun ExportConfirmationDialog(
             confirmButton = {
                 Button(
                     onClick = onConfirm,
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(20.dp)
                 ) { Text("Export") }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(28.dp)
+            shape = RoundedCornerShape(36.dp)
         )
     }
 }

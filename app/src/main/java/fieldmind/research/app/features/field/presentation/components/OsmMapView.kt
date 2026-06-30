@@ -120,7 +120,7 @@ fun OsmMapView(
         modifier = modifier
             .fillMaxWidth()
             .height(height)
-            .background(MaterialTheme.colorScheme.surfaceContainerHighest, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest, RoundedCornerShape(24.dp))
     ) {
         AndroidView(
             factory = { ctx ->
@@ -202,7 +202,7 @@ fun OsmMapView(
         if (isOffline) {
             Surface(
                 modifier = Modifier.align(Alignment.TopStart).padding(8.dp),
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(16.dp),
                 color = MaterialTheme.colorScheme.errorContainer
             ) {
                 Text(

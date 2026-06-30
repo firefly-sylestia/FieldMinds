@@ -114,7 +114,7 @@ fun FigureGalleryView(
                     // Count badge
                     if (items.isNotEmpty()) {
                         Surface(
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(18.dp),
                             color = MaterialTheme.colorScheme.primaryContainer
                         ) {
                             Text(
@@ -192,7 +192,7 @@ private fun FigureGalleryCard(
 
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         shadowElevation = 2.dp,
         modifier = Modifier.expressivePress(scaleDown = 0.97f)
@@ -205,7 +205,7 @@ private fun FigureGalleryCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1.33f)
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 24.dp))
                     .background(
                         if (hasUri) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
                         else MaterialTheme.colorScheme.surfaceContainerHigh
@@ -256,7 +256,7 @@ private fun FigureGalleryCard(
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(6.dp),
-                    shape = RoundedCornerShape(6.dp),
+                    shape = RoundedCornerShape(12.dp),
                     color = MaterialTheme.colorScheme.secondaryContainer
                 ) {
                     Text(

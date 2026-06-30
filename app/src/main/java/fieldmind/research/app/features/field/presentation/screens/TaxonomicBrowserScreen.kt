@@ -200,7 +200,7 @@ fun TaxonomicBrowserScreen(
                     ) {
                         Surface(
                             onClick = { goUp() },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.size(44.dp)
                         ) {
@@ -247,7 +247,7 @@ fun TaxonomicBrowserScreen(
                                 val accent = levelColor(crumb.level)
                                 Surface(
                                     onClick = { jumpTo(index) },
-                                    shape = RoundedCornerShape(10.dp),
+                                    shape = RoundedCornerShape(18.dp),
                                     color = accent.copy(alpha = 0.1f)
                                 ) {
                                     Row(
@@ -365,7 +365,7 @@ private fun TaxoLevelCard(
 
     ClickableCard(
         onClick = onClick,
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
@@ -380,7 +380,7 @@ private fun TaxoLevelCard(
             Box(
                 Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(22.dp))
                     .background(accent.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {

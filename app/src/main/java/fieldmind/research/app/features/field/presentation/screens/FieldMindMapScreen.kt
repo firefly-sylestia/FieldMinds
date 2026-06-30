@@ -115,7 +115,7 @@ fun MapFieldScreen(
                     ) {
                         Surface(
                             onClick = { onNavigate(FieldMindScreen.Home) },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.size(44.dp)
                         ) { Box(contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Back, null, size = 22.dp) } }
@@ -127,7 +127,7 @@ fun MapFieldScreen(
                         if (points.isNotEmpty()) {
                             Surface(
                                 onClick = { fullScreen = true },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.size(44.dp)
                             ) { Box(contentAlignment = Alignment.Center) { Icon(icon = MaterialSymbolIcon("fullscreen"), contentDescription = "Fullscreen map", size = 22.dp) } }
@@ -259,7 +259,7 @@ private fun FullScreenMapView(
             }
             if (drawingMode != DrawingMode.View) {
                 Surface(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(30.dp),
                     color = MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Text(
@@ -284,7 +284,7 @@ private fun FullScreenMapView(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp),
-            shape = RoundedCornerShape(28.dp),
+            shape = RoundedCornerShape(36.dp),
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             shadowElevation = 8.dp
         ) {
@@ -343,7 +343,7 @@ private fun DrawToolButton(icon: MaterialSymbolIcon, label: String, isActive: Bo
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(24.dp))
             .clickable(onClick = onClick)
             .background(bgColor)
             .padding(horizontal = 12.dp, vertical = 8.dp)
@@ -421,7 +421,7 @@ private fun MapViewTab(
             if (isRecording) {
                 Surface(
                     modifier = Modifier.align(Alignment.TopStart).padding(8.dp),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     color = MaterialTheme.colorScheme.errorContainer
                 ) {
                     Row(
@@ -452,7 +452,7 @@ private fun MapViewTab(
             // Drawing mode chips
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -480,7 +480,7 @@ private fun MapViewTab(
             // Stats card
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -503,7 +503,7 @@ private fun TrackRecordingCard(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = if (isRecording) MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -530,12 +530,12 @@ private fun TrackRecordingCard(
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = onStop, shape = RoundedCornerShape(14.dp), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) { Text("Stop") }
-                    OutlinedButton(onClick = onTogglePause, shape = RoundedCornerShape(14.dp)) { Text(if (currentTrack.isPaused) "Resume" else "Pause") }
+                    Button(onClick = onStop, shape = RoundedCornerShape(22.dp), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) { Text("Stop") }
+                    OutlinedButton(onClick = onTogglePause, shape = RoundedCornerShape(22.dp)) { Text(if (currentTrack.isPaused) "Resume" else "Pause") }
                 }
             } else {
                 Text("Record GPS tracks during your field sessions to map your survey path.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Button(onClick = onStart, shape = RoundedCornerShape(14.dp)) { Icon(FieldMindIcons.Track, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Start recording") }
+                Button(onClick = onStart, shape = RoundedCornerShape(22.dp)) { Icon(FieldMindIcons.Track, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Start recording") }
             }
         }
     }
@@ -561,7 +561,7 @@ private fun OfflineTilesTab(
 
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         item {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Download, null, tint = FieldMindTheme.colors.info, size = 20.dp)
@@ -572,11 +572,11 @@ private fun OfflineTilesTab(
                         Text("Cache: $cacheSize", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("${cachedRegions.size} region${if (cachedRegions.size == 1) "" else "s"}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                    Button(onClick = { showDownloadDialog = true }, shape = RoundedCornerShape(14.dp), enabled = !isDownloading) { Text("Download new region") }
+                    Button(onClick = { showDownloadDialog = true }, shape = RoundedCornerShape(22.dp), enabled = !isDownloading) { Text("Download new region") }
                     if (cachedRegions.isNotEmpty()) {
                         OutlinedButton(onClick = {
                             scope.launch { tileManager.clearAllCaches(); cacheSize = "0 KB" }
-                        }, shape = RoundedCornerShape(14.dp)) { Text("Clear all") }
+                        }, shape = RoundedCornerShape(22.dp)) { Text("Clear all") }
                     }
                 }
             }
@@ -584,7 +584,7 @@ private fun OfflineTilesTab(
         if (cachedRegions.isNotEmpty()) {
             item { Text("Cached regions", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold) }
             items(cachedRegions) { region ->
-                Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                             Text(region.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
@@ -662,7 +662,7 @@ private fun DownloadRegionDialog(
                     }
                     onDismiss()
                 },
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(22.dp),
                 enabled = name.isNotBlank() && latNorth.isNotBlank() && latSouth.isNotBlank() && lonEast.isNotBlank() && lonWest.isNotBlank()
             ) { Text("Download") }
         },
@@ -681,7 +681,7 @@ private fun DrawingsTab(
     val colors = FieldMindTheme.colors
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Shape, null, tint = colors.info, size = 20.dp)
@@ -693,7 +693,7 @@ private fun DrawingsTab(
                         Text("No drawings yet. Use the drawing tools in full-screen map mode to mark sites, transects, and survey boundaries.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     if (overlays.isNotEmpty()) {
-                        OutlinedButton(onClick = onClearAll, shape = RoundedCornerShape(14.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Clear all drawings") }
+                        OutlinedButton(onClick = onClearAll, shape = RoundedCornerShape(22.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Clear all drawings") }
                     }
                 }
             }
@@ -701,7 +701,7 @@ private fun DrawingsTab(
         items(overlays) { overlay ->
             ClickableCard(
                 onClick = { onEditOverlay(overlay) },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(
@@ -750,7 +750,7 @@ private fun TracksTab(
 
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Track, null, tint = colors.info, size = 20.dp)
@@ -763,7 +763,7 @@ private fun TracksTab(
         }
         if (currentTrack != null && isRecording) {
             item {
-                Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))) {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Box(Modifier.size(8.dp).clip(CircleShape).background(MaterialTheme.colorScheme.error))
@@ -775,7 +775,7 @@ private fun TracksTab(
             }
         }
         items(savedTracks.sortedByDescending { it.startedAt }) { track ->
-            Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
@@ -826,7 +826,7 @@ private fun GeofencesTab(
 
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Notifications, null, tint = colors.info, size = 20.dp)
@@ -835,14 +835,14 @@ private fun GeofencesTab(
                     Text("Mark sites and get notified when you arrive. Points drawn on the map are automatically registered as geo-fence zones.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text("${geofenceRegions.size} active region${if (geofenceRegions.size == 1) "" else "s"}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (geofenceRegions.isNotEmpty()) {
-                        OutlinedButton(onClick = { geoFenceReminder.clearAllRegions() }, shape = RoundedCornerShape(14.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Clear all") }
+                        OutlinedButton(onClick = { geoFenceReminder.clearAllRegions() }, shape = RoundedCornerShape(22.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Clear all") }
                     }
                 }
             }
         }
         items(geofenceRegions) { region ->
             Card(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(
@@ -851,7 +851,7 @@ private fun GeofencesTab(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Box(
-                        Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                        Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                             .background(if (region.isActive) colors.observation.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceContainerHighest),
                         contentAlignment = Alignment.Center
                     ) {

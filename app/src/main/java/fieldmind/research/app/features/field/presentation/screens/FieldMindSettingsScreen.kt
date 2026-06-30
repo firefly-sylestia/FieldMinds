@@ -127,7 +127,7 @@ fun FieldMindSettingsScreen(
                     placeholder = { Text("Search settings...") },
                     leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                     trailingIcon = { if (searchQuery.isNotBlank()) IconButton(onClick = { searchQuery = "" }) { Icon(MaterialSymbolIcon("close"), contentDescription = "Clear", size = 18.dp) } },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     singleLine = true,
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
@@ -191,7 +191,7 @@ fun FieldMindSettingsScreen(
         item { SettingsNavCard("Developer options", "Debug tools, logging, performance stats, and test data", MaterialSymbolIcon("tune"), FieldMindTheme.colors.hypothesis) { onOpenDeveloper?.invoke() } }
 
         item {
-            OutlinedButton(onClick = onResetOnboarding, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+            OutlinedButton(onClick = onResetOnboarding, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
                 Text("Reset onboarding")
             }
             Spacer(Modifier.height(40.dp))
@@ -203,12 +203,12 @@ fun FieldMindSettingsScreen(
 private fun SettingsNavCard(title: String, subtitle: String, icon: MaterialSymbolIcon, color: androidx.compose.ui.graphics.Color, onClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).pressScale(scaleDown = 0.97f),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(44.dp).clip(RoundedCornerShape(14.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(icon = icon, contentDescription = null, tint = color, size = 24.dp)
             }
             Column(Modifier.weight(1f)) {
@@ -236,7 +236,7 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             SettingsGroupCard {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("FieldMind has no app server: profile, observations, sources, and local model settings are stored on this device unless you export or share them.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    OutlinedTextField(value = profileName, onValueChange = settings::setProfileName, label = { Text("Display name") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
+                    OutlinedTextField(value = profileName, onValueChange = settings::setProfileName, label = { Text("Display name") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), singleLine = true, keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                                         trailingIcon = {
                                             if (LocalPrivacyTypingEnabled.current) {
                                                 PrivacyTypingIndicator()
@@ -296,7 +296,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Map data", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("FieldMind uses OpenStreetMap tiles for map rendering. No map data is sent to any server beyond the tile request.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -398,7 +398,7 @@ fun AiAssistantSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         ChoiceItemForm("Provider", listOf("Gemini", "OpenAI"), provider, FieldMindIcons.Sparkle, settings::setAiProvider)
 
                         if (provider == "OpenAI") {
-                            OutlinedTextField(value = openAiKey, onValueChange = settings::setOpenAiApiKey, label = { Text("OpenAI API key") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, supportingText = { Text(if (openAiKey.isBlank()) "No OpenAI key saved." else "OpenAI key saved locally.") }, keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
+                            OutlinedTextField(value = openAiKey, onValueChange = settings::setOpenAiApiKey, label = { Text("OpenAI API key") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), singleLine = true, supportingText = { Text(if (openAiKey.isBlank()) "No OpenAI key saved." else "OpenAI key saved locally.") }, keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                                                 trailingIcon = {
                                                     if (LocalPrivacyTypingEnabled.current) {
                                                         PrivacyTypingIndicator()
@@ -408,7 +408,7 @@ fun AiAssistantSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                             Text("Model", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             OptionPickerField(label = "OpenAI model", selected = openAiModel, options = listOf("gpt-4.1-mini", "gpt-4.1", "gpt-4o-mini"), onSelected = { settings.setOpenAiModel(it) }, icon = FieldMindIcons.Bolt)
                         } else {
-                            OutlinedTextField(value = key, onValueChange = settings::setGeminiApiKey, label = { Text("Gemini API key") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, supportingText = { Text(if (key.isBlank()) "No key saved — get one at aistudio.google.com." else "Key saved locally.") }, keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
+                            OutlinedTextField(value = key, onValueChange = settings::setGeminiApiKey, label = { Text("Gemini API key") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), singleLine = true, supportingText = { Text(if (key.isBlank()) "No key saved — get one at aistudio.google.com." else "Key saved locally.") }, keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                                                 trailingIcon = {
                                                     if (LocalPrivacyTypingEnabled.current) {
                                                         PrivacyTypingIndicator()
@@ -430,7 +430,7 @@ fun AiAssistantSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Privacy note", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("Nothing is sent to any AI provider without an explicit action. Your API key is stored only on this device.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -453,10 +453,10 @@ fun LocalModelSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     SettingsSubPage("Study profiles", icon = FieldMindIcons.Sparkle, onBack = onBack) {
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                             Icon(FieldMindIcons.Sparkle, null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
                         }
                         Text("On-device study generation", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -486,7 +486,7 @@ fun LocalModelSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                             val selected = localModelOption == profile
                             Surface(
                                 onClick = { settings.setLocalModelOption(profile) },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh
                             ) {
                                 Row(Modifier.fillMaxWidth().padding(14.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -511,7 +511,7 @@ fun LocalModelSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("How it works", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text(
@@ -589,14 +589,14 @@ fun SecuritySettingsPage(
     SettingsSubPage("Privacy & Security", icon = FieldMindIcons.Lock, onBack = onBack) {
         // ── Security Status ──
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Column { Text("Security Status", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold); Text("$enabledCount of 5 protections enabled", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { listOf(appLockActive, backupEncryption, clipboardCleanup, privacyTyping, screenCapture).forEach { active -> Box(Modifier.size(10.dp).clip(CircleShape).background(if (active) FieldMindTheme.colors.positive else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))) } }
                     }
-                    LinearProgressIndicator(progress = { enabledCount / 5f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)), color = FieldMindTheme.colors.positive, trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                    Surface(onClick = { onOpenSecurityScore?.invoke() }, shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), modifier = Modifier.fillMaxWidth()) {
+                    LinearProgressIndicator(progress = { enabledCount / 5f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = FieldMindTheme.colors.positive, trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    Surface(onClick = { onOpenSecurityScore?.invoke() }, shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), modifier = Modifier.fillMaxWidth()) {
                         Row(Modifier.padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                             Icon(MaterialSymbolIcon("security"), null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
                             Text("View full security score", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
@@ -615,7 +615,7 @@ fun SecuritySettingsPage(
 
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Lock, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp) }
+                    Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Lock, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp) }
                     Column(Modifier.weight(1f)) { Text("App PIN lock", fontWeight = FontWeight.SemiBold); Text("Self-contained 4-6 digit PIN", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                     Switch(checked = appPinEnabled && appPinHash.isNotBlank(), onCheckedChange = { enabled -> if (enabled) showPinSetup = true else showCurrentPinDialog = true })
                 }
@@ -630,7 +630,7 @@ fun SecuritySettingsPage(
                                 val selected = appPinLen == option
                                 Surface(
                                     onClick = { settings.setAppPinLength(option) },
-                                    shape = RoundedCornerShape(10.dp),
+                                    shape = RoundedCornerShape(18.dp),
                                     color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
                                     modifier = Modifier.weight(1f)
                                 ) {
@@ -649,13 +649,13 @@ fun SecuritySettingsPage(
                     HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(if (appPinHash.isNotBlank()) "Change PIN" else "Set a 4-6 digit PIN", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                        OutlinedTextField(value = pinInput, onValueChange = { if (it.length <= 6) { pinInput = it; pinError = false } }, label = { Text("Enter PIN") }, singleLine = true, isError = pinError, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword).withPrivacyTyping(LocalPrivacyTypingEnabled.current), trailingIcon = { if (LocalPrivacyTypingEnabled.current) PrivacyTypingIndicator() }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
-                        OutlinedTextField(value = pinConfirm, onValueChange = { if (it.length <= 6) { pinConfirm = it; pinError = false } }, label = { Text("Confirm PIN") }, singleLine = true, isError = pinError, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword).withPrivacyTyping(LocalPrivacyTypingEnabled.current), trailingIcon = { if (LocalPrivacyTypingEnabled.current) PrivacyTypingIndicator() }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
+                        OutlinedTextField(value = pinInput, onValueChange = { if (it.length <= 6) { pinInput = it; pinError = false } }, label = { Text("Enter PIN") }, singleLine = true, isError = pinError, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword).withPrivacyTyping(LocalPrivacyTypingEnabled.current), trailingIcon = { if (LocalPrivacyTypingEnabled.current) PrivacyTypingIndicator() }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
+                        OutlinedTextField(value = pinConfirm, onValueChange = { if (it.length <= 6) { pinConfirm = it; pinError = false } }, label = { Text("Confirm PIN") }, singleLine = true, isError = pinError, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword).withPrivacyTyping(LocalPrivacyTypingEnabled.current), trailingIcon = { if (LocalPrivacyTypingEnabled.current) PrivacyTypingIndicator() }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
                         if (pinError) Text("PINs don't match. Try again.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            OutlinedButton(onClick = { showPinSetup = false; pinInput = ""; pinConfirm = ""; pinError = false }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) { Text("Cancel") }
+                            OutlinedButton(onClick = { showPinSetup = false; pinInput = ""; pinConfirm = ""; pinError = false }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) { Text("Cancel") }
                             val minPinLen = when (appPinLen) { "5 digits" -> 5; "6 digits" -> 6; else -> 4 }
-                            Button(onClick = { if (pinInput.length >= minPinLen && pinInput == pinConfirm) { val hash = settings.hashAppPin(pinInput); settings.setAppPinHash(hash); settings.setAppPinEnabled(true); showPinSetup = false; pinInput = ""; pinConfirm = ""; pinError = false } else pinError = true }, enabled = pinInput.length >= minPinLen && pinConfirm.length >= minPinLen, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) { Text("Save PIN") }
+                            Button(onClick = { if (pinInput.length >= minPinLen && pinInput == pinConfirm) { val hash = settings.hashAppPin(pinInput); settings.setAppPinHash(hash); settings.setAppPinEnabled(true); showPinSetup = false; pinInput = ""; pinConfirm = ""; pinError = false } else pinError = true }, enabled = pinInput.length >= minPinLen && pinConfirm.length >= minPinLen, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) { Text("Save PIN") }
                         }
                     }
                 }
@@ -664,7 +664,7 @@ fun SecuritySettingsPage(
                 if (appPinEnabled && appPinHash.isNotBlank()) {
                     HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(MaterialSymbolIcon("lock_open"), null, tint = MaterialTheme.colorScheme.tertiary, size = 22.dp) }
+                        Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(MaterialSymbolIcon("lock_open"), null, tint = MaterialTheme.colorScheme.tertiary, size = 22.dp) }
                         Column(Modifier.weight(1f)) { Text("Decoy PIN", fontWeight = FontWeight.SemiBold); val decoyStatus = if (decoyEnabled && settings.decoyPinHash.value.isNotBlank()) "Active — ${decoyLabel.ifBlank { "Opens clean app" }}" else "Off"; Text(decoyStatus, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                         Switch(checked = decoyEnabled && settings.decoyPinHash.value.isNotBlank(), onCheckedChange = { enabled -> if (enabled) { showDecoyDialog = true; decoyLabelInput = decoyLabel } else { settings.setDecoyPinEnabled(false); settings.setDecoyPinHash(""); settings.setDecoyPinLabel("") } })
                     }
@@ -691,7 +691,7 @@ fun SecuritySettingsPage(
                         val selected = failedCooldown == option
                         Surface(
                             onClick = { settings.setFailedUnlockCooldown(option) },
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(20.dp),
                             color = if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (selected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                         ) {
@@ -716,7 +716,7 @@ fun SecuritySettingsPage(
 
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(FieldMindTheme.colors.data.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Export, null, tint = FieldMindTheme.colors.data, size = 22.dp) }
+                    Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.data.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Export, null, tint = FieldMindTheme.colors.data, size = 22.dp) }
                     Column(Modifier.weight(1f)) { Text("Password protect exports", fontWeight = FontWeight.SemiBold); Text(if (exportPassEnabled && settings.exportPasswordHash.value.isNotBlank()) "Password set ✓" else "Off", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                     Switch(checked = exportPassEnabled, onCheckedChange = { enabled -> if (enabled && settings.exportPasswordHash.value.isBlank()) { showExportPassDialog = true } else { settings.setExportPasswordProtectionEnabled(enabled); if (!enabled) { settings.setExportPasswordHash("") } } })
                 }
@@ -726,7 +726,7 @@ fun SecuritySettingsPage(
                     HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Surface(
                         onClick = { showExportPassDialog = true; exportPassInput = ""; exportPassConfirm = ""; exportPassError = false },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
@@ -767,7 +767,7 @@ fun SecuritySettingsPage(
                         val selected = previewMode == mode
                         Surface(
                             onClick = { settings.setAppPreviewMode(mode) },
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(20.dp),
                             color = if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (selected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                         ) {
@@ -788,7 +788,7 @@ fun SecuritySettingsPage(
 
         // ── Info card ──
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Your data stays on this device", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("FieldMind stores everything locally. No data is sent to any server unless you explicitly export or share it.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -807,7 +807,7 @@ fun SecuritySettingsPage(
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("Enter your current PIN to disable the app PIN lock.")
-                    OutlinedTextField(value = currentPinInput, onValueChange = { if (it.length <= 6) { currentPinInput = it; currentPinError = false } }, label = { Text("Current PIN") }, singleLine = true, isError = currentPinError, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword).withPrivacyTyping(LocalPrivacyTypingEnabled.current), trailingIcon = { if (LocalPrivacyTypingEnabled.current) PrivacyTypingIndicator() }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
+                    OutlinedTextField(value = currentPinInput, onValueChange = { if (it.length <= 6) { currentPinInput = it; currentPinError = false } }, label = { Text("Current PIN") }, singleLine = true, isError = currentPinError, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword).withPrivacyTyping(LocalPrivacyTypingEnabled.current), trailingIcon = { if (LocalPrivacyTypingEnabled.current) PrivacyTypingIndicator() }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
                     if (currentPinError) Text("Incorrect PIN", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                 }
             },
@@ -825,8 +825,8 @@ fun SecuritySettingsPage(
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("Enter a password to protect exported files.")
-                    OutlinedTextField(value = exportPassInput, onValueChange = { if (it.length <= 32) { exportPassInput = it; exportPassError = false } }, label = { Text("Password") }, singleLine = true, isError = exportPassError, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), textStyle = MaterialTheme.typography.titleMedium.copy(letterSpacing = 4.sp, textAlign = TextAlign.Center))
-                    OutlinedTextField(value = exportPassConfirm, onValueChange = { if (it.length <= 32) { exportPassConfirm = it; exportPassError = false } }, label = { Text("Confirm password") }, singleLine = true, isError = exportPassError, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), textStyle = MaterialTheme.typography.titleMedium.copy(letterSpacing = 4.sp, textAlign = TextAlign.Center))
+                    OutlinedTextField(value = exportPassInput, onValueChange = { if (it.length <= 32) { exportPassInput = it; exportPassError = false } }, label = { Text("Password") }, singleLine = true, isError = exportPassError, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), textStyle = MaterialTheme.typography.titleMedium.copy(letterSpacing = 4.sp, textAlign = TextAlign.Center))
+                    OutlinedTextField(value = exportPassConfirm, onValueChange = { if (it.length <= 32) { exportPassConfirm = it; exportPassError = false } }, label = { Text("Confirm password") }, singleLine = true, isError = exportPassError, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), textStyle = MaterialTheme.typography.titleMedium.copy(letterSpacing = 4.sp, textAlign = TextAlign.Center))
                     if (exportPassError) Text("Passwords don't match or too short", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                 }
             },
@@ -845,9 +845,9 @@ fun SecuritySettingsPage(
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("Enter a 4-6 digit PIN that opens a clean, empty version of FieldMind.")
-                    OutlinedTextField(value = decoyInput, onValueChange = { if (it.length <= 6) { decoyInput = it; decoyError = false } }, label = { Text("Decoy PIN") }, singleLine = true, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
-                    OutlinedTextField(value = decoyConfirm, onValueChange = { if (it.length <= 6) { decoyConfirm = it; decoyError = false } }, label = { Text("Confirm decoy PIN") }, singleLine = true, isError = decoyError, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
-                    OutlinedTextField(value = decoyLabelInput, onValueChange = { if (it.length <= 40) decoyLabelInput = it }, label = { Text("Label (shown when decoy is active)") }, placeholder = { Text("e.g. \"Guest mode\"") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp))
+                    OutlinedTextField(value = decoyInput, onValueChange = { if (it.length <= 6) { decoyInput = it; decoyError = false } }, label = { Text("Decoy PIN") }, singleLine = true, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
+                    OutlinedTextField(value = decoyConfirm, onValueChange = { if (it.length <= 6) { decoyConfirm = it; decoyError = false } }, label = { Text("Confirm decoy PIN") }, singleLine = true, isError = decoyError, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
+                    OutlinedTextField(value = decoyLabelInput, onValueChange = { if (it.length <= 40) decoyLabelInput = it }, label = { Text("Label (shown when decoy is active)") }, placeholder = { Text("e.g. \"Guest mode\"") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp))
                     if (decoyError) Text("PINs don't match. Try again.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                 }
             },
@@ -884,7 +884,7 @@ fun BackupImportSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, 
             }
         }
         item {
-            FilledTonalButton(onClick = onOpenExport, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+            FilledTonalButton(onClick = onOpenExport, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
                 Icon(FieldMindIcons.Export, null, size = 18.dp)
                 Spacer(Modifier.size(8.dp))
                 Text("Open Backup & Restore")
@@ -904,12 +904,12 @@ fun AboutPage(onBack: () -> Unit, onOpenChangelog: (() -> Unit)? = null) {
     SettingsSubPage("About", icon = FieldMindIcons.Info, onBack = onBack) {
         item {
             Card(
-                shape = RoundedCornerShape(26.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(Modifier.padding(22.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Box(Modifier.size(64.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                    Box(Modifier.size(64.dp).clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                         Icon(FieldMindIcons.Nature, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 36.dp)
                     }
                     Text("FieldMind", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
@@ -920,7 +920,7 @@ fun AboutPage(onBack: () -> Unit, onOpenChangelog: (() -> Unit)? = null) {
         }
         item { SettingsNavCard("What’s new", "See the FieldMind redesign changelog", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenChangelog?.invoke() } }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("Built with", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                     listOf(
@@ -940,7 +940,7 @@ fun AboutPage(onBack: () -> Unit, onOpenChangelog: (() -> Unit)? = null) {
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("Research data sources", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                     listOf(
@@ -996,7 +996,7 @@ fun ExportFormatSelector(selected: String, onSelect: (String) -> Unit) {
             Surface(
                 onClick = { onSelect(format.name) },
                 modifier = Modifier.fillMaxWidth(itemWeight),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 color = if (isSelected) format.color.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                 border = if (isSelected) BorderStroke(1.5.dp, format.color) else null
             ) {
@@ -1006,7 +1006,7 @@ fun ExportFormatSelector(selected: String, onSelect: (String) -> Unit) {
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Box(
-                        Modifier.size(36.dp).clip(RoundedCornerShape(10.dp))
+                        Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
                             .background(if (isSelected) format.color.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerLow),
                         contentAlignment = Alignment.Center
                     ) {
@@ -1040,7 +1040,7 @@ fun ObservationReaderContent(observation: ObservationEntity, onAttachments: @Com
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         // Header card
         Card(
-            shape = RoundedCornerShape(26.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -1076,13 +1076,13 @@ fun ObservationReaderContent(observation: ObservationEntity, onAttachments: @Com
 
         // Facts section
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                    Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                         Icon(FieldMindIcons.Edit, null, tint = FieldMindTheme.colors.observation, size = 18.dp)
                     }
                     Text("Facts-only notes", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -1098,13 +1098,13 @@ fun ObservationReaderContent(observation: ObservationEntity, onAttachments: @Com
         // Context section
         if (observation.moodOrContext.isNotBlank()) {
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                             Icon(FieldMindIcons.Lightbulb, null, tint = FieldMindTheme.colors.hypothesis, size = 18.dp)
                         }
                         Text("Context", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -1116,7 +1116,7 @@ fun ObservationReaderContent(observation: ObservationEntity, onAttachments: @Com
 
         if (observation.structuredDetailsJson.isNotBlank() || observation.timeNote.isNotBlank()) {
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -1131,13 +1131,13 @@ fun ObservationReaderContent(observation: ObservationEntity, onAttachments: @Com
         // Evidence summary
         if (observation.evidenceSummary.isNotBlank()) {
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.data.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.data.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                             Icon(FieldMindIcons.Camera, null, tint = FieldMindTheme.colors.data, size = 18.dp)
                         }
                         Text("Evidence summary", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -1192,7 +1192,7 @@ fun UnitsFormatSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Display only", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("Unit and format changes only affect how data is displayed in the UI. Your stored data is always saved in base metric/ISO formats.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1275,7 +1275,7 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val providerColor = FieldMindTheme.colors.info
                         Surface(
                             onClick = { settings.setWeatherProviderEnabled(provider.slug, !isSelected) },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (isSelected) providerColor.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) BorderStroke(1.5.dp, providerColor) else null
                         ) {
@@ -1315,7 +1315,7 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                             placeholder = { Text(provider.apiKeyPlaceholder) },
                             visualTransformation = PasswordVisualTransformation(),
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(18.dp),
+                            shape = RoundedCornerShape(28.dp),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                             trailingIcon = {
@@ -1357,7 +1357,7 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                                     openMeteoConfigPicker.launch(arrayOf("application/json", "*/*"))
                                 }
                             },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (openMeteoConfig.isNotBlank())
                                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                             else
@@ -1394,7 +1394,7 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     // ── Info note about free providers ──
                     Spacer(Modifier.height(4.dp))
                     Surface(
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                     ) {
                         Row(
@@ -1485,7 +1485,7 @@ fun MapSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Map data", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("FieldMind uses OpenStreetMap tiles for map rendering. No map data is sent to any server beyond the tile request.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1621,7 +1621,7 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
                     }
                     if (orphanedObs > 0) {
                         Spacer(Modifier.height(8.dp))
-                        Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)) {
+                        Surface(shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)) {
                             Row(Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Icon(FieldMindIcons.Info, null, tint = MaterialTheme.colorScheme.error, size = 18.dp)
                                 Text("$orphanedObs observation${if (orphanedObs != 1) "s" else ""} reference missing or deleted projects", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onErrorContainer)
@@ -1633,7 +1633,7 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
         }
         item {
             if (isRunning) {
-                Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))) {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))) {
                     Row(Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                         Text("Running integrity check…", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
@@ -1650,7 +1650,7 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(24.dp)
                 ) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp)
                     Spacer(Modifier.size(8.dp))
@@ -1659,7 +1659,7 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("What this checks", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     listOf(
@@ -1731,7 +1731,7 @@ fun ScreenVisibilitySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Un
     SettingsSubPage("Screen visibility", icon = FieldMindIcons.Visibility, onBack = onBack) {
         item {
             Card(
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(32.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -1766,7 +1766,7 @@ fun ScreenVisibilitySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Un
                         horizontalArrangement = Arrangement.spacedBy(14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(item.accentColor.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(item.accentColor.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                             Icon(icon = item.icon, contentDescription = null, tint = item.accentColor, size = 22.dp)
                         }
                         Column(Modifier.weight(1f)) {
@@ -1797,7 +1797,7 @@ fun ScreenVisibilitySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Un
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Navigation impact", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("Disabling the Capture, Projects, Insights, or Library tabs removes them from the bottom navigation bar. The screens remain accessible via deep links and search.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1944,7 +1944,7 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                                         }
                                     }
                                 },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh
                             ) {
                                 Row(Modifier.fillMaxWidth().padding(14.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -1979,7 +1979,7 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 )
             }
             item {
-                Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+                Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text("Version info", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                         Text("FieldMind 4.3.0", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1994,7 +1994,7 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             item { TapTestCard() }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Caution", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.error)
                     Text("Developer options are intended for troubleshooting and testing. Incorrect changes to stored data could cause data loss.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -2073,7 +2073,7 @@ internal fun SettingsSubPage(title: String, icon: MaterialSymbolIcon, onBack: ()
 @Composable
 internal fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
     Card(
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) { Column(content = content) }
@@ -2087,7 +2087,7 @@ internal fun ToggleItem(title: String, body: String, checked: Boolean, onChecked
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (icon != null) {
-            Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                 Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
             }
         }
@@ -2103,7 +2103,7 @@ internal fun ToggleItem(title: String, body: String, checked: Boolean, onChecked
 private fun StepperItem(title: String, body: String, value: Int, icon: MaterialSymbolIcon? = null, onValueChange: (Int) -> Unit) {
     Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
         if (icon != null) {
-            Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                 Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
             }
         }
@@ -2124,7 +2124,7 @@ internal fun ChoiceItemForm(title: String, options: List<String>, selected: Stri
     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
             if (icon != null) {
-                Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                     Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                 }
             }
@@ -2133,7 +2133,7 @@ internal fun ChoiceItemForm(title: String, options: List<String>, selected: Stri
         var showDialog by remember { mutableStateOf(false) }
         Surface(
             onClick = { showDialog = true },
-            shape = RoundedCornerShape(14.dp),
+            shape = RoundedCornerShape(22.dp),
             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
         ) {
             Row(
@@ -2156,7 +2156,7 @@ internal fun ChoiceItemForm(title: String, options: List<String>, selected: Stri
                             val isSelected = selected == option
                             Surface(
                                 onClick = { onSelected(option); showDialog = false },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                 border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                             ) {
@@ -2184,7 +2184,7 @@ private fun SettingsTileGroup(title: String, content: @Composable ColumnScope.()
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(start = 4.dp))
         Card(
-            shape = RoundedCornerShape(22.dp),
+            shape = RoundedCornerShape(32.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) { Column(content = content) }
@@ -2217,10 +2217,10 @@ fun SpeciesToolsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 40.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             item { StandardScreenHeader(title = "Species tools", subtitle = "Identification settings, API keys, and regional model packs", icon = FieldMindIcons.Nature, trailing = { BackButton(onClick = onBack) }) }
             item {
-                Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+                Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                 Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.observation, size = 18.dp)
                             }
                             Text("How identification works", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -2237,7 +2237,7 @@ fun SpeciesToolsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     SettingsGroupCard {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Text("Perenual API (plant and botany data)", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
-                            OutlinedTextField(value = perenualKey, onValueChange = settings::setPerenualApiKey, label = { Text("Perenual API key") }, placeholder = { Text("Paste your Perenual API key") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, supportingText = { Text(if (perenualKey.isBlank()) "No key saved. Sign up free at perenual.com" else "Perenual key saved locally.") })
+                            OutlinedTextField(value = perenualKey, onValueChange = settings::setPerenualApiKey, label = { Text("Perenual API key") }, placeholder = { Text("Paste your Perenual API key") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), singleLine = true, supportingText = { Text(if (perenualKey.isBlank()) "No key saved. Sign up free at perenual.com" else "Perenual key saved locally.") })
                         }
                     }
                 }
@@ -2245,7 +2245,7 @@ fun SpeciesToolsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     SettingsGroupCard {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Text("Other species API (optional)", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            OutlinedTextField(value = apiKey, onValueChange = settings::setSpeciesIdApiKey, label = { Text("Custom API key (optional)") }, placeholder = { Text("Leave blank if using iNaturalist") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, supportingText = { Text(if (apiKey.isBlank()) "No key - iNaturalist API is free" else "Custom key saved locally.") })
+                            OutlinedTextField(value = apiKey, onValueChange = settings::setSpeciesIdApiKey, label = { Text("Custom API key (optional)") }, placeholder = { Text("Leave blank if using iNaturalist") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), singleLine = true, supportingText = { Text(if (apiKey.isBlank()) "No key - iNaturalist API is free" else "Custom key saved locally.") })
                         }
                     }
                 }
@@ -2254,33 +2254,33 @@ fun SpeciesToolsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             item {
                 SettingsGroupCard {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        OutlinedTextField(value = modelBaseUrl, onValueChange = settings::setSpeciesModelBaseUrl, label = { Text("Pack base URL (advanced)") }, placeholder = { Text("https://...") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, supportingText = { Text(if (modelBaseUrl.isBlank()) "Default URL" else "Using: $modelBaseUrl") })
+                        OutlinedTextField(value = modelBaseUrl, onValueChange = settings::setSpeciesModelBaseUrl, label = { Text("Pack base URL (advanced)") }, placeholder = { Text("https://...") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), singleLine = true, supportingText = { Text(if (modelBaseUrl.isBlank()) "Default URL" else "Using: $modelBaseUrl") })
                     }
                 }
             }
             items(packs, key = { it.regionId }) { pack ->
                 val isDownloaded = pack.isDownloaded
                 val isDownloading = downloadingId == pack.regionId
-                Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = if (isDownloaded) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f) else MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+                Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = if (isDownloaded) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f) else MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                     Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Box(Modifier.size(48.dp).clip(RoundedCornerShape(14.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(if (isDownloaded) FieldMindIcons.Check else FieldMindIcons.Download, null, tint = FieldMindTheme.colors.observation, size = 24.dp) }
+                            Box(Modifier.size(48.dp).clip(RoundedCornerShape(22.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(if (isDownloaded) FieldMindIcons.Check else FieldMindIcons.Download, null, tint = FieldMindTheme.colors.observation, size = 24.dp) }
                             Column(Modifier.weight(1f)) {
                                 Text(pack.regionName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                                 Text(pack.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
                             }
                         }
                         if (isDownloading) {
-                            Column { LinearProgressIndicator(progress = { downloadProgress }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)), color = FieldMindTheme.colors.observation)
+                            Column { LinearProgressIndicator(progress = { downloadProgress }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = FieldMindTheme.colors.observation)
                                 Text("${(downloadProgress * 100).toInt()}% - Downloading...", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                         }
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             if (isDownloaded) {
-                                OutlinedButton(onClick = { haptics.light(); scope.launch { database.deletePack(pack.regionId); refreshPacks() } }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) {
+                                OutlinedButton(onClick = { haptics.light(); scope.launch { database.deletePack(pack.regionId); refreshPacks() } }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) {
                                     Icon(FieldMindIcons.Delete, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Delete")
                                 }
                             } else {
-                                Button(onClick = { haptics.confirm(); downloadingId = pack.regionId; downloadProgress = 0f; scope.launch { runCatching { database.downloadPack(pack.regionId) }; downloadingId = null; refreshPacks() } }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
+                                Button(onClick = { haptics.confirm(); downloadingId = pack.regionId; downloadProgress = 0f; scope.launch { runCatching { database.downloadPack(pack.regionId) }; downloadingId = null; refreshPacks() } }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
                                     Icon(FieldMindIcons.Download, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Download")
                                 }
                             }
@@ -2349,7 +2349,7 @@ fun SpeciesPackSettingsPage(onBack: () -> Unit) {
 
             item {
                 Card(
-                    shape = RoundedCornerShape(22.dp),
+                    shape = RoundedCornerShape(32.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -2371,7 +2371,7 @@ fun SpeciesPackSettingsPage(onBack: () -> Unit) {
                 val isDownloading = downloadingId == pack.regionId
 
                 Card(
-                    shape = RoundedCornerShape(22.dp),
+                    shape = RoundedCornerShape(32.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = if (isDownloaded)
                             MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
@@ -2393,7 +2393,7 @@ fun SpeciesPackSettingsPage(onBack: () -> Unit) {
                             Box(
                                 Modifier
                                     .size(48.dp)
-                                    .clip(RoundedCornerShape(14.dp))
+                                    .clip(RoundedCornerShape(22.dp))
                                     .background(
                                         FieldMindTheme.colors.observation.copy(alpha = 0.14f)
                                     ),
@@ -2422,7 +2422,7 @@ fun SpeciesPackSettingsPage(onBack: () -> Unit) {
                             }
                             // Status badge
                             Surface(
-                                shape = RoundedCornerShape(10.dp),
+                                shape = RoundedCornerShape(18.dp),
                                 color = if (isDownloaded)
                                     FieldMindTheme.colors.positive.copy(alpha = 0.14f)
                                 else
@@ -2457,7 +2457,7 @@ fun SpeciesPackSettingsPage(onBack: () -> Unit) {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(6.dp)
-                                        .clip(RoundedCornerShape(3.dp)),
+                                        .clip(RoundedCornerShape(8.dp)),
                                     color = FieldMindTheme.colors.observation
                                 )
                                 Text(
@@ -2486,7 +2486,7 @@ fun SpeciesPackSettingsPage(onBack: () -> Unit) {
                                         }
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(14.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     colors = ButtonDefaults.outlinedButtonColors(
                                         contentColor = MaterialTheme.colorScheme.error
                                     )
@@ -2534,7 +2534,7 @@ fun SpeciesPackSettingsPage(onBack: () -> Unit) {
                                         }
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(14.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     enabled = !isDownloading
                                 ) {
                                     if (isDownloading) {
@@ -2586,14 +2586,14 @@ fun SpeciesIdentificationSettingsPage(
         // ── How it works ──
         item {
             Card(
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(32.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Box(
-                            Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
+                            Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.observation, size = 18.dp)
@@ -2634,7 +2634,7 @@ fun SpeciesIdentificationSettingsPage(
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             Box(
-                                Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(FieldMindIcons.Sparkle, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
@@ -2671,7 +2671,7 @@ fun SpeciesIdentificationSettingsPage(
                                 }
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(18.dp),
+                            shape = RoundedCornerShape(28.dp),
                             singleLine = true,
                             supportingText = {
                                 Text(
@@ -2687,7 +2687,7 @@ fun SpeciesIdentificationSettingsPage(
                                 }
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(14.dp)
+                            shape = RoundedCornerShape(22.dp)
                         ) {
                             Icon(FieldMindIcons.OpenLink, null, size = 18.dp)
                             Spacer(Modifier.size(8.dp))
@@ -2710,7 +2710,7 @@ fun SpeciesIdentificationSettingsPage(
                             placeholder = { Text("Leave blank if using iNaturalist") },
                             visualTransformation = PasswordVisualTransformation(),
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(18.dp),
+                            shape = RoundedCornerShape(28.dp),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                             trailingIcon = {
@@ -2727,7 +2727,7 @@ fun SpeciesIdentificationSettingsPage(
                         )
 
                         Surface(
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                         ) {
                             Row(
@@ -2754,7 +2754,7 @@ fun SpeciesIdentificationSettingsPage(
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Box(
-                            Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                            Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(FieldMindIcons.Download, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
@@ -2775,7 +2775,7 @@ fun SpeciesIdentificationSettingsPage(
                         label = { Text("Pack base URL") },
                         placeholder = { Text("https://...") },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                         trailingIcon = {
@@ -2841,7 +2841,7 @@ fun AutoGenerationSettingsPage(
                         showErrorDialog = false
                         errorMessage = null
                     },
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 ) { Text("OK") }
             }
         )
@@ -2885,10 +2885,10 @@ fun AutoGenerationSettingsPage(
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                             Icon(FieldMindIcons.Info, null, tint = FieldMindTheme.colors.info, size = 18.dp)
                         }
                         Text("Daily generation cap", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -2904,7 +2904,7 @@ fun AutoGenerationSettingsPage(
             }
         }
         item {
-            Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("How it works", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text(

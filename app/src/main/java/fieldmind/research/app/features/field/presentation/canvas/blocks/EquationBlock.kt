@@ -93,12 +93,12 @@ fun EquationBlock(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                     .border(
                         1.dp,
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                        RoundedCornerShape(8.dp)
+                        RoundedCornerShape(16.dp)
                     )
                     .padding(10.dp),
                 textStyle = TextStyle(

@@ -152,7 +152,7 @@ private fun BlockToolbarContent(
     hasLinkedEntity: Boolean = false
 ) {
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = 6.dp,
         shadowElevation = 8.dp,
@@ -240,7 +240,7 @@ private fun ToolbarAction(
 ) {
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(18.dp),
         color = Color.Transparent,
         modifier = Modifier
             .height(32.dp)

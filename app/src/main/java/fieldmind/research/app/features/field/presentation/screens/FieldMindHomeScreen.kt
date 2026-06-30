@@ -324,7 +324,7 @@ fun SharedTransitionScope.HomeScreen(
             item {
                 val colors = FieldMindTheme.colors
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.fillMaxWidth()
@@ -335,7 +335,7 @@ fun SharedTransitionScope.HomeScreen(
                         horizontalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         Box(
-                            Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                            Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                                 .background(colors.project.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -352,7 +352,7 @@ fun SharedTransitionScope.HomeScreen(
                         }
                         FilledTonalButton(
                             onClick = { onNavigate(FieldMindScreen.FieldLog) },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             colors = ButtonDefaults.filledTonalButtonColors(
                                 containerColor = colors.project.copy(alpha = 0.12f)
                             )
@@ -408,7 +408,7 @@ fun SharedTransitionScope.HomeScreen(
                     Triple("Species", "Quick observation", FieldMindIcons.Nature) to FieldMindScreen.SpeciesTool
                 )
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.fillMaxWidth()
@@ -419,7 +419,7 @@ fun SharedTransitionScope.HomeScreen(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Box(
-                                Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                                     .background(FieldMindTheme.colors.data.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -431,7 +431,7 @@ fun SharedTransitionScope.HomeScreen(
                             }
                             FilledTonalButton(
                                 onClick = { onNavigate(FieldMindScreen.DataTools) },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 colors = ButtonDefaults.filledTonalButtonColors(containerColor = FieldMindTheme.colors.data.copy(alpha = 0.12f))
                             ) {
                                 Text("All tools", fontWeight = FontWeight.SemiBold)
@@ -567,7 +567,7 @@ fun SharedTransitionScope.HomeScreen(
                 // Category picker bottom sheet
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+                    shape = RoundedCornerShape(topStart = 36.dp, topEnd = 40.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     tonalElevation = 4.dp
                 ) {
@@ -579,7 +579,7 @@ fun SharedTransitionScope.HomeScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                             Box(
                                 Modifier.width(40.dp).height(4.dp)
-                                    .clip(RoundedCornerShape(2.dp))
+                                    .clip(RoundedCornerShape(6.dp))
                                     .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
                             )
                             Spacer(Modifier.height(12.dp))
@@ -623,7 +623,7 @@ fun SharedTransitionScope.HomeScreen(
                                             modifier = Modifier.weight(1f).clickable {
                                                 selectedCaptureCategory = name
                                             },
-                                            shape = RoundedCornerShape(18.dp),
+                                            shape = RoundedCornerShape(28.dp),
                                             colors = CardDefaults.cardColors(
                                                 containerColor = if (isSelected) accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest
                                             ),
@@ -636,7 +636,7 @@ fun SharedTransitionScope.HomeScreen(
                                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                                             ) {
                                                 Box(
-                                                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                                                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                                                         .background(
                                                             if (isSelected) accent.copy(alpha = 0.22f)
                                                             else MaterialTheme.colorScheme.surfaceContainerLow
@@ -670,7 +670,7 @@ fun SharedTransitionScope.HomeScreen(
                                     label = { Text("Specify category") },
                                     placeholder = { Text("e.g. Reptile, Amphibian, Fungus…") },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(16.dp),
+                                    shape = RoundedCornerShape(24.dp),
                                     singleLine = true,
                                     colors = OutlinedTextFieldDefaults.colors(
                                         focusedBorderColor = colors.accentFor("Other"),
@@ -712,7 +712,7 @@ fun SharedTransitionScope.HomeScreen(
                                 capturedPhotoMime = null
                             },
                             modifier = Modifier.fillMaxWidth().height(52.dp),
-                            shape = RoundedCornerShape(18.dp)
+                            shape = RoundedCornerShape(28.dp)
                         ) {
                             Icon(FieldMindIcons.Observation, null, size = 18.dp)
                             Spacer(Modifier.size(8.dp))
@@ -794,7 +794,7 @@ private fun CompactHomeHeader(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 18.dp),
-        shape = RoundedCornerShape(30.dp),
+        shape = RoundedCornerShape(38.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp,
         shadowElevation = 0.dp
@@ -812,7 +812,7 @@ private fun CompactHomeHeader(
                 Box(
                     Modifier
                         .size(52.dp)
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(24.dp))
                         .background(colors.positive.copy(alpha = if (colors.isDark) 0.34f else 0.16f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -834,7 +834,7 @@ private fun CompactHomeHeader(
                 }
                 Surface(
                     onClick = onOpenSettings,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     tonalElevation = 0.dp,
                     modifier = Modifier.size(44.dp)
@@ -885,14 +885,14 @@ private fun CompactHomeHeader(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(10.dp)
-                        .clip(RoundedCornerShape(5.dp))
+                        .clip(RoundedCornerShape(12.dp))
                         .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(animatedProgress)
                             .fillMaxHeight()
-                            .clip(RoundedCornerShape(5.dp))
+                            .clip(RoundedCornerShape(12.dp))
                             .background(
                                 if (complete) Brush.horizontalGradient(listOf(colors.positive, colors.confidenceSure))
                                 else Brush.horizontalGradient(listOf(colors.observation, colors.data))
@@ -1027,7 +1027,7 @@ private fun HomeNoteCaptureDialog(
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).wrapContentHeight().padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
+            shape = RoundedCornerShape(40.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
         ) {
             Column(
@@ -1037,7 +1037,7 @@ private fun HomeNoteCaptureDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     Box(
-                        Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                        Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                             .background(FieldMindTheme.colors.source.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -1062,7 +1062,7 @@ private fun HomeNoteCaptureDialog(
                     label = { Text("Title") },
                     placeholder = { Text("Optional — auto-generated from content") },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = RoundedCornerShape(28.dp),
                     singleLine = true
                 )
 
@@ -1073,7 +1073,7 @@ private fun HomeNoteCaptureDialog(
                     label = { Text("Note body") },
                     placeholder = { Text("What would you like to note?…") },
                     modifier = Modifier.fillMaxWidth().heightIn(min = 140.dp),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = RoundedCornerShape(28.dp),
                     minLines = 5
                 )
 
@@ -1084,7 +1084,7 @@ private fun HomeNoteCaptureDialog(
                     label = { Text("Tags") },
                     placeholder = { Text("Comma-separated, optional") },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = RoundedCornerShape(28.dp),
                     singleLine = true
                 )
 
@@ -1096,7 +1096,7 @@ private fun HomeNoteCaptureDialog(
                         label = { Text("Attachments") },
                         placeholder = { Text("One per line: type|caption|uri") },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         minLines = 2
                     )
                 }
@@ -1139,7 +1139,7 @@ private fun HomeNoteCaptureDialog(
                                 )
                             }
                         },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         enabled = body.isNotBlank() || title.isNotBlank()
                     ) { Text("Save Note") }
                 }
@@ -1160,7 +1160,7 @@ private fun HeroActionChip(
     Surface(
         modifier = modifier.pressScale(scaleDown = 0.95f),
         onClick = { haptics.light(); onClick() },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = 0.dp
     ) {
@@ -1292,7 +1292,7 @@ private fun LiveWeatherDashboardWidget(
             )
             .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
             .clickable { onNavigate(FieldMindScreen.WeatherDatabase) },
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(36.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Box(
@@ -1304,7 +1304,7 @@ private fun LiveWeatherDashboardWidget(
                     modifier = Modifier
                         .matchParentSize()
                         .then(
-                            Modifier.clip(RoundedCornerShape(28.dp))
+                            Modifier.clip(RoundedCornerShape(36.dp))
                         )
                 ) {AnimatedWeatherScene(
         weatherCode = displayWeatherCode,
@@ -1320,7 +1320,7 @@ private fun LiveWeatherDashboardWidget(
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .clip(RoundedCornerShape(28.dp))
+                        .clip(RoundedCornerShape(36.dp))
                         .background(
                             Brush.verticalGradient(
                                 colors = listOf(
@@ -1347,7 +1347,7 @@ private fun LiveWeatherDashboardWidget(
             ) {
                 Box(
                     Modifier.size(42.dp)
-                        .clip(RoundedCornerShape(13.dp))
+                        .clip(RoundedCornerShape(20.dp))
                         .background(
                             if (currentWeather != null) weatherGradient
                             else Brush.horizontalGradient(
@@ -1606,7 +1606,7 @@ private fun LiveWeatherDashboardWidget(
                 // ── Conditions nudge ──
                 if (conditionsNudge.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = colors.warning.copy(alpha = if (colors.isDark) 0.18f else 0.10f),
                         tonalElevation = 0.dp
                     ) {
@@ -1771,7 +1771,7 @@ private fun QuickActionChip(
     val haptics = rememberFieldMindHaptics()
     Surface(
         onClick = { haptics.light(); onNavigate(screen) },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp,
         modifier = Modifier.pressScale(scaleDown = 0.94f)
@@ -1783,7 +1783,7 @@ private fun QuickActionChip(
         ) {
             Box(
                 Modifier.size(36.dp)
-                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(12.dp)),
+                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(20.dp)),
                 contentAlignment = Alignment.Center
             ) { Icon(icon, null, tint = accent, size = 20.dp) }
             Text(label, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
@@ -1798,7 +1798,7 @@ private fun QuickActionChip(
 @Composable
 private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<FlashcardEntity>, onNavigate: (FieldMindScreen) -> Unit) {
     val current = sources.firstOrNull { it.readingStatus != "Read" } ?: sources.firstOrNull()
-    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Book, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
@@ -1817,7 +1817,7 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
 
 @Composable
 private fun MiniActionTile(title: String, value: String, subtitle: String, icon: MaterialSymbolIcon, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(modifier = modifier.expressivePress(scaleDown = 0.96f).clickable(onClick = onClick), shape = RoundedCornerShape(18.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(modifier = modifier.expressivePress(scaleDown = 0.96f).clickable(onClick = onClick), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
             Text(title, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1842,7 +1842,7 @@ private fun ObservationTimelinePreview(
         }
     }.sortedWith(compareByDescending<TimelinePreviewEvent> { it.date }.thenByDescending { it.time }).take(8)
 
-    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Calendar, null, tint = FieldMindTheme.colors.project, size = 22.dp)
@@ -1858,7 +1858,7 @@ private fun ObservationTimelinePreview(
                     Text(date, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = FieldMindTheme.colors.project)
                     dayEvents.take(3).forEach { event ->
                         Row(
-                            Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { onOpenDetail(event.kind, event.id) }.padding(horizontal = 10.dp, vertical = 8.dp),
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).clickable { onOpenDetail(event.kind, event.id) }.padding(horizontal = 10.dp, vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
@@ -1895,7 +1895,7 @@ private fun CurrentProjectResearchCard(
     val connectedSources = sources.count { it.relatedProjectId == project.id }
     val connectedReports = reports.count { it.projectId == project.id }
 
-    ClickableCard(onClick = onOpen, shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+    ClickableCard(onClick = onOpen, shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Project, null, tint = FieldMindTheme.colors.project, size = 24.dp)
@@ -2006,7 +2006,7 @@ private fun ResearchSessionCtaCard(
     val colors = FieldMindTheme.colors
     Card(
         modifier = Modifier.fillMaxWidth().clickable { haptics.light(); onStartSession() },
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isActive) colors.observation.copy(alpha = 0.14f) else colors.positive.copy(alpha = 0.08f)
         ),
@@ -2018,7 +2018,7 @@ private fun ResearchSessionCtaCard(
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Box(
-                Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                     .background(if (isActive) colors.observation.copy(alpha = 0.16f) else colors.positive.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -2068,7 +2068,7 @@ private fun SessionObservationsCard(
     val totalSessionObs = sessionObs.values.sumOf { it.size }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -2081,7 +2081,7 @@ private fun SessionObservationsCard(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                         .background(colors.observation.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -2123,7 +2123,7 @@ private fun SessionObservationsCard(
                         expandedSessions = if (isExpanded) expandedSessions - sessionName
                         else expandedSessions + sessionName
                     },
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                     ),
@@ -2197,7 +2197,7 @@ private fun SessionObservationsCard(
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .clip(RoundedCornerShape(12.dp))
+                                            .clip(RoundedCornerShape(20.dp))
                                             .clickable { onOpenDetail("observation", observation.id) }
                                             .padding(vertical = 6.dp, horizontal = 4.dp),
                                         verticalAlignment = Alignment.CenterVertically,
@@ -2289,16 +2289,16 @@ internal fun DevWeatherTestPanel(
         allCodes.firstOrNull { it.first == testCode }?.second ?: "Custom ($testCode)"
     } else { "Live" }
     
-    Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(FieldMindIcons.Weather, null, tint = FieldMindTheme.colors.info, size = 18.dp)
                 }
                 Text("Test weather conditions", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                 Spacer(Modifier.weight(1f))
-                Surface(shape = RoundedCornerShape(8.dp), color = if (testCode != null || testTemperature != null || testHumidity != null) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh) {
+                Surface(shape = RoundedCornerShape(16.dp), color = if (testCode != null || testTemperature != null || testHumidity != null) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh) {
                     Text(
                         if (testCode != null || testTemperature != null || testHumidity != null) "Override active" else "Live data",
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
@@ -2339,7 +2339,7 @@ internal fun DevWeatherTestPanel(
                     placeholder = { Text("e.g. 96") },
                     modifier = Modifier.width(140.dp),
                     singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     textStyle = MaterialTheme.typography.bodySmall,
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number)
                 )
@@ -2384,7 +2384,7 @@ internal fun DevWeatherTestPanel(
             if (testCode != null) {
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                 Text("Preview", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
-                Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+                Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
                     Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
                         WeatherConditionImage(code = testCode, isNight = testNight, compact = false, size = 48.dp)
                         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -2495,7 +2495,7 @@ private fun RecentCapturesCard(observations: List<ObservationEntity>, onOpenDeta
     if (observations.isEmpty()) return
     val recentObs = observations.sortedByDescending { it.timestamp }.take(3)
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -2507,7 +2507,7 @@ private fun RecentCapturesCard(observations: List<ObservationEntity>, onOpenDeta
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(14.dp))
+                            .clip(RoundedCornerShape(22.dp))
                             .clickable { onOpenDetail("observation", obs.id) }
                             .padding(10.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -2589,7 +2589,7 @@ private fun ExpandInfoChip(
 ) {
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         color = Color.White.copy(alpha = 0.1f)
     ) {
         Row(
@@ -2620,7 +2620,7 @@ private fun DataToolMiniCard(
     Card(
         onClick = onClick,
         modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2630,7 +2630,7 @@ private fun DataToolMiniCard(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Box(
-                Modifier.size(32.dp).clip(RoundedCornerShape(10.dp))
+                Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
                     .background(color.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -2675,7 +2675,7 @@ private fun QuickCaptureSheet(
             // Sheet content
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+                shape = RoundedCornerShape(topStart = 36.dp, topEnd = 40.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 tonalElevation = 4.dp
             ) {
@@ -2686,7 +2686,7 @@ private fun QuickCaptureSheet(
                     // Drag handle
                     Box(
                         Modifier.width(40.dp).height(4.dp)
-                            .clip(RoundedCornerShape(2.dp))
+                            .clip(RoundedCornerShape(6.dp))
                             .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
                             .align(Alignment.CenterHorizontally)
                     )
@@ -2756,7 +2756,7 @@ private fun QuickCaptureSheet(
                     OutlinedButton(
                         onClick = onDismiss,
                         modifier = Modifier.fillMaxWidth().height(48.dp),
-                        shape = RoundedCornerShape(16.dp)
+                        shape = RoundedCornerShape(24.dp)
                     ) {
                         Text("Cancel", fontWeight = FontWeight.SemiBold)
                     }
@@ -2780,7 +2780,7 @@ private fun QuickCaptureOption(
             .fillMaxWidth()
             .pressScale(scaleDown = 0.97f)
             .clickable { haptics.light(); onClick() },
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
         ),
@@ -2793,7 +2793,7 @@ private fun QuickCaptureOption(
         ) {
             Box(
                 Modifier.size(48.dp)
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(22.dp))
                     .background(accent.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -2920,7 +2920,7 @@ private fun VoiceNoteCaptureDialog(
                 .fillMaxWidth(0.94f)
                 .wrapContentHeight()
                 .padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
+            shape = RoundedCornerShape(40.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
         ) {
             Column(
@@ -2936,7 +2936,7 @@ private fun VoiceNoteCaptureDialog(
                 ) {
                     Box(
                         Modifier.size(48.dp)
-                            .clip(RoundedCornerShape(16.dp))
+                            .clip(RoundedCornerShape(24.dp))
                             .background(FieldMindTheme.colors.flashcard.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -2963,7 +2963,7 @@ private fun VoiceNoteCaptureDialog(
 
                 // ── Recording Controls ──
                 Card(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(30.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                     ),
@@ -3007,7 +3007,7 @@ private fun VoiceNoteCaptureDialog(
                             label = { Text("Voice note title") },
                             placeholder = { Text("e.g. Bird call observation") },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             singleLine = true,
                             enabled = !recording
                         )
@@ -3033,7 +3033,7 @@ private fun VoiceNoteCaptureDialog(
                                         showSnackbar("Recording saved. Add a title and save.")
                                     },
                                     modifier = Modifier.weight(1f).height(48.dp),
-                                    shape = RoundedCornerShape(16.dp),
+                                    shape = RoundedCornerShape(24.dp),
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = Color(0xFFE53935)
                                     )
@@ -3055,7 +3055,7 @@ private fun VoiceNoteCaptureDialog(
                                         )
                                     },
                                     modifier = Modifier.weight(1f).height(48.dp),
-                                    shape = RoundedCornerShape(16.dp),
+                                    shape = RoundedCornerShape(24.dp),
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = FieldMindTheme.colors.flashcard
                                     )
@@ -3101,7 +3101,7 @@ private fun VoiceNoteCaptureDialog(
                                         }
                                     },
                                     modifier = Modifier.weight(1f).height(48.dp),
-                                    shape = RoundedCornerShape(16.dp)
+                                    shape = RoundedCornerShape(24.dp)
                                 ) {
                                     Icon(
                                         MaterialSymbolIcon("save"),
@@ -3130,7 +3130,7 @@ private fun VoiceNoteCaptureDialog(
                         voiceNotes.take(10).forEach { note ->
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(16.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                                 ),
@@ -3143,7 +3143,7 @@ private fun VoiceNoteCaptureDialog(
                                 ) {
                                     Box(
                                         Modifier.size(40.dp)
-                                            .clip(RoundedCornerShape(12.dp))
+                                            .clip(RoundedCornerShape(20.dp))
                                             .background(
                                                 FieldMindTheme.colors.flashcard.copy(alpha = 0.12f)
                                             ),

@@ -165,7 +165,7 @@ fun FieldLogScreen(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Box(
-                            Modifier.size(32.dp).clip(RoundedCornerShape(10.dp))
+                            Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
                                 .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -217,7 +217,7 @@ fun FieldLogScreen(
                 items(completedSessions.take(5), key = { it.id }) { session ->
                     ClickableCard(
                         onClick = { onOpenDetail("research_session", session.id) },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -227,7 +227,7 @@ fun FieldLogScreen(
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Box(
-                                Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                                     .background(FieldMindTheme.colors.positive.copy(alpha = 0.12f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -281,7 +281,7 @@ fun FieldLogScreen(
                                 }
                             }
                         },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         singleLine = true
                     )
                 }
@@ -296,7 +296,7 @@ fun FieldLogScreen(
                 ) {
                     // View mode segmented control
                     Surface(
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(2.dp), horizontalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -307,7 +307,7 @@ fun FieldLogScreen(
                                 val selected = viewMode == mode
                                 Surface(
                                     onClick = { viewMode = mode },
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(20.dp),
                                     color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh
                                 ) {
                                     Row(
@@ -450,7 +450,7 @@ fun FieldLogScreen(
                                     ) {
                                         Box(
                                             Modifier.size(32.dp)
-                                                .clip(RoundedCornerShape(10.dp))
+                                                .clip(RoundedCornerShape(18.dp))
                                                 .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                             contentAlignment = Alignment.Center
                                         ) {

@@ -250,7 +250,7 @@ private fun TaskSectionHeader(
 ) {
     Surface(
         onClick = onToggle,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
@@ -265,7 +265,7 @@ private fun TaskSectionHeader(
             Box(
                 modifier = Modifier
                     .size(32.dp)
-                    .clip(RoundedCornerShape(10.dp))
+                    .clip(RoundedCornerShape(18.dp))
                     .background(accentColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -282,7 +282,7 @@ private fun TaskSectionHeader(
             // Count badge
             if (count > 0) {
                 Surface(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(30.dp),
                     color = accentColor.copy(alpha = 0.12f)
                 ) {
                     Text(
@@ -333,7 +333,7 @@ private fun TaskCard(
     Card(
         onClick = onTap,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isChecked)
                 MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.6f)
@@ -414,7 +414,7 @@ private fun TaskCard(
                 ) {
                     // Priority badge
                     Surface(
-                        shape = RoundedCornerShape(6.dp),
+                        shape = RoundedCornerShape(12.dp),
                         color = priorityColor.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -497,9 +497,9 @@ private fun EmptyTaskHint(message: String) {
 
 @Composable
 private fun StatCard(value: String, label: String, icon: MaterialSymbolIcon, color: Color, modifier: Modifier = Modifier) {
-    Card(modifier, shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(modifier, shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Box(Modifier.size(28.dp).clip(RoundedCornerShape(10.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(28.dp).clip(RoundedCornerShape(18.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(icon, null, tint = color, size = 16.dp)
             }
             Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)

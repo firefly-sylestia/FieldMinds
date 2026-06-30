@@ -284,7 +284,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                                     scaleX = shareButtonScale.value
                                     scaleY = shareButtonScale.value
                                 },
-                            shape = RoundedCornerShape(32.dp)
+                            shape = RoundedCornerShape(40.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Share,
@@ -318,7 +318,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                                     scaleX = restartButtonScale.value
                                     scaleY = restartButtonScale.value
                                 },
-                            shape = RoundedCornerShape(32.dp)
+                            shape = RoundedCornerShape(40.dp)
                         ) {
                             Text(stringResource(R.string.crash_restart_app), style = MaterialTheme.typography.labelLarge)
                             Spacer(modifier = Modifier.width(8.dp))

@@ -146,7 +146,7 @@ fun CanvasScreen(
                         showExitConfirm = false
                         onBack()
                     },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error
                     )
@@ -562,7 +562,7 @@ private fun CanvasTopBar(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)),
+            .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 34.dp)),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp,
         shadowElevation = 0.dp
@@ -578,7 +578,7 @@ private fun CanvasTopBar(
             // ── Back button ──
             Surface(
                 onClick = onBack,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 modifier = Modifier.size(36.dp)
             ) {
@@ -619,7 +619,7 @@ private fun CanvasTopBar(
                 modifier = Modifier
                     .background(
                         MaterialTheme.colorScheme.surfaceContainerHigh,
-                        RoundedCornerShape(8.dp)
+                        RoundedCornerShape(16.dp)
                     )
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
@@ -641,7 +641,7 @@ private fun CanvasTopBar(
                 Surface(
                     onClick = onUndo,
                     enabled = canUndo,
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(16.dp),
                     color = Color.Transparent,
                     modifier = Modifier
                         .size(32.dp)
@@ -662,7 +662,7 @@ private fun CanvasTopBar(
                 Surface(
                     onClick = onRedo,
                     enabled = canRedo,
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(16.dp),
                     color = Color.Transparent,
                     modifier = Modifier
                         .size(32.dp)
@@ -685,7 +685,7 @@ private fun CanvasTopBar(
             // ── Lock toggle ──
             Surface(
                 onClick = onToggleLock,
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(16.dp),
                 color = if (canvasLocked)
                     MaterialTheme.colorScheme.primaryContainer
                 else
@@ -712,7 +712,7 @@ private fun CanvasTopBar(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(1.dp),
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(16.dp))
                     .padding(horizontal = 2.dp)
             ) {
                 // Zoom out
@@ -742,7 +742,7 @@ private fun CanvasTopBar(
             Box {
                 Surface(
                     onClick = { showOverflow = true },
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(16.dp),
                     color = Color.Transparent,
                     modifier = Modifier
                         .size(32.dp)
@@ -1096,7 +1096,7 @@ private fun AddBlockMenu(
 
     Surface(
         modifier = modifier.widthIn(min = 160.dp),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         shadowElevation = 8.dp,
         tonalElevation = 4.dp
@@ -1112,7 +1112,7 @@ private fun AddBlockMenu(
 
             blockTypes.forEach { (type, label) ->
                 Surface(
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(18.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier
                         .fillMaxWidth()

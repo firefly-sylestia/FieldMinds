@@ -176,14 +176,14 @@ fun FieldMindReportScreen(
             // ── Report title ──
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             Box(
-                                Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                                     .background(colors.report.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -198,7 +198,7 @@ fun FieldMindReportScreen(
                             value = reportTitle,
                             onValueChange = { reportTitle = it },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(18.dp),
+                            shape = RoundedCornerShape(28.dp),
                             singleLine = true,
                             placeholder = { Text("Enter report title") }
                         )
@@ -209,7 +209,7 @@ fun FieldMindReportScreen(
             // ── Overview stats ──
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -239,7 +239,7 @@ fun FieldMindReportScreen(
             if (reportData.overview.topCategories.isNotEmpty()) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -252,7 +252,7 @@ fun FieldMindReportScreen(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Box(
-                                        Modifier.size(10.dp).clip(RoundedCornerShape(3.dp))
+                                        Modifier.size(10.dp).clip(RoundedCornerShape(8.dp))
                                             .background(                                        categoryColor(cat))
                                     )
                                     Text(cat, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
@@ -267,7 +267,7 @@ fun FieldMindReportScreen(
             // ── Options card ──
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -284,7 +284,7 @@ fun FieldMindReportScreen(
                                 val selected = reportFormat == fmt
                                 Surface(
                                     onClick = { reportFormat = fmt },
-                                    shape = RoundedCornerShape(14.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     color = if (selected) MaterialTheme.colorScheme.primaryContainer
                                     else MaterialTheme.colorScheme.surfaceContainerHigh,
                                     border = if (selected) androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
@@ -325,7 +325,7 @@ fun FieldMindReportScreen(
                 Button(
                     onClick = { generateReport() },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     enabled = !isGenerating,
                     colors = ButtonDefaults.buttonColors(containerColor = colors.report)
                 ) {
@@ -349,7 +349,7 @@ fun FieldMindReportScreen(
             if (generatedHtml != null) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -384,7 +384,7 @@ fun FieldMindReportScreen(
                             Button(
                                 onClick = { exportReport() },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(16.dp)
+                                shape = RoundedCornerShape(24.dp)
                             ) {
                                 Icon(FieldMindIcons.Export, null, size = 18.dp)
                                 Spacer(Modifier.width(8.dp))
@@ -398,7 +398,7 @@ fun FieldMindReportScreen(
             // ── Information card ──
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {

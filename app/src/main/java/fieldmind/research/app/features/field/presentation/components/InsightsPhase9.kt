@@ -48,7 +48,7 @@ fun ResearchHealthCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -91,7 +91,7 @@ private fun HealthIssueBadge(issue: ResearchHealthIssue) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(severityColor.copy(alpha = 0.1f), RoundedCornerShape(10.dp))
+            .background(severityColor.copy(alpha = 0.1f), RoundedCornerShape(18.dp))
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -99,7 +99,7 @@ private fun HealthIssueBadge(issue: ResearchHealthIssue) {
         Box(
             Modifier
                 .size(8.dp)
-                .background(severityColor, RoundedCornerShape(4.dp))
+                .background(severityColor, RoundedCornerShape(8.dp))
         )
         Column(Modifier.weight(1f)) {
             Text(issue.title, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = severityColor)
@@ -137,7 +137,7 @@ fun ConfidenceSummaryCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = confidenceColor.copy(alpha = 0.15f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -178,7 +178,7 @@ fun InsightsCategoryRanking(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -219,7 +219,7 @@ fun OpenQuestionsCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -236,7 +236,7 @@ fun OpenQuestionsCard(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.background, RoundedCornerShape(16.dp))
                             .padding(10.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -276,7 +276,7 @@ fun TrendIndicator(
 
     Column(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surfaceContainerLow, RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerLow, RoundedCornerShape(20.dp))
             .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp)

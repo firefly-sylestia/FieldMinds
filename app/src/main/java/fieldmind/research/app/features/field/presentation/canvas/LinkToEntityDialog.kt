@@ -134,7 +134,7 @@ fun LinkToEntityDialog(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
-                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 36.dp),
                 color = MaterialTheme.colorScheme.surface
             ) {
                 Column(Modifier.fillMaxSize()) {
@@ -162,7 +162,7 @@ fun LinkToEntityDialog(
                                 ) {
                                     Surface(
                                         onClick = onDismiss,
-                                        shape = RoundedCornerShape(14.dp),
+                                        shape = RoundedCornerShape(22.dp),
                                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                         modifier = Modifier.size(40.dp)
                                     ) {
@@ -234,7 +234,7 @@ fun LinkToEntityDialog(
                                     }
                                 },
                                 singleLine = true,
-                                shape = RoundedCornerShape(16.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 colors = OutlinedTextFieldDefaults.colors(
                                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                                 ),
@@ -254,7 +254,7 @@ fun LinkToEntityDialog(
                                     val isSelected = tab == selectedTab
                                     Surface(
                                         onClick = { selectedTab = tab; searchQuery = "" },
-                                        shape = RoundedCornerShape(12.dp),
+                                        shape = RoundedCornerShape(20.dp),
                                         color = if (isSelected) tab.accent.copy(alpha = 0.15f)
                                         else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         modifier = Modifier.weight(1f)
@@ -449,7 +449,7 @@ private fun EntityListItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onLink),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
@@ -466,7 +466,7 @@ private fun EntityListItem(
             Box(
                 modifier = Modifier
                     .size(40.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(20.dp))
                     .background(accentColor.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -504,7 +504,7 @@ private fun EntityListItem(
             // Link button
             Surface(
                 onClick = onLink,
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(18.dp),
                 color = accentColor.copy(alpha = 0.12f)
             ) {
                 Row(

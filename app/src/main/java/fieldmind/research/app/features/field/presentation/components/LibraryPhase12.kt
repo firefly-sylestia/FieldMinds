@@ -47,7 +47,7 @@ fun SourceCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -88,8 +88,8 @@ fun HighlightCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .border(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f), RoundedCornerShape(14.dp)),
-        shape = RoundedCornerShape(14.dp),
+            .border(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f), RoundedCornerShape(22.dp)),
+        shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -137,7 +137,7 @@ fun SourceMetadataPanel(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -188,7 +188,7 @@ fun KnowledgeExtractionMenu(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -209,7 +209,7 @@ fun KnowledgeExtractionMenu(
 
 @Composable
 private fun ExtractionButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    OutlinedButton(onClick = onClick, modifier = modifier.height(36.dp), shape = RoundedCornerShape(8.dp)) {
+    OutlinedButton(onClick = onClick, modifier = modifier.height(36.dp), shape = RoundedCornerShape(16.dp)) {
         Text(label, style = MaterialTheme.typography.labelSmall)
     }
 }
@@ -231,7 +231,7 @@ fun BacklinksPanel(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -272,7 +272,7 @@ private fun BacklinkChip(label: String, onClick: () -> Unit, modifier: Modifier 
     OutlinedButton(
         onClick = onClick,
         modifier = modifier.height(36.dp),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(18.dp)
     ) {
         Text(label, style = MaterialTheme.typography.labelSmall)
     }

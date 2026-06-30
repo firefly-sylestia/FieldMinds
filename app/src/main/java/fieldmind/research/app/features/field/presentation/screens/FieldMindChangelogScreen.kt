@@ -724,7 +724,7 @@ fun FieldMindChangelogScreen(onBack: () -> Unit) {
         // Introduction card
         item {
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -769,7 +769,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
     }
     
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isLatest) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f) 
                           else MaterialTheme.colorScheme.surfaceContainerLow
@@ -782,7 +782,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 Box(
                     Modifier.size(56.dp)
-                        .clip(RoundedCornerShape(18.dp))
+                        .clip(RoundedCornerShape(28.dp))
                         .background(accentColor.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -821,7 +821,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
                 }
                 // Importance badge
                 Box(
-                    Modifier.clip(RoundedCornerShape(12.dp))
+                    Modifier.clip(RoundedCornerShape(20.dp))
                         .background(
                             when (entry.importance) {
                                 "Major" -> MaterialTheme.colorScheme.errorContainer
@@ -852,7 +852,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
                 ) {
                     entry.tags.forEach { tag ->
                         Box(
-                            Modifier.clip(RoundedCornerShape(10.dp))
+                            Modifier.clip(RoundedCornerShape(18.dp))
                                 .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f))
                                 .padding(horizontal = 10.dp, vertical = 5.dp),
                             contentAlignment = Alignment.Center
@@ -885,7 +885,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
                     ) {
                         Box(
                             Modifier.size(6.dp)
-                                .clip(RoundedCornerShape(3.dp))
+                                .clip(RoundedCornerShape(8.dp))
                                 .background(accentColor)
                         )
                         Text(
@@ -927,7 +927,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
                 Spacer(Modifier.height(4.dp))
                 Box(
                     Modifier.fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
+                        .clip(RoundedCornerShape(22.dp))
                         .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
                         .padding(12.dp),
                     contentAlignment = Alignment.Center

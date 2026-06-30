@@ -103,7 +103,7 @@ fun EntityAccentColorsPage(
         // ── Info card ──
         item {
             Card(
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(28.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                 ),
@@ -140,7 +140,7 @@ fun EntityAccentColorsPage(
             val isEditing = editingKey == key
 
             Card(
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(28.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = if (isOverridden)
                         Color(currentColor).copy(alpha = 0.06f)
@@ -172,7 +172,7 @@ fun EntityAccentColorsPage(
                         Box(
                             modifier = Modifier
                                 .size(40.dp)
-                                .clip(RoundedCornerShape(12.dp))
+                                .clip(RoundedCornerShape(20.dp))
                                 .background(Color(currentColor)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -225,7 +225,7 @@ fun EntityAccentColorsPage(
                                 Box(
                                     modifier = Modifier
                                         .size(36.dp)
-                                        .clip(RoundedCornerShape(10.dp))
+                                        .clip(RoundedCornerShape(18.dp))
                                         .background(Color(tempColor)),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -246,7 +246,7 @@ fun EntityAccentColorsPage(
                                 if (tempColor != defaultColor) {
                                     Surface(
                                         onClick = { tempColor = defaultColor },
-                                        shape = RoundedCornerShape(10.dp),
+                                        shape = RoundedCornerShape(18.dp),
                                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                                     ) {
                                         Icon(MaterialSymbolIcon("restart_alt"), "Reset", size = 18.dp, modifier = Modifier.padding(8.dp))
@@ -261,7 +261,7 @@ fun EntityAccentColorsPage(
                                         settings.setEntityColors(updated)
                                         editingKey = null
                                     },
-                                    shape = RoundedCornerShape(10.dp),
+                                    shape = RoundedCornerShape(18.dp),
                                     color = Color(tempColor)
                                 ) {
                                     Icon(MaterialSymbolIcon("check"), "Apply", tint = Color.White, size = 18.dp, modifier = Modifier.padding(8.dp))
@@ -269,7 +269,7 @@ fun EntityAccentColorsPage(
                                 // Cancel
                                 Surface(
                                     onClick = { editingKey = null },
-                                    shape = RoundedCornerShape(10.dp),
+                                    shape = RoundedCornerShape(18.dp),
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                                 ) {
                                     Icon(MaterialSymbolIcon("close"), "Cancel", size = 18.dp, modifier = Modifier.padding(8.dp))
@@ -293,12 +293,12 @@ fun EntityAccentColorsPage(
                                         Box(
                                             modifier = Modifier
                                                 .size(40.dp)
-                                                .clip(RoundedCornerShape(10.dp))
+                                                .clip(RoundedCornerShape(18.dp))
                                                 .background(Color(colorLong))
                                                 .then(
                                                     if (isSelected) Modifier.border(
                                                         3.dp, MaterialTheme.colorScheme.onSurface,
-                                                        RoundedCornerShape(10.dp)
+                                                        RoundedCornerShape(18.dp)
                                                     ) else Modifier
                                                 )
                                                 .clickable {
@@ -345,7 +345,7 @@ fun EntityAccentColorsPage(
                                 },
                                 modifier = Modifier.width(120.dp),
                                 singleLine = true,
-                                shape = RoundedCornerShape(10.dp),
+                                shape = RoundedCornerShape(18.dp),
                                 textStyle = MaterialTheme.typography.bodySmall,
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -369,7 +369,7 @@ fun EntityAccentColorsPage(
                     editingKey = null
                 },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = MaterialTheme.colorScheme.error
                 )

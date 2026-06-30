@@ -363,7 +363,7 @@ fun InsightsScreen(
                 item { SectionHeader("Top tags", "${tags.size} total") }
                 item {
                     Card(
-                        shape = RoundedCornerShape(22.dp),
+                        shape = RoundedCornerShape(32.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                     ) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -383,7 +383,7 @@ fun InsightsScreen(
             item { SectionHeader("Knowledge graph", "${graphData.first.size} connected entities") }
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -444,7 +444,7 @@ fun InsightsScreen(
             } else {
                 item {
                     Card(
-                        shape = RoundedCornerShape(22.dp),
+                        shape = RoundedCornerShape(32.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                     ) {
                         Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -498,7 +498,7 @@ fun InsightsScreen(
 
 @Composable
 private fun ResearchJourneyCard(observations: List<ObservationEntity>, questions: List<QuestionEntity>, hypotheses: List<HypothesisEntity>, projects: List<ProjectEntity>) {
-    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Research journey", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Text("Question → observations → patterns → hypothesis → findings", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -600,7 +600,7 @@ private fun DataRecordInsightCard(record: DataRecordEntity, onClick: () -> Unit)
 @Composable
 private fun ResearchProfileCard(name: String, role: String, focus: String, todayCount: Int, weekCount: Int, goal: Int) {
     Card(
-        shape = RoundedCornerShape(26.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -668,7 +668,7 @@ private fun CollapsibleAchievements(
     }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.pressScale(scaleDown = 0.98f).clickable { expanded = !expanded }
@@ -696,7 +696,7 @@ private fun AchievementCardV2(item: ResearchAchievement, modifier: Modifier = Mo
     val animatedProgress by animateFloatAsState(targetValue = item.fraction, animationSpec = tween(600), label = "achieve")
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (item.unlocked) item.accent.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surfaceContainerHigh
         ),
@@ -705,7 +705,7 @@ private fun AchievementCardV2(item: ResearchAchievement, modifier: Modifier = Mo
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Box(
-                    Modifier.size(36.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(36.dp).clip(RoundedCornerShape(20.dp))
                         .background(item.accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.3f else 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -752,7 +752,7 @@ private fun GraphLegend(label: String, color: Color) {
 @Composable
 private fun InsightCard(title: String, icon: MaterialSymbolIcon, content: @Composable () -> Unit) {
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
  * should respond to tap with the signature iOS-style lift-and-scale feedback.
  *
  * Defaults mirror the project conventions:
- * - RoundedCornerShape(24.dp)
+ * - RoundedCornerShape(34.dp)
  * - surfaceContainerLow background
  * - zero elevation
  * - 1.5dp lift, 0.985 scale-down on press
@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 fun ClickableCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(24.dp),
+    shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
@@ -58,7 +58,7 @@ fun ClickableCard(
 @Composable
 fun InfoCard(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(24.dp),
+    shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
@@ -83,7 +83,7 @@ fun ClickableCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     fillMaxWidth: Boolean = true,
-    shape: Shape = RoundedCornerShape(24.dp),
+    shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),

@@ -62,7 +62,7 @@ fun SwipeableAlertDialog(
     text: @Composable (() -> Unit)? = null,
     confirmButton: @Composable () -> Unit,
     dismissButton: @Composable (() -> Unit)? = null,
-    shape: Shape = RoundedCornerShape(28.dp),
+    shape: Shape = RoundedCornerShape(36.dp),
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     tonalElevation: androidx.compose.ui.unit.Dp = 6.dp
 ) {

@@ -68,7 +68,7 @@ fun SecurityScoreDetailPage(settings: FieldMindSettings, onBack: () -> Unit) {
     SettingsSubPage(onBack = onBack, title = "Security Score", icon = MaterialSymbolIcon("security")) {
         item {
             Card(
-                shape = RoundedCornerShape(26.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Column(Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -100,7 +100,7 @@ fun SecurityScoreDetailPage(settings: FieldMindSettings, onBack: () -> Unit) {
                     // Progress bar
                     LinearProgressIndicator(
                         progress = { score / 100f },
-                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
+                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
                         color = scoreColor,
                         trackColor = scoreColor.copy(alpha = 0.12f)
                     )
@@ -118,7 +118,7 @@ fun SecurityScoreDetailPage(settings: FieldMindSettings, onBack: () -> Unit) {
         if (enabledItems.any { it.second }) {
             item {
                 Card(
-                    shape = RoundedCornerShape(22.dp),
+                    shape = RoundedCornerShape(32.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -138,7 +138,7 @@ fun SecurityScoreDetailPage(settings: FieldMindSettings, onBack: () -> Unit) {
         if (recommendedItems.isNotEmpty()) {
             item {
                 Card(
-                    shape = RoundedCornerShape(22.dp),
+                    shape = RoundedCornerShape(32.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -184,7 +184,7 @@ fun ExportProtectionPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Surface(
                         onClick = { showPasswordDialog = true },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth().padding(16.dp)
                     ) {
@@ -220,7 +220,7 @@ fun ExportProtectionPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 if (encryptionLevel == "Maximum") {
                     Spacer(Modifier.height(8.dp))
                     Surface(
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f),
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
                     ) {
@@ -255,7 +255,7 @@ fun ExportProtectionPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         isError = passwordError,
                         visualTransformation = PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         textStyle = MaterialTheme.typography.titleMedium.copy(letterSpacing = 4.sp, textAlign = TextAlign.Center)
                     )
                     OutlinedTextField(
@@ -266,7 +266,7 @@ fun ExportProtectionPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         isError = passwordError,
                         visualTransformation = PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         textStyle = MaterialTheme.typography.titleMedium.copy(letterSpacing = 4.sp, textAlign = TextAlign.Center)
                     )
                     if (passwordError) {
@@ -307,7 +307,7 @@ fun AppPreviewPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     SettingsSubPage(onBack = onBack, title = "App Preview", icon = MaterialSymbolIcon("visibility")) {
         item {
             Card(
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(32.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -322,7 +322,7 @@ fun AppPreviewPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val selected = previewMode == mode
                         Surface(
                             onClick = { settings.setAppPreviewMode(mode) },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (selected) androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                         ) {
@@ -342,7 +342,7 @@ fun AppPreviewPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         // Preview card
         item {
             Card(
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(32.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -350,7 +350,7 @@ fun AppPreviewPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     when (previewMode) {
                         "Normal" -> {
                             Box(
-                                Modifier.fillMaxWidth().height(100.dp).clip(RoundedCornerShape(14.dp))
+                                Modifier.fillMaxWidth().height(100.dp).clip(RoundedCornerShape(22.dp))
                                     .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -359,7 +359,7 @@ fun AppPreviewPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         }
                         "Blur Content" -> {
                             Box(
-                                Modifier.fillMaxWidth().height(100.dp).clip(RoundedCornerShape(14.dp))
+                                Modifier.fillMaxWidth().height(100.dp).clip(RoundedCornerShape(22.dp))
                                     .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -370,7 +370,7 @@ fun AppPreviewPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         }
                         "Privacy Screen" -> {
                             Box(
-                                Modifier.fillMaxWidth().height(100.dp).clip(RoundedCornerShape(14.dp))
+                                Modifier.fillMaxWidth().height(100.dp).clip(RoundedCornerShape(22.dp))
                                     .background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.08f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -422,7 +422,7 @@ fun FailedUnlocksPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     SettingsSubPage(onBack = onBack, title = "Failed Unlocks", icon = MaterialSymbolIcon("lock_person")) {
         item {
             Card(
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(32.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -433,7 +433,7 @@ fun FailedUnlocksPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val selected = cooldown == option
                         Surface(
                             onClick = { settings.setFailedUnlockCooldown(option) },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (selected) androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                         ) {
@@ -470,7 +470,7 @@ fun FailedUnlocksPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         if (panicLock) {
             item {
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -503,7 +503,7 @@ fun MetadataProtectionPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     SettingsSubPage(onBack = onBack, title = "Metadata Protection", icon = MaterialSymbolIcon("perm_media")) {
         item {
             Card(
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(32.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
             ) {
                 Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -549,7 +549,7 @@ fun DecoyPinPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     SettingsSubPage(onBack = onBack, title = "Decoy PIN", icon = MaterialSymbolIcon("lock_open")) {
         item {
             Card(
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(32.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
             ) {
                 Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -577,7 +577,7 @@ fun DecoyPinPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Surface(
                         onClick = { showSetupDialog = true; decoyLabelInput = decoyLabel },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth().padding(16.dp)
                     ) {
@@ -617,7 +617,7 @@ fun DecoyPinPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         singleLine = true,
                         visualTransformation = PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center)
                     )
                     OutlinedTextField(
@@ -628,7 +628,7 @@ fun DecoyPinPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         isError = decoyError,
                         visualTransformation = PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center)
                     )
                     OutlinedTextField(
@@ -638,7 +638,7 @@ fun DecoyPinPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         placeholder = { Text("e.g. \"Guest mode\"") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp)
+                        shape = RoundedCornerShape(28.dp)
                     )
                     if (decoyError) {
                         Text("PINs don't match. Try again.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
@@ -686,7 +686,7 @@ fun AppPinLengthPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val selected = pinLength == option
                         Surface(
                             onClick = { settings.setAppPinLength(option) },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (selected) androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                         ) {
