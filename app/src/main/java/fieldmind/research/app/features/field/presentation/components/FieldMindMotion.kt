@@ -259,8 +259,8 @@ object FieldMindMotion {
     const val swipeScaleFactor = 0.92f
     const val swipeScrimAlpha = 0.35f
     const val swipeShadowElevationDp = 24f
-    const val swipeCornerRadiusDp = 22f
-    const val swipeBaseCornerRadiusDp = 4f
+    const val swipeCornerRadiusDp = 28f
+    const val swipeBaseCornerRadiusDp = 8f
 
     // -- Utility --
 
@@ -548,7 +548,7 @@ fun SwipeBackHost(
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp),
+                        shape = RoundedCornerShape(topEnd = 28.dp, bottomEnd = 28.dp),
                         tonalElevation = 3.dp,
                         shadowElevation = 16.dp,
                         border = androidx.compose.foundation.BorderStroke(
