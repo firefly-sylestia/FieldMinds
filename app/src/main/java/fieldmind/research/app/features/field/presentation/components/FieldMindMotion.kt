@@ -93,14 +93,16 @@ val LocalPeekContentHolder = compositionLocalOf { PeekContentHolder() }
  * to customize spring physics without recompiling.
  */
 data class AnimationConfig(
-    val entranceDampingRatio: Float = 0.85f,
-    val entranceStiffness: Float = Spring.StiffnessMedium,
-    val swipeBackDampingRatio: Float = 0.75f,
-    val swipeBackStiffness: Float = 800f,
-    val cancelDampingRatio: Float = 0.85f,
-    val cancelStiffness: Float = Spring.StiffnessLow,
-    val tabEntranceDampingRatio: Float = 0.8f,
-    val tabEntranceStiffness: Float = Spring.StiffnessMedium,
+    // ── Soft, elegant spring defaults ──
+    // Low stiffness = slow, gentle motion. High damping = smooth, no bounce.
+    val entranceDampingRatio: Float = 0.9f,
+    val entranceStiffness: Float = 300f,
+    val swipeBackDampingRatio: Float = 0.85f,
+    val swipeBackStiffness: Float = 300f,
+    val cancelDampingRatio: Float = 0.9f,
+    val cancelStiffness: Float = 150f,
+    val tabEntranceDampingRatio: Float = 0.9f,
+    val tabEntranceStiffness: Float = 400f,
     val swipeThreshold: Float = 0.20f,
     val swipeScaleFactor: Float = 0.92f
 ) {

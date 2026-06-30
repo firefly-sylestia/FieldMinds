@@ -1200,9 +1200,18 @@ private fun TabContentBox(
     onNavigateToDestination: (String) -> Unit,
     onPopBackStack: () -> Unit,
     sharedTransitionScope: SharedTransitionScope? = null,
-    entranceProgress: Float = 1f // 0 = just became active (scale up + fade in), 1 = fully entered
+    entranceProgress: Float = 1f, // 0 = just became active (scale up + fade in), 1 = fully entered
+    visibleTabs: List<FieldMindScreen> = emptyList(),
+    onTabSelected: ((Int) -> Unit)? = null
 ) {
-    val onNav: (FieldMindScreen) -> Unit = { screen -> onNavigateToDestination(screen.route) }
+    val onNav: (FieldMindScreen) -> Unit = { screen ->
+        val tabIdx = visibleTabs.indexOf(screen)
+        if (tabIdx >= 0) {
+            onTabSelected?.invoke(tabIdx)
+        } else {
+            onNavigateToDestination(screen.route)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -1503,7 +1512,9 @@ private fun AllTabScreen(
             onNavigateToDestination = onNavigateToDestination,
             onPopBackStack = onPopBackStack,
             sharedTransitionScope = sharedTransitionScope,
-            entranceProgress = tabEntranceProgress.value
+            entranceProgress = tabEntranceProgress.value,
+            visibleTabs = visibleTabs,
+            onTabSelected = onTabSelected
         )
     }
 }

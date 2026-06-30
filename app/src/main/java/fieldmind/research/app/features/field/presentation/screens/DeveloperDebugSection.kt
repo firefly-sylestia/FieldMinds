@@ -26,6 +26,7 @@ import fieldmind.research.app.features.field.presentation.components.FieldMindIc
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
+import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -548,7 +549,6 @@ private fun AnimationPreviewDemo() {
                     scaleAnim.snapTo(0f)
                     offsetXAnim.snapTo(0f)
                     offsetYAnim.snapTo(0f)
-                    rotationAnim.snapTo(0f)
                     scaleAnim.animateTo(1f, animConfig.entranceSpring())
                 }
             },
