@@ -128,10 +128,13 @@ fun AnimationTuningCard(
     settings: FieldMindSettings
 ) {
     val entranceDamping by settings.animEntranceDamping.collectAsState()
+    val entranceStiffness by settings.animEntranceStiffness.collectAsState()
     val swipeBackDamping by settings.animSwipeBackDamping.collectAsState()
+    val swipeBackStiffness by settings.animSwipeBackStiffness.collectAsState()
     val swipeThreshold by settings.animSwipeThreshold.collectAsState()
     val swipeScale by settings.animSwipeScaleFactor.collectAsState()
     val tabDamping by settings.animTabEntranceDamping.collectAsState()
+    val tabStiffness by settings.animTabEntranceStiffness.collectAsState()
 
     Card(
         shape = RoundedCornerShape(22.dp),
@@ -148,7 +151,7 @@ fun AnimationTuningCard(
 
             Spacer(Modifier.height(4.dp))
 
-            // ── Entrance damping slider ──
+            // ── Entrance damping + stiffness ──
             Text("Entrance damping: %.2f".format(entranceDamping), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
             Slider(
                 value = entranceDamping,
@@ -161,8 +164,20 @@ fun AnimationTuningCard(
                 Text("Bouncy", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text("Smooth", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
+            Text("Entrance stiffness: %.0f".format(entranceStiffness), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = entranceStiffness,
+                onValueChange = { settings.setAnimEntranceStiffness(it.coerceIn(200f, 10000f)) },
+                valueRange = 200f..10000f,
+                steps = 49,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Soft", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Stiff", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
 
-            // ── Swipe-back damping slider ──
+            // ── Swipe-back damping + stiffness ──
             Text("Swipe-back damping: %.2f".format(swipeBackDamping), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
             Slider(
                 value = swipeBackDamping,
@@ -175,8 +190,20 @@ fun AnimationTuningCard(
                 Text("Bouncy", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text("Smooth", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
+            Text("Swipe-back stiffness: %.0f".format(swipeBackStiffness), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = swipeBackStiffness,
+                onValueChange = { settings.setAnimSwipeBackStiffness(it.coerceIn(200f, 10000f)) },
+                valueRange = 200f..10000f,
+                steps = 49,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Soft", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Stiff", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
 
-            // ── Tab entrance damping slider ──
+            // ── Tab entrance damping + stiffness ──
             Text("Tab entrance damping: %.2f".format(tabDamping), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
             Slider(
                 value = tabDamping,
@@ -188,6 +215,18 @@ fun AnimationTuningCard(
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text("Bouncy", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text("Smooth", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Text("Tab entrance stiffness: %.0f".format(tabStiffness), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = tabStiffness,
+                onValueChange = { settings.setAnimTabEntranceStiffness(it.coerceIn(200f, 10000f)) },
+                valueRange = 200f..10000f,
+                steps = 49,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Soft", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Stiff", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
             // ── Swipe threshold slider ──
@@ -224,10 +263,13 @@ fun AnimationTuningCard(
                 onClick = {
                     val def = AnimationConfig.DEFAULT
                     settings.setAnimEntranceDamping(def.entranceDampingRatio)
+                    settings.setAnimEntranceStiffness(def.entranceStiffness)
                     settings.setAnimSwipeBackDamping(def.swipeBackDampingRatio)
+                    settings.setAnimSwipeBackStiffness(def.swipeBackStiffness)
                     settings.setAnimSwipeThreshold(def.swipeThreshold)
                     settings.setAnimSwipeScaleFactor(def.swipeScaleFactor)
                     settings.setAnimTabEntranceDamping(def.tabEntranceDampingRatio)
+                    settings.setAnimTabEntranceStiffness(def.tabEntranceStiffness)
                 },
                 shape = RoundedCornerShape(12.dp),
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
