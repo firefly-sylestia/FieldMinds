@@ -44,6 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import fieldmind.research.app.features.field.presentation.components.FieldMindSnackbarProvider
 import fieldmind.research.app.features.field.presentation.components.SwipeBackHost
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
+import fieldmind.research.app.features.field.presentation.components.LocalSharedTransitionScope
 import fieldmind.research.app.features.field.presentation.components.PeekScreenType
 import fieldmind.research.app.features.field.presentation.components.PreviousScreenInfo
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
@@ -925,7 +926,8 @@ private fun FieldMindNavHost(
 
     SharedTransitionLayout(modifier = modifier) {
         val composableScope = this
-        NavHost(
+        CompositionLocalProvider(LocalSharedTransitionScope provides composableScope) {
+            NavHost(
             navController = navController,
             startDestination = "field_tab_container",
             modifier = Modifier,
@@ -1150,8 +1152,9 @@ private fun FieldMindNavHost(
                     )
                 }
             }
-        }
-    }
+        } // end NavHost
+        } // end CompositionLocalProvider
+    } // end SharedTransitionLayout
 }
 
 /** Map a route string to a [PreviousScreenInfo] for the peek animation preview. */
@@ -1249,23 +1252,35 @@ private fun TabContentBox(
                     )
                 }
             }
-            FieldMindScreen.Observe -> ObserveScreen(
-                viewModel = viewModel,
-                onBack = onPopBackStack,
-                onOpenDetail = openDetail
-            )
-            FieldMindScreen.Projects -> ProjectsScreen(
-                viewModel = viewModel,
-                onOpenDetail = { _, id -> onNavigateToDestination("field_project_detail/$id") },
-                onStartSession = { onNavigateToDestination(FieldMindScreen.ResearchSession.route) },
-                onNavigate = onNav
-            )
-            FieldMindScreen.Insights -> InsightsScreen(
-                viewModel = viewModel,
-                onBack = onPopBackStack,
-                onNavigate = onNav,
-                onOpenDetail = openDetail
-            )
+            FieldMindScreen.Observe -> {
+                with(sharedTransitionScope ?: return@Box) {
+                    ObserveScreen(
+                        viewModel = viewModel,
+                        onBack = onPopBackStack,
+                        onOpenDetail = openDetail
+                    )
+                }
+            }
+            FieldMindScreen.Projects -> {
+                with(sharedTransitionScope ?: return@Box) {
+                    ProjectsScreen(
+                        viewModel = viewModel,
+                        onOpenDetail = { _, id -> onNavigateToDestination("field_project_detail/$id") },
+                        onStartSession = { onNavigateToDestination(FieldMindScreen.ResearchSession.route) },
+                        onNavigate = onNav
+                    )
+                }
+            }
+            FieldMindScreen.Insights -> {
+                with(sharedTransitionScope ?: return@Box) {
+                    InsightsScreen(
+                        viewModel = viewModel,
+                        onBack = onPopBackStack,
+                        onNavigate = onNav,
+                        onOpenDetail = openDetail
+                    )
+                }
+            }
             FieldMindScreen.Library -> {
                 with(sharedTransitionScope ?: return@Box) {
                     KnowledgeLibraryScreen(
