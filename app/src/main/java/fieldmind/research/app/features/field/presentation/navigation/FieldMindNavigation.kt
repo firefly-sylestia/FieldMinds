@@ -1251,7 +1251,7 @@ private fun TabContentBox(
                     HomeScreen(
                         viewModel = viewModel,
                         onOpenSettings = onOpenSettings,
-                        onNavigate = { screen -> onNavigateToDestination(screen.route) },
+                        onNavigate = onNav,
                         onOpenDetail = openDetail,
                         onOpenReader = openReader,
                         onOpenCanvas = { onOpenCanvas(0L) }
