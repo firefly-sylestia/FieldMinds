@@ -919,7 +919,7 @@ private fun FieldMindNavHost(
     // via PeekContentHolder + CompositionLocal, so the predictive back gesture
     // shows the ACTUAL previous screen composable (with real data, same ViewModel)
     // instead of mock placeholder cards.
-    val previousRoute = remember(currentBackEntry) {
+    val previousRoute = remember {
         navController.previousBackStackEntry?.destination?.route
     }
     val peekHolder = remember { PeekContentHolder() }
