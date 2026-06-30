@@ -1236,7 +1236,8 @@ private fun TabContentBox(
     onOpenCanvas: (Long) -> Unit,
     onNavigateToDestination: (String) -> Unit,
     onPopBackStack: () -> Unit,
-    sharedTransitionScope: SharedTransitionScope? = null
+    sharedTransitionScope: SharedTransitionScope? = null,
+    entranceProgress: Float = 1f // 0 = just became active (scale up + fade in), 1 = fully entered
 ) {
     val onNav: (FieldMindScreen) -> Unit = { screen -> onNavigateToDestination(screen.route) }
 
@@ -1245,9 +1246,17 @@ private fun TabContentBox(
             .fillMaxSize()
             .offset { IntOffset(offsetX.roundToInt(), 0) }
             .graphicsLayer {
-                scaleX = scale
-                scaleY = scale
-                this.alpha = alpha
+                // ── Entrance animation for newly active tab ──
+                // When a tab becomes active via tapping (entranceProgress animates 0→1),
+                // the content scales up from 0.95 and fades in from alpha 0.7,
+                // creating a smooth "pop" entrance. For swipe gestures the entrance
+                // animation is fast enough (spring, ~300ms) to blend naturally with
+                // the slide animation driven by animX.
+                val entranceScale = 0.95f + 0.05f * entranceProgress
+                val entranceAlpha = 0.7f + 0.3f * entranceProgress
+                scaleX = scale * entranceScale
+                scaleY = scale * entranceScale
+                this.alpha = alpha * entranceAlpha
                 clip = true
             }
             .then(
@@ -1349,6 +1358,26 @@ private fun AllTabScreen(
     val haptics = rememberFieldMindHaptics()
 
     val isFirstTab = activeTabIndex == 0
+
+    // ── Tab entrance animation (scale-up + fade-in on tap-switch) ──
+    // When a tab is activated via tapping (not swiping), the content
+    // smoothly scales up from 0.95 and fades in from alpha 0.7 using
+    // spring physics for a polished "pop" entrance.
+    val tabEntranceProgress = remember { Animatable(1f) }
+    var lastActiveIndex by remember { mutableIntStateOf(activeTabIndex) }
+    LaunchedEffect(activeTabIndex) {
+        if (activeTabIndex != lastActiveIndex) {
+            lastActiveIndex = activeTabIndex
+            tabEntranceProgress.snapTo(0f)
+            tabEntranceProgress.animateTo(
+                1f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
+        }
+    }
 
     // ── Device back button: previous tab, or exit on first tab ──
     BackHandler(enabled = !isFirstTab) {
@@ -1493,11 +1522,12 @@ private fun AllTabScreen(
                 onOpenCanvas = onOpenCanvas,
                 onNavigateToDestination = onNavigateToDestination,
                 onPopBackStack = onPopBackStack,
-                sharedTransitionScope = sharedTransitionScope
+                sharedTransitionScope = sharedTransitionScope,
+                entranceProgress = 1f // non-active tabs don't animate entrance
             )
         }
 
-        // Phase 2: Active tab (on top)
+        // Phase 2: Active tab (on top) — with entrance animation from tapping
         TabContentBox(
             screen = visibleTabs[activeTabIndex],
             offsetX = animX.value,
@@ -1511,7 +1541,8 @@ private fun AllTabScreen(
             onOpenCanvas = onOpenCanvas,
             onNavigateToDestination = onNavigateToDestination,
             onPopBackStack = onPopBackStack,
-            sharedTransitionScope = sharedTransitionScope
+            sharedTransitionScope = sharedTransitionScope,
+            entranceProgress = tabEntranceProgress.value
         )
     }
 }
