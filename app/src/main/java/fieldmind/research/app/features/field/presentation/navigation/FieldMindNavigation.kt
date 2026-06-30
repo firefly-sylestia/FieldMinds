@@ -364,10 +364,10 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                 // .liquidGlassRefraction() applies GPU displacement & specular.
                 if (!hideChrome) {
                     Surface(
-                        shape = RoundedCornerShape(size = 24.dp),
+                        shape = RoundedCornerShape(size = 30.dp),
                         color = Color.Transparent,
                         tonalElevation = 0.dp,
-                        shadowElevation = 8.dp,
+                        shadowElevation = 12.dp,
                         border = androidx.compose.foundation.BorderStroke(
                             width = 0.6.dp,
                             color = if (isSystemInDarkTheme())
@@ -381,13 +381,14 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                             .hazeChild(
                                 state = hazeState,
                                 style = HazeStyle(
-                                    blurRadius = 24.dp,
-                                    noiseFactor = 0.04f,
+                                    blurRadius = 32.dp,
+                                    noiseFactor = 0.06f,
                                     tints = listOf(
                                         HazeTint(
-                                            color = MaterialTheme.colorScheme.surfaceContainer.copy(
-                                                alpha = if (isSystemInDarkTheme()) 0.88f else 0.93f
-                                            )
+                                            color = if (isSystemInDarkTheme())
+                                                MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.88f)
+                                            else
+                                                Color(0xFFFFF5E6).copy(alpha = 0.78f)
                                         )
                                     )
                                 )
@@ -459,31 +460,32 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                             .align(Alignment.BottomCenter)
                             .fillMaxWidth()
                             .navigationBarsPadding()
-                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
                             .wrapContentHeight(align = Alignment.Bottom)
                     ) {
                         // Glassmorphic nav pill — real backdrop blur via Haze with
                         // GPU liquid-glass displacement, specular highlights, and
                         // Fresnel edge glow via the .liquidGlassRefraction() modifier.
                         Surface(
-                            shape = RoundedCornerShape(34.dp),
+                            shape = RoundedCornerShape(50.dp),
                             color = Color.Transparent,
                             tonalElevation = 0.dp,
-                            shadowElevation = 8.dp,
+                            shadowElevation = 16.dp,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(66.dp)
-                                .clip(RoundedCornerShape(34.dp))
+                                .height(72.dp)
+                                .clip(RoundedCornerShape(50.dp))
                                 .hazeChild(
                                     state = hazeState,
                                     style = HazeStyle(
-                                        blurRadius = 24.dp,
-                                        noiseFactor = 0.04f,
+                                        blurRadius = 32.dp,
+                                        noiseFactor = 0.06f,
                                         tints = listOf(
                                             HazeTint(
-                                                color = MaterialTheme.colorScheme.surfaceContainer.copy(
-                                                    alpha = if (isSystemInDarkTheme()) 0.88f else 0.93f
-                                                )
+                                                color = if (isSystemInDarkTheme())
+                                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.88f)
+                                                else
+                                                    Color(0xFFFFF5E6).copy(alpha = 0.78f)
                                             )
                                         )
                                     )

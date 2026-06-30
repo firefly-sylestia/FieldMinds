@@ -467,7 +467,7 @@ fun SharedTransitionScope.HomeScreen(
             onClick = { showQuickCaptureSheet = true },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 16.dp),
+                .padding(end = 16.dp, bottom = 112.dp),
             shape = CircleShape,
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
