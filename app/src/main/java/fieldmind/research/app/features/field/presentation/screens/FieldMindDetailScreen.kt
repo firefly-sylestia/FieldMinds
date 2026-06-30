@@ -1895,7 +1895,7 @@ private fun ObservationQuickAddDialog(
     val categories = listOf("General", "Flora", "Fauna", "Fungi", "Geology", "Weather", "Habitat", "Behavior", "Other")
     var showCategoryMenu by remember { mutableStateOf(false) }
 
-    AlertDialog(
+    SwipeableAlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Quick Observation", fontWeight = FontWeight.Bold) },
         text = {

@@ -625,7 +625,7 @@ private fun DownloadRegionDialog(
     var minZoom by remember { mutableStateOf("10") }
     var maxZoom by remember { mutableStateOf("16") }
 
-    AlertDialog(
+    SwipeableAlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Download tile region") },
         text = {

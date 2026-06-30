@@ -562,7 +562,7 @@ fun HypothesisDetailScreen(
     //  Delete Confirmation Dialog
     // ════════════════════════════════════════════════════════════════
     if (showDeleteConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
             icon = { Icon(MaterialSymbolIcon("delete"), null, size = 28.dp, tint = MaterialTheme.colorScheme.error) },
             title = { Text("Delete hypothesis?") },
@@ -632,7 +632,7 @@ private fun MarkTestedDialog(
     var selectedStatus by remember { mutableStateOf(currentStatus) }
     val conclusions = listOf("Supported", "Refuted", "Inconclusive")
 
-    AlertDialog(
+    SwipeableAlertDialog(
         onDismissRequest = onDismiss,
         icon = { Icon(MaterialSymbolIcon("science"), null, size = 28.dp, tint = FieldMindTheme.colors.hypothesis) },
         title = { Text("Mark as tested") },

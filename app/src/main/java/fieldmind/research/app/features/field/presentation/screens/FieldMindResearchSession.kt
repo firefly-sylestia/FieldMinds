@@ -433,7 +433,7 @@ fun ResearchSessionScreen(
     }
 
     if (showExitConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showExitConfirm = false },
             icon = { Icon(icon = FieldMindIcons.Bolt, contentDescription = null, size = 28.dp) },
             title = { Text("Active research session") },

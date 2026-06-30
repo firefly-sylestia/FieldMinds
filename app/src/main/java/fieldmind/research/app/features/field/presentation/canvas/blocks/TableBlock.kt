@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -301,7 +302,7 @@ fun TableBlock(
         // ── Context menu dialog ──
         if (showContextMenu && contextRowIndex >= 0) {
             val rowIdx = contextRowIndex
-            AlertDialog(
+            SwipeableAlertDialog(
                 onDismissRequest = { showContextMenu = false },
                 icon = { Icon(MaterialSymbolIcon("table_rows"), "Row options", size = 24.dp) },
                 title = { Text("Row ${rowIdx + 1}") },

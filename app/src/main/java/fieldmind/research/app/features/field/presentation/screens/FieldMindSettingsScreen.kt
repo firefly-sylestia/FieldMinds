@@ -800,7 +800,7 @@ fun SecuritySettingsPage(
     // ── Confirm current PIN before disabling ──
     if (showCurrentPinDialog) {
         val minPinLen = when (appPinLen) { "5 digits" -> 5; "6 digits" -> 6; else -> 4 }
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showCurrentPinDialog = false; currentPinInput = ""; currentPinError = false },
             icon = { Icon(FieldMindIcons.Lock, null, size = 28.dp) },
             title = { Text("Enter current PIN", fontWeight = FontWeight.Bold) },
@@ -818,7 +818,7 @@ fun SecuritySettingsPage(
 
     // ── Export password setup dialog ──
     if (showExportPassDialog) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showExportPassDialog = false; exportPassInput = ""; exportPassConfirm = ""; exportPassError = false },
             icon = { Icon(FieldMindIcons.Lock, null, size = 28.dp) },
             title = { Text("Set export password", fontWeight = FontWeight.Bold) },
@@ -838,7 +838,7 @@ fun SecuritySettingsPage(
     // ── Decoy PIN setup dialog ──
     if (showDecoyDialog) {
         val minPinLen = when (appPinLen) { "5 digits" -> 5; "6 digits" -> 6; else -> 4 }
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showDecoyDialog = false; decoyInput = ""; decoyConfirm = ""; decoyLabelInput = ""; decoyError = false },
             icon = { Icon(MaterialSymbolIcon("lock_open"), null, size = 28.dp) },
             title = { Text("Set decoy PIN", fontWeight = FontWeight.Bold) },

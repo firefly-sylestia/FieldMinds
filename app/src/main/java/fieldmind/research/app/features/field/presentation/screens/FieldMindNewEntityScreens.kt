@@ -231,7 +231,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     // ── Template Picker Dialog ──
     if (showTemplatePicker) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showTemplatePicker = false },
             icon = { Icon(FieldMindIcons.Project, null, size = 28.dp) },
             title = { Text("Choose a template") },

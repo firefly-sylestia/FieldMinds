@@ -29,6 +29,7 @@ import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.presentation.components.FieldTextField
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
+import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
@@ -521,7 +522,7 @@ fun ProjectDetailScreen(
     }
 
     if (showRenameDialog) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showRenameDialog = false },
             icon = { Icon(FieldMindIcons.Edit, null, size = 28.dp) },
             title = { Text("Project options") },

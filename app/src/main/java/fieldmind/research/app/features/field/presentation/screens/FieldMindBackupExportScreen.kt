@@ -589,7 +589,7 @@ fun BackupAndRestoreScreen(
 
     // ── Password prompt dialog ──
     if (showPasswordPrompt) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = {
                 showPasswordPrompt = false
                 importFileUri = null
@@ -668,7 +668,7 @@ fun BackupAndRestoreScreen(
 
     // ── Conflict Resolution Dialog ──
     if (showConflictDialog) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showConflictDialog = false },
             icon = { Icon(icon = MaterialSymbolIcon("priority_high"), contentDescription = null, size = 32.dp, tint = MaterialTheme.colorScheme.error) },
             title = { Text("Duplicate records detected") },
@@ -728,7 +728,7 @@ fun BackupAndRestoreScreen(
     // ── Import result dialog ──
     if (showImportResultDialog && importResult != null) {
         val result = importResult ?: return
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = {
                 showImportResultDialog = false
                 importFileUri = null
@@ -1131,7 +1131,7 @@ fun BackupAndRestoreScreen(
 
     // ── Share Preview Dialog moved to ExportTabContent ──
     /*if (showSharePreview) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showSharePreview = false },
             icon = { Icon(icon = FieldMindIcons.Export, contentDescription = null, size = 32.dp, tint = MaterialTheme.colorScheme.primary) },
             title = { Text("Share Data Export") },

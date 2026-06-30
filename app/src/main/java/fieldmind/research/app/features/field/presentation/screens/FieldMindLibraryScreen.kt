@@ -1342,7 +1342,7 @@ private fun FlashcardPanel(
     
     // ═══ Bulk delete confirmation dialog ═══
     if (showDeleteConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
             icon = { Icon(icon = FieldMindIcons.Delete, contentDescription = null, size = 28.dp) },
             title = { Text("Delete flashcards?") },

@@ -632,7 +632,7 @@ private fun ProjectCard(
 
     // ── Rename Dialog ──
     if (showRenameDialog) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showRenameDialog = false },
             icon = { Icon(FieldMindIcons.Edit, null, size = 28.dp) },
             title = { Text("Rename Project") },
@@ -666,7 +666,7 @@ private fun ProjectCard(
 
     // ── Delete Confirmation Dialog ──
     if (showDeleteConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
             icon = { Icon(MaterialSymbolIcon("delete_forever"), null, size = 28.dp, tint = MaterialTheme.colorScheme.error) },
             title = { Text("Delete Project?") },

@@ -313,7 +313,7 @@ fun BackupConfirmationDialog(
     onDismiss: () -> Unit
 ) {
     if (visible) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = onDismiss,
             icon = { Icon(FieldMindIcons.Archive, null, size = 28.dp) },
             title = { Text("Create backup?", fontWeight = FontWeight.Bold) },
@@ -358,7 +358,7 @@ fun ExportConfirmationDialog(
     onDismiss: () -> Unit
 ) {
     if (visible) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = onDismiss,
             icon = { Icon(FieldMindIcons.Export, null, size = 28.dp) },
             title = { Text("Export $format?", fontWeight = FontWeight.Bold) },

@@ -38,7 +38,7 @@ fun GpsOffDialog(
             })
         }
     }
-    AlertDialog(
+    SwipeableAlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(28.dp),
         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,

@@ -413,7 +413,7 @@ fun ObserveScreen(
     }
 
     if (showExitConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showExitConfirm = false },
             icon = { Icon(icon = FieldMindIcons.Info, contentDescription = null, size = 28.dp) },
             title = { Text("Unsaved observation") },
@@ -454,7 +454,7 @@ fun ObserveScreen(
 
     // ── Session exit confirm (active session, clean form) ──
     if (showSessionExitConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showSessionExitConfirm = false },
             icon = {
                 Icon(
@@ -1666,7 +1666,7 @@ private fun AutoMetadataStatusCard(
             
             // Weather fetch confirmation dialog
             if (showWeatherConfirm.value) {
-                AlertDialog(
+                SwipeableAlertDialog(
                     onDismissRequest = { showWeatherConfirm.value = false },
                     icon = { Icon(FieldMindIcons.Weather, null, tint = MaterialTheme.colorScheme.primary, size = 28.dp) },
                     title = { Text("Fetch weather data?") },

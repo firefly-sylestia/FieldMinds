@@ -40,6 +40,7 @@ import fieldmind.research.app.features.field.data.settings.*
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
 import fieldmind.research.app.features.field.presentation.components.expressivePress
+import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -297,7 +298,7 @@ fun FieldMindOnboardingScreen(
 
         // ── Finish Tour Dialog ──
         if (showFinishDialog) {
-            AlertDialog(
+            SwipeableAlertDialog(
                 onDismissRequest = { showFinishDialog = false },
                 shape = RoundedCornerShape(28.dp),
                 containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,

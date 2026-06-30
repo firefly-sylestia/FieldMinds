@@ -240,7 +240,7 @@ fun ExportProtectionPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     }
 
     if (showPasswordDialog) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showPasswordDialog = false; passwordInput = ""; passwordConfirm = ""; passwordError = false },
             icon = { Icon(FieldMindIcons.Lock, null, size = 28.dp) },
             title = { Text(if (settings.exportPasswordHash.value.isNotBlank()) "Change export password" else "Set export password", fontWeight = FontWeight.Bold) },
@@ -603,7 +603,7 @@ fun DecoyPinPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     }
 
     if (showSetupDialog) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showSetupDialog = false; decoyInput = ""; decoyConfirm = ""; decoyLabelInput = ""; decoyError = false },
             icon = { Icon(MaterialSymbolIcon("lock_open"), null, size = 28.dp) },
             title = { Text("Set decoy PIN", fontWeight = FontWeight.Bold) },

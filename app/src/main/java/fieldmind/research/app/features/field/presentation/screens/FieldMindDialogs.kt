@@ -76,7 +76,7 @@ internal fun DialogWrapper(
 
     // Confirmation dialog when exiting with unsaved changes
     if (showExitConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showExitConfirm = false },
             icon = { Icon(icon = FieldMindIcons.Info, contentDescription = null, size = 28.dp) },
             title = { Text("Unsaved changes") },

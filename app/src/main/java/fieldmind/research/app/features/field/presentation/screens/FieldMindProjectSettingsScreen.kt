@@ -635,7 +635,7 @@ fun ProjectSettingsScreen(
     //  Archive Confirmation Dialog
     // ════════════════════════════════════════════════════════════════
     if (showArchiveConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showArchiveConfirm = false },
             icon = { Icon(MaterialSymbolIcon("archive"), null, size = 28.dp, tint = colors.project) },
             title = { Text("Archive project?") },
@@ -663,7 +663,7 @@ fun ProjectSettingsScreen(
     //  Delete Confirmation Dialog
     // ════════════════════════════════════════════════════════════════
     if (showDeleteConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
             icon = { Icon(MaterialSymbolIcon("delete_forever"), null, size = 28.dp, tint = MaterialTheme.colorScheme.error) },
             title = { Text("Delete this project?") },
