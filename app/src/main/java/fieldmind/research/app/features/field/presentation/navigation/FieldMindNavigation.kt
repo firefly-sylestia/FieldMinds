@@ -1385,8 +1385,8 @@ private fun AllTabScreen(
                 animX.animateTo(
                     0f,
                     animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMedium
+                        dampingRatio = 0.9f,
+                        stiffness = 200f
                     )
                 )
             }
@@ -1437,8 +1437,8 @@ private fun AllTabScreen(
                                         animX.animateTo(
                                             0f,
                                             animationSpec = spring(
-                                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                                stiffness = Spring.StiffnessMediumLow
+                                                dampingRatio = 0.85f,
+                                                stiffness = 300f
                                             )
                                         )
                                     }
@@ -1449,8 +1449,8 @@ private fun AllTabScreen(
                                     animX.animateTo(
                                         0f,
                                         animationSpec = spring(
-                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                                            stiffness = Spring.StiffnessMediumLow
+                                            dampingRatio = 0.85f,
+                                            stiffness = 300f
                                         )
                                     )
                                 }

@@ -173,9 +173,9 @@ fun AnimationTuningCard(
             Text("Entrance stiffness: %.0f".format(entranceStiffness), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
             Slider(
                 value = entranceStiffness,
-                onValueChange = { settings.setAnimEntranceStiffness(it.coerceIn(200f, 10000f)) },
-                valueRange = 200f..10000f,
-                steps = 49,
+                onValueChange = { settings.setAnimEntranceStiffness(it.coerceIn(50f, 5000f)) },
+                valueRange = 50f..5000f,
+                steps = 99,
                 modifier = Modifier.fillMaxWidth()
             )
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -199,9 +199,9 @@ fun AnimationTuningCard(
             Text("Swipe-back stiffness: %.0f".format(swipeBackStiffness), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
             Slider(
                 value = swipeBackStiffness,
-                onValueChange = { settings.setAnimSwipeBackStiffness(it.coerceIn(200f, 10000f)) },
-                valueRange = 200f..10000f,
-                steps = 49,
+                onValueChange = { settings.setAnimSwipeBackStiffness(it.coerceIn(50f, 5000f)) },
+                valueRange = 50f..5000f,
+                steps = 99,
                 modifier = Modifier.fillMaxWidth()
             )
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -225,9 +225,9 @@ fun AnimationTuningCard(
             Text("Tab entrance stiffness: %.0f".format(tabStiffness), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
             Slider(
                 value = tabStiffness,
-                onValueChange = { settings.setAnimTabEntranceStiffness(it.coerceIn(200f, 10000f)) },
-                valueRange = 200f..10000f,
-                steps = 49,
+                onValueChange = { settings.setAnimTabEntranceStiffness(it.coerceIn(50f, 5000f)) },
+                valueRange = 50f..5000f,
+                steps = 99,
                 modifier = Modifier.fillMaxWidth()
             )
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {

@@ -93,16 +93,17 @@ val LocalPeekContentHolder = compositionLocalOf { PeekContentHolder() }
  * to customize spring physics without recompiling.
  */
 data class AnimationConfig(
-    // ── Soft, elegant spring defaults ──
-    // Low stiffness = slow, gentle motion. High damping = smooth, no bounce.
-    val entranceDampingRatio: Float = 0.9f,
-    val entranceStiffness: Float = 300f,
-    val swipeBackDampingRatio: Float = 0.85f,
-    val swipeBackStiffness: Float = 300f,
-    val cancelDampingRatio: Float = 0.9f,
-    val cancelStiffness: Float = 150f,
-    val tabEntranceDampingRatio: Float = 0.9f,
-    val tabEntranceStiffness: Float = 400f,
+    // — Ultra-soft, elegant, cute spring defaults —
+    // These power the tunable sliders in Developer settings.
+    // Extremely low stiffness for buttery-smooth motion.
+    val entranceDampingRatio: Float = 0.92f,
+    val entranceStiffness: Float = 200f,
+    val swipeBackDampingRatio: Float = 0.88f,
+    val swipeBackStiffness: Float = 200f,
+    val cancelDampingRatio: Float = 0.92f,
+    val cancelStiffness: Float = 100f,
+    val tabEntranceDampingRatio: Float = 0.92f,
+    val tabEntranceStiffness: Float = 300f,
     val swipeThreshold: Float = 0.20f,
     val swipeScaleFactor: Float = 0.92f
 ) {
@@ -139,107 +140,110 @@ val LocalAnimationConfig = compositionLocalOf { AnimationConfig.DEFAULT }
  */
 object FieldMindMotion {
 
-    // -- Expressive Springs (overshoot / bounce / elastic) --
+    // — Elegant, soft, cute spring defaults —
+    // Every spring throughout the app uses these specs.
+    // Low stiffness (~200-400) = slow, gentle motion.
+    // High damping (≥0.8) = smooth, no bounce.
 
     val expressiveSpring = spring<Float>(
-        dampingRatio = Spring.DampingRatioMediumBouncy,
-        stiffness = Spring.StiffnessMedium
+        dampingRatio = 0.85f,
+        stiffness = 400f
     )
 
     val expressiveSoft = spring<Float>(
-        dampingRatio = Spring.DampingRatioMediumBouncy,
-        stiffness = Spring.StiffnessLow
+        dampingRatio = 0.85f,
+        stiffness = 200f
     )
 
     val expressiveElastic = spring<Float>(
-        dampingRatio = 0.3f,
-        stiffness = Spring.StiffnessMedium
+        dampingRatio = 0.9f,
+        stiffness = 300f
     )
 
     val expressiveFloat = spring<Float>(
-        dampingRatio = Spring.DampingRatioNoBouncy,
-        stiffness = Spring.StiffnessMediumLow
+        dampingRatio = 0.9f,
+        stiffness = 350f
     )
 
     val expressiveSnap = spring<Float>(
-        dampingRatio = Spring.DampingRatioMediumBouncy,
-        stiffness = Spring.StiffnessHigh
+        dampingRatio = 0.8f,
+        stiffness = 500f
     )
 
     val expressiveDramatic = spring<Float>(
-        dampingRatio = 0.75f,
-        stiffness = 600f
+        dampingRatio = 0.85f,
+        stiffness = 300f
     )
 
     // -- Standard Springs (no overshoot) --
 
     val layoutSpring = spring<Float>(
-        dampingRatio = Spring.DampingRatioNoBouncy,
-        stiffness = Spring.StiffnessLow
+        dampingRatio = 0.9f,
+        stiffness = 200f
     )
 
     val pressSpring = spring<Float>(
-        dampingRatio = Spring.DampingRatioMediumBouncy,
-        stiffness = Spring.StiffnessMedium
+        dampingRatio = 0.85f,
+        stiffness = 400f
     )
 
     val confirmSpring = spring<Float>(
-        dampingRatio = Spring.DampingRatioMediumBouncy,
-        stiffness = Spring.StiffnessLow
+        dampingRatio = 0.85f,
+        stiffness = 200f
     )
 
     // -- Navigation Springs --
 
     val swipeBackSpring = spring<Float>(
-        dampingRatio = Spring.DampingRatioMediumBouncy,
-        stiffness = 800f
+        dampingRatio = 0.85f,
+        stiffness = 300f
     )
 
     val sharedElementSpring = spring<Float>(
-        dampingRatio = 0.7f,
-        stiffness = 600f
+        dampingRatio = 0.85f,
+        stiffness = 300f
     )
 
     val slideSpring = spring<Float>(
-        dampingRatio = 0.75f,
-        stiffness = 700f
+        dampingRatio = 0.85f,
+        stiffness = 300f
     )
 
     val fadeThroughSpring = spring<Float>(
-        dampingRatio = Spring.DampingRatioNoBouncy,
-        stiffness = Spring.StiffnessMediumLow
+        dampingRatio = 0.9f,
+        stiffness = 300f
     )
 
     val slideOffsetSpring = spring<IntOffset>(
-        dampingRatio = Spring.DampingRatioNoBouncy,
-        stiffness = Spring.StiffnessMedium
+        dampingRatio = 0.9f,
+        stiffness = 300f
     )
 
     // -- Duration Tokens (ms) --
 
-    const val durationMicro = 120
-    const val durationSubtle = 200
-    const val durationStandard = 350
-    const val durationEmphasized = 500
-    const val durationExpressive = 800
-    const val countUpMs = 600
+    const val durationMicro = 100
+    const val durationSubtle = 180
+    const val durationStandard = 280
+    const val durationEmphasized = 400
+    const val durationExpressive = 600
+    const val countUpMs = 500
 
     // -- Stagger & Delay Tokens --
 
-    const val staggerItemDelayMs = 50
-    const val staggerInitialDelayMs = 80
-    const val staggerMaxDurationMs = 500
+    const val staggerItemDelayMs = 40
+    const val staggerInitialDelayMs = 60
+    const val staggerMaxDurationMs = 400
 
     // -- Shape Morphing --
 
     val morphSpring = spring<Float>(
-        dampingRatio = Spring.DampingRatioMediumBouncy,
-        stiffness = Spring.StiffnessMediumLow
+        dampingRatio = 0.85f,
+        stiffness = 300f
     )
 
     val cornerSpring = spring<Float>(
-        dampingRatio = Spring.DampingRatioNoBouncy,
-        stiffness = Spring.StiffnessMedium
+        dampingRatio = 0.9f,
+        stiffness = 400f
     )
 
     // -- Convenience Tween --
