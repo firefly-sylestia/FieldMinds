@@ -703,9 +703,9 @@ private fun DayCloudyScene(
     
     // Wind speed multiplier: clouds drift faster during storms (high intensity = high wind)
     // Range: 1.5x at partly cloudy (0.25) to 2.7x at overcast/storm (0.85)
-    val windSpeed = 1f + cloudIntensity * 2f
-    val cloudDriftDuration1 = (18000f / windSpeed).toInt()
-    val cloudDriftDuration2 = (28000f / windSpeed).toInt()
+    val windSpeed = 1f + cloudIntensity * 0.8f
+    val cloudDriftDuration1 = (42000f / windSpeed).toInt()
+    val cloudDriftDuration2 = (62000f / windSpeed).toInt()
     
     val infiniteTransition = rememberInfiniteTransition(label = "dayClouds")
     val sunRotation by infiniteTransition.animateFloat(
@@ -723,7 +723,7 @@ private fun DayCloudyScene(
     val windGust by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 0.2f + cloudIntensity * 0.6f,
-        animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(12000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "windGust"
     )
     val cloudOffset1 by infiniteTransition.animateFloat(
@@ -742,7 +742,7 @@ private fun DayCloudyScene(
     val cloudMorph by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 6f,
-        animationSpec = infiniteRepeatable(tween(12000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(20000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "cloudMorph"
     )
 
@@ -1102,13 +1102,13 @@ private fun NightCloudyScene(
     val cloudOffset1 by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(18000, easing = LinearEasing), RepeatMode.Restart),
+        animationSpec = infiniteRepeatable(tween(35000, easing = LinearEasing), RepeatMode.Restart),
         label = "ncCloudDrift1"
     )
     val cloudOffset2 by infiniteTransition.animateFloat(
         initialValue = 0.3f,
         targetValue = 1.3f,
-        animationSpec = infiniteRepeatable(tween(25000, easing = LinearEasing), RepeatMode.Restart),
+        animationSpec = infiniteRepeatable(tween(50000, easing = LinearEasing), RepeatMode.Restart),
         label = "ncCloudDrift2"
     )
     val moonGlow by infiniteTransition.animateFloat(
@@ -1120,7 +1120,7 @@ private fun NightCloudyScene(
     val cloudMorph by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 6f,
-        animationSpec = infiniteRepeatable(tween(15000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(25000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "ncCloudMorph"
     )
     // Aurora borealis for cloudy nights
@@ -1702,7 +1702,7 @@ private fun CloudyScene(
     val cloudOffset by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(25000, easing = LinearEasing), RepeatMode.Restart),
+        animationSpec = infiniteRepeatable(tween(35000, easing = LinearEasing), RepeatMode.Restart),
         label = "cloudDrift"
     )
     val cloudMorph by infiniteTransition.animateFloat(
