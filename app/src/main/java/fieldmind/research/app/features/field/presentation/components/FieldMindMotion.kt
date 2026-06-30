@@ -404,290 +404,30 @@ fun Modifier.pressCardScale(): Modifier = composed {
 
 private enum class SwipeDirection { Horizontal, Vertical }
 
-/**
- * Categorizes the previous screen for its peek preview mock content.
- * Each type produces a different visual placeholder during the back gesture.
- */
-enum class PeekScreenType {
-    Settings, Detail, Tool, Creation, Generic
-}
+/** DEPRECATED — kept to avoid binary compatibility issues; will be removed in next major release. */
+enum class PeekScreenType { Settings, Detail, Tool, Creation, Generic }
 
-/**
- * Previous screen peek state for the navigation peek animation.
- * Passed from the navigation layer (e.g., NavHost) to show which
- * destination is behind the current screen during the back gesture.
- *
- * @param label Human-readable name of the previous destination
- * @param route Route string of the previous destination (for matching icons)
- * @param screenType Categorizes the screen for a type-appropriate peek preview
- */
+/** DEPRECATED — kept to avoid binary compatibility issues; will be removed in next major release. */
 data class PreviousScreenInfo(
     val label: String,
     val route: String = "",
     val screenType: PeekScreenType = PeekScreenType.Generic
 )
 
-// ── Screen-type-specific peek preview content ──
-
-/**
- * Renders a mock preview of the previous screen's content during the back-gesture peek.
- * The mock style depends on [screenType], giving the user a visual hint of what
- * screen they're navigating back to without needing the real composable.
- */
+/** DEPRECATED — kept for binary compatibility. Renders nothing. */
 @Composable
+@Suppress("UNUSED_PARAMETER")
 private fun PeekPreviewContent(
     screenType: PeekScreenType,
     label: String,
     accentColor: Color
-) {
-    val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
-    val onSurface = MaterialTheme.colorScheme.onSurface
-    val outlineAlpha = 0.12f
-
-    Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            when (screenType) {
-                PeekScreenType.Settings -> {
-                    // ── Settings-style mock: labeled rows with toggles/chevrons ──
-                    Text(
-                        label,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = onSurface.copy(alpha = 0.6f),
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                    repeat(4) { idx ->
-                        val rowColor = if (idx == 0) accentColor else surfaceVariant
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                // Icon placeholder
-                                Box(
-                                    Modifier.size(22.dp).background(
-                                        rowColor.copy(alpha = outlineAlpha),
-                                        RoundedCornerShape(6.dp)
-                                    )
-                                )
-                                Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                                    Box(
-                                        Modifier.width((80 + idx * 20).dp).height(8.dp).background(
-                                            onSurface.copy(alpha = 0.10f),
-                                            RoundedCornerShape(4.dp)
-                                        )
-                                    )
-                                    Box(
-                                        Modifier.width((40 + idx * 10).dp).height(6.dp).background(
-                                            onSurface.copy(alpha = 0.06f),
-                                            RoundedCornerShape(3.dp)
-                                        )
-                                    )
-                                }
-                            }
-                            // Toggle / chevron placeholder
-                            Box(
-                                Modifier.size(16.dp).background(
-                                    onSurface.copy(alpha = 0.08f),
-                                    RoundedCornerShape(4.dp)
-                                )
-                            )
-                        }
-                        if (idx < 3) {
-                            Spacer(
-                                Modifier.fillMaxWidth().height(1.dp).background(
-                                    onSurface.copy(alpha = 0.04f)
-                                )
-                            )
-                        }
-                    }
-                }
-
-                PeekScreenType.Detail -> {
-                    // ── Detail-style mock: header + content cards ──
-                    // Header area
-                    Box(
-                        Modifier.fillMaxWidth().height(80.dp).background(
-                            accentColor.copy(alpha = 0.06f),
-                            RoundedCornerShape(12.dp)
-                        ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Box(
-                                Modifier.size(28.dp).background(
-                                    accentColor.copy(alpha = 0.15f),
-                                    RoundedCornerShape(8.dp)
-                                )
-                            )
-                            Spacer(Modifier.height(6.dp))
-                            Box(
-                                Modifier.width(80.dp).height(8.dp).background(
-                                    onSurface.copy(alpha = 0.12f),
-                                    RoundedCornerShape(4.dp)
-                                )
-                            )
-                        }
-                    }
-                    // Content cards
-                    repeat(3) { idx ->
-                        Surface(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            color = surfaceVariant.copy(alpha = 0.3f)
-                        ) {
-                            Row(
-                                Modifier.padding(12.dp),
-                                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Box(
-                                    Modifier.size(36.dp).background(
-                                        accentColor.copy(alpha = 0.08f * (3 - idx)),
-                                        RoundedCornerShape(8.dp)
-                                    )
-                                )
-                                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                    Box(
-                                        Modifier.width((60 + idx * 30).dp).height(8.dp).background(
-                                            onSurface.copy(alpha = 0.10f),
-                                            RoundedCornerShape(4.dp)
-                                        )
-                                    )
-                                    Box(
-                                        Modifier.width((100 + idx * 20).dp).height(6.dp).background(
-                                            onSurface.copy(alpha = 0.06f),
-                                            RoundedCornerShape(3.dp)
-                                        )
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                PeekScreenType.Tool -> {
-                    // ── Tool-style mock: input field + controls ──
-                    Text(
-                        label,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = onSurface.copy(alpha = 0.6f),
-                        modifier = Modifier.padding(bottom = 2.dp)
-                    )
-                    // Large value display
-                    Box(
-                        Modifier.fillMaxWidth().height(64.dp).background(
-                            surfaceVariant.copy(alpha = 0.25f),
-                            RoundedCornerShape(14.dp)
-                        ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Box(
-                            Modifier.width(48.dp).height(20.dp).background(
-                                onSurface.copy(alpha = 0.08f),
-                                RoundedCornerShape(6.dp)
-                            )
-                        )
-                    }
-                    // Control row
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        repeat(3) {
-                            Box(
-                                Modifier.weight(1f).height(36.dp).background(
-                                    surfaceVariant.copy(alpha = 0.3f),
-                                    RoundedCornerShape(10.dp)
-                                )
-                            )
-                        }
-                    }
-                    // Entry list
-                    repeat(2) {
-                        Box(
-                            Modifier.fillMaxWidth().height(40.dp).background(
-                                surfaceVariant.copy(alpha = 0.15f),
-                                RoundedCornerShape(10.dp)
-                            )
-                        )
-                    }
-                }
-
-                PeekScreenType.Creation -> {
-                    // ── Creation-style mock: form fields ──
-                    Text(
-                        label,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = onSurface.copy(alpha = 0.6f),
-                        modifier = Modifier.padding(bottom = 2.dp)
-                    )
-                    repeat(4) { idx ->
-                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Box(
-                                Modifier.width((50 + idx * 15).dp).height(6.dp).background(
-                                    onSurface.copy(alpha = 0.07f),
-                                    RoundedCornerShape(3.dp)
-                                )
-                            )
-                            Box(
-                                Modifier.fillMaxWidth().height(if (idx == 3) 56.dp else 40.dp).background(
-                                    surfaceVariant.copy(alpha = 0.2f),
-                                    RoundedCornerShape(if (idx == 3) 10.dp else 8.dp)
-                                )
-                            )
-                        }
-                    }
-                    // Button placeholder
-                    Box(
-                        Modifier.fillMaxWidth().height(40.dp).background(
-                            accentColor.copy(alpha = 0.15f),
-                            RoundedCornerShape(10.dp)
-                        ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Box(
-                            Modifier.width(50.dp).height(8.dp).background(
-                                accentColor.copy(alpha = 0.25f),
-                                RoundedCornerShape(4.dp)
-                            )
-                        )
-                    }
-                }
-
-                PeekScreenType.Generic -> {
-                    // ── Generic clean gradient fallback (same as before) ──
-                    Box(
-                        modifier = Modifier.fillMaxSize().background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    accentColor.copy(alpha = 0.03f),
-                                    Color.Transparent
-                                )
-                            )
-                        )
-                    )
-                }
-            }
-        }
-    }
-}
+) = Unit
 
 @OptIn(ExperimentalActivityApi::class)
 @Composable
 fun SwipeBackHost(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    previousScreen: PreviousScreenInfo? = null,
     content: @Composable () -> Unit
 ) {
     val reduceMotion = FieldMindMotion.isReduceMotion()
@@ -766,67 +506,39 @@ fun SwipeBackHost(
             .background(Color.Transparent) // ensure transparent background so previous screen preview is visible
     ) {
         // ── Layer 1: Previous screen peek preview ──
-        // Slides in from the left behind the current content.
-        // Uses parallax (70% speed) for depth layering effect.
-        // When [PeekContentHolder] provides real composable content (set by
-        // [FieldMindNavHost]), renders the ACTUAL previous screen's composable
-        // with [Key] for state preservation — always in the tree (hidden
-        // offscreen when not peeking) so state survives across peek cycles.
-        // Falls back to the [PeekPreviewContent] mock when no real content.
+        // Renders the REAL previous screen composable behind the current screen
+        // using [PeekContentHolder] (set by [FieldMindNavHost]). The composable
+        // is always in the tree with [Key] for state preservation — hidden
+        // offscreen when not peeking, revealed on the left during the back gesture.
         val peekHolder = LocalPeekContentHolder.current
         val realPeekContent = peekHolder.peekContent
         val realPeekKey = peekHolder.peekKey
         val hasRealContent = realPeekContent != null && realPeekKey != null
-        val showLayer = isHorizontalPeek && (hasRealContent || (progress > 0.01f && previousScreen != null))
 
-        if (showLayer) {
-            val previewWidth = if (hasRealContent) contentWidth else contentWidth * 0.85f
+        if (isHorizontalPeek && hasRealContent) {
             val previewScale = 0.94f + (1f - 0.94f) * (1f - progress)
-            val screenColor = MaterialTheme.colorScheme.primary
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .offset {
-                        val offset = if (hasRealContent) {
-                            // Real content: always in tree; offscreen (-contentWidth) when
-                            // not peeking, pinned to left of current screen when peeking.
-                            if (progress > 0.005f) animX.value - contentWidth else -contentWidth
-                        } else {
-                            // Mock content: only visible when peeking
-                            animX.value - previewWidth
-                        }
+                        // Always in tree; offscreen (-contentWidth) when
+                        // not peeking, pinned to left of current screen when peeking.
+                        val offset = if (progress > 0.005f) animX.value - contentWidth else -contentWidth
                         IntOffset(offset.roundToInt(), 0)
                     }
-                    .width(Dp(previewWidth))
+                    .width(Dp(contentWidth))
                     .fillMaxHeight()
                     .graphicsLayer {
                         scaleX = previewScale
                         scaleY = previewScale
                         transformOrigin = TransformOrigin(1f, 0.5f)
                         // Hide when not peeking (but keep in tree for state)
-                        alpha = if (hasRealContent && progress <= 0.005f) 0f else 1f
+                        alpha = if (progress <= 0.005f) 0f else 1f
                     }
             ) {
-                if (hasRealContent) {
-                    // ── REAL previous screen composable (kept alive with Key) ──
-                    key(realPeekKey) {
-                        Surface(
-                            modifier = Modifier.fillMaxSize(),
-                            color = MaterialTheme.colorScheme.surface,
-                            shape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp),
-                            tonalElevation = 3.dp,
-                            shadowElevation = 16.dp,
-                            border = androidx.compose.foundation.BorderStroke(
-                                0.5.dp,
-                                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
-                            )
-                        ) {
-                            realPeekContent()
-                        }
-                    }
-                } else if (previousScreen != null && progress > 0.01f) {
-                    // ── MOCK preview (no real composable available) ──
+                // ── REAL previous screen composable (kept alive with Key) ──
+                key(realPeekKey) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.surface,
@@ -838,48 +550,7 @@ fun SwipeBackHost(
                             MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
                         )
                     ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            // ── Mock status bar area ──
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(screenColor.copy(alpha = 0.08f))
-                                    .padding(horizontal = 20.dp, vertical = 14.dp)
-                            ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    // Back arrow + screen name
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Icon(
-                                            FieldMindIcons.ChevronLeft,
-                                            "Back",
-                                            size = 22.dp,
-                                            tint = screenColor.copy(alpha = 0.8f)
-                                        )
-                                        Text(
-                                            previousScreen.label,
-                                            style = MaterialTheme.typography.titleMedium,
-                                            color = MaterialTheme.colorScheme.onSurface
-                                        )
-                                    }
-                                }
-                            }
-
-                            // ── Screen-type-specific peek preview content ──
-                            PeekPreviewContent(
-                                screenType = previousScreen.screenType,
-                                label = previousScreen.label,
-                                accentColor = screenColor
-                            )
-                        }
+                        realPeekContent()
                     }
                 }
             }
