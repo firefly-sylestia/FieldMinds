@@ -280,6 +280,8 @@ class FieldMindSettings private constructor(context: Context) {
     // ── Developer settings ──
     private val _developerMode = MutableStateFlow(prefs.getBoolean(KEY_DEVELOPER_MODE, false))
     val developerMode: StateFlow<Boolean> = _developerMode.asStateFlow()
+    private val _showWeatherTestPanel = MutableStateFlow(prefs.getBoolean(KEY_SHOW_WEATHER_TEST_PANEL, false))
+    val showWeatherTestPanel: StateFlow<Boolean> = _showWeatherTestPanel.asStateFlow()
     private val _debugLogging = MutableStateFlow(prefs.getBoolean(KEY_DEBUG_LOGGING, false))
     val debugLogging: StateFlow<Boolean> = _debugLogging.asStateFlow()
     private val _dataIntegrityCheckOnLaunch = MutableStateFlow(prefs.getBoolean(KEY_DATA_INTEGRITY_CHECK, false))
@@ -581,6 +583,7 @@ class FieldMindSettings private constructor(context: Context) {
     fun setFieldModeAutoStartTimer(value: Boolean) = edit(KEY_FIELD_MODE_AUTO_START_TIMER, value) { _fieldModeAutoStartTimer.value = value }
     fun setFieldModeObservationSpacing(value: String) = edit(KEY_FIELD_MODE_OBSERVATION_SPACING, value) { _fieldModeObservationSpacing.value = value }
     fun setDeveloperMode(value: Boolean) = edit(KEY_DEVELOPER_MODE, value) { _developerMode.value = value }
+    fun setShowWeatherTestPanel(value: Boolean) = edit(KEY_SHOW_WEATHER_TEST_PANEL, value) { _showWeatherTestPanel.value = value }
     fun setDebugLogging(value: Boolean) = edit(KEY_DEBUG_LOGGING, value) { _debugLogging.value = value }
     fun setDataIntegrityCheckOnLaunch(value: Boolean) = edit(KEY_DATA_INTEGRITY_CHECK, value) { _dataIntegrityCheckOnLaunch.value = value }
     fun setLockTimeout(value: String) = edit(KEY_LOCK_TIMEOUT, value) { _lockTimeout.value = value }
@@ -739,6 +742,7 @@ class FieldMindSettings private constructor(context: Context) {
         _fieldModeAutoStartTimer.value = false
         _fieldModeObservationSpacing.value = "None"
         _developerMode.value = false
+        _showWeatherTestPanel.value = false
         _debugLogging.value = false
         _dataIntegrityCheckOnLaunch.value = false
         _lockTimeout.value = "Immediate"
@@ -854,6 +858,7 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_FIELD_MODE_AUTO_START_TIMER, _fieldModeAutoStartTimer.value)
         put(KEY_FIELD_MODE_OBSERVATION_SPACING, _fieldModeObservationSpacing.value)
         put(KEY_DEVELOPER_MODE, _developerMode.value)
+        put(KEY_SHOW_WEATHER_TEST_PANEL, _showWeatherTestPanel.value)
         put(KEY_DEBUG_LOGGING, _debugLogging.value)
         put(KEY_DATA_INTEGRITY_CHECK, _dataIntegrityCheckOnLaunch.value)
         put(KEY_LOCK_TIMEOUT, _lockTimeout.value)
@@ -966,6 +971,7 @@ class FieldMindSettings private constructor(context: Context) {
         applyBoolean(KEY_FIELD_MODE_AUTO_START_TIMER)
         applyString(KEY_FIELD_MODE_OBSERVATION_SPACING)
         applyBoolean(KEY_DEVELOPER_MODE)
+        applyBoolean(KEY_SHOW_WEATHER_TEST_PANEL)
         applyBoolean(KEY_DEBUG_LOGGING)
         applyBoolean(KEY_DATA_INTEGRITY_CHECK)
         applyString(KEY_LOCK_TIMEOUT)
@@ -1082,6 +1088,7 @@ class FieldMindSettings private constructor(context: Context) {
         _fieldModeAutoStartTimer.value = prefs.getBoolean(KEY_FIELD_MODE_AUTO_START_TIMER, false)
         _fieldModeObservationSpacing.value = prefs.getString(KEY_FIELD_MODE_OBSERVATION_SPACING, "None") ?: "None"
         _developerMode.value = prefs.getBoolean(KEY_DEVELOPER_MODE, false)
+        _showWeatherTestPanel.value = prefs.getBoolean(KEY_SHOW_WEATHER_TEST_PANEL, false)
         _debugLogging.value = prefs.getBoolean(KEY_DEBUG_LOGGING, false)
         _dataIntegrityCheckOnLaunch.value = prefs.getBoolean(KEY_DATA_INTEGRITY_CHECK, false)
         _lockTimeout.value = prefs.getString(KEY_LOCK_TIMEOUT, "Immediate") ?: "Immediate"
@@ -1178,6 +1185,7 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_FIELD_MODE_AUTO_START_TIMER = "field_mode_auto_start_timer"
         private const val KEY_FIELD_MODE_OBSERVATION_SPACING = "field_mode_observation_spacing"
         private const val KEY_DEVELOPER_MODE = "developer_mode"
+        private const val KEY_SHOW_WEATHER_TEST_PANEL = "show_weather_test_panel"
         private const val KEY_DEBUG_LOGGING = "debug_logging"
         private const val KEY_DATA_INTEGRITY_CHECK = "data_integrity_check"
         private const val KEY_LOCK_TIMEOUT = "lock_timeout"

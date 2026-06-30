@@ -176,6 +176,7 @@ fun SharedTransitionScope.HomeScreen(
     val tempUnit by viewModel.fieldSettings.tempUnit.collectAsState()
     val windSpeedUnit by viewModel.fieldSettings.windSpeedUnit.collectAsState()
     val developerMode by viewModel.fieldSettings.developerMode.collectAsState()
+    val showWeatherTestPanel by viewModel.fieldSettings.showWeatherTestPanel.collectAsState()
 
     // ── Weather state (hoisted outside LazyColumn so it persists across scroll) ──
     var homeCurrentWeather by remember { mutableStateOf<WeatherSnapshot?>(null) }
@@ -308,6 +309,7 @@ fun SharedTransitionScope.HomeScreen(
                     conditionsNudge = conditionsNudge,    sunrise = homeCurrentWeather?.sunrise,
     sunset = homeCurrentWeather?.sunset,
     developerMode = developerMode,
+    showWeatherTestPanel = showWeatherTestPanel,
     showCloudAnimation = weatherShowCloudAnimation
 )
             }
@@ -1212,6 +1214,7 @@ private fun LiveWeatherDashboardWidget(
     sunrise: String? = null,
     sunset: String? = null,
     developerMode: Boolean = false,
+    showWeatherTestPanel: Boolean = false,
     showCloudAnimation: Boolean = true
 ) {
     val colors = FieldMindTheme.colors
@@ -1536,7 +1539,7 @@ private fun LiveWeatherDashboardWidget(
                         }
 
                         // ── Developer: Test weather conditions ──
-                        if (developerMode) {
+                        if (developerMode && showWeatherTestPanel) {
                             DevWeatherTestPanel(testWeatherCode, testIsNight, null, null, { testWeatherCode = it }, { testIsNight = it }, {}, {})
                         }
                     }
