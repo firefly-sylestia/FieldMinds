@@ -64,6 +64,8 @@ import fieldmind.research.app.features.field.presentation.components.LocalPrivac
 import fieldmind.research.app.features.field.presentation.components.PrivacyTextInputWrapper
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
+import fieldmind.research.app.features.field.presentation.components.PeekContentHolder
+import fieldmind.research.app.features.field.presentation.components.LocalPeekContentHolder
 import androidx.activity.compose.BackHandler
 import androidx.activity.ExperimentalActivityApi
 import androidx.activity.compose.PredictiveBackHandler
@@ -924,9 +926,32 @@ private fun FieldMindNavHost(
         }
     }
 
+    // ── Real-content peek cache (ScreenCache) ──
+    // Tracks the previous route and keeps its composable alive inside SwipeBackHost
+    // via PeekContentHolder + CompositionLocal, so the predictive back gesture
+    // shows the ACTUAL previous screen composable (with real data, same ViewModel)
+    // instead of mock placeholder cards.
+    val previousRoute = remember(currentBackEntry) {
+        navController.previousBackStackEntry?.destination?.route
+    }
+    val peekHolder = remember { PeekContentHolder() }
+    LaunchedEffect(previousRoute) {
+        // Exclude tab container (which has its own AllTabScreen peek system)
+        // and null (first screen) from the real-content cache.
+        val route = previousRoute
+        val isCachable = route != null && route != "field_tab_container"
+        peekHolder.peekKey = if (isCachable) route else null
+        peekHolder.peekContent = if (isCachable) {
+            { RouteContent(route!!, viewModel) }
+        } else null
+    }
+
     SharedTransitionLayout(modifier = modifier) {
         val composableScope = this
-        CompositionLocalProvider(LocalSharedTransitionScope provides composableScope) {
+        CompositionLocalProvider(
+            LocalSharedTransitionScope provides composableScope,
+            LocalPeekContentHolder provides peekHolder
+        ) {
             NavHost(
             navController = navController,
             startDestination = "field_tab_container",
@@ -1488,6 +1513,161 @@ private fun AllTabScreen(
             onPopBackStack = onPopBackStack,
             sharedTransitionScope = sharedTransitionScope
         )
+    }
+}
+
+/**
+ * Dispatches a route string to its screen composable for the real-content peek
+ * preview (ScreenCache). Called by [SwipeBackHost] via [PeekContentHolder] when
+ * rendering the previous screen behind the current one during the predictive
+ * back gesture. All interaction callbacks are empty no-ops because the peek
+ * composable is never interactive (the current screen captures all touches).
+ *
+ * This lives in the navigation package alongside the [NavHost] route definitions
+ * to keep the route→screen mapping in a single source of truth.
+ */
+@Composable
+private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
+    val noop: () -> Unit = {}
+    val noopDetail: (String, Long) -> Unit = { _, _ -> }
+    val noopNav: (FieldMindScreen) -> Unit = {}
+    val noopReader: (String, String) -> Unit = { _, _ -> }
+    val noopStr: (String) -> Unit = {}
+    val noopLong: (Long) -> Unit = {}
+
+    when {
+        // ── Dynamic routes (parameterised) ──
+        route.startsWith("field_task_detail/") -> {
+            val taskId = route.removePrefix("field_task_detail/").toLongOrNull() ?: return
+            TaskDetailScreen(taskId = taskId, viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
+        }
+        route.startsWith("field_question_detail/") -> {
+            val id = route.removePrefix("field_question_detail/").toLongOrNull() ?: return
+            QuestionDetailScreen(questionId = id, viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
+        }
+        route.startsWith("field_project_detail/") -> {
+            val id = route.removePrefix("field_project_detail/").toLongOrNull() ?: return
+            ProjectDetailScreen(projectId = id, viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onNavigate = null, onOpenRelations = noop, onOpenSettings = noopStr)
+        }
+        route.startsWith("field_project_relations/") -> {
+            val id = route.removePrefix("field_project_relations/").toLongOrNull() ?: return
+            ProjectRelationsScreen(projectId = id, viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
+        }
+        route.startsWith("field_project_settings/") -> {
+            val id = route.removePrefix("field_project_settings/").toLongOrNull() ?: return
+            ProjectSettingsScreen(projectId = id, viewModel = viewModel, onBack = noop, onOpenBackupSettings = noop)
+        }
+        route.startsWith("field_canvas/") -> {
+            val id = route.removePrefix("field_canvas/").toLongOrNull() ?: return
+            CanvasScreen(noteId = id, fieldViewModel = viewModel, onBack = noop, onOpenLinkedEntity = null)
+        }
+        route.startsWith("field_species_detail/") -> {
+            val speciesId = route.removePrefix("field_species_detail/")
+            SpeciesDetailScreen(speciesId = speciesId, onBack = noop)
+        }
+        route.startsWith("field_detail/") -> {
+            // Routes like "field_detail/observation/42" → kind="observation", id=42
+            val parts = route.removePrefix("field_detail/").split("/")
+            if (parts.size < 2) return
+            val kind = parts[0]
+            val id = parts[1].toLongOrNull() ?: return
+            DetailScreen(kind = kind, id = id, viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onOpenReader = noopReader, onOpenCanvas = noopLong)
+        }
+
+        // ── Exact-match static routes ──
+        route == FieldMindScreen.Learn.route -> FieldMindLearnScreen(viewModel = viewModel, onBack = noop, onOpenReader = noopReader)
+        route == FieldMindScreen.Reader.route -> LearnReaderScreen(url = "", title = "", onBack = noop)
+        route == FieldMindScreen.FieldMode.route -> ObserveScreen(viewModel = viewModel, compactFieldMode = true, onBack = noop, onOpenDetail = noopDetail)
+        route == FieldMindScreen.Questions.route -> QuestionsScreen(viewModel = viewModel, onOpenDetail = noopDetail)
+        route == FieldMindScreen.Hypotheses.route -> QuestionsScreen(viewModel = viewModel, onOpenDetail = noopDetail)
+        route == FieldMindScreen.DataTools.route -> DataToolsHubScreen(viewModel = viewModel, onBack = noop, onNavigate = noopNav, onOpenDetail = noopDetail)
+        route == FieldMindScreen.Analysis.route -> ProjectsScreen(viewModel = viewModel, startTab = 0, onOpenDetail = noopDetail, onNavigate = noopNav)
+        route == FieldMindScreen.Reports.route -> FieldMindReportScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.Search.route -> ArchiveScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onOpenReader = noopReader)
+        route == FieldMindScreen.MapScreen.route -> MapFieldScreen(viewModel = viewModel, onBack = noop, onNavigate = noopNav, onOpenDetail = noopDetail)
+        route == FieldMindScreen.ExportStudio.route -> BackupAndRestoreScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.Changelog.route -> FieldMindChangelogScreen(onBack = noop)
+        route == FieldMindScreen.Progress.route -> InsightsScreen(viewModel = viewModel, onBack = noop, onNavigate = noopNav, onOpenDetail = noopDetail)
+        route == FieldMindScreen.Flashcards.route -> FlashcardSessionScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.ResearchSession.route -> ResearchSessionScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
+        route == FieldMindScreen.WeatherDatabase.route -> WeatherDatabaseScreen(viewModel = viewModel, onBack = noop, onOpenSettings = noop, onOpenDetail = noopDetail)
+
+        // ── Settings hub (many callbacks) ──
+        route == FieldMindScreen.Settings.route -> FieldMindSettingsScreen(
+            viewModel = viewModel,
+            onBack = noop,
+            onResetOnboarding = noop,
+            onOpenExport = null,
+            onOpenAbout = null,
+            onOpenProfile = null,
+            onOpenAppearance = null,
+            onOpenCapture = null,
+            onOpenWeather = null,
+            onOpenAi = null,
+            onOpenLocalModel = null,
+            onOpenBackup = null,
+            onOpenSecurity = null,
+            onOpenChangelog = null,
+            onOpenUnits = null,
+            onOpenMap = null,
+            onOpenDataIntegrity = null,
+            onOpenDeveloper = null,
+            onOpenSpeciesPacks = null,
+            onOpenSpeciesId = null,
+            onOpenAutoGen = null,
+            onOpenScreenVisibility = null
+        )
+
+        // ── Settings sub-pages ──
+        route == FieldMindScreen.SettingsProfile.route -> ProfileSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsAppearance.route -> AppearanceSettingsPage(viewModel = viewModel, onBack = noop, onOpenEntityColors = null)
+        route == FieldMindScreen.SettingsEntityColors.route -> EntityAccentColorsPage(settings = viewModel.fieldSettings, onBack = noop)
+        route == FieldMindScreen.SettingsCapture.route -> CaptureDefaultsSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsAi.route -> AiAssistantSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsLocalModel.route -> LocalModelSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsBackup.route -> BackupImportSettingsPage(viewModel = viewModel, onBack = noop, onOpenExport = noop)
+        route == FieldMindScreen.SettingsSecurity.route -> SecuritySettingsPage(viewModel = viewModel, onBack = noop, onOpenSecurityScore = null)
+        route == FieldMindScreen.SettingsSecurityScore.route -> SecurityScoreDetailPage(settings = viewModel.fieldSettings, onBack = noop)
+        route == FieldMindScreen.SettingsScreenVisibility.route -> ScreenVisibilitySettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsAbout.route -> AboutPage(onBack = noop, onOpenChangelog = null)
+        route == FieldMindScreen.SettingsUnits.route -> UnitsFormatSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsWeather.route -> WeatherSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsMap.route -> MapSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsDataIntegrity.route -> DataIntegritySettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsDeveloper.route -> DeveloperSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsSpeciesPacks.route -> SpeciesPackSettingsPage(onBack = noop)
+        route == FieldMindScreen.SettingsSpeciesId.route -> SpeciesIdentificationSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsAutoGen.route -> AutoGenerationSettingsPage(viewModel = viewModel, onBack = noop)
+
+        // ── Species browsers ──
+        route == FieldMindScreen.SpeciesBrowser.route -> SpeciesBrowserScreen(onBack = noop, onOpenDetail = noopStr)
+        route == FieldMindScreen.TaxonomicBrowser.route -> TaxonomicBrowserScreen(onBack = noop, onOpenDetail = noopStr)
+
+        // ── Tools ──
+        route == FieldMindScreen.CounterTool.route -> CounterToolScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.MeasurementTool.route -> MeasurementToolScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.WeatherLogTool.route -> WeatherLogToolScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SpeciesTool.route -> SpeciesToolScreen(viewModel = viewModel, onBack = noop, onOpenBrowser = noop, onOpenTaxonomicBrowser = noop)
+        route == FieldMindScreen.ChecklistTool.route -> ChecklistToolScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.EventLogTool.route -> EventLogToolScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SiteLogTool.route -> SiteLogToolScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.ComparisonTable.route -> ComparisonTableScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.TimerTool.route -> TimerToolScreen(onBack = noop)
+        route == FieldMindScreen.FieldLog.route -> FieldLogScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onOpenExport = noop)
+
+        // ── Creation screens ──
+        route == FieldMindScreen.NewProject.route -> NewProjectScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.NewQuestion.route -> NewQuestionScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.NewHypothesis.route -> NewHypothesisScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.NewDataRecord.route -> NewDataRecordScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.NewReport.route -> NewReportScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.Tasks.route -> TasksScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onNavigate = noopNav)
+        route == FieldMindScreen.NewTask.route -> NewTaskScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.NewObservation.route -> NewObservationScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.NewNote.route -> NewNoteScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.NewSource.route -> NewSourceScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.NewAttachment.route -> NewAttachmentScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.NewFolder.route -> NewFolderScreen(viewModel = viewModel, onBack = noop)
     }
 }
 

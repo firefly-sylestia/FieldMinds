@@ -34,6 +34,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -61,6 +63,26 @@ import androidx.activity.compose.PredictiveBackHandler
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import kotlin.math.abs
 import kotlin.math.roundToInt
+
+// ══════════════════════════════════════════════════════════════════════
+//  CompositionLocals for real-content peek (ScreenCache)
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Holder for the previous screen's composable content to show during the
+ * predictive back peek animation. Set by [FieldMindNavHost] so that every
+ * [SwipeBackHost] instance can render real composable content behind the
+ * current screen instead of mock placeholder cards.
+ */
+class PeekContentHolder {
+    /** Stable key used with [Key] — the previous route string. */
+    var peekKey: Any? by mutableStateOf(null)
+
+    /** Composable lambda that renders the previous screen's content. */
+    var peekContent: (@Composable () -> Unit)? by mutableStateOf(null)
+}
+
+val LocalPeekContentHolder = compositionLocalOf { PeekContentHolder() }
 
 /**
  * Material expressive motion specifications for FieldMind.
@@ -700,77 +722,118 @@ fun SwipeBackHost(
         // ── Layer 1: Previous screen peek preview ──
         // Slides in from the left behind the current content.
         // Uses parallax (70% speed) for depth layering effect.
-        if (progress > 0.01f && previousScreen != null && isHorizontalPeek) {
-            val previewWidth = contentWidth * 0.85f
-            val previewOffset = animX.value - previewWidth
+        // When [PeekContentHolder] provides real composable content (set by
+        // [FieldMindNavHost]), renders the ACTUAL previous screen's composable
+        // with [Key] for state preservation — always in the tree (hidden
+        // offscreen when not peeking) so state survives across peek cycles.
+        // Falls back to the [PeekPreviewContent] mock when no real content.
+        val peekHolder = LocalPeekContentHolder.current
+        val realPeekContent = peekHolder.peekContent
+        val realPeekKey = peekHolder.peekKey
+        val hasRealContent = realPeekContent != null && realPeekKey != null
+        val showLayer = isHorizontalPeek && (hasRealContent || (progress > 0.01f && previousScreen != null))
+
+        if (showLayer) {
+            val previewWidth = if (hasRealContent) contentWidth else contentWidth * 0.85f
             val previewScale = 0.94f + (1f - 0.94f) * (1f - progress)
             val screenColor = MaterialTheme.colorScheme.primary
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .offset { IntOffset(previewOffset.roundToInt(), 0) }
+                    .offset {
+                        val offset = if (hasRealContent) {
+                            // Real content: always in tree; offscreen (-contentWidth) when
+                            // not peeking, pinned to left of current screen when peeking.
+                            if (progress > 0.005f) animX.value - contentWidth else -contentWidth
+                        } else {
+                            // Mock content: only visible when peeking
+                            animX.value - previewWidth
+                        }
+                        IntOffset(offset.roundToInt(), 0)
+                    }
                     .width(Dp(previewWidth))
                     .fillMaxHeight()
                     .graphicsLayer {
                         scaleX = previewScale
                         scaleY = previewScale
                         transformOrigin = TransformOrigin(1f, 0.5f)
+                        // Hide when not peeking (but keep in tree for state)
+                        alpha = if (hasRealContent && progress <= 0.005f) 0f else 1f
                     }
             ) {
-                // Main preview surface — full-height rounded card like a real screen
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp),
-                    tonalElevation = 3.dp,
-                    shadowElevation = 16.dp,
-                    border = androidx.compose.foundation.BorderStroke(
-                        0.5.dp,
-                        MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        // ── Mock status bar area ──
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(screenColor.copy(alpha = 0.08f))
-                                .padding(horizontal = 20.dp, vertical = 14.dp)
+                if (hasRealContent) {
+                    // ── REAL previous screen composable (kept alive with Key) ──
+                    key(realPeekKey) {
+                        Surface(
+                            modifier = Modifier.fillMaxSize(),
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp),
+                            tonalElevation = 3.dp,
+                            shadowElevation = 16.dp,
+                            border = androidx.compose.foundation.BorderStroke(
+                                0.5.dp,
+                                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
+                            )
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                            realPeekContent()
+                        }
+                    }
+                } else if (previousScreen != null && progress > 0.01f) {
+                    // ── MOCK preview (no real composable available) ──
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.surface,
+                        shape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp),
+                        tonalElevation = 3.dp,
+                        shadowElevation = 16.dp,
+                        border = androidx.compose.foundation.BorderStroke(
+                            0.5.dp,
+                            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            // ── Mock status bar area ──
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(screenColor.copy(alpha = 0.08f))
+                                    .padding(horizontal = 20.dp, vertical = 14.dp)
                             ) {
-                                // Back arrow + screen name
                                 Row(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Icon(
-                                        FieldMindIcons.ChevronLeft,
-                                        "Back",
-                                        size = 22.dp,
-                                        tint = screenColor.copy(alpha = 0.8f)
-                                    )
-                                    Text(
-                                        previousScreen.label,
-                                        style = MaterialTheme.typography.titleMedium,
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
+                                    // Back arrow + screen name
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            FieldMindIcons.ChevronLeft,
+                                            "Back",
+                                            size = 22.dp,
+                                            tint = screenColor.copy(alpha = 0.8f)
+                                        )
+                                        Text(
+                                            previousScreen.label,
+                                            style = MaterialTheme.typography.titleMedium,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
                                 }
                             }
-                        }
 
-                        // ── Screen-type-specific peek preview content ──
-                        PeekPreviewContent(
-                            screenType = previousScreen.screenType,
-                            label = previousScreen.label,
-                            accentColor = screenColor
-                        )
+                            // ── Screen-type-specific peek preview content ──
+                            PeekPreviewContent(
+                                screenType = previousScreen.screenType,
+                                label = previousScreen.label,
+                                accentColor = screenColor
+                            )
+                        }
                     }
                 }
             }
