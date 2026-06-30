@@ -1,6 +1,7 @@
 package fieldmind.research.app.features.field.presentation.screens
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -11,11 +12,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
@@ -23,7 +29,6 @@ import fieldmind.research.app.features.field.presentation.components.FieldMindMo
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
-import kotlinx.coroutines.delay
 
 // ══════════════════════════════════════════════════════════════════════
 //  Developer Debug Tools — Gesture Thresholds
@@ -257,6 +262,9 @@ fun AnimationTuningCard(
                 Text("Dramatic", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
+            // ── Live Preview ──
+            AnimationPreviewDemo()
+
             // ── Reset button ──
             Spacer(Modifier.height(4.dp))
             Surface(
@@ -426,4 +434,169 @@ private fun StatChip(label: String, value: String) {
         Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Monospace)
     }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Live Animation Preview — interactively demonstrates current spring tuning
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun AnimationPreviewDemo() {
+    val animConfig = LocalAnimationConfig.current
+    val scope = rememberCoroutineScope()
+    val colors = FieldMindTheme.colors
+
+    // ── Animatable properties for three demonstration modes ──
+    val scaleAnim = remember { Animatable(0f) }
+    val offsetXAnim = remember { Animatable(0f) }
+    val offsetYAnim = remember { Animatable(0f) }
+
+    // ── Track which animation last played (for label feedback) ──
+    var lastAction by remember { mutableStateOf("Tap a button to preview") }
+
+    Spacer(Modifier.height(8.dp))
+
+    // ── Header ──
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Box(
+            Modifier.size(28.dp).clip(RoundedCornerShape(8.dp))
+                .background(colors.flashcard.copy(alpha = 0.14f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(MaterialSymbolIcon("play_circle"), null, tint = colors.flashcard, size = 16.dp)
+        }
+        Text(
+            "Live preview",
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Spacer(Modifier.weight(1f))
+        Text(
+            lastAction,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1
+        )
+    }
+
+    Spacer(Modifier.height(8.dp))
+
+    // ── Preview area ──
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.surfaceContainerHigh,
+                        MaterialTheme.colorScheme.surfaceContainerLow
+                    )
+                )
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        // Demo element — a gradient pill with icon that animates
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .graphicsLayer {
+                    scaleX = scaleAnim.value
+                    scaleY = scaleAnim.value
+                    translationX = offsetXAnim.value
+                    translationY = offsetYAnim.value
+                }
+                .clip(RoundedCornerShape(18.dp))
+                .background(
+                    Brush.sweepGradient(
+                        colors = listOf(
+                            colors.positive,
+                            colors.observation,
+                            colors.data,
+                            colors.positive
+                        )
+                    )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                MaterialSymbolIcon("play_arrow"),
+                null,
+                tint = Color.White,
+                size = 32.dp
+            )
+        }
+    }
+
+    Spacer(Modifier.height(8.dp))
+
+    // ── Action buttons ──
+    Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        // Entrance: scale 0→1 with spring
+        Button(
+            onClick = {
+                lastAction = "Entrance"
+                scope.launch {
+                    scaleAnim.snapTo(0f)
+                    offsetXAnim.snapTo(0f)
+                    offsetYAnim.snapTo(0f)
+                    rotationAnim.snapTo(0f)
+                    scaleAnim.animateTo(1f, animConfig.entranceSpring())
+                }
+            },
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(12.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+        ) {
+            Text("Entrance", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
+        }
+
+        // Swipe-back: translate right and spring back
+        OutlinedButton(
+            onClick = {
+                lastAction = "Snap back"
+                scope.launch {
+                    offsetXAnim.snapTo(0f)
+                    offsetXAnim.animateTo(160f, animConfig.swipeBackSpring())
+                    offsetXAnim.animateTo(0f, animConfig.swipeBackSpring())
+                }
+            },
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(12.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+        ) {
+            Text("Snap back", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
+        }
+
+        // Dismiss: fly out with spring, then reset
+        OutlinedButton(
+            onClick = {
+                lastAction = "Dismiss"
+                scope.launch {
+                    offsetYAnim.snapTo(0f)
+                    scaleAnim.snapTo(1f)
+                    offsetYAnim.animateTo(-300f, animConfig.entranceSpring())
+                    // Reset after fly-out completes
+                    scaleAnim.snapTo(0f)
+                    offsetYAnim.snapTo(0f)
+                    scaleAnim.animateTo(1f, animConfig.entranceSpring())
+                }
+            },
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(12.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+        ) {
+            Text("Dismiss", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
+        }
+    }
+
+    Spacer(Modifier.height(4.dp))
 }
