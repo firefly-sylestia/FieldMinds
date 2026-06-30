@@ -109,22 +109,22 @@ data class AnimationConfig(
         val DEFAULT = AnimationConfig()
     }
 
-    fun entranceSpring(): Spring<Float> = spring(
+    fun entranceSpring() = spring<Float>(
         dampingRatio = entranceDampingRatio,
         stiffness = entranceStiffness
     )
 
-    fun swipeBackSpring(): Spring<Float> = spring(
+    fun swipeBackSpring() = spring<Float>(
         dampingRatio = swipeBackDampingRatio,
         stiffness = swipeBackStiffness
     )
 
-    fun cancelSpring(): Spring<Float> = spring(
+    fun cancelSpring() = spring<Float>(
         dampingRatio = cancelDampingRatio,
         stiffness = cancelStiffness
     )
 
-    fun tabEntranceSpring(): Spring<Float> = spring(
+    fun tabEntranceSpring() = spring<Float>(
         dampingRatio = tabEntranceDampingRatio,
         stiffness = tabEntranceStiffness
     )

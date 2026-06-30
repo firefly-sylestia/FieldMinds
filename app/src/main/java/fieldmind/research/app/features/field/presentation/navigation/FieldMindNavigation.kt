@@ -65,6 +65,7 @@ import fieldmind.research.app.features.field.presentation.components.PrivacyText
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
 import fieldmind.research.app.features.field.presentation.components.PeekContentHolder
+import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
 import fieldmind.research.app.features.field.presentation.components.LocalPeekContentHolder
 import androidx.activity.compose.BackHandler
 import androidx.activity.ExperimentalActivityApi
@@ -1587,7 +1588,7 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
                         onNavigate = noopNav,
                         onOpenDetail = noopDetail,
                         onOpenReader = noopReader,
-                        onOpenCanvas = noopLong
+                        onOpenCanvas = noop
                     )
                 }
             }
