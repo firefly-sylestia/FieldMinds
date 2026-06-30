@@ -1148,7 +1148,7 @@ private fun OnboardingReviewPage(
                     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                         Box(
                             Modifier.size(80.dp).background(
-                                Brush.linearGradient(listOf(Color(0xFF43A047), Color(0xFF66BB6A))),
+                                Brush.linearGradient(listOf(Color(0xFF1F6B4C), Color(0xFF4CAF50))),
                                 RoundedCornerShape(28.dp)
                             ),
                             contentAlignment = Alignment.Center

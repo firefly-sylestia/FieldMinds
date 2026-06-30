@@ -904,19 +904,19 @@ fun SwipeBackHost(
                                             onBack()
                                         }
                                     } else {
-                                        // Snap back to 0
+                                        // Smooth spring back to 0
                                         activeDirection = null
                                         scope.launch {
-                                            animX.snapTo(0f)
-                                            animY.snapTo(0f)
+                                            animX.animateTo(0f, FieldMindMotion.swipeBackSpring)
+                                            animY.animateTo(0f, FieldMindMotion.swipeBackSpring)
                                         }
                                     }
                                 },
                                 onDragCancel = {
                                     activeDirection = null
                                     scope.launch {
-                                        animX.snapTo(0f)
-                                        animY.snapTo(0f)
+                                        animX.animateTo(0f, FieldMindMotion.swipeBackSpring)
+                                        animY.animateTo(0f, FieldMindMotion.swipeBackSpring)
                                     }
                                 }
                             )

@@ -202,7 +202,7 @@ data class FieldMindColors(
 private val LightFieldMindColors = FieldMindColors(
     isDark = false,
     // Entity colors
-    observation = Color(0xFF2E7D32),
+    observation = Color(0xFF1F6B4C),
     question = Color(0xFF1565C0),
     hypothesis = Color(0xFF8B5000),
     project = Color(0xFF00695C),
@@ -210,30 +210,28 @@ private val LightFieldMindColors = FieldMindColors(
     note = Color(0xFF8E24AA),
     task = Color(0xFF00897B),
     folder = Color(0xFF6D4C41),
-    species = Color(0xFF43A047),
+    species = Color(0xFF1F6B4C),
     data = Color(0xFF006D7A),
     report = Color(0xFFA1531F),
     flashcard = Color(0xFFE91E63),
     // State colors (distinct from entity colors)
-    positive = Color(0xFF00A86B),
+    positive = Color(0xFF1F6B4C),
     warning = Color(0xFFE67E22),
     info = Color(0xFF546E7A),
     // Confidence colors (distinct from entity and state)
-    confidenceSure = Color(0xFF27AE60),
+    confidenceSure = Color(0xFF1F6B4C),
     confidenceGuess = Color(0xFFF39C12),
     confidenceVerify = Color(0xFFE53935),
     categorical = listOf(
-        Color(0xFF2E7D32), // observation green
+        Color(0xFF1F6B4C), // brand green — unified
         Color(0xFF1565C0), // question blue
         Color(0xFF8B5000), // hypothesis amber
         Color(0xFF5E35B1), // source violet
         Color(0xFF8E24AA), // note purple
         Color(0xFF00897B), // task teal
         Color(0xFF6D4C41), // folder brown
-        Color(0xFF43A047), // species green
         Color(0xFF006D7A), // data teal
         Color(0xFFE91E63), // flashcard pink
-        Color(0xFF00A86B), // positive jade
         Color(0xFFE67E22), // warning orange
     )
 )
@@ -241,7 +239,7 @@ private val LightFieldMindColors = FieldMindColors(
 private val DarkFieldMindColors = FieldMindColors(
     isDark = true,
     // Entity colors
-    observation = Color(0xFFA5D6A7),
+    observation = Color(0xFF8DD5A9),
     question = Color(0xFF90CAF9),
     hypothesis = Color(0xFFFFCC80),
     project = Color(0xFF80CBC4),
@@ -249,30 +247,28 @@ private val DarkFieldMindColors = FieldMindColors(
     note = Color(0xFFCE93D8),
     task = Color(0xFF4DB6AC),
     folder = Color(0xFFBCAAA4),
-    species = Color(0xFF81C784),
+    species = Color(0xFF8DD5A9),
     data = Color(0xFF80DEEA),
     report = Color(0xFFFFB74D),
     flashcard = Color(0xFFF48FB1),
     // State colors (distinct from entity colors)
-    positive = Color(0xFF69F0AE),
+    positive = Color(0xFF8DD5A9),
     warning = Color(0xFFFFB74D),
     info = Color(0xFFB0BEC5),
     // Confidence colors (distinct from entity and state)
-    confidenceSure = Color(0xFF81C784),
+    confidenceSure = Color(0xFF8DD5A9),
     confidenceGuess = Color(0xFFFFD54F),
     confidenceVerify = Color(0xFFEF9A9A),
     categorical = listOf(
-        Color(0xFFA5D6A7), // observation green
+        Color(0xFF8DD5A9), // brand green — unified
         Color(0xFF90CAF9), // question blue
         Color(0xFFFFCC80), // hypothesis amber
         Color(0xFFB39DDB), // source violet
         Color(0xFFCE93D8), // note purple
         Color(0xFF4DB6AC), // task teal
         Color(0xFFBCAAA4), // folder brown
-        Color(0xFF81C784), // species green
         Color(0xFF80DEEA), // data teal
         Color(0xFFF48FB1), // flashcard pink
-        Color(0xFF69F0AE), // positive jade
         Color(0xFFFFB74D), // warning orange
     )
 )
@@ -302,7 +298,7 @@ object FieldMindTheme {
  * Matches [LightFieldMindColors] values.
  */
 val DEFAULT_ENTITY_COLORS: Map<String, Long> = mapOf(
-    "observation" to 0xFF2E7D32,
+    "observation" to 0xFF1F6B4C,
     "question" to 0xFF1565C0,
     "hypothesis" to 0xFF8B5000,
     "project" to 0xFF00695C,
@@ -310,14 +306,14 @@ val DEFAULT_ENTITY_COLORS: Map<String, Long> = mapOf(
     "note" to 0xFF8E24AA,
     "task" to 0xFF00897B,
     "folder" to 0xFF6D4C41,
-    "species" to 0xFF43A047,
+    "species" to 0xFF1F6B4C,
     "data" to 0xFF006D7A,
     "report" to 0xFFA1531F,
     "flashcard" to 0xFFE91E63,
-    "positive" to 0xFF00A86B,
+    "positive" to 0xFF1F6B4C,
     "warning" to 0xFFE67E22,
     "info" to 0xFF546E7A,
-    "confidenceSure" to 0xFF27AE60,
+    "confidenceSure" to 0xFF1F6B4C,
     "confidenceGuess" to 0xFFF39C12,
     "confidenceVerify" to 0xFFE53935
 )

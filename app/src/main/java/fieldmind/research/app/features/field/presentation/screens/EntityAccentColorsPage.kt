@@ -29,29 +29,28 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 // ── Preset color swatches for the picker ──
 
 private val colorPresets = listOf(
-    0xFF2E7D32L, 0xFF1565C0L, 0xFF8B5000L, 0xFF5E35B1L,
-    0xFF8E24AAL, 0xFF00897BL, 0xFF6D4C41L, 0xFF43A047L,
-    0xFFE91E63L, 0xFF00A86BL, 0xFFE67E22L, 0xFF546E7AL,
-    0xFF27AE60L, 0xFFF39C12L, 0xFFE53935L, 0xFF1F6B4CL,
-    0xFFD84315L, 0xFF455A64L, 0xFFAD1457L, 0xFF00695CL,
-    0xFF2196F3L, 0xFF4CAF50L, 0xFF9C27B0L, 0xFFFF9800L,
-    0xFFF44336L, 0xFF607D8BL, 0xFF795548L, 0xFF009688L
+    0xFF1F6B4CL, 0xFF1565C0L, 0xFF8B5000L, 0xFF5E35B1L,
+    0xFF8E24AAL, 0xFF00897BL, 0xFF6D4C41L, 0xFFE91E63L,
+    0xFF006D7AL, 0xFFA1531FL, 0xFFE67E22L, 0xFF546E7AL,
+    0xFFF39C12L, 0xFFE53935L, 0xFF00695CL, 0xFFD84315L,
+    0xFF455A64L, 0xFFAD1457L, 0xFF2196F3L, 0xFFFF9800L,
+    0xFF9C27B0L, 0xFF607D8BL, 0xFF795548L, 0xFF009688L,
+    0xFFF44336L, 0xFF4CAF50L, 0xFF27AE60L, 0xFF00A86BL
 )
 
 private val presetLabels = mapOf(
-    0xFF2E7D32L to "Observation Green",
+    0xFF1F6B4CL to "Brand Green",
     0xFF1565C0L to "Question Blue",
     0xFF8B5000L to "Hypothesis Amber",
     0xFF5E35B1L to "Source Violet",
     0xFF8E24AAL to "Note Purple",
     0xFF00897BL to "Task Teal",
     0xFF6D4C41L to "Folder Brown",
-    0xFF43A047L to "Species Green",
     0xFFE91E63L to "Flashcard Pink",
-    0xFF00A86BL to "Positive Jade",
+    0xFF006D7AL to "Data Teal",
+    0xFFA1531FL to "Report Rust",
     0xFFE67E22L to "Warning Orange",
     0xFF546E7AL to "Info Slate",
-    0xFF1F6B4CL to "Brand Green",
     0xFF00695CL to "Project Teal",
     0xFF2196F3L to "Sky Blue",
     0xFF4CAF50L to "Material Green",
@@ -60,13 +59,14 @@ private val presetLabels = mapOf(
     0xFF455A64L to "Slate",
     0xFFAD1457L to "Magenta",
     0xFFD84315L to "Burnt Orange",
-    0xFF27AE60L to "Confidence Green",
+    0xFF27AE60L to "Jade",
     0xFFF39C12L to "Gold",
     0xFFE53935L to "Verification Red",
     0xFFF44336L to "Red",
     0xFF607D8BL to "Blue Grey",
     0xFF795548L to "Brown",
-    0xFF009688L to "Teal"
+    0xFF009688L to "Teal",
+    0xFF00A86BL to "Deep Jade"
 )
 
 // ══════════════════════════════════════════════════════════════════════

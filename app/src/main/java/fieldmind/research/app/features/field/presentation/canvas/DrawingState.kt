@@ -135,7 +135,7 @@ class DrawingState(
             0xFFE53935L,  // red
             0xFFFF6D00L,  // orange
             0xFFFFC107L,  // amber
-            0xFF43A047L,  // green
+            0xFF1F6B4CL,  // brand green
             0xFF00ACC1L,  // cyan
             0xFF1E88E5L,  // blue
             0xFF3949ABL,  // indigo

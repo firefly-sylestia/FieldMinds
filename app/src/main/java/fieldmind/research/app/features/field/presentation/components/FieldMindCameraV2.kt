@@ -1270,12 +1270,12 @@ private fun SpeciesFieldPanel(
                         categories.forEach { cat ->
                             val isSelected = speciesCategory == cat
                             val accentColor = when (cat) {
-                                "Bird" -> Color(0xFF2E7D32)
+                                "Bird" -> Color(0xFF1F6B4C)
                                 "Mammal" -> Color(0xFF6A1B9A)
                                 "Insect" -> Color(0xFFE65100)
-                                "Plant" -> Color(0xFF1B5E20)
+                                "Plant" -> Color(0xFF1F6B4C)
                                 "Fungi" -> Color(0xFF4E342E)
-                                "Reptile" -> Color(0xFF558B2F)
+                                "Reptile" -> Color(0xFF1F6B4C)
                                 "Amphibian" -> Color(0xFF00838F)
                                 "Fish" -> Color(0xFF1565C0)
                                 "Mollusk" -> Color(0xFF795548)
