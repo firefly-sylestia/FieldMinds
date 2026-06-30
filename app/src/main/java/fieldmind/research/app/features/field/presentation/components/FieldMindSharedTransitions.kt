@@ -9,13 +9,14 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.runtime.CompositionLocal
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.IntOffset
 
@@ -30,7 +31,7 @@ import androidx.compose.ui.unit.IntOffset
  * transitions without needing explicit parameter threading through the
  * composable hierarchy.
  */
-val LocalSharedTransitionScope: CompositionLocal<SharedTransitionScope?> =
+val LocalSharedTransitionScope: ProvidableCompositionLocal<SharedTransitionScope?> =
     compositionLocalOf { null }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -53,22 +54,23 @@ fun AnimatedContentTransitionScope<*>.sharedAxisHorizontal(
     initialScale: Float = 0.97f
 ): ContentTransform {
     val slideSpec = FieldMindMotion.slideOffsetSpring
-    val fadeSpec = FieldMindMotion.fadeThroughSpring
 
     val enter: EnterTransition = if (direction != 0) {
-        slideInHorizontally(slideSpec) { direction * it } + fadeIn(animationSpec = fadeSpec)
+        slideInHorizontally(slideSpec) { direction * it } +
+            fadeIn(animationSpec = FieldMindMotion.expressiveFloat)
     } else {
-        fadeIn(animationSpec = fadeSpec) +
+        fadeIn(animationSpec = FieldMindMotion.expressiveFloat) +
             scaleIn(
                 initialScale = initialScale,
-                animationSpec = fadeSpec
+                animationSpec = FieldMindMotion.expressiveFloat
             )
     }
 
     val exit: ExitTransition = if (direction != 0) {
-        slideOutHorizontally(slideSpec) { -direction * it } + fadeOut(animationSpec = fadeSpec)
+        slideOutHorizontally(slideSpec) { -direction * it } +
+            fadeOut(animationSpec = FieldMindMotion.expressiveFloat)
     } else {
-        fadeOut(animationSpec = fadeSpec)
+        fadeOut(animationSpec = FieldMindMotion.expressiveFloat)
     }
 
     return enter togetherWith exit
@@ -95,7 +97,7 @@ fun AnimatedContentTransitionScope<*>.fadeThrough(
  */
 fun scaleEnter(
     initialScale: Float = 0.97f,
-    spec: androidx.compose.animation.core.AnimationSpec<Float> = FieldMindMotion.expressiveFloat
+    spec: FiniteAnimationSpec<Float> = FieldMindMotion.expressiveFloat
 ): EnterTransition = fadeIn(animationSpec = spec) +
     scaleIn(initialScale = initialScale, animationSpec = spec)
 
@@ -103,7 +105,7 @@ fun scaleEnter(
  * A simple fade-out exit transition.
  */
 fun fadeExit(
-    spec: androidx.compose.animation.core.AnimationSpec<Float> = FieldMindMotion.expressiveFloat
+    spec: FiniteAnimationSpec<Float> = FieldMindMotion.expressiveFloat
 ): ExitTransition = fadeOut(animationSpec = spec)
 
 // ────────────────────────────────────────────────────────────────────────────
