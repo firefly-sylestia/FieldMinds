@@ -84,6 +84,54 @@ class PeekContentHolder {
 
 val LocalPeekContentHolder = compositionLocalOf { PeekContentHolder() }
 
+// ══════════════════════════════════════════════════════════════════════
+//  Animation Configuration (runtime-tunable via Developer Settings)
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Runtime-tunable animation parameters. Override via [LocalAnimationConfig]
+ * to customize spring physics without recompiling.
+ */
+data class AnimationConfig(
+    val entranceDampingRatio: Float = 0.85f,
+    val entranceStiffness: Float = Spring.StiffnessMedium,
+    val swipeBackDampingRatio: Float = 0.75f,
+    val swipeBackStiffness: Float = 800f,
+    val cancelDampingRatio: Float = 0.85f,
+    val cancelStiffness: Float = Spring.StiffnessLow,
+    val tabEntranceDampingRatio: Float = 0.8f,
+    val tabEntranceStiffness: Float = Spring.StiffnessMedium,
+    val swipeThreshold: Float = 0.20f,
+    val swipeScaleFactor: Float = 0.92f
+) {
+    companion object {
+        /** Default config used when no LocalAnimationConfig is provided. */
+        val DEFAULT = AnimationConfig()
+    }
+
+    fun entranceSpring(): Spring<Float> = spring(
+        dampingRatio = entranceDampingRatio,
+        stiffness = entranceStiffness
+    )
+
+    fun swipeBackSpring(): Spring<Float> = spring(
+        dampingRatio = swipeBackDampingRatio,
+        stiffness = swipeBackStiffness
+    )
+
+    fun cancelSpring(): Spring<Float> = spring(
+        dampingRatio = cancelDampingRatio,
+        stiffness = cancelStiffness
+    )
+
+    fun tabEntranceSpring(): Spring<Float> = spring(
+        dampingRatio = tabEntranceDampingRatio,
+        stiffness = tabEntranceStiffness
+    )
+}
+
+val LocalAnimationConfig = compositionLocalOf { AnimationConfig.DEFAULT }
+
 /**
  * Material expressive motion specifications for FieldMind.
  */
@@ -117,8 +165,8 @@ object FieldMindMotion {
     )
 
     val expressiveDramatic = spring<Float>(
-        dampingRatio = 0.4f,
-        stiffness = 400f
+        dampingRatio = 0.75f,
+        stiffness = 600f
     )
 
     // -- Standard Springs (no overshoot) --
@@ -661,6 +709,7 @@ fun SwipeBackHost(
     var isPredictiveBackActive by remember { mutableStateOf(false) }
 
     // Predictive back gesture (Android 14+) — drives peek animation from system back gesture
+    val animConfig = LocalAnimationConfig.current
     PredictiveBackHandler(enabled = !reduceMotion && !isImeVisible) { progressFlow ->
         isPredictiveBackActive = true
         try {
@@ -685,10 +734,7 @@ fun SwipeBackHost(
             scope.launch {
                 animX.animateTo(
                     0f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessMediumLow
-                    )
+                    animationSpec = animConfig.cancelSpring()
                 )
             }
         }
@@ -706,7 +752,7 @@ fun SwipeBackHost(
         null -> Pair(horizontalProgress.coerceAtLeast(verticalProgress), horizontalProgress >= verticalProgress)
     }
     val scrimAlpha = progress * FieldMindMotion.swipeScrimAlpha
-    val contentScale = 1f - progress * (1f - FieldMindMotion.swipeScaleFactor)
+    val contentScale = 1f - progress * (1f - animConfig.swipeScaleFactor)
     val swipeElevation = progress * FieldMindMotion.swipeShadowElevationDp
     val swipeCornerRadius = (FieldMindMotion.swipeBaseCornerRadiusDp + progress * (FieldMindMotion.swipeCornerRadiusDp - FieldMindMotion.swipeBaseCornerRadiusDp)).dp
 
@@ -956,7 +1002,7 @@ fun SwipeBackHost(
                                         SwipeDirection.Vertical -> animY.value
                                         null -> 0f
                                     }
-                                    if (currentVal > maxVal * FieldMindMotion.swipeThreshold) {
+                                    if (currentVal > maxVal * animConfig.swipeThreshold) {
                                         haptics.confirm()
                                         activeDirection = null
                                         // Snap offset to 0 immediately before navigating.
@@ -970,16 +1016,16 @@ fun SwipeBackHost(
                                         // Smooth spring back to 0
                                         activeDirection = null
                                         scope.launch {
-                                            animX.animateTo(0f, FieldMindMotion.swipeBackSpring)
-                                            animY.animateTo(0f, FieldMindMotion.swipeBackSpring)
+                                            animX.animateTo(0f, animConfig.swipeBackSpring())
+                                            animY.animateTo(0f, animConfig.swipeBackSpring())
                                         }
                                     }
                                 },
                                 onDragCancel = {
                                     activeDirection = null
                                     scope.launch {
-                                        animX.animateTo(0f, FieldMindMotion.swipeBackSpring)
-                                        animY.animateTo(0f, FieldMindMotion.swipeBackSpring)
+                                        animX.animateTo(0f, animConfig.swipeBackSpring())
+                                        animY.animateTo(0f, animConfig.swipeBackSpring())
                                     }
                                 }
                             )

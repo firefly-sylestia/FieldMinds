@@ -17,6 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
+import fieldmind.research.app.features.field.data.settings.FieldMindSettings
+import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
@@ -113,6 +115,133 @@ fun AnimationStateCard() {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Developer Debug Tools — Animation Tuning
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+fun AnimationTuningCard(
+    settings: FieldMindSettings
+) {
+    val entranceDamping by settings.animEntranceDamping.collectAsState()
+    val swipeBackDamping by settings.animSwipeBackDamping.collectAsState()
+    val swipeThreshold by settings.animSwipeThreshold.collectAsState()
+    val swipeScale by settings.animSwipeScaleFactor.collectAsState()
+    val tabDamping by settings.animTabEntranceDamping.collectAsState()
+
+    Card(
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Box(Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                    Icon(MaterialSymbolIcon("tune"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
+                }
+                Text("Animation tuning", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            // ── Entrance damping slider ──
+            Text("Entrance damping: %.2f".format(entranceDamping), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = entranceDamping,
+                onValueChange = { settings.setAnimEntranceDamping(it.coerceIn(0.3f, 1.0f)) },
+                valueRange = 0.3f..1.0f,
+                steps = 13,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Bouncy", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Smooth", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            // ── Swipe-back damping slider ──
+            Text("Swipe-back damping: %.2f".format(swipeBackDamping), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = swipeBackDamping,
+                onValueChange = { settings.setAnimSwipeBackDamping(it.coerceIn(0.3f, 1.0f)) },
+                valueRange = 0.3f..1.0f,
+                steps = 13,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Bouncy", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Smooth", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            // ── Tab entrance damping slider ──
+            Text("Tab entrance damping: %.2f".format(tabDamping), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = tabDamping,
+                onValueChange = { settings.setAnimTabEntranceDamping(it.coerceIn(0.3f, 1.0f)) },
+                valueRange = 0.3f..1.0f,
+                steps = 13,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Bouncy", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Smooth", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            // ── Swipe threshold slider ──
+            Text("Swipe threshold: %.0f%%".format(swipeThreshold * 100), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = swipeThreshold,
+                onValueChange = { settings.setAnimSwipeThreshold(it.coerceIn(0.05f, 0.5f)) },
+                valueRange = 0.05f..0.5f,
+                steps = 8,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Easy", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Hard", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            // ── Swipe scale factor slider ──
+            Text("Swipe scale: %.0f%%".format(swipeScale * 100), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = swipeScale,
+                onValueChange = { settings.setAnimSwipeScaleFactor(it.coerceIn(0.80f, 0.99f)) },
+                valueRange = 0.80f..0.99f,
+                steps = 18,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Subtle", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Dramatic", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            // ── Reset button ──
+            Spacer(Modifier.height(4.dp))
+            Surface(
+                onClick = {
+                    val def = AnimationConfig.DEFAULT
+                    settings.setAnimEntranceDamping(def.entranceDampingRatio)
+                    settings.setAnimSwipeBackDamping(def.swipeBackDampingRatio)
+                    settings.setAnimSwipeThreshold(def.swipeThreshold)
+                    settings.setAnimSwipeScaleFactor(def.swipeScaleFactor)
+                    settings.setAnimTabEntranceDamping(def.tabEntranceDampingRatio)
+                },
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    Modifier.padding(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(FieldMindIcons.Refresh, null, tint = MaterialTheme.colorScheme.onErrorContainer, size = 16.dp)
+                    Text("Reset to defaults", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onErrorContainer)
+                }
+            }
         }
     }
 }

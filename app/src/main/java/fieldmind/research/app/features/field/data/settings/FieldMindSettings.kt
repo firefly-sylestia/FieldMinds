@@ -1,8 +1,10 @@
 package fieldmind.research.app.features.field.data.settings
 
 import android.content.Context
+import androidx.compose.animation.core.Spring
 import com.google.gson.Gson
 import fieldmind.research.app.features.field.data.background.FieldMindBackgroundScheduler
+import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -282,6 +284,24 @@ class FieldMindSettings private constructor(context: Context) {
     val debugLogging: StateFlow<Boolean> = _debugLogging.asStateFlow()
     private val _dataIntegrityCheckOnLaunch = MutableStateFlow(prefs.getBoolean(KEY_DATA_INTEGRITY_CHECK, false))
     val dataIntegrityCheckOnLaunch: StateFlow<Boolean> = _dataIntegrityCheckOnLaunch.asStateFlow()
+
+    // ── Animation tuning settings ──
+    private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.85f))
+    val animEntranceDamping: StateFlow<Float> = _animEntranceDamping.asStateFlow()
+    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, Spring.StiffnessMedium))
+    val animEntranceStiffness: StateFlow<Float> = _animEntranceStiffness.asStateFlow()
+    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.75f))
+    val animSwipeBackDamping: StateFlow<Float> = _animSwipeBackDamping.asStateFlow()
+    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 800f))
+    val animSwipeBackStiffness: StateFlow<Float> = _animSwipeBackStiffness.asStateFlow()
+    private val _animSwipeThreshold = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_THRESHOLD, 0.20f))
+    val animSwipeThreshold: StateFlow<Float> = _animSwipeThreshold.asStateFlow()
+    private val _animSwipeScaleFactor = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_SCALE, 0.92f))
+    val animSwipeScaleFactor: StateFlow<Float> = _animSwipeScaleFactor.asStateFlow()
+    private val _animTabEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_DAMPING, 0.8f))
+    val animTabEntranceDamping: StateFlow<Float> = _animTabEntranceDamping.asStateFlow()
+    private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, Spring.StiffnessMedium))
+    val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
     // ── Species identification settings ──
     private val _speciesIdApiKey = MutableStateFlow(prefs.getString(KEY_SPECIES_ID_API_KEY, "") ?: "")
@@ -605,6 +625,29 @@ class FieldMindSettings private constructor(context: Context) {
     fun setAppPinEnabled(value: Boolean) = edit(KEY_APP_PIN_ENABLED, value) { _appPinEnabled.value = value }
 
     fun setAppPinHash(value: String) = edit(KEY_APP_PIN_HASH, value) { _appPinHash.value = value }
+
+    fun currentAnimationConfig(): AnimationConfig {
+        return AnimationConfig(
+            entranceDampingRatio = _animEntranceDamping.value,
+            entranceStiffness = _animEntranceStiffness.value,
+            swipeBackDampingRatio = _animSwipeBackDamping.value,
+            swipeBackStiffness = _animSwipeBackStiffness.value,
+            swipeThreshold = _animSwipeThreshold.value,
+            swipeScaleFactor = _animSwipeScaleFactor.value,
+            tabEntranceDampingRatio = _animTabEntranceDamping.value,
+            tabEntranceStiffness = _animTabEntranceStiffness.value
+        )
+    }
+
+    // ── Animation tuning setters ──
+    fun setAnimEntranceDamping(value: Float) = edit(KEY_ANIM_ENTRANCE_DAMPING, value) { _animEntranceDamping.value = value }
+    fun setAnimEntranceStiffness(value: Float) = edit(KEY_ANIM_ENTRANCE_STIFFNESS, value) { _animEntranceStiffness.value = value }
+    fun setAnimSwipeBackDamping(value: Float) = edit(KEY_ANIM_SWIPE_BACK_DAMPING, value) { _animSwipeBackDamping.value = value }
+    fun setAnimSwipeBackStiffness(value: Float) = edit(KEY_ANIM_SWIPE_BACK_STIFFNESS, value) { _animSwipeBackStiffness.value = value }
+    fun setAnimSwipeThreshold(value: Float) = edit(KEY_ANIM_SWIPE_THRESHOLD, value) { _animSwipeThreshold.value = value }
+    fun setAnimSwipeScaleFactor(value: Float) = edit(KEY_ANIM_SWIPE_SCALE, value) { _animSwipeScaleFactor.value = value }
+    fun setAnimTabEntranceDamping(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_DAMPING, value) { _animTabEntranceDamping.value = value }
+    fun setAnimTabEntranceStiffness(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, value) { _animTabEntranceStiffness.value = value }
 
     fun verifyAppPin(input: String): Boolean {
         val hash = _appPinHash.value
@@ -1062,6 +1105,7 @@ class FieldMindSettings private constructor(context: Context) {
 
     private inline fun edit(key: String, value: String, after: () -> Unit) { prefs.edit().putString(key, value).apply(); after() }
     private inline fun edit(key: String, value: Boolean, after: () -> Unit) { prefs.edit().putBoolean(key, value).apply(); after() }
+    private inline fun edit(key: String, value: Float, after: () -> Unit) { prefs.edit().putFloat(key, value).apply(); after() }
     private inline fun edit(key: String, value: Int, after: () -> Unit) { prefs.edit().putInt(key, value).apply(); after() }
 
     companion object {
@@ -1178,5 +1222,14 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_DECOY_PIN_LABEL = "decoy_pin_label"
         // ── Per-category entity color overrides ──
         private const val KEY_ENTITY_COLORS = "entity_colors"
+        // ── Animation tuning keys ──
+        private const val KEY_ANIM_ENTRANCE_DAMPING = "anim_entrance_damping"
+        private const val KEY_ANIM_ENTRANCE_STIFFNESS = "anim_entrance_stiffness"
+        private const val KEY_ANIM_SWIPE_BACK_DAMPING = "anim_swipe_back_damping"
+        private const val KEY_ANIM_SWIPE_BACK_STIFFNESS = "anim_swipe_back_stiffness"
+        private const val KEY_ANIM_SWIPE_THRESHOLD = "anim_swipe_threshold"
+        private const val KEY_ANIM_SWIPE_SCALE = "anim_swipe_scale"
+        private const val KEY_ANIM_TAB_ENTRANCE_DAMPING = "anim_tab_entrance_damping"
+        private const val KEY_ANIM_TAB_ENTRANCE_STIFFNESS = "anim_tab_entrance_stiffness"
     }
 }

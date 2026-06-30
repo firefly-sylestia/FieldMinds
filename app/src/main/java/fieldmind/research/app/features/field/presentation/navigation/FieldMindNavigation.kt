@@ -936,21 +936,32 @@ private fun FieldMindNavHost(
     }
     val peekHolder = remember { PeekContentHolder() }
     LaunchedEffect(previousRoute) {
-        // Exclude tab container (which has its own AllTabScreen peek system)
-        // and null (first screen) from the real-content cache.
+        // Include all routes in the cache, including tab container.
+        // For tab container, RouteContent renders the Home screen so
+        // the predictive back peek shows REAL tab content instead of
+        // a mock placeholder card.
         val route = previousRoute
-        val isCachable = route != null && route != "field_tab_container"
+        val isCachable = route != null
         peekHolder.peekKey = if (isCachable) route else null
         peekHolder.peekContent = if (isCachable) {
             { RouteContent(route!!, viewModel) }
         } else null
     }
 
+    // ── Read animation config from settings and provide via CompositionLocal ──
+    // Uses derivedStateOf so all 8 animation state flows are reactively tracked.
+    val animConfig by remember {
+        derivedStateOf {
+            viewModel.fieldSettings.currentAnimationConfig()
+        }
+    }
+
     SharedTransitionLayout(modifier = modifier) {
         val composableScope = this
         CompositionLocalProvider(
             LocalSharedTransitionScope provides composableScope,
-            LocalPeekContentHolder provides peekHolder
+            LocalPeekContentHolder provides peekHolder,
+            LocalAnimationConfig provides animConfig
         ) {
             NavHost(
             navController = navController,
@@ -1365,16 +1376,14 @@ private fun AllTabScreen(
     // spring physics for a polished "pop" entrance.
     val tabEntranceProgress = remember { Animatable(1f) }
     var lastActiveIndex by remember { mutableIntStateOf(activeTabIndex) }
+    val animConfig = fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig.current
     LaunchedEffect(activeTabIndex) {
         if (activeTabIndex != lastActiveIndex) {
             lastActiveIndex = activeTabIndex
             tabEntranceProgress.snapTo(0f)
             tabEntranceProgress.animateTo(
                 1f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessMedium
-                )
+                animationSpec = animConfig.tabEntranceSpring()
             )
         }
     }
@@ -1567,6 +1576,23 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
     val noopLong: (Long) -> Unit = {}
 
     when {
+        // ── Tab container: render the Home screen for peek preview ──
+        route == "field_tab_container" -> {
+            val scope = LocalSharedTransitionScope.current
+            if (scope != null) {
+                with(scope) {
+                    HomeScreen(
+                        viewModel = viewModel,
+                        onOpenSettings = noop,
+                        onNavigate = noopNav,
+                        onOpenDetail = noopDetail,
+                        onOpenReader = noopReader,
+                        onOpenCanvas = noopLong
+                    )
+                }
+            }
+        }
+
         // ── Dynamic routes (parameterised) ──
         route.startsWith("field_task_detail/") -> {
             val taskId = route.removePrefix("field_task_detail/").toLongOrNull() ?: return

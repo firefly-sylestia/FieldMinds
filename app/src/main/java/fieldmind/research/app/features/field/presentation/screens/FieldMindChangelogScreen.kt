@@ -42,9 +42,37 @@ internal data class FieldMindChangelogEntry(
     val importance: String,
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
-)
-
-private val fieldMindChangelog = listOf(
+)    private val fieldMindChangelog = listOf(
+        // ── v0.22.0 – Animation Tuning & Smoother Transitions ──
+        FieldMindChangelogEntry(
+            version = "0.22.0",
+            date = "2026-06-30",
+            title = "Animation Tuning & Smoother Transitions",
+            importance = "Major",
+            tags = listOf("🎬", "🛠️", "✨"),
+            sections = listOf(
+                "🎬 Smoother animations" to listOf(
+                    "✓ Reduced entrance bounce: damping ratio raised from 0.4→0.75 on all screen entrance springs",
+                    "✓ Tab switch animation tuned: lower bounciness, more elegant spring-back feel",
+                    "✓ Swipe-back gesture now uses configurable damping — not over-bouncy on cancel",
+                    "✓ Predictive back peek cancel animation uses smooth configurable spring"
+                ),
+                "🛠️ Developer animation tuning" to listOf(
+                    "✓ Added AnimationTuningCard to developer settings with 5 sliders",
+                    "✓ Entrance damping: adjust from bouncy (0.3) to smooth (1.0) with live preview",
+                    "✓ Swipe-back damping: control how the back gesture snaps or glides",
+                    "✓ Tab entrance damping: tune the tab-switch pop animation feel",
+                    "✓ Swipe threshold: make back gestures easier or harder to trigger",
+                    "✓ Swipe scale: control how much the current screen shrinks during back peek",
+                    "✓ Reset to defaults button for quick restore"
+                ),
+                "✨ Real-content peek for all screens" to listOf(
+                    "✓ Tab container now included in peek cache — back swipe from settings shows real home content, not placeholder",
+                    "✓ All 40+ navigation routes now participate in the real-content peek system",
+                    "✓ Settings back swipe shows the actual Home tab, not a generic gradient mock"
+                )
+            )
+        ),
     FieldMindChangelogEntry(
         version = "2.3.26.24",
         date = "2026-06-28",
