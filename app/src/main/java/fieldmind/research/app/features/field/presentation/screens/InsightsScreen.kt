@@ -364,7 +364,7 @@ fun InsightsScreen(
                 item {
                     Card(
                         shape = RoundedCornerShape(32.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             tags.take(10).forEach { tag ->
@@ -384,7 +384,7 @@ fun InsightsScreen(
             item {
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         NetworkGraphTimeline(
@@ -445,7 +445,7 @@ fun InsightsScreen(
                 item {
                     Card(
                         shape = RoundedCornerShape(32.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                             Icon(icon = FieldMindIcons.Weather, contentDescription = null, tint = colors.info, size = 22.dp)
@@ -498,7 +498,7 @@ fun InsightsScreen(
 
 @Composable
 private fun ResearchJourneyCard(observations: List<ObservationEntity>, questions: List<QuestionEntity>, hypotheses: List<HypothesisEntity>, projects: List<ProjectEntity>) {
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Research journey", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Text("Question → observations → patterns → hypothesis → findings", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -669,7 +669,7 @@ private fun CollapsibleAchievements(
 
     Card(
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.pressScale(scaleDown = 0.98f).clickable { expanded = !expanded }
     ) {
@@ -753,7 +753,7 @@ private fun GraphLegend(label: String, color: Color) {
 private fun InsightCard(title: String, icon: MaterialSymbolIcon, content: @Composable () -> Unit) {
     Card(
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {

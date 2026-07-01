@@ -287,22 +287,22 @@ class FieldMindSettings private constructor(context: Context) {
     private val _dataIntegrityCheckOnLaunch = MutableStateFlow(prefs.getBoolean(KEY_DATA_INTEGRITY_CHECK, false))
     val dataIntegrityCheckOnLaunch: StateFlow<Boolean> = _dataIntegrityCheckOnLaunch.asStateFlow()
 
-    // ── Animation tuning settings ──
-    private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.85f))
+    // ── Animation tuning settings (elegant, slow defaults) ──
+    private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.95f))
     val animEntranceDamping: StateFlow<Float> = _animEntranceDamping.asStateFlow()
-    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, Spring.StiffnessMedium))
+    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, 120f))
     val animEntranceStiffness: StateFlow<Float> = _animEntranceStiffness.asStateFlow()
-    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.75f))
+    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.92f))
     val animSwipeBackDamping: StateFlow<Float> = _animSwipeBackDamping.asStateFlow()
-    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 800f))
+    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 120f))
     val animSwipeBackStiffness: StateFlow<Float> = _animSwipeBackStiffness.asStateFlow()
     private val _animSwipeThreshold = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_THRESHOLD, 0.20f))
     val animSwipeThreshold: StateFlow<Float> = _animSwipeThreshold.asStateFlow()
     private val _animSwipeScaleFactor = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_SCALE, 0.92f))
     val animSwipeScaleFactor: StateFlow<Float> = _animSwipeScaleFactor.asStateFlow()
-    private val _animTabEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_DAMPING, 0.8f))
+    private val _animTabEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_DAMPING, 0.95f))
     val animTabEntranceDamping: StateFlow<Float> = _animTabEntranceDamping.asStateFlow()
-    private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, Spring.StiffnessMedium))
+    private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, 180f))
     val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
     // ── Species identification settings ──

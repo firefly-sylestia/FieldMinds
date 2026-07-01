@@ -141,6 +141,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object SettingsSpeciesId : FieldMindScreen("field_settings_species_id", "Species ID", FieldMindIcons.Nature)
     data object SettingsAutoGen : FieldMindScreen("field_settings_auto_gen", "Auto generation", FieldMindIcons.Sparkle)
     data object SettingsSecurityScore : FieldMindScreen("field_settings_security_score", "Security Score", MaterialSymbolIcon("security"))
+    data object SettingsAnimationTuning : FieldMindScreen("field_settings_animation_tuning", "Animation Tuning", MaterialSymbolIcon("tune"))
 
 
     // ── Tasks screen ──
@@ -1067,7 +1068,8 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.SettingsWeather.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { WeatherSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.SettingsMap.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { MapSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.SettingsDataIntegrity.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { DataIntegritySettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
-            composable(FieldMindScreen.SettingsDeveloper.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { DeveloperSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
+            composable(FieldMindScreen.SettingsDeveloper.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { DeveloperSettingsPage(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenAnimationTuning = { navController.navigateToDestination(FieldMindScreen.SettingsAnimationTuning.route) }) } }
+            composable(FieldMindScreen.SettingsAnimationTuning.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { AnimationTuningSettingsPage(settings = viewModel.fieldSettings, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.SpeciesBrowser.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { SpeciesBrowserScreen(onBack = { navController.popBackStack() }, onOpenDetail = { id -> navController.navigateToDestination("field_species_detail/$id") }) } }
             composable(FieldMindScreen.TaxonomicBrowser.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { TaxonomicBrowserScreen(onBack = { navController.popBackStack() }, onOpenDetail = { id -> navController.navigateToDestination("field_species_detail/$id") }) } }
             composable("field_species_detail/{speciesId}") { entry ->
@@ -1676,7 +1678,8 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         route == FieldMindScreen.SettingsWeather.route -> WeatherSettingsPage(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.SettingsMap.route -> MapSettingsPage(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.SettingsDataIntegrity.route -> DataIntegritySettingsPage(viewModel = viewModel, onBack = noop)
-        route == FieldMindScreen.SettingsDeveloper.route -> DeveloperSettingsPage(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.SettingsDeveloper.route -> DeveloperSettingsPage(viewModel = viewModel, onBack = noop, onOpenAnimationTuning = null)
+        route == FieldMindScreen.SettingsAnimationTuning.route -> AnimationTuningSettingsPage(settings = viewModel.fieldSettings, onBack = noop)
         route == FieldMindScreen.SettingsSpeciesPacks.route -> SpeciesPackSettingsPage(onBack = noop)
         route == FieldMindScreen.SettingsSpeciesId.route -> SpeciesIdentificationSettingsPage(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.SettingsAutoGen.route -> AutoGenerationSettingsPage(viewModel = viewModel, onBack = noop)

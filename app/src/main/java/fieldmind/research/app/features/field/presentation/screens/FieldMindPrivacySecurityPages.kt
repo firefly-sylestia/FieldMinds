@@ -69,7 +69,7 @@ fun SecurityScoreDetailPage(settings: FieldMindSettings, onBack: () -> Unit) {
         item {
             Card(
                 shape = RoundedCornerShape(34.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     // Score circle
@@ -119,7 +119,7 @@ fun SecurityScoreDetailPage(settings: FieldMindSettings, onBack: () -> Unit) {
             item {
                 Card(
                     shape = RoundedCornerShape(32.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Text("Enabled", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = FieldMindTheme.colors.positive)
@@ -139,7 +139,7 @@ fun SecurityScoreDetailPage(settings: FieldMindSettings, onBack: () -> Unit) {
             item {
                 Card(
                     shape = RoundedCornerShape(32.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Text("Recommended", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = FieldMindTheme.colors.warning)
@@ -308,7 +308,7 @@ fun AppPreviewPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             Card(
                 shape = RoundedCornerShape(32.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("How should FieldMind appear in recent apps?", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -343,7 +343,7 @@ fun AppPreviewPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             Card(
                 shape = RoundedCornerShape(32.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Preview", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -423,7 +423,7 @@ fun FailedUnlocksPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             Card(
                 shape = RoundedCornerShape(32.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("After 5 failed attempts", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)

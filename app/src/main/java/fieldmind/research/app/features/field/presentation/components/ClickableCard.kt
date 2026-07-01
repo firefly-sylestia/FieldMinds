@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
  *
  * Defaults mirror the project conventions:
  * - RoundedCornerShape(34.dp)
- * - surfaceContainerLow background
- * - zero elevation
+ * - surfaceContainerLowest background (brighter = contrasts more from background)
+ * - 4dp plush elevation with soft shadow
  * - 1.5dp lift, 0.985 scale-down on press
  */
 @Composable
@@ -32,9 +32,9 @@ fun ClickableCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        containerColor = MaterialTheme.colorScheme.surface
     ),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,
@@ -60,9 +60,9 @@ fun InfoCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        containerColor = MaterialTheme.colorScheme.surface
     ),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     border: androidx.compose.foundation.BorderStroke? = null,
     content: @Composable ColumnScope.() -> Unit
 ) = Card(
@@ -85,9 +85,9 @@ fun ClickableCard(
     fillMaxWidth: Boolean = true,
     shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        containerColor = MaterialTheme.colorScheme.surface
     ),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,

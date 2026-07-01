@@ -5,6 +5,9 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -26,6 +29,8 @@ import fieldmind.research.app.features.field.presentation.components.FieldMindIc
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
+import fieldmind.research.app.features.field.presentation.components.StandardScreenHeader
+import fieldmind.research.app.features.field.presentation.components.BackButton
 import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
@@ -599,4 +604,259 @@ private fun AnimationPreviewDemo() {
     }
 
     Spacer(Modifier.height(4.dp))
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Animation Tuning Settings — Full-screen page inside Developer Options
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+fun AnimationTuningSettingsPage(
+    settings: FieldMindSettings,
+    onBack: () -> Unit
+) {
+    val entranceDamping by settings.animEntranceDamping.collectAsState()
+    val entranceStiffness by settings.animEntranceStiffness.collectAsState()
+    val swipeBackDamping by settings.animSwipeBackDamping.collectAsState()
+    val swipeBackStiffness by settings.animSwipeBackStiffness.collectAsState()
+    val swipeThreshold by settings.animSwipeThreshold.collectAsState()
+    val swipeScale by settings.animSwipeScaleFactor.collectAsState()
+    val tabDamping by settings.animTabEntranceDamping.collectAsState()
+    val tabStiffness by settings.animTabEntranceStiffness.collectAsState()
+
+    Box(Modifier.fillMaxSize().statusBarsPadding()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 40.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                StandardScreenHeader(
+                    title = "Animation Tuning",
+                    subtitle = "Adjust spring physics, damping, and stiffness for every animation in the app",
+                    icon = MaterialSymbolIcon("tune"),
+                    trailing = { BackButton(onClick = onBack) }
+                )
+            }
+
+            // ── Live Preview Section ──
+            item {
+                Card(
+                    shape = RoundedCornerShape(32.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(MaterialSymbolIcon("play_circle"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
+                            }
+                            Text("Live Preview", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                            Spacer(Modifier.weight(1f))
+                        }
+                        AnimationPreviewDemo()
+                    }
+                }
+            }
+
+            // ── Entrance Spring Tuning ──
+            item {
+                SectionHeader("Entrance animation", "Controls how screens and elements appear")
+            }
+            item {
+                SettingsGroupCard {
+                    DampingSlider(
+                        label = "Entrance damping",
+                        value = entranceDamping,
+                        onValueChange = { settings.setAnimEntranceDamping(it.coerceIn(0.3f, 1.0f)) },
+                        lowLabel = "Bouncy",
+                        highLabel = "Smooth"
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    StiffnessSlider(
+                        label = "Entrance stiffness",
+                        value = entranceStiffness,
+                        onValueChange = { settings.setAnimEntranceStiffness(it.coerceIn(50f, 5000f)) },
+                        lowLabel = "Soft",
+                        highLabel = "Stiff"
+                    )
+                }
+            }
+
+            // ── Swipe-back Spring Tuning ──
+            item {
+                SectionHeader("Swipe-back gesture", "Controls the back-swipe animation feel")
+            }
+            item {
+                SettingsGroupCard {
+                    DampingSlider(
+                        label = "Swipe-back damping",
+                        value = swipeBackDamping,
+                        onValueChange = { settings.setAnimSwipeBackDamping(it.coerceIn(0.3f, 1.0f)) },
+                        lowLabel = "Bouncy",
+                        highLabel = "Smooth"
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    StiffnessSlider(
+                        label = "Swipe-back stiffness",
+                        value = swipeBackStiffness,
+                        onValueChange = { settings.setAnimSwipeBackStiffness(it.coerceIn(50f, 5000f)) },
+                        lowLabel = "Soft",
+                        highLabel = "Stiff"
+                    )
+                }
+            }
+
+            // ── Tab Switch Spring Tuning ──
+            item {
+                SectionHeader("Tab switch", "Controls the tab-switch pop animation")
+            }
+            item {
+                SettingsGroupCard {
+                    DampingSlider(
+                        label = "Tab entrance damping",
+                        value = tabDamping,
+                        onValueChange = { settings.setAnimTabEntranceDamping(it.coerceIn(0.3f, 1.0f)) },
+                        lowLabel = "Bouncy",
+                        highLabel = "Smooth"
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    StiffnessSlider(
+                        label = "Tab entrance stiffness",
+                        value = tabStiffness,
+                        onValueChange = { settings.setAnimTabEntranceStiffness(it.coerceIn(50f, 5000f)) },
+                        lowLabel = "Soft",
+                        highLabel = "Stiff"
+                    )
+                }
+            }
+
+            // ── Swipe Threshold & Scale ──
+            item {
+                SectionHeader("Swipe behavior", "Commit threshold and scale effect")
+            }
+            item {
+                SettingsGroupCard {
+                    StiffnessSlider(
+                        label = "Swipe threshold",
+                        value = swipeThreshold * 100,
+                        onValueChange = { settings.setAnimSwipeThreshold((it / 100f).coerceIn(0.05f, 0.5f)) },
+                        valueRange = 5f..50f,
+                        lowLabel = "Easy",
+                        highLabel = "Hard",
+                        formatValue = { "%.0f%%".format(it) }
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    StiffnessSlider(
+                        label = "Swipe scale",
+                        value = swipeScale * 100,
+                        onValueChange = { settings.setAnimSwipeScaleFactor((it / 100f).coerceIn(0.80f, 0.99f)) },
+                        valueRange = 80f..99f,
+                        lowLabel = "Subtle",
+                        highLabel = "Dramatic",
+                        formatValue = { "%.0f%%".format(it) }
+                    )
+                }
+            }
+
+            // ── Reset button ──
+            item {
+                Surface(
+                    onClick = {
+                        val def = AnimationConfig.DEFAULT
+                        settings.setAnimEntranceDamping(def.entranceDampingRatio)
+                        settings.setAnimEntranceStiffness(def.entranceStiffness)
+                        settings.setAnimSwipeBackDamping(def.swipeBackDampingRatio)
+                        settings.setAnimSwipeBackStiffness(def.swipeBackStiffness)
+                        settings.setAnimSwipeThreshold(def.swipeThreshold)
+                        settings.setAnimSwipeScaleFactor(def.swipeScaleFactor)
+                        settings.setAnimTabEntranceDamping(def.tabEntranceDampingRatio)
+                        settings.setAnimTabEntranceStiffness(def.tabEntranceStiffness)
+                    },
+                    shape = RoundedCornerShape(20.dp),
+                    color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        Modifier.padding(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(FieldMindIcons.Refresh, null, tint = MaterialTheme.colorScheme.onErrorContainer, size = 16.dp)
+                        Text("Reset to defaults", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onErrorContainer)
+                    }
+                }
+            }
+
+            // ── Info card ──
+            item {
+                Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("Tip", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                        Text("Lower stiffness = slower, more elegant motion. Higher damping = less bounce. Changes take effect immediately.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+
+            item { Spacer(Modifier.height(16.dp)) }
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Shared slider helpers for Animation Tuning
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun DampingSlider(
+    label: String,
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    lowLabel: String,
+    highLabel: String
+) {
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Text("$label: %.2f".format(value), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+        Slider(
+            value = value,
+            onValueChange = onValueChange,
+            valueRange = 0.3f..1.0f,
+            steps = 13,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(lowLabel, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(highLabel, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+@Composable
+private fun StiffnessSlider(
+    label: String,
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    valueRange: ClosedFloatingPointRange<Float> = 50f..5000f,
+    lowLabel: String,
+    highLabel: String,
+    formatValue: ((Float) -> String)? = null
+) {
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Text(
+            if (formatValue != null) formatValue(value) else "$label: %.0f".format(value),
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Medium
+        )
+        Slider(
+            value = value,
+            onValueChange = onValueChange,
+            valueRange = valueRange,
+            steps = 99,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(lowLabel, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(highLabel, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
 }

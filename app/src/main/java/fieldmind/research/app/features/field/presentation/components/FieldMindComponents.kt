@@ -109,12 +109,12 @@ fun FieldMindSubNavBar(
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 0.dp)
     ) {
-        // Pill container
+        // Pill container — elevated with soft shadow for a plush, pill-like feel
         Surface(
             shape = RoundedCornerShape(34.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerLow,
-            tonalElevation = 0.dp,
-            shadowElevation = 0.dp
+            color = MaterialTheme.colorScheme.surface,
+            tonalElevation = 2.dp,
+            shadowElevation = 2.dp
         ) {
             Row(
                 modifier = Modifier
@@ -540,8 +540,9 @@ fun FieldScreenHeader(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(30.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.6f),
-        tonalElevation = 0.dp
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
+        tonalElevation = 2.dp,
+        shadowElevation = 2.dp
     ) {
         Row(
             Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
@@ -623,8 +624,9 @@ fun StandardScreenHeader(
         modifier = modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(34.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 0.dp
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 3.dp,
+        shadowElevation = 3.dp
     ) {
         Row(
             Modifier.padding(18.dp),
@@ -824,8 +826,8 @@ fun EntityCard(
                 else Modifier
             ),
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             Box(
@@ -875,8 +877,8 @@ fun MetricTile(
             .then(if (onClick != null) Modifier.expressivePress(scaleDown = 0.96f) else Modifier)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Icon(icon = icon, contentDescription = null, tint = tint, size = 22.dp)

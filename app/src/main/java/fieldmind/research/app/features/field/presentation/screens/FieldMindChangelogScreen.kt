@@ -43,6 +43,36 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+        // ── v0.23.0 – Soft Shadows & Cute Cards Theme ──
+        FieldMindChangelogEntry(
+            version = "0.23.0",
+            date = "2026-07-01",
+            title = "Soft Shadows & Cute Cards Theme",
+            importance = "Major",
+            tags = listOf("🎨", "✨", "🛠️"),
+            sections = listOf(
+                "🎨 Plush card elevation & soft shadows" to listOf(
+                    "✓ All cards now elevated with 4dp soft shadows — cards float above the background for a plush, layered feel",
+                    "✓ Card colors switched to surface (bright/clean) for maximum contrast against the background",
+                    "✓ StandardScreenHeader, EntityCard, MetricTile, SubNavBar — all elevated and more prominent",
+                    "✓ ClickableCard & InfoCard default to 4dp elevation, surface container color, and press animation",
+                    "✓ Bulk elevation update across 15 screen files: Home, Settings, Dialogs, Tasks, DataTools, Insights, and more"
+                ),
+                "✨ CuteThemeConfig.kt — central theme file" to listOf(
+                    "✓ New file: CuteThemeConfig.kt with CuteElevations (5 plush tiers), CuteShadows, and CuteCardDefaults",
+                    "✓ CuteElevations: plushTier1 (2dp) through plushTier5 (12dp) for consistent elevation everywhere",
+                    "✓ CuteCardDefaults: Shape (RoundedCornerShape 32dp), ShapeCompact (24dp), ShapeHero (36dp), and tinted/colors presets",
+                    "✓ cuteShadow() modifier for adding soft shadows to any composable",
+                    "✓ Ready for the upcoming cute pastel theme phase"
+                ),
+                "🛠️ Wider visual hierarchy" to listOf(
+                    "✓ Cards now visually distinct from backgrounds — layered feel with clear separation",
+                    "✓ Surface color at MaterialTheme.colorScheme.surface for clean, bright card faces",
+                    "✓ 4dp elevation creates consistent soft shadows that make cards feel touchable and plush",
+                    "✓ Info/privacy cards, settings group cards, entity cards — all now have the plush look"
+                )
+            )
+        ),
         // ── v0.22.0 – Animation Tuning & Smoother Transitions ──
         FieldMindChangelogEntry(
             version = "0.22.0",
