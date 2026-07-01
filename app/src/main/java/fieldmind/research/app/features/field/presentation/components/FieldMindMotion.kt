@@ -36,6 +36,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -56,6 +57,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 import androidx.activity.ExperimentalActivityApi
@@ -405,6 +407,67 @@ fun Modifier.pressScale(
 
 fun Modifier.pressCardScale(): Modifier = composed {
     this.pressScale(scaleDown = 0.97f)
+}
+
+// ── Staggered Entrance Animation (fadeIn + slideUp) ──
+
+/**
+ * A [Modifier] that animates a composable's entrance with a fade-in and
+ * upward slide, staggered by [index] for a delightful cascade reveal.
+ *
+ * When [animate] is true, the item starts invisible and slightly below its
+ * final position, then fades in and slides up after a staggered delay.
+ * Pass `animate = true` and the item's [index] when rendering cards in a
+ * LazyColumn for a polished scroll-reveal effect.
+ *
+ * @param index  Zero-based position in the list; determines stagger delay.
+ * @param animate  Whether to play the entrance animation. Default false.
+ * @param offsetY  The vertical slide distance. Default 20dp.
+ */
+fun Modifier.staggeredEntrance(
+    index: Int = 0,
+    animate: Boolean = false,
+    offsetY: Dp = 20.dp
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "staggeredEntrance"
+        properties["index"] = index
+        properties["animate"] = animate
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    var hasAnimatedIn by remember { mutableStateOf(false) }
+    val density = LocalDensity.current
+    val shouldAnimate = animate && !reduceMotion
+
+    LaunchedEffect(animate, index, reduceMotion) {
+        if (shouldAnimate) {
+            delay(FieldMindMotion.staggerDelay(index).toLong())
+            hasAnimatedIn = true
+        } else {
+            // No animation — immediately visible
+            hasAnimatedIn = true
+        }
+    }
+
+    val targetAlpha = if (!shouldAnimate || hasAnimatedIn) 1f else 0f
+    val targetTranslationY = if (!shouldAnimate || hasAnimatedIn) 0f else with(density) { offsetY.toPx() }
+
+    val alpha by animateFloatAsState(
+        targetValue = targetAlpha,
+        animationSpec = FieldMindMotion.expressiveFloat,
+        label = "entranceAlpha_$index"
+    )
+    val translationY by animateFloatAsState(
+        targetValue = targetTranslationY,
+        animationSpec = FieldMindMotion.expressiveFloat,
+        label = "entranceSlide_$index"
+    )
+
+    this.graphicsLayer {
+        this.alpha = alpha
+        this.translationY = translationY
+    }
 }
 
 // -- Swipe-back Gesture Host -- iOS-style with predictive peek --

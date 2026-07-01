@@ -43,7 +43,37 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
-        // ── v0.24.0 – Pastel Color Theme & Cute Cards Polish ──
+        // ── v0.24.2 – Staggered Entrance Animations ──
+        FieldMindChangelogEntry(
+            version = "0.24.2",
+            date = "2026-07-01",
+            title = "✨ Staggered Entrance Animations",
+            importance = "Patch",
+            tags = listOf("🎬", "✨", "🛠️"),
+            sections = listOf(
+                "🎬 Fade-in + slide-up entrance animation" to listOf(
+                    "✓ New reusable staggerEntrance() modifier: items fade in from alpha 0→1 and slide up 20dp with a staggered delay based on position",
+                    "✓ Applied to all card composables: SectionHeader, EntityCard, ClickableCard, InfoCard, MetricTile",
+                    "✓ SectionHeader animates by default (animate=true) for a delightful reveal as you scroll",
+                    "✓ Other cards accept optional animate + index params — existing callsites pass animate=true for instant upgrade",
+                    "✓ Respects system reduce-motion accessibility setting — no animation when animations are off"
+                ),
+                "✨ Staggered cascade effect" to listOf(
+                    "✓ Each item gets an 80ms initial delay + 50ms per index — creates a smooth cascade as items scroll into view",
+                    "✓ Uses the existing FieldMindMotion.expressiveFloat spring (0.94 damping, 180 stiffness) for buttery-smooth motion",
+                    "✓ Items start invisible (alpha=0) and slightly below their final position, then glide up and fade in",
+                    "✓ SectionHeaders (index=0) get a quick 80ms delay before appearing — subtle but delightful"
+                ),
+                "🛠️ Implementation details" to listOf(
+                    "✓ Modifier.staggeredEntrance() in FieldMindMotion.kt — composed {} modifier using animateFloatAsState + graphicsLayer",
+                    "✓ LaunchedEffect with staggered delay (80ms + 50ms per index, capped at 500ms) triggers the animation",
+                    "✓ Cards automatically animate when used with itemsIndexed { i, item -> Card(..., index = i, animate = true) }",
+                    "✓ No layout shifts — animation is purely visual via graphicsLayer (alpha + translationY)",
+                    "✓ Existing EntityCard animate=true callsites (Archive, Insights, FieldLog) automatically upgraded"
+                )
+            )
+        ),
+        // ── v0.24.1 – Mini-Card Section Headers & Plush Chips ──
         FieldMindChangelogEntry(
             version = "0.24.0",
             date = "2026-07-01",

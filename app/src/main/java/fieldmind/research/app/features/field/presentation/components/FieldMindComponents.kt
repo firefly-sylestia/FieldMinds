@@ -587,12 +587,15 @@ fun SectionHeader(
     subtitle: String? = null,
     modifier: Modifier = Modifier,
     trailing: @Composable (() -> Unit)? = null,
-    accentColor: Color? = null
+    accentColor: Color? = null,
+    index: Int = 0,
+    animate: Boolean = true
 ) {
     val accent = accentColor ?: FieldMindTheme.colors.accentFor(title)
     Surface(
         modifier = modifier
             .fillMaxWidth()
+            .staggeredEntrance(index = index, animate = animate)
             .cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(28.dp)),
         shape = RoundedCornerShape(28.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -838,6 +841,7 @@ fun EntityCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .staggeredEntrance(index = index, animate = animate)
             .then(
                 if (onClick != null) Modifier.expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 else Modifier
@@ -893,11 +897,14 @@ fun MetricTile(
     modifier: Modifier = Modifier,
     accent: Color? = null,
     trend: String? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    index: Int = 0,
+    animate: Boolean = false
 ) {
     val tint = accent ?: MaterialTheme.colorScheme.primary
     Card(
         modifier = modifier
+            .staggeredEntrance(index = index, animate = animate)
             .then(if (onClick != null) Modifier.expressivePress(scaleDown = 0.96f) else Modifier)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         shape = RoundedCornerShape(32.dp),

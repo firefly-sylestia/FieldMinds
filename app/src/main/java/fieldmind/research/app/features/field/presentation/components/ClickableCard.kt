@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardElevation
 import androidx.compose.ui.unit.dp
-
 /**
  * A [Card] with built-in [expressiveCardPress] animation (lift + scale) and [onClick].
  *
@@ -38,11 +37,14 @@ fun ClickableCard(
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,
+    index: Int = 0,
+    animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) = Card(
     onClick = onClick,
     modifier = modifier
         .fillMaxWidth()
+        .staggeredEntrance(index = index, animate = animate)
         .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
     shape = shape,
     colors = colors,
@@ -64,9 +66,13 @@ fun InfoCard(
     ),
     elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     border: androidx.compose.foundation.BorderStroke? = null,
+    index: Int = 0,
+    animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) = Card(
-    modifier = modifier.fillMaxWidth(),
+    modifier = modifier
+        .fillMaxWidth()
+        .staggeredEntrance(index = index, animate = animate),
     shape = shape,
     colors = colors,
     elevation = elevation,
@@ -91,6 +97,8 @@ fun ClickableCard(
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,
+    index: Int = 0,
+    animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val effectiveModifier = if (fillMaxWidth) modifier.fillMaxWidth() else modifier
@@ -103,6 +111,8 @@ fun ClickableCard(
         liftDp = liftDp,
         scaleDown = scaleDown,
         border = border,
+        index = index,
+        animate = animate,
         content = content
     )
 }
