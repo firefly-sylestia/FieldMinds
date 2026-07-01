@@ -2,9 +2,10 @@ package fieldmind.research.app.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardDefaults.CardElevation
+import androidx.compose.material3.CardDefaults.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -53,19 +54,16 @@ object CuteElevations {
     val plushTier5: Dp = 12.dp
 
     // ── Quick-access presets for CardDefaults ──
-    val cardDefault: CardDefaults.CardElevation
+    val cardDefault: CardElevation
         @Composable
-        @ReadOnlyComposable
         get() = CardDefaults.cardElevation(defaultElevation = plushTier2)
 
-    val cardProminent: CardDefaults.CardElevation
+    val cardProminent: CardElevation
         @Composable
-        @ReadOnlyComposable
         get() = CardDefaults.cardElevation(defaultElevation = plushTier3)
 
-    val cardDialog: CardDefaults.CardElevation
+    val cardDialog: CardElevation
         @Composable
-        @ReadOnlyComposable
         get() = CardDefaults.cardElevation(defaultElevation = plushTier4)
 }
 
@@ -124,15 +122,13 @@ object CuteCardDefaults {
      * @param containerColor override if a tinted card is needed.
      */
     @Composable
-    @ReadOnlyComposable
     fun colors(
         containerColor: Color = MaterialTheme.colorScheme.surface
-    ) = CardDefaults.cardColors(containerColor = containerColor)
+    ): CardColors = CardDefaults.cardColors(containerColor = containerColor)
 
     /** Tinted card with an accent colour at a very soft alpha. */
     @Composable
-    @ReadOnlyComposable
-    fun tinted(accent: Color, isDark: Boolean = false): CardDefaults.CardColors =
+    fun tinted(accent: Color, isDark: Boolean = false): CardColors =
         CardDefaults.cardColors(
             containerColor = accent.copy(alpha = if (isDark) 0.20f else 0.08f)
         )

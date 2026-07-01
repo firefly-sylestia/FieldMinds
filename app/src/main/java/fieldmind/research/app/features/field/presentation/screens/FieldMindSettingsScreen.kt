@@ -2084,8 +2084,6 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
 
 /** Wraps a sub-page with consistent StandardScreenHeader and scrollable content. */
 @Composable
-
-@Composable
 internal fun SettingsSubPage(title: String, icon: MaterialSymbolIcon, onBack: () -> Unit, content: LazyListScope.() -> Unit) {
     BackHandler(enabled = true) { onBack() }
     LazyColumn(
