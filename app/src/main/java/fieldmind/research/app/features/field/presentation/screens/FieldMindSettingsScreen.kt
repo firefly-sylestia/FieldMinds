@@ -2020,6 +2020,7 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
                         Text("Room: SQLite-backed local storage", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
+            }
             item { SettingsNavCard("Animation Tuning", "Adjust spring physics, damping, stiffness, and preview live animations", MaterialSymbolIcon("tune"), FieldMindTheme.colors.flashcard) { onOpenAnimationTuning?.invoke() } }
             // ── Debug gesture thresholds, animation state, and tap test ──
             item { GestureThresholdsCard() }
@@ -2074,7 +2075,6 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
             }
         )
     }
-}
 }
 }
 
