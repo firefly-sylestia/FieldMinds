@@ -2,8 +2,6 @@ package fieldmind.research.app.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardDefaults.CardElevation
-import androidx.compose.material3.CardDefaults.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -54,15 +52,15 @@ object CuteElevations {
     val plushTier5: Dp = 12.dp
 
     // ── Quick-access presets for CardDefaults ──
-    val cardDefault: CardElevation
+    val cardDefault
         @Composable
         get() = CardDefaults.cardElevation(defaultElevation = plushTier2)
 
-    val cardProminent: CardElevation
+    val cardProminent
         @Composable
         get() = CardDefaults.cardElevation(defaultElevation = plushTier3)
 
-    val cardDialog: CardElevation
+    val cardDialog
         @Composable
         get() = CardDefaults.cardElevation(defaultElevation = plushTier4)
 }
@@ -124,11 +122,11 @@ object CuteCardDefaults {
     @Composable
     fun colors(
         containerColor: Color = MaterialTheme.colorScheme.surface
-    ): CardColors = CardDefaults.cardColors(containerColor = containerColor)
+    ) = CardDefaults.cardColors(containerColor = containerColor)
 
     /** Tinted card with an accent colour at a very soft alpha. */
     @Composable
-    fun tinted(accent: Color, isDark: Boolean = false): CardColors =
+    fun tinted(accent: Color, isDark: Boolean = false) =
         CardDefaults.cardColors(
             containerColor = accent.copy(alpha = if (isDark) 0.20f else 0.08f)
         )

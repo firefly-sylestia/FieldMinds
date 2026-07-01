@@ -2021,12 +2021,10 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
                     }
                 }
             item { SettingsNavCard("Animation Tuning", "Adjust spring physics, damping, stiffness, and preview live animations", MaterialSymbolIcon("tune"), FieldMindTheme.colors.flashcard) { onOpenAnimationTuning?.invoke() } }
-            }
             // ── Debug gesture thresholds, animation state, and tap test ──
             item { GestureThresholdsCard() }
             item { AnimationStateCard() }
             item { TapTestCard() }
-        }
         item {
             Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
