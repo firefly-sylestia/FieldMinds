@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.sp
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.theme.cardBg
 import fieldmind.research.app.shared.presentation.components.icons.Icon
+import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.components.LocalPrivacyTypingEnabled
 import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
@@ -112,7 +113,7 @@ fun FieldMindSubNavBar(
         // Pill container — elevated with soft shadow for a plush, pill-like feel
         Surface(
             shape = RoundedCornerShape(34.dp),
-            color = MaterialTheme.colorScheme.surface,
+            color = MaterialTheme.colorScheme.surfaceContainerLow,
             tonalElevation = 2.dp,
             shadowElevation = 2.dp
         ) {
@@ -579,22 +580,44 @@ fun FieldScreenHeader(
     }
 }
 
-/** In-list section header. */
+/** In-list section header — wrapped in an elegant mini-card with soft shadow for a plush, cute look. */
 @Composable
 fun SectionHeader(
     title: String,
     subtitle: String? = null,
     modifier: Modifier = Modifier,
-    trailing: @Composable (() -> Unit)? = null
+    trailing: @Composable (() -> Unit)? = null,
+    accentColor: Color? = null
 ) {
-    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-            if (!subtitle.isNullOrBlank()) {
-                Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
+    val accent = accentColor ?: FieldMindTheme.colors.accentFor(title)
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(28.dp)),
+        shape = RoundedCornerShape(28.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        tonalElevation = 2.dp
+    ) {
+        Row(
+            Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Cute accent color strip on the left
+            Box(
+                Modifier
+                    .width(4.dp)
+                    .height(if (subtitle != null) 36.dp else 28.dp)
+                    .background(accent.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
+            )
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                if (!subtitle.isNullOrBlank()) {
+                    Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
+                }
             }
+            if (trailing != null) trailing()
         }
-        if (trailing != null) trailing()
     }
 }
 
@@ -624,7 +647,7 @@ fun StandardScreenHeader(
         modifier = modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(34.dp),
-        color = MaterialTheme.colorScheme.surface,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 3.dp,
         shadowElevation = 3.dp
     ) {
@@ -704,7 +727,7 @@ fun BackButton(
 fun EntityBadge(kind: String, modifier: Modifier = Modifier) {
     val accent = FieldMindTheme.colors.accentFor(kind)
     Surface(
-        modifier = modifier,
+        modifier = modifier.cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(999.dp)),
         shape = RoundedCornerShape(999.dp),
         color = accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f),
         contentColor = accent
@@ -720,14 +743,15 @@ fun EntityBadge(kind: String, modifier: Modifier = Modifier) {
     }
 }
 
-/** Small metadata chip with optional leading icon. */
+/** Small metadata chip with optional leading icon — elevated with a soft shadow for a plush, touchable feel. */
 @Composable
 fun InfoChip(text: String, modifier: Modifier = Modifier, icon: MaterialSymbolIcon? = null, color: Color? = null) {
     val content = color ?: MaterialTheme.colorScheme.onSurfaceVariant
     Surface(
-        modifier = modifier,
+        modifier = modifier.cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(999.dp)),
         shape = RoundedCornerShape(999.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        tonalElevation = 1.dp,
         contentColor = content
     ) {
         Row(
@@ -745,7 +769,7 @@ fun InfoChip(text: String, modifier: Modifier = Modifier, icon: MaterialSymbolIc
 fun ConfidenceChip(level: String, modifier: Modifier = Modifier) {
     val color = FieldMindTheme.colors.confidenceColor(level)
     Surface(
-        modifier = modifier,
+        modifier = modifier.cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(999.dp)),
         shape = RoundedCornerShape(999.dp),
         color = color.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f),
         contentColor = color

@@ -73,6 +73,34 @@ internal data class FieldMindChangelogEntry(
                 )
             )
         ),
+        // ── v0.24.1 – Mini-Card Section Headers & Plush Chips ──
+        FieldMindChangelogEntry(
+            version = "0.24.1",
+            date = "2026-07-01",
+            title = "💎 Mini-Card Section Headers & Plush Chips",
+            importance = "Patch",
+            tags = listOf("🎨", "💎", "✨"),
+            sections = listOf(
+                "💎 SectionHeader → elegant mini-card" to listOf(
+                    "✓ SectionHeader now wrapped in a Surface card with soft 2dp shadow and tonal elevation",
+                    "✓ Cute accent color strip on the left — auto-detects entity color from header title",
+                    "✓ Optional accentColor parameter for manual override",
+                    "✓ Rounded corners (28dp) and proper padding for a plush, pill-like look",
+                    "✓ Used across 60+ section headers in Settings, Insights, Detail, Library, and more"
+                ),
+                "✨ InfoChip, ConfidenceChip, EntityBadge elevated" to listOf(
+                    "✓ All metadata chips now have 2dp soft shadows for a plush, touchable feel",
+                    "✓ Chips use surfaceContainerLow background with tonal elevation for dark mode readability",
+                    "✓ Consistent pill shape (999dp radius) with elevation — chips feel like tiny floating badges",
+                    "✓ EntityBadge keeps its semantic accent color but now floats with a subtle shadow"
+                ),
+                "🛠️ cuteShadow modifier in action" to listOf(
+                    "✓ cuteShadow() from CuteThemeConfig.kt now used by SectionHeader, InfoChip, ConfidenceChip, and EntityBadge",
+                    "✓ Import added: `import fieldmind.research.app.ui.theme.cuteShadow`",
+                    "✓ Consistent 2dp shadow across all standalone text items creates a unified plush aesthetic"
+                )
+            )
+        ),
         // ── v0.23.0 – Soft Shadows & Cute Cards Theme ──
         FieldMindChangelogEntry(
             version = "0.23.0",
