@@ -43,6 +43,36 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+        // ── v0.24.0 – Pastel Color Theme & Cute Cards Polish ──
+        FieldMindChangelogEntry(
+            version = "0.24.0",
+            date = "2026-07-01",
+            title = "🌸 Pastel Theme & Cute Cards Polish",
+            importance = "Major",
+            tags = listOf("🎨", "🌸", "✨"),
+            sections = listOf(
+                "🌸 Pastel color scheme (new)" to listOf(
+                    "✓ Brand-new Pastel theme: soft lavender primary (#B39DDB), blush pink secondary (#F8BBD0), mint tertiary (#A5D6A7)",
+                    "✓ Warm pink-white background (light) and deep warm purple-black (dark) — cozy and adorable",
+                    "✓ Pastel surface containers: lavender blush, light pink, soft mauve throughout",
+                    "✓ Full M3 color scheme with proper container, outline, inverse, and scrim colors",
+                    "✓ Selectable from Settings → Appearance → Color scheme — pick Pastel and see the app transform"
+                ),
+                "🎨 Pastel entity accent colors" to listOf(
+                    "✓ All 12 research entity types get soft pastel tints: sage (obs, species), sky blue (questions), amber (hypotheses), lavender (sources), rose (notes, flashcards)",
+                    "✓ Pastel confidence colors: soft sage (sure), warm amber (guess), soft coral (verify)",
+                    "✓ 10 pastel categorical chart colors for consistency in charts and graphs",
+                    "✓ Dark mode: glowing pastels on deep warm backgrounds for readability"
+                ),
+                "✨ Full wiring & settings integration" to listOf(
+                    "✓ Color scheme picker added to Appearance settings with 10 schemes including Pastel",
+                    "✓ FieldMindTheme now accepts and resolves customColorScheme parameter",
+                    "✓ MainActivity passes customColorScheme from settings to theme",
+                    "✓ Entity colors auto-switch to pastel when Pastel scheme is active",
+                    "✓ Pastel reference documented in CuteThemeConfig.kt as the flagship cute theme"
+                )
+            )
+        ),
         // ── v0.23.0 – Soft Shadows & Cute Cards Theme ──
         FieldMindChangelogEntry(
             version = "0.23.0",

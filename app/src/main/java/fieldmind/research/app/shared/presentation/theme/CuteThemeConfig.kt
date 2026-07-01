@@ -19,6 +19,14 @@ import androidx.compose.ui.unit.dp
  *  Purpose: Centralise every elevation, shadow, and card preset so the
  *  entire app breathes a consistent, soft, layered, "cute" aesthetic.
  *  All values are deliberately gentle — nothing harsh or sharp.
+ *
+ *  🌸 Pastel Theme: See [fieldmind.research.app.ui.theme.PastelPrimaryLight] et al.
+ *  in [Color.kt] for the full pastel M3 palette, wired as "Pastel" in
+ *  [fieldmind.research.app.ui.theme.getCustomColorScheme]. Selectable from
+ *  Settings → Appearance → Color scheme.
+ *
+ *  Pastel entity colors: [fieldmind.research.app.features.field.presentation.theme.PastelLightFieldMindColors]
+ *  in [FieldMindTheme.kt] — soft sage, sky blue, blush, lavender for each research entity type.
  * ════════════════════════════════════════════════════════════════════════
  */
 

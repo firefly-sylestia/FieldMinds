@@ -37,6 +37,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.data.vision.RegionalPack
+import fieldmind.research.app.shared.data.model.AppSettings as SharedAppSettings
 import fieldmind.research.app.features.field.data.vision.SpeciesDatabase
 import fieldmind.research.app.features.field.data.weather.WeatherProviders
 import fieldmind.research.app.features.field.presentation.components.*
@@ -269,6 +270,8 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
     val dynamicColor by settings.dynamicColorEnabled.collectAsState()
     val mapType by settings.mapType.collectAsState()
     val mapShowLocation by settings.mapShowLocation.collectAsState()
+    val sharedAppSettings = SharedAppSettings.getInstance(androidx.compose.ui.platform.LocalContext.current)
+    val customColorScheme by sharedAppSettings.customColorScheme.collectAsState()
 
     SettingsSubPage("Appearance", icon = FieldMindIcons.Palette, onBack = onBack) {
         // ── Theme section ──
@@ -278,6 +281,28 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                 ThemeToggle(themeMode, settings::setThemeMode)
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Material You dynamic color", "Use system wallpaper colors that auto-adapt to light/dark. Off keeps the FieldMind brand palette.", dynamicColor, settings::setDynamicColorEnabled, FieldMindIcons.Palette)
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("Color scheme", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    OptionPickerField(
+                        label = "Color scheme",
+                        selected = customColorScheme,
+                        options = listOf(
+                            "Default",
+                            "Pastel",
+                            "Warm",
+                            "Cool",
+                            "Forest",
+                            "Rose",
+                            "Lavender",
+                            "Mint",
+                            "Ocean",
+                            "Monochrome"
+                        ),
+                        onSelected = { sharedAppSettings.setCustomColorScheme(it) },
+                        icon = MaterialSymbolIcon("palette")
+                    )
+                }
             }
         }
         // ── Map settings ──

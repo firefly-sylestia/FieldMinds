@@ -97,7 +97,7 @@ class MainActivity : FragmentActivity() {
                 }
             }
 
-            FieldMindTheme(darkTheme = isDarkTheme, dynamicColor = fieldDynamicColor, entityColorOverrides = fieldEntityColors) {
+            FieldMindTheme(darkTheme = isDarkTheme, dynamicColor = fieldDynamicColor, customColorScheme = customColorScheme, entityColorOverrides = fieldEntityColors) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

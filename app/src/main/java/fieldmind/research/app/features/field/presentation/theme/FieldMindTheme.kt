@@ -14,6 +14,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.getCustomColorScheme
 import fieldmind.research.app.ui.theme.getTypographyForFont
 
 /**
@@ -236,6 +237,80 @@ private val LightFieldMindColors = FieldMindColors(
     )
 )
 
+private val PastelLightFieldMindColors = FieldMindColors(
+    isDark = false,
+    // Entity colors — soft pastel versions
+    observation = Color(0xFFA5D6A7), // Soft sage
+    question = Color(0xFF90CAF9), // Soft sky blue
+    hypothesis = Color(0xFFFFE082), // Soft amber
+    project = Color(0xFF80CBC4), // Soft teal
+    source = Color(0xFFCE93D8), // Soft lavender
+    note = Color(0xFFF48FB1), // Soft rose
+    task = Color(0xFF81C784), // Soft mint
+    folder = Color(0xFFBCAAA4), // Soft taupe
+    species = Color(0xFFA5D6A7), // Soft sage (same as observation)
+    data = Color(0xFF80DEEA), // Soft cyan
+    report = Color(0xFFFFCCBC), // Soft peach
+    flashcard = Color(0xFFF48FB1), // Soft pink
+    // State colors — pastel-tinted
+    positive = Color(0xFFA5D6A7),
+    warning = Color(0xFFFFE082),
+    info = Color(0xFF90CAF9),
+    // Confidence colors — soft pastels
+    confidenceSure = Color(0xFFA5D6A7),
+    confidenceGuess = Color(0xFFFFE082),
+    confidenceVerify = Color(0xFFEF9A9A),
+    categorical = listOf(
+        Color(0xFFA5D6A7), // sage
+        Color(0xFF90CAF9), // sky
+        Color(0xFFFFE082), // amber
+        Color(0xFFCE93D8), // lavender
+        Color(0xFFF48FB1), // rose
+        Color(0xFF81C784), // mint
+        Color(0xFF80CBC4), // teal
+        Color(0xFFBCAAA4), // taupe
+        Color(0xFF80DEEA), // cyan
+        Color(0xFFFFCCBC), // peach
+    )
+)
+
+private val PastelDarkFieldMindColors = FieldMindColors(
+    isDark = true,
+    // Entity colors — glowing pastels on dark
+    observation = Color(0xFF81C784),
+    question = Color(0xFF64B5F6),
+    hypothesis = Color(0xFFFFD54F),
+    project = Color(0xFF4DB6AC),
+    source = Color(0xFFBA68C8),
+    note = Color(0xFFF06292),
+    task = Color(0xFF66BB6A),
+    folder = Color(0xFFA1887F),
+    species = Color(0xFF81C784),
+    data = Color(0xFF4DD0E1),
+    report = Color(0xFFFFAB91),
+    flashcard = Color(0xFFF06292),
+    // State colors — glowing pastels
+    positive = Color(0xFF81C784),
+    warning = Color(0xFFFFD54F),
+    info = Color(0xFF64B5F6),
+    // Confidence colors
+    confidenceSure = Color(0xFF81C784),
+    confidenceGuess = Color(0xFFFFD54F),
+    confidenceVerify = Color(0xFFEF9A9A),
+    categorical = listOf(
+        Color(0xFF81C784),
+        Color(0xFF64B5F6),
+        Color(0xFFFFD54F),
+        Color(0xFFBA68C8),
+        Color(0xFFF06292),
+        Color(0xFF66BB6A),
+        Color(0xFF4DB6AC),
+        Color(0xFFA1887F),
+        Color(0xFF4DD0E1),
+        Color(0xFFFFAB91),
+    )
+)
+
 private val DarkFieldMindColors = FieldMindColors(
     isDark = true,
     // Entity colors
@@ -375,6 +450,7 @@ val ENTITY_COLOR_ICONS: Map<String, MaterialSymbolIcon> = mapOf(
 fun FieldMindTheme(
     darkTheme: Boolean,
     dynamicColor: Boolean,
+    customColorScheme: String = "Default",
     entityColorOverrides: Map<String, Long> = emptyMap(),
     content: @Composable () -> Unit
 ) {
@@ -382,10 +458,15 @@ fun FieldMindTheme(
     val colorScheme: ColorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        customColorScheme != "Default" -> getCustomColorScheme(customColorScheme, darkTheme)
         darkTheme -> BrandDark
         else -> BrandLight
     }
-    val semantic = (if (darkTheme) DarkFieldMindColors else LightFieldMindColors)
+    val semantic = when {
+            customColorScheme == "Pastel" && !dynamicColor ->
+                if (darkTheme) PastelDarkFieldMindColors else PastelLightFieldMindColors
+            else -> (if (darkTheme) DarkFieldMindColors else LightFieldMindColors)
+        }
         .applyOverrides(entityColorOverrides)
 
     val geomTypography = getTypographyForFont("Geom")

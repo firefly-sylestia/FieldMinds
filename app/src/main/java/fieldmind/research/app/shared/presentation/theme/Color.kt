@@ -259,3 +259,89 @@ val MonoTertiaryDark = Color(0xFF757575)
 val MonoOnTertiaryDark = Color(0xFFEEEEEE)
 val MonoTertiaryContainerDark = Color(0xFF424242)
 val MonoOnTertiaryContainerDark = Color(0xFFF5F5F5)
+
+// ============================================
+// Pastel Theme - Soft, adorable pastels
+// ============================================
+
+// Light Pastel — lavender, blush, mint on warm white
+val PastelPrimaryLight = Color(0xFFB39DDB) // Soft lavender
+val PastelOnPrimaryLight = Color(0xFFFFFFFF)
+val PastelPrimaryContainerLight = Color(0xFFEDE7F6) // Very light lavender
+val PastelOnPrimaryContainerLight = Color(0xFF2C1B4D)
+
+val PastelSecondaryLight = Color(0xFFF8BBD0) // Blush pink
+val PastelOnSecondaryLight = Color(0xFF3E1F2E) // Deep rose for contrast — white fails WCAG on this bright blush
+val PastelSecondaryContainerLight = Color(0xFFFCE4EC) // Very light pink
+val PastelOnSecondaryContainerLight = Color(0xFF3E1F2E)
+
+val PastelTertiaryLight = Color(0xFFA5D6A7) // Soft mint
+val PastelOnTertiaryLight = Color(0xFFFFFFFF)
+val PastelTertiaryContainerLight = Color(0xFFE8F5E9) // Very light mint
+val PastelOnTertiaryContainerLight = Color(0xFF1B3E1D)
+
+val PastelErrorLight = Color(0xFFEF9A9A) // Soft coral
+val PastelOnErrorLight = Color(0xFFFFFFFF)
+val PastelErrorContainerLight = Color(0xFFFFEBEE) // Very light coral
+val PastelOnErrorContainerLight = Color(0xFF3E1515)
+
+val PastelBackgroundLight = Color(0xFFFFF8FB) // Warm pink-white
+val PastelOnBackgroundLight = Color(0xFF2D2D2D) // Soft dark gray
+val PastelSurfaceLight = Color(0xFFFFF8FB)
+val PastelOnSurfaceLight = Color(0xFF2D2D2D)
+val PastelSurfaceVariantLight = Color(0xFFF3E5F5) // Very light lavender-pink
+val PastelOnSurfaceVariantLight = Color(0xFF5D4E5E) // Muted mauve-gray
+
+val PastelOutlineLight = Color(0xFFD7C4D7) // Soft mauve
+val PastelOutlineVariantLight = Color(0xFFEBE0EB) // Lighter mauve
+
+val PastelSurfaceContainerLowestLight = Color(0xFFFFF0F5) // Lavender blush
+val PastelSurfaceContainerLowLight = Color(0xFFFDE8F0) // Light pink
+val PastelSurfaceContainerLight = Color(0xFFFCE4EC) // Pink
+val PastelSurfaceContainerHighLight = Color(0xFFF8D7E3) // Slightly deeper pink
+val PastelSurfaceContainerHighestLight = Color(0xFFF0CCD8) // Deeper pink
+
+val PastelInverseSurfaceLight = Color(0xFF2D2D2D)
+val PastelInverseOnSurfaceLight = Color(0xFFFFF8FB)
+val PastelInversePrimaryLight = PastelPrimaryLight
+
+// Dark Pastel — deep warm tones with glowing pastels
+val PastelPrimaryDark = Color(0xFFD1C4E9) // Soft light lavender
+val PastelOnPrimaryDark = Color(0xFF2C1B4D)
+val PastelPrimaryContainerDark = Color(0xFF6A4E94) // Muted purple
+val PastelOnPrimaryContainerDark = Color(0xFFEDE7F6)
+
+val PastelSecondaryDark = Color(0xFFF8BBD0) // Warm blush
+val PastelOnSecondaryDark = Color(0xFF3E1F2E)
+val PastelSecondaryContainerDark = Color(0xFF6D3A4D) // Muted rose
+val PastelOnSecondaryContainerDark = Color(0xFFFCE4EC)
+
+val PastelTertiaryDark = Color(0xFFA5D6A7) // Soft mint glow
+val PastelOnTertiaryDark = Color(0xFF1B3E1D)
+val PastelTertiaryContainerDark = Color(0xFF3E6B40) // Muted green
+val PastelOnTertiaryContainerDark = Color(0xFFE8F5E9)
+
+val PastelErrorDark = Color(0xFFEF9A9A) // Soft coral
+val PastelOnErrorDark = Color(0xFF3E1515)
+val PastelErrorContainerDark = Color(0xFF6E2C2C) // Muted maroon
+val PastelOnErrorContainerDark = Color(0xFFFFEBEE)
+
+val PastelBackgroundDark = Color(0xFF1A1423) // Deep warm purple-black
+val PastelOnBackgroundDark = Color(0xFFE8E0EB) // Light lavender-gray
+val PastelSurfaceDark = Color(0xFF1A1423)
+val PastelOnSurfaceDark = Color(0xFFE8E0EB)
+val PastelSurfaceVariantDark = Color(0xFF3D2E40) // Muted purple-gray
+val PastelOnSurfaceVariantDark = Color(0xFFCBB4CF) // Light mauve
+
+val PastelOutlineDark = Color(0xFF8A7A8E) // Muted mauve outline
+val PastelOutlineVariantDark = Color(0xFF3D2E40) // Darker variant
+
+val PastelSurfaceContainerLowestDark = Color(0xFF120E18) // Deepest
+val PastelSurfaceContainerLowDark = Color(0xFF221B28) // Low
+val PastelSurfaceContainerDark = Color(0xFF2B2330) // Medium
+val PastelSurfaceContainerHighDark = Color(0xFF352C38) // High
+val PastelSurfaceContainerHighestDark = Color(0xFF3F3642) // Highest
+
+val PastelInverseSurfaceDark = Color(0xFFFFF8FB)
+val PastelInverseOnSurfaceDark = Color(0xFF2D2D2D)
+val PastelInversePrimaryDark = PastelPrimaryDark
