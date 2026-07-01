@@ -2035,6 +2035,7 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
             }
         }
     }
+    }
 
     // ���─ Clear preferences confirmation dialog ──
     if (showClearConfirmation) {
@@ -2075,7 +2076,6 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
             }
         )
     }
-}
 }
 
 // ══════════════════════════════════════════════════════════════════════
