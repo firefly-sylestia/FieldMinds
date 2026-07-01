@@ -2075,6 +2075,8 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
         )
     }
 }
+}
+}
 
 // ══════════════════════════════════════════════════════════════════════
 //  Shared helpers
