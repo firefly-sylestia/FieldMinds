@@ -30,6 +30,7 @@ import fieldmind.research.app.features.field.presentation.components.FieldTextFi
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
 import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
+import fieldmind.research.app.features.field.presentation.components.pressScale
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
@@ -396,7 +397,7 @@ fun ProjectDetailScreen(
                         shape = RoundedCornerShape(20.dp),
                         color = if (isSelected) colors.project.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = if (isSelected) androidx.compose.foundation.BorderStroke(1.dp, colors.project.copy(alpha = 0.4f)) else null,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f).pressScale(scaleDown = 0.96f)
                     ) {
                         Text(
                             tab.label,
@@ -795,7 +796,7 @@ private fun CreateOptionRow(icon: MaterialSymbolIcon, label: String, subtitle: S
         onClick = { haptics.light(); onClick() },
         shape = RoundedCornerShape(22.dp),
         color = accent.copy(alpha = 0.06f),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f)
     ) {
         Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
@@ -883,7 +884,7 @@ private fun NewTaskDialog(viewModel: FieldMindViewModel, projectId: Long, onDism
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 listOf("Low", "Medium", "High").forEach { level ->
                     val isSelected = priority == level; val accent = priorityColor[level] ?: colors.positive
-                    Surface(onClick = { haptics.light(); priority = level }, shape = RoundedCornerShape(22.dp), color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh, border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null, modifier = Modifier.weight(1f)) {
+                    Surface(onClick = { haptics.light(); priority = level }, shape = RoundedCornerShape(22.dp), color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh, border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null, modifier = Modifier.weight(1f).pressScale(scaleDown = 0.97f)) {
                         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Box(modifier = Modifier.size(18.dp).clip(CircleShape).background(if (isSelected) accent else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) { if (isSelected) Box(Modifier.size(8.dp).clip(CircleShape).background(accent)) }
                             Text(level, style = MaterialTheme.typography.labelMedium, fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal, color = if (isSelected) accent else MaterialTheme.colorScheme.onSurfaceVariant)
@@ -925,7 +926,7 @@ private fun NewAttachmentDialog(viewModel: FieldMindViewModel, onDismiss: () -> 
             }
         }
         if (capturedUri != null) {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp), modifier = Modifier.fillMaxWidth()) {
+            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp), modifier = Modifier.fillMaxWidth()) {
                 Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Icon(MaterialSymbolIcon("check_circle"), null, tint = colors.positive, size = 24.dp)
                     Column(Modifier.weight(1f)) { Text("$capturedType attached", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold); Text(capturedUri?.substringAfterLast("/")?.take(40) ?: "", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis) }
@@ -938,7 +939,7 @@ private fun NewAttachmentDialog(viewModel: FieldMindViewModel, onDismiss: () -> 
 
 @Composable
 private fun AttachmentTypeButton(label: String, icon: MaterialSymbolIcon, accent: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(modifier = modifier.clickable(onClick = onClick), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = accent.copy(alpha = 0.10f)), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)) {
+    Card(modifier = modifier.clickable(onClick = onClick), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)) {
         Column(Modifier.fillMaxWidth().padding(vertical = 16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(icon, null, tint = accent, size = 22.dp) }
             Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = accent)

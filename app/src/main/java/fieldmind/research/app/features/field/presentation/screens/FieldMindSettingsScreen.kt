@@ -7,8 +7,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.animateContentSize
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -626,7 +628,7 @@ fun SecuritySettingsPage(
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { listOf(appLockActive, backupEncryption, clipboardCleanup, privacyTyping, screenCapture).forEach { active -> Box(Modifier.size(10.dp).clip(CircleShape).background(if (active) FieldMindTheme.colors.positive else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))) } }
                     }
                     LinearProgressIndicator(progress = { enabledCount / 5f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = FieldMindTheme.colors.positive, trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                    Surface(onClick = { onOpenSecurityScore?.invoke() }, shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), modifier = Modifier.fillMaxWidth()) {
+                    Surface(onClick = { onOpenSecurityScore?.invoke() }, shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), modifier = Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f)) {
                         Row(Modifier.padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                             Icon(MaterialSymbolIcon("security"), null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
                             Text("View full security score", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
@@ -2115,8 +2117,22 @@ internal fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
 
 @Composable
 internal fun ToggleItem(title: String, body: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit, icon: MaterialSymbolIcon? = null) {
+    val scope = rememberCoroutineScope()
+    val checkmarkPulse = remember { Animatable(1f) }
+    LaunchedEffect(checked) {
+        if (checked) {
+            checkmarkPulse.animateTo(1.3f, spring(dampingRatio = 0.55f, stiffness = 500f))
+            checkmarkPulse.animateTo(1f, spring(dampingRatio = 0.85f, stiffness = 350f))
+        }
+    }
     Row(
-        Modifier.fillMaxWidth().clickable { onCheckedChange(!checked) }.padding(16.dp),
+        Modifier.fillMaxWidth().clickable {
+            scope.launch {
+                checkmarkPulse.snapTo(1.3f)
+                checkmarkPulse.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+            }
+            onCheckedChange(!checked)
+        }.padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -2129,7 +2145,20 @@ internal fun ToggleItem(title: String, body: String, checked: Boolean, onChecked
             Text(title, fontWeight = FontWeight.SemiBold)
             Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Switch(
+            checked = checked,
+            onCheckedChange = {
+                scope.launch {
+                    checkmarkPulse.snapTo(1.3f)
+                    checkmarkPulse.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                }
+                onCheckedChange(it)
+            },
+            modifier = Modifier.graphicsLayer {
+                scaleX = checkmarkPulse.value
+                scaleY = checkmarkPulse.value
+            }
+        )
     }
 }
 

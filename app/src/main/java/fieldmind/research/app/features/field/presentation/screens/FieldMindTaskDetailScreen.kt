@@ -2,6 +2,7 @@ package fieldmind.research.app.features.field.presentation.screens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.launch
 import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
@@ -331,10 +334,23 @@ fun TaskDetailScreen(
                     title = "Checklist"
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        val checklistScope = rememberCoroutineScope()
                         checklistItems.forEach { item ->
+                            val checkBounce = remember { Animatable(1f) }
+                            val isChecked = item.done
+                            LaunchedEffect(isChecked) {
+                                if (isChecked) {
+                                    checkBounce.snapTo(1.3f)
+                                    checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 500f))
+                                }
+                            }
                             Surface(
                                 onClick = {
                                     haptics.light()
+                                    checklistScope.launch {
+                                        checkBounce.snapTo(1.3f)
+                                        checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                                    }
                                     // Toggle item
                                     val arr = try { JSONArray(task.checklistJson) } catch (_: Exception) { JSONArray() }
                                     for (i in 0 until arr.length()) {
@@ -347,19 +363,22 @@ fun TaskDetailScreen(
                                 },
                                 shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f)
                             ) {
                                 Row(
                                     Modifier.fillMaxWidth().padding(12.dp),
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
-                                    // Checkbox
+                                    // Checkbox with spring bounce
                                     Surface(
                                         shape = CircleShape,
                                         color = if (item.done) FieldMindTheme.colors.positive.copy(alpha = 0.14f)
                                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                        modifier = Modifier.size(28.dp)
+                                        modifier = Modifier.size(28.dp).graphicsLayer {
+                                            scaleX = checkBounce.value
+                                            scaleY = checkBounce.value
+                                        }
                                     ) {
                                         Box(contentAlignment = Alignment.Center) {
                                             if (item.done) {

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
@@ -19,11 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import fieldmind.research.app.features.field.data.database.entity.TaskEntity
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
@@ -349,15 +352,32 @@ private fun TaskCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // ── Checkbox ──
+            // ── Checkbox with spring bounce ──
+            val checkBounce = remember { Animatable(1f) }
+            val scope = rememberCoroutineScope()
+            LaunchedEffect(isChecked) {
+                if (isChecked) {
+                    checkBounce.snapTo(1.3f)
+                    checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 500f))
+                }
+            }
             Surface(
-                onClick = onToggle,
+                onClick = {
+                    scope.launch {
+                        checkBounce.snapTo(1.3f)
+                        checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                    }
+                    onToggle()
+                },
                 shape = CircleShape,
                 color = if (isChecked)
                     accentColor.copy(alpha = 0.14f)
                 else
                     MaterialTheme.colorScheme.surfaceContainerHigh,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(36.dp).graphicsLayer {
+                    scaleX = checkBounce.value
+                    scaleY = checkBounce.value
+                }
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     if (isChecked) {

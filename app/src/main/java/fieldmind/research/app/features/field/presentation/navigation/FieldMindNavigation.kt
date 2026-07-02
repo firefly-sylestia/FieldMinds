@@ -592,6 +592,7 @@ private fun LiquidNavRow(
         }
 
         // ── Tab items drawn on top of the indicator ──
+        val scope = rememberCoroutineScope()
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -600,6 +601,8 @@ private fun LiquidNavRow(
             visibleTabs.forEachIndexed { index, screen ->
                 val selected = isSelected(screen)
                 var isPressed by remember { mutableStateOf(false) }
+                // Spring bounce pulse on tap — briefly scales up, then springs back
+                val tapBounce = remember { Animatable(1f) }
 
                 val pressScale by animateFloatAsState(
                     targetValue = if (isPressed && !selected) 0.92f else 1f,
@@ -614,10 +617,6 @@ private fun LiquidNavRow(
                     modifier = Modifier
                         .onGloballyPositioned { coordinates ->
                             val width = coordinates.size.width.toFloat()
-                            // positionInParent() was removed from Compose. Calculate
-                            // relative position by subtracting parent's root position.
-                            // positionInRoot/positionInWindow were removed in Compose BOM 2026.05.01.
-                            // Use localToWindow(Offset.Zero) to compute relative x-position.
                             val childWindow = coordinates.localToWindow(Offset.Zero)
                             val parentWindow = coordinates.parentCoordinates?.localToWindow(Offset.Zero) ?: Offset.Zero
                             val x = (childWindow - parentWindow).x
@@ -632,12 +631,17 @@ private fun LiquidNavRow(
                             indication = null,
                             onClick = {
                                 isPressed = true
+                                // Spring bounce: snap to 1.15, spring back to 1.0
+                                scope.launch {
+                                    tapBounce.snapTo(1.15f)
+                                    tapBounce.animateTo(1f, spring(dampingRatio = 0.4f, stiffness = 600f))
+                                }
                                 onTabClick(screen)
                             }
                         )
                         .graphicsLayer {
-                            scaleX = pressScale
-                            scaleY = pressScale
+                            scaleX = pressScale * tapBounce.value
+                            scaleY = pressScale * tapBounce.value
                         }
                         .defaultMinSize(minWidth = 60.dp, minHeight = 56.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,

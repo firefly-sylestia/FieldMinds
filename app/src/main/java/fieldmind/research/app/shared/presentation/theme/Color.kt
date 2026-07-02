@@ -89,11 +89,11 @@ val OutlineDark = Color(0xFF938F99) // Light gray outline
 val OutlineVariantDark = Color(0xFF49454F) // Medium gray outline variant
 
 // Surface containers for different elevation levels
-val SurfaceContainerLowestDark = Color(0xFF0D0B10) // Lowest elevation — slightly deeper
-val SurfaceContainerLowDark = Color(0xFF1A1820) // Low elevation
-val SurfaceContainerDark = Color(0xFF201E25) // Medium elevation
-val SurfaceContainerHighDark = Color(0xFF2A282F) // High elevation
-val SurfaceContainerHighestDark = Color(0xFF35333A) // Highest elevation
+val SurfaceContainerLowestDark = Color(0xFF1C1922) // Lowest elevation — slightly brighter than background
+val SurfaceContainerLowDark = Color(0xFF25222C) // Low elevation — visibly distinct from bg
+val SurfaceContainerDark = Color(0xFF2E2B36) // Medium elevation
+val SurfaceContainerHighDark = Color(0xFF383540) // High elevation
+val SurfaceContainerHighestDark = Color(0xFF43404A) // Highest elevation
 
 // Inverse colors for special cases
 val InverseSurfaceDark = Color(0xFFE6E1E5) // Light surface for dark theme
@@ -336,11 +336,11 @@ val PastelOnSurfaceVariantDark = Color(0xFFCBB4CF) // Light mauve
 val PastelOutlineDark = Color(0xFF8A7A8E) // Muted mauve outline
 val PastelOutlineVariantDark = Color(0xFF3D2E40) // Darker variant
 
-val PastelSurfaceContainerLowestDark = Color(0xFF120E18) // Deepest
-val PastelSurfaceContainerLowDark = Color(0xFF221B28) // Low
-val PastelSurfaceContainerDark = Color(0xFF2B2330) // Medium
-val PastelSurfaceContainerHighDark = Color(0xFF352C38) // High
-val PastelSurfaceContainerHighestDark = Color(0xFF3F3642) // Highest
+val PastelSurfaceContainerLowestDark = Color(0xFF221C2A) // Deepest — brighter than bg
+val PastelSurfaceContainerLowDark = Color(0xFF2B2430) // Low — visibly distinct
+val PastelSurfaceContainerDark = Color(0xFF342C3A) // Medium
+val PastelSurfaceContainerHighDark = Color(0xFF3E3542) // High
+val PastelSurfaceContainerHighestDark = Color(0xFF473E4C) // Highest
 
 val PastelInverseSurfaceDark = Color(0xFFFFF8FB)
 val PastelInverseOnSurfaceDark = Color(0xFF2D2D2D)

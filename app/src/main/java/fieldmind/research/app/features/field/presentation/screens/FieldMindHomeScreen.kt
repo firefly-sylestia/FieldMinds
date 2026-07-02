@@ -2008,7 +2008,8 @@ private fun ResearchSessionCtaCard(
         modifier = Modifier.fillMaxWidth().clickable { haptics.light(); onStartSession() },
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isActive) colors.observation.copy(alpha = 0.14f) else colors.positive.copy(alpha = 0.08f)
+            containerColor = if (isActive) MaterialTheme.colorScheme.surfaceContainerHigh
+            else MaterialTheme.colorScheme.surfaceContainerLow
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
