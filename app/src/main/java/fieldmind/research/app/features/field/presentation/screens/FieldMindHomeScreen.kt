@@ -2023,11 +2023,11 @@ private fun ResearchSessionCtaCard(
                 .fillMaxWidth()
                 .background(brush = gradient, shape = RoundedCornerShape(34.dp))
         ) {
-        Row(
-            Modifier.fillMaxWidth().padding(18.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
+            Row(
+                Modifier.fillMaxWidth().padding(18.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
             Box(
                 Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
                     .background(if (isActive) colors.observation.copy(alpha = 0.16f) else colors.positive.copy(alpha = 0.12f)),
@@ -2058,6 +2058,7 @@ private fun ResearchSessionCtaCard(
                 tint = (if (isActive) colors.observation else colors.positive).copy(alpha = 0.5f),
                 size = 24.dp
             )
+            }
         }
     }
 }

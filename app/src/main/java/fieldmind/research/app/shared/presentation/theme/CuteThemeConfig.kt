@@ -207,7 +207,8 @@ object CuteGradients {
     @Composable
     fun brushFor(style: Style): Brush {
         val scheme = MaterialTheme.colorScheme
-        val isDark = scheme.background.luminance() < 0.5f
+        val bg = scheme.background
+        val isDark = (0.299f * bg.red + 0.587f * bg.green + 0.114f * bg.blue) < 0.5f
         return when (style) {
             Style.SurfaceSubtle -> Brush.horizontalGradient(
                 colors = listOf(
