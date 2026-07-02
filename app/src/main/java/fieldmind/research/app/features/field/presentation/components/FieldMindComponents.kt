@@ -59,8 +59,10 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -925,37 +927,67 @@ fun MetricTile(
     }
 }
 
-/** Empty-state block with an icon, message, and an optional primary action. */
+/** Enhanced empty-state block with gradient background, icon shell, and optional primary action. */
 @Composable
 fun EmptyState(
     title: String,
     body: String,
     modifier: Modifier = Modifier,
     icon: MaterialSymbolIcon = FieldMindIcons.Nature,
+    iconColor: Color = MaterialTheme.colorScheme.primary,
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null
 ) {
-    Column(
+    Card(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainerLow, RoundedCornerShape(34.dp))
-            .padding(28.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+            .cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(34.dp)),
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Box(
-            Modifier
-                .size(56.dp)
-                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(28.dp)),
-            contentAlignment = Alignment.Center
-        ) { Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 28.dp) }
-        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        Text(body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        if (actionLabel != null && onAction != null) {
-            androidx.compose.material3.Button(onClick = onAction, modifier = Modifier.padding(top = 4.dp)) {
-                Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 18.dp)
-                Spacer(Modifier.size(6.dp))
-                Text(actionLabel)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            iconColor.copy(alpha = 0.04f),
+                            MaterialTheme.colorScheme.surface
+                        )
+                    ),
+                    shape = RoundedCornerShape(34.dp)
+                )
+                .padding(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Gradient icon shell
+            Box(
+                Modifier
+                    .size(64.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(
+                                iconColor.copy(alpha = 0.20f),
+                                iconColor.copy(alpha = 0.06f)
+                            )
+                        ),
+                        shape = RoundedCornerShape(30.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon = icon, contentDescription = null, tint = iconColor, size = 30.dp)
+            }
+            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            if (actionLabel != null && onAction != null) {
+                Spacer(Modifier.height(4.dp))
+                androidx.compose.material3.Button(onClick = onAction, modifier = Modifier, shape = RoundedCornerShape(22.dp)) {
+                    Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 18.dp)
+                    Spacer(Modifier.size(6.dp))
+                    Text(actionLabel)
+                }
             }
         }
     }

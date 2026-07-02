@@ -41,6 +41,9 @@ import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenceAttachment
+import fieldmind.research.app.ui.theme.CuteCardDefaults
+import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -162,10 +165,10 @@ internal fun DialogWrapper(
             }
         } else {
             Surface(
-                modifier = modifier.fillMaxWidth(0.94f).wrapContentHeight().padding(vertical = 24.dp),
-                shape = RoundedCornerShape(40.dp),
+                modifier = modifier.fillMaxWidth(0.94f).wrapContentHeight().padding(vertical = 24.dp).cuteShadow(elevation = CuteElevations.plushTier4, shape = CuteCardDefaults.Shape),
+                shape = CuteCardDefaults.Shape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
-                tonalElevation = 6.dp
+                tonalElevation = CuteElevations.plushTier4
             ) {
                 Column(
                     Modifier.verticalScroll(rememberScrollState()).padding(20.dp),

@@ -61,6 +61,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import fieldmind.research.app.ui.theme.CuteGradients
+import fieldmind.research.app.ui.theme.cuteShadow
 
 // ══════════════════════════════════════════════════════════════════════
 //  Data Classes
@@ -2184,6 +2185,7 @@ internal fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
     val gradient = CuteGradients.brushFor(gradientStyle)
     Card(
+        modifier = Modifier.fillMaxWidth().cuteShadow(),
         shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
