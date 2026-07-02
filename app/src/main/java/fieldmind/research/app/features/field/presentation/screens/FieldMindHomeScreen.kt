@@ -1798,8 +1798,17 @@ private fun QuickActionChip(
 @Composable
 private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<FlashcardEntity>, onNavigate: (FieldMindScreen) -> Unit) {
     val current = sources.firstOrNull { it.readingStatus != "Read" } ?: sources.firstOrNull()
+    val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(androidx.compose.ui.platform.LocalContext.current) }
+    val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
+    val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
+    val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
     Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)) {
-        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = gradient, shape = RoundedCornerShape(34.dp))
+        ) {
+            Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Book, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
                 Column(Modifier.weight(1f)) {
@@ -2079,13 +2088,22 @@ private fun SessionObservationsCard(
     var expandedSessions by remember { mutableStateOf<Set<String>>(emptySet()) }
     val totalSessionObs = sessionObs.values.sumOf { it.size }
 
+    val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(androidx.compose.ui.platform.LocalContext.current) }
+    val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
+    val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
+    val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
     Card(
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = gradient, shape = RoundedCornerShape(34.dp))
+        ) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             // Header
             Row(
                 Modifier.fillMaxWidth(),
@@ -2506,14 +2524,23 @@ private fun computeFieldworkNudge(weather: WeatherSnapshot): String {
 private fun RecentCapturesCard(observations: List<ObservationEntity>, onOpenDetail: (String, Long) -> Unit) {
     if (observations.isEmpty()) return
     val recentObs = observations.sortedByDescending { it.timestamp }.take(3)
+    val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(androidx.compose.ui.platform.LocalContext.current) }
+    val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
+    val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
+    val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
     Card(
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Recent captures", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = gradient, shape = RoundedCornerShape(34.dp))
+        ) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("Recent captures", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 recentObs.forEach { obs ->
                     Row(
@@ -2557,6 +2584,7 @@ private fun RecentCapturesCard(observations: List<ObservationEntity>, onOpenDeta
                         }
                     }
                 }
+            }
             }
         }
     }
@@ -2629,6 +2657,10 @@ private fun DataToolMiniCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(androidx.compose.ui.platform.LocalContext.current) }
+    val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
+    val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
+    val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
     Card(
         onClick = onClick,
         modifier = modifier,
@@ -2636,11 +2668,16 @@ private fun DataToolMiniCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Row(
-            Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = gradient, shape = RoundedCornerShape(24.dp))
         ) {
+            Row(
+                Modifier.padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
             Box(
                 Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
                     .background(color.copy(alpha = 0.14f)),
@@ -2651,6 +2688,7 @@ private fun DataToolMiniCard(
             Column {
                 Text(title, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
             }
         }
     }
