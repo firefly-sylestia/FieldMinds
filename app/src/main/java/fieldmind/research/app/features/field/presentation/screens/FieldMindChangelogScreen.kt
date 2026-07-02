@@ -843,7 +843,7 @@ fun FieldMindChangelogScreen(onBack: () -> Unit) {
         item {
             Card(
                 shape = RoundedCornerShape(34.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -889,7 +889,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
     Card(
         shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isLatest) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f) 
+            containerColor = if (isLatest) MaterialTheme.colorScheme.primaryContainer 
                           else MaterialTheme.colorScheme.surfaceContainerLow
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = if (isLatest) 4.dp else 0.dp),

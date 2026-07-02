@@ -2008,9 +2008,10 @@ private fun ResearchSessionCtaCard(
         modifier = Modifier.fillMaxWidth().clickable { haptics.light(); onStartSession() },
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isActive) MaterialTheme.colorScheme.surfaceContainerHigh
+            containerColor = if (isActive) MaterialTheme.colorScheme.surfaceContainerHighest
             else MaterialTheme.colorScheme.surfaceContainerLow
         ),
+        border = if (isActive) androidx.compose.foundation.BorderStroke(1.5.dp, colors.observation.copy(alpha = 0.34f)) else null,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
