@@ -62,6 +62,7 @@ import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.ui.theme.CuteGradients
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -490,11 +491,12 @@ fun ObserveScreen(
         )
     }
 
+    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.SurfaceSubtle)
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color.Transparent
     ) { padding ->
-        Box(Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxSize().background(brush = screenBgGradient)) {
             LazyColumn(
                 Modifier.fillMaxSize().padding(padding),
                 contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 96.dp),

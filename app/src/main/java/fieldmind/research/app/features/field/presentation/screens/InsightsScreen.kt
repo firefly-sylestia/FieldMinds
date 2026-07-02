@@ -28,6 +28,7 @@ import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.theme.FieldMindColors
+import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -234,10 +235,11 @@ fun InsightsScreen(
         }
     }
 
+    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.SurfaceSubtle)
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color.Transparent
     ) { padding ->
-        Box(Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxSize().background(brush = screenBgGradient)) {
             val insightsScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
             LazyColumn(
                 state = insightsScrollState,
