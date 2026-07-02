@@ -2289,8 +2289,8 @@ private fun SessionObservationsCard(
 //  Moon Phase Calculation — Based on the age of the lunar cycle
 // ══════════════════════════════════════════════════════════════════════
 
-@Composable
 }
+@Composable
 
 internal fun DevWeatherTestPanel(
     testCode: Int?,
