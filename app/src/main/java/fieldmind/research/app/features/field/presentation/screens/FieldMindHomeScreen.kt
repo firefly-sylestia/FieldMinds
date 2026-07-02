@@ -1823,6 +1823,7 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
         }
     }
 }
+}
 
 @Composable
 private fun MiniActionTile(title: String, value: String, subtitle: String, icon: MaterialSymbolIcon, modifier: Modifier = Modifier, onClick: () -> Unit) {
@@ -2289,6 +2290,8 @@ private fun SessionObservationsCard(
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
+}
+
 internal fun DevWeatherTestPanel(
     testCode: Int?,
     testNight: Boolean,
