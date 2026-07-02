@@ -408,6 +408,15 @@ class FieldMindSettings private constructor(context: Context) {
     val appPinLength: StateFlow<String> = _appPinLength.asStateFlow()
 
     // ── Per-category entity color overrides ──
+    // ── Card gradient style (Phase 5) ──
+    private val _cardGradientStyle = MutableStateFlow(
+        prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
+    )
+    /** The user's selected card gradient style (display name from [CuteGradients.Style]). */
+    val cardGradientStyle: StateFlow<String> = _cardGradientStyle.asStateFlow()
+
+    fun setCardGradientStyle(value: String) = edit(KEY_CARD_GRADIENT_STYLE, value) { _cardGradientStyle.value = value }
+
     private val _entityColors = MutableStateFlow(parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null)))
     /** Map of entity type → hex color Long (e.g. "observation" → 0xFF2E7D32). Empty = use defaults. */
     val entityColors: StateFlow<Map<String, Long>> = _entityColors.asStateFlow()
@@ -780,6 +789,7 @@ class FieldMindSettings private constructor(context: Context) {
         _screenVisibility.value = ScreenVisibility()
         _onboardingExtendedTourCompleted.value = false
         _entityColors.value = emptyMap()
+        _cardGradientStyle.value = fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
     }
 
     // ── Species identification setters ──
@@ -896,6 +906,7 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_USER_INTERESTS, UserInterests.toJson(_userInterests.value))
         put(KEY_SCREEN_VISIBILITY, ScreenVisibility.toJson(_screenVisibility.value))
         put(KEY_EXTENDED_TOUR_DONE, _onboardingExtendedTourCompleted.value)
+        put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
     }.toString(2)
 
     /**
@@ -1020,6 +1031,7 @@ class FieldMindSettings private constructor(context: Context) {
         applyString(KEY_ENTITY_COLORS)
         applyBoolean(KEY_EXTENDED_TOUR_DONE)
         applyInt(KEY_DAILY_GOAL)
+        applyString(KEY_CARD_GRADIENT_STYLE)
 
         edit.apply()
 
@@ -1108,6 +1120,7 @@ class FieldMindSettings private constructor(context: Context) {
         _appPinEnabled.value = prefs.getBoolean(KEY_APP_PIN_ENABLED, false)
         _appPinHash.value = prefs.getString(KEY_APP_PIN_HASH, "") ?: ""
         _entityColors.value = parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null))
+        _cardGradientStyle.value = prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
     }
 
     private inline fun edit(key: String, value: String, after: () -> Unit) { prefs.edit().putString(key, value).apply(); after() }
@@ -1228,6 +1241,9 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_DECOY_PIN_ENABLED = "decoy_pin_enabled"
         private const val KEY_DECOY_PIN_HASH = "decoy_pin_hash"
         private const val KEY_DECOY_PIN_LABEL = "decoy_pin_label"
+        // ── Card gradient style ──
+        private const val KEY_CARD_GRADIENT_STYLE = "card_gradient_style"
+
         // ── Per-category entity color overrides ──
         private const val KEY_ENTITY_COLORS = "entity_colors"
         // ── Animation tuning keys ──

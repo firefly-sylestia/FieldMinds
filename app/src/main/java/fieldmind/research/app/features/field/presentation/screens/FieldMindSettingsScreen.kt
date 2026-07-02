@@ -59,6 +59,7 @@ import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import fieldmind.research.app.ui.theme.CuteGradients
 
 // ══════════════════════════════════════════════════════════════════════
 //  Data Classes
@@ -209,21 +210,31 @@ fun FieldMindSettingsScreen(
 
 @Composable
 private fun SettingsNavCard(title: String, subtitle: String, icon: MaterialSymbolIcon, color: androidx.compose.ui.graphics.Color, onClick: () -> Unit) {
+    val gradientSettings = remember { FieldMindSettings.getInstance(LocalContext.current) }
+    val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
+    val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
+    val gradient = CuteGradients.brushFor(gradientStyle)
     Card(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).pressScale(scaleDown = 0.97f),
         shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
-                Icon(icon = icon, contentDescription = null, tint = color, size = 24.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = gradient, shape = RoundedCornerShape(32.dp))
+        ) {
+            Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                    Icon(icon = icon, contentDescription = null, tint = color, size = 24.dp)
+                }
+                Column(Modifier.weight(1f)) {
+                    Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Icon(icon = FieldMindIcons.Forward, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
             }
-            Column(Modifier.weight(1f)) {
-                Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            Icon(icon = FieldMindIcons.Forward, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
         }
     }
 }
@@ -304,6 +315,63 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                         onSelected = { sharedAppSettings.setCustomColorScheme(it) },
                         icon = MaterialSymbolIcon("palette")
                     )
+                }
+            }
+        }
+        // ── Card Gradient section ──
+        item { SectionHeader("Card Style", "Card background gradient style") }
+        item {
+            val gradientStyleName by settings.cardGradientStyle.collectAsState()
+            SettingsGroupCard {
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("Card gradient", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(4.dp))
+                    // Gradient preview chips
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CuteGradients.Style.entries.forEach { style ->
+                            val isSelected = gradientStyleName == style.displayName
+                            val previewBrush = CuteGradients.brushFor(style)
+                            Surface(
+                                onClick = { settings.setCardGradientStyle(style.displayName) },
+                                shape = RoundedCornerShape(20.dp),
+                                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                                modifier = Modifier.width(IntrinsicSize.Min)
+                            ) {
+                                Row(
+                                    Modifier.padding(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    // Gradient preview swatch
+                                    Box(
+                                        Modifier
+                                            .size(32.dp)
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .background(brush = previewBrush)
+                                    )
+                                    Text(
+                                        style.displayName,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                        maxLines = 1
+                                    )
+                                    if (isSelected) {
+                                        Icon(
+                                            FieldMindIcons.Check,
+                                            null,
+                                            tint = MaterialTheme.colorScheme.primary,
+                                            size = 16.dp
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -2108,11 +2176,21 @@ internal fun SettingsSubPage(title: String, icon: MaterialSymbolIcon, onBack: ()
 
 @Composable
 internal fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
+    val gradientSettings = remember { FieldMindSettings.getInstance(LocalContext.current) }
+    val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
+    val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
+    val gradient = CuteGradients.brushFor(gradientStyle)
     Card(
         shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) { Column(content = content) }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = gradient, shape = RoundedCornerShape(32.dp))
+        ) { Column(content = content) }
+    }
 }
 
 @Composable

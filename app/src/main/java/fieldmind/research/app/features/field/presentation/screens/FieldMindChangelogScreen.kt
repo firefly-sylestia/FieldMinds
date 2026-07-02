@@ -43,6 +43,36 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+        // ── v0.25.0 – Gradient Cards & Preset Theme Picker ──
+        FieldMindChangelogEntry(
+            version = "0.25.0",
+            date = "2026-07-02",
+            title = "🌸 Gradient Cards & Preset Theme Picker",
+            importance = "Major",
+            tags = listOf("🎨", "🌈", "✨"),
+            sections = listOf(
+                "🌈 Gradient card backgrounds (Phase 5)" to listOf(
+                    "✓ Every SettingsGroupCard and SettingsNavCard now sports a beautiful theme-aware gradient background",
+                    "✓ 10 gorgeous gradient styles to choose from: Surface Subtle, Primary Tonal, Blush Trio, Primary Mono, Cool Dream, Rainbow Soft, Spring Pastel, Sunny Lift, and Moonlight",
+                    "✓ Gradients use 2-3 similar palette colors from the Material scheme for harmonious, adorable card backgrounds",
+                    "✓ GradientCard composable and cuteGradientBackground modifier available for any card in the app",
+                    "✓ Home screen ResearchSessionCtaCard also gets the gradient treatment"
+                ),
+                "🎨 Preset gradient style picker" to listOf(
+                    "✓ New 'Card Gradient' section in Settings → Appearance with a visual picker",
+                    "✓ Each gradient style shown as a mini preview swatch with its name and checkmark when selected",
+                    "✓ Selection persists immediately — all settings cards update to show the chosen gradient",
+                    "✓ Gradients are fully theme-aware: they adapt to light/dark mode and any color scheme (Default, Pastel, Warm, etc.)",
+                    "✓ Setting persisted via FieldMindSettings.cardGradientStyle with full backup/restore support"
+                ),
+                "✨ Card surface polish" to listOf(
+                    "✓ Gradients blend beautifully over the card's surface color with subtle transparency layering",
+                    "✓ No more box-line alpha artifacts — gradients use solid container colors for clean rendering",
+                    "✓ CuteGradients infrastructure in CuteThemeConfig.kt: brushFor(), fromString(), Style enum, and GradientCard composable",
+                    "✓ Ready for future expansion: more gradient styles, custom gradient creator, and per-screen overrides"
+                )
+            )
+        ),
         // ── v0.24.2 – Staggered Entrance Animations ──
         FieldMindChangelogEntry(
             version = "0.24.2",

@@ -2004,6 +2004,10 @@ private fun ResearchSessionCtaCard(
     }
     
     val colors = FieldMindTheme.colors
+    val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(androidx.compose.ui.platform.LocalContext.current) }
+    val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
+    val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
+    val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
     Card(
         modifier = Modifier.fillMaxWidth().clickable { haptics.light(); onStartSession() },
         shape = RoundedCornerShape(34.dp),
@@ -2014,6 +2018,11 @@ private fun ResearchSessionCtaCard(
         border = if (isActive) androidx.compose.foundation.BorderStroke(1.5.dp, colors.observation.copy(alpha = 0.34f)) else null,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = gradient, shape = RoundedCornerShape(34.dp))
+        ) {
         Row(
             Modifier.fillMaxWidth().padding(18.dp),
             verticalAlignment = Alignment.CenterVertically,
