@@ -43,7 +43,32 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
-        // ── v0.25.0 – Gradient Cards & Preset Theme Picker ──
+        // ── v0.26.0 — Beautification Phases 4–7 & Fixes ──
+        FieldMindChangelogEntry(
+            version = "0.26.0",
+            date = "2026-07-02",
+            title = "🎨 Beautification Phases 4–7 & Polish",
+            importance = "Major",
+            tags = listOf("🎨", "⚡", "🔧"),
+            sections = listOf(
+                "🌈 Theme & Colors" to listOf(
+                    "✓ Entity accent colors (obs, project, source icons) now auto-adapt to any color scheme via deriveFieldMindColors() — Warm, Cool, Forest, Rose, Monochrome, and all 12 schemes get proper entity tints",
+                    "✓ ScreenBackground gradient: subtle vertical gradient using primaryContainer/tertiaryContainer tints for a scheme-reflective background wash on all 5 tab screens",
+                    "✓ Gradient card system with 9 gradient styles and visual picker in Settings → Appearance"
+                ),
+                "⚡ Animations & Interactions" to listOf(
+                    "✓ Card staggered entrance animations sped up 3× (stiffness 180→350, delays halved) — no more sluggish fades",
+                    "✓ Swipe-to-complete animation for task items with haptic confirmation and spring overshoot",
+                    "✓ SettingsGroupCard shadow, gradient EmptyState, and plush dialog presets"
+                ),
+                "🔧 Fixes" to listOf(
+                    "✓ Animation tuning sliders now reactive — changes apply instantly to all screens",
+                    "✓ Swipe-back gesture no longer conflicts with scrollable content (LazyColumn in settings, etc.)",
+                    "✓ CI compilation fixes for awaitFirstDown import and positionChange() API"
+                )
+            )
+        ),
+        // ── v0.25.0 — Gradient Cards & Theme Picker ──
         FieldMindChangelogEntry(
             version = "0.25.0",
             date = "2026-07-02",
@@ -51,29 +76,18 @@ internal data class FieldMindChangelogEntry(
             importance = "Major",
             tags = listOf("🎨", "🌈", "✨"),
             sections = listOf(
-                "🌈 Gradient card backgrounds (Phase 5)" to listOf(
-                    "✓ Every SettingsGroupCard and SettingsNavCard now sports a beautiful theme-aware gradient background",
-                    "✓ 10 gorgeous gradient styles to choose from: Surface Subtle, Primary Tonal, Blush Trio, Primary Mono, Cool Dream, Rainbow Soft, Spring Pastel, Sunny Lift, and Moonlight",
-                    "✓ Gradients use 2-3 similar palette colors from the Material scheme for harmonious, adorable card backgrounds",
-                    "✓ GradientCard composable and cuteGradientBackground modifier available for any card in the app",
-                    "✓ Home screen ResearchSessionCtaCard also gets the gradient treatment"
+                "🌈 Gradient card backgrounds" to listOf(
+                    "✓ Every settings card now has a theme-aware gradient background with 9 styles (Primary Tonal, Blush Trio, Cool Dream, etc.)",
+                    "✓ Visual gradient picker in Settings → Appearance with live preview swatches",
+                    "✓ Gradients adapt to light/dark and any color scheme"
                 ),
-                "🎨 Preset gradient style picker" to listOf(
-                    "✓ New 'Card Gradient' section in Settings → Appearance with a visual picker",
-                    "✓ Each gradient style shown as a mini preview swatch with its name and checkmark when selected",
-                    "✓ Selection persists immediately — all settings cards update to show the chosen gradient",
-                    "✓ Gradients are fully theme-aware: they adapt to light/dark mode and any color scheme (Default, Pastel, Warm, etc.)",
-                    "✓ Setting persisted via FieldMindSettings.cardGradientStyle with full backup/restore support"
-                ),
-                "✨ Card surface polish" to listOf(
-                    "✓ Gradients blend beautifully over the card's surface color with subtle transparency layering",
-                    "✓ No more box-line alpha artifacts — gradients use solid container colors for clean rendering",
-                    "✓ CuteGradients infrastructure in CuteThemeConfig.kt: brushFor(), fromString(), Style enum, and GradientCard composable",
-                    "✓ Ready for future expansion: more gradient styles, custom gradient creator, and per-screen overrides"
+                "✨ Card polish" to listOf(
+                    "✓ GradientCard composable, cuteGradientBackground modifier, CuteGradients infrastructure",
+                    "✓ SettingsGroupCard shadow, gradient EmptyState, CuteCardDefaults dialog presets"
                 )
             )
         ),
-        // ── v0.24.2 – Staggered Entrance Animations ──
+        // ── v0.24.2 — Staggered Entrance Animations ──
         FieldMindChangelogEntry(
             version = "0.24.2",
             date = "2026-07-01",
@@ -81,87 +95,29 @@ internal data class FieldMindChangelogEntry(
             importance = "Patch",
             tags = listOf("🎬", "✨", "🛠️"),
             sections = listOf(
-                "🎬 Fade-in + slide-up entrance animation" to listOf(
-                    "✓ New reusable staggerEntrance() modifier: items fade in from alpha 0→1 and slide up 20dp with a staggered delay based on position",
-                    "✓ Applied to all card composables: SectionHeader, EntityCard, ClickableCard, InfoCard, MetricTile",
-                    "✓ SectionHeader animates by default (animate=true) for a delightful reveal as you scroll",
-                    "✓ Other cards accept optional animate + index params — existing callsites pass animate=true for instant upgrade",
-                    "✓ Respects system reduce-motion accessibility setting — no animation when animations are off"
-                ),
-                "✨ Staggered cascade effect" to listOf(
-                    "✓ Each item gets an 80ms initial delay + 50ms per index — creates a smooth cascade as items scroll into view",
-                    "✓ Uses the existing FieldMindMotion.expressiveFloat spring (0.94 damping, 180 stiffness) for buttery-smooth motion",
-                    "✓ Items start invisible (alpha=0) and slightly below their final position, then glide up and fade in",
-                    "✓ SectionHeaders (index=0) get a quick 80ms delay before appearing — subtle but delightful"
-                ),
-                "🛠️ Implementation details" to listOf(
-                    "✓ Modifier.staggeredEntrance() in FieldMindMotion.kt — composed {} modifier using animateFloatAsState + graphicsLayer",
-                    "✓ LaunchedEffect with staggered delay (80ms + 50ms per index, capped at 500ms) triggers the animation",
-                    "✓ Cards automatically animate when used with itemsIndexed { i, item -> Card(..., index = i, animate = true) }",
-                    "✓ No layout shifts — animation is purely visual via graphicsLayer (alpha + translationY)",
-                    "✓ Existing EntityCard animate=true callsites (Archive, Insights, FieldLog) automatically upgraded"
+                "🎬 Fade-in + slide-up cards" to listOf(
+                    "✓ New staggeredEntrance() modifier: items fade in and slide up with staggered delays",
+                    "✓ Applied to SectionHeader, EntityCard, ClickableCard, InfoCard, MetricTile",
+                    "✓ Respects system reduce-motion accessibility setting"
                 )
             )
         ),
-        // ── v0.24.1 – Mini-Card Section Headers & Plush Chips ──
+        // ── v0.24.0 — Pastel Theme ──
         FieldMindChangelogEntry(
             version = "0.24.0",
             date = "2026-07-01",
-            title = "🌸 Pastel Theme & Cute Cards Polish",
+            title = "🌸 Pastel Color Scheme",
             importance = "Major",
             tags = listOf("🎨", "🌸", "✨"),
             sections = listOf(
-                "🌸 Pastel color scheme (new)" to listOf(
-                    "✓ Brand-new Pastel theme: soft lavender primary (#B39DDB), blush pink secondary (#F8BBD0), mint tertiary (#A5D6A7)",
-                    "✓ Warm pink-white background (light) and deep warm purple-black (dark) — cozy and adorable",
-                    "✓ Pastel surface containers: lavender blush, light pink, soft mauve throughout",
-                    "✓ Full M3 color scheme with proper container, outline, inverse, and scrim colors",
-                    "✓ Selectable from Settings → Appearance → Color scheme — pick Pastel and see the app transform"
-                ),
-                "🎨 Pastel entity accent colors" to listOf(
-                    "✓ All 12 research entity types get soft pastel tints: sage (obs, species), sky blue (questions), amber (hypotheses), lavender (sources), rose (notes, flashcards)",
-                    "✓ Pastel confidence colors: soft sage (sure), warm amber (guess), soft coral (verify)",
-                    "✓ 10 pastel categorical chart colors for consistency in charts and graphs",
-                    "✓ Dark mode: glowing pastels on deep warm backgrounds for readability"
-                ),
-                "✨ Full wiring & settings integration" to listOf(
-                    "✓ Color scheme picker added to Appearance settings with 10 schemes including Pastel",
-                    "✓ FieldMindTheme now accepts and resolves customColorScheme parameter",
-                    "✓ MainActivity passes customColorScheme from settings to theme",
-                    "✓ Entity colors auto-switch to pastel when Pastel scheme is active",
-                    "✓ Pastel reference documented in CuteThemeConfig.kt as the flagship cute theme"
+                "🌸 New Pastel theme" to listOf(
+                    "✓ Soft lavender/blush/mint palette with warm pink-white background",
+                    "✓ Pastel entity accent colors for all 12 research entity types",
+                    "✓ Selectable from Settings → Appearance → Color scheme"
                 )
             )
         ),
-        // ── v0.24.1 – Mini-Card Section Headers & Plush Chips ──
-        FieldMindChangelogEntry(
-            version = "0.24.1",
-            date = "2026-07-01",
-            title = "💎 Mini-Card Section Headers & Plush Chips",
-            importance = "Patch",
-            tags = listOf("🎨", "💎", "✨"),
-            sections = listOf(
-                "💎 SectionHeader → elegant mini-card" to listOf(
-                    "✓ SectionHeader now wrapped in a Surface card with soft 2dp shadow and tonal elevation",
-                    "✓ Cute accent color strip on the left — auto-detects entity color from header title",
-                    "✓ Optional accentColor parameter for manual override",
-                    "✓ Rounded corners (28dp) and proper padding for a plush, pill-like look",
-                    "✓ Used across 60+ section headers in Settings, Insights, Detail, Library, and more"
-                ),
-                "✨ InfoChip, ConfidenceChip, EntityBadge elevated" to listOf(
-                    "✓ All metadata chips now have 2dp soft shadows for a plush, touchable feel",
-                    "✓ Chips use surfaceContainerLow background with tonal elevation for dark mode readability",
-                    "✓ Consistent pill shape (999dp radius) with elevation — chips feel like tiny floating badges",
-                    "✓ EntityBadge keeps its semantic accent color but now floats with a subtle shadow"
-                ),
-                "🛠️ cuteShadow modifier in action" to listOf(
-                    "✓ cuteShadow() from CuteThemeConfig.kt now used by SectionHeader, InfoChip, ConfidenceChip, and EntityBadge",
-                    "✓ Import added: `import fieldmind.research.app.ui.theme.cuteShadow`",
-                    "✓ Consistent 2dp shadow across all standalone text items creates a unified plush aesthetic"
-                )
-            )
-        ),
-        // ── v0.23.0 – Soft Shadows & Cute Cards Theme ──
+        // ── v0.23.0 — Soft Shadows & Cute Cards ──
         FieldMindChangelogEntry(
             version = "0.23.0",
             date = "2026-07-01",
@@ -169,29 +125,14 @@ internal data class FieldMindChangelogEntry(
             importance = "Major",
             tags = listOf("🎨", "✨", "🛠️"),
             sections = listOf(
-                "🎨 Plush card elevation & soft shadows" to listOf(
-                    "✓ All cards now elevated with 4dp soft shadows — cards float above the background for a plush, layered feel",
-                    "✓ Card colors switched to surface (bright/clean) for maximum contrast against the background",
-                    "✓ StandardScreenHeader, EntityCard, MetricTile, SubNavBar — all elevated and more prominent",
-                    "✓ ClickableCard & InfoCard default to 4dp elevation, surface container color, and press animation",
-                    "✓ Bulk elevation update across 15 screen files: Home, Settings, Dialogs, Tasks, DataTools, Insights, and more"
-                ),
-                "✨ CuteThemeConfig.kt — central theme file" to listOf(
-                    "✓ New file: CuteThemeConfig.kt with CuteElevations (5 plush tiers), CuteShadows, and CuteCardDefaults",
-                    "✓ CuteElevations: plushTier1 (2dp) through plushTier5 (12dp) for consistent elevation everywhere",
-                    "✓ CuteCardDefaults: Shape (RoundedCornerShape 32dp), ShapeCompact (24dp), ShapeHero (36dp), and tinted/colors presets",
-                    "✓ cuteShadow() modifier for adding soft shadows to any composable",
-                    "✓ Ready for the upcoming cute pastel theme phase"
-                ),
-                "🛠️ Wider visual hierarchy" to listOf(
-                    "✓ Cards now visually distinct from backgrounds — layered feel with clear separation",
-                    "✓ Surface color at MaterialTheme.colorScheme.surface for clean, bright card faces",
-                    "✓ 4dp elevation creates consistent soft shadows that make cards feel touchable and plush",
-                    "✓ Info/privacy cards, settings group cards, entity cards — all now have the plush look"
+                "🎨 Plush card elevation" to listOf(
+                    "✓ All cards elevated with 4dp soft shadows for a layered, plush feel",
+                    "✓ CuteThemeConfig.kt: CuteElevations (5 tiers), CuteShadows, CuteCardDefaults",
+                    "✓ cuteShadow() modifier for consistent shadows anywhere"
                 )
             )
         ),
-        // ── v0.22.0 – Animation Tuning & Smoother Transitions ──
+        // ── v0.22.0 — Animation Tuning ──
         FieldMindChangelogEntry(
             version = "0.22.0",
             date = "2026-06-30",
@@ -200,653 +141,89 @@ internal data class FieldMindChangelogEntry(
             tags = listOf("🎬", "🛠️", "✨"),
             sections = listOf(
                 "🎬 Smoother animations" to listOf(
-                    "✓ Reduced entrance bounce: damping ratio raised from 0.4→0.75 on all screen entrance springs",
-                    "✓ Tab switch animation tuned: lower bounciness, more elegant spring-back feel",
-                    "✓ Swipe-back gesture now uses configurable damping — not over-bouncy on cancel",
-                    "✓ Predictive back peek cancel animation uses smooth configurable spring"
-                ),
-                "🛠️ Developer animation tuning" to listOf(
-                    "✓ Added AnimationTuningCard to developer settings with 5 sliders",
-                    "✓ Entrance damping: adjust from bouncy (0.3) to smooth (1.0) with live preview",
-                    "✓ Swipe-back damping: control how the back gesture snaps or glides",
-                    "✓ Tab entrance damping: tune the tab-switch pop animation feel",
-                    "✓ Swipe threshold: make back gestures easier or harder to trigger",
-                    "✓ Swipe scale: control how much the current screen shrinks during back peek",
-                    "✓ Reset to defaults button for quick restore"
-                ),
-                "✨ Real-content peek for all screens" to listOf(
-                    "✓ Tab container now included in peek cache — back swipe from settings shows real home content, not placeholder",
-                    "✓ All 40+ navigation routes now participate in the real-content peek system",
-                    "✓ Settings back swipe shows the actual Home tab, not a generic gradient mock"
+                    "✓ Reduced entrance bounce with configurable damping/stiffness",
+                    "✓ Developer animation tuning: 5 sliders for entrance, swipe-back, tab transition physics",
+                    "✓ Real-content preview peek on back gesture for all 40+ routes"
                 )
             )
         ),
-    FieldMindChangelogEntry(
-        version = "2.3.26.24",
-        date = "2026-06-28",
-        title = "Tab Overhaul, UI Consistency & Status Bar Fixes",
-        importance = "Major",
-        tags = listOf("Navigation", "UI", "Redesign", "Fixes", "Compose"),
-        sections = listOf(
-            "🔄 Simultaneous 5-Tab Rendering & Predictive Peek" to listOf(
-                "All 5 tabs render simultaneously behind the active tab — predictive back peek shows REAL adjacent tab content, not placeholder cards.",
-                "Inactive tabs consume zero pointer events so taps, scrolls, and clicks pass through to the active tab.",
-                "System back gesture (PredictiveBackHandler) reveals 60% of the previous tab; commit switches to it, cancel springs back.",
-                "First tab (Today) predictive peek shows full-screen reveal for device back gesture — commit exits the app.",
-                "Shared animation flag prevents the gesture overlay from competing with PredictiveBackHandler."
-            ),
-            "🎨 Unified UI Consistency Pass" to listOf(
-                "StandardScreenHeader with fade-in + slide-up entrance animation applied across all screens (Canvas, Weather, Species, headers).",
-                "Consistent header design: 48dp accent-colored icon, headlineSmall extra-bold title, surfaceContainerLow fill.",
-                "Unified color system with 15 distinct entity/state/confidence colors and semantic accent functions.",
-                "Geom font applied throughout for a cleaner, more consistent reading experience.",
-                "Swipe gesture system replaced detectDragGestures with awaitEachGesture for reliable taps, clicks, and vertical scrolls.",
-                "Liquid nav bar blob indicator with spring-physics animation between tabs on both phone (pill) and tablet (rail) layouts."
-            ),
-            "📱 Status Bar & Compile Fixes" to listOf(
-                "Added statusBarsPadding() to 6 screens (Observe, Onboarding, Map, ResearchSession, SettingsNew, FieldLog).",
-                "Fixed Compose 2026.05.01 API changes: positionChange() → manual delta tracking, awaitFirstDown import, nested launch fix.",
-                "Resolved 50+ CI compilation errors across navigation, settings, canvas, and data layer: !! crashes, return labels, delegated properties, TFLite stubs.",
-                "Replaced fake Modifier.blur() with real RenderEffect.createBlurEffect() for proper GPU-backed blur.",
-                "Fixed similar species arrow tap: LaunchedEffect was loading from stale speciesId param instead of state — now correctly loads tapped species data.",
-                "Fixed tab swipe gesture overlay: do-while(isHorizontalDrag) exited after one pointer event — changed to do-while(true) so detection collects events until threshold is crossed.",
-                "Fixed PredictiveBackHandler on first tab: commit called no-op popBackStack — now disabled for first tab so system handles back-to-exit properly."
-            ),
-            "✏️ Creation Screen Redesigns" to listOf(
-                "Redesigned New Project screen with icon/color/template picker, consistent with the app's design language.",
-                "Redesigned Note, Question, Source creation screens with full-screen rich forms, proper headers, and consistent visual style.",
-                "Added navigation routes for NewObservation, NewNote, NewSource, NewAttachment, NewFolder screens.",
-                "Redesigned Workspace Create button with grouped entity menu and project selector.",
-                "Fixed Projects screen header, enlarged FieldMind icon, unsquished action buttons."
+        // ── v2.3.26.24 — Tab Overhaul ──
+        FieldMindChangelogEntry(
+            version = "2.3.26.24",
+            date = "2026-06-28",
+            title = "Tab Overhaul & UI Consistency",
+            importance = "Major",
+            tags = listOf("Navigation", "UI", "Fixes"),
+            sections = listOf(
+                "🔄 5-tab rendering & predictive peek" to listOf(
+                    "✓ All 5 tabs render simultaneously behind active tab — predictive back peek shows real content",
+                    "✓ StandardScreenHeader and Geom font applied throughout",
+                    "✓ Liquid nav bar blob indicator with spring animation",
+                    "✓ statusBarsPadding on 6 screens, 50+ CI compile fixes"
+                )
             )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "2.2.26.28",
-        date = "2026-06-24",
-        title = "Security & Auto-Lock Overhaul",
-        importance = "Patch",
-        tags = listOf("Security", "PIN", "Auto-Lock", "Decoy", "Clipboard", "Fixes"),
-        sections = listOf(
-            "🔐 PIN & Lock Screen Fixes" to listOf(
-                "Fixed PIN lockout bug: entering a 5 or 6-digit PIN no longer accepts only the first 4 digits — PIN validation now respects the configured length (4, 5, or 6 digits).",
-                "All PIN fields now use the number-pad keyboard (KeyboardType.NumberPassword) instead of the full keyboard for faster, more reliable entry.",
-                "PIN setup, disable, and decoy PIN dialogs all validate against the user's selected PIN length setting instead of a hardcoded minimum of 4.",
-                "Customizable failed-unlock cooldown (30 sec or 5 min) with lockout timer display."
-            ),
-            "🎭 Decoy PIN — Fully Functional" to listOf(
-                "Decoy PIN now properly opens a clean, empty version of FieldMind with no real data visible — no more confusing partial state.",
-                "Once in decoy mode, the app stays in decoy mode until restarted, preventing any accidental data exposure.",
-                "Decoy PIN setup/management is integrated into the Security settings page with label customization."
-            ),
-            "🔋 Auto-Lock & Keep Screen On" to listOf(
-                "Auto-lock on background now works correctly — AppLifecycleManager is wired into MainActivity's onPause/onResume lifecycle callbacks.",
-                "Auto-lock respects the \"Lock on background\" toggle setting.",
-                "Keep screen on (alwaysOnScreenEnabled) now works reactively via LaunchedEffect and responds immediately to setting changes.",
-                "Lock timeout setting (Immediate / 1 min / 5 min / 15 min) properly schedules lock after backgrounding."
-            ),
-            "🧹 Clipboard & Category Picker Improvements" to listOf(
-                "Auto clear clipboard now works — clipboard is cleared when the app goes to background if clipboardAutoCleanupEnabled is on.",
-                "All category/option pickers unified to dialog-based (ChoiceChips replaced by dialog) for a consistent selection experience across the entire app.",
-                "Added top-level cardBg import to fix compilation errors from the refactored extension function."
+        ),
+        // ── v2.2.26.28 — Security & Auto-Lock ──
+        FieldMindChangelogEntry(
+            version = "2.2.26.28",
+            date = "2026-06-24",
+            title = "Security & Auto-Lock Overhaul",
+            importance = "Patch",
+            tags = listOf("Security", "PIN", "Auto-Lock"),
+            sections = listOf(
+                "🔐 PIN & security" to listOf(
+                    "✓ PIN lockout fix: respects 4-6 digit PIN length",
+                    "✓ Decoy PIN opens clean empty version of app",
+                    "✓ Auto-lock on background, keep-screen-on, customizable lock timeout"
+                )
             )
-        )
-    ),FieldMindChangelogEntry(
-        version = "2.2.26.27",
-        date = "2026-06-24",
-        title = "Per-Category Color Customizer",
-        importance = "Patch",
-        tags = listOf("Colors", "Theme", "Settings", "UI"),
-        sections = listOf(
-            "🎨 Per-Category Entity Color Customization" to listOf(
-                "Added Entity Accent Colors settings page under Appearance with a full inline color picker for all 18 entity/state/confidence color tokens.",
-                "Each entity type shows its current color swatch, label, and customization status (Default / Customized).",
-                "Tap any row to open an inline editor with a 28-color preset grid, custom hex input, and Apply/Reset/Cancel controls.",
-                "Custom colors are persisted in SharedPreferences and survive app restarts and exports.",
-                "Reset All to Defaults button instantly clears all overrides and reverts to the unified palette.",
-                "Colors apply immediately across the entire app via the FieldMindTheme composable's new entityColorOverrides parameter."
-            ),
-            "🔧 Data Layer & Theme Integration" to listOf(
-                "Added entityColors StateFlow + setEntityColors() to FieldMindSettings with JSON serialization via Gson.",
-                "Added applyOverrides() method to FieldMindColors data class that merges per-key overrides into a copy.",
-                "FieldMindTheme() now accepts entityColorOverrides param and chains .applyOverrides() before providing the CompositionLocal.",
-                "MainActivity collects entityColors from Settings and passes them to FieldMindTheme for app-wide application.",
-                "Added DEFAULT_ENTITY_COLORS, ENTITY_COLOR_LABELS, and ENTITY_COLOR_ICONS constants for the color picker UI.",
-                "entityColors included in toExportJson / applyFromJson for backup/restore compatibility."
+        ),
+        // ── v2.2.26.27 — Color Customizer ──
+        FieldMindChangelogEntry(
+            version = "2.2.26.27",
+            date = "2026-06-24",
+            title = "Per-Category Color Customizer",
+            importance = "Patch",
+            tags = listOf("Colors", "Theme", "Settings"),
+            sections = listOf(
+                "🎨 Entity color customization" to listOf(
+                    "✓ Inline color picker for all 18 entity/state/confidence colors",
+                    "✓ 28-color preset grid + custom hex input",
+                    "✓ Persisted in SharedPreferences with backup/restore support"
+                )
             )
-        )
-    ),FieldMindChangelogEntry(
-        version = "2.2.26.25",
-        date = "2026-06-24",
-        title = "Project Detail Redesign with Activity Feed & Create Sheet",
-        importance = "Patch",
-        tags = listOf("Project Detail", "Redesign", "UI", "Create Sheet", "Navigation"),
-        sections = listOf(
-            "📋 Redesigned Project Detail Screen" to listOf(
-                "Complete redesign with modern header: back button, project icon/name/status/topic, search and + Add buttons, and overflow menu.",
-                "Stats row shows entity counts (Obs, Notes, Qs, Sources, Tasks) plus folders/data/reports with themed accent colors.",
-                "Filter tabs (All, Obs, Notes, Questions, Sources, Tasks) let you drill into specific entity types with proper filtering.",
-                "Activity feed renders all project entities in chronological order with rich cards showing kind icon, title, body, tags, and linked counts.",
-                "Search bar with animated toggle lets you search across all entity types within the project.",
-                "Empty state with helpful guidance when no records exist yet.",
-                "[+ Add Record] button at the bottom opens the new Create sheet."
-            ),
-            "🎯 New Create Sheet (COLLECT/ANALYZE/EVIDENCE/PLAN)" to listOf(
-                "Full-screen bottom sheet organized into 4 sections: COLLECT (Observation, Photo, Voice Note, Location Record), ANALYZE (Note, Question, Hypothesis, Experiment), EVIDENCE (Source, Document, Citation), and PLAN (Task, Survey Session, Field Visit, Folder).",
-                "Each option shows a colored icon, label, description, and + add icon with press feedback.",
-                "Overflow menu in the header opens Project Options: View Relations and Project Settings.",
-                "Hypothesis option now wired to the existing NewHypothesisDialog.",
-                "Survey Session navigates to the Research Session screen."
-            ),
-            "🔧 Data & Navigation Fixes" to listOf(
-                "Properly wired onOpenRelations and onOpenSettings callbacks from navigation into the project options menu.",
-                "Updated statusBarsPadding and consistent design language throughout the screen.",
-                "All entity cards are clickable and navigate to their respective detail screens via onOpenDetail."
+        ),
+        // ── v2.2.26.25 — Project Detail Redesign ──
+        FieldMindChangelogEntry(
+            version = "2.2.26.25",
+            date = "2026-06-24",
+            title = "Project Detail Redesign",
+            importance = "Patch",
+            tags = listOf("Project", "Redesign", "Create Sheet"),
+            sections = listOf(
+                "📋 Redesigned project screen" to listOf(
+                    "✓ Modern header, stats row, filter tabs, activity feed",
+                    "✓ New Create sheet (COLLECT/ANALYZE/EVIDENCE/PLAN groups)",
+                    "✓ Search bar and empty state guidance"
+                )
             )
-        )
-    ),    FieldMindChangelogEntry(
-        version = "2.2.26.24",
-        date = "2026-06-24",
-        title = "Real Folder Entity & Task Screen Polish",
-        importance = "Patch",
-        tags = listOf("Folders", "Entity", "UI", "Data Layer"),
-        sections = listOf(
-            "📁 Real Folder Entity (Database-Backed)" to listOf(
-                "Created a proper FolderEntity in Room database with fields: name, color, icon, parent folder, project link.",
-                "Added full data layer: DAO queries (observe, insert, update, soft delete), Repository methods, and ViewModel integration.",
-                "Registered FolderEntity in FieldMindDatabase with version bump to 16 (destructive migration fallback).",
-                "Updated NewFolderScreen and NewFolderDialog to call viewModel.addFolder() instead of faking folders as Notes with category='Folder'.",
-                "Folders now persist as a dedicated database table with proper lifecycle tracking (createdAt, updatedAt, archivedAt, deletedAt)."
-            ),
-            "🎨 Task Screen Design Consistency" to listOf(
-                "NewTaskScreen already has statusBarPadding, StandardScreenHeader with heroColor (FieldMindTheme.colors.flashcard), and consistent design patterns matching other entity screens.",
-                "NewTaskDialog in ProjectDetailScreen uses DialogWrapper with proper accent color and full-screen mode."
+        ),
+        // ── v2.2.26.22 — Quick Capture FAB ──
+        FieldMindChangelogEntry(
+            version = "2.2.26.22",
+            date = "2026-06-24",
+            title = "Quick Capture FAB & Voice Notes",
+            importance = "Patch",
+            tags = listOf("FAB", "Voice Notes", "Capture"),
+            sections = listOf(
+                "📷 Quick capture" to listOf(
+                    "✓ Floating + button on Home with 5 capture options",
+                    "✓ Voice note recording with MediaRecorder AAC",
+                    "✓ Seamless camera, note, and question capture"
+                )
             )
-        )
-    ),    FieldMindChangelogEntry(
-        version = "2.2.26.22",
-        date = "2026-06-24",
-        title = "Quick Capture FAB with Voice Notes",
-        importance = "Patch",
-        tags = listOf("FAB", "Quick Capture", "Voice Notes", "UI"),
-        sections = listOf(
-            "📷 Floating Quick Capture FAB" to listOf(
-                "Added floating + button (FAB) on the Home Screen that opens a Quick Capture bottom sheet with 5 options: Observation, Note, Voice Note, Photo, and Question.",
-                "Each option shows an icon, label, and description with themed accent colors and press animations.",
-                "Observation and Photo open the built-in camera for immediate field capture.",
-                "Note opens the existing note creation dialog for quick thoughts and ideas.",
-                "Voice Note opens a dedicated recording dialog with MediaRecorder AAC recording.",
-                "Question navigates to the Questions screen for recording research questions.",
-                "FAB sits at the bottom-right corner with proper elevation and accessible touch target."
-            ),
-            "🎤 Voice Note Recording Dialog" to listOf(
-                "Full-featured voice note recorder with microphone permission handling via ActivityResultContracts.",
-                "Record button starts AAC audio capture to app-internal storage using the existing createFieldMindFile pattern.",
-                "Live recording timer displayed during capture with red recording indicator.",
-                "Stop button releases the MediaRecorder and shows the Save option.",
-                "Title input field for naming voice notes before saving.",
-                "Save creates a Note entity with the audio file attached as DraftEvidenceAttachment for permanent storage.",
-                "Existing voice notes section lists previously recorded audio notes filtered from the notes database."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "2.2.26.21",
-        date = "2026-06-24",
-        title = "Entity Linking Pickers & Settings Improvements",
-        importance = "Patch",
-        tags = listOf("Linking", "Pickers", "Settings", "Fixes"),
-        sections = listOf(
-            "🔗 Entity Linking Infrastructure" to listOf(
-                "Added DAO DELETE queries, Repository unlink methods, and 8 ViewModel link/unlink methods for task→observation, project→observation, and project→source cross-references.",
-                "TaskDetailScreen now includes a searchable observation picker with unlink (link_off) and link (add_link) buttons for managing linked observations.",
-                "ProjectDetailScreen now includes a 'Linked Entities' card with observation and source sub-sections, each with unlink buttons and searchable picker dialogs.",
-                "Link/unlink operations use the existing cross-ref table pattern (TaskObservationCrossRef, ProjectObservationCrossRef, ProjectSourceCrossRef) for consistency."
-            ),
-            "⚙️ Advanced Settings & Developer Options" to listOf(
-                "Added 'Developer options' nav card to the 'About & advanced' section in Settings, wired to the existing onOpenDeveloper callback.",
-                "Developer options card uses the MaterialSymbolIcon \"tune\" icon and hypothesis accent color for visual distinction."
-            ),
-            "🐛 Compilation Error Fixes" to listOf(
-                "Fixed Color.luminance() unresolved reference — replaced with manual NTSC luminance calculation (color.red * 0.299f + color.green * 0.587f + color.blue * 0.114f) for Compose compatibility.",
-                "Fixed missing closing brace in ProjectDetailScreen that caused cascading 'local function' errors across StatusBadge, ProjectActionButton, ProjectActionTile, and StatItem composables.",
-                "Fixed missing import (androidx.compose.foundation.lazy.items) in ProjectDetailScreen for the EntityPickerDialog's items(items) LazyListScope extension.",
-                "Fixed FieldMindIcons.Code unresolved reference — replaced with MaterialSymbolIcon(\"tune\") which uses standard Material Symbols."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "1.5.3-infinite-canvas-removed",
-        date = "2026-06-24",
-        title = "Removed Infinite Canvas — Simplified to Page-Only Mode",
-        importance = "Patch",
-        tags = listOf("Canvas", "Simplification", "Cleanup"),
-        sections = listOf(
-            "🗑️ Infinite Canvas Removed" to listOf(
-                "Removed InfiniteCanvas, CanvasBackground (dot grid), and CanvasMinimap composables — the app now uses PageCanvas exclusively.",
-                "Removed CanvasMode enum and canvasMode toggle from CanvasState — the canvas is always in page (document) mode.",
-                "Removed showGrid/toggleGrid from CanvasState — the dot-grid background was only used by the infinite canvas.",
-                "Simplified CanvasTopBar overflow menu: removed canvas mode toggle and grid toggle; Figure Gallery and Drawing tools remain.",
-                "Page indicator in the top bar now always visible since the canvas is always in page mode."
-            ),
-            "🧼 Cleanup" to listOf(
-                "Deleted ~1,500 lines of code across InfiniteCanvas.kt, CanvasBackground.kt, and CanvasMinimap.kt.",
-                "Removed ~250 lines of mode-switching logic from CanvasScreen and CanvasState.",
-                "All canvas blocks, drawing, zoom, and block operations preserved under PageCanvas."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "1.5.2-predictive-back-canvas",
-        date = "2026-06-23",
-        title = "Predictive Back Peek Animation & Canvas Improvements",
-        importance = "Patch",
-        tags = listOf("Navigation", "Canvas", "Animation", "Fixes"),
-        sections = listOf(
-            "🔙 Predictive Back Peek Animation" to listOf(
-                "Previous screen preview with parallax, label, and back-arrow icon slides in from the left during the back gesture — shows exactly where you're navigating to before you commit.",
-                "Fixed blank/black screen appearing when the back gesture commits — offset is now reset to 0 before navigation triggers, preventing the graphicsLayer translation from shifting the exit transition off-screen.",
-                "Swipe-back spring stiffness increased from 300 to 800 for a fast, fluid feel — no more sluggish settings back gesture.",
-                "TabSwipeHost refactored from laggy animateFloatAsState to Animatable with snapTo for instant per-frame finger tracking during tab swipes.",
-                "Edge tabs (Home, Library) use SwipeBackHost instead of TabSwipeHost — no more swiping into a non-existent screen from the first/last tab.",
-                "PreviousScreenInfo wired to all 40+ SwipeBackHost calls — every screen with swipe-back shows the correct previous destination badge."
-            ),
-            "🖱️ Canvas Drag & Resize Stability" to listOf(
-                "Fixed drag snap when re-dragging a block before Room finishes writing the previous position — onDragStart now captures from liveBlockPosition (if active) instead of the stale entity position.",
-                "Fixed resize handle jumping to the old size on next gesture — resize now bases on displayWidth (which reads the live size) instead of block.width (entity, could be stale).",
-                "Fixed visual snap at drag/resize end — setLiveBlockPosition/setLiveBlockSize now keeps the override active until Room emits the updated entity, with LaunchedEffect cleanup that removes the override when entity values match.",
-                "Same drag/resize snap fixes applied to both InfiniteCanvas and PageCanvas modes."
-            ),
-            "📄 Text & Image Block Simplification" to listOf(
-                "TextBlock redesigned: removed FormattingToolbar, CommandMenu, and LinkInsertDialog (~250 lines). Clean outline border when selected, no filled background, auto-expand height, placeholder text.",
-                "ImageBlock simplified: removed inline caption editing and caption display bar. Tap image for full-screen viewer, tap empty for picker. Minimal, clean design."
-            ),
-            "🔍 Page Zoom & Per-Page Drawing" to listOf(
-                "PageCanvas no longer forces zoomTo(1f) — pages now scale with the ZoomSlider (0.1x–5x) like InfiniteCanvas.",
-                "Block positions and sizes scale by zoom; drag and resize deltas divided by zoom for correct document-space movement.",
-                "ZoomSlider always visible in page mode; zoom controls in the top bar work in both modes.",
-                "Drawing overlay moved from behind the scrollable pages to INSIDE each page Surface — strokes render on the page, not the gray background.",
-                "Per-page drawing uses correct coordinate transforms (page-local ↔ document with zoom scaling) and filters saved drawings by Y range.",
-                "All drawing tools supported per-page: pen, highlighter, shapes, eraser."
-            ),
-            "🔄 Viewport Culling Performance" to listOf(
-                "InfiniteCanvas viewport culling padding increased from 100px to 300px — 3× wider recycling buffer keeps blocks composed during rapid scrolling, reducing composition/disposal churn.",
-                "Block visibility computation moved from inline SubcomposeLayout filter to derivedStateOf outside the measurement pass, tracked reactively via zoom/pan/liveBlockPositions changes.",
-                "Viewport size tracked via onSizeChanged for accurate culling; remember keys only on blocks list (not camera values that change every frame) to avoid recreating derivedStateOf.",
-                "Manual BlockToolbar offset positioning in PageCanvas replaced with direct BlockToolbar using canvasToScreen() for correct zoom-aware placement."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "1.5.1-weather-crash-ui-polish",
-        date = "2026-06-16",
-        title = "Weather Animation Polish, Crash Fixes & Back Navigation",
-        importance = "Patch",
-        tags = listOf("Weather", "Fixes", "UI", "Navigation"),
-        sections = listOf(
-            "🌙 Weather Animation Polish" to listOf(
-                "Shooting star now fades in gradually during the first 25% of its flight instead of appearing suddenly, then fades out smoothly for a natural appear-then-disappear arc.",
-                "Moon repositioned to top-right corner with reduced size (0.07 normal / 0.09 compact) and tighter glow rings (2x/3x radius) so the glow doesn't wash over the whole scene.",
-                "Sun repositioned to top-right corner with reduced size, shorter rays (1.3x–1.5x radius), slower rotation (20s), and slower glow pulse (5s) for a calmer day scene.",
-                "Rain streaks reduced by ~40% (heavy 80→50, normal 50→30) with per-drop random phase delays so drops fall continuously as scattered random drops instead of synchronized sheets.",
-                "Rain fall speed reduced (base animation slowed from 400ms→700ms heavy, 700ms→1200ms normal) for a more gentle, natural look.",
-                "All rain types (drizzle, rain, showers, heavy rain) benefit from the continuous random-drop behavior."
-            ),
-            "🐛 Infinite-Height Scroll Crash Fix" to listOf(
-                "Fixed crash when tapping 'Add Species' or 'Add Task' in Project Detail — the root cause was 'verticalScroll' being placed before 'heightIn(max=...)' in the modifier chain, causing infinite height constraints inside LazyColumn items.",
-                "Reordered modifiers to Modifier.heightIn(max = 420.dp).verticalScroll(...) in SpeciesRegistryBuilder and ProjectTasksBuilder so height constraints clamp before the scroll check.",
-                "Replaced nested LazyRow (which conflicted with parent verticalScroll) with FlowRow in ProjectTasksBuilder to eliminate the nested scrollable issue entirely."
-            ),
-            "🔙 Back Navigation & Confirmation Dialogs" to listOf(
-                "Added BackHandler to all full-screen editors (projects, sources, questions, hypotheses, reports, observations) so the device back button works properly — previously dismissOnBackPress=false had no handler.",
-                "Added isDirty tracking with confirmation dialog: when content is filled and the user presses back, shows an AlertDialog with Discard (red) and Keep Editing options.",
-                "Dirty detection added to all 9 full-screen dialogs: NewQuestion, NewProject, NewSource, NewHypothesis, NewReport, EditObservation, EditProject, EditSource, EditReport.",
-                "Added BackHandler with unsaved-data protection to the Observation/Add Observation screen — shows Save & Exit, Discard, or Keep Editing dialog when content exists and back is pressed.",
-                "Fixed sharp edges on full-screen dialogs by styling the back button with a rounded Surface (RoundedCornerShape 14dp), adding HorizontalDivider below header, and proper bottom padding (32dp)."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "1.5.0-weather-v3-expand",
-        date = "2026-06-16",
-        title = "Random Thunderstorm, Expand Dashboard & Crash Fixes",
-        importance = "Patch",
-        tags = listOf("Weather", "UI", "Fixes", "Capture"),
-        sections = listOf(
-            "⛈️ Random Thunderstorm Flashes" to listOf(
-                "Thunderstorm animation completely rewritten: replaces constant 150ms flashing (headache-inducing) with random 2-6 second intervals — each lightning strike is unpredictable.",
-                "Random flash position (anywhere on screen) and intensity (subtle to bright) for natural variety.",
-                "Jagged lightning bolts with branching offshoots, each strike unique per event.",
-                "Optional double-flash (35% chance) and screen-edge glow afterglow with slow decay.",
-                "Bolt path stays stable for the entire flash duration — no frame-to-frame jitter."
-            ),
-            "🎬 Orphe-Style Expand Dashboard" to listOf(
-                "LiveWeatherDashboardWidget now expands full-screen with a smooth slide-up + fade-in transition (inspired by Orphe music player's beautiful full-screen animation).",
-                "Full-screen overlay shows: time-of-day greeting, large gradient temperature, animated weather scene background.",
-                "Detailed metrics card: humidity, wind speed, cloud cover, and atmospheric pressure at a glance.",
-                "Sunrise/sunset times and moon phase indicators with color-coded info chips.",
-                "Fieldwork conditions nudge with contextual advice based on current weather.",
-                "Tap the close button or anywhere on the backdrop to dismiss with a reverse slide-out animation."
-            ),
-            "🐛 Infinite-Height Crash Fixes" to listOf(
-                "Replaced AnimatedContent wrappers (which pass infinite maxHeight to scrollable children causing crashes) with static Box + when blocks in FieldMindProjectsScreen and FieldMindObservationsTimeline.",
-                "Added Modifier.heightIn(max = ...) constraints to scrollable Column forms inside LazyColumn items (ProjectsScreen, DetailScreen, ScreenUtils).",
-                "Added Modifier.fillMaxSize() to inner LazyColumn in ObservationsTimeline for safe layout sizing.",
-                "Fix applies to ProjectCreationForm, SpeciesRegistryBuilder, ProjectTasksBuilder, InlineFormCard, and all 4 tab LazyColumns."
-            ),
-            "📸 Capture Flow & Custom Categories" to listOf(
-                "Category picker confirm button now saves observations to database with photo as DraftEvidenceAttachment instead of just navigating away — no more lost captures.",
-                "OutlinedTextField appears when 'Other' is selected in the category picker, letting you type any custom category (e.g. 'Reptile', 'Amphibian', 'Fungus').",
-                "Confirm button label updates dynamically based on the selected category."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "1.4.1-build-fixes",
-        date = "2026-06-14",
-        title = "Build Fixes & Stability Improvements",
-        importance = "Patch",
-        tags = listOf("Fixes", "Stability", "Build"),
-        sections = listOf(
-            "Geo-fence Reminders" to listOf(
-                "Fixed Long-to-Int type mismatch in loitering delay that caused a compile error.",
-                "Fixed nullable GeofencingClient calls that could crash on devices without Google Play Services — all calls now use safe-call operators (?.) so geo-fencing degrades gracefully."
-            ),
-            "Map Drawing Tools" to listOf(
-                "Removed unresolved 'geodesic' property references on Polyline overlays (not present in the bundled osmdroid version).",
-                "Fixed DrawingInputHandler tempMarkerDrawer being declared as val while needing reassignment — changed to var."
-            ),
-            "Offline Tile Manager" to listOf(
-                "Resolved 'Cannot infer type parameter R' errors on CacheManager.downloadAreaAsync — now called via reflection for version-safe compatibility.",
-                "Fixed unresolved 'cleanArea' method reference (renamed in some osmdroid builds) — now called via reflection with graceful fallback."
-            ),
-            "Data Tools Screens" to listOf(
-                "Fixed widespread escaped-quote syntax errors throughout FieldMindDataTools.kt (backslash-escaped \\\" sequences inside Kotlin string literals caused every string in the file to be invalid).",
-                "Counter, Measurement, Weather Log, and Species Tool screens now compile and function correctly."
-            ),
-            "Navigation" to listOf(
-                "MeasurementToolScreen, WeatherLogToolScreen, and SpeciesToolScreen are now correctly resolved in the navigation graph (unblocked by the DataTools syntax fix)."
-            ),
-            "Observation Detail Screen" to listOf(
-                "Added missing onOpenDetail callback parameter to ObservationDetailContent so re-observation parent/child links correctly open detail views."
-            ),
-            "Home Screen" to listOf(
-                "Fixed Triple(...) called with 4 arguments — replaced with Pair<Triple, Screen> so each tool entry correctly carries title, body, icon, and navigation target.",
-                "Fixed destructuring to use (info, screen) → val (title, body, icon) = info pattern."
-            ),
-            "Map Screen" to listOf(
-                "Added missing import for android.content.Context used in the Tracks tab.",
-                "Added missing import for MaterialSymbolIcon used in DrawToolButton."
-            ),
-            "Capture Screen" to listOf(
-                "Removed duplicate import for SpeciesMatch that caused an ambiguous reference error.",
-                "Removed duplicate val context = LocalContext.current declaration in the same composable scope."
-            ),
-            "Settings Screen" to listOf(
-                "Fixed nullable Long? comparison operator (obs.projectId > 0) in Data Integrity page — now safely unwraps with ?: 0L before comparing."
-            ),
-            "Charts" to listOf(
-                "Removed unresolved geodesic property from Polyline in EnhancedOsmMap composable (both the factory block and the update block)."
-            ),
-            "UI Components" to listOf(
-                "Added missing imports for Dialog, DialogProperties, wrapContentHeight, verticalScroll, rememberScrollState, and TextButton that were required by the ProtocolPicker dialog composable."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "1.4.0-species-id-map-tools",
-        date = "2026-06-14",
-        title = "Phase 4: Species ID, Offline Maps & Enhanced Observation",
-        importance = "Major",
-        tags = listOf("Species ID", "Offline Maps", "Observation", "PDF", "Attachments"),
-        sections = listOf(
-            "🔬 Species Identification Engine (NEW)" to listOf(
-                "On-device TensorFlow Lite species classifier with bundled 500-species model (expandable via download).",
-                "Post-capture 'Identify species' button in observation evidence row.",
-                "Top-5 species matches with confidence scores displayed in a bottom sheet.",
-                "Manual species search by common or scientific name for offline lookup.",
-                "iNaturalist API fallback integration when online (with user permission toggle).",
-                "Auto-populate species name, category (Bird/Mammal/Insect/Plant/etc.), and confidence.",
-                "Supports regional model packs: North America, Europe, Asia, Tropical."
-            ),
-            "🌍 Offline Maps with Drawing Tools (NEW)" to listOf(
-                "Offline tile manager downloads OSM tile regions for fully offline map use.",
-                "Drawing tools: Polygon (survey boundary), Line (transect), Point (site marker) overlays.",
-                "GPS track recording during research sessions with start/stop control.",
-                "Geo-fence reminders: 'When you arrive at Site A, remind you to log water quality.'",
-                "Multiple tile sources: OSM Standard, Satellite, Terrain.",
-                "LRU tile cache with pruning to manage storage."
-            ),
-            "🔗 Hypothesis-Driven Observation Graph (NEW)" to listOf(
-                "Live graph inference: semantic matching of observations to hypotheses as you add them.",
-                "Weak signal detection suggests potential connections: 'These 3 observations might support Hypothesis #2'.",
-                "Gap detection: 'You're testing H1 but missing observations for alternative H3.'",
-                "Question generation: 'Based on your observations, you might ask...'",
-                "Citation chains track evidence used to support each hypothesis.",
-                "Enhanced detail screen with 'Related' section showing graph connections."
-            ),
-            "📄 PDF Reader with Native Rendering (NEW)" to listOf(
-                "Native AndroidX PDF renderer replaces WebView fallback.",
-                "Inline annotations: highlight, underline, sticky notes.",
-                "Table of contents navigation for structured documents.",
-                "Full-text search within PDF with page and context snippets.",
-                "Continuous scroll and page thumbnail preview."
-            ),
-            "📁 Project Attachments (NEW)" to listOf(
-                "Attach photos, PDFs, and documents to projects with folder organization.",
-                "Quick preview in project detail with thumbnail gallery.",
-                "Organize attachments by folder/type with bulk operations.",
-                "Attachment count and type indicators in project cards."
-            ),
-            "🏠 Home Screen Data Tool Improvements (Enhanced)" to listOf(
-                "Counter Tool: session grouping, running totals, chart view, CSV export.",
-                "Measurement Tool: measurement history chart, batch entry, unit conversion.",
-                "Weather Log Tool: Open-Meteo auto-fetch, 7-day history chart, data export.",
-                "Species Tool: auto-categorization, species ID suggestions, photo upload.",
-                "All tools now open full dedicated screens with rich interactions."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "1.3.0-interactive-data-tools",
-        date = "2026-06-14",
-        title = "Interactive Data Tools — Dedicated Mini-Tools",
-        importance = "Major",
-        tags = listOf("Data Tools", "Counter", "Measurement", "Weather", "Species"),
-        sections = listOf(
-            "Interactive Counter Tool" to listOf(
-                "Dedicated full-screen counter UI with large +/− stepper buttons and auto-save on each increment.",
-                "Real-time count display with pulse animation on increment.",
-                "Auto-saves a data record to the database with every tap, building a time-stamped tally history.",
-                "Label input to describe what you are counting (birds, trees, samples).",
-                "Expandable recent tally history showing all saved counter records."
-            ),
-            "Measurement Tool" to listOf(
-                "Structured measurement form with large value display, decimal place support, and inline unit selector.",
-                "Quick unit preset chips (cm, m, mm, g, kg, °C) plus dropdown with 15+ common units.",
-                "Details section for label, notes, and location input.",
-                "Saves directly to the Data Records database as a Measurement Log entry."
-            ),
-            "Weather Log Tool" to listOf(
-                "Quick weather conditions form with condition picker (Clear, Rain, Snow, Thunderstorm, etc.).",
-                "Temperature (°C), humidity (%), and wind speed fields with number pads.",
-                "One-tap GPS location fetch with place name resolution.",
-                "Saves as a Weather Log data record with structured condition string."
-            ),
-            "Species Log Tool" to listOf(
-                "Quick-capture species observation form with name, count stepper, and confidence selector.",
-                "Behavior picker (Feeding, Flying, Calling, Resting, etc.) and habitat input.",
-                "Auto-categorizes into Bird/Mammal/Insect/Plant based on species name keywords.",
-                "Saves directly as a full observation with facts and species-tracking tag."
-            ),
-            "Wired from Home Screen" to listOf(
-                "Home screen Data Tools card now opens each tool directly — Count, Measure, Weather, Species.",
-                "Tap any tile to open its dedicated mini-tool instead of the generic listing screen.",
-                "'Open all' button still available to see all data records in the Workspace Data tab."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "1.2.0-field-research-complete",
-        date = "2026-06-14",
-        title = "Complete Field Research Redesign (Phases 1-12)",
-        importance = "Major",
-        tags = listOf("Observations", "Projects", "Analysis", "Reports", "Library", "Journal", "Evidence", "Data"),
-        sections = listOf(
-            "Observations & Capture (Phase 3-4)" to listOf(
-                "Species confidence selector (Certain, Likely, Unsure) with visual feedback.",
-                "Distance from observer selector (2m, 10m, 50m, 100m+) for scale reference.",
-                "Observation checklist (Seen, Heard, Smelled, Touched, Measured) tracking methods used.",
-                "Structured measurements with specialized fields for height, width, length, diameter, weight, and fungi-specific properties.",
-                "Quality score calculator (0-100%) showing data completeness and missing field checklist.",
-                "Follow-up scheduling system (None, Tomorrow, 3 days, 1 week, Custom) with notifications.",
-                "Image annotation tools (circle, arrow, highlight, label, measurement line) for visual notes.",
-                "Capture mode toggle between single observation and each-photo-equals-observation modes.",
-                "Collapsible 'Structured details' section reduces visual complexity while preserving advanced features."
-            ),
-            "Research Sessions (Phase 4)" to listOf(
-                "Session persistence guarantees observations and notes are never lost when navigating away.",
-                "Active session restoration shows elapsed timer and observation count on home screen.",
-                "Session notification includes real-time timer updates (e.g., 'Running • 05:30 • 3 obs').",
-                "Session summary displays total duration, observation count, evidence count, and linked project.",
-                "Quick export to project journal for research storytelling.",
-                "Audio recording moved to dedicated card below attachments for cleaner UI organization."
-            ),
-            "Projects & Workspace (Phase 5)" to listOf(
-                "Project types: Observation, Investigation, Survey, Experiment, Monitoring for targeted workflows.",
-                "Research method builder lets you select from 10+ methods (daily observations, photo documentation, audio recording, measurements, species counting, weather logging, behavior logging, comparison tables).",
-                "Auto-recommended data fields and charts based on selected methods.",
-                "Project templates (Species Survey, Behavior Study, Site Survey, Experiment, Monitoring, Weather Study, Phenology Study, Site Comparison) with pre-configured fields.",
-                "Project journal auto-generates dated entries from observations, notes, hypotheses, and data.",
-                "Project timeline visualizes observations chronologically for research storytelling.",
-                "Project relationships graph shows connections: Questions → Observations → Evidence → Hypotheses → Reports."
-            ),
-            "Evidence Hub (Phase 6)" to listOf(
-                "Advanced filtering by category, date, tag, location, confidence, project, evidence type, and completeness.",
-                "Bulk management: select multiple, archive, delete, add tags, link to project, export as bundle.",
-                "Evidence status tracking (Used in analysis, Needs review, Missing metadata) for quality control.",
-                "Completeness indicator shows what metadata is present and what's missing.",
-                "Grid view with checkbox selection for batch operations on evidence."
-            ),
-            "Data Workspace (Phase 7)" to listOf(
-                "Question-first data collection: 'What are you tracking?' (Count, Measure, Compare, Track Changes, Record Weather, Track Species).",
-                "Auto-generated dataset with suggested fields and live preview.",
-                "Mobile-optimized data record cards instead of cramped tables.",
-                "Quick tally counter for rapid tallying during observations.",
-                "Each record captures label, value/unit, date, project link, and linked observation/evidence."
-            ),
-            "Hypotheses Redesign (Phase 8)" to listOf(
-                "Hypothesis cards display prediction, confidence percentage, status, and evidence count at a glance.",
-                "Status tracking (Supported, Contradicted, Inconclusive, Untested) for hypothesis lifecycle.",
-                "Linked question display shows what research question this hypothesis tests.",
-                "Evidence needed and support/contradiction criteria documented for test design.",
-                "Next test/action indicator guides your research workflow."
-            ),
-            "Insights Dashboard (Phase 9)" to listOf(
-                "GitHub-style calendar heatmap with proper month boundaries, week labels, and tap tooltips.",
-                "By-hour and by-day horizontal ranking bars showing activity distribution.",
-                "Daily trend card showing peak day and trend direction with sparkline.",
-                "Category distribution bars with readable, non-cut-off labels.",
-                "Research health card surfaces actionable issues: 'Add more evidence', 'Link questions to hypotheses', 'Enable GPS', 'Add weather'.",
-                "Confidence score card displays overall research quality (Strong/Weak evidence).",
-                "Knowledge graph with clustering by project/entity type and legend/filters.",
-                "Open questions summary showing created date, linked observations, and status/priority."
-            ),
-            "Notes & Journal (Phase 10)" to listOf(
-                "Rich block editor supports 11 block types: Text, Image, Drawing, Audio, Observation embed, Checklist, Quote, Table, Map, Reference link, Handwritten note.",
-                "Rich text formatting toolbar with Bold, Italic, Underline, Strikethrough, and inline links.",
-                "Split view on tablets showing photo on left, notes on right for efficient capture.",
-                "Live observation embeds stay linked to original observation data.",
-                "Categories converted to tags inside notes for flexible organization.",
-                "Inline image annotation with drawing tools."
-            ),
-            "Reports Redesign (Phase 11)" to listOf(
-                "7 report types grouped by difficulty: Observation, Species, Summary (Beginner); Site Survey, Field Report (Intermediate); Lab Report, Literature Review (Advanced).",
-                "Generate from Project button auto-populates sections from project data.",
-                "Generate Draft button uses AI-powered outlining for report structure.",
-                "Auto-sections: Background, Methods, Results, Evidence Summary, Visual Evidence, Research Journey, Conclusion Draft, Limitations, Next Steps.",
-                "Visual evidence gallery (photos, charts, maps, tables, timelines) auto-inserted from project.",
-                "Multiple exports: PDF, DOCX-compatible HTML, Markdown, share link, presentation outline/slides.",
-                "Knowledge extraction: highlight text to create note, quote, flashcard, question, or project evidence."
-            ),
-            "Library & Sources (Phase 12)" to listOf(
-                "Native research reading workspace with PDF viewer, page thumbnails, navigation, search, bookmarks.",
-                "Annotation tools: highlights, underline, strike-through, drawing/handwriting, comments on selection.",
-                "Knowledge extraction menu extracts highlights as notes, quotes, flashcards, questions, or project evidence.",
-                "8 source types: PDF, Image, Audio, Video, Document, Spreadsheet, Presentation, Web Link.",
-                "Source metadata panel shows publisher, DOI, journal, credibility score, citation style.",
-                "Backlinks tracking shows where source is referenced (notes, projects, hypotheses, flashcards, reports).",
-                "OCR for image/page photos; DOI/ISBN metadata lookup; Cornell notes templates.",
-                "Highlights collection shows all annotations with search and tag filtering."
-            ),
-            "Weather & Location (Phase 1 Refinement & Beyond)" to listOf(
-                "Weather database screen displays offline weather records with statistics (avg temp, range, humidity, wind).",
-                "Weather location display shows specific location or 'multiple locations' for multi-site research.",
-                "Auto-weather toggle in settings automatically captures weather for every observation.",
-                "GPS fetch button in observations, projects, and research sessions.",
-                "Weather data persists correctly in observation details when captured during research sessions.",
-                "Open-Meteo free API used for weather when no custom API key configured."
-            ),
-            "Insights Dashboard Fixes (Phase 1)" to listOf(
-                "Calendar heatmap 'Swipe or use arrows' helper text removed for cleaner UI.",
-                "Duplicate calendar day information display removed.",
-                "Research metrics grid restructured from 3×3 to 2×2 layout for visual balance.",
-                "'Data' button in home screen now navigates to Weather Database.",
-                "Weather card shows location information instead of generic API text."
-            ),
-            "Home Screen Redesign (Phase 2)" to listOf(
-                "Recent Captures card displays latest 3 observations with category, location, and time.",
-                "Clickable observations open detail views for quick review.",
-                "Data Tools card shows Count, Measure, Weather, Species tracking options.",
-                "Live research session CTA shows active timer (e.g., 'Research Session A • 05:30').",
-                "Button changes to 'Continue' when session is active with tertiaryContainer highlighting."
-            )
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "0.9.0-field-research-dashboard",
-        date = "2026-06-13",
-        title = "Research Dashboard & Interactive Data Tools",
-        importance = "Major",
-        tags = listOf("Dashboard", "Charts", "Data Table", "Analytics", "Insights"),
-        sections = listOf(
-            "Research Dashboard" to listOf(
-                "Insights screen completely redesigned into a 9-section Research Dashboard with profile card, performance metrics, time-series analytics, category/tag analysis, knowledge graph timeline, research health score, weather correlation, achievements, and data records table.",
-                "New calendar heatmap shows daily observation activity across 12 months (GitHub-style contribution grid).",
-                "New radar/spider chart compares observation categories across multiple dimensions.",
-                "New tag co-occurrence matrix reveals which tags appear together most often.",
-                "New activity-by-hour and day-of-week charts show when you observe most.",
-                "New moving average chart with 7-day rolling overlay on daily counts.",
-                "New weather correlation scatter plot with trend line (requires GPS + weather on capture).",
-                "New data quality meter scores research health across 5 dimensions (evidence, questions, hypotheses, tags, GPS).",
-                "New network graph timeline visualizes how your knowledge graph evolved over time with an interactive slider.",
-                "15 achievements with progress tracking, tiered unlocks, and snackbar celebration."
-            ),
-            "Interactive Data Table" to listOf(
-                "New FieldDataTable composable with sortable columns, search across all fields, column-specific filters, numerical aggregates (count/sum/avg), pivot table view, CSV export, and row selection.",
-                "Data records now display in a spreadsheet-style table within the Research Dashboard."
-            ),
-            "Extended Chart Library" to listOf(
-                "8 new Canvas-based chart composables: CalendarHeatmap, RadarChart, TagCoOccurrenceMatrix, ActivityByHourChart, DayOfWeekChart, MovingAverageChart, WeatherCorrelationChart, DataQualityMeter.",
-                "All charts are fully offline, zero external dependencies, and built entirely with Compose Canvas."
-            ),
-            "Observation Improvements" to listOf("Observations now support structured category-specific fields (JSON), live stopwatch tracking, manual duration override, change timing markers, and context presets.", "Field mode buttons allow one-tap observation per category with undo support.")
-        )
-    ),
-    FieldMindChangelogEntry(
-        version = "0.8.0-field-redesign",
-        date = "2026-06-13",
-        title = "Immersive research workspace foundation",
-        importance = "Major",
-        tags = listOf("Camera", "Observations", "Projects", "Migration"),
-        sections = listOf(
-            "Capture" to listOf("Camera V2 now opens as an immersive full-screen surface.", "Quick Snap can attach GPS and weather metadata when permissions and settings allow it."),
-            "Research records" to listOf("Observations gained stopwatch, manual duration, change timing, and structured category fields.", "Projects, reports, and data records gained metadata for connections, attachments, templates, and chart preferences."),
-            "Data safety" to listOf("The FieldMind database now uses an explicit Room migration instead of destructive migration for the new schema."),
-            "Navigation" to listOf("Bottom navigation icons are larger and use a subtle spring motion for a more tactile feel.")
-        )
+        ),
     )
-)
 
 @Composable
 fun FieldMindChangelogScreen(onBack: () -> Unit) {
