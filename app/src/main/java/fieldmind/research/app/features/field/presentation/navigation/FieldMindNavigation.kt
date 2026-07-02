@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -631,10 +632,10 @@ private fun LiquidNavRow(
                             indication = null,
                             onClick = {
                                 isPressed = true
-                                // Spring bounce: snap to 1.15, spring back to 1.0
+                                // Spring bounce: snap to 1.08, spring back to 1.0
                                 scope.launch {
-                                    tapBounce.snapTo(1.15f)
-                                    tapBounce.animateTo(1f, spring(dampingRatio = 0.4f, stiffness = 600f))
+                                    tapBounce.snapTo(1.08f)
+                                    tapBounce.animateTo(1f, spring(dampingRatio = 0.65f, stiffness = 300f))
                                 }
                                 onTabClick(screen)
                             }
@@ -670,7 +671,8 @@ private fun LiquidNavRow(
                             MaterialTheme.colorScheme.primary
                         else
                             MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
-                        maxLines = 1
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
 
@@ -722,7 +724,8 @@ private fun RailNavTabItem(
             style = MaterialTheme.typography.labelSmall,
             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
             color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-            maxLines = 1
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
