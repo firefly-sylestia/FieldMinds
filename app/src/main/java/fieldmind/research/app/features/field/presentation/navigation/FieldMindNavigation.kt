@@ -962,13 +962,11 @@ private fun FieldMindNavHost(
         } else null
     }
 
-    // ── Read animation config from settings and provide via CompositionLocal ──
-    // Uses derivedStateOf so all 8 animation state flows are reactively tracked.
-    val animConfig by remember {
-        derivedStateOf {
-            viewModel.fieldSettings.currentAnimationConfig()
-        }
-    }
+    // ── Read reactive animation config from settings and provide via CompositionLocal ──
+    // Uses the combined animationConfig StateFlow which re-emits whenever any
+    // animation parameter changes (set via animation tuning sliders).
+    // collectAsState() ensures the CompositionLocal reactively updates.
+    val animConfig by viewModel.fieldSettings.animationConfig.collectAsState(AnimationConfig.DEFAULT)
 
     SharedTransitionLayout(modifier = modifier) {
         val composableScope = this

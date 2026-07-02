@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -654,84 +655,86 @@ fun SwipeBackHost(
                     clip = true
                 }
                 .then(
-                    if (!reduceMotion && !isImeVisible) {
-                        Modifier.pointerInput(Unit) {
-                            detectDragGestures(
-                                onDragStart = { startPos ->
-                                    // Skip manual drag if PredictiveBackHandler is already active
-                                    // to prevent competing animation drivers.
-                                    if (startPos.x <= FieldMindMotion.swipeEdgeWidthDp) {
-                                        activeDirection = SwipeDirection.Horizontal
-                                    } else if (startPos.y <= FieldMindMotion.swipeEdgeHeightDp) {
-                                        activeDirection = SwipeDirection.Vertical
-                                    }
-                                },
-                                onDrag = { change, dragAmount ->
-                                    // Safety net: if PredictiveBackHandler became active after
-                                    // onDragStart, skip to prevent competing animation drivers.
-                                    change.consume()
-                                    when (activeDirection) {
-                                        SwipeDirection.Horizontal -> {
-                                            val newX = (animX.value + dragAmount.x).coerceAtLeast(0f)
-                                            scope.launch { animX.snapTo(newX) }
+                    if (!reduceMotion) {
+                        // Use isImeVisible as key so the gesture handler restarts when
+                        // keyboard state changes, preventing stale handler/removal cycles.
+                        Modifier.pointerInput(isImeVisible) {
+                            if (isImeVisible) return@pointerInput
+                            awaitEachGesture {
+                                val down = awaitFirstDown(requireUnconsumed = false)
+                                val isAtLeftEdge = down.position.x <= FieldMindMotion.swipeEdgeWidthDp
+                                val isAtTopEdge = down.position.y <= FieldMindMotion.swipeEdgeHeightDp
+
+                                // NOT near any edge — release the gesture and let children
+                                // (e.g. LazyColumn in settings) process it normally.
+                                if (!isAtLeftEdge && !isAtTopEdge) {
+                                    return@awaitEachGesture
+                                }
+
+                                // Near edge — consume the down event and handle drag
+                                down.consume()
+                                activeDirection = if (isAtLeftEdge) SwipeDirection.Horizontal else SwipeDirection.Vertical
+
+                                try {
+                                    var pointerUp = false
+                                    do {
+                                        val event = awaitPointerEvent()
+                                        val change = event.changes.firstOrNull() ?: break
+                                        if (change.isConsumed || !change.pressed) {
+                                            pointerUp = !change.pressed
+                                            break
                                         }
-                                        SwipeDirection.Vertical -> {
-                                            val newY = (animY.value + dragAmount.y).coerceAtLeast(0f)
-                                            scope.launch { animY.snapTo(newY) }
-                                        }
-                                        null -> {
-                                            val dx = dragAmount.x
-                                            val dy = dragAmount.y
-                                            if (abs(dx) > abs(dy) && dx > 0) {
-                                                activeDirection = SwipeDirection.Horizontal
-                                                scope.launch { animX.snapTo(dx.coerceAtLeast(0f)) }
-                                            } else if (abs(dy) > abs(dx) && dy > 0) {
-                                                activeDirection = SwipeDirection.Vertical
-                                                scope.launch { animY.snapTo(dy.coerceAtLeast(0f)) }
+                                        change.consume()
+                                        val delta = change.positionChange()
+                                        when (activeDirection) {
+                                            SwipeDirection.Horizontal -> {
+                                                val newX = (animX.value + delta.x).coerceAtLeast(0f)
+                                                scope.launch { animX.snapTo(newX) }
                                             }
+                                            SwipeDirection.Vertical -> {
+                                                val newY = (animY.value + delta.y).coerceAtLeast(0f)
+                                                scope.launch { animY.snapTo(newY) }
+                                            }
+                                            null -> {}
                                         }
-                                    }
-                                },
-                                onDragEnd = {
-                                    // Safety net: if PredictiveBackHandler became active,
-                                    // don't navigate — PredictiveBackHandler already handles it.
-                                    val maxVal = when (activeDirection) {
+                                    } while (true)
+
+                                    // ── onDragEnd equivalent ──
+                                    // Capture direction BEFORE clearing it
+                                    val endDirection = activeDirection
+                                    activeDirection = null
+                                    val maxVal = when (endDirection) {
                                         SwipeDirection.Horizontal -> contentWidth
                                         SwipeDirection.Vertical -> contentHeight
                                         null -> Float.MAX_VALUE
                                     }
-                                    val currentVal = when (activeDirection) {
+                                    val currentVal = when (endDirection) {
                                         SwipeDirection.Horizontal -> animX.value
                                         SwipeDirection.Vertical -> animY.value
                                         null -> 0f
                                     }
-                                    if (currentVal > maxVal * animConfig.swipeThreshold) {
+                                    if (pointerUp && currentVal > maxVal * animConfig.swipeThreshold) {
                                         haptics.confirm()
-                                        activeDirection = null
-                                        // Snap offset to 0 immediately before navigating.
-                                        // snapTo is a suspend function — must be called inside scope.launch.
                                         scope.launch {
                                             animX.snapTo(0f)
                                             animY.snapTo(0f)
                                             onBack()
                                         }
                                     } else {
-                                        // Smooth spring back to 0
-                                        activeDirection = null
                                         scope.launch {
                                             animX.animateTo(0f, animConfig.swipeBackSpring())
                                             animY.animateTo(0f, animConfig.swipeBackSpring())
                                         }
                                     }
-                                },
-                                onDragCancel = {
+                                } catch (_: CancellationException) {
+                                    // ── onDragCancel equivalent ──
                                     activeDirection = null
                                     scope.launch {
                                         animX.animateTo(0f, animConfig.swipeBackSpring())
                                         animY.animateTo(0f, animConfig.swipeBackSpring())
                                     }
                                 }
-                            )
+                            }
                         }
                     } else {
                         Modifier

@@ -305,6 +305,31 @@ class FieldMindSettings private constructor(context: Context) {
     private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, 180f))
     val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
+    // ── Reactive combined AnimationConfig flow (reacts to any parameter change) ──
+    private val _animationConfig = MutableStateFlow(
+        AnimationConfig(
+            entranceDampingRatio = _animEntranceDamping.value,
+            entranceStiffness = _animEntranceStiffness.value,
+            swipeBackDampingRatio = _animSwipeBackDamping.value,
+            swipeBackStiffness = _animSwipeBackStiffness.value,
+            swipeThreshold = _animSwipeThreshold.value,
+            swipeScaleFactor = _animSwipeScaleFactor.value,
+            tabEntranceDampingRatio = _animTabEntranceDamping.value,
+            tabEntranceStiffness = _animTabEntranceStiffness.value
+        )
+    )
+    /**
+     * Reactive [StateFlow] of the current [AnimationConfig], re-emitted whenever
+     * any individual animation parameter changes. Use [collectAsState] in Compose
+     * so the UI reactively updates when the user tweaks animation sliders.
+     */
+    val animationConfig: StateFlow<AnimationConfig> = _animationConfig.asStateFlow()
+
+    /** Refresh [animationConfig] from current parameter values. */
+    private fun refreshAnimationConfig() {
+        _animationConfig.value = currentAnimationConfig()
+    }
+
     // ── Species identification settings ──
     private val _speciesIdApiKey = MutableStateFlow(prefs.getString(KEY_SPECIES_ID_API_KEY, "") ?: "")
     val speciesIdApiKey: StateFlow<String> = _speciesIdApiKey.asStateFlow()
@@ -651,15 +676,15 @@ class FieldMindSettings private constructor(context: Context) {
         )
     }
 
-    // ── Animation tuning setters ──
-    fun setAnimEntranceDamping(value: Float) = edit(KEY_ANIM_ENTRANCE_DAMPING, value) { _animEntranceDamping.value = value }
-    fun setAnimEntranceStiffness(value: Float) = edit(KEY_ANIM_ENTRANCE_STIFFNESS, value) { _animEntranceStiffness.value = value }
-    fun setAnimSwipeBackDamping(value: Float) = edit(KEY_ANIM_SWIPE_BACK_DAMPING, value) { _animSwipeBackDamping.value = value }
-    fun setAnimSwipeBackStiffness(value: Float) = edit(KEY_ANIM_SWIPE_BACK_STIFFNESS, value) { _animSwipeBackStiffness.value = value }
-    fun setAnimSwipeThreshold(value: Float) = edit(KEY_ANIM_SWIPE_THRESHOLD, value) { _animSwipeThreshold.value = value }
-    fun setAnimSwipeScaleFactor(value: Float) = edit(KEY_ANIM_SWIPE_SCALE, value) { _animSwipeScaleFactor.value = value }
-    fun setAnimTabEntranceDamping(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_DAMPING, value) { _animTabEntranceDamping.value = value }
-    fun setAnimTabEntranceStiffness(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, value) { _animTabEntranceStiffness.value = value }
+    // ── Animation tuning setters (each also refreshes the combined animationConfig) ──
+    fun setAnimEntranceDamping(value: Float) = edit(KEY_ANIM_ENTRANCE_DAMPING, value) { _animEntranceDamping.value = value; refreshAnimationConfig() }
+    fun setAnimEntranceStiffness(value: Float) = edit(KEY_ANIM_ENTRANCE_STIFFNESS, value) { _animEntranceStiffness.value = value; refreshAnimationConfig() }
+    fun setAnimSwipeBackDamping(value: Float) = edit(KEY_ANIM_SWIPE_BACK_DAMPING, value) { _animSwipeBackDamping.value = value; refreshAnimationConfig() }
+    fun setAnimSwipeBackStiffness(value: Float) = edit(KEY_ANIM_SWIPE_BACK_STIFFNESS, value) { _animSwipeBackStiffness.value = value; refreshAnimationConfig() }
+    fun setAnimSwipeThreshold(value: Float) = edit(KEY_ANIM_SWIPE_THRESHOLD, value) { _animSwipeThreshold.value = value; refreshAnimationConfig() }
+    fun setAnimSwipeScaleFactor(value: Float) = edit(KEY_ANIM_SWIPE_SCALE, value) { _animSwipeScaleFactor.value = value; refreshAnimationConfig() }
+    fun setAnimTabEntranceDamping(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_DAMPING, value) { _animTabEntranceDamping.value = value; refreshAnimationConfig() }
+    fun setAnimTabEntranceStiffness(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, value) { _animTabEntranceStiffness.value = value; refreshAnimationConfig() }
 
     fun verifyAppPin(input: String): Boolean {
         val hash = _appPinHash.value
