@@ -1798,6 +1798,7 @@ private fun QuickActionChip(
 @Composable
 private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<FlashcardEntity>, onNavigate: (FieldMindScreen) -> Unit) {
     val current = sources.firstOrNull { it.readingStatus != "Read" } ?: sources.firstOrNull()
+    val context = LocalContext.current
     val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
@@ -2014,6 +2015,7 @@ private fun ResearchSessionCtaCard(
     }
     
     val colors = FieldMindTheme.colors
+    val context = LocalContext.current
     val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
@@ -2089,6 +2091,7 @@ private fun SessionObservationsCard(
     var expandedSessions by remember { mutableStateOf<Set<String>>(emptySet()) }
     val totalSessionObs = sessionObs.values.sumOf { it.size }
 
+    val context = LocalContext.current
     val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
@@ -2527,6 +2530,7 @@ private fun computeFieldworkNudge(weather: WeatherSnapshot): String {
 private fun RecentCapturesCard(observations: List<ObservationEntity>, onOpenDetail: (String, Long) -> Unit) {
     if (observations.isEmpty()) return
     val recentObs = observations.sortedByDescending { it.timestamp }.take(3)
+    val context = LocalContext.current
     val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
@@ -2660,6 +2664,7 @@ private fun DataToolMiniCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val context = LocalContext.current
     val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }

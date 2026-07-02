@@ -2178,6 +2178,7 @@ internal fun SettingsSubPage(title: String, icon: MaterialSymbolIcon, onBack: ()
 
 @Composable
 internal fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
+    val context = LocalContext.current
     val gradientSettings = remember {  FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
