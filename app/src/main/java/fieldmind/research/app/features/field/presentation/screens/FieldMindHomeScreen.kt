@@ -259,7 +259,7 @@ fun SharedTransitionScope.HomeScreen(
     }
 
     val homeScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.SurfaceSubtle)
+    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground)
     Box(Modifier.fillMaxSize().statusBarsPadding().background(brush = screenBgGradient)) {            LazyColumn(state = homeScrollState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 0.dp, 20.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             // ── Merged Header + Goal ──
             item {

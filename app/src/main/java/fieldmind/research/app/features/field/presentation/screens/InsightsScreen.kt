@@ -235,7 +235,7 @@ fun InsightsScreen(
         }
     }
 
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.SurfaceSubtle)
+    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground)
     Scaffold(
         containerColor = Color.Transparent
     ) { padding ->

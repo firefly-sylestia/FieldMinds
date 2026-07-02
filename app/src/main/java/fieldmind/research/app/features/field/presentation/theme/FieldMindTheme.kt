@@ -351,6 +351,71 @@ private val DarkFieldMindColors = FieldMindColors(
 val LocalFieldMindColors = staticCompositionLocalOf { LightFieldMindColors }
 
 /**
+ * Derives harmonious [FieldMindColors] from a Material [ColorScheme] by blending
+ * the scheme's primary color with fixed hue targets for each entity type.
+ * This ensures entity accent colors automatically adapt to any color scheme.
+ */
+private fun deriveFieldMindColors(colorScheme: ColorScheme, isDark: Boolean): FieldMindColors {
+    fun blend(a: Color, b: Color, t: Float): Color = Color(
+        (a.red * (1 - t) + b.red * t).coerceIn(0f, 1f),
+        (a.green * (1 - t) + b.green * t).coerceIn(0f, 1f),
+        (a.blue * (1 - t) + b.blue * t).coerceIn(0f, 1f),
+        (a.alpha * (1 - t) + b.alpha * t).coerceIn(0f, 1f)
+    )
+
+    val p = colorScheme.primary
+
+    // Fixed hue targets — each entity type maps to a distinct hue
+    val green = Color(0xFF4CAF50)
+    val blue = Color(0xFF2196F3)
+    val amber = Color(0xFFFFC107)
+    val teal = Color(0xFF009688)
+    val purple = Color(0xFF9C27B0)
+    val pink = Color(0xFFE91E63)
+    val brown = Color(0xFF795548)
+    val cyan = Color(0xFF00BCD4)
+    val orange = Color(0xFFFF9800)
+    val red = Color(0xFFF44336)
+
+    return FieldMindColors(
+        isDark = isDark,
+        observation = blend(p, green, 0.55f),
+        question = blend(p, blue, 0.55f),
+        hypothesis = blend(p, amber, 0.55f),
+        project = blend(p, teal, 0.5f),
+        source = blend(p, purple, 0.5f),
+        note = blend(p, pink, 0.5f),
+        task = blend(p, teal, 0.35f),
+        folder = blend(p, brown, 0.5f),
+        species = blend(p, green, 0.65f),
+        data = blend(p, cyan, 0.55f),
+        report = blend(p, orange, 0.55f),
+        flashcard = blend(p, pink, 0.65f),
+        // State colors derived from scheme
+        positive = blend(p, green, 0.4f),
+        warning = blend(p, amber, 0.5f),
+        info = blend(p, blue, 0.5f),
+        // Confidence colors
+        confidenceSure = blend(p, green, 0.3f),
+        confidenceGuess = blend(p, amber, 0.5f),
+        confidenceVerify = blend(p, red, 0.4f),
+        // Categorical palette — 10 distinct hues
+        categorical = listOf(
+            blend(p, green, 0.55f),
+            blend(p, blue, 0.55f),
+            blend(p, amber, 0.55f),
+            blend(p, purple, 0.5f),
+            blend(p, pink, 0.5f),
+            blend(p, teal, 0.4f),
+            blend(p, cyan, 0.5f),
+            blend(p, brown, 0.5f),
+            blend(p, orange, 0.55f),
+            blend(p, red, 0.4f),
+        )
+    )
+}
+
+/**
  * Accessor object so callers can read semantic colors via `FieldMindTheme.colors`.
  */
 object FieldMindTheme {
@@ -463,9 +528,14 @@ fun FieldMindTheme(
         else -> BrandLight
     }
     val semantic = when {
-            customColorScheme == "Pastel" && !dynamicColor ->
+            // Hand-tuned pastel entity colors for Pastel scheme without dynamic color
+            !dynamicColor && customColorScheme == "Pastel" ->
                 if (darkTheme) PastelDarkFieldMindColors else PastelLightFieldMindColors
-            else -> (if (darkTheme) DarkFieldMindColors else LightFieldMindColors)
+            // Hand-tuned default entity colors for Default scheme without dynamic color
+            !dynamicColor && customColorScheme == "Default" ->
+                if (darkTheme) DarkFieldMindColors else LightFieldMindColors
+            // For custom color schemes or dynamic colors, derive from the active scheme
+            else -> deriveFieldMindColors(colorScheme, darkTheme)
         }
         .applyOverrides(entityColorOverrides)
 

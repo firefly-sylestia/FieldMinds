@@ -165,8 +165,8 @@ object FieldMindMotion {
     )
 
     val expressiveFloat = spring<Float>(
-        dampingRatio = 0.94f,
-        stiffness = 180f
+        dampingRatio = 0.85f,
+        stiffness = 350f
     )
 
     val expressiveSnap = spring<Float>(
@@ -234,9 +234,9 @@ object FieldMindMotion {
 
     // -- Stagger & Delay Tokens --
 
-    const val staggerItemDelayMs = 50
-    const val staggerInitialDelayMs = 80
-    const val staggerMaxDurationMs = 500
+    const val staggerItemDelayMs = 25
+    const val staggerInitialDelayMs = 40
+    const val staggerMaxDurationMs = 300
 
     // -- Shape Morphing --
 

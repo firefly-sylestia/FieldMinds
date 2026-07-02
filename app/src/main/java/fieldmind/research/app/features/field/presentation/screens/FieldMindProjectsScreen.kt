@@ -179,7 +179,7 @@ fun ProjectsScreen(
         }
     }
 
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.SurfaceSubtle)
+    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground)
     Box(Modifier.fillMaxSize().background(brush = screenBgGradient)) {
     LazyColumn(
         modifier = Modifier.fillMaxSize().statusBarsPadding(),

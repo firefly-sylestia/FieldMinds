@@ -179,6 +179,8 @@ object CuteGradients {
     enum class Style(val displayName: String) {
         /** surfaceContainerLow → surfaceContainerHigh — subtle lift */
         SurfaceSubtle("Surface Subtle"),
+        /** surface → primaryContainer hint → surface — scheme-aware vertical background wash */
+        ScreenBackground("Screen Background"),
         /** primaryContainer → tertiaryContainer — soft, tonal */
         PrimaryTonal("Primary Tonal"),
         /** secondaryContainer → primaryContainer → tertiaryContainer — warm blush trio */
@@ -214,6 +216,14 @@ object CuteGradients {
                 colors = listOf(
                     scheme.surfaceContainerLow,
                     scheme.surfaceContainerHigh
+                )
+            )
+            Style.ScreenBackground -> Brush.verticalGradient(
+                colors = listOf(
+                    scheme.surface,
+                    scheme.primaryContainer.copy(alpha = 0.08f),
+                    scheme.tertiaryContainer.copy(alpha = 0.04f),
+                    scheme.surface
                 )
             )
             Style.PrimaryTonal -> Brush.horizontalGradient(
