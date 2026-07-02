@@ -678,6 +678,7 @@ fun SwipeBackHost(
 
                                 try {
                                     var pointerUp = false
+                                    var lastPosition = down.position
                                     do {
                                         val event = awaitPointerEvent()
                                         val change = event.changes.firstOrNull() ?: break
@@ -686,14 +687,16 @@ fun SwipeBackHost(
                                             break
                                         }
                                         change.consume()
-                                        val delta = change.positionChange()
+                                        val deltaX = change.position.x - lastPosition.x
+                                        val deltaY = change.position.y - lastPosition.y
+                                        lastPosition = change.position
                                         when (activeDirection) {
                                             SwipeDirection.Horizontal -> {
-                                                val newX = (animX.value + delta.x).coerceAtLeast(0f)
+                                                val newX = (animX.value + deltaX).coerceAtLeast(0f)
                                                 scope.launch { animX.snapTo(newX) }
                                             }
                                             SwipeDirection.Vertical -> {
-                                                val newY = (animY.value + delta.y).coerceAtLeast(0f)
+                                                val newY = (animY.value + deltaY).coerceAtLeast(0f)
                                                 scope.launch { animY.snapTo(newY) }
                                             }
                                             null -> {}
