@@ -211,7 +211,8 @@ fun FieldMindSettingsScreen(
 
 @Composable
 private fun SettingsNavCard(title: String, subtitle: String, icon: MaterialSymbolIcon, color: androidx.compose.ui.graphics.Color, onClick: () -> Unit) {
-    val gradientSettings = remember { FieldMindSettings.getInstance(LocalContext.current) }
+    val context = LocalContext.current
+    val gradientSettings = remember {  FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
     val gradient = CuteGradients.brushFor(gradientStyle)
@@ -2177,7 +2178,7 @@ internal fun SettingsSubPage(title: String, icon: MaterialSymbolIcon, onBack: ()
 
 @Composable
 internal fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
-    val gradientSettings = remember { FieldMindSettings.getInstance(LocalContext.current) }
+    val gradientSettings = remember {  FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
     val gradient = CuteGradients.brushFor(gradientStyle)
