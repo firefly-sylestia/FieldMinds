@@ -60,8 +60,7 @@ import androidx.compose.foundation.layout.ime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
-import androidx.activity.ExperimentalActivityApi
-import androidx.activity.compose.PredictiveBackHandler
+import androidx.activity.compose.BackHandler
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -493,7 +492,6 @@ private fun PeekPreviewContent(
     accentColor: Color
 ) = Unit
 
-@OptIn(ExperimentalActivityApi::class)
 @Composable
 fun SwipeBackHost(
     onBack: () -> Unit,
@@ -515,45 +513,19 @@ fun SwipeBackHost(
     val imeBottom = with(density) { WindowInsets.ime.getBottom(density) }
     val isImeVisible = imeBottom > 0
 
-    // ── Flag to prevent detectDragGestures from competing with PredictiveBackHandler ──
-    var isPredictiveBackActive by remember { mutableStateOf(false) }
-
-    // Predictive back gesture (Android 14+) — drives peek animation from system back gesture
-    val animConfig = LocalAnimationConfig.current
-    PredictiveBackHandler(enabled = !reduceMotion && !isImeVisible) { progressFlow ->
-        isPredictiveBackActive = true
-        try {
-            // Inside PredictiveBackHandler coroutine — snapTo is suspend, call directly
-            progressFlow.collect { backEvent ->
-                animX.snapTo((contentWidth * backEvent.progress).coerceAtLeast(0f))
-            }
-            // Flow completed → gesture committed
-            isPredictiveBackActive = false
-            // Reset offset before navigating to prevent blank/offset screen
-            // during the pop exit transition.
-            animX.snapTo(0f)
-            animY.snapTo(0f)
-            // Navigate immediately for both gesture swipes AND hardware button presses.
-            // Note: detectDragGestures.onDragEnd does NOT fire for system back gestures,
-            // so we must navigate here directly rather than deferring to onDragEnd.
-            haptics.confirm()
-            onBack()
-        } catch (_: CancellationException) {
-            // Gesture cancelled — smooth spring animation back to 0
-            isPredictiveBackActive = false
-            scope.launch {
-                animX.animateTo(
-                    0f,
-                    animationSpec = animConfig.cancelSpring()
-                )
-            }
-        }
+    // ── BackHandler for hardware button press (innermost wins priority) ──
+    // This replaces PredictiveBackHandler which caused double-fire issues
+    // during navigation transitions when two SwipeBackHost instances
+    // (outgoing and incoming screen) were simultaneously active.
+    // The manual detectDragGestures below handles swipe gesture animations.
+    BackHandler(enabled = !isImeVisible) {
+        onBack()
     }
 
     // ── Unified progress computation ──
-    // PredictiveBackHandler drives animX but leaves activeDirection=null.
-    // Manual drag sets activeDirection. We compute progress from whichever
-    // source has positive offset.
+    // Only manual drag drives animX (PredictiveBackHandler was removed to
+    // prevent nested SwipeBackHost conflicts during nav transitions).
+    val animConfig = LocalAnimationConfig.current
     val horizontalProgress = (abs(animX.value) / contentWidth).coerceIn(0f, 1f)
     val verticalProgress = (abs(animY.value) / contentHeight).coerceIn(0f, 1f)
     val (progress, isHorizontalPeek) = when (activeDirection) {
@@ -688,7 +660,6 @@ fun SwipeBackHost(
                                 onDragStart = { startPos ->
                                     // Skip manual drag if PredictiveBackHandler is already active
                                     // to prevent competing animation drivers.
-                                    if (isPredictiveBackActive) return@detectDragGestures
                                     if (startPos.x <= FieldMindMotion.swipeEdgeWidthDp) {
                                         activeDirection = SwipeDirection.Horizontal
                                     } else if (startPos.y <= FieldMindMotion.swipeEdgeHeightDp) {
@@ -698,7 +669,6 @@ fun SwipeBackHost(
                                 onDrag = { change, dragAmount ->
                                     // Safety net: if PredictiveBackHandler became active after
                                     // onDragStart, skip to prevent competing animation drivers.
-                                    if (isPredictiveBackActive) return@detectDragGestures
                                     change.consume()
                                     when (activeDirection) {
                                         SwipeDirection.Horizontal -> {
@@ -725,14 +695,6 @@ fun SwipeBackHost(
                                 onDragEnd = {
                                     // Safety net: if PredictiveBackHandler became active,
                                     // don't navigate — PredictiveBackHandler already handles it.
-                                    if (isPredictiveBackActive) {
-                                        activeDirection = null
-                                        scope.launch {
-                                            animX.snapTo(0f)
-                                            animY.snapTo(0f)
-                                        }
-                                        return@detectDragGestures
-                                    }
                                     val maxVal = when (activeDirection) {
                                         SwipeDirection.Horizontal -> contentWidth
                                         SwipeDirection.Vertical -> contentHeight
