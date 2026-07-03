@@ -195,6 +195,12 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
 
     // ── Canvas note editor ──
     data object Canvas : FieldMindScreen("field_canvas/{noteId}", "Canvas", MaterialSymbolIcon("dashboard_customize"))
+
+    // ── New screens: Voice Notes, Media Gallery, Citation Manager, Collaboration ──
+    data object VoiceNotes : FieldMindScreen("field_voice_notes", "Voice Notes", MaterialSymbolIcon("mic"))
+    data object MediaGallery : FieldMindScreen("field_media_gallery", "Media Gallery", MaterialSymbolIcon("photo_library"))
+    data object CitationManager : FieldMindScreen("field_bibliography", "Bibliography", MaterialSymbolIcon("book"))
+    data object Collaboration : FieldMindScreen("field_collaboration", "Collaborate", MaterialSymbolIcon("share"))
 }
 
 private val bottomTabs = listOf(
@@ -1189,6 +1195,10 @@ private fun FieldMindNavHost(
                 onOpenDetail = openDetail,
                 onOpenExport = { navController.navigateToDestination(FieldMindScreen.ExportStudio.route) }
             ) } }
+            composable(FieldMindScreen.VoiceNotes.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { VoiceNotesScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
+            composable(FieldMindScreen.MediaGallery.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { MediaGalleryScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenDetail = openDetail) } }
+            composable(FieldMindScreen.CitationManager.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { CitationManagerScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenDetail = openDetail) } }
+            composable(FieldMindScreen.Collaboration.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { CollaborationScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenExport = { navController.navigateToDestination(FieldMindScreen.ExportStudio.route) }) } }
             composable("field_detail/{kind}/{id}") { entry ->
                 val kind = entry.arguments?.getString("kind") ?: "observation"
                 val id = entry.arguments?.getString("id")?.toLongOrNull() ?: 0L
@@ -1694,6 +1704,10 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         route == FieldMindScreen.SiteLogTool.route -> SiteLogToolScreen(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.ComparisonTable.route -> ComparisonTableScreen(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.TimerTool.route -> TimerToolScreen(onBack = noop)
+        route == FieldMindScreen.VoiceNotes.route -> VoiceNotesScreen(viewModel = viewModel, onBack = noop)
+        route == FieldMindScreen.MediaGallery.route -> MediaGalleryScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
+        route == FieldMindScreen.CitationManager.route -> CitationManagerScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
+        route == FieldMindScreen.Collaboration.route -> CollaborationScreen(viewModel = viewModel, onBack = noop, onOpenExport = noop)
         route == FieldMindScreen.FieldLog.route -> FieldLogScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail, onOpenExport = noop)
 
         // ── Creation screens ──
