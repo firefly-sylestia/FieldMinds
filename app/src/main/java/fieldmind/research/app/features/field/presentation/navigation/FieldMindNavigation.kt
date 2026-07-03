@@ -1354,15 +1354,15 @@ private fun AllTabScreen(
     val isFirstTab = activeTabIndex == 0
 
     // ── Double-tap to exit from Home tab ──
-    var backPressTime by remember { mutableStateOf(0L) }
+    val backPressTime = remember { mutableStateOf(0L) }
     val doubleTapInterval = 2000L
     BackHandler(enabled = isFirstTab) {
         val now = System.currentTimeMillis()
-        if (now - backPressTime < doubleTapInterval) {
+        if (now - backPressTime.value < doubleTapInterval) {
             val activity = LocalContext.current as? android.app.Activity
             activity?.moveTaskToBack(true)
         } else {
-            backPressTime = now
+            backPressTime.value = now
             val context = LocalContext.current
             android.widget.Toast.makeText(context, "Press back again to exit", android.widget.Toast.LENGTH_SHORT).show()
         }
