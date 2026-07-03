@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import androidx.compose.ui.unit.IntOffset
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalInspectionMode
 import kotlin.math.cos
 import kotlin.math.sin
@@ -42,6 +44,8 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+
+import fieldmind.research.app.R
 
 /**
  * Time-of-day phase for granular color palettes.
@@ -98,13 +102,33 @@ fun AnimatedWeatherScene(
         return
     }
 
+    // Load moon phase vector texture as ImageBitmap for moon body rendering
+    val moonTextureBitmap = remember {
+        val context = androidx.compose.ui.platform.LocalContext.current
+        val drawable = androidx.core.content.ContextCompat.getDrawable(context, R.drawable.moon_phase_texture)
+        if (drawable != null) {
+            val w = drawable.intrinsicWidth.coerceAtLeast(1)
+            val h = drawable.intrinsicHeight.coerceAtLeast(1)
+            val bitmap = android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ARGB_8888)
+            val canvas = android.graphics.Canvas(bitmap)
+            drawable.setBounds(0, 0, w, h)
+            drawable.draw(canvas)
+            bitmap.asImageBitmap()
+        } else null
+    }
+
+    // Apply texture to palette
+    val texturedPalette = if (moonTextureBitmap != null) {
+        palette.copy(moonTextureBitmap = moonTextureBitmap)
+    } else palette
+
     Box(modifier = modifier.fillMaxSize()) {
         // Background gradient — rich multi-stop with atmospheric warm band near horizon
         Canvas(modifier = Modifier.fillMaxSize()) {
             val bgColors = when {
-                palette.background.size >= 3 -> palette.background
-                palette.background.size == 2 -> listOf(palette.background[0], palette.tertiary, palette.background[1])
-                else -> listOf(palette.primary, palette.tertiary, palette.secondary)
+                texturedPalette.background.size >= 3 -> texturedPalette.background
+                texturedPalette.background.size == 2 -> listOf(texturedPalette.background[0], texturedPalette.tertiary, texturedPalette.background[1])
+                else -> listOf(texturedPalette.primary, texturedPalette.tertiary, texturedPalette.secondary)
             }
             drawRect(
                 brush = Brush.verticalGradient(
@@ -117,7 +141,7 @@ fun AnimatedWeatherScene(
             // Subtle accent glow near horizon for added depth
             drawRect(
                 brush = Brush.radialGradient(
-                    colors = listOf(palette.accent.copy(alpha = 0.08f), Color.Transparent),
+                    colors = listOf(texturedPalette.accent.copy(alpha = 0.08f), Color.Transparent),
                     center = Offset(size.width * 0.5f, size.height * 0.75f),
                     radius = size.maxDimension * 0.5f
                 ),
@@ -127,7 +151,7 @@ fun AnimatedWeatherScene(
 
         // Specific weather effects
         // weatherCode -1 = day cloudy, -2 = night sky (used by weather widget for enhanced display)
-        // All scenes use the same animation style regardless of day/night — palette provides the colors
+        // All scenes use the same animation style regardless of day/night — texturedPalette provides the colors
         // Cloudy conditions (code 2-3) now use DayCloudyScene/NightCloudyScene with high cloudIntensity
         // instead of the separate CloudyScene, so the time-of-day background, birds, aurora, ground
         // terrain, and atmospheric effects are preserved with clouds layered on top.
@@ -139,30 +163,30 @@ fun AnimatedWeatherScene(
             weatherCode == -1 || weatherCode == -2 || weatherCode in 0..3
         )
         when {
-            useEveningScene -> EveningScene(palette, compact, timeOfDay, modifier)
+            useEveningScene -> EveningScene(texturedPalette, compact, timeOfDay, modifier)
             weatherCode == -1 || weatherCode in 0..1 -> {
                 if (isDaytime) {
-                    if (showCloudAnimation) DayCloudyScene(palette, compact, timeOfDay, modifier, cloudIntensity = 0.25f)
-                    else ClearSkyScene(palette, timeOfDay, compact, modifier)
+                    if (showCloudAnimation) DayCloudyScene(texturedPalette, compact, timeOfDay, modifier, cloudIntensity = 0.25f)
+                    else ClearSkyScene(texturedPalette, timeOfDay, compact, modifier)
                 } else {
-                    ClearSkyScene(palette, timeOfDay, compact, modifier)
+                    ClearSkyScene(texturedPalette, timeOfDay, compact, modifier)
                 }
             }
             weatherCode == -2 -> {
-                if (showCloudAnimation) NightCloudyScene(palette, compact, timeOfDay, modifier, cloudIntensity = 0.25f)
-                else NightSkyScene(palette, compact, timeOfDay, modifier)
+                if (showCloudAnimation) NightCloudyScene(texturedPalette, compact, timeOfDay, modifier, cloudIntensity = 0.25f)
+                else NightSkyScene(texturedPalette, compact, timeOfDay, modifier)
             }
             weatherCode in 2..3 -> {
                 if (showCloudAnimation) {
-                    if (isDaytime) DayCloudyScene(palette, compact, timeOfDay, modifier, cloudIntensity = 0.85f)
-                    else NightCloudyScene(palette, compact, timeOfDay, modifier, cloudIntensity = 0.85f)
-                } else ClearSkyScene(palette, timeOfDay, compact, modifier)
+                    if (isDaytime) DayCloudyScene(texturedPalette, compact, timeOfDay, modifier, cloudIntensity = 0.85f)
+                    else NightCloudyScene(texturedPalette, compact, timeOfDay, modifier, cloudIntensity = 0.85f)
+                } else ClearSkyScene(texturedPalette, timeOfDay, compact, modifier)
             }
-            weatherCode in 45..48 -> FogScene(weatherCode, palette, compact, timeOfDay, modifier)
-            weatherCode in 51..67 || weatherCode in 80..82 -> RainScene(weatherCode, palette, compact, timeOfDay, modifier)
-            weatherCode in 71..77 || weatherCode in 85..86 -> SnowScene(weatherCode, palette, compact, timeOfDay, modifier)
-            weatherCode >= 95 -> ThunderstormScene(weatherCode, palette, compact, timeOfDay, modifier)
-            else -> ClearSkyScene(palette, timeOfDay, compact, modifier)
+            weatherCode in 45..48 -> FogScene(weatherCode, texturedPalette, compact, timeOfDay, modifier)
+            weatherCode in 51..67 || weatherCode in 80..82 -> RainScene(weatherCode, texturedPalette, compact, timeOfDay, modifier)
+            weatherCode in 71..77 || weatherCode in 85..86 -> SnowScene(weatherCode, texturedPalette, compact, timeOfDay, modifier)
+            weatherCode >= 95 -> ThunderstormScene(weatherCode, texturedPalette, compact, timeOfDay, modifier)
+            else -> ClearSkyScene(texturedPalette, timeOfDay, compact, modifier)
         }
     }
 }
@@ -279,6 +303,7 @@ data class WeatherPalette(
     val sunFlareColor: Color = Color(0xFFFFAB91),
     val moonColor: Color = Color(0xFFECEFF1),
     val moonGlowColor: Color = Color(0xFFE3F2FD),
+    val moonTextureBitmap: ImageBitmap? = null,
     val cloudBaseColor: Color = Color.White,
     val hazeColor: Color = Color.Transparent,
     val mountainFarColor: Color = Color(0xFF90A8C4),
@@ -2574,7 +2599,7 @@ private fun DrawScope.drawMoon(
     drawCircle(color = Color.White.copy(alpha = 0.01f * moonGlow),
         radius = moonR * 5.0f * gm, center = Offset(cx, cy))
 
-    // Draw moon body with rich mare/crater surface features
+    // Moon body shading: use VectorDrawable texture when available, else solid color
     val litColor = palette.moonColor.copy(alpha = 1f)
     val shadowColor = Color(0xFF0A0A1A).copy(alpha = 0.7f)
 
@@ -2583,7 +2608,8 @@ private fun DrawScope.drawMoon(
         phaseValue = phase, cx = cx, cy = cy, radius = moonR,
         litColor = litColor,
         shadowColor = shadowColor,
-        glowColor = palette.moonGlowColor
+        glowColor = palette.moonGlowColor,
+        moonTextureBitmap = palette.moonTextureBitmap
     )
 
     // Draw mare & crater surface features ON TOP of the illuminated portion
@@ -2736,9 +2762,20 @@ private fun DrawScope.drawMoonPhase(
     litColor: Color,          // illuminated moon color
     shadowColor: Color,       // dark/shadowed portion color
     glowColor: Color,         // subtle inner glow for dark-side detail
+    moonTextureBitmap: ImageBitmap? = null,  // VectorDrawable texture for moon surface (from moon_phase SVG)
 ) {
-    // Draw full lit circle first
-    drawCircle(color = litColor, radius = radius, center = Offset(cx, cy))
+    // Draw full lit circle first (use VectorDrawable texture if available)
+    if (moonTextureBitmap != null) {
+        clipPath(Path().apply { addOval(androidx.compose.ui.geometry.Rect(cx - radius, cy - radius, cx + radius, cy + radius)) }) {
+            drawImage(
+                image = moonTextureBitmap!!,
+                dstOffset = IntOffset((cx - radius).toInt(), (cy - radius).toInt()),
+                dstSize = IntSize((radius * 2).toInt(), (radius * 2).toInt())
+            )
+        }
+    } else {
+        drawCircle(color = litColor, radius = radius, center = Offset(cx, cy))
+    }
 
     // Full moon — no shadow needed
     if (phaseValue in 0.48f..0.52f) return
