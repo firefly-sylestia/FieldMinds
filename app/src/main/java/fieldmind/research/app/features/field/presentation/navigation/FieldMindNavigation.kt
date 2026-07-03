@@ -102,7 +102,7 @@ private fun formatElapsed(startedAt: Long): String {
 sealed class FieldMindScreen(val route: String, val label: String, val icon: MaterialSymbolIcon) {
     data object Home : FieldMindScreen("field_today", "Today", FieldMindIcons.Today)
     data object Observe : FieldMindScreen("field_capture", "Capture", FieldMindIcons.Capture)
-    data object Projects : FieldMindScreen("field_projects", "Workspace", FieldMindIcons.Projects)
+    data object Projects : FieldMindScreen("field_projects", "Projects", FieldMindIcons.Projects)
     data object Library : FieldMindScreen("field_library", "Library", FieldMindIcons.Library)
     data object Insights : FieldMindScreen("field_insights", "Insights", FieldMindIcons.Insights)
     data object MapScreen : FieldMindScreen("field_map", "Map", FieldMindIcons.Map)

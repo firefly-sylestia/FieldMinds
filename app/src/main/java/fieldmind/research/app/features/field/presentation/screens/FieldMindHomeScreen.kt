@@ -1168,11 +1168,12 @@ private fun HeroActionChip(
         tonalElevation = 0.dp
     ) {
         Row(
-            Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+            horizontalArrangement = Arrangement.Center
         ) {
             Icon(icon, null, tint = accent, size = 20.dp)
+            Spacer(Modifier.width(6.dp))
             Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, maxLines = 1)
         }
     }
@@ -1783,13 +1784,14 @@ private fun QuickActionChip(
         Row(
             Modifier.padding(horizontal = 18.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.Center
         ) {
             Box(
                 Modifier.size(36.dp)
                     .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(20.dp)),
                 contentAlignment = Alignment.Center
             ) { Icon(icon, null, tint = accent, size = 20.dp) }
+            Spacer(Modifier.width(10.dp))
             Text(label, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }
     }
@@ -1833,11 +1835,11 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
 @Composable
 private fun MiniActionTile(title: String, value: String, subtitle: String, icon: MaterialSymbolIcon, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Card(modifier = modifier.expressivePress(scaleDown = 0.96f).clickable(onClick = onClick), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
-            Text(title, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(value, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(title, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            Text(value, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
+            Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
         }
     }
 }
@@ -2678,9 +2680,9 @@ private fun DataToolMiniCard(
                 .background(brush = gradient, shape = RoundedCornerShape(24.dp))
         ) {
             Row(
-                Modifier.padding(12.dp),
+                Modifier.fillMaxWidth().padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.Center
             ) {
             Box(
                 Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
@@ -2689,6 +2691,7 @@ private fun DataToolMiniCard(
             ) {
                 Icon(icon, null, tint = color, size = 18.dp)
             }
+            Spacer(Modifier.width(8.dp))
             Column {
                 Text(title, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
