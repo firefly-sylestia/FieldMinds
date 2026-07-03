@@ -2350,7 +2350,6 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
 // ══════════════════════════════════════════════════════════════════════
 
 /** Wraps a sub-page with consistent StandardScreenHeader and scrollable content. */
-}
 
 @Composable
 internal fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {

@@ -357,9 +357,9 @@ fun ObserveScreen(
         }
         haptics.confirm()
         val now = System.currentTimeMillis()
-        val startedAt = s.timerStartedAt
+        val timerStartedAtVal = s.timerStartedAt
         val liveElapsed = s.timerAccumulatedMs +
-            if (s.timerRunning && startedAt != null) (now - startedAt) else 0L
+            if (s.timerRunning && timerStartedAtVal != null) (now - timerStartedAtVal) else 0L
 
         // Pack all enhanced capture fields into structuredDetailsJson
         val structuredJson = run {
@@ -496,10 +496,9 @@ fun ObserveScreen(
             },
             dismissButton = {                    TextButton(onClick = {
                                     viewModel.setCaptureSessionActive(false)
-                                    activeSessionId?.let { id ->
-                                        val startedAt = session.timerStartedAt
-                                        val durationMs = session.timerAccumulatedMs +
-                                            (if (session.timerRunning && startedAt != null) System.currentTimeMillis() - startedAt else 0L)
+                                activeSessionId?.let { id ->
+                                    val durationMs = session.timerAccumulatedMs +
+                                        (if (session.timerRunning && session.timerStartedAt != null) System.currentTimeMillis() - session.timerStartedAt else 0L)
                                         viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
                                     }
                                     activeSessionId = null
@@ -541,6 +540,7 @@ fun ObserveScreen(
                             timerStartedAt = session.timerStartedAt,
                             timerAccumulatedMs = session.timerAccumulatedMs,
                             timerRunning = session.timerRunning,
+
                             observationCount = session.sessionObservationCount,
                             onStart = {
                                 if (!session.timerRunning) {
@@ -573,8 +573,9 @@ fun ObserveScreen(
                             onClose = {
                                 viewModel.setCaptureSessionActive(false)
                                 activeSessionId?.let { id ->
+                                    val timerStartedAtLocal = session.timerStartedAt
                                     val durationMs = session.timerAccumulatedMs +
-                                        (if (session.timerRunning && session.timerStartedAt != null) System.currentTimeMillis() - session.timerStartedAt else 0L)
+                                        (if (session.timerRunning && timerStartedAtLocal != null) System.currentTimeMillis() - timerStartedAtLocal else 0L)
                                     viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
                                 }
                                 activeSessionId = null

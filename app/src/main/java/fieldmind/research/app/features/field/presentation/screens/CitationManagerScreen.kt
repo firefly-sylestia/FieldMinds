@@ -49,6 +49,7 @@ fun CitationManagerScreen(
     val colors = FieldMindTheme.colors
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     var searchQuery by remember { mutableStateOf("") }
     var showSearch by remember { mutableStateOf(false) }
@@ -237,21 +238,20 @@ fun CitationManagerScreen(
                                     }
 
                                     // Copy citation button
-                                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                        AssistChip(
-                                            onClick = {
-                                                val clipboard = (LocalContext.current.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager)
-                                                clipboard.setPrimaryClip(android.content.ClipData.newPlainText("citation", citation))
-                                                showFastSnackbar(snackbar, scope, "Citation copied!")
-                                            },
-                                            label = { Text("Copy citation") },
-                                            leadingIcon = { Icon(MaterialSymbolIcon("content_copy"), null, size = 16.dp) }
-                                        )
+                                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {                                            AssistChip(
+                                                onClick = {
+                                                    val clipboard = (context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager)
+                                                    clipboard.setPrimaryClip(android.content.ClipData.newPlainText("citation", citation))
+                                                    showFastSnackbar(snackbar, scope, "Citation copied!")
+                                                },
+                                                label = { Text("Copy citation") },
+                                                leadingIcon = { Icon(MaterialSymbolIcon("content_copy"), null, size = 16.dp) }
+                                            )
                             if (source.link.isNotBlank()) {
                                 AssistChip(
                                     onClick = {
                                         val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(source.link))
-                                        LocalContext.current.startActivity(intent)
+                                        context.startActivity(intent)
                                     },
                                     label = { Text("Open source") },
                                     leadingIcon = { Icon(MaterialSymbolIcon("open_in_new"), null, size = 16.dp) }

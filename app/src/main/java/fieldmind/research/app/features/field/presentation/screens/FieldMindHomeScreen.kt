@@ -2137,7 +2137,7 @@ private fun SessionObservationsCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                TextButton(onClick = { onNavigate(FieldMindScreen.ResearchSession) }) {
+                TextButton(onClick = { onNavigate(FieldMindScreen.Observe) }) {
                     Text("New session")
                 }
             }
