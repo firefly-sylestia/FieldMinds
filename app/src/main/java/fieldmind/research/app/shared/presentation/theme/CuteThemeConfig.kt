@@ -434,16 +434,11 @@ fun GradientCard(
  * @param shape the shape to clip the shadow to (defaults to pill shape).
  * @param isClickable if true, uses clickable-tier elevation; otherwise uses non-clickable.
  */
+@Composable
 fun Modifier.cuteShadow(
     elevation: Dp = CuteElevations.clickableTier,
     shape: Shape = CuteCardDefaults.Shape
-): Modifier = this.then(
-    shadow(
-        elevation = elevation,
-        shape = shape,
-        clip = false
-    )
-)
+): Modifier = cuteShadowAdaptive(elevation, shape)
 
 /**
  * Theme-aware shadow that adapts ambient/spot colors to dark/light mode.

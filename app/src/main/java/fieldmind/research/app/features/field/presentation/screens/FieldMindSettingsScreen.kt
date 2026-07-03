@@ -287,6 +287,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
     val mapType by settings.mapType.collectAsState()
     val mapShowLocation by settings.mapShowLocation.collectAsState()
     val sharedAppSettings = SharedAppSettings.getInstance(androidx.compose.ui.platform.LocalContext.current)
+    val amoledTheme by sharedAppSettings.amoledTheme.collectAsState()
     val customColorScheme by sharedAppSettings.customColorScheme.collectAsState()
 
     SettingsSubPage("Appearance", icon = FieldMindIcons.Palette, onBack = onBack) {
@@ -295,6 +296,8 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
         item {
             SettingsGroupCard {
                 ThemeToggle(themeMode, settings::setThemeMode)
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                ToggleItem("AMOLED dark mode", "Pure black backgrounds in dark mode for OLED screens. Deeper blacks save battery on OLED displays.", amoledTheme, sharedAppSettings::setAmoledTheme, MaterialSymbolIcon("dark_mode"))
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Material You dynamic color", "Use system wallpaper colors that auto-adapt to light/dark. Off keeps the FieldMind brand palette.", dynamicColor, settings::setDynamicColorEnabled, FieldMindIcons.Palette)
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))

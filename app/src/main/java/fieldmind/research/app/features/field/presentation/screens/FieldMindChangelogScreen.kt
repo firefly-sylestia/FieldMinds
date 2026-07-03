@@ -55,12 +55,13 @@ internal data class FieldMindChangelogEntry(
                     "✓ Clickable vs non-clickable elevation tiers: clickable cards (6dp) lift higher than info-only cards (4dp)",
                     "✓ Home screen header now has proper 6dp shadow depth and 2dp tonal elevation",
                     "✓ Dark mode: shadows use white-tinted ambient/spot colors for a luminous lifted glow",
-                    "✓ cuteShadowAdaptive() — new theme-aware shadow modifier adapting to light/dark mode"
+                    "✓ cuteShadow() now theme-aware — delegates to cuteShadowAdaptive() so all existing callers get dark mode white shadows"
                 ),
                 "🌙 AMOLED mode" to listOf(
                     "✓ True black backgrounds (surface, background) when AMOLED is enabled in dark mode",
                     "✓ Surface containers shift to deeper blacks (#0A0A0A, #121212, #1E1E1E, #2A2A2A)",
-                    "✓ Wired through FieldMindTheme and Settings toggle"
+                    "✓ Wired through FieldMindTheme and MainActivity",
+                    "✓ New toggle in Settings → Appearance → Theme section"
                 ),
                 "⚡ Softer animations" to listOf(
                     "✓ All spring stiffness values reduced ~30-40% for buttery-smooth motion",
