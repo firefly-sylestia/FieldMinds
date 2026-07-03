@@ -497,8 +497,9 @@ fun ObserveScreen(
             dismissButton = {                    TextButton(onClick = {
                                     viewModel.setCaptureSessionActive(false)
                                 activeSessionId?.let { id ->
+                                    val finalStartedAt = session.timerStartedAt
                                     val durationMs = session.timerAccumulatedMs +
-                                        (if (session.timerRunning && session.timerStartedAt != null) System.currentTimeMillis() - session.timerStartedAt else 0L)
+                                        (if (session.timerRunning && finalStartedAt != null) System.currentTimeMillis() - finalStartedAt else 0L)
                                         viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
                                     }
                                     activeSessionId = null
