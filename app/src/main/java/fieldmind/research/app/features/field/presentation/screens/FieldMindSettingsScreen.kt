@@ -381,16 +381,13 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                             }
                         }
                     }
-                }
-            }
-        item {
-            val gradientOpacity by settings.gradientOpacity.collectAsState()
-            SettingsGroupCard {
-                Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Spacer(Modifier.height(12.dp))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    Spacer(Modifier.height(8.dp))
                     Text("Gradient intensity", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text("Adjust how bold or subtle card gradients appear.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(4.dp))
-                    val sliderValue = remember { mutableFloatStateOf(gradientOpacity) }
+                    val sliderValue = remember(gradientOpacity) { mutableFloatStateOf(gradientOpacity) }
                     Slider(
                         value = sliderValue.floatValue,
                         onValueChange = { sliderValue.floatValue = it },
@@ -411,7 +408,6 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                     }
                 }
             }
-        }
         }
         // ── Map settings ──
         // ── Entity accent colors ──

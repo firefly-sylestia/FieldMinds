@@ -2532,11 +2532,11 @@ private fun RecentCapturesCard(observations: List<ObservationEntity>, onOpenDeta
     if (observations.isEmpty()) return
     val recentObs = observations.sortedByDescending { it.timestamp }.take(3)
     val context = LocalContext.current
-    val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradientSettings = remember { fieldmind.research.app.features.field.data.settings.FieldMindSettings.getInstance(context) }
+    val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
-    val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
+    val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
     Card(
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
