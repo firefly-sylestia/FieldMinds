@@ -1353,10 +1353,19 @@ private fun AllTabScreen(
 
     val isFirstTab = activeTabIndex == 0
 
-    // ── Home tab: move app to background instead of destroying Activity ──
+    // ── Double-tap to exit from Home tab ──
+    var backPressTime by remember { mutableStateOf(0L) }
+    val doubleTapInterval = 2000L
     BackHandler(enabled = isFirstTab) {
-        val activity = LocalContext.current as? android.app.Activity
-        activity?.moveTaskToBack(true)
+        val now = System.currentTimeMillis()
+        if (now - backPressTime < doubleTapInterval) {
+            val activity = LocalContext.current as? android.app.Activity
+            activity?.moveTaskToBack(true)
+        } else {
+            backPressTime = now
+            val context = LocalContext.current
+            android.widget.Toast.makeText(context, "Press back again to exit", android.widget.Toast.LENGTH_SHORT).show()
+        }
     }
 
     // ── Tab entrance animation (scale-up + fade-in on tap-switch) ──
