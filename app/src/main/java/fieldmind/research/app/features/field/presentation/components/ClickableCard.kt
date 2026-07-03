@@ -42,9 +42,9 @@ fun ClickableCard(
 ) = Card(
     modifier = modifier
         .fillMaxWidth()
-        .clickable(onClick = onClick)
         .staggeredEntrance(index = index, animate = animate)
-        .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
+        .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown)
+        .clickable(onClick = onClick),
     shape = shape,
     colors = colors,
     elevation = elevation,
