@@ -43,6 +43,21 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+        // ── v0.32.0 — Fixed Map Crash (NPE in OsmTileManager) ──
+        FieldMindChangelogEntry(
+            version = "0.32.0",
+            date = "2026-07-03",
+            title = "🗺️ Fixed Map Crash on Open",
+            importance = "Patch",
+            tags = listOf("🐛", "🗺️", "🔧"),
+            sections = listOf(
+                "🐛 OsmTileManager NPE fix" to listOf(
+                    "✓ Fixed NullPointerException crash when opening the map screen",
+                    "✓ Root cause: regionsPrefs SharedPreferences was declared after init block — Kotlin ran init before initializing the property",
+                    "✓ Moved regionsPrefs declaration before init so it's available when refreshCachedRegions() is called"
+                )
+            )
+        ),
         // ── v0.31.0 — Fixed Card Elevation Hierarchy ──
         FieldMindChangelogEntry(
             version = "0.31.0",
