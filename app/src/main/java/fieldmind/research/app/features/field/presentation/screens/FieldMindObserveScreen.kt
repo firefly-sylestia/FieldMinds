@@ -1491,7 +1491,6 @@ private fun QuickClassificationGrid(
                             shape = RoundedCornerShape(24.dp),
                             color = if (isSelected) accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
-                            tonalElevation = 0.dp,
                             modifier = Modifier.weight(1f)
                         ) {
                             Column(
@@ -1706,7 +1705,6 @@ private fun MetadataStatusChip(
         onClick = { if (onTap != null) { haptics.light(); onTap() } },
         shape = RoundedCornerShape(22.dp),
         color = if (acquired) accent.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
-        tonalElevation = 0.dp,
         modifier = modifier
     ) {
         Column(

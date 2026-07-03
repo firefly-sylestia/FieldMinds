@@ -42,7 +42,9 @@ internal data class FieldMindChangelogEntry(
     val importance: String,
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
-)    private val fieldMindChangelog = listOf(
+)
+
+private val fieldMindChangelog = listOf(
 	// ── v0.35.0 — Full App Test Runner in Developer Options ──
 	FieldMindChangelogEntry(
 		version = "0.35.0",

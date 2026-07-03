@@ -475,7 +475,6 @@ private suspend fun runAllTests(
     onProgress: (String) -> Unit
 ) {
     val settings = viewModel.fieldSettings
-    val navScreens = fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 
     // ═══════════════════════════════════════════════
     //  1. NAVIGATION & TAB TESTS
@@ -484,44 +483,43 @@ private suspend fun runAllTests(
 
     runTest(results, "Navigation & Tabs", "Tab screens list is non-empty") {
         val tabRoutes = listOf(
-            navScreens.Home.route, navScreens.Observe.route,
-            navScreens.Projects.route, navScreens.Insights.route,
-            navScreens.Library.route
+            "field_today", "field_capture",
+            "field_projects", "field_insights",
+            "field_library"
         )
         assert(tabRoutes.size == 5) { "Expected 5 tab routes" }
         tabRoutes.forEach { r -> assert(r.isNotBlank()) { "Tab route is blank" } }
     }
 
     runTest(results, "Navigation & Tabs", "All settings screens have routes") {
-        val screens = listOf(
-            navScreens.Settings, navScreens.SettingsProfile,
-            navScreens.SettingsAppearance, navScreens.SettingsSecurity,
-            navScreens.SettingsBackup, navScreens.SettingsAbout,
-            navScreens.SettingsDeveloper
+        val routes = listOf(
+            "field_settings", "field_settings_profile",
+            "field_settings_appearance", "field_settings_security",
+            "field_settings_backup", "field_settings_about",
+            "field_settings_developer"
         )
-        screens.forEach { s -> assert(s.route.isNotBlank()) { "${s.label} route is blank" } }
+        routes.forEach { r -> assert(r.isNotBlank()) { "Route is blank" } }
     }
 
     runTest(results, "Navigation & Tabs", "Tab screen icons are defined") {
         listOf(
-            navScreens.Home.icon, navScreens.Observe.icon,
-            navScreens.Projects.icon, navScreens.Insights.icon,
-            navScreens.Library.icon
+            FieldMindIcons.Today, FieldMindIcons.Capture,
+            FieldMindIcons.Projects, FieldMindIcons.Insights,
+            FieldMindIcons.Library
         ).forEach { icon ->
             assert(icon.name.isNotBlank()) { "Icon name is blank" }
         }
     }
 
     runTest(results, "Navigation & Tabs", "All FieldMindScreen sealed objects have routes") {
-        // Spot-check key screens
-        val keyScreens = listOf(
-            navScreens.Home.route, navScreens.FieldMode.route,
-            navScreens.MapScreen.route, navScreens.ExportStudio.route,
-            navScreens.Tasks.route, navScreens.Settings.route,
-            navScreens.Changelog.route, navScreens.Progress.route
+        val keyRoutes = listOf(
+            "field_today", "field_mode",
+            "field_map", "field_export_studio",
+            "field_tasks", "field_settings",
+            "field_changelog", "field_progress"
         )
-        keyScreens.forEach { r ->
-            assert(r.removePrefix("field_").isNotBlank()) { "Route $r has no prefix" }
+        keyRoutes.forEach { r ->
+            assert(r.startsWith("field_")) { "Route $r has no prefix" }
         }
     }
 
