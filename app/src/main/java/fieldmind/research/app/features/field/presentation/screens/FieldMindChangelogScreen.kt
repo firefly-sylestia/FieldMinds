@@ -45,6 +45,31 @@ internal data class FieldMindChangelogEntry(
 )
 
 private val fieldMindChangelog = listOf(
+        // ── v0.36.0 — New Tools, Clickable Sessions, Snappier Animations ──
+        FieldMindChangelogEntry(
+            version = "0.36.0",
+            date = "2026-07-03",
+            title = "🎯 New Tools, Clickable Sessions & Snappier Animations",
+            importance = "Patch",
+            tags = listOf("🎯", "⚡", "🔧"),
+            sections = listOf(
+                "🎯 New tools in Home" to listOf(
+                    "✓ Voice Notes, Media Gallery, Bibliography, and Collaborate now surfaced on Home screen",
+                    "✓ Quick-access cards in a new \"Media & sharing\" section",
+                    "✓ Previously hidden routes—now discoverable from the home dashboard"
+                ),
+                "🔧 Past sessions clickable" to listOf(
+                    "✓ Past research sessions in Capture screen now open detail on tap",
+                    "✓ Expressive press feedback + navigation to session details"
+                ),
+                "⚡ Snappier animations" to listOf(
+                    "✓ Cancel spring stiffness increased 60→120 (2x snappier)",
+                    "✓ Swipe-back spring stiffness increased 80→100 for more responsive feel",
+                    "✓ Still buttery-smooth—just noticeably faster"
+                )
+            )
+        ),
+
         // ── v0.35.0 — Full App Test Runner in Developer Options ──
         FieldMindChangelogEntry(
             version = "0.35.0",
