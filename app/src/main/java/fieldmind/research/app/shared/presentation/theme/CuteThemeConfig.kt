@@ -240,7 +240,7 @@ object CuteCardDefaults {
  *  Usage:
  *  ```
  *  Card(
- *      modifier = Modifier.cuteGradientBackground(CuteGradients.Style.PrimaryTonal)
+ *      modifier = Modifier.cuteGradientBackground(CuteGradients.Style.CyberpunkSunset)
  *  ) { ... }
  *  ```
  *
@@ -253,67 +253,65 @@ object CuteCardDefaults {
 object CuteGradients {
 
     /**
-     * Available gradient styles. Each produces a beautiful 2-3 color
-     * gradient using the current Material theme's palette.
-     *
-     * (っ◕◕)っ  Phase 5: fully cute and colorful!
+     * Available gradient styles. Combines scheme-aware tonal gradients
+     * with curated artistic fixed-color gradients for bold visual impact.
      */
     enum class Style(val displayName: String) {
-        /** surfaceContainerLow → surfaceContainerHigh — subtle lift */
-        SurfaceSubtle("Surface Subtle"),
-        /** surface → primaryContainer hint → surface — scheme-aware vertical background wash */
+        // ── Scheme-aware (theme-responsive) ──
+        /** surface → primaryContainer hint → surface — vertical background wash */
         ScreenBackground("Screen Background"),
-        /** primaryContainer → tertiaryContainer — soft, tonal */
-        PrimaryTonal("Primary Tonal"),
-        /** secondaryContainer → primaryContainer → tertiaryContainer — warm blush trio */
+        /** secondaryContainer → primaryContainer → tertiaryContainer */
         BlushTrio("Blush Trio"),
-        /** primary container at two alpha levels — monochromatic depth */
-        PrimaryMono("Primary Mono"),
-        /** tertiaryContainer → secondaryContainer — cool dream */
-        CoolDream("Cool Dream"),
-        /** primaryContainer → secondaryContainer → tertiaryContainer — soft rainbow */
+        /** primaryContainer → secondaryContainer → tertiaryContainer */
         RainbowSoft("Rainbow Soft"),
-        /** secondaryContainer → tertiaryContainer — pastel spring */
+        /** tertiaryContainer → secondaryContainer */
+        CoolDream("Cool Dream"),
+        /** secondaryContainer → tertiaryContainer */
         SpringPastel("Spring Pastel"),
-        /** primaryContainer → surfaceContainerHigh with extra lift */
+        /** primaryContainer → surfaceContainerHigh */
         SunnyLift("Sunny Lift"),
-        /** inverseSurface → surface — moonlight glow for dark mode lovers */
-        Moonlight("Moonlight"),
-        /** true black → deep gray — extreme power saving for AMOLED screens in dark mode */
+        /** true black → deep gray — AMOLED power saving */
         AmoledBlack("AMOLED Black"),
+
+        // ── Artistic fixed-color gradients (abstract, bold) ──
+        /** #0D0221 → #3A015C → #7B2D8E → #E879F9 — deep space nebula */
+        NebulaPurple("Nebula Purple"),
+        /** #1A1A2E → #16213E → #0F3460 → #E94560 — neon cyberpunk */
+        CyberpunkSunset("Cyberpunk Sunset"),
+        /** #0F2027 → #203A43 → #2C5364 — deep ocean twilight */
+        OceanDepths("Ocean Depths"),
+        /** #FF6B6B → #4ECDC4 → #292F36 — bold triadic pop */
+        TropicalLagoon("Tropical Lagoon"),
+        /** #2C3E50 → #3498DB → #ECF0F1 — arctic aurora */
+        ArcticAurora("Arctic Aurora"),
+        /** #FDEB71 → #F8D800 → #FF8A5C — warm golden hour */
+        GoldenHour("Golden Hour"),
+        /** #EA8D8D → #A890FE → #D8B4FE — cherry blossom dream */
+        SakuraDream("Sakura Dream"),
+        /** #4158D0 → #C850C0 → #FFCC70 — vibrant gradient mesh */
+        SunsetVibes("Sunset Vibes"),
     }
 
     /** The user's selected gradient style — persisted in settings. */
-    const val DEFAULT_STYLE = "Surface Subtle"
+    const val DEFAULT_STYLE = "Screen Background"
 
     /**
-     * Returns a horizontal gradient [Brush] for the given [style] using
-     * the current MaterialTheme color scheme.
+     * Returns a gradient [Brush] for the given [style].
+     * Scheme-aware styles adapt to the current MaterialTheme color scheme.
+     * Artistic styles use fixed curated color combinations for bold impact.
      */
     @Composable
     fun brushFor(style: Style): Brush {
         val scheme = MaterialTheme.colorScheme
-        val bg = scheme.background
-        val isDark = (0.299f * bg.red + 0.587f * bg.green + 0.114f * bg.blue) < 0.5f
+        val isDark = (0.299f * scheme.background.red + 0.587f * scheme.background.green + 0.114f * scheme.background.blue) < 0.5f
         return when (style) {
-            Style.SurfaceSubtle -> Brush.horizontalGradient(
-                colors = listOf(
-                    scheme.surfaceContainerLow,
-                    scheme.surfaceContainerHigh
-                )
-            )
+            // ── Scheme-aware (theme-responsive) ──
             Style.ScreenBackground -> Brush.verticalGradient(
                 colors = listOf(
                     scheme.surface,
                     scheme.primaryContainer.copy(alpha = 0.08f),
                     scheme.tertiaryContainer.copy(alpha = 0.04f),
                     scheme.surface
-                )
-            )
-            Style.PrimaryTonal -> Brush.horizontalGradient(
-                colors = listOf(
-                    scheme.primaryContainer,
-                    scheme.tertiaryContainer
                 )
             )
             Style.BlushTrio -> Brush.horizontalGradient(
@@ -323,15 +321,6 @@ object CuteGradients {
                     scheme.tertiaryContainer
                 )
             )
-            Style.PrimaryMono -> {
-                val base = scheme.primaryContainer
-                Brush.horizontalGradient(
-                    colors = listOf(
-                        base,
-                        if (isDark) base.copy(alpha = 0.5f) else base.copy(alpha = 0.35f)
-                    )
-                )
-            }
             Style.CoolDream -> Brush.horizontalGradient(
                 colors = listOf(
                     scheme.tertiaryContainer,
@@ -357,33 +346,58 @@ object CuteGradients {
                     scheme.surfaceContainerHigh
                 )
             )
-            Style.Moonlight -> Brush.horizontalGradient(
-                colors = listOf(
-                    if (isDark) scheme.inverseSurface.copy(alpha = 0.3f) else scheme.surfaceContainerLow,
-                    scheme.surfaceContainerHigh
-                )
-            )
             Style.AmoledBlack -> {
                 if (isDark) {
-                    // True black gradient for AMOLED — barely lifts pixels to save battery
-                    // Only uses the deepest blacks for maximum power saving on OLED panels
                     Brush.horizontalGradient(
-                        colors = listOf(
-                            Color.Black,
-                            Color(0xFF050505),
-                            Color(0xFF080808)
-                        )
+                        colors = listOf(Color.Black, Color(0xFF050505), Color(0xFF080808))
                     )
                 } else {
-                    // Fall back to a subtle neutral gradient in light mode
-                    // (AMOLED mode typically only matters in dark mode, but keep it graceful)
                     Brush.horizontalGradient(
-                        colors = listOf(
-                            scheme.surfaceContainerLow,
-                            scheme.surfaceContainer
-                        )
+                        colors = listOf(scheme.surfaceContainerLow, scheme.surfaceContainer)
                     )
                 }
+            }
+
+            // ── Artistic fixed-color gradients (abstract, bold) ──
+            Style.NebulaPurple -> if (isDark) {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF0A0015), Color(0xFF1A0040), Color(0xFF3A1060), Color(0xFF6A2A8A)))
+            } else {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF1A0030), Color(0xFF3A1060), Color(0xFF7B2D8E), Color(0xFFE879F9)))
+            }
+            Style.CyberpunkSunset -> if (isDark) {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF0D0D1A), Color(0xFF1A1040), Color(0xFF3A2060), Color(0xFFC94050)))
+            } else {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF1A1A2E), Color(0xFF16213E), Color(0xFF0F3460), Color(0xFFE94560)))
+            }
+            Style.OceanDepths -> if (isDark) {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF051015), Color(0xFF0A1A25), Color(0xFF102A35)))
+            } else {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364)))
+            }
+            Style.TropicalLagoon -> if (isDark) {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF1A2020), Color(0xFFC95050), Color(0xFF3AB0A0)))
+            } else {
+                Brush.horizontalGradient(colors = listOf(Color(0xFFFF6B6B), Color(0xFF4ECDC4), Color(0xFF292F36)))
+            }
+            Style.ArcticAurora -> if (isDark) {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF0A1520), Color(0xFF1A4A70), Color(0xFF2A5A8A)))
+            } else {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF2C3E50), Color(0xFF3498DB), Color(0xFFD4E6F1)))
+            }
+            Style.GoldenHour -> if (isDark) {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF2A1A00), Color(0xFF5A3A00), Color(0xFF8A5A00), Color(0xFFCC7A30)))
+            } else {
+                Brush.horizontalGradient(colors = listOf(Color(0xFFFDEB71), Color(0xFFF8D800), Color(0xFFFF8A5C)))
+            }
+            Style.SakuraDream -> if (isDark) {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF1A0A20), Color(0xFF3A1A40), Color(0xFF5A2A60), Color(0xFF8A4A7A)))
+            } else {
+                Brush.horizontalGradient(colors = listOf(Color(0xFFEA8D8D), Color(0xFFA890FE), Color(0xFFD8B4FE)))
+            }
+            Style.SunsetVibes -> if (isDark) {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF0A0A2A), Color(0xFF2A1060), Color(0xFF6A2060), Color(0xFFAA6030)))
+            } else {
+                Brush.horizontalGradient(colors = listOf(Color(0xFF4158D0), Color(0xFFC850C0), Color(0xFFFFCC70)))
             }
         }
     }
@@ -392,13 +406,13 @@ object CuteGradients {
      * Parse a style from its display name string.
      */
     fun fromDisplayName(name: String): Style =
-        Style.entries.find { it.displayName == name } ?: Style.SurfaceSubtle
+        Style.entries.find { it.displayName == name } ?: Style.ScreenBackground
 
     /**
      * Parse a style from a settings-stored string (supports both name and displayName).
      */
     fun fromString(s: String): Style =
-        Style.entries.find { it.name == s || it.displayName == s } ?: Style.SurfaceSubtle
+        Style.entries.find { it.name == s || it.displayName == s } ?: Style.ScreenBackground
 
     /**
      * All display names for the settings picker.
@@ -414,7 +428,7 @@ object CuteGradients {
  * - Standard plush elevation and rounded corners
  * - All content is laid out with consistent padding
  *
- * @param style the gradient style (defaults to SurfaceSubtle)
+ * @param style the gradient style (defaults to ScreenBackground)
  * @param shape corner shape (defaults to CuteCardDefaults.Shape = 32dp)
  * @param elevation card elevation (defaults to plushTier2 = 4dp)
  * @param modifier additional modifier
@@ -422,7 +436,7 @@ object CuteGradients {
  */
 @Composable
 fun GradientCard(
-    style: CuteGradients.Style = CuteGradients.Style.SurfaceSubtle,
+    style: CuteGradients.Style = CuteGradients.Style.ScreenBackground,
     shape: Shape = CuteCardDefaults.Shape,
     elevation: Dp = CuteElevations.plushTier2,
     modifier: Modifier = Modifier,

@@ -2574,12 +2574,23 @@ private fun DrawScope.drawMoon(
     drawCircle(color = Color.White.copy(alpha = 0.01f * moonGlow),
         radius = moonR * 5.0f * gm, center = Offset(cx, cy))
 
+    // Draw moon body with rich mare/crater surface features
+    val litColor = palette.moonColor.copy(alpha = 1f)
+    val shadowColor = Color(0xFF0A0A1A).copy(alpha = 0.7f)
+
+    // Draw the phase shadow overlay FIRST (drawMoonPhase draws body + shadow)
     drawMoonPhase(
         phaseValue = phase, cx = cx, cy = cy, radius = moonR,
-        litColor = palette.moonColor.copy(alpha = 1f),
-        shadowColor = Color(0xFF0A0A1A).copy(alpha = 0.7f),
+        litColor = litColor,
+        shadowColor = shadowColor,
         glowColor = palette.moonGlowColor
     )
+
+    // Draw mare & crater surface features ON TOP of the illuminated portion
+    // (subtle alpha so they appear naturally on lit side, nearly invisible on shadow)
+    if (moonR >= 8f) {
+        drawWeatherMoonSurfaceFeatures(cx, cy, moonR, litColor)
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════��══���═══
@@ -2615,6 +2626,108 @@ private fun getMoonPhaseValue(): Float {
  * circle offset to create the correct phase shape. For quarter phases a
  * straight cut path is used for a clean half-moon appearance.
  */
+
+/**
+ * Draws lunar mare (dark basaltic plains) and crater highlights on the moon surface.
+ * Uses the actual positions of prominent lunar features including Mare Imbrium,
+ * Mare Serenitatis, Mare Tranquillitatis, and major impact craters like Tycho.
+ * Ported from MoonPhaseIcon.kt for use in the animated weather scene.
+ */
+private fun DrawScope.drawWeatherMoonSurfaceFeatures(cx: Float, cy: Float, r: Float, tint: Color) {
+    data class LunarFeature(
+        val xOffset: Float, val yOffset: Float,
+        val widthFraction: Float, val heightFraction: Float, val alphaMul: Float
+    )
+
+    val features = listOf(
+        LunarFeature(-0.35f, -0.30f, 0.40f, 0.30f, 1.0f),
+        LunarFeature(-0.05f, -0.25f, 0.25f, 0.22f, 0.85f),
+        LunarFeature(0.25f, -0.10f, 0.30f, 0.25f, 0.80f),
+        LunarFeature(0.40f, 0.20f, 0.22f, 0.18f, 0.75f),
+        LunarFeature(-0.15f, 0.30f, 0.30f, 0.20f, 0.70f),
+        LunarFeature(-0.45f, 0.05f, 0.35f, 0.45f, 0.85f),
+        LunarFeature(-0.20f, -0.42f, 0.55f, 0.12f, 0.75f),
+        LunarFeature(-0.12f, 0.02f, 0.15f, 0.12f, 0.65f),
+        LunarFeature(-0.25f, 0.08f, 0.20f, 0.15f, 0.60f),
+        LunarFeature(-0.30f, 0.28f, 0.18f, 0.12f, 0.55f),
+        LunarFeature(-0.65f, -0.05f, 0.18f, 0.18f, 0.35f),
+        LunarFeature(-0.40f, -0.20f, 0.15f, 0.10f, 0.55f),
+        LunarFeature(0.20f, -0.38f, 0.10f, 0.08f, 0.50f),
+    )
+
+    val featureColor = if (tint == Color.White || tint == Color(0xFFECEFF1)) {
+        Color(0xFF607D8B).copy(alpha = 0.25f)
+    } else {
+        tint.copy(
+            red = (tint.red * 0.5f).coerceIn(0f, 1f),
+            green = (tint.green * 0.5f).coerceIn(0f, 1f),
+            blue = (tint.blue * 0.5f).coerceIn(0f, 1f),
+            alpha = tint.alpha * 0.20f
+        )
+    }
+
+    features.forEach { f ->
+        val fr = r * f.widthFraction * 0.5f
+        val fh = r * f.heightFraction * 0.5f
+        drawOval(
+            color = featureColor.copy(alpha = featureColor.alpha * f.alphaMul),
+            topLeft = Offset(cx + f.xOffset * r - fr, cy + f.yOffset * r - fh),
+            size = androidx.compose.ui.geometry.Size(fr * 2f, fh * 2f)
+        )
+    }
+
+    if (r < 14f) return
+
+    data class CraterHighlight(val xOffset: Float, val yOffset: Float, val size: Float, val brightness: Float)
+    val craters = listOf(
+        CraterHighlight(-0.08f, 0.42f, 0.08f, 0.35f),
+        CraterHighlight(-0.30f, 0.12f, 0.06f, 0.25f),
+        CraterHighlight(-0.48f, 0.20f, 0.04f, 0.20f),
+        CraterHighlight(-0.42f, -0.25f, 0.04f, 0.30f),
+        CraterHighlight(-0.15f, -0.40f, 0.05f, 0.15f),
+        CraterHighlight(-0.60f, 0.05f, 0.05f, 0.12f),
+        CraterHighlight(0.52f, 0.28f, 0.04f, 0.18f),
+        CraterHighlight(0.55f, 0.10f, 0.06f, 0.12f),
+    )
+
+    val highlightColor = if (tint == Color.White || tint == Color(0xFFECEFF1)) {
+        Color.White.copy(alpha = 0.20f)
+    } else {
+        tint.copy(
+            red = (tint.red * 1.3f).coerceIn(0f, 1f),
+            green = (tint.green * 1.3f).coerceIn(0f, 1f),
+            blue = (tint.blue * 1.3f).coerceIn(0f, 1f),
+            alpha = tint.alpha * 0.15f
+        )
+    }
+
+    craters.forEach { c ->
+        drawCircle(
+            color = highlightColor.copy(alpha = highlightColor.alpha * c.brightness),
+            radius = r * c.size * 0.5f,
+            center = Offset(cx + c.xOffset * r, cy + c.yOffset * r)
+        )
+    }
+
+    if (r >= 24f) {
+        data class CraterRim(val xOffset: Float, val yOffset: Float, val size: Float)
+        val rims = listOf(
+            CraterRim(-0.08f, 0.42f, 0.09f),
+            CraterRim(-0.30f, 0.12f, 0.07f),
+            CraterRim(-0.48f, 0.20f, 0.05f),
+            CraterRim(0.52f, 0.28f, 0.05f),
+        )
+        rims.forEach { rim ->
+            drawCircle(
+                color = featureColor.copy(alpha = 0.15f),
+                radius = r * rim.size * 0.5f,
+                center = Offset(cx + rim.xOffset * r, cy + rim.yOffset * r),
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = r * 0.02f)
+            )
+        }
+    }
+}
+
 private fun DrawScope.drawMoonPhase(
     phaseValue: Float,        // 0.0–1.0 moon phase (0=new, 0.25=waxing quarter, 0.5=full, 0.75=waning quarter)
     cx: Float,                // center x

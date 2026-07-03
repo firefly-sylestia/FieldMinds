@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android VectorDrawable derived from moon_phase_original.svg (CC0, SVG Repo).
+  Provides a detailed moon surface texture with crater detail for use in
+  weather scene composables via painterResource().
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108.336"
+    android:viewportHeight="108.336">
+
+    <!-- Moon body fill -->
+    <path
+        android:fillColor="#FFECEFF1"
+        android:pathData="M108.266,51.385C106.812,22.805,83.104,0,54.168,0C27.1,0,4.605,19.957,0.625,45.93C0.214,48.617,0,51.368,0,54.168s0.214,5.552,0.625,8.238c3.98,25.973,26.475,45.93,53.543,45.93c28.936,0,52.645-22.804,54.098-51.385c0.047-0.922,0.07-1.85,0.07-2.783C108.336,53.235,108.312,52.307,108.266,51.385z" />
+
+    <!-- Mare Imbrium overlay -->
+    <path
+        android:fillColor="#FF607D8B"
+        android:fillAlpha="0.12"
+        android:pathData="M30,30 Q40,25 45,35 Q38,42 28,38 Z" />
+
+    <!-- Mare Serenitatis overlay -->
+    <path
+        android:fillColor="#FF607D8B"
+        android:fillAlpha="0.10"
+        android:pathData="M50,32 Q56,28 62,34 Q58,40 50,38 Z" />
+
+    <!-- Mare Tranquillitatis overlay -->
+    <path
+        android:fillColor="#FF607D8B"
+        android:fillAlpha="0.09"
+        android:pathData="M65,40 Q72,36 76,44 Q70,50 62,46 Z" />
+
+    <!-- Oceanus Procellarum overlay -->
+    <path
+        android:fillColor="#FF607D8B"
+        android:fillAlpha="0.10"
+        android:pathData="M22,45 Q28,38 32,48 Q26,56 18,52 Z" />
+
+    <!-- Mare Nubium overlay -->
+    <path
+        android:fillColor="#FF607D8B"
+        android:fillAlpha="0.08"
+        android:pathData="M35,70 Q42,66 48,72 Q42,78 34,74 Z" />
+
+    <!-- Mare Frigoris overlay -->
+    <path
+        android:fillColor="#FF607D8B"
+        android:fillAlpha="0.09"
+        android:pathData="M38,22 Q48,18 62,20 Q58,26 42,26 Z" />
+
+    <!-- Mare Fecunditatis overlay -->
+    <path
+        android:fillColor="#FF607D8B"
+        android:fillAlpha="0.08"
+        android:pathData="M75,62 Q80,58 84,64 Q80,70 74,66 Z" />
+</vector>

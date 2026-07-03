@@ -84,6 +84,8 @@ import kotlin.math.roundToInt
 import fieldmind.research.app.features.field.presentation.components.ObservationStatsDashboard
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import fieldmind.research.app.features.field.presentation.components.GlassCard
+import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 
 /**
  * Loads a PNG image from Android assets folder as an ImageBitmap for display.
