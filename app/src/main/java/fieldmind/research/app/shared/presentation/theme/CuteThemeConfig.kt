@@ -280,6 +280,8 @@ object CuteGradients {
         SunnyLift("Sunny Lift"),
         /** inverseSurface → surface — moonlight glow for dark mode lovers */
         Moonlight("Moonlight"),
+        /** true black → deep gray — extreme power saving for AMOLED screens in dark mode */
+        AmoledBlack("AMOLED Black"),
     }
 
     /** The user's selected gradient style — persisted in settings. */
@@ -362,6 +364,28 @@ object CuteGradients {
                     scheme.surfaceContainerHigh
                 )
             )
+            Style.AmoledBlack -> {
+                if (isDark) {
+                    // True black gradient for AMOLED — barely lifts pixels to save battery
+                    // Only uses the deepest blacks for maximum power saving on OLED panels
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            Color.Black,
+                            Color(0xFF050505),
+                            Color(0xFF080808)
+                        )
+                    )
+                } else {
+                    // Fall back to a subtle neutral gradient in light mode
+                    // (AMOLED mode typically only matters in dark mode, but keep it graceful)
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            scheme.surfaceContainerLow,
+                            scheme.surfaceContainer
+                        )
+                    )
+                }
+            }
         }
     }
 

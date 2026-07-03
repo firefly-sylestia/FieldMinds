@@ -43,6 +43,22 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+        // ── v0.29.0 — AMOLED Black Gradient Style ──
+        FieldMindChangelogEntry(
+            version = "0.29.0",
+            date = "2026-07-03",
+            title = "🌑 AMOLED Black Gradient for OLED Power Saving",
+            importance = "Patch",
+            tags = listOf("🌙", "🎨", "🔋"),
+            sections = listOf(
+                "🌙 AMOLED Black gradient" to listOf(
+                    "✓ New \"AMOLED Black\" card gradient style — true black (#000000) to barely-lit dark (#080808)",
+                    "✓ Saves battery on OLED screens by keeping pixels near-off",
+                    "✓ Selectable from Settings → Appearance → Card Style picker",
+                    "✓ Only affects card backgrounds in dark mode with AMOLED enabled; light mode falls back to subtle neutral"
+                )
+            )
+        ),
         // ── v0.28.0 — Official FieldMind Logo in App UI ──
         FieldMindChangelogEntry(
             version = "0.28.0",
