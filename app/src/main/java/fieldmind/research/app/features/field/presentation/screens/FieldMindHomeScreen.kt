@@ -461,6 +461,51 @@ fun SharedTransitionScope.HomeScreen(
                 }
             }
 
+            // ── Media & Collaboration Tools ──
+            item {
+                val mediaToolsCards = listOf(
+                    Triple("Voice Notes", "Record field audio", MaterialSymbolIcon("mic")) to FieldMindScreen.VoiceNotes,
+                    Triple("Media Gallery", "Browse captured media", MaterialSymbolIcon("photo_library")) to FieldMindScreen.MediaGallery,
+                    Triple("Bibliography", "Manage citations", MaterialSymbolIcon("book")) to FieldMindScreen.CitationManager,
+                    Triple("Collaborate", "Share with others", MaterialSymbolIcon("share")) to FieldMindScreen.Collaboration
+                )
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Box(
+                                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                                    .background(FieldMindTheme.colors.note.copy(alpha = 0.14f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(MaterialSymbolIcon("mic"), null, tint = FieldMindTheme.colors.note, size = 24.dp)
+                            }
+                            Column(Modifier.weight(1f)) {
+                                Text("Media & sharing", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                                Text("Voice memos, photos, citations, and collaboration", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            mediaToolsCards.take(2).forEach { (info, screen) ->
+                                DataToolMiniCard(info.first, info.second, info.third, FieldMindTheme.colors.note, Modifier.weight(1f)) { onNavigate(screen) }
+                            }
+                        }
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            mediaToolsCards.drop(2).forEach { (info, screen) ->
+                                DataToolMiniCard(info.first, info.second, info.third, FieldMindTheme.colors.note, Modifier.weight(1f)) { onNavigate(screen) }
+                            }
+                        }
+                    }
+                }
+            }
+
             item { Spacer(Modifier.height(24.dp)) }
         }
 

@@ -653,7 +653,10 @@ fun ObserveScreen(
                         }
                         items(completedSessions.take(10)) { researchSession ->
                             Card(
-                                modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp)),
+                                modifier = Modifier.fillMaxWidth()
+                                    .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp))
+                                    .expressiveCardPress()
+                                    .clickable { onOpenDetail("research_session", researchSession.id) },
                                 shape = RoundedCornerShape(30.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
