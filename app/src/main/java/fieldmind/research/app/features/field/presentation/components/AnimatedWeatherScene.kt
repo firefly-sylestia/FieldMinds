@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.components
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -32,7 +33,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalContext
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.abs
@@ -104,7 +108,7 @@ fun AnimatedWeatherScene(
 
     // Load moon phase vector texture as ImageBitmap for moon body rendering
     val moonTextureBitmap = remember {
-        val context = androidx.compose.ui.platform.LocalContext.current
+        val context = LocalContext.current
         val drawable = androidx.core.content.ContextCompat.getDrawable(context, R.drawable.moon_phase_texture)
         if (drawable != null) {
             val w = drawable.intrinsicWidth.coerceAtLeast(1)
