@@ -88,7 +88,10 @@ fun VoiceNotesScreen(
     // ── Helpers ──
     fun startRecording() {
         val file = createFieldMindFile(context, "voice", ".m4a")
-        val newRecorder = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) android.media.MediaRecorder(context) else android.media.MediaRecorder().apply {
+        val newRecorder = (if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S)
+            android.media.MediaRecorder(context)
+        else
+            android.media.MediaRecorder()).apply {
             setAudioSource(android.media.MediaRecorder.AudioSource.MIC)
             setOutputFormat(android.media.MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(android.media.MediaRecorder.AudioEncoder.AAC)
