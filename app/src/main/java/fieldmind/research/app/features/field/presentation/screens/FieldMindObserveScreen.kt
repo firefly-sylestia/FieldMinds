@@ -159,9 +159,14 @@ fun ObserveScreen(
     var session by rememberSaveable { mutableStateOf(CaptureSessionState()) }
     var capturedLocation by remember { mutableStateOf<CapturedLocation?>(null) }
 
+    val researchSessions by viewModel.researchSessions.collectAsState()
+    val projects by viewModel.projects.collectAsState()
+    var sessionName by remember { mutableStateOf("") }
+    var selectedProjectId by remember { mutableStateOf<Long?>(null) }
+    var activeSessionId by remember { mutableStateOf<Long?>(null) }
+    var showSessionSummary by remember { mutableStateOf(false) }
+
     // Sync captureSessionActive with local session state on navigation to Observe screen.
-    // This prevents the nav bar from hiding when navigating to Observe without an active
-    // session — handles stale captureSessionActive state from incomplete cleanup paths.
     LaunchedEffect(Unit) {
         if (!session.isActive) {
             viewModel.setCaptureSessionActive(false)
@@ -324,15 +329,22 @@ fun ObserveScreen(
     // ── Action: start evidence capture ──
     fun startCapture() {
         haptics.light()
+        val name = sessionName.ifBlank {
+            val project = projects.firstOrNull { it.id == selectedProjectId }
+            val time = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date())
+            listOfNotNull(project?.title).joinToString(" • ").ifBlank { "Observation session" } + " · $time"
+        }
+        // Activate session immediately, then create the ResearchSession in background
         session = session.copy(isActive = true, step = CaptureStep.Evidence)
         showEvidenceForm = true
         viewModel.setCaptureSessionActive(true)
-        // Auto-start timer if not already running
         if (!session.timerRunning && session.timerStartedAt == null) {
             session = session.copy(timerStartedAt = System.currentTimeMillis(), timerRunning = true)
         }
-        // Show metadata auto-fetch confirmation
         showMetadataConfirm = true
+        viewModel.addResearchSession(name, selectedProjectId) { id ->
+            activeSessionId = id
+        }
     }
     // ── Action: save observation ──
     fun saveObservation() {
@@ -383,8 +395,10 @@ fun ObserveScreen(
             latitude = capturedLocation?.latitude,
             longitude = capturedLocation?.longitude,
             structuredDetailsJson = structuredJson,
-            timeNote = "Captured via observation session"
-        ) {
+            timeNote = "Captured via observation session at ${formatDurationCompact(liveElapsed)}"
+        ) { observationId ->
+            // Link this observation to the active ResearchSession
+            activeSessionId?.let { viewModel.linkObservationToSession(it, observationId) }
             session = session.copy(
                 subject = "", speciesName = "", facts = "", tags = "", evidence = "",
                 fieldContext = "", manualLocation = "", attachments = emptyList(),
@@ -477,14 +491,19 @@ fun ObserveScreen(
                     Text("Stay on Capture")
                 }
             },
-            dismissButton = {
-                TextButton(onClick = {
-                    viewModel.setCaptureSessionActive(false)
-                    session = CaptureSessionState()
-                    showEvidenceForm = false
-                    showSessionExitConfirm = false
-                    onBack?.invoke()
-                }) {
+            dismissButton = {                    TextButton(onClick = {
+                                    viewModel.setCaptureSessionActive(false)
+                                    activeSessionId?.let { id ->
+                                        val durationMs = session.timerAccumulatedMs +
+                                            (if (session.timerRunning && session.timerStartedAt != null) System.currentTimeMillis() - session.timerStartedAt else 0L)
+                                        viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
+                                    }
+                                    activeSessionId = null
+                                    session = CaptureSessionState()
+                                    showEvidenceForm = false
+                                    showSessionExitConfirm = false
+                                    onBack?.invoke()
+                                }) {
                     Text("Discard session", color = MaterialTheme.colorScheme.error)
                 }
             }
@@ -548,23 +567,63 @@ fun ObserveScreen(
                                 )
                             },
                             onClose = {
-                                session = CaptureSessionState()
-                                showEvidenceForm = false
                                 viewModel.setCaptureSessionActive(false)
+                                activeSessionId?.let { id ->
+                                    val durationMs = session.timerAccumulatedMs +
+                                        (if (session.timerRunning && session.timerStartedAt != null) System.currentTimeMillis() - session.timerStartedAt else 0L)
+                                    viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
+                                }
+                                activeSessionId = null
+                                showSessionSummary = true
                             }
                         )
                     }
                 } else {
                     // ── Start capture button ──
                     item {
-                        Button(
-                            onClick = { startCapture() },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(28.dp)
+                        Card(
+                            shape = RoundedCornerShape(36.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
-                            Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 20.dp)
-                            Spacer(Modifier.size(8.dp))
-                            Text("Start observation session")
+                            Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                                Text("Start observing", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                                Text("Capture evidence, add facts, and log observations with a live timer.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                
+                                // Session name
+                                OutlinedTextField(
+                                    value = sessionName,
+                                    onValueChange = { sessionName = it },
+                                    label = { Text("Session name (optional)") },
+                                    placeholder = { Text("e.g. Morning bird walk") },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(28.dp),
+                                    singleLine = true
+                                )
+                                
+                                // Project linking
+                                if (projects.isNotEmpty()) {
+                                    OptionPickerField(
+                                        label = "Link to project",
+                                        selected = projects.firstOrNull { it.id == selectedProjectId }?.title ?: "No project",
+                                        options = listOf("No project") + projects.map { it.title },
+                                        onSelected = { selected ->
+                                            selectedProjectId = projects.firstOrNull { it.title == selected }?.id
+                                        },
+                                        icon = FieldMindIcons.Project
+                                    )
+                                }
+                                
+                                Button(
+                                    onClick = { startCapture() },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(28.dp)
+                                ) {
+                                    Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 20.dp)
+                                    Spacer(Modifier.size(8.dp))
+                                    Text("Start observation session")
+                                }
+                            }
                         }
                     }
                 }
@@ -578,62 +637,60 @@ fun ObserveScreen(
                     }
                 }
 
-                // ── Past Observation Sessions Grouped Display ──
-                if (observations.isNotEmpty() && !session.isActive) {
-                    val sessionGroups = observations.groupBy { "all" }
-                    if (sessionGroups.size > 1 || (sessionGroups.size == 1 && sessionGroups.keys.first() != "ungrouped")) {
+                // ── Past Research Sessions ──
+                if (!session.isActive) {
+                    val completedSessions = researchSessions.filter { it.status == "Completed" }.sortedByDescending { it.endedAt }
+                    if (completedSessions.isNotEmpty()) {
                         item {
-                            var expandSessions by remember { mutableStateOf(false) }
+                            SectionHeader("Past sessions", "${completedSessions.size} completed")
+                        }
+                        items(completedSessions.take(10)) { researchSession ->
                             Card(
-                                modifier = Modifier.fillMaxWidth().expressivePress(scaleDown = 0.97f).clickable { expandSessions = !expandSessions },
                                 shape = RoundedCornerShape(30.dp),
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                        Box(Modifier.size(44.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.2f)), contentAlignment = Alignment.Center) {
-                                            Icon(FieldMindIcons.Timer, null, tint = FieldMindTheme.colors.observation, size = 22.dp)
-                                        }
-                                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                                            Text("${sessionGroups.size} Capture Session${if (sessionGroups.size != 1) "s" else ""}", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                                            Text("${observations.size} observations logged", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                        }
-                                        Icon(
-                                            MaterialSymbolIcon(if (expandSessions) "expand_less" else "expand_more"),
-                                            null,
-                                            size = 24.dp,
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                                Row(
+                                    Modifier.fillMaxWidth().padding(16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Box(
+                                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                                            .background(FieldMindTheme.colors.positive.copy(alpha = 0.12f)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(FieldMindIcons.Session, null, tint = FieldMindTheme.colors.positive, size = 22.dp)
+                                    }
+                                    Column(Modifier.weight(1f)) {
+                                        Text(
+                                            researchSession.name,
+                                            style = MaterialTheme.typography.titleSmall,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        val elapsedStr = if (researchSession.totalDurationMs > 0) {
+                                            val s = researchSession.totalDurationMs / 1000
+                                            "%d:%02d".format(s / 60, s % 60)
+                                        } else ""
+                                        val obsStr = "${researchSession.observationCount} obs"
+                                        val dateStr = java.text.SimpleDateFormat("MMM d, yyyy", java.util.Locale.getDefault()).format(java.util.Date(researchSession.startedAt))
+                                        Text(
+                                            listOfNotNull(elapsedStr.takeIf { it.isNotBlank() }, obsStr, dateStr).joinToString(" • "),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }
-                                    if (expandSessions) {
-                                        Divider(Modifier.padding(vertical = 8.dp))
-                                        sessionGroups.entries.sortedByDescending { it.value.firstOrNull()?.createdAt }.take(5).forEach { (sessionId, sessionObs) ->
-                                            val firstObs = sessionObs.firstOrNull()
-                                            Row(
-                                                Modifier.fillMaxWidth().padding(8.dp, 0.dp)
-                                                    .then(
-                                                        if (firstObs != null) Modifier.clickable { onOpenDetail("observation", firstObs.id) }
-                                                        else Modifier
-                                                    ),
-                                                verticalAlignment = Alignment.CenterVertically,
-                                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                            ) {
-                                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                                    Text("${sessionObs.size} observation${if (sessionObs.size != 1) "s" else ""}", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
-                                                    Text(java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.US).format(sessionObs.first().createdAt), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                                }
-                                                Icon(MaterialSymbolIcon("chevron_right"), null, size = 18.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
-                                            }
-                                        }
-                                    }
+                                    Icon(
+                                        FieldMindIcons.Forward, null,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        size = 20.dp
+                                    )
                                 }
                             }
                         }
                     }
-                }
-
-                // ── Evidence-First Input ──
+                }                    // ── Evidence-First Input ──
                 if (showEvidenceForm) {
                     // Evidence capture buttons (always visible when form is open)
                     item {
@@ -799,8 +856,54 @@ fun ObserveScreen(
                     }
                 }
 
+                // ── Session Summary (shown when session ends) ──
+                if (showSessionSummary) {
+                    item {
+                        Card(
+                            shape = RoundedCornerShape(36.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        ) {
+                            Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                                Text("Session Complete", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    MetricTile(
+                                        "Duration",
+                                        formatDurationCompact(
+                                            session.timerAccumulatedMs +
+                                                (if (session.timerRunning && session.timerStartedAt != null) System.currentTimeMillis() - session.timerStartedAt else 0L)
+                                        ),
+                                        FieldMindIcons.Calendar,
+                                        Modifier.weight(1f)
+                                    )
+                                    MetricTile(
+                                        "Observations",
+                                        "${session.sessionObservationCount}",
+                                        FieldMindIcons.Observation,
+                                        Modifier.weight(1f)
+                                    )
+                                }
+                                if (sessionName.isNotBlank()) {
+                                    Text("Session: $sessionName", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                }
+                                Button(onClick = {
+                                    showSessionSummary = false
+                                    session = session.copy(
+                                        timerAccumulatedMs = 0L,
+                                        sessionObservationCount = 0
+                                    )
+                                    sessionName = ""
+                                    selectedProjectId = null
+                                }, shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth()) {
+                                    Text("Start new session")
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // ── Empty state (only when no form is open AND no saved observations) ──
-                if (!showEvidenceForm && !session.isActive && observations.isEmpty()) {
+                if (!showEvidenceForm && !session.isActive && observations.isEmpty() && !showSessionSummary) {
                     item {
                         EmptyState(
                             "No observations yet",

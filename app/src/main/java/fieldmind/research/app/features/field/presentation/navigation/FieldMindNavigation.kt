@@ -50,7 +50,6 @@ import fieldmind.research.app.features.field.presentation.components.LocalShared
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
 import fieldmind.research.app.features.field.presentation.screens.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
-import fieldmind.research.app.features.field.data.database.entity.ResearchSessionEntity
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.data.model.AppSettings
 import fieldmind.research.app.shared.presentation.components.icons.Icon
@@ -120,8 +119,6 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object Changelog : FieldMindScreen("field_changelog", "What's new", FieldMindIcons.Info)
     data object Progress : FieldMindScreen("field_progress", "Progress", FieldMindIcons.Check)
     data object Flashcards : FieldMindScreen("field_flashcards_session", "Review", FieldMindIcons.Flashcard)
-    data object ResearchSession : FieldMindScreen("field_research_session", "Session", FieldMindIcons.Bolt)
-    data object WeatherDatabase : FieldMindScreen("field_weather_database", "Weather", FieldMindIcons.Weather)
     data object Reader : FieldMindScreen("field_reader", "Reader", FieldMindIcons.Book)
     data object Settings : FieldMindScreen("field_settings", "Settings", FieldMindIcons.Settings)
     data object SettingsProfile : FieldMindScreen("field_settings_profile", "Profile", FieldMindIcons.Nature)
@@ -317,7 +314,8 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
     LaunchedEffect(requestedDestination) {
         when (requestedDestination) {
             FieldMindScreen.FieldMode.route, "field_mode" -> navController.navigateToDestination(FieldMindScreen.FieldMode.route)
-            "field_timer" -> navController.navigateToDestination(FieldMindScreen.ResearchSession.route)
+            "field_timer" -> navController.navigateToDestination("field_tab_container") // redirect to tabs (capture is tab index 1)
+            // Note: Capture tab can be activated by setting activeTabIndex = 1 after navigation
         }
     }
 
@@ -764,7 +762,7 @@ private fun categorizeRoute(route: String): RouteCategory = when (route) {
             FieldMindScreen.SiteLogTool.route, FieldMindScreen.ComparisonTable.route,
             FieldMindScreen.SpeciesBrowser.route, FieldMindScreen.TaxonomicBrowser.route,
             FieldMindScreen.FieldLog.route, FieldMindScreen.TimerTool.route,
-            FieldMindScreen.Flashcards.route, FieldMindScreen.ResearchSession.route,
+            FieldMindScreen.Flashcards.route,
             FieldMindScreen.WeatherDatabase.route
         ) -> RouteCategory.Tool
         else -> RouteCategory.Other
@@ -1024,7 +1022,6 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.Changelog.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { FieldMindChangelogScreen(onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.Progress.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { InsightsScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Flashcards.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { FlashcardSessionScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
-            composable(FieldMindScreen.ResearchSession.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { ResearchSessionScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.WeatherDatabase.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { WeatherDatabaseScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenSettings = { navController.navigateToDestination(FieldMindScreen.SettingsWeather.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Settings.route) {
                 SwipeBackHost(onBack = { navController.popBackStack() }) {
@@ -1305,7 +1302,7 @@ private fun TabContentBox(
                     ProjectsScreen(
                         viewModel = viewModel,
                         onOpenDetail = { _, id -> onNavigateToDestination("field_project_detail/$id") },
-                        onStartSession = { onNavigateToDestination(FieldMindScreen.ResearchSession.route) },
+                        onStartSession = { onNavigateToDestination("field_tab_container") }, // redirect to capture tab
                         onNavigate = onNav
                     )
                 }
@@ -1632,7 +1629,7 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         route == FieldMindScreen.Changelog.route -> FieldMindChangelogScreen(onBack = noop)
         route == FieldMindScreen.Progress.route -> InsightsScreen(viewModel = viewModel, onBack = noop, onNavigate = noopNav, onOpenDetail = noopDetail)
         route == FieldMindScreen.Flashcards.route -> FlashcardSessionScreen(viewModel = viewModel, onBack = noop)
-        route == FieldMindScreen.ResearchSession.route -> ResearchSessionScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
+        route ==
         route == FieldMindScreen.WeatherDatabase.route -> WeatherDatabaseScreen(viewModel = viewModel, onBack = noop, onOpenSettings = noop, onOpenDetail = noopDetail)
 
         // ── Settings hub (many callbacks) ──
