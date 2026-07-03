@@ -798,8 +798,8 @@ private fun CompactHomeHeader(
             .padding(top = 18.dp),
         shape = RoundedCornerShape(38.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 0.dp,
-        shadowElevation = 0.dp
+        tonalElevation = 2.dp,
+        shadowElevation = 6.dp
     ) {
         Column(
             Modifier.padding(22.dp),

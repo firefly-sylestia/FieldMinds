@@ -43,6 +43,36 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+        // ── v0.27.0 — Depth Hierarchy, Dark Mode Shadows, AMOLED & Smoother Animations ──
+        FieldMindChangelogEntry(
+            version = "0.27.0",
+            date = "2026-07-03",
+            title = "📐 Depth Hierarchy, Dark Mode Shadows & AMOLED",
+            importance = "Major",
+            tags = listOf("💡", "🎨", "⚡", "🔧"),
+            sections = listOf(
+                "💡 Shadow depth hierarchy" to listOf(
+                    "✓ Clickable vs non-clickable elevation tiers: clickable cards (6dp) lift higher than info-only cards (4dp)",
+                    "✓ Home screen header now has proper 6dp shadow depth and 2dp tonal elevation",
+                    "✓ Dark mode: shadows use white-tinted ambient/spot colors for a luminous lifted glow",
+                    "✓ cuteShadowAdaptive() — new theme-aware shadow modifier adapting to light/dark mode"
+                ),
+                "🌙 AMOLED mode" to listOf(
+                    "✓ True black backgrounds (surface, background) when AMOLED is enabled in dark mode",
+                    "✓ Surface containers shift to deeper blacks (#0A0A0A, #121212, #1E1E1E, #2A2A2A)",
+                    "✓ Wired through FieldMindTheme and Settings toggle"
+                ),
+                "⚡ Softer animations" to listOf(
+                    "✓ All spring stiffness values reduced ~30-40% for buttery-smooth motion",
+                    "✓ Default entrance stiffness: 120→80, swipe-back: 120→80, tab entrance: 180→120",
+                    "✓ Nav transitions, press feedback, and gesture springs all softened"
+                ),
+                "🔧 Navigation fix" to listOf(
+                    "✓ Removed PredictiveBackHandler from AllTabScreen — was conflicting with SwipeBackHost's BackHandler causing double-fire on back button",
+                    "✓ BackHandler now cleanly handles hardware back without gesture conflicts"
+                )
+            )
+        ),
         // ── v0.26.0 — Beautification Phases 4–7 & Fixes ──
         FieldMindChangelogEntry(
             version = "0.26.0",

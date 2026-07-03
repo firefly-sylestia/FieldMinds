@@ -289,12 +289,12 @@ class FieldMindSettings private constructor(context: Context) {
 
     // ── Animation tuning settings (elegant, slow defaults) ──
     private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.95f))
-    val animEntranceDamping: StateFlow<Float> = _animEntranceDamping.asStateFlow()
-    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, 120f))
+    val animEntranceDamping: StateFlow<Float> = _animEntranceDamping.asStateFlow()    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, 80f))
     val animEntranceStiffness: StateFlow<Float> = _animEntranceStiffness.asStateFlow()
-    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.92f))
+
+    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.93f))
     val animSwipeBackDamping: StateFlow<Float> = _animSwipeBackDamping.asStateFlow()
-    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 120f))
+    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 80f))
     val animSwipeBackStiffness: StateFlow<Float> = _animSwipeBackStiffness.asStateFlow()
     private val _animSwipeThreshold = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_THRESHOLD, 0.20f))
     val animSwipeThreshold: StateFlow<Float> = _animSwipeThreshold.asStateFlow()
@@ -302,7 +302,7 @@ class FieldMindSettings private constructor(context: Context) {
     val animSwipeScaleFactor: StateFlow<Float> = _animSwipeScaleFactor.asStateFlow()
     private val _animTabEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_DAMPING, 0.95f))
     val animTabEntranceDamping: StateFlow<Float> = _animTabEntranceDamping.asStateFlow()
-    private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, 180f))
+    private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, 120f))
     val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
     // ── Reactive combined AnimationConfig flow (reacts to any parameter change) ──

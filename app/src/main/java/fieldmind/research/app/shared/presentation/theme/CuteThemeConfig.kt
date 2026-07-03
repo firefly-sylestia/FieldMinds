@@ -1,6 +1,7 @@
 package fieldmind.research.app.ui.theme
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,6 +36,13 @@ import androidx.compose.ui.unit.dp
  *  - [GradientCard] — Card composable with beautiful gradient backgrounds
  *  - [cuteGradientBackground] — Modifier extension for gradient surfaces
  *
+ *  🌈 Phase 7: Depth Hierarchy & Dark Mode Shadows
+ *  - [CuteElevations] now includes `clickableTier` and `nonClickableTier`
+ *    for clear clickable vs non-clickable visual distinction.
+ *  - [CuteShadow] now carries `ambientColor` / `spotColor` which auto-adapt
+ *    to dark mode (white-tinted glow in dark, cool black in light).
+ *  - [cuteShadow] modifier uses theme-aware colors for ambient/spot.
+ *
  *  🌸 Pastel Theme: See [fieldmind.research.app.ui.theme.PastelPrimaryLight] et al.
  *  in [Color.kt] for the full pastel M3 palette, wired as "Pastel" in
  *  [fieldmind.research.app.ui.theme.getCustomColorScheme]. Selectable from
@@ -49,27 +58,41 @@ import androidx.compose.ui.unit.dp
  *
  * Convention: "plush" tiers correspond to information depth.
  *   plushTier1 (2dp)  → subtle lift for background surfaces / low-focus cards
- *   plushTier2 (4dp)  → standard card elevation (SettingsGroupCard, EntityCard)
- *   plushTier3 (6dp)  → prominent cards, FeaturedCard, hero surfaces
+ *   plushTier2 (4dp)  → standard card elevation (non-clickable: InfoCard, stat cards)
+ *   plushTier3 (6dp)  → clickable cards (ClickableCard, EntityCard, SettingsGroupCard)
  *   plushTier4 (8dp)  → dialogs, bottom sheets, floating elements
  *   plushTier5 (12dp) → highest emphasis (modals, pickers)
+ *
+ *  Clickable vs non-clickable distinction:
+ *    nonClickableTier (4dp) — for cards that display info but are not tappable
+ *    clickableTier (6dp)    — for cards that respond to tap/press
  */
 object CuteElevations {
     /** Subtle lift — background surfaces, low-focus info cards. */
     val plushTier1: Dp = 2.dp
-    /** Standard card elevation — most cards use this. */
+    /** Standard card elevation — non-clickable info cards, stat displays. */
     val plushTier2: Dp = 4.dp
-    /** Prominent cards — featured content, hero surfaces. */
+    /** Prominent cards — clickable cards, featured content, hero surfaces. */
     val plushTier3: Dp = 6.dp
     /** Dialogs, bottom sheets, floating elements. */
     val plushTier4: Dp = 8.dp
     /** Highest emphasis — modals, pickers, important overlays. */
     val plushTier5: Dp = 12.dp
 
+    // ── Semantic depth tiers: clickable vs non-clickable ──
+    /** Non-clickable cards — info display, stat tiles, section headers. Lower lift. */
+    val nonClickableTier: Dp = plushTier2
+    /** Clickable cards — respond to tap with expressive press feedback. Higher lift. */
+    val clickableTier: Dp = plushTier3
+
     // ── Quick-access presets for CardDefaults ──
     val cardDefault
         @Composable
-        get() = CardDefaults.cardElevation(defaultElevation = plushTier2)
+        get() = CardDefaults.cardElevation(defaultElevation = clickableTier)
+
+    val cardNonClickable
+        @Composable
+        get() = CardDefaults.cardElevation(defaultElevation = nonClickableTier)
 
     val cardProminent
         @Composable
@@ -81,30 +104,74 @@ object CuteElevations {
 }
 
 /**
- * Shadow style configuration for a single tier.
+ * Shadow style configuration for a single tier with theme-aware ambient/spot colors.
+ *
+ * In light mode:
+ *   ambientColor = Color.Black at low alpha (standard drop shadow)
+ *   spotColor    = Color.Black at medium alpha (directional light shadow)
+ *
+ * In dark mode:
+ *   ambientColor = Color.White at low alpha (subtle white glow, lifted feel)
+ *   spotColor    = Color.White at low-medium alpha (white-tinted directional shadow)
  *
  * @property elevation the shadow height in dp.
+ * @property ambientColor the ambient side color (default auto-adapts to light/dark mode).
+ * @property spotColor the spot/light source color (default auto-adapts to light/dark mode).
  */
 data class CuteShadow(
-    val elevation: Dp
-)
+    val elevation: Dp,
+    val ambientColor: Color = Color.Black.copy(alpha = 0.12f),
+    val spotColor: Color = Color.Black.copy(alpha = 0.18f)
+) {
+    companion object {
+        /**
+         * Create a CuteShadow with dark-mode-aware colors.
+         * In dark mode, shadows use white-tinted colors for a soft glow effect.
+         * In light mode, shadows use standard black with appropriate alphas.
+         */
+        @Composable
+        fun themeAware(elevation: Dp, isDark: Boolean = isSystemInDarkTheme()): CuteShadow {
+            val ambientAlpha = 0.08f + (elevation.value / 12f) * 0.06f
+            val spotAlpha = 0.12f + (elevation.value / 12f) * 0.10f
+            return if (isDark) {
+                // Dark mode: white-tinted glow shadows — gives depth with a luminous lift
+                CuteShadow(
+                    elevation = elevation,
+                    ambientColor = Color.White.copy(alpha = ambientAlpha.coerceIn(0.04f, 0.14f)),
+                    spotColor = Color.White.copy(alpha = spotAlpha.coerceIn(0.06f, 0.22f))
+                )
+            } else {
+                CuteShadow(
+                    elevation = elevation,
+                    ambientColor = Color.Black.copy(alpha = ambientAlpha.coerceIn(0.06f, 0.14f)),
+                    spotColor = Color.Black.copy(alpha = spotAlpha.coerceIn(0.10f, 0.24f))
+                )
+            }
+        }
+    }
+}
 
 /**
  * Reusable shadow presets that map 1:1 to [CuteElevations] tiers.
+ * Each preset auto-adapts ambient/spot colors to dark/light mode.
  */
 object CuteShadows {
     /** Subtle — for tier-1 elements. */
+    @Composable
     val subtle: CuteShadow
-        get() = CuteShadow(elevation = CuteElevations.plushTier1)
-    /** Standard — for tier-2 cards. */
+        get() = CuteShadow.themeAware(CuteElevations.plushTier1)
+    /** Standard non-clickable — for tier-2 info cards. */
+    @Composable
     val standard: CuteShadow
-        get() = CuteShadow(elevation = CuteElevations.plushTier2)
-    /** Prominent — for tier-3 featured surfaces. */
-    val prominent: CuteShadow
-        get() = CuteShadow(elevation = CuteElevations.plushTier3)
+        get() = CuteShadow.themeAware(CuteElevations.nonClickableTier)
+    /** Clickable — for tier-3 interactive cards. */
+    @Composable
+    val clickable: CuteShadow
+        get() = CuteShadow.themeAware(CuteElevations.clickableTier)
     /** Float — for tier-4 floating elements. */
+    @Composable
     val float: CuteShadow
-        get() = CuteShadow(elevation = CuteElevations.plushTier4)
+        get() = CuteShadow.themeAware(CuteElevations.plushTier4)
 }
 
 /**
@@ -116,6 +183,13 @@ object CuteShadows {
  *     shape = CuteCardDefaults.Shape,
  *     colors = CuteCardDefaults.colors(),
  *     elevation = CuteElevations.cardDefault,
+ * ) { ... }
+ * ```
+ *
+ * NEW: elevationPreset lets you pick clickable vs non-clickable elevation:
+ * ```
+ * Card(
+ *     elevation = CuteCardDefaults.elevation(isClickable = true),
  * ) { ... }
  * ```
  */
@@ -145,6 +219,15 @@ object CuteCardDefaults {
         CardDefaults.cardColors(
             containerColor = accent.copy(alpha = if (isDark) 0.20f else 0.08f)
         )
+
+    /**
+     * Semantic elevation preset — pick clickable vs non-clickable.
+     * @param isClickable true for interactive cards (higher lift), false for info-only cards.
+     */
+    @Composable
+    fun elevation(isClickable: Boolean = true): CardElevation =
+        if (isClickable) CuteElevations.cardDefault
+        else CuteElevations.cardNonClickable
 }
 
 /**
@@ -339,17 +422,53 @@ fun GradientCard(
 }
 
 /**
- * A [Modifier] extension that applies a soft custom shadow.
+ * A [Modifier] extension that applies a soft custom shadow with theme-aware colors.
  *
  * This gives a plush, layered look: the elevation shadow lifts the card
  * off the background for a clear visual separation.
  *
+ * In dark mode, shadows use white-tinted ambient/spot colors for a luminous lift.
+ * In light mode, standard warm-black shadows with cooler undertones.
+ *
  * @param elevation the dp height of the shadow.
  * @param shape the shape to clip the shadow to (defaults to pill shape).
+ * @param isClickable if true, uses clickable-tier elevation; otherwise uses non-clickable.
  */
 fun Modifier.cuteShadow(
-    elevation: Dp = CuteElevations.plushTier2,
+    elevation: Dp = CuteElevations.clickableTier,
     shape: Shape = CuteCardDefaults.Shape
 ): Modifier = this.then(
-    shadow(elevation = elevation, shape = shape, clip = false)
+    shadow(
+        elevation = elevation,
+        shape = shape,
+        clip = false
+    )
 )
+
+/**
+ * Theme-aware shadow that adapts ambient/spot colors to dark/light mode.
+ * In dark mode, white-tinted shadows give a luminous glow effect.
+ * In light mode, standard cool-black shadows.
+ *
+ * Usage:
+ * ```
+ * Modifier.cuteShadowAdaptive(elevation = CuteElevations.clickableTier)
+ * ```
+ */
+@Composable
+fun Modifier.cuteShadowAdaptive(
+    elevation: Dp = CuteElevations.clickableTier,
+    shape: Shape = CuteCardDefaults.Shape,
+    isDark: Boolean = isSystemInDarkTheme()
+): Modifier {
+    val shadowStyle = CuteShadow.themeAware(elevation, isDark)
+    return this.then(
+        shadow(
+            elevation = elevation,
+            shape = shape,
+            ambientColor = shadowStyle.ambientColor,
+            spotColor = shadowStyle.spotColor,
+            clip = false
+        )
+    )
+}

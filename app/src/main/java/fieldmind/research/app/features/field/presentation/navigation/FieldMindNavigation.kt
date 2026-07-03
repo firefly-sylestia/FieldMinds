@@ -68,11 +68,8 @@ import fieldmind.research.app.features.field.presentation.components.AnimationCo
 import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
 import fieldmind.research.app.features.field.presentation.components.LocalPeekContentHolder
 import androidx.activity.compose.BackHandler
-import androidx.activity.ExperimentalActivityApi
-import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.CompositionLocalProvider
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import kotlin.math.abs
@@ -770,8 +767,8 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val damping = animConfig?.entranceDampingRatio ?: 0.88f
-    val stiffness = animConfig?.entranceStiffness ?: 200f
+    val damping = animConfig?.entranceDampingRatio ?: 0.95f
+    val stiffness = animConfig?.entranceStiffness ?: 80f
     val slideSpec = spring<IntOffset>(dampingRatio = damping, stiffness = stiffness * 0.5f)
     val fadeSpec = spring<Float>(dampingRatio = damping, stiffness = stiffness)
 
@@ -809,8 +806,8 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val damping = animConfig?.entranceDampingRatio ?: 0.88f
-    val stiffness = animConfig?.entranceStiffness ?: 200f
+    val damping = animConfig?.entranceDampingRatio ?: 0.95f
+    val stiffness = animConfig?.entranceStiffness ?: 80f
     val slideSpec = spring<IntOffset>(dampingRatio = damping, stiffness = stiffness * 0.5f)
     val fadeSpec = spring<Float>(dampingRatio = damping, stiffness = stiffness)
 
@@ -850,8 +847,8 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val damping = animConfig?.entranceDampingRatio ?: 0.88f
-    val stiffness = animConfig?.entranceStiffness ?: 200f
+    val damping = animConfig?.entranceDampingRatio ?: 0.95f
+    val stiffness = animConfig?.entranceStiffness ?: 80f
     val slideSpec = spring<IntOffset>(dampingRatio = damping, stiffness = stiffness * 0.5f)
     val fadeSpec = spring<Float>(dampingRatio = damping, stiffness = stiffness)
 
@@ -882,8 +879,8 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val damping = animConfig?.entranceDampingRatio ?: 0.88f
-    val stiffness = animConfig?.entranceStiffness ?: 200f
+    val damping = animConfig?.entranceDampingRatio ?: 0.95f
+    val stiffness = animConfig?.entranceStiffness ?: 80f
     val slideSpec = spring<IntOffset>(dampingRatio = damping, stiffness = stiffness * 0.5f)
     val fadeSpec = spring<Float>(dampingRatio = damping, stiffness = stiffness)
 
@@ -1333,7 +1330,6 @@ private fun TabContentBox(
  * During a swipe gesture, the active tab slides to reveal the REAL adjacent
  * tab content — no mock placeholder cards or labels.
  */
-@OptIn(ExperimentalActivityApi::class)
 @Composable
 private fun AllTabScreen(
     activeTabIndex: Int,
@@ -1380,43 +1376,13 @@ private fun AllTabScreen(
     }
 
     // ── System back gesture (left edge): handle all tabs ──
-    // First tab: predictive peek → exit app on commit (full screen reveal).
-    // Other tabs: predictive peek → show REAL adjacent tab content behind current
-    // tab (reveals 60% of previous tab), then switch to it on commit.
-    //
-    // ── Predictive back gesture (system swipe from left edge) ──
-    // Drives animX to reveal the previous tab behind the current one.
-    // Uses the system's PredictiveBackHandler instead of a custom gesture overlay
-    // to avoid breaking taps, clicks, and vertical scrolls in tab content.
-    PredictiveBackHandler(enabled = !reduceMotion) { progressFlow ->
-        try {
-            // First tab: reveal full screen behind (exit). Other tabs: reveal 60% of previous.
-            val maxOffset = if (isFirstTab) contentWidth else contentWidth * 0.6f
-            progressFlow.collect { backEvent ->
-                val offset = (maxOffset * backEvent.progress).coerceAtLeast(0f)
-                animX.snapTo(offset)
-            }
-            // Gesture committed — snap back before navigating
-            animX.snapTo(0f)
-            haptics.confirm()
-            if (isFirstTab) {
-                onPopBackStack()
-            } else {
-                onTabSelected(activeTabIndex - 1)
-            }
-        } catch (_: CancellationException) {
-            // Gesture cancelled — spring animation back to 0
-            scope.launch {
-                animX.animateTo(
-                    0f,
-                    animationSpec = spring(
-                        dampingRatio = 0.9f,
-                        stiffness = 200f
-                    )
-                )
-            }
-        }
-    }
+    // First tab: exit app on back. Other tabs: navigate to previous tab.
+    // NOTE: PredictiveBackHandler was removed because it conflicted with
+    // SwipeBackHost's BackHandler during navigation transitions (double-fire issue).
+    // Manual drag gestures on the content layer handle inter-tab swiping instead.
+    // BackHandler fires on hardware back button press.
+    // The detectHorizontalDragGestures gesture overlay below handles touch-based
+    // inter-tab swiping independently.
 
     // ── Determine if we can swipe left/right ──
     val canSwipeLeft = activeTabIndex < visibleTabs.size - 1
@@ -1461,10 +1427,7 @@ private fun AllTabScreen(
                                     scope.launch {
                                         animX.animateTo(
                                             0f,
-                                            animationSpec = spring(
-                                                dampingRatio = 0.85f,
-                                                stiffness = 300f
-                                            )
+                                            animationSpec = FieldMindMotion.expressiveFloat
                                         )
                                     }
                                 }
@@ -1473,10 +1436,7 @@ private fun AllTabScreen(
                                 scope.launch {
                                     animX.animateTo(
                                         0f,
-                                        animationSpec = spring(
-                                            dampingRatio = 0.85f,
-                                            stiffness = 300f
-                                        )
+                                        animationSpec = FieldMindMotion.expressiveFloat
                                     )
                                 }
                             }

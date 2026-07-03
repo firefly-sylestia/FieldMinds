@@ -515,6 +515,7 @@ val ENTITY_COLOR_ICONS: Map<String, MaterialSymbolIcon> = mapOf(
 fun FieldMindTheme(
     darkTheme: Boolean,
     dynamicColor: Boolean,
+    amoledTheme: Boolean = false,
     customColorScheme: String = "Default",
     entityColorOverrides: Map<String, Long> = emptyMap(),
     content: @Composable () -> Unit
@@ -526,6 +527,22 @@ fun FieldMindTheme(
         customColorScheme != "Default" -> getCustomColorScheme(customColorScheme, darkTheme)
         darkTheme -> BrandDark
         else -> BrandLight
+    }.let { scheme ->
+        // Apply AMOLED theme modifications if enabled and in dark mode
+        if (amoledTheme && darkTheme) {
+            scheme.copy(
+                background = Color.Black,
+                surface = Color.Black,
+                surfaceVariant = Color(0xFF121212),
+                surfaceContainer = Color(0xFF121212),
+                surfaceContainerLow = Color(0xFF0A0A0A),
+                surfaceContainerLowest = Color.Black,
+                surfaceContainerHigh = Color(0xFF1E1E1E),
+                surfaceContainerHighest = Color(0xFF2A2A2A),
+                surfaceDim = Color.Black,
+                surfaceBright = Color(0xFF2A2A2A)
+            )
+        } else scheme
     }
     val semantic = when {
             // Hand-tuned pastel entity colors for Pastel scheme without dynamic color
