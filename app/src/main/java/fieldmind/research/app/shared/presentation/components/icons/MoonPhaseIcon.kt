@@ -129,9 +129,10 @@ fun MoonPhaseIcon(
         contentAlignment = Alignment.Center
     ) {
         Canvas(modifier = Modifier.size(size)) {
-            val cx = size.width / 2f
-            val cy = size.height / 2f
-            val r = minOf(size.width, size.height) * 0.42f
+            val cs = this.size
+            val cx = cs.width / 2f
+            val cy = cs.height / 2f
+            val r = minOf(cs.width, cs.height) * 0.42f
 
             // Glow halo
             if (showGlow && glowAlpha > 0f) {
