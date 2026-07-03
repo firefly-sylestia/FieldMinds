@@ -62,6 +62,7 @@ import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenc
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.rememberScrollState
@@ -811,15 +812,10 @@ private fun CompactHomeHeader(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                Box(
-                    Modifier
-                        .size(52.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(colors.positive.copy(alpha = if (colors.isDark) 0.34f else 0.16f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(FieldMindIcons.Nature, null, tint = colors.positive, size = 28.dp)
-                }
+                FieldMindLogo(
+                    size = 52.dp,
+                    modifier = Modifier.clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f))
+                )
                 Column(Modifier.weight(1f)) {
                     Text(
                         "FieldMind",

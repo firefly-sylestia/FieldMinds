@@ -38,6 +38,7 @@ import androidx.core.content.ContextCompat
 import kotlin.math.roundToInt
 import fieldmind.research.app.features.field.data.settings.*
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
+import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
 import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
 import fieldmind.research.app.features.field.presentation.components.expressivePress
 import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
@@ -448,13 +449,13 @@ private fun OnboardingWelcomePage(
             ) {
                 AnimatedVisibility(visible = showContent, enter = fadeIn(tween(400, easing = FastOutSlowInEasing)) + scaleIn(initialScale = 0.8f, animationSpec = tween(400, easing = FastOutSlowInEasing))) {
                     Box(
-                        Modifier.size(72.dp).background(
-                            Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.tertiary)),
+                        Modifier.size(72.dp).clip(RoundedCornerShape(34.dp)).background(
+                            Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primaryContainer)),
                             RoundedCornerShape(34.dp)
                         ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(FieldMindIcons.Nature, null, tint = MaterialTheme.colorScheme.onPrimary, size = 40.dp)
+                        FieldMindLogo(size = 64.dp)
                     }
                 }
 

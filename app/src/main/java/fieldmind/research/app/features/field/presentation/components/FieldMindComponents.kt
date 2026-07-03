@@ -74,8 +74,32 @@ import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.components.LocalPrivacyTypingEnabled
 import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
+import fieldmind.research.app.R
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
 // FieldMindIcons is in the same package (components.FieldMindIcons)
 // FieldMindIcons is in the same package (components.FieldMindIcons)
+
+/**
+ * Displays the official FieldMind logo from drawable resources.
+ * Uses the fieldmind_logo.png asset with proper aspect-ratio scaling.
+ *
+ * @param size The display size (default 72.dp). The logo scales proportionally.
+ * @param modifier Additional modifier to apply.
+ */
+@Composable
+fun FieldMindLogo(
+    modifier: Modifier = Modifier,
+    size: androidx.compose.ui.unit.Dp = 72.dp
+) {
+    Image(
+        painter = painterResource(id = R.drawable.fieldmind_logo),
+        contentDescription = "FieldMind logo",
+        modifier = modifier.size(size),
+        contentScale = ContentScale.Fit
+    )
+}
 
 // ══════════════════════════════════════════════════════════════════════
 //  FieldMindSubNavBar — shared horizontal chip/tab row for Library,

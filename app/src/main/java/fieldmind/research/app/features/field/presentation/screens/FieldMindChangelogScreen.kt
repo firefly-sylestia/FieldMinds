@@ -43,6 +43,23 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+        // ── v0.28.0 — Official FieldMind Logo in App UI ──
+        FieldMindChangelogEntry(
+            version = "0.28.0",
+            date = "2026-07-03",
+            title = "🎯 Official FieldMind Logo in App UI",
+            importance = "Major",
+            tags = listOf("🎨", "✨", "🖼️"),
+            sections = listOf(
+                "🎯 FieldMind logo" to listOf(
+                    "✓ New FieldMindLogo composable loads the official fieldmind_logo.png from resources",
+                    "✓ Welcome page: real logo replaces generic leaf icon with gradient background",
+                    "✓ Home header: real logo replaces green-tinted Nature icon",
+                    "✓ About page: real logo replaces Nature icon in branding card",
+                    "✓ Decoy lock screen: real logo replaces placeholder leaf icon"
+                )
+            )
+        ),
         // ── v0.27.0 — Depth Hierarchy, Dark Mode Shadows, AMOLED & Smoother Animations ──
         FieldMindChangelogEntry(
             version = "0.27.0",

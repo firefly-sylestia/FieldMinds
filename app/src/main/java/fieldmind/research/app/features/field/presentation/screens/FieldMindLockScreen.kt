@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
+import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
 import fieldmind.research.app.features.field.presentation.components.LocalPrivacyTypingEnabled
 import fieldmind.research.app.features.field.presentation.components.PrivacyTypingIndicator
 import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
@@ -294,12 +295,10 @@ fun DecoyAppContent(
             modifier = Modifier.padding(32.dp)
         ) {
             // Decoy brand icon
-            Box(
-                Modifier.size(80.dp).clip(RoundedCornerShape(34.dp)).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.12f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.hypothesis, size = 44.dp)
-            }
+            FieldMindLogo(
+                size = 80.dp,
+                modifier = Modifier.clip(RoundedCornerShape(34.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f))
+            )
 
             Text(
                 "Welcome to FieldMind",

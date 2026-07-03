@@ -48,6 +48,7 @@ import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindVie
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.components.pressScale
+import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
 import fieldmind.research.app.features.field.presentation.screens.DevWeatherTestPanel
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.foundation.text.KeyboardOptions
@@ -1015,9 +1016,10 @@ fun AboutPage(onBack: () -> Unit, onOpenChangelog: (() -> Unit)? = null) {
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(Modifier.padding(22.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Box(Modifier.size(64.dp).clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
-                        Icon(FieldMindIcons.Nature, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 36.dp)
-                    }
+                    FieldMindLogo(
+                        size = 64.dp,
+                        modifier = Modifier.clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.08f))
+                    )
                     Text("FieldMind", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     Text("Observe. Question. Research clearly.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f), textAlign = TextAlign.Center)
                     Text("A free, offline-first research notebook for curious naturalists, students, and citizen scientists.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.68f), textAlign = TextAlign.Center)
