@@ -27,6 +27,8 @@ import fieldmind.research.app.features.field.data.vision.SpeciesRecord
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.delay
@@ -465,8 +467,7 @@ internal fun SpeciesCard(
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier
-            
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.clickableTier, shape = RoundedCornerShape(30.dp))
     ) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),
@@ -755,7 +756,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                                 shape = RoundedCornerShape(28.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f).cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(28.dp))
                             ) {
                                 Column(
                                     Modifier.padding(16.dp),
@@ -780,7 +781,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                                 shape = RoundedCornerShape(28.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f).cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(28.dp))
                             ) {
                                 Column(
                                     Modifier.padding(16.dp),
@@ -895,7 +896,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                                         ),
                                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                        modifier = Modifier.fillMaxWidth()
+                                        modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(24.dp))
                                     ) {
                                         Row(
                                             Modifier
@@ -983,6 +984,7 @@ private fun DetailSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
+            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp))
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(

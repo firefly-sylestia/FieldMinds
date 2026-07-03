@@ -62,7 +62,9 @@ import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.CuteGradients
+import fieldmind.research.app.ui.theme.cuteShadow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -582,6 +584,7 @@ fun ObserveScreen(
                     // ── Start capture button ──
                     item {
                         Card(
+                            modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
                             shape = RoundedCornerShape(36.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -645,22 +648,11 @@ fun ObserveScreen(
                             SectionHeader("Past sessions", "${completedSessions.size} completed")
                         }
                         items(completedSessions.take(10)) { researchSession ->
-                            Card(
+                        Card(
+                                modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp)),
                                 shape = RoundedCornerShape(30.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Row(
-                                    Modifier.fillMaxWidth().padding(16.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    Box(
-                                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
-                                            .background(FieldMindTheme.colors.positive.copy(alpha = 0.12f)),
-                                        contentAlignment = Alignment.Center
-                                    ) {
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                                         Icon(FieldMindIcons.Session, null, tint = FieldMindTheme.colors.positive, size = 22.dp)
                                     }
                                     Column(Modifier.weight(1f)) {
@@ -860,6 +852,7 @@ fun ObserveScreen(
                 if (showSessionSummary) {
                     item {
                         Card(
+                            modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
                             shape = RoundedCornerShape(36.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -1049,6 +1042,7 @@ private fun LiveObservationTimer(
     )
 
     Card(
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isRunning)
@@ -1204,6 +1198,7 @@ private fun EvidenceCaptureRow(
     onIdentifyFromPhoto: (String?) -> Unit = {}
 ) {
     Card(
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
         shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
@@ -1375,24 +1370,25 @@ private fun QuickObservationForm(
     val hasLocation = manualLocation.isNotBlank()
     val hasMeasurements = measurements.values.any { it.isNotBlank() }
 
-    Card(
-        shape = RoundedCornerShape(36.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
-    ) {
-        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            // Form header
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(FieldMindIcons.Edit, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
-                }
-                Text("Observation details", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+Card(
+    modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
+    shape = RoundedCornerShape(36.dp),
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+) {
+    Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        // Form header
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Box(
+                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(FieldMindIcons.Edit, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
             }
+            Text("Observation details", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        }
 
-            // Quality Score (Phase 3)
+        // Quality Score (Phase 3)
             QualityScoreCard(qualityScore)
             MissingFieldsChecklist(
                 hasSubject = subject.isNotBlank(),
@@ -1571,6 +1567,7 @@ private fun QuickClassificationGrid(
     )
 
     Card(
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
         shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -1641,7 +1638,7 @@ private fun AutoFetchConfirmCard(
     onSkip: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
@@ -1712,6 +1709,7 @@ private fun AutoMetadataStatusCard(
     val showWeatherConfirm = remember { mutableStateOf(false) }
     
     Card(
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -1855,6 +1853,7 @@ private fun SpeciesIdentificationLiveCard(
     if (!hasPhoto && identifiedSpecies == null) return
 
     Card(
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (identifiedSpecies != null)
@@ -2004,6 +2003,7 @@ private fun EnhancedObservationForm(
     }
 
     Card(
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
         shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
