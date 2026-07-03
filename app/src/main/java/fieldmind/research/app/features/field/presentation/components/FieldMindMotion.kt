@@ -166,7 +166,7 @@ object FieldMindMotion {
 
     val expressiveFloat = spring<Float>(
         dampingRatio = 0.88f,
-        stiffness = 220f
+        stiffness = 170f
     )
 
     val expressiveSnap = spring<Float>(

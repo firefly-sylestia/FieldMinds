@@ -43,6 +43,21 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+        // ── v0.30.0 — Smoother Card Entrance Animations ──
+        FieldMindChangelogEntry(
+            version = "0.30.0",
+            date = "2026-07-03",
+            title = "✨ Smoother Card Entrance Animations",
+            importance = "Patch",
+            tags = listOf("🎬", "🐌", "✨"),
+            sections = listOf(
+                "🐌 ExpressiveFloat softened" to listOf(
+                    "✓ expressiveFloat stiffness reduced from 220→170 (23% reduction)",
+                    "✓ Powers staggeredEntrance() — every card's fade+slide entrance across the entire app",
+                    "✓ Still the snappiest spring (above expressiveSpring at 130) — lively but no longer jarring"
+                )
+            )
+        ),
         // ── v0.29.0 — AMOLED Black Gradient Style ──
         FieldMindChangelogEntry(
             version = "0.29.0",
