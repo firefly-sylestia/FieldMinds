@@ -69,6 +69,7 @@ import fieldmind.research.app.features.field.presentation.components.LocalAnimat
 import fieldmind.research.app.features.field.presentation.components.LocalPeekContentHolder
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.CompositionLocalProvider
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -1351,6 +1352,12 @@ private fun AllTabScreen(
     val haptics = rememberFieldMindHaptics()
 
     val isFirstTab = activeTabIndex == 0
+
+    // ── Home tab: move app to background instead of destroying Activity ──
+    BackHandler(enabled = isFirstTab) {
+        val activity = LocalContext.current as? android.app.Activity
+        activity?.moveTaskToBack(true)
+    }
 
     // ── Tab entrance animation (scale-up + fade-in on tap-switch) ──
     // When a tab is activated via tapping (not swiping), the content
