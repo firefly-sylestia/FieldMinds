@@ -801,6 +801,8 @@ internal fun SettingsSubPage(
     headerAction: @Composable (() -> Unit)? = null,
     content: LazyListScope.() -> Unit
 ) {
+    // Hardware/gesture back button support
+    BackHandler(enabled = true) { onBack() }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()

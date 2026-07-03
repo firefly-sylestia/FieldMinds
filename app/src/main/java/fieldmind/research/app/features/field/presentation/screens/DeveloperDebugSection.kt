@@ -36,6 +36,7 @@ import fieldmind.research.app.features.field.presentation.components.SectionHead
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import androidx.activity.compose.BackHandler
 
 // ══════════════════════════════════════════════════════════════════════
 //  Developer Debug Tools — Gesture Thresholds
@@ -624,6 +625,9 @@ fun AnimationTuningSettingsPage(
     val swipeScale by settings.animSwipeScaleFactor.collectAsState()
     val tabDamping by settings.animTabEntranceDamping.collectAsState()
     val tabStiffness by settings.animTabEntranceStiffness.collectAsState()
+
+    // Hardware/gesture back button support
+    BackHandler(enabled = true) { onBack() }
 
     Box(Modifier.fillMaxSize().statusBarsPadding()) {
         LazyColumn(
