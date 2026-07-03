@@ -1359,10 +1359,10 @@ private fun AllTabScreen(
     val backPressTime = remember { mutableStateOf(0L) }
     val doubleTapInterval = 2000L
     val snackbar = LocalFieldMindSnackbar.current
+    val activity = LocalContext.current as? android.app.Activity
     BackHandler(enabled = isFirstTab) {
         val now = System.currentTimeMillis()
         if (now - backPressTime.value < doubleTapInterval) {
-            val activity = LocalContext.current as? android.app.Activity
             activity?.moveTaskToBack(true)
         } else {
             backPressTime.value = now

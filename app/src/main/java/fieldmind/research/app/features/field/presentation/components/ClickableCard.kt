@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,9 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.Color
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardElevation
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.ui.theme.CuteElevations
 /**
@@ -42,15 +40,14 @@ fun ClickableCard(
     animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) = Card(
-    onClick = onClick,
     modifier = modifier
         .fillMaxWidth()
+        .clickable(onClick = onClick)
         .staggeredEntrance(index = index, animate = animate)
         .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
     shape = shape,
     colors = colors,
     elevation = elevation,
-    tonalElevation = CuteElevations.clickableTier,
     border = border,
     content = content
 )
@@ -78,7 +75,6 @@ fun InfoCard(
     shape = shape,
     colors = colors,
     elevation = elevation,
-    tonalElevation = CuteElevations.nonClickableTier,
     border = border,
     content = content
 )
