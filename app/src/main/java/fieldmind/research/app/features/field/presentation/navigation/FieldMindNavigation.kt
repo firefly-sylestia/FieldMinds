@@ -43,6 +43,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import fieldmind.research.app.features.field.presentation.components.FieldMindSnackbarProvider
+import fieldmind.research.app.features.field.presentation.components.LocalFieldMindSnackbar
 import fieldmind.research.app.features.field.presentation.components.SwipeBackHost
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.LocalSharedTransitionScope
@@ -72,6 +73,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.CompositionLocalProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 import kotlin.math.abs
 
@@ -1356,6 +1358,7 @@ private fun AllTabScreen(
     // ── Double-tap to exit from Home tab ──
     val backPressTime = remember { mutableStateOf(0L) }
     val doubleTapInterval = 2000L
+    val snackbar = LocalFieldMindSnackbar.current
     BackHandler(enabled = isFirstTab) {
         val now = System.currentTimeMillis()
         if (now - backPressTime.value < doubleTapInterval) {
@@ -1363,8 +1366,15 @@ private fun AllTabScreen(
             activity?.moveTaskToBack(true)
         } else {
             backPressTime.value = now
-            val context = LocalContext.current
-            android.widget.Toast.makeText(context, "Press back again to exit", android.widget.Toast.LENGTH_SHORT).show()
+            scope.launch {
+                snackbar.currentSnackbarData?.dismiss()
+                snackbar.showSnackbar(
+                    message = "Press back again to exit",
+                    duration = SnackbarDuration.Indefinite
+                )
+                delay(1500L)
+                snackbar.currentSnackbarData?.dismiss()
+            }
         }
     }
 
