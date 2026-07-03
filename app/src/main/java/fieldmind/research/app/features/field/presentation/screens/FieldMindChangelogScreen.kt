@@ -43,6 +43,22 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+        // ── v0.31.0 — Fixed Card Elevation Hierarchy ──
+        FieldMindChangelogEntry(
+            version = "0.31.0",
+            date = "2026-07-03",
+            title = "📐 Fixed Card Elevation Hierarchy",
+            importance = "Patch",
+            tags = listOf("💡", "🎨", "🔧"),
+            sections = listOf(
+                "💡 Clickable vs non-clickable elevation fix" to listOf(
+                    "✓ ClickableCard default elevation: 4dp → 6dp (CuteElevations.clickableTier)",
+                    "✓ InfoCard now uses CuteElevations.nonClickableTier (4dp) for semantic clarity",
+                    "✓ Clickable cards now lift higher than info-only cards, matching the defined depth hierarchy",
+                    "✓ All existing ClickableCard call sites (~10+) automatically inherit the correct elevation"
+                )
+            )
+        ),
         // ── v0.30.0 — Smoother Card Entrance Animations ──
         FieldMindChangelogEntry(
             version = "0.30.0",

@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardElevation
 import androidx.compose.ui.unit.dp
+import fieldmind.research.app.ui.theme.CuteElevations
 /**
  * A [Card] with built-in [expressiveCardPress] animation (lift + scale) and [onClick].
  *
@@ -22,7 +23,7 @@ import androidx.compose.ui.unit.dp
  * Defaults mirror the project conventions:
  * - RoundedCornerShape(34.dp)
  * - surfaceContainerLowest background (brighter = contrasts more from background)
- * - 4dp plush elevation with soft shadow
+ * - 6dp plush elevation (clickableTier) with soft shadow
  * - 1.5dp lift, 0.985 scale-down on press
  */
 @Composable
@@ -33,7 +34,7 @@ fun ClickableCard(
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surface
     ),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,
@@ -64,7 +65,7 @@ fun InfoCard(
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surface
     ),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
     border: androidx.compose.foundation.BorderStroke? = null,
     index: Int = 0,
     animate: Boolean = false,
@@ -93,7 +94,7 @@ fun ClickableCard(
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surface
     ),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,
