@@ -2104,6 +2104,7 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
             item { GestureThresholdsCard() }
             item { AnimationStateCard() }
             item { TapTestCard() }
+        item { DevFullAppTestRunner(viewModel = viewModel) }
         item {
             Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
