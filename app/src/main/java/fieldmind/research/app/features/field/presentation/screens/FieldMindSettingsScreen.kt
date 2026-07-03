@@ -217,6 +217,7 @@ private fun SettingsNavCard(title: String, subtitle: String, icon: MaterialSymbo
     val gradientSettings = remember {  FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
+    val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradient = CuteGradients.brushFor(gradientStyle)
     Card(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).pressScale(scaleDown = 0.97f),
@@ -329,6 +330,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
         item { SectionHeader("Card Style", "Card background gradient style") }
         item {
             val gradientStyleName by settings.cardGradientStyle.collectAsState()
+            val gradientOpacity by settings.gradientOpacity.collectAsState()
             SettingsGroupCard {
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text("Card gradient", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -341,7 +343,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                     ) {
                         CuteGradients.Style.entries.forEach { style ->
                             val isSelected = gradientStyleName == style.displayName
-                            val previewBrush = CuteGradients.brushFor(style)
+                            val previewBrush = CuteGradients.brushFor(style, opacity = gradientOpacity)
                             Surface(
                                 onClick = { settings.setCardGradientStyle(style.displayName) },
                                 shape = RoundedCornerShape(20.dp),
@@ -381,6 +383,35 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                     }
                 }
             }
+        item {
+            val gradientOpacity by settings.gradientOpacity.collectAsState()
+            SettingsGroupCard {
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Gradient intensity", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("Adjust how bold or subtle card gradients appear.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(4.dp))
+                    val sliderValue = remember { mutableFloatStateOf(gradientOpacity) }
+                    Slider(
+                        value = sliderValue.floatValue,
+                        onValueChange = { sliderValue.floatValue = it },
+                        onValueChangeFinished = { settings.setGradientOpacity(sliderValue.floatValue) },
+                        valueRange = 0.1f..1.0f,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = SliderDefaults.colors(
+                            thumbColor = MaterialTheme.colorScheme.primary,
+                            activeTrackColor = MaterialTheme.colorScheme.primary
+                        )
+                    )
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("Subtle", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("Bold", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+        }
         }
         // ── Map settings ──
         // ── Entity accent colors ──
@@ -2357,6 +2388,7 @@ internal fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
     val gradientSettings = remember {  FieldMindSettings.getInstance(context) }
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
+    val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradient = CuteGradients.brushFor(gradientStyle)
     Card(
         modifier = Modifier.fillMaxWidth().cuteShadow(),

@@ -434,6 +434,13 @@ class FieldMindSettings private constructor(context: Context) {
     val appPinLength: StateFlow<String> = _appPinLength.asStateFlow()
 
     // ── Per-category entity color overrides ──
+    // ── Card gradient opacity (0.1 – 1.0, default 0.55) ──
+    private val _gradientOpacity = MutableStateFlow(prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f))
+    /** Opacity multiplier for card gradient backgrounds. Lower = more subtle. */
+    val gradientOpacity: StateFlow<Float> = _gradientOpacity.asStateFlow()
+
+    fun setGradientOpacity(value: Float) = edit(KEY_GRADIENT_OPACITY, value.coerceIn(0.1f, 1.0f)) { _gradientOpacity.value = value.coerceIn(0.1f, 1.0f) }
+
     // ── Card gradient style (Phase 5) ──
     private val _cardGradientStyle = MutableStateFlow(
         prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
@@ -816,6 +823,7 @@ class FieldMindSettings private constructor(context: Context) {
         _onboardingExtendedTourCompleted.value = false
         _entityColors.value = emptyMap()
         _cardGradientStyle.value = fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
+        _gradientOpacity.value = 0.55f
     }
 
     // ── Species identification setters ──
@@ -933,6 +941,7 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_SCREEN_VISIBILITY, ScreenVisibility.toJson(_screenVisibility.value))
         put(KEY_EXTENDED_TOUR_DONE, _onboardingExtendedTourCompleted.value)
         put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
+        put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
     }.toString(2)
 
     /**
@@ -944,6 +953,7 @@ class FieldMindSettings private constructor(context: Context) {
         fun applyString(key: String) { if (json.has(key)) edit.putString(key, json.optString(key, "")) }
         fun applyBoolean(key: String, default: Boolean = false) { if (json.has(key)) edit.putBoolean(key, json.optBoolean(key, default)) }
         fun applyInt(key: String, default: Int = 0) { if (json.has(key)) edit.putInt(key, json.optInt(key, default)) }
+        fun applyFloat(key: String, default: Float = 0.55f) { if (json.has(key)) edit.putFloat(key, json.optDouble(key, default.toDouble()).toFloat()) }
 
         applyString(KEY_DEFAULT_CATEGORY)
         applyString(KEY_DEFAULT_CONFIDENCE)
@@ -1058,6 +1068,7 @@ class FieldMindSettings private constructor(context: Context) {
         applyBoolean(KEY_EXTENDED_TOUR_DONE)
         applyInt(KEY_DAILY_GOAL)
         applyString(KEY_CARD_GRADIENT_STYLE)
+        applyFloat(KEY_GRADIENT_OPACITY)
 
         edit.apply()
 
@@ -1147,6 +1158,7 @@ class FieldMindSettings private constructor(context: Context) {
         _appPinHash.value = prefs.getString(KEY_APP_PIN_HASH, "") ?: ""
         _entityColors.value = parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null))
         _cardGradientStyle.value = prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
+        _gradientOpacity.value = prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f)
     }
 
     private inline fun edit(key: String, value: String, after: () -> Unit) { prefs.edit().putString(key, value).apply(); after() }
@@ -1269,6 +1281,8 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_DECOY_PIN_LABEL = "decoy_pin_label"
         // ── Card gradient style ──
         private const val KEY_CARD_GRADIENT_STYLE = "card_gradient_style"
+        // ── Gradient opacity ──
+        private const val KEY_GRADIENT_OPACITY = "gradient_opacity"
 
         // ── Per-category entity color overrides ──
         private const val KEY_ENTITY_COLORS = "entity_colors"
