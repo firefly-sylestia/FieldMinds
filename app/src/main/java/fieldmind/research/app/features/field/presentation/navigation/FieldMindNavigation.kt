@@ -210,6 +210,8 @@ private val bottomTabs = listOf(
 @Composable
 fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, requestedDestination: String? = null) {
     val onboardingCompleted by appSettings.onboardingCompleted.collectAsState()
+    var showSplash by remember { mutableStateOf(true) }
+    val splashActive = showSplash && onboardingCompleted
     var appUnlocked by remember { mutableStateOf(!viewModel.fieldSettings.privacyLockEnabled.value) }
     var isDecoyMode by remember { mutableStateOf(false) }
     val privacyEnabled by viewModel.fieldSettings.privacyLockEnabled.collectAsState()
@@ -227,7 +229,7 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             settings = viewModel.fieldSettings,
             onFinish = { appSettings.setOnboardingCompleted(true) }
         )
-    } else {
+    } else if (!splashActive) {
         FieldMindAppLock(
             settings = viewModel.fieldSettings,
             isUnlocked = appUnlocked,
@@ -1719,5 +1721,14 @@ fun WithSharedTransitionScope(
 ) {
     @Suppress("FunctionName")
     content(scope)
+    // ── Animated Splash Screen ──
+    if (splashActive) {
+        FieldMindAnimatedSplash(
+            durationMs = 1800,
+            onSplashComplete = { showSplash = false }
+        )
+    }
+
+
 }
 

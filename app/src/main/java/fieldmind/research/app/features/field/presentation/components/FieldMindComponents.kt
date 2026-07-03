@@ -3,6 +3,8 @@ package fieldmind.research.app.features.field.presentation.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Animatable
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -928,6 +930,52 @@ fun MetricTile(
     animate: Boolean = false
 ) {
     val tint = accent ?: MaterialTheme.colorScheme.primary
+
+    // ── Count-up animation for numeric values ──
+    // Parse the leading number from the value string (e.g., "42" or "5/10" or "12 observations")
+    val numericPrefix = remember(value) {
+        val cleaned = value.trimStart()
+        val numStr = cleaned.takeWhile { it.isDigit() || it == '.' }
+        numStr.toDoubleOrNull()
+    }
+    val hasNumeric = numericPrefix != null
+    val countUpTarget = numericPrefix ?: 0.0
+    val countUpAnimated = remember { Animatable(0.0) }
+
+    // Animate from 0 to target once on first visible composition
+    var hasCountedUp by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if (hasNumeric && !hasCountedUp) {
+            hasCountedUp = true
+            countUpAnimated.snapTo(0.0)
+            countUpAnimated.animateTo(
+                targetValue = countUpTarget,
+                animationSpec = tween(
+                    durationMillis = FieldMindMotion.countUpMs,
+                    easing = FastOutSlowInEasing
+                )
+            )
+        } else {
+            countUpAnimated.snapTo(countUpTarget)
+        }
+    }
+
+    // Format the animated value: preserve the suffix part of the original value
+    val displayValue = if (hasNumeric) {
+        remember(countUpAnimated.value) {
+            val suffix = value.trimStart().dropWhile { it.isDigit() || it == '.' }.trimStart()
+            val isInteger = numericPrefix == numericPrefix?.toLong()?.toDouble()
+            val formatted = if (isInteger) {
+                countUpAnimated.value.toLong().toString()
+            } else {
+                "%.1f".format(countUpAnimated.value)
+            }
+            formatted + suffix
+        }
+    } else {
+        value
+    }
+
     Card(
         modifier = modifier
             .staggeredEntrance(index = index, animate = animate)
@@ -939,7 +987,7 @@ fun MetricTile(
     ) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Icon(icon = icon, contentDescription = null, tint = tint, size = 22.dp)
-            Text(value, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(displayValue, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (!trend.isNullOrBlank()) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(3.dp)) {

@@ -2225,144 +2225,107 @@ internal fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
 }
 
 @Composable
-internal fun ToggleItem(title: String, body: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit, icon: MaterialSymbolIcon? = null) {
+internal fun ToggleItem(
+    title: String, 
+    body: String, 
+    checked: Boolean, 
+    onCheckedChange: (Boolean) -> Unit, 
+    icon: MaterialSymbolIcon? = null
+) {
     val scope = rememberCoroutineScope()
-    val checkmarkPulse = remember { Animatable(1f) }
+    val switchPulse = remember { Animatable(1f) }
+    val checkmarkScale = remember { Animatable(0f) }
+    val checkmarkRotate = remember { Animatable(-90f) }
+
+    // Animate checkmark with spring bounce when toggled
     LaunchedEffect(checked) {
         if (checked) {
-            checkmarkPulse.animateTo(1.3f, spring(dampingRatio = 0.55f, stiffness = 500f))
-            checkmarkPulse.animateTo(1f, spring(dampingRatio = 0.85f, stiffness = 350f))
+            // Spring-bounce the checkmark in
+            checkmarkScale.animateTo(1f, spring(dampingRatio = 0.45f, stiffness = 300f))
+            checkmarkRotate.animateTo(0f, spring(dampingRatio = 0.5f, stiffness = 250f))
+        } else {
+            checkmarkScale.animateTo(0f, tween(150))
+            checkmarkRotate.animateTo(-90f, tween(150))
         }
     }
+
+    // Pulse on switch toggles
+    LaunchedEffect(checked) {
+        if (checked) {
+            switchPulse.animateTo(1.3f, spring(dampingRatio = 0.55f, stiffness = 500f))
+            switchPulse.animateTo(1f, spring(dampingRatio = 0.85f, stiffness = 350f))
+        }
+    }
+
     Row(
         Modifier.fillMaxWidth().clickable {
             scope.launch {
-                checkmarkPulse.snapTo(1.3f)
-                checkmarkPulse.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                if (!checked) {
+                    // Pre-bounce the checkmark before state changes
+                    checkmarkScale.snapTo(0f)
+                    checkmarkScale.animateTo(1.2f, spring(dampingRatio = 0.45f, stiffness = 300f))
+                    checkmarkScale.animateTo(1f, spring(dampingRatio = 0.5f, stiffness = 200f))
+                    checkmarkRotate.snapTo(-90f)
+                    checkmarkRotate.animateTo(0f, spring(dampingRatio = 0.5f, stiffness = 250f))
+                }
+                switchPulse.snapTo(1.3f)
+                switchPulse.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
             }
             onCheckedChange(!checked)
         }.padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Optional icon
         if (icon != null) {
             Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                 Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
             }
         }
+
+        // Title and body text with animated checkmark
         Column(Modifier.weight(1f)) {
-            Text(title, fontWeight = FontWeight.SemiBold)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                // Animated checkmark icon — springs in with bounce when enabled
+                Box(
+                    modifier = Modifier
+                        .size(18.dp)
+                        .graphicsLayer {
+                            scaleX = checkmarkScale.value.coerceAtLeast(0f)
+                            scaleY = checkmarkScale.value.coerceAtLeast(0f)
+                            rotationZ = checkmarkRotate.value
+                            alpha = if (checked) 1f else 0f
+                        }
+                ) {
+                    Icon(
+                        icon = FieldMindIcons.Check,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        size = 16.dp
+                    )
+                }
+                Text(title, fontWeight = FontWeight.SemiBold)
+            }
             Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+
+        // Switch with scale pulse
         Switch(
             checked = checked,
             onCheckedChange = {
                 scope.launch {
-                    checkmarkPulse.snapTo(1.3f)
-                    checkmarkPulse.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                    switchPulse.snapTo(1.3f)
+                    switchPulse.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
                 }
                 onCheckedChange(it)
             },
             modifier = Modifier.graphicsLayer {
-                scaleX = checkmarkPulse.value
-                scaleY = checkmarkPulse.value
+                scaleX = switchPulse.value
+                scaleY = switchPulse.value
             }
         )
     }
 }
-
-@Composable
-private fun StepperItem(title: String, body: String, value: Int, icon: MaterialSymbolIcon? = null, onValueChange: (Int) -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-        if (icon != null) {
-            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
-                Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
-            }
-        }
-        Column(Modifier.weight(1f)) {
-            Text(title, fontWeight = FontWeight.SemiBold)
-            Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FilledTonalIconButton(onClick = { onValueChange((value - 1).coerceAtLeast(0)) }) { Icon(icon = MaterialSymbolIcon("remove"), contentDescription = "Decrease", size = 18.dp) }
-            Text(value.toString(), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.widthIn(min = 24.dp), textAlign = TextAlign.Center)
-            FilledTonalIconButton(onClick = { onValueChange(value + 1) }) { Icon(icon = FieldMindIcons.Add, contentDescription = "Increase", size = 18.dp) }
-        }
-    }
-}
-
-@Composable
-internal fun ChoiceItemForm(title: String, options: List<String>, selected: String, icon: MaterialSymbolIcon? = null, onSelected: (String) -> Unit) {
-    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (icon != null) {
-                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
-                    Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
-                }
-            }
-            Text(title, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-        }
-        var showDialog by remember { mutableStateOf(false) }
-        Surface(
-            onClick = { showDialog = true },
-            shape = RoundedCornerShape(22.dp),
-            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
-        ) {
-            Row(
-                Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(selected, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                Icon(FieldMindIcons.Forward, null, tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f), size = 18.dp)
-            }
-        }
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                icon = if (icon != null) {{ Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 28.dp) }} else null,
-                title = { Text(title, fontWeight = FontWeight.Bold) },
-                text = {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        options.forEach { option ->
-                            val isSelected = selected == option
-                            Surface(
-                                onClick = { onSelected(option); showDialog = false },
-                                shape = RoundedCornerShape(22.dp),
-                                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
-                            ) {
-                                Row(
-                                    Modifier.fillMaxWidth().padding(14.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    RadioButton(selected = isSelected, onClick = { onSelected(option); showDialog = false })
-                                    Text(option, fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
-                                    if (isSelected) Icon(FieldMindIcons.Check, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
-                                }
-                            }
-                        }
-                    }
-                },
-                confirmButton = { TextButton(onClick = { showDialog = false }) { Text("Cancel") } }
-            )
-        }
-    }
-}
-
-@Composable
-private fun SettingsTileGroup(title: String, content: @Composable ColumnScope.() -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(start = 4.dp))
-        Card(
-            shape = RoundedCornerShape(32.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-        ) { Column(content = content) }
-    }
-}
-
 // ══════════════════════════════════════════════════════════════════════
 //  Species Pack Management Page
 // ════════════════════════════════════════��═════════════════════════════
