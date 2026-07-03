@@ -43,6 +43,26 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
+	// ── v0.34.0 — Dark Mode Depth & Shadow Visibility ──
+	FieldMindChangelogEntry(
+		version = "0.34.0",
+		date = "2026-07-03",
+		title = "🎚️ Dark Mode Depth & Shadow Visibility",
+		importance = "Patch",
+		tags = listOf("🎨", "🌙", "💡"),
+		sections = listOf(
+			"💡 Brighter dark mode shadows" to listOf(
+				"✓ Dark mode white-tinted shadow alphas increased ~45% for clearly visible card depth",
+				"✓ Ambient alpha: ~0.11→0.16, Spot alpha: ~0.17→0.25 at 6dp elevation",
+				"✓ Shadows now provide visible luminous lift against dark/AMOLED backgrounds"
+			),
+			"📐 Tonal elevation for visible depth in dark mode" to listOf(
+				"✓ ClickableCard: tonalElevation = 6dp — surfaceTint overlay makes card edges visible in dark mode",
+				"✓ InfoCard: tonalElevation = 4dp — consistent depth for non-interactive cards",
+				"✓ tonalElevation renders a Material3 surfaceTint overlay proportional to elevation, creating visible depth even when shadows are not perceivable"
+			)
+		)
+	),
         // ── v0.33.0 — New Detailed Moon Phase Icons ──
         FieldMindChangelogEntry(
             version = "0.33.0",

@@ -50,6 +50,7 @@ fun ClickableCard(
     shape = shape,
     colors = colors,
     elevation = elevation,
+    tonalElevation = CuteElevations.clickableTier,
     border = border,
     content = content
 )
@@ -77,6 +78,7 @@ fun InfoCard(
     shape = shape,
     colors = colors,
     elevation = elevation,
+    tonalElevation = CuteElevations.nonClickableTier,
     border = border,
     content = content
 )

@@ -131,20 +131,23 @@ data class CuteShadow(
          */
         @Composable
         fun themeAware(elevation: Dp, isDark: Boolean = isSystemInDarkTheme()): CuteShadow {
-            val ambientAlpha = 0.08f + (elevation.value / 12f) * 0.06f
-            val spotAlpha = 0.12f + (elevation.value / 12f) * 0.10f
+            val ambientAlpha = 0.12f + (elevation.value / 12f) * 0.08f
+            val spotAlpha = 0.18f + (elevation.value / 12f) * 0.14f
             return if (isDark) {
-                // Dark mode: white-tinted glow shadows — gives depth with a luminous lift
+                // Dark mode: brighter white-tinted glow shadows so depth is clearly visible
+                // against dark/AMOLED backgrounds. Significantly bumped from v0.31.0 levels
+                // where shadows were too subtle (invisible on dark surfaces).
+                // At 6dp: ambient ~0.16, spot ~0.25 — clearly visible luminous lift.
                 CuteShadow(
                     elevation = elevation,
-                    ambientColor = Color.White.copy(alpha = ambientAlpha.coerceIn(0.04f, 0.14f)),
-                    spotColor = Color.White.copy(alpha = spotAlpha.coerceIn(0.06f, 0.22f))
+                    ambientColor = Color.White.copy(alpha = ambientAlpha.coerceIn(0.08f, 0.25f)),
+                    spotColor = Color.White.copy(alpha = spotAlpha.coerceIn(0.12f, 0.35f))
                 )
             } else {
                 CuteShadow(
                     elevation = elevation,
-                    ambientColor = Color.Black.copy(alpha = ambientAlpha.coerceIn(0.06f, 0.14f)),
-                    spotColor = Color.Black.copy(alpha = spotAlpha.coerceIn(0.10f, 0.24f))
+                    ambientColor = Color.Black.copy(alpha = ambientAlpha.coerceIn(0.08f, 0.18f)),
+                    spotColor = Color.Black.copy(alpha = spotAlpha.coerceIn(0.12f, 0.28f))
                 )
             }
         }
