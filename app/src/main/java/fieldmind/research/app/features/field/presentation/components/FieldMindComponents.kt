@@ -936,18 +936,18 @@ fun MetricTile(
     val numericPrefix = remember(value) {
         val cleaned = value.trimStart()
         val numStr = cleaned.takeWhile { it.isDigit() || it == '.' }
-        numStr.toDoubleOrNull()
+        numStr.toFloatOrNull()
     }
     val hasNumeric = numericPrefix != null
-    val countUpTarget = numericPrefix ?: 0.0
-    val countUpAnimated = remember { Animatable(0.0) }
+    val countUpTarget = numericPrefix ?: 0f
+    val countUpAnimated = remember { Animatable(0f) }
 
     // Animate from 0 to target once on first visible composition
     var hasCountedUp by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         if (hasNumeric && !hasCountedUp) {
             hasCountedUp = true
-            countUpAnimated.snapTo(0.0)
+            countUpAnimated.snapTo(0f)
             countUpAnimated.animateTo(
                 targetValue = countUpTarget,
                 animationSpec = tween(
@@ -964,9 +964,9 @@ fun MetricTile(
     val displayValue = if (hasNumeric) {
         remember(countUpAnimated.value) {
             val suffix = value.trimStart().dropWhile { it.isDigit() || it == '.' }.trimStart()
-            val isInteger = numericPrefix == numericPrefix?.toLong()?.toDouble()
+            val isInteger = numericPrefix == numericPrefix?.toInt()?.toFloat()
             val formatted = if (isInteger) {
-                countUpAnimated.value.toLong().toString()
+                countUpAnimated.value.toInt().toString()
             } else {
                 "%.1f".format(countUpAnimated.value)
             }

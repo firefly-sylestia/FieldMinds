@@ -68,6 +68,7 @@ import fieldmind.research.app.features.field.presentation.components.PeekContent
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
 import fieldmind.research.app.features.field.presentation.components.LocalPeekContentHolder
+import fieldmind.research.app.features.field.presentation.components.FieldMindAnimatedSplash
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -229,7 +230,12 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             settings = viewModel.fieldSettings,
             onFinish = { appSettings.setOnboardingCompleted(true) }
         )
-    } else if (!splashActive) {
+    } else if (splashActive) {
+        FieldMindAnimatedSplash(
+            durationMs = 1800,
+            onSplashComplete = { showSplash = false }
+        )
+    } else {
         FieldMindAppLock(
             settings = viewModel.fieldSettings,
             isUnlocked = appUnlocked,
@@ -1721,14 +1727,6 @@ fun WithSharedTransitionScope(
 ) {
     @Suppress("FunctionName")
     content(scope)
-    // ── Animated Splash Screen ──
-    if (splashActive) {
-        FieldMindAnimatedSplash(
-            durationMs = 1800,
-            onSplashComplete = { showSplash = false }
-        )
-    }
-
 
 }
 

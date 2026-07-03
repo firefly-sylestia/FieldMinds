@@ -633,6 +633,174 @@ fun LocalModelSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
+//  Choice Item Form — Row with picker for settings
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Settings row that shows the current selected value and opens an [OptionPickerDialog] on tap.
+ * Used inside [SettingsGroupCard] for choice-based settings (e.g., map type, temperature unit).
+ */
+@Composable
+internal fun ChoiceItemForm(
+    label: String,
+    options: List<String>,
+    selected: String,
+    icon: MaterialSymbolIcon,
+    onSelected: (String) -> Unit
+) {
+    var showDialog by remember { mutableStateOf(false) }
+    val haptics = rememberFieldMindHaptics()
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clickable {
+                haptics.light()
+                showDialog = true
+            }
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            Modifier
+                .size(40.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
+        }
+        Column(Modifier.weight(1f)) {
+            Text(label, fontWeight = FontWeight.SemiBold)
+            Text(selected, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Icon(FieldMindIcons.Forward, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
+    }
+
+    if (showDialog) {
+        OptionPickerDialog(
+            title = label,
+            options = options,
+            selected = selected,
+            onSelect = { value ->
+                onSelected(value)
+                haptics.confirm()
+                showDialog = false
+            },
+            onDismiss = { showDialog = false }
+        )
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Stepper Item — Row with +/- buttons for numeric settings
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Settings row with stepper (+/-) buttons for adjusting a numeric value.
+ * Used inside [SettingsGroupCard] for incremental settings (e.g., daily goal).
+ */
+@Composable
+internal fun StepperItem(
+    label: String,
+    body: String,
+    value: Int,
+    icon: MaterialSymbolIcon,
+    onValueChange: (Int) -> Unit
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            Modifier
+                .size(40.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
+        }
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(label, fontWeight = FontWeight.SemiBold)
+            Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        }
+        // Minus button
+        IconButton(
+            onClick = { if (value > 1) onValueChange(value - 1) },
+            modifier = Modifier.size(40.dp),
+            enabled = value > 1
+        ) {
+            Icon(FieldMindIcons.Remove, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
+        }
+        // Value display
+        Box(
+            Modifier
+                .size(width = 48.dp, height = 40.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                value.toString(),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        // Plus button
+        IconButton(
+            onClick = { if (value < 999) onValueChange(value + 1) },
+            modifier = Modifier.size(40.dp),
+            enabled = value < 999
+        ) {
+            Icon(FieldMindIcons.Add, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  SettingsSubPage Helper — Scaffold for settings sub-pages
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+internal fun SettingsSubPage(
+    title: String,
+    icon: MaterialSymbolIcon,
+    onBack: () -> Unit,
+    headerAction: @Composable (() -> Unit)? = null,
+    content: LazyListScope.() -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .background(MaterialTheme.colorScheme.background),
+        contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 40.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        item {
+            StandardScreenHeader(
+                title = title,
+                icon = icon,
+                trailing = {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        headerAction?.invoke()
+                        BackButton(onClick = onBack)
+                    }
+                }
+            )
+        }
+        content()
+    }
+}
+// ══════════════════════════════════════════════════════════════════════
 //  Security Settings Page (ALL settings inline, no sub-pages)
 // ══════════════════════════════════════════════════════════════════════
 
@@ -2182,25 +2350,6 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
 // ══════════════════════════════════════════════════════════════════════
 
 /** Wraps a sub-page with consistent StandardScreenHeader and scrollable content. */
-@Composable
-internal fun SettingsSubPage(title: String, icon: MaterialSymbolIcon, onBack: () -> Unit, content: LazyListScope.() -> Unit) {
-    BackHandler(enabled = true) { onBack() }
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().statusBarsPadding(),
-        contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 40.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
-    ) {
-        item {
-            StandardScreenHeader(
-                title = title,
-                icon = icon,
-                trailing = {
-                    BackButton(onClick = onBack)
-                }
-            )
-        }
-        content()
-    }
 }
 
 @Composable
