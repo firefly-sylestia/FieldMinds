@@ -357,8 +357,9 @@ fun ObserveScreen(
         }
         haptics.confirm()
         val now = System.currentTimeMillis()
+        val startedAt = s.timerStartedAt
         val liveElapsed = s.timerAccumulatedMs +
-            if (s.timerRunning) (now - (s.timerStartedAt ?: now)) else 0L
+            if (s.timerRunning && startedAt != null) (now - startedAt) else 0L
 
         // Pack all enhanced capture fields into structuredDetailsJson
         val structuredJson = run {
@@ -496,8 +497,9 @@ fun ObserveScreen(
             dismissButton = {                    TextButton(onClick = {
                                     viewModel.setCaptureSessionActive(false)
                                     activeSessionId?.let { id ->
+                                        val startedAt = session.timerStartedAt
                                         val durationMs = session.timerAccumulatedMs +
-                                            (if (session.timerRunning && session.timerStartedAt != null) System.currentTimeMillis() - session.timerStartedAt else 0L)
+                                            (if (session.timerRunning && startedAt != null) System.currentTimeMillis() - startedAt else 0L)
                                         viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
                                     }
                                     activeSessionId = null
@@ -648,13 +650,18 @@ fun ObserveScreen(
                             SectionHeader("Past sessions", "${completedSessions.size} completed")
                         }
                         items(completedSessions.take(10)) { researchSession ->
-                        Card(
+                            Card(
                                 modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp)),
                                 shape = RoundedCornerShape(30.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-                                        Icon(FieldMindIcons.Session, null, tint = FieldMindTheme.colors.positive, size = 22.dp)
-                                    }
+                            ) {
+                                Row(
+                                    Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Icon(FieldMindIcons.Session, null, tint = FieldMindTheme.colors.positive, size = 22.dp)
                                     Column(Modifier.weight(1f)) {
                                         Text(
                                             researchSession.name,
@@ -682,7 +689,9 @@ fun ObserveScreen(
                             }
                         }
                     }
-                }                    // ── Evidence-First Input ──
+                }
+
+                // ── Evidence-First Input ──
                 if (showEvidenceForm) {
                     // Evidence capture buttons (always visible when form is open)
                     item {
@@ -859,16 +868,16 @@ fun ObserveScreen(
                         ) {
                             Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                                 Text("Session Complete", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                                    MetricTile(
-                                        "Duration",
-                                        formatDurationCompact(
-                                            session.timerAccumulatedMs +
-                                                (if (session.timerRunning && session.timerStartedAt != null) System.currentTimeMillis() - session.timerStartedAt else 0L)
-                                        ),
-                                        FieldMindIcons.Calendar,
-                                        Modifier.weight(1f)
-                                    )
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {                                        val finalStartedAt = session.timerStartedAt
+                                        MetricTile(
+                                            "Duration",
+                                            formatDurationCompact(
+                                                session.timerAccumulatedMs +
+                                                    (if (session.timerRunning && finalStartedAt != null) System.currentTimeMillis() - finalStartedAt else 0L)
+                                            ),
+                                            FieldMindIcons.Calendar,
+                                            Modifier.weight(1f)
+                                        )
                                     MetricTile(
                                         "Observations",
                                         "${session.sessionObservationCount}",

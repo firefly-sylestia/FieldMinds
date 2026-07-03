@@ -615,7 +615,7 @@ fun ProjectDetailScreen(
                     "Document" -> showNewAttachment = true
                     "Citation" -> showNewSource = true
                     "Task" -> showNewTask = true
-                    "Survey Session" -> onNavigate?.invoke(FieldMindScreen.ResearchSession)
+                    "Survey Session" -> onNavigate?.invoke(FieldMindScreen.Observe)
                     "Field Visit" -> showNewTask = true
                     "Folder" -> showNewFolder = true
                 }

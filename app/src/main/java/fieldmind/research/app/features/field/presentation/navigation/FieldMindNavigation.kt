@@ -107,6 +107,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object Insights : FieldMindScreen("field_insights", "Insights", FieldMindIcons.Insights)
     data object MapScreen : FieldMindScreen("field_map", "Map", FieldMindIcons.Map)
     data object ExportStudio : FieldMindScreen("field_export_studio", "Export", FieldMindIcons.Export)
+    data object WeatherDatabase : FieldMindScreen("field_weather_database", "Weather", FieldMindIcons.Weather)
 
     data object Learn : FieldMindScreen("field_learn", "Learn", FieldMindIcons.School)
     data object FieldMode : FieldMindScreen("field_mode", "Field Mode", FieldMindIcons.Bolt)

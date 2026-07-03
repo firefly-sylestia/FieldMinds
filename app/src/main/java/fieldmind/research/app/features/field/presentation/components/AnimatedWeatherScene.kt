@@ -107,8 +107,8 @@ fun AnimatedWeatherScene(
     }
 
     // Load moon phase vector texture as ImageBitmap for moon body rendering
-    val moonTextureBitmap = remember {
-        val context = LocalContext.current
+    val context = LocalContext.current
+    val moonTextureBitmap = remember(context) {
         val drawable = androidx.core.content.ContextCompat.getDrawable(context, R.drawable.moon_phase_texture)
         if (drawable != null) {
             val w = drawable.intrinsicWidth.coerceAtLeast(1)

@@ -735,7 +735,7 @@ internal fun StepperItem(
             modifier = Modifier.size(40.dp),
             enabled = value > 1
         ) {
-            Icon(FieldMindIcons.Remove, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
+            Icon(MaterialSymbolIcon("remove"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
         }
         // Value display
         Box(

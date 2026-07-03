@@ -71,13 +71,13 @@ fun CitationManagerScreen(
         val authorPart = source.author.ifBlank { "Unknown" }
         val yearPart = SimpleDateFormat("yyyy", Locale.getDefault()).format(Date(source.createdAt))
         val titlePart = source.title
-        val urlPart = if (source.url.isNotBlank()) " Retrieved from ${source.url}" else ""
+        val linkPart = if (source.link.isNotBlank()) " Retrieved from ${source.link}" else ""
         return when (format) {
-            "MLA" -> "$authorPart. \"$titlePart.\" $yearPart.$urlPart"
-            "Chicago" -> "$authorPart. \"$titlePart.\" $yearPart.$urlPart"
-            "IEEE" -> "$authorPart, \"$titlePart,\" $yearPart.$urlPart"
-            "Harvard" -> "$authorPart ($yearPart) $titlePart.$urlPart"
-            else -> "$authorPart ($yearPart). $titlePart.$urlPart" // APA
+            "MLA" -> "$authorPart. \"$titlePart.\" $yearPart.$linkPart"
+            "Chicago" -> "$authorPart. \"$titlePart.\" $yearPart.$linkPart"
+            "IEEE" -> "$authorPart, \"$titlePart,\" $yearPart.$linkPart"
+            "Harvard" -> "$authorPart ($yearPart) $titlePart.$linkPart"
+            else -> "$authorPart ($yearPart). $titlePart.$linkPart" // APA
         }
     }
 
@@ -247,16 +247,16 @@ fun CitationManagerScreen(
                                             label = { Text("Copy citation") },
                                             leadingIcon = { Icon(MaterialSymbolIcon("content_copy"), null, size = 16.dp) }
                                         )
-                                        if (source.url.isNotBlank()) {
-                                            AssistChip(
-                                                onClick = {
-                                                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(source.url))
-                                                    LocalContext.current.startActivity(intent)
-                                                },
-                                                label = { Text("Open source") },
-                                                leadingIcon = { Icon(MaterialSymbolIcon("open_in_new"), null, size = 16.dp) }
-                                            )
-                                        }
+                            if (source.link.isNotBlank()) {
+                                AssistChip(
+                                    onClick = {
+                                        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(source.link))
+                                        LocalContext.current.startActivity(intent)
+                                    },
+                                    label = { Text("Open source") },
+                                    leadingIcon = { Icon(MaterialSymbolIcon("open_in_new"), null, size = 16.dp) }
+                                )
+                            }
                                     }
                                 }
                             }
@@ -273,12 +273,14 @@ fun CitationManagerScreen(
             onDismiss = { showNewSource = false },
             onSave = { title, author, url, notes ->
                 viewModel.addSource(
+                    type = "webpage",
                     title = title,
                     author = author,
-                    url = url,
-                    sourceType = "webpage",
-                    notes = notes,
-                    relatedProjectId = null
+                    link = url,
+                    summary = notes,
+                    taught = "",
+                    reliability = 3,
+                    dateOrYear = java.text.SimpleDateFormat("yyyy", java.util.Locale.getDefault()).format(java.util.Date())
                 )
                 showNewSource = false
                 showFastSnackbar(snackbar, scope, "Source added to bibliography")

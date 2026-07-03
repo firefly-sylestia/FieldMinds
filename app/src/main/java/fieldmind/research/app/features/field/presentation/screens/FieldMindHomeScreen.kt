@@ -288,7 +288,7 @@ fun SharedTransitionScope.HomeScreen(
                     lastSessionLabel = if (lastSession != null) "Resume your last session" else null,
                     activeSessionName = activeSession?.name,
                     timerMs = liveTimerMs,
-                    onStartSession = { onNavigate(FieldMindScreen.ResearchSession) }
+                    onStartSession = { onNavigate(FieldMindScreen.Observe) }
                 ) }
 
             // ── Weather as animated centerpiece ──
