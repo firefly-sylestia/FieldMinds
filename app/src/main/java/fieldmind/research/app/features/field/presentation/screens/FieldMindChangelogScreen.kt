@@ -43,18 +43,25 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private val fieldMindChangelog = listOf(
-        // ── v0.32.0 — Fixed Map Crash (NPE in OsmTileManager) ──
+        // ── v0.33.0 — New Detailed Moon Phase Icons ──
         FieldMindChangelogEntry(
-            version = "0.32.0",
+            version = "0.33.0",
             date = "2026-07-03",
-            title = "🗺️ Fixed Map Crash on Open",
+            title = "🌙 Detailed Moon Phase Icons Everywhere",
             importance = "Patch",
-            tags = listOf("🐛", "🗺️", "🔧"),
+            tags = listOf("🌙", "🎨", "✨"),
             sections = listOf(
-                "🐛 OsmTileManager NPE fix" to listOf(
-                    "✓ Fixed NullPointerException crash when opening the map screen",
-                    "✓ Root cause: regionsPrefs SharedPreferences was declared after init block — Kotlin ran init before initializing the property",
-                    "✓ Moved regionsPrefs declaration before init so it's available when refreshCachedRegions() is called"
+                "🌙 MoonPhaseIcon composable" to listOf(
+                    "✓ Canvas-based moon phase icon with mare/crater surface features, glow halo, and accurate phase shadow",
+                    "✓ 8 moon phase enum: New Moon, Waxing Crescent, First Quarter, Waxing Gibbous, Full Moon, Waning Gibbous, Third Quarter, Waning Crescent",
+                    "✓ Automatic current phase detection using astronomical calculation",
+                    "✓ Lunar mare positions (Mare Imbrium, Tranquillitatis, Serenitatis, etc.) and crater highlights (Tycho, Copernicus, Aristarchus)",
+                    "✓ Optional animated glow pulse for Full Moon"
+                ),
+                "🔄 Integrated across UI" to listOf(
+                    "✓ Weather widget moon phase now shows detailed phase-specific icon instead of generic MaterialSymbol",
+                    "✓ Home screen, moon phase label, and developer test panel all use the new composable",
+                    "✓ Original SVG crater data preserved in app resources for reference"
                 )
             )
         ),

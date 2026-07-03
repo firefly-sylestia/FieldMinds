@@ -62,6 +62,9 @@ import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenc
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.shared.presentation.components.icons.MoonPhase
+import fieldmind.research.app.shared.presentation.components.icons.MoonPhaseIcon
+import fieldmind.research.app.shared.presentation.components.icons.moonPhaseFromName
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.Image
@@ -1587,11 +1590,12 @@ private fun LiveWeatherDashboardWidget(
                         }
                         if (moonPhase.isNotBlank()) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Icon(
-                                    moonPhaseIcon(moonPhase),
-                                    null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    size = 14.dp
+                                MoonPhaseIcon(
+                                    phase = moonPhaseFromName(moonPhase),
+                                    contentDescription = null,
+                                    size = 14.dp,
+                                    tint = textOnScene.copy(alpha = 0.7f),
+                                    showGlow = false
                                 )
                                 Text(moonPhase, style = MaterialTheme.typography.labelSmall, color = textOnScene.copy(alpha = 0.7f))
                             }
@@ -2381,7 +2385,7 @@ internal fun DevWeatherTestPanel(
                     selected = testNight,
                     onClick = { onNightChange(!testNight); if (testCode == null) onCodeChange(0) },
                     label = { Text("Night mode", style = MaterialTheme.typography.labelSmall) },
-                    leadingIcon = if (testNight) {{ Icon(FieldMindIcons.MoonNew, null, size = 14.dp) }} else null
+                    leadingIcon = if (testNight) {{ MoonPhaseIcon(phase = MoonPhase.FullMoon, contentDescription = null, size = 14.dp, showGlow = false) }} else null
                 )
                 TextButton(onClick = { onCodeChange(null); onNightChange(false); onTemperatureChange(null); onHumidityChange(null) }) {
                     Text("Reset all", style = MaterialTheme.typography.labelSmall)
@@ -2455,14 +2459,6 @@ private fun getMoonPhase(date: LocalDate): String {
     }
 }
 
-private fun moonPhaseIcon(phase: String): MaterialSymbolIcon = when {
-    phase.startsWith("New") -> FieldMindIcons.MoonNew
-    phase.startsWith("Waxing crescent") || phase.startsWith("Waning crescent") -> FieldMindIcons.MoonCrescent
-    phase.startsWith("First") || phase.startsWith("Last") -> FieldMindIcons.MoonQuarter
-    phase.startsWith("Waxing gibbous") || phase.startsWith("Waning gibbous") -> FieldMindIcons.MoonGibbous
-    phase.startsWith("Full") -> FieldMindIcons.MoonFull
-    else -> FieldMindIcons.MoonNew
-}
 
 internal fun formatTimeFromIso(isoString: String): String {
     // Input format: "2026-06-15T05:03" or "2026-06-15T18:27"
