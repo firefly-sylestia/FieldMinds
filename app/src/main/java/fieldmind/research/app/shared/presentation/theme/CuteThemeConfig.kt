@@ -158,20 +158,16 @@ data class CuteShadow(
 object CuteShadows {
     /** Subtle — for tier-1 elements. */
     @Composable
-    val subtle: CuteShadow
-        get() = CuteShadow.themeAware(CuteElevations.plushTier1)
+    fun subtle(): CuteShadow = CuteShadow.themeAware(CuteElevations.plushTier1)
     /** Standard non-clickable — for tier-2 info cards. */
     @Composable
-    val standard: CuteShadow
-        get() = CuteShadow.themeAware(CuteElevations.nonClickableTier)
+    fun standard(): CuteShadow = CuteShadow.themeAware(CuteElevations.nonClickableTier)
     /** Clickable — for tier-3 interactive cards. */
     @Composable
-    val clickable: CuteShadow
-        get() = CuteShadow.themeAware(CuteElevations.clickableTier)
+    fun clickable(): CuteShadow = CuteShadow.themeAware(CuteElevations.clickableTier)
     /** Float — for tier-4 floating elements. */
     @Composable
-    val float: CuteShadow
-        get() = CuteShadow.themeAware(CuteElevations.plushTier4)
+    fun float(): CuteShadow = CuteShadow.themeAware(CuteElevations.plushTier4)
 }
 
 /**
