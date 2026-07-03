@@ -1287,7 +1287,7 @@ private fun LiveWeatherDashboardWidget(
         label = "liveAlpha"
     )
 
-    Card(
+    GlassCard(
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize(
@@ -1296,8 +1296,8 @@ private fun LiveWeatherDashboardWidget(
             .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
             .clickable { onNavigate(FieldMindScreen.WeatherDatabase) },
         shape = RoundedCornerShape(36.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
+        tintAlpha = 0.72f
+    ){
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -1340,7 +1340,7 @@ private fun LiveWeatherDashboardWidget(
 
             // Content overlay
             Column(
-                Modifier.fillMaxWidth().padding(18.dp),
+                Modifier.fillMaxWidth().padding(2.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
             // ── Header row with live indicator ──
