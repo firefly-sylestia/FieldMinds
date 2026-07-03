@@ -83,10 +83,14 @@ class MainActivity : FragmentActivity() {
             val fieldDynamicColor by fieldMindViewModel.fieldSettings.dynamicColorEnabled.collectAsState()
             val fieldEntityColors by fieldMindViewModel.fieldSettings.entityColors.collectAsState()
             val screenCaptureProtection by fieldMindViewModel.fieldSettings.screenCaptureProtectionEnabled.collectAsState()
+            val appPreviewMode by fieldMindViewModel.fieldSettings.appPreviewMode.collectAsState()
             val alwaysOnScreen by fieldMindViewModel.fieldSettings.alwaysOnScreenEnabled.collectAsState()
 
-            LaunchedEffect(screenCaptureProtection) {
-                applyScreenCaptureProtection(window, screenCaptureProtection)
+            // Apply FLAG_SECURE if screen capture block is enabled OR if preview mode
+            // is set to blur/privacy (prevents content from showing in recent apps).
+            val shouldSecure = screenCaptureProtection || appPreviewMode != "Normal"
+            LaunchedEffect(shouldSecure) {
+                applyScreenCaptureProtection(window, shouldSecure)
             }
 
             LaunchedEffect(alwaysOnScreen) {

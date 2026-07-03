@@ -45,38 +45,38 @@ internal data class FieldMindChangelogEntry(
 )
 
 private val fieldMindChangelog = listOf(
-	// ── v0.35.0 — Full App Test Runner in Developer Options ──
-	FieldMindChangelogEntry(
-		version = "0.35.0",
-		date = "2026-07-03",
-		title = "🧪 Full App Test Runner",
-		importance = "Patch",
-		tags = listOf("🧪", "🔧", "📋"),
-		sections = listOf(
-			"🧪 DevFullAppTestRunner composable" to listOf(
-				"✓ Comprehensive in-app test runner in Developer Settings",
-				"✓ 8 test categories: Navigation, ViewModel, Settings, Database, Security, AI, Capture, Error Handling",
-				"✓ 45+ individual assertions across all app layers",
-				"✓ Real-time progress with pass/fail summary",
-				"✓ Collapsible detailed results log",
-				"✓ Copy to clipboard or share via Android share sheet"
-			),
-			"🔧 Tests included" to listOf(
-				"✓ Navigation: tab screens, settings routes, FieldMindScreen objects",
-				"✓ ViewModel: all 10 StateFlows verified non-null (observations, notes, questions, projects, etc.)",
-				"✓ Settings: theme, developer mode, profile, temperature, map, time, date, weather toggles",
-				"✓ Database: entity constructors for all 7 entity types",
-				"✓ Security: PIN hashing, verification, export password, privacy lock, screen capture",
-				"✓ AI: provider switching, confirm-before-save, local model toggle",
-				"✓ Capture: categories, confidence, location, media, audio, reminders toggles",
-				"✓ Error handling: CrashReporter class, crash logs, integrity check, SDK version"
-			)
-		)
-	)
+        // ── v0.35.0 — Full App Test Runner in Developer Options ──
+        FieldMindChangelogEntry(
+            version = "0.35.0",
+            date = "2026-07-03",
+            title = "🧪 Full App Test Runner",
+            importance = "Patch",
+            tags = listOf("🧪", "🔧", "📋"),
+            sections = listOf(
+                "🧪 DevFullAppTestRunner composable" to listOf(
+                    "✓ Comprehensive in-app test runner in Developer Settings",
+                    "✓ 8 test categories: Navigation, ViewModel, Settings, Database, Security, AI, Capture, Error Handling",
+                    "✓ 45+ individual assertions across all app layers",
+                    "✓ Real-time progress with pass/fail summary",
+                    "✓ Collapsible detailed results log",
+                    "✓ Copy to clipboard or share via Android share sheet"
+                ),
+                "🔧 Tests included" to listOf(
+                    "✓ Navigation: tab screens, settings routes, FieldMindScreen objects",
+                    "✓ ViewModel: all 10 StateFlows verified non-null (observations, notes, questions, projects, etc.)",
+                    "✓ Settings: theme, developer mode, profile, temperature, map, time, date, weather toggles",
+                    "✓ Database: entity constructors for all 7 entity types",
+                    "✓ Security: PIN hashing, verification, export password, privacy lock, screen capture",
+                    "✓ AI: provider switching, confirm-before-save, local model toggle",
+                    "✓ Capture: categories, confidence, location, media, audio, reminders toggles",
+                    "✓ Error handling: CrashReporter class, crash logs, integrity check, SDK version"
+                )
+            )
+        ),
 
-	// ── v0.34.0 — Dark Mode Depth & Shadow Visibility ──
-	FieldMindChangelogEntry(
-		version = "0.34.0",
+        // ── v0.34.0 — Dark Mode Depth & Shadow Visibility ──
+        FieldMindChangelogEntry(
+            version = "0.34.0",
 		date = "2026-07-03",
 		title = "🎚️ Dark Mode Depth & Shadow Visibility",
 		importance = "Patch",

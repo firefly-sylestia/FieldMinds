@@ -687,9 +687,11 @@ private suspend fun runAllTests(
         val obs = ObservationEntity(
             subject = "Test observation",
             category = "Wildlife",
-            confidenceLevel = "Moderate",
+            factsOnlyNotes = "Test notes",
+            timestamp = System.currentTimeMillis(),
             date = "2026-07-03",
-            time = "12:00"
+            time = "12:00",
+            confidenceLevel = "Moderate"
         )
         assert(obs.subject == "Test observation") { "ObservationEntity constructor failed" }
         assert(obs.category == "Wildlife") { "ObservationEntity category mismatch" }
@@ -701,23 +703,23 @@ private suspend fun runAllTests(
     }
 
     runTest(results, "Database & Entities", "QuestionEntity constructable") {
-        val q = QuestionEntity(title = "Test Question", body = "Test body")
-        assert(q.title == "Test Question") { "QuestionEntity constructor failed" }
+        val q = QuestionEntity(questionText = "Test Question", sourceType = "Observation", status = "Open")
+        assert(q.questionText == "Test Question") { "QuestionEntity constructor failed" }
     }
 
     runTest(results, "Database & Entities", "ProjectEntity constructable") {
-        val p = ProjectEntity(name = "Test Project", description = "Test desc", status = "Active")
-        assert(p.name == "Test Project") { "ProjectEntity constructor failed" }
+        val p = ProjectEntity(title = "Test Project")
+        assert(p.title == "Test Project") { "ProjectEntity constructor failed" }
     }
 
     runTest(results, "Database & Entities", "SourceEntity constructable") {
-        val s = SourceEntity(title = "Test Source", url = "https://example.com", sourceType = "Web")
+        val s = SourceEntity(type = "Website", title = "Test Source")
         assert(s.title == "Test Source") { "SourceEntity constructor failed" }
     }
 
     runTest(results, "Database & Entities", "HypothesisEntity constructable") {
-        val h = HypothesisEntity(title = "Test Hypothesis", body = "Test body", category = "Flora")
-        assert(h.title == "Test Hypothesis") { "HypothesisEntity constructor failed" }
+        val h = HypothesisEntity(prediction = "Test hypothesis prediction")
+        assert(h.prediction == "Test hypothesis prediction") { "HypothesisEntity constructor failed" }
     }
 
     runTest(results, "Database & Entities", "TaskEntity constructable") {

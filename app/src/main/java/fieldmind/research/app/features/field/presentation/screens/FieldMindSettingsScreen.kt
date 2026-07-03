@@ -755,7 +755,27 @@ fun SecuritySettingsPage(
                 if (showPinSetup) {
                     HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Text(if (appPinHash.isNotBlank()) "Change PIN" else "Set a 4-6 digit PIN", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        Text(if (appPinHash.isNotBlank()) "Change PIN" else "Set a PIN", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+
+                        // PIN Length selector — shown upfront so user chooses length BEFORE entering PIN
+                        Text("PIN Length", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            listOf("4 digits", "5 digits", "6 digits").forEach { option ->
+                                val selected = appPinLen == option
+                                Surface(
+                                    onClick = { settings.setAppPinLength(option) },
+                                    shape = RoundedCornerShape(18.dp),
+                                    color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Row(Modifier.padding(10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                                        Text(option.take(1), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
+                                        Text(option.split(" ")[1], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    }
+                                }
+                            }
+                        }
+
                         OutlinedTextField(value = pinInput, onValueChange = { if (it.length <= 6) { pinInput = it; pinError = false } }, label = { Text("Enter PIN") }, singleLine = true, isError = pinError, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword).withPrivacyTyping(LocalPrivacyTypingEnabled.current), trailingIcon = { if (LocalPrivacyTypingEnabled.current) PrivacyTypingIndicator() }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
                         OutlinedTextField(value = pinConfirm, onValueChange = { if (it.length <= 6) { pinConfirm = it; pinError = false } }, label = { Text("Confirm PIN") }, singleLine = true, isError = pinError, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword).withPrivacyTyping(LocalPrivacyTypingEnabled.current), trailingIcon = { if (LocalPrivacyTypingEnabled.current) PrivacyTypingIndicator() }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), textStyle = MaterialTheme.typography.headlineSmall.copy(letterSpacing = 8.sp, textAlign = TextAlign.Center))
                         if (pinError) Text("PINs don't match. Try again.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
