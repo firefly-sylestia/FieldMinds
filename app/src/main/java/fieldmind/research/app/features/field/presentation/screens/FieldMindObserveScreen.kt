@@ -1973,7 +1973,8 @@ private fun EnhancedObservationForm(
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                         ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        tonalElevation = 4.dp
                     ) {
                         Column(Modifier.padding(4.dp)) {
                             speciesSuggestions.take(5).forEach { record ->
