@@ -44,6 +44,27 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.40.6 — HomeScreen Brace Cascade Fix ──
+        FieldMindChangelogEntry(
+            version = "0.40.6",
+            date = "2026-07-05",
+            title = "🔧 HomeScreen Brace Cascade & CI Fixes",
+            importance = "Patch",
+            tags = listOf("🔧", "🐛"),
+            sections = listOf(
+                "🐛 HomeScreen: brace cascade fix" to listOf(
+                    "✓ DataToolMiniCard was missing its closing braces after sed edits — caused all subsequent functions to be trapped as local functions inside it",
+                    "✓ Added 3 missing closing braces to properly close Box, Card, and function",
+                    "✓ QuickCaptureSheet, QuickCaptureOption, VoiceNoteCaptureDialog restored to top-level",
+                    "✓ Removed duplicate @Composable annotation causing 'not repeatable' error",
+                    "✓ Cleaned up corrupted UTF-8 comment separator artifacts"
+                ),
+                "🔧 Navigation unresolved references" to listOf(
+                    "✓ Fixed cascade errors in FieldMindNavigation.kt (caused by HomeScreen parse failure)"
+                )
+            )
+        ),
+
         // ── v0.40.5 — Card Sizing Standardization & CI Fixes ──
         FieldMindChangelogEntry(
             version = "0.40.5",

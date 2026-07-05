@@ -2748,7 +2748,6 @@ private fun ExpandInfoChip(
 }
 
 @Composable
-@Composable
 private fun DataToolMiniCard(
     title: String,
     description: String,
@@ -2792,14 +2791,9 @@ private fun DataToolMiniCard(
                     Text(description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
                 }
             }
-// ══════════════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════
+        }
+    }
+}
 @Composable
 private fun QuickCaptureSheet(
     onDismiss: () -> Unit,
