@@ -1017,6 +1017,9 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.Reader.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { LearnReaderScreen(url = readerTarget.first, title = readerTarget.second, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.FieldMode.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { ObserveScreen(viewModel = viewModel, compactFieldMode = true, onBack = { navController.popBackStack() }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Questions.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { QuestionsScreen(viewModel = viewModel, onOpenDetail = openDetail) } }
+            // NOTE: Hypotheses currently renders QuestionsScreen — a dedicated hypotheses
+            // list/browser screen isn't built yet. QuestionsScreen shows both questions and
+            // linked hypotheses. Same for Analysis→ProjectsScreen and Progress→InsightsScreen.
             composable(FieldMindScreen.Hypotheses.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { QuestionsScreen(viewModel = viewModel, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.DataTools.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { DataToolsHubScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Analysis.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { ProjectsScreen(viewModel = viewModel, startTab = 0, onOpenDetail = { _, id -> navController.navigateToDestination("field_project_detail/$id") }, onNavigate = { navController.navigateToDestination(it.route) }) } }

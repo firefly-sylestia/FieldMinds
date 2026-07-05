@@ -45,7 +45,34 @@ internal data class FieldMindChangelogEntry(
     val sections: List<Pair<String, List<String>>>
 )
 
-private val fieldMindChangelog = listOf(
+private    val fieldMindChangelog = listOf(
+        // ── v0.38.0 — Placeholder & No-Op Fixes ──
+        FieldMindChangelogEntry(
+            version = "0.38.0",
+            date = "2026-07-05",
+            title = "🔧 Placeholder Fixes & Export Improvements",
+            importance = "Patch",
+            tags = listOf("🔧", "🎨", "📋"),
+            sections = listOf(
+                "🔧 Map drawing overlay editor" to listOf(
+                    "✓ Tapping a drawing in Drawings tab now opens an edit dialog — rename label + pick color",
+                    "✓ 10-color palette with check mark selection indicator",
+                    "✓ Replaces the old /* future: edit label/color */ no-op"
+                ),
+                "🎨 Onboarding tour pages filled in" to listOf(
+                    "✓ Pages 7 (Backup), 8 (Data Tools), 9 (Species ID) are no longer bare 'Coming Soon' stubs",
+                    "✓ Now show real UI: backup interval picker, data tool cards, species ID intro",
+                    "✓ Page 10 final page also replaced with proper OnboardingFinalPage"
+                ),
+                "📋 Export buttons now work" to listOf(
+                    "✓ PDF/CSV/JSON buttons in observation detail no longer show 'coming soon'",
+                    "✓ Markdown: copies observation as formatted Markdown",
+                    "✓ CSV: generates proper CSV with header row",
+                    "✓ JSON: generates pretty-printed JSON with all observation fields"
+                )
+            )
+        ),
+
         // ── v0.37.0 — Map Improvements, Region Picker, GPS Retry ──
         FieldMindChangelogEntry(
             version = "0.37.0",

@@ -56,6 +56,7 @@ import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindVie
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.util.Locale
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -1216,6 +1217,45 @@ private fun ObservationExportSection(
     scope: kotlinx.coroutines.CoroutineScope
 ) {
     val exportText = remember(o) { FieldMindExport.singleObservationMarkdown(o) }
+    // Generate CSV and JSON formats for export
+    val csvText = remember(o) {
+        buildString {
+            appendLine("subject,category,date,time,latitude,longitude,confidence,species,temperature,humidity,conditions")
+            appendLine(
+                listOf(
+                    "\"${o.subject.replace("\"", "\"\"")}\"",
+                    o.category,
+                    o.date,
+                    o.time,
+                    o.latitude?.toString() ?: "",
+                    o.longitude?.toString() ?: "",
+                    o.confidenceLevel,
+                    "",
+                    o.weatherTemperature?.toString() ?: "",
+                    o.weatherHumidity?.toString() ?: "",
+                    "\"${o.weatherCondition.replace("\"", "\"\"")}\""
+                ).joinToString(",")
+            )
+        }
+    }
+    val jsonText = remember(o) {
+        try {
+            JSONObject().apply {
+                put("subject", o.subject)
+                put("category", o.category)
+                put("date", o.date)
+                put("time", o.time)
+                put("latitude", o.latitude)
+                put("longitude", o.longitude)
+                put("confidence", o.confidenceLevel)
+                put("species", "")
+                put("temperature", o.weatherTemperature)
+                put("humidity", o.weatherHumidity)
+                put("condition", o.weatherCondition)
+                if (o.factsOnlyNotes.isNotBlank()) put("notes", o.factsOnlyNotes)
+            }.toString(2)
+        } catch (_: Exception) { exportText }
+    }
     val haptics = rememberFieldMindHaptics()
     
     Card(
@@ -1230,24 +1270,26 @@ private fun ObservationExportSection(
             }
             
             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                // Row 1: PDF + CSV
+                // Row 1: PDF (Markdown) + CSV
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilledTonalButton(
                         onClick = {
                             haptics.light()
-                            showFastSnackbar(snackbar, scope, "PDF export coming soon")
+                            clipboard.setText(AnnotatedString(exportText))
+                            showFastSnackbar(snackbar, scope, "Markdown copied to clipboard")
                         },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(22.dp)
                     ) {
                         Icon(FieldMindIcons.Article, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
-                        Text("PDF", style = MaterialTheme.typography.labelSmall)
+                        Text("Markdown", style = MaterialTheme.typography.labelSmall)
                     }
                     FilledTonalButton(
                         onClick = {
                             haptics.light()
-                            showFastSnackbar(snackbar, scope, "CSV export coming soon")
+                            clipboard.setText(AnnotatedString(csvText))
+                            showFastSnackbar(snackbar, scope, "CSV copied to clipboard")
                         },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(22.dp)
@@ -1262,7 +1304,8 @@ private fun ObservationExportSection(
                     FilledTonalButton(
                         onClick = {
                             haptics.light()
-                            showFastSnackbar(snackbar, scope, "JSON export coming soon")
+                            clipboard.setText(AnnotatedString(jsonText))
+                            showFastSnackbar(snackbar, scope, "JSON copied to clipboard")
                         },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(22.dp)
@@ -1274,7 +1317,6 @@ private fun ObservationExportSection(
                     FilledTonalButton(
                         onClick = {
                             haptics.confirm()
-                            clipboard.setText(AnnotatedString(exportText))
                             sharePlainText(context, exportText)
                         },
                         modifier = Modifier.weight(1f),

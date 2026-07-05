@@ -36,6 +36,7 @@ import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindVie
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.border
 
 // ══════════════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════════
@@ -68,6 +69,7 @@ fun MapFieldScreen(
     // Drawing tools state
     var savedOverlays by remember { mutableStateOf<List<MapOverlay>>(emptyList()) }
     var drawingMode by remember { mutableStateOf(DrawingMode.View) }
+    var editingOverlay by remember { mutableStateOf<MapOverlay?>(null) }
     val isRecording by trackRecorder.isRecording.collectAsState()
     val currentTrack by trackRecorder.currentRecording.collectAsState()
     val savedTracks by trackRecorder.savedTracks.collectAsState()
@@ -202,7 +204,7 @@ fun MapFieldScreen(
                 overlays = savedOverlays,
                 onDeleteOverlay = { id -> savedOverlays = savedOverlays.filter { it.id != id } },
                 onClearAll = { savedOverlays = emptyList() },
-                onEditOverlay = { /* future: edit label/color */ }
+                onEditOverlay = { editingOverlay = it }
             )
             MapTab.Tracks -> TracksTab(
                 modifier = Modifier.padding(padding),
@@ -216,6 +218,23 @@ fun MapFieldScreen(
                 modifier = Modifier.padding(padding),
                 geoFenceReminder = geoFenceReminder,
                 geofenceRegions = geofenceRegions
+            )
+        }
+
+        // ── Overlay edit dialog ──
+        editingOverlay?.let { overlay ->
+            EditOverlayDialog(
+                overlay = overlay,
+                onSave = { edited ->
+                    val current = savedOverlays.toMutableList()
+                    val idx = current.indexOfFirst { it.id == overlay.id }
+                    if (idx >= 0) {
+                        current[idx] = edited
+                        savedOverlays = current
+                    }
+                    editingOverlay = null
+                },
+                onDismiss = { editingOverlay = null }
             )
         }
     }
@@ -1267,4 +1286,114 @@ private fun GeofencesTab(
             }
         }
     }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Edit Overlay Dialog — rename label & pick color
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Dialog for editing a map overlay's label and color.
+ * Fills in the existing values and saves on confirm.
+ */
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+private fun EditOverlayDialog(
+    overlay: MapOverlay,
+    onSave: (MapOverlay) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+    var label by remember { mutableStateOf(overlay.label) }
+    val palette = listOf(
+        0xFFF44336 to "Red",
+        0xFFFF5722 to "Deep orange",
+        0xFFFF9800 to "Amber",
+        0xFFFFC107 to "Yellow",
+        0xFF4CAF50 to "Green",
+        0xFF009688 to "Teal",
+        0xFF2196F3 to "Blue",
+        0xFF3F51B5 to "Indigo",
+        0xFF9C27B0 to "Purple",
+        0xFF607D8B to "Blue grey"
+    )
+    var selectedColor by remember { mutableStateOf(overlay.color) }
+
+    SwipeableAlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Edit overlay", fontWeight = FontWeight.Bold) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                OutlinedTextField(
+                    value = label,
+                    onValueChange = { label = it },
+                    label = { Text("Label") },
+                    placeholder = { Text(when (overlay) {
+                        is MapOverlay.PointOverlay -> "Site point"
+                        is MapOverlay.LineOverlay -> "Transect"
+                        is MapOverlay.PolygonOverlay -> "Survey boundary"
+                    }) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(22.dp)
+                )
+
+                Text("Color", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
+
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    palette.forEach { (colorLong, name) ->
+                        val colorInt = colorLong.toInt()
+                        val isSelected = selectedColor == colorLong
+                        Surface(
+                            onClick = { selectedColor = colorLong },
+                            shape = RoundedCornerShape(14.dp),
+                            color = Color(colorInt),
+                            modifier = Modifier
+                                .size(42.dp)
+                                .then(
+                                    if (isSelected) Modifier.border(
+                                        2.5.dp,
+                                        MaterialTheme.colorScheme.onSurface,
+                                        RoundedCornerShape(14.dp)
+                                    ) else Modifier
+                                )
+                        ) {
+                            if (isSelected) {
+                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        FieldMindIcons.Check,
+                                        null,
+                                        tint = Color.White,
+                                        size = 20.dp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Text(
+                    when (overlay) {
+                        is MapOverlay.PointOverlay -> "Point · %.5f, %.5f".format(overlay.latitude, overlay.longitude)
+                        is MapOverlay.LineOverlay -> "Line · ${overlay.points.size} points"
+                        is MapOverlay.PolygonOverlay -> "Polygon · ${overlay.points.size} vertices"
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onSave(overlay.copy(label = label, color = selectedColor))
+                },
+                shape = RoundedCornerShape(22.dp)
+            ) { Text("Save") }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Cancel") }
+        },
+        shape = RoundedCornerShape(34.dp)
+    )
 }
