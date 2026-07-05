@@ -19,10 +19,10 @@ import androidx.compose.ui.platform.LocalContext
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.data.location.*
@@ -877,27 +877,28 @@ private fun RegionPickerOverlay(
                     Text(statusText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 // Zoom to my location button
+                val hasLocPerm = locationProvider.hasAnyLocationPermission()
                 FilledTonalIconButton(
                     onClick = {
-                        if (!zoomingToLocation && locationProvider.hasAnyLocationPermission()) {
+                        if (hasLocPerm) {
                             zoomingToLocation = true
                             locationProvider.requestCurrentLocation(timeoutMs = 8_000L) { loc ->
                                 zoomingToLocation = false
                                 if (loc != null) {
                                     mapView?.controller?.animateTo(
                                         GeoPoint(loc.latitude, loc.longitude),
-                                        15.0, // zoom level
+                                        15.0, // street-level zoom
                                         true  // animated
                                     )
                                 }
                             }
                         }
                     },
-                    enabled = !zoomingToLocation,
+                    enabled = !zoomingToLocation && hasLocPerm,
                     modifier = Modifier.size(40.dp)
                 ) {
                     Icon(
-                        if (zoomingToLocation) FieldMindIcons.Sync else FieldMindIcons.Location,
+                        FieldMindIcons.Location,
                         null,
                         size = 20.dp
                     )
@@ -978,14 +979,14 @@ private fun observationMarkerBitmap(context: Context): BitmapDrawable {
 
     // Outer glow ring (faint)
     val glowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.argb(50, 0, 150, 136) // Teal with ~20% opacity
+        color = android.graphics.Color.argb(50, 0, 150, 136) // Teal with ~20% opacity
         style = Paint.Style.FILL
     }
     canvas.drawCircle(cx, cy, 10f, glowPaint)
 
     // Solid center dot
     val dotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.argb(220, 0, 150, 136) // Teal with ~86% opacity
+        color = android.graphics.Color.argb(220, 0, 150, 136) // Teal with ~86% opacity
         style = Paint.Style.FILL
     }
     canvas.drawCircle(cx, cy, 4f, dotPaint)
@@ -1025,8 +1026,8 @@ private fun drawRegionRect(
                 GeoPoint(s, e), // SE
                 GeoPoint(s, w)  // SW
             ))
-            fillPaint.color = Color.argb(30, 33, 150, 243)
-            outlinePaint.color = Color.parseColor("#2196F3")
+            fillPaint.color = android.graphics.Color.argb(30, 33, 150, 243)
+            outlinePaint.color = android.graphics.Color.parseColor("#2196F3")
             outlinePaint.strokeWidth = 3f
         }
         mapView.overlays.add(rect)
