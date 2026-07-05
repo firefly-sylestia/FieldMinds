@@ -44,6 +44,30 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.40.2 — Species Catalog: No Reload & Detail Polish ──
+        FieldMindChangelogEntry(
+            version = "0.40.2",
+            date = "2026-07-05",
+            title = "🐞 Species Catalog: No Reload & Detail Polish",
+            importance = "Patch",
+            tags = listOf("🐞", "⚡", "🎨"),
+            sections = listOf(
+                "⚡ SpeciesDatabase is now a singleton" to listOf(
+                    "✓ SpeciesDatabase made application-scoped with getInstance() — parsed catalog JSON persists across navigation",
+                    "✓ Eliminates full reload every time user opens Species Browser or navigates back from species detail",
+                    "✓ In-memory speciesCache now survives across screens — instant load on return"
+                ),
+                "🎨 Species detail screen redesigned" to listOf(
+                    "✓ Added 20dp horizontal padding to LazyColumn for consistent content margins",
+                    "✓ Hero header now uses proper Surface with elevation depth instead of flat accent background",
+                    "✓ All cards upgraded: replaced 0dp + cuteShadow with CuteElevations.nonClickableTier (4dp)",
+                    "✓ Habitat and Diet cards now use proper elevation with surface container",
+                    "✓ Similar species cards now use ClickableCard with press animation instead of raw Card",
+                    "✓ Consistent 12dp spacing between sections via Arrangement.spacedBy"
+                )
+            )
+        ),
+
         // ── v0.40.1 — CI Compilation Fixes ──
         FieldMindChangelogEntry(
             version = "0.40.1",

@@ -70,7 +70,7 @@ fun TaxonomicBrowserScreen(
     onOpenDetail: (String) -> Unit
 ) {
     val context = LocalContext.current
-    val database = remember { SpeciesDatabase(context) }
+    val database = remember { SpeciesDatabase.getInstance(context) }
 
     var breadcrumbs by rememberSaveable { mutableStateOf<List<Breadcrumb>>(emptyList()) }
     var currentLevel by rememberSaveable { mutableStateOf(TaxoLevel.Kingdom) }

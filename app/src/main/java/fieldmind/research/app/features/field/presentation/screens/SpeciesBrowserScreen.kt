@@ -80,7 +80,7 @@ fun SpeciesBrowserScreen(
     onOpenDetail: (String) -> Unit
 ) {
     val context = LocalContext.current
-    val database = remember { SpeciesDatabase(context) }
+    val database = remember { SpeciesDatabase.getInstance(context) }
 
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedCategory by rememberSaveable { mutableStateOf<String?>(null) }
@@ -572,7 +572,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val database = remember { SpeciesDatabase(context) }
+    val database = remember { SpeciesDatabase.getInstance(context) }
 
     var species by remember { mutableStateOf<SpeciesRecord?>(null) }
     var isLoading by remember { mutableStateOf(true) }
@@ -616,15 +616,17 @@ fun SharedTransitionScope.SpeciesDetailScreen(
 
             LazyColumn(
                 Modifier.fillMaxSize().padding(padding),
-                contentPadding = PaddingValues(bottom = 96.dp),
-                verticalArrangement = Arrangement.spacedBy(0.dp)
+                contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 96.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 // ── Hero header with back button ──
                 item {
-                    Box(
-                        Modifier
+                    Surface(
+                        shape = RoundedCornerShape(34.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerLow,
+                        tonalElevation = 0.dp,
+                        modifier = Modifier
                             .fillMaxWidth()
-                            .background(accent.copy(alpha = 0.06f))
                     ) {
                         Column(Modifier.fillMaxWidth()) {
                             // Back button row
@@ -721,9 +723,10 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                         }
                     }
                 }
+                }
 
                 // ── Content sections ──
-                item { Spacer(Modifier.height(12.dp)) }
+                item { Spacer(Modifier.height(4.dp)) }
 
                 // Description
                 if (record.description.isNotBlank()) {
@@ -746,17 +749,15 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                 // Habitat & Diet (side-by-side)
                 item {
                     Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp),
+                        Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         if (record.habitat.isNotBlank()) {
                             Card(
                                 shape = RoundedCornerShape(28.dp),
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                modifier = Modifier.weight(1f).cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(28.dp))
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                                modifier = Modifier.weight(1f)
                             ) {
                                 Column(
                                     Modifier.padding(16.dp),
@@ -779,9 +780,9 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                         if (record.diet.isNotBlank()) {
                             Card(
                                 shape = RoundedCornerShape(28.dp),
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                modifier = Modifier.weight(1f).cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(28.dp))
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                                modifier = Modifier.weight(1f)
                             ) {
                                 Column(
                                     Modifier.padding(16.dp),
@@ -890,13 +891,15 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 similarSpecies.forEach { similar ->
-                                    Card(
+                                    ClickableCard(
+                                        onClick = { internalSpeciesId = similar.id },
                                         shape = RoundedCornerShape(24.dp),
                                         colors = CardDefaults.cardColors(
-                                            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                                            containerColor = MaterialTheme.colorScheme.surface
                                         ),
-                                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                        modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(24.dp))
+                                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                                        liftDp = 0.5f,
+                                        scaleDown = 0.98f
                                     ) {
                                         Row(
                                             Modifier
@@ -933,22 +936,12 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                                                     )
                                                 }
                                             }
-                                            // Tap to navigate to that species
-                                            Surface(
-                                                onClick = { internalSpeciesId = similar.id },
-                                                shape = CircleShape,
-                                                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                                modifier = Modifier.size(36.dp)
-                                            ) {
-                                                Box(contentAlignment = Alignment.Center) {
-                                                    Icon(
-                                                        FieldMindIcons.Forward,
-                                                        null,
-                                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                        size = 16.dp
-                                                    )
-                                                }
-                                            }
+                                            Icon(
+                                                FieldMindIcons.Forward,
+                                                null,
+                                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f),
+                                                size = 18.dp
+                                            )
                                         }
                                     }
                                 }
@@ -979,12 +972,9 @@ private fun DetailSection(
 ) {
     Card(
         shape = RoundedCornerShape(30.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(

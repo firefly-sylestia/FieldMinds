@@ -68,9 +68,24 @@ data class RegionalPack(
  * - Category-based browsing
  * - Feature-based identification hints
  */
-class SpeciesDatabase(private val context: Context) {
+class SpeciesDatabase private constructor(private val context: Context) {
 
     companion object {
+        @Volatile
+        private var INSTANCE: SpeciesDatabase? = null
+
+        /**
+         * Get the application-scoped singleton instance.
+         * Call this instead of the constructor to ensure the in-memory
+         * species cache persists across navigation (avoids re-parsing
+         * the 5MB+ JSON catalog every time the user opens the browser).
+         */
+        fun getInstance(context: Context): SpeciesDatabase {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: SpeciesDatabase(context.applicationContext).also { INSTANCE = it }
+            }
+        }
+
         private const val DB_FILE = "species_catalog.json"
         private const val PACKS_FILE = "regional_packs.json"
         private const val DOWNLOAD_DIR = "species_packs"

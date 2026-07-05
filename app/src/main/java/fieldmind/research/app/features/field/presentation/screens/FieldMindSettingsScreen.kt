@@ -2145,7 +2145,7 @@ fun SpeciesToolsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val settings = viewModel.fieldSettings
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
-    val database = remember { SpeciesDatabase(context) }
+    val database = remember { SpeciesDatabase.getInstance(context) }
     val apiKey by settings.speciesIdApiKey.collectAsState()
     val offlineFirst by settings.speciesIdOfflineFirst.collectAsState()
     val modelBaseUrl by settings.speciesModelBaseUrl.collectAsState()
@@ -2240,7 +2240,7 @@ fun SpeciesToolsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 @Composable
 fun SpeciesPackSettingsPage(onBack: () -> Unit) {
     val context = LocalContext.current
-    val database = remember { SpeciesDatabase(context) }
+    val database = remember { SpeciesDatabase.getInstance(context) }
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
     val snackbar = remember { SnackbarHostState() }

@@ -30,7 +30,7 @@ fun HomeSpeciesCatalogSection(
     userInterests: UserInterests = UserInterests()
 ) {
     val context = LocalContext.current
-    val database = remember { SpeciesDatabase(context) }
+    val database = remember { SpeciesDatabase.getInstance(context) }
     var totalCount by remember { mutableStateOf(0) }
     var isLoading by remember { mutableStateOf(true) }
 

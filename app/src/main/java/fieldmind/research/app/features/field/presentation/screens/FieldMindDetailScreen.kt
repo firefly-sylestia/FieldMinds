@@ -490,7 +490,7 @@ private fun ObservationSpeciesInfoSection(
 ) {
     val colors = FieldMindTheme.colors
     val context = LocalContext.current
-    val speciesDatabase = remember { SpeciesDatabase(context) }
+    val speciesDatabase = remember { SpeciesDatabase.getInstance(context) }
 
     // ── Species record lookup state ──
     var selectedSpeciesRecord by remember { mutableStateOf<SpeciesRecord?>(null) }
@@ -2041,7 +2041,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
     var targetCount by remember { mutableStateOf("") }
     var autoCount by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val speciesDatabase = remember { SpeciesDatabase(context) }
+    val speciesDatabase = remember { SpeciesDatabase.getInstance(context) }
 
     // Live species list for this project
     val allSpecies by viewModel.speciesRegistry.collectAsState()
