@@ -44,6 +44,25 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.40.7 — IntegrityStat Missing Brace Fix ──
+        FieldMindChangelogEntry(
+            version = "0.40.7",
+            date = "2026-07-05",
+            title = "🔧 IntegrityStat Missing Brace Fix",
+            importance = "Patch",
+            tags = listOf("🔧", "🐛"),
+            sections = listOf(
+                "🔧 IntegrityStat missing closing brace" to listOf(
+                    "✓ IntegrityStat composable was missing its closing } — Column `}` at line 1793 only closed the inner layout but never closed the function body",
+                    "✓ This trapped ScreenVisibilitySettingsPage, DeveloperSettingsPage, SpeciesPackSettingsPage, and SpeciesIdentificationSettingsPage as local functions inside IntegrityStat",
+                    "✓ All 8 Navigation.kt 'Unresolved reference' errors now resolved — functions are properly top-level and visible to Navigation.kt via wildcard import"
+                ),
+                "🧹 Code hygiene" to listOf(
+                    "✓ Cleaned up remaining corrupted UTF-8 comment separator artifacts near IntegrityStat"
+                )
+            )
+        ),
+
         // ── v0.40.6 — HomeScreen Brace Cascade Fix ──
         FieldMindChangelogEntry(
             version = "0.40.6",

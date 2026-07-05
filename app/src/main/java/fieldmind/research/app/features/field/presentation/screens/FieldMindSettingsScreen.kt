@@ -1791,6 +1791,7 @@ private fun IntegrityStat(value: String, label: String) {
         Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
         Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
+}
 // ══════════════════════════════════════════════════════════════════════
 //  Screen Visibility Settings Page
 // ══════════════════════════════════════════════════════════════════════
