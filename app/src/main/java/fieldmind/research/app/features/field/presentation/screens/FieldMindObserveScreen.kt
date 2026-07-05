@@ -160,6 +160,7 @@ fun ObserveScreen(
     // Core session state — uses rememberSaveable to survive configuration changes
     var session by rememberSaveable { mutableStateOf(CaptureSessionState()) }
     var capturedLocation by remember { mutableStateOf<CapturedLocation?>(null) }
+    var showEvidenceForm by remember { mutableStateOf(false) }
 
     val researchSessions by viewModel.researchSessions.collectAsState()
     val projects by viewModel.projects.collectAsState()
@@ -187,7 +188,6 @@ fun ObserveScreen(
         }
     }
 
-    var showEvidenceForm by remember { mutableStateOf(false) }
     var showCategoryPicker by remember { mutableStateOf(false) }
     var selectedCategories by remember { mutableStateOf(setOf("Other")) }
 

@@ -68,6 +68,10 @@ fun MapFieldScreen(
     val geoFenceReminder = remember { GeoFenceReminder(context) }
     val geofenceRegions by geoFenceReminder.activeRegions.collectAsState()
 
+    val isRecording by trackRecorder.isRecording.collectAsState()
+    val currentTrack by trackRecorder.currentRecording.collectAsState()
+    val savedTracks by trackRecorder.savedTracks.collectAsState()
+
     // Drawing tools state — persisted to SharedPreferences across app restarts
     val prefs = remember { context.getSharedPreferences("fieldmind_map", Context.MODE_PRIVATE) }
     var savedOverlays by remember {
@@ -98,9 +102,6 @@ fun MapFieldScreen(
 
     var drawingMode by remember { mutableStateOf(DrawingMode.View) }
     var editingOverlay by remember { mutableStateOf<MapOverlay?>(null) }
-    val isRecording by trackRecorder.isRecording.collectAsState()
-    val currentTrack by trackRecorder.currentRecording.collectAsState()
-    val savedTracks by trackRecorder.savedTracks.collectAsState()
     val cachedRegions by tileManager.cachedRegions.collectAsState()
     // cachedRegions type is now List<OsmTileRegion>
 
