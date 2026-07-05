@@ -44,6 +44,29 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.40.5 — Card Sizing Standardization & CI Fixes ──
+        FieldMindChangelogEntry(
+            version = "0.40.5",
+            date = "2026-07-05",
+            title = "📐 Card Sizing Standardization & CI Fixes",
+            importance = "Patch",
+            tags = listOf("📐", "🔧", "🎨"),
+            sections = listOf(
+                "📐 Consistent icon box sizing" to listOf(
+                    "✓ CreateOptionRow (ProjectDetail): icon box 40→44dp, icon 22→24dp — 55% ratio",
+                    "✓ SettingsScreen: 3x inline icon boxes 40→44dp for consistent tap targets",
+                    "✓ SettingsScreen: 6x metadata info badges 32→36dp boxes for better icon breathing room",
+                    "✓ ProjectCard: box 48→44dp, icon 26→24dp — aligned with all other list-style cards"
+                ),
+                "🔧 CI compilation fixes" to listOf(
+                    "✓ Added missing @Composable annotation to DataToolMiniCard",
+                    "✓ Removed orphaned @Composable in SettingsScreen (StatChip extraction leftover)",
+                    "✓ Removed extra closing braces in HomeScreen causing cascade syntax errors",
+                    "✓ Cleaned up corrupted UTF-8 comment separators"
+                )
+            )
+        ),
+
         // ── v0.40.4 — CI Compilation Error Fixes ──
         FieldMindChangelogEntry(
             version = "0.40.4",

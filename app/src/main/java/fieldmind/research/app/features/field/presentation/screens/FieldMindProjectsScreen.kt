@@ -460,7 +460,7 @@ private fun ProjectCard(
                     .background(colors.project.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(FieldMindIcons.Project, null, tint = colors.project, size = 26.dp)
+                Icon(FieldMindIcons.Project, null, tint = colors.project, size = 24.dp)
             }
 
             // Content
