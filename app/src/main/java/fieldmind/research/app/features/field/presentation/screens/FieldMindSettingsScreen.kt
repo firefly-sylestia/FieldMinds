@@ -314,13 +314,8 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                         onSelected = { scheme ->
                             sharedAppSettings.setCustomColorScheme(scheme)
                             // Auto-select matching gradient style
-                            val matchedGradient = when (scheme) {
-                                "Midnight Flora" -> "Flora Glow"
-                                "Noir Amethyst" -> "Amethyst Aura"
-                                "Warm Terrain" -> "Terrain Warmth"
-                                else -> "Screen Background"
-                            }
-                            settings.setCardGradientStyle(matchedGradient)
+                            // All color schemes use the default tint now
+                            settings.setCardGradientStyle("Screen Background")
                         }
                     )
                 }

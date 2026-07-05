@@ -259,25 +259,10 @@ object CuteGradients {
     enum class Style(val displayName: String) {
         /** primaryContainer flat tint — the default subtle card wash */
         ScreenBackground("Screen Background"),
-        /** secondaryContainer flat tint */
-        BlushTrio("Blush Trio"),
-        /** primaryContainer flat tint */
-        RainbowSoft("Rainbow Soft"),
-        /** tertiaryContainer flat tint */
-        CoolDream("Cool Dream"),
-        /** secondaryContainer flat tint */
-        SpringPastel("Spring Pastel"),
         /** primaryContainer flat tint (slightly stronger) */
         SunnyLift("Sunny Lift"),
         /** true black / dark gray — AMOLED power saving */
         AmoledBlack("AMOLED Black"),
-        // ── Premium theme-specific tints (responsive to active scheme) ──
-        /** scheme primary flat tint — matches Midnight Flora palette */
-        FloraGlow("Flora Glow"),
-        /** scheme primary flat tint — matches Noir Amethyst palette */
-        AmethystAura("Amethyst Aura"),
-        /** scheme primary flat tint — matches Warm Terrain palette */
-        TerrainWarmth("Terrain Warmth"),
     }
 
     /** The user's selected tint style — persisted in settings. */
@@ -298,35 +283,11 @@ object CuteGradients {
         fun alpha(base: Float): Float = (base * opacity).coerceIn(0f, 1f)
 
         return when (style) {
-            // ── Scheme-aware flat tints — each uses a single container color ──
+            // ── Flat tints — each uses a single container color ──
             Style.ScreenBackground -> Brush.verticalGradient(
                 colors = listOf(
                     scheme.primaryContainer.copy(alpha = alpha(0.07f)),
                     scheme.primaryContainer.copy(alpha = alpha(0.07f))
-                )
-            )
-            Style.BlushTrio -> Brush.verticalGradient(
-                colors = listOf(
-                    scheme.secondaryContainer.copy(alpha = alpha(0.09f)),
-                    scheme.secondaryContainer.copy(alpha = alpha(0.09f))
-                )
-            )
-            Style.CoolDream -> Brush.verticalGradient(
-                colors = listOf(
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.09f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.09f))
-                )
-            )
-            Style.RainbowSoft -> Brush.verticalGradient(
-                colors = listOf(
-                    scheme.primaryContainer.copy(alpha = alpha(0.09f)),
-                    scheme.primaryContainer.copy(alpha = alpha(0.09f))
-                )
-            )
-            Style.SpringPastel -> Brush.verticalGradient(
-                colors = listOf(
-                    scheme.secondaryContainer.copy(alpha = alpha(0.09f)),
-                    scheme.secondaryContainer.copy(alpha = alpha(0.09f))
                 )
             )
             Style.SunnyLift -> Brush.verticalGradient(
@@ -346,26 +307,6 @@ object CuteGradients {
                     )
                 }
             }
-
-            // ── Premium theme-specific tints — scheme primary gives each theme's character ──
-            Style.FloraGlow -> Brush.verticalGradient(
-                colors = listOf(
-                    scheme.primary.copy(alpha = alpha(0.07f)),
-                    scheme.primary.copy(alpha = alpha(0.07f))
-                )
-            )
-            Style.AmethystAura -> Brush.verticalGradient(
-                colors = listOf(
-                    scheme.primary.copy(alpha = alpha(0.07f)),
-                    scheme.primary.copy(alpha = alpha(0.07f))
-                )
-            )
-            Style.TerrainWarmth -> Brush.verticalGradient(
-                colors = listOf(
-                    scheme.primary.copy(alpha = alpha(0.07f)),
-                    scheme.primary.copy(alpha = alpha(0.07f))
-                )
-            )
         }
     }
 

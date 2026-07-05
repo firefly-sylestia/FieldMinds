@@ -638,18 +638,17 @@ internal data class FieldMindChangelogEntry(
             date = "2026-07-02",
             title = "🌸 Gradient Cards & Preset Theme Picker",
             importance = "Major",
-            tags = listOf("🎨", "🌈", "✨"),
-            sections = listOf(
-                "🌈 Gradient card backgrounds" to listOf(
-                    "✓ Every settings card now has a theme-aware gradient background with 9 styles (Primary Tonal, Blush Trio, Cool Dream, etc.)",
-                    "✓ Visual gradient picker in Settings → Appearance with live preview swatches",
-                    "✓ Gradients adapt to light/dark and any color scheme"
-                ),
-                "✨ Card polish" to listOf(
-                    "✓ GradientCard composable, cuteGradientBackground modifier, CuteGradients infrastructure",
-                    "✓ SettingsGroupCard shadow, gradient EmptyState, CuteCardDefaults dialog presets"
+            tags = listOf("🎨", "🌈", "✨"),                sections = listOf(
+                    "🌈 Gradient card backgrounds" to listOf(
+                        "✓ Settings cards use a clean flat tint background instead of multi-stop gradients",
+                        "✓ Visual tint picker in Settings → Appearance with live preview swatches",
+                        "✓ Tints adapt to light/dark and any color scheme"
+                    ),
+                    "✨ Card polish" to listOf(
+                        "✓ CuteGradients infrastructure simplified to 3 flat-tint styles (Default, Sunny Lift, AMOLED Black)",
+                        "✓ SettingsGroupCard shadow, CuteCardDefaults dialog presets"
+                    )
                 )
-            )
         ),
         // ── v0.24.2 — Staggered Entrance Animations ──
         FieldMindChangelogEntry(

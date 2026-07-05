@@ -970,11 +970,11 @@ private suspend fun runAllTests(
         settings.setShowWeatherTestPanel(original)
     }
 
-    runTest(results, "Error Handling", "Card gradient style sets") {
+    runTest(results, "Error Handling", "Card tint style sets") {
         val original = settings.cardGradientStyle.value
-        settings.setCardGradientStyle("Blush Trio")
+        settings.setCardGradientStyle("Sunny Lift")
         val style = settings.cardGradientStyle.first()
-        assert(style == "Blush Trio") { "Expected Blush Trio, got $style" }
+        assert(style == "Sunny Lift") { "Expected Sunny Lift, got $style" }
         settings.setCardGradientStyle(original)
     }
 
