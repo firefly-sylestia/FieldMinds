@@ -120,7 +120,8 @@ fun VoiceNotesScreen(
         showFastSnackbar(snackbar, scope, "Voice note saved")
     }
 
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground)
+    val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
+    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground, opacity = gradientOpacity)
     Scaffold(
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbar) }

@@ -116,7 +116,8 @@ fun SharedTransitionScope.KnowledgeLibraryScreen(
             tab = bounded; haptics.light()
         }
     }
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground)
+    val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
+    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground, opacity = gradientOpacity)
     Column(Modifier.fillMaxSize().statusBarsPadding().background(brush = screenBgGradient)) {
         Column(Modifier.padding(20.dp, 20.dp, 20.dp, 12.dp)) {
             StandardScreenHeader(

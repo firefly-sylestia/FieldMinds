@@ -514,7 +514,8 @@ fun ObserveScreen(
         )
     }
 
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground)
+    val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
+    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground, opacity = gradientOpacity)
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         containerColor = Color.Transparent

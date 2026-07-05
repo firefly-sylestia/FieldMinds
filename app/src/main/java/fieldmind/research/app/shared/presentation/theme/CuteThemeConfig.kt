@@ -319,8 +319,8 @@ object CuteGradients {
             Style.ScreenBackground -> Brush.verticalGradient(
                 colors = listOf(
                     scheme.surface,
-                    scheme.primaryContainer.copy(alpha = (0.08f * opacity).coerceIn(0f, 0.25f)),
-                    scheme.tertiaryContainer.copy(alpha = (0.04f * opacity).coerceIn(0f, 0.15f)),
+                    scheme.primaryContainer.copy(alpha = (0.18f * opacity).coerceIn(0f, 0.40f)),
+                    scheme.tertiaryContainer.copy(alpha = (0.10f * opacity).coerceIn(0f, 0.30f)),
                     scheme.surface
                 )
             )

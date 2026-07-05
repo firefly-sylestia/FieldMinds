@@ -146,8 +146,11 @@ fun FieldMindAppLock(
     }
 
     // Try biometric/device auth first, then fall back to PIN.
-    LaunchedEffect(privacyEnabled) {
-        if (privacyEnabled && !isUnlocked && !authAttempted) {
+    // Key on both privacyEnabled AND isUnlocked so the prompt re-fires
+    // when the lock screen reappears after auto-lock from backgrounding.
+    LaunchedEffect(privacyEnabled, isUnlocked) {
+        if (privacyEnabled && !isUnlocked) {
+            authAttempted = false
             startBiometricAuth()
         }
     }
