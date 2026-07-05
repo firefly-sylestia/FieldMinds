@@ -24,7 +24,7 @@ import fieldmind.research.app.ui.theme.CuteElevations
  *
  * Defaults mirror the project conventions:
  * - RoundedCornerShape(34.dp)
- * - surfaceContainerLowest background (brighter = contrasts more from background)
+ * - surfaceContainerLow background (subtle contrast from screen background)
  * - 6dp plush elevation (clickableTier) with soft shadow
  * - 1.5dp lift, 0.985 scale-down on press
  */
@@ -34,7 +34,7 @@ fun ClickableCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
     elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
     tonalElevation: Dp = CuteElevations.clickableTier,
@@ -67,7 +67,7 @@ fun InfoCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
     elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
     tonalElevation: Dp = CuteElevations.nonClickableTier,
@@ -98,7 +98,7 @@ fun ClickableCard(
     fillMaxWidth: Boolean = true,
     shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
     elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
     tonalElevation: Dp = CuteElevations.clickableTier,
