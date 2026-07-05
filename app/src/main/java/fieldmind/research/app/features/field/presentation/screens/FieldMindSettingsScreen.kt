@@ -1418,6 +1418,7 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val openWeatherMapKey by settings.openWeatherMapApiKey.collectAsState()
     val weatherApiDotComKey by settings.weatherApiDotComApiKey.collectAsState()
     val imdApiKey by settings.imdApiKey.collectAsState()
+    val openMeteoApiKey by settings.openMeteoApiKey.collectAsState()
     val selectedProviderSet = remember(providerSlugs) { providerSlugs.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet().ifEmpty { setOf("met-norway") } }
     val keyProvider = remember(selectedProviderSet) { WeatherProviders.selectedProviders(selectedProviderSet.joinToString(",")).firstOrNull { it.requiresApiKey } ?: WeatherProviders.selectedProviders(selectedProviderSet.joinToString(",")).first() }
     SettingsSubPage("Weather", icon = FieldMindIcons.Weather, onBack = onBack) {
@@ -1476,6 +1477,7 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                             "openweathermap" -> openWeatherMapKey to { v: String -> settings.setOpenWeatherMapApiKey(v) }
                             "weatherapi" -> weatherApiDotComKey to { v: String -> settings.setWeatherApiDotComApiKey(v) }
                             "imd-india" -> imdApiKey to { v: String -> settings.setImdApiKey(v) }
+                            "open-meteo" -> openMeteoApiKey to { v: String -> settings.setOpenMeteoApiKey(v) }
                             else -> apiKey to { v: String -> settings.setWeatherApiKey(v) }
                         }
                         OutlinedTextField(

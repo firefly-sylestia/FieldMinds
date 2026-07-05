@@ -944,6 +944,8 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         if (wapi.isNotBlank()) put("weatherapi", wapi)
         val imd = fieldSettings.imdApiKey.value.trim()
         if (imd.isNotBlank()) put("imd-india", imd)
+        val om = fieldSettings.openMeteoApiKey.value.trim()
+        if (om.isNotBlank()) put("open-meteo", om)
     }
 
     fun fetchWeatherForLocation(latitude: Double, longitude: Double) = viewModelScope.launch {

@@ -26,7 +26,7 @@ class OpenMeteoProvider : WeatherProvider {
     override val displayName: String = "Open-Meteo"
 
     /** Free tier works without a key; provide one for commercial access. */
-    override val requiresApiKey: Boolean = false
+    override val requiresApiKey: Boolean = true
     override val apiKeyLabel: String = "Open-Meteo commercial API key (optional)"
     override val apiKeyPlaceholder: String =
         "Leave blank for free tier. Get a key at open-meteo.com for commercial access."
