@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -111,6 +112,7 @@ class GeoFenceReminder(private val context: Context) {
     /**
      * Adds a new geo-fence region and starts monitoring it.
      */
+    @SuppressLint("MissingPermission")
     fun addRegion(region: GeofenceRegion) {
         if (!hasLocationPermission()) return
         val client = geofencingClient ?: return // Play Services unavailable — silently degrade
@@ -212,6 +214,7 @@ class GeoFenceReminder(private val context: Context) {
     /**
      * Restores previously saved regions (called on app start).
      */
+    @SuppressLint("MissingPermission")
     fun restoreRegions() {
         val client = geofencingClient ?: return // Play Services not available
         val saved = loadRegionsFromStorage()
