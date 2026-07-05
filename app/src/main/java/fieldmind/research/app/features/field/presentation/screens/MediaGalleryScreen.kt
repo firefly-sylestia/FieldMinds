@@ -33,8 +33,8 @@ import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindVie
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.CuteElevations
-import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.ui.theme.cuteShadow
+import fieldmind.research.app.ui.theme.screenBackground
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -76,12 +76,11 @@ fun MediaGalleryScreen(
     }
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground, opacity = gradientOpacity)
     Scaffold(
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbar) }
     ) { padding ->
-        Box(Modifier.fillMaxSize().background(brush = screenBgGradient)) {
+        Box(Modifier.fillMaxSize().screenBackground(gradientOpacity)) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(padding),
                 contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 96.dp),

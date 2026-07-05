@@ -58,8 +58,8 @@ import fieldmind.research.app.features.field.data.learn.LearnResource
 import fieldmind.research.app.features.field.data.learn.SuggestedOnlineApis
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
-import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.ui.theme.screenBackground
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -117,8 +117,7 @@ fun SharedTransitionScope.KnowledgeLibraryScreen(
         }
     }
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground, opacity = gradientOpacity)
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(brush = screenBgGradient)) {
+    Column(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {
         Column(Modifier.padding(20.dp, 20.dp, 20.dp, 12.dp)) {
             StandardScreenHeader(
                 title = "Knowledge Hub",

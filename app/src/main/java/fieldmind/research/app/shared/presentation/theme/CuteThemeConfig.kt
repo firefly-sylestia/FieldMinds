@@ -253,12 +253,11 @@ object CuteCardDefaults {
 object CuteGradients {
 
     /**
-     * Available gradient styles. Combines scheme-aware tonal gradients
-     * with curated artistic fixed-color gradients for bold visual impact.
+     * Available gradient styles. All use theme-responsive colors from the
+     * current Material color scheme for consistent, harmonious blending.
      */
     enum class Style(val displayName: String) {
-        // ── Scheme-aware (theme-responsive) ──
-        /** surface → primaryContainer hint → surface — vertical background wash */
+        /** surface → subtle container hints → surface — vertical background wash */
         ScreenBackground("Screen Background"),
         /** secondaryContainer → primaryContainer → tertiaryContainer */
         BlushTrio("Blush Trio"),
@@ -272,25 +271,6 @@ object CuteGradients {
         SunnyLift("Sunny Lift"),
         /** true black → deep gray — AMOLED power saving */
         AmoledBlack("AMOLED Black"),
-
-        // ── Artistic fixed-color gradients (abstract, bold) ──
-        /** #0D0221 → #3A015C → #7B2D8E → #E879F9 — deep space nebula */
-        NebulaPurple("Nebula Purple"),
-        /** #1A1A2E → #16213E → #0F3460 → #E94560 — neon cyberpunk */
-        CyberpunkSunset("Cyberpunk Sunset"),
-        /** #0F2027 → #203A43 → #2C5364 — deep ocean twilight */
-        OceanDepths("Ocean Depths"),
-        /** #FF6B6B → #4ECDC4 → #292F36 — bold triadic pop */
-        TropicalLagoon("Tropical Lagoon"),
-        /** #2C3E50 → #3498DB → #ECF0F1 — arctic aurora */
-        ArcticAurora("Arctic Aurora"),
-        /** #FDEB71 → #F8D800 → #FF8A5C — warm golden hour */
-        GoldenHour("Golden Hour"),
-        /** #EA8D8D → #A890FE → #D8B4FE — cherry blossom dream */
-        SakuraDream("Sakura Dream"),
-        /** #4158D0 → #C850C0 → #FFCC70 — vibrant gradient mesh */
-        SunsetVibes("Sunset Vibes"),
-
         // ── Premium theme-specific gradients (responsive to active scheme) ──
         /** emerald → amber → teal — matches Midnight Flora palette */
         FloraGlow("Flora Glow"),
@@ -309,50 +289,51 @@ object CuteGradients {
      * Artistic styles use fixed curated color combinations for bold impact.
      */
     @Composable
-    fun brushFor(style: Style, opacity: Float = 1f): Brush {
+    fun brushFor(style: Style, opacity: Float = 0.55f): Brush {
         val scheme = MaterialTheme.colorScheme
         val isDark = (0.299f * scheme.background.red + 0.587f * scheme.background.green + 0.114f * scheme.background.blue) < 0.5f
-        // Apply opacity multiplier to a color, keeping the base alpha sensible
-        fun Color.withOpacity(baseAlpha: Float): Color = this.copy(alpha = (alpha * baseAlpha * opacity).coerceIn(0f, 1f))
+        // Consistently apply opacity: baseAlpha is the gradient's inherent strength,
+        // multiplied by the user's opacity preference so all gradients scale uniformly.
+        fun alpha(base: Float): Float = (base * opacity).coerceIn(0f, 1f)
         return when (style) {
-            // ── Scheme-aware (theme-responsive) — reduced base alpha for consistency ──
+            // ── Scheme-aware (theme-responsive) — subtle container hints ──
             Style.ScreenBackground -> Brush.verticalGradient(
                 colors = listOf(
                     scheme.surface,
-                    scheme.primaryContainer.copy(alpha = (0.18f * opacity).coerceIn(0f, 0.40f)),
-                    scheme.tertiaryContainer.copy(alpha = (0.10f * opacity).coerceIn(0f, 0.30f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.15f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.10f)),
                     scheme.surface
                 )
             )
             Style.BlushTrio -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.secondaryContainer.copy(alpha = (0.50f * opacity).coerceIn(0f, 1f)),
-                    scheme.primaryContainer.copy(alpha = (0.45f * opacity).coerceIn(0f, 1f)),
-                    scheme.tertiaryContainer.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f))
+                    scheme.secondaryContainer.copy(alpha = alpha(0.30f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.28f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.25f))
                 )
             )
             Style.CoolDream -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.tertiaryContainer.copy(alpha = (0.45f * opacity).coerceIn(0f, 1f)),
-                    scheme.secondaryContainer.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f))
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.28f)),
+                    scheme.secondaryContainer.copy(alpha = alpha(0.25f))
                 )
             )
             Style.RainbowSoft -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.primaryContainer.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f)),
-                    scheme.secondaryContainer.copy(alpha = (0.35f * opacity).coerceIn(0f, 1f)),
-                    scheme.tertiaryContainer.copy(alpha = (0.30f * opacity).coerceIn(0f, 1f))
+                    scheme.primaryContainer.copy(alpha = alpha(0.25f)),
+                    scheme.secondaryContainer.copy(alpha = alpha(0.22f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.20f))
                 )
             )
             Style.SpringPastel -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.secondaryContainer.copy(alpha = (0.50f * opacity).coerceIn(0f, 1f)),
-                    scheme.tertiaryContainer.copy(alpha = (0.45f * opacity).coerceIn(0f, 1f))
+                    scheme.secondaryContainer.copy(alpha = alpha(0.30f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.28f))
                 )
             )
             Style.SunnyLift -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.primaryContainer.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.25f)),
                     scheme.surfaceContainerHigh
                 )
             )
@@ -368,68 +349,26 @@ object CuteGradients {
                 }
             }
 
-            // ── Artistic fixed-color gradients (abstract, bold) with opacity ──
-            Style.NebulaPurple -> if (isDark) {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF0A0015).withOpacity(1f), Color(0xFF1A0040).withOpacity(1f), Color(0xFF3A1060).withOpacity(1f), Color(0xFF6A2A8A).withOpacity(1f)))
-            } else {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF1A0030).withOpacity(1f), Color(0xFF3A1060).withOpacity(1f), Color(0xFF7B2D8E).withOpacity(1f), Color(0xFFE879F9).withOpacity(1f)))
-            }
-            Style.CyberpunkSunset -> if (isDark) {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF0D0D1A).withOpacity(1f), Color(0xFF1A1040).withOpacity(1f), Color(0xFF3A2060).withOpacity(1f), Color(0xFFC94050).withOpacity(1f)))
-            } else {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF1A1A2E).withOpacity(1f), Color(0xFF16213E).withOpacity(1f), Color(0xFF0F3460).withOpacity(1f), Color(0xFFE94560).withOpacity(1f)))
-            }
-            Style.OceanDepths -> if (isDark) {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF051015).withOpacity(1f), Color(0xFF0A1A25).withOpacity(1f), Color(0xFF102A35).withOpacity(1f)))
-            } else {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF0F2027).withOpacity(1f), Color(0xFF203A43).withOpacity(1f), Color(0xFF2C5364).withOpacity(1f)))
-            }
-            Style.TropicalLagoon -> if (isDark) {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF1A2020).withOpacity(1f), Color(0xFFC95050).withOpacity(1f), Color(0xFF3AB0A0).withOpacity(1f)))
-            } else {
-                Brush.horizontalGradient(colors = listOf(Color(0xFFFF6B6B).withOpacity(1f), Color(0xFF4ECDC4).withOpacity(1f), Color(0xFF292F36).withOpacity(1f)))
-            }
-            Style.ArcticAurora -> if (isDark) {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF0A1520).withOpacity(1f), Color(0xFF1A4A70).withOpacity(1f), Color(0xFF2A5A8A).withOpacity(1f)))
-            } else {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF2C3E50).withOpacity(1f), Color(0xFF3498DB).withOpacity(1f), Color(0xFFD4E6F1).withOpacity(1f)))
-            }
-            Style.GoldenHour -> if (isDark) {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF2A1A00).withOpacity(1f), Color(0xFF5A3A00).withOpacity(1f), Color(0xFF8A5A00).withOpacity(1f), Color(0xFFCC7A30).withOpacity(1f)))
-            } else {
-                Brush.horizontalGradient(colors = listOf(Color(0xFFFDEB71).withOpacity(1f), Color(0xFFF8D800).withOpacity(1f), Color(0xFFFF8A5C).withOpacity(1f)))
-            }
-            Style.SakuraDream -> if (isDark) {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF1A0A20).withOpacity(1f), Color(0xFF3A1A40).withOpacity(1f), Color(0xFF5A2A60).withOpacity(1f), Color(0xFF8A4A7A).withOpacity(1f)))
-            } else {
-                Brush.horizontalGradient(colors = listOf(Color(0xFFEA8D8D).withOpacity(1f), Color(0xFFA890FE).withOpacity(1f), Color(0xFFD8B4FE).withOpacity(1f)))
-            }
-            Style.SunsetVibes -> if (isDark) {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF0A0A2A).withOpacity(1f), Color(0xFF2A1060).withOpacity(1f), Color(0xFF6A2060).withOpacity(1f), Color(0xFFAA6030).withOpacity(1f)))
-            } else {
-                Brush.horizontalGradient(colors = listOf(Color(0xFF4158D0).withOpacity(1f), Color(0xFFC850C0).withOpacity(1f), Color(0xFFFFCC70).withOpacity(1f)))
-            }
-
-            // ── Premium theme-specific gradients ──
+            // ── Premium theme-specific gradients — subtle primary/secondary/tertiary blends ──
             Style.FloraGlow -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.primary.copy(alpha = (0.55f * opacity).coerceIn(0f, 1f)),
-                    scheme.tertiary.copy(alpha = (0.45f * opacity).coerceIn(0f, 1f)),
-                    scheme.secondary.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f))
+                    scheme.primary.copy(alpha = alpha(0.32f)),
+                    scheme.tertiary.copy(alpha = alpha(0.28f)),
+                    scheme.secondary.copy(alpha = alpha(0.24f))
                 )
             )
             Style.AmethystAura -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.primary.copy(alpha = (0.50f * opacity).coerceIn(0f, 1f)),
-                    scheme.tertiary.copy(alpha = (0.45f * opacity).coerceIn(0f, 1f)),
-                    scheme.secondary.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f))
+                    scheme.primary.copy(alpha = alpha(0.30f)),
+                    scheme.tertiary.copy(alpha = alpha(0.26f)),
+                    scheme.secondary.copy(alpha = alpha(0.22f))
                 )
             )
             Style.TerrainWarmth -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.primary.copy(alpha = (0.50f * opacity).coerceIn(0f, 1f)),
-                    scheme.tertiary.copy(alpha = (0.45f * opacity).coerceIn(0f, 1f)),
-                    scheme.secondary.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f))
+                    scheme.primary.copy(alpha = alpha(0.30f)),
+                    scheme.tertiary.copy(alpha = alpha(0.26f)),
+                    scheme.secondary.copy(alpha = alpha(0.22f))
                 )
             )
         }
@@ -536,4 +475,22 @@ fun Modifier.cuteShadowAdaptive(
             clip = false
         )
     )
+}
+
+/**
+ * A centralized screen background modifier that applies the ScreenBackground gradient
+ * at the user's preferred opacity. Use this on the outermost Box/Column of every screen
+ * instead of manually copying the boilerplate everywhere.
+ *
+ * Usage:
+ * ```kotlin
+ * Box(Modifier.fillMaxSize().screenBackground(gradientOpacity)) {
+ *     // screen content
+ * }
+ * ```
+ */
+@Composable
+fun Modifier.screenBackground(gradientOpacity: Float = 0.75f): Modifier {
+    val brush = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground, opacity = gradientOpacity)
+    return this.background(brush = brush)
 }

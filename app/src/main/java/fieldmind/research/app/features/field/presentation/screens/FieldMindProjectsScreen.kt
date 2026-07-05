@@ -19,7 +19,7 @@ import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
-import fieldmind.research.app.ui.theme.CuteGradients
+import fieldmind.research.app.ui.theme.screenBackground
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -180,8 +180,7 @@ fun ProjectsScreen(
     }
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground, opacity = gradientOpacity)
-    Box(Modifier.fillMaxSize().background(brush = screenBgGradient)) {
+    Box(Modifier.fillMaxSize().screenBackground(gradientOpacity)) {
     LazyColumn(
         modifier = Modifier.fillMaxSize().statusBarsPadding(),
         contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 96.dp),

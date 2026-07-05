@@ -53,7 +53,7 @@ fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
-    val gradient = CuteGradients.brushFor(gradientStyle)
+    val gradient = CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
     Card(
         modifier = Modifier.fillMaxWidth().cuteShadow(),
         shape = RoundedCornerShape(32.dp),

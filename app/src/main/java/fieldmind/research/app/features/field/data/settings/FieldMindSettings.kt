@@ -435,8 +435,8 @@ class FieldMindSettings private constructor(context: Context) {
 
     // ── Per-category entity color overrides ──
     // ── Card gradient opacity (0.1 – 1.0, default 0.55) ──
-    private val _gradientOpacity = MutableStateFlow(prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f))
-    /** Opacity multiplier for card gradient backgrounds. Lower = more subtle. */
+    private val _gradientOpacity = MutableStateFlow(prefs.getFloat(KEY_GRADIENT_OPACITY, 0.75f))
+    /** Opacity multiplier for card gradient backgrounds. Higher = more visible. */
     val gradientOpacity: StateFlow<Float> = _gradientOpacity.asStateFlow()
 
     fun setGradientOpacity(value: Float) = edit(KEY_GRADIENT_OPACITY, value.coerceIn(0.1f, 1.0f)) { _gradientOpacity.value = value.coerceIn(0.1f, 1.0f) }
@@ -823,7 +823,7 @@ class FieldMindSettings private constructor(context: Context) {
         _onboardingExtendedTourCompleted.value = false
         _entityColors.value = emptyMap()
         _cardGradientStyle.value = fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
-        _gradientOpacity.value = 0.55f
+        _gradientOpacity.value = 0.75f
     }
 
     // ── Species identification setters ──

@@ -63,8 +63,8 @@ import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.ui.theme.CuteElevations
-import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.ui.theme.cuteShadow
+import fieldmind.research.app.ui.theme.screenBackground
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -515,12 +515,11 @@ fun ObserveScreen(
     }
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
-    val screenBgGradient = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground, opacity = gradientOpacity)
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         containerColor = Color.Transparent
     ) { padding ->
-        Box(Modifier.fillMaxSize().background(brush = screenBgGradient)) {
+        Box(Modifier.fillMaxSize().screenBackground(gradientOpacity)) {
             LazyColumn(
                 Modifier.fillMaxSize().padding(padding),
                 contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 96.dp),
