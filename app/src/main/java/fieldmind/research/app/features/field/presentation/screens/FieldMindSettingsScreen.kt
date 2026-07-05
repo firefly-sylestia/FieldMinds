@@ -2245,12 +2245,6 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
 // ══════════════════════════════════════════════════════════════════════
 //  Shared helpers
 // ══════════════════════════════════════════════════════════════════════
-
-/** Wraps a sub-page with consistent StandardScreenHeader and scrollable content. */
-
-@Composable
-//  Species Pack Management Page
-// ════════════════════════════════════════��═════════════════════════════
 // ── Species Tools (merged page) ──
 @Composable
 fun SpeciesToolsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
