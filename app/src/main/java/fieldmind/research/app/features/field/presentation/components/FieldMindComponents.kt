@@ -1688,6 +1688,7 @@ enum class IconBoxSize(val boxDp: androidx.compose.ui.unit.Dp, val clipDp: andro
  * @param tint The icon and box background tint color.
  * @param size The standard size tier — Mini (36dp), Medium (40dp), Large (44dp).
  * @param modifier Additional modifier to apply to the outer Box.
+ * @param alpha Background tint opacity (default 0.14f; use ~0.28f for dark mode variants).
  */
 @Composable
 fun StandardIconBox(
