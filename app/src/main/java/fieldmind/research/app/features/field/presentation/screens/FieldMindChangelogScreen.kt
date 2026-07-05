@@ -44,6 +44,38 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.42.0 — Snappier Animations Across the Board ──
+        FieldMindChangelogEntry(
+            version = "0.42.0",
+            date = "2026-07-05",
+            title = "⚡ Snappier Animations — ~35% Stiffness Increase",
+            importance = "Patch",
+            tags = listOf("⚡", "🎬", "✨"),
+            sections = listOf(
+                "⚡ All spring stiffness increased ~35%" to listOf(
+                    "✓ expressiveFloat: 170→220 — main entrance/fade animations (29% increase)",
+                    "✓ expressiveSpring: 130→180 — general spring animations (38% increase)",
+                    "✓ expressiveSoft: 80→110 — card lift on press (37% increase)",
+                    "✓ expressiveSnap: 180→240 — press feedback animations (33% increase)",
+                    "✓ pressSpring: 160→200 — press scale animations (25% increase)",
+                    "✓ swipeBackSpring: 120→160 — swipe-back gesture (33% increase)",
+                    "✓ entranceStiffness: 80→110 — AnimationConfig default (37% increase)",
+                    "✓ swipeBackStiffness: 100→140 — AnimationConfig swipe (40% increase)"
+                ),
+                "⏱ Duration tokens reduced ~20%" to listOf(
+                    "✓ durationStandard: 350→300ms, durationEmphasized: 500→400ms",
+                    "✓ durationExpressive: 800→600ms, countUpMs: 600→500ms",
+                    "✓ stagger delays: initial 40→30ms, item 25→20ms",
+                    "✓ Swipe threshold slightly lowered (0.20→0.18) for earlier gesture recognition"
+                ),
+                "🎬 Overall effect" to listOf(
+                    "✓ Animations complete noticeably faster but remain smooth",
+                    "✓ Privacy lock unlock, card entrances, and press feedback all feel more responsive",
+                    "✓ Damping ratios slightly lowered to allow gentle bounce — adds liveliness"
+                )
+            )
+        ),
+
         // ── v0.41.0 — InfoBadge Composable for 32dp Inline Badges ──
         FieldMindChangelogEntry(
             version = "0.41.0",
