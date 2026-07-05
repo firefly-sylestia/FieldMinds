@@ -36,7 +36,8 @@ fun ArchiveScreen(viewModel: FieldMindViewModel, onOpenDetail: (String, Long) ->
             StandardScreenHeader(
                 title = "Search Archive",
                 subtitle = "Search forever by topic, date, place, source, project, and keyword.",
-                icon = FieldMindIcons.Search
+                icon = FieldMindIcons.Search,
+                trailing = { BackButton(onClick = onBack) }
             )
         }
         item {

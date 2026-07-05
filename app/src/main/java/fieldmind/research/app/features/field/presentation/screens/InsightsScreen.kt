@@ -256,7 +256,10 @@ fun InsightsScreen(
                     subtitle = "Your research at a glance — ${if (observations.isEmpty()) "start capturing to see analytics" else "${observations.size} observations analyzed"}",
                     icon = FieldMindIcons.Insights,
                     trailing = {
-                        BackButton(onClick = { onNavigate(FieldMindScreen.Search) }, icon = FieldMindIcons.Search, contentDescription = "Search")
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            BackButton(onClick = { onNavigate(FieldMindScreen.Search) }, icon = FieldMindIcons.Search, contentDescription = "Search")
+                            BackButton(onClick = onBack)
+                        }
                     }
                 )
             }

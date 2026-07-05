@@ -117,3 +117,41 @@ fun ClickableCard(
         content = content
     )
 }
+
+/**
+ * Convenience overload with an [accentColor] parameter that tints the card container.
+ * Use this for colorful, visually distinct cards across the UI.
+ *
+ * @param onClick click handler
+ * @param accentColor the accent color for tinting the card background
+ * @param tintStrength how strong the tint should be (default 0.06f for subtle, 0.10f for noticeable)
+ * @param modifier modifier
+ * @param shape corner shape
+ * @param elevation card elevation
+ * @param liftDp lift amount on press
+ * @param scaleDown scale amount on press
+ * @param content card content
+ */
+@Composable
+fun ClickableCard(
+    onClick: () -> Unit,
+    accentColor: Color,
+    modifier: Modifier = Modifier,
+    tintStrength: Float = 0.08f,
+    shape: Shape = RoundedCornerShape(34.dp),
+    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
+    liftDp: Float = 1.5f,
+    scaleDown: Float = 0.985f,
+    content: @Composable ColumnScope.() -> Unit
+) = ClickableCard(
+    onClick = onClick,
+    modifier = modifier,
+    shape = shape,
+    colors = CardDefaults.cardColors(
+        containerColor = accentColor.copy(alpha = tintStrength)
+    ),
+    elevation = elevation,
+    liftDp = liftDp,
+    scaleDown = scaleDown,
+    content = content
+)

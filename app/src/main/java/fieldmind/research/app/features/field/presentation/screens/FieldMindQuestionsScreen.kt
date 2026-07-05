@@ -45,7 +45,8 @@ import fieldmind.research.app.ui.theme.CuteElevations
 @Composable
 fun QuestionsScreen(
     viewModel: FieldMindViewModel,
-    onOpenDetail: (String, Long) -> Unit = { _, _ -> }
+    onOpenDetail: (String, Long) -> Unit = { _, _ -> },
+    onBack: () -> Unit = {}
 ) {
     val questions by viewModel.questions.collectAsState()
     val hypotheses by viewModel.hypotheses.collectAsState()
@@ -151,8 +152,11 @@ fun QuestionsScreen(
                 icon = FieldMindIcons.Question,
                 heroColor = FieldMindTheme.colors.question,
                 trailing = {
-                    IconButton(onClick = { searchQuery = if (searchQuery.isEmpty()) "search" else "" }, modifier = Modifier.size(40.dp)) {
-                        Icon(FieldMindIcons.Search, contentDescription = "Search", size = 20.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        IconButton(onClick = { searchQuery = if (searchQuery.isEmpty()) "search" else "" }, modifier = Modifier.size(40.dp)) {
+                            Icon(FieldMindIcons.Search, contentDescription = "Search", size = 20.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        BackButton(onClick = onBack)
                     }
                 }
             )

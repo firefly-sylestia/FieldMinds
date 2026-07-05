@@ -218,6 +218,7 @@ fun TimerToolScreen(
                 StandardScreenHeader(
                     title = if (timerMode == TimerMode.STOPWATCH) "Stopwatch" else "Timer",
                     subtitle = "Track elapsed time with laps. Runs in background with notification.",
+                    heroColor = FieldMindTheme.colors.data,
                     icon = headerIcon,
                     trailing = { BackButton(onClick = onBack) }
                 )

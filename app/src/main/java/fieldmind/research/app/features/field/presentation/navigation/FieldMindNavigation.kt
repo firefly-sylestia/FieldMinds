@@ -1001,11 +1001,11 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.Learn.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { FieldMindLearnScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenReader = openReader) } }
             composable(FieldMindScreen.Reader.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { LearnReaderScreen(url = readerTarget.first, title = readerTarget.second, onBack = { navController.popBackStack() }) } }
             composable(FieldMindScreen.FieldMode.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { ObserveScreen(viewModel = viewModel, compactFieldMode = true, onBack = { navController.popBackStack() }, onOpenDetail = openDetail) } }
-            composable(FieldMindScreen.Questions.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { QuestionsScreen(viewModel = viewModel, onOpenDetail = openDetail) } }
+            composable(FieldMindScreen.Questions.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { QuestionsScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenDetail = openDetail) } }
             // NOTE: Hypotheses currently renders QuestionsScreen — a dedicated hypotheses
             // list/browser screen isn't built yet. QuestionsScreen shows both questions and
             // linked hypotheses. Same for Analysis→ProjectsScreen and Progress→InsightsScreen.
-            composable(FieldMindScreen.Hypotheses.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { QuestionsScreen(viewModel = viewModel, onOpenDetail = openDetail) } }
+            composable(FieldMindScreen.Hypotheses.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { QuestionsScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.DataTools.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { DataToolsHubScreen(viewModel = viewModel, onBack = { navController.popBackStack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Analysis.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { ProjectsScreen(viewModel = viewModel, startTab = 0, onOpenDetail = { _, id -> navController.navigateToDestination("field_project_detail/$id") }, onNavigate = { navController.navigateToDestination(it.route) }) } }
             composable(FieldMindScreen.Reports.route) { SwipeBackHost(onBack = { navController.popBackStack() }) { FieldMindReportScreen(viewModel = viewModel, onBack = { navController.popBackStack() }) } }
@@ -1620,8 +1620,8 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         route == FieldMindScreen.Learn.route -> FieldMindLearnScreen(viewModel = viewModel, onBack = noop, onOpenReader = noopReader)
         route == FieldMindScreen.Reader.route -> LearnReaderScreen(url = "", title = "", onBack = noop)
         route == FieldMindScreen.FieldMode.route -> ObserveScreen(viewModel = viewModel, compactFieldMode = true, onBack = noop, onOpenDetail = noopDetail)
-        route == FieldMindScreen.Questions.route -> QuestionsScreen(viewModel = viewModel, onOpenDetail = noopDetail)
-        route == FieldMindScreen.Hypotheses.route -> QuestionsScreen(viewModel = viewModel, onOpenDetail = noopDetail)
+        route == FieldMindScreen.Questions.route -> QuestionsScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
+        route == FieldMindScreen.Hypotheses.route -> QuestionsScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
         route == FieldMindScreen.DataTools.route -> DataToolsHubScreen(viewModel = viewModel, onBack = noop, onNavigate = noopNav, onOpenDetail = noopDetail)
         route == FieldMindScreen.Analysis.route -> ProjectsScreen(viewModel = viewModel, startTab = 0, onOpenDetail = noopDetail, onNavigate = noopNav)
         route == FieldMindScreen.Reports.route -> FieldMindReportScreen(viewModel = viewModel, onBack = noop)

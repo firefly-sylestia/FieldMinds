@@ -531,15 +531,13 @@ fun FieldMindChangelogScreen(onBack: () -> Unit) {
         modifier = Modifier.fillMaxSize().statusBarsPadding(),
         contentPadding = PaddingValues(20.dp, 20.dp, 20.dp, 40.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
+    ) {    item {
             StandardScreenHeader(
                 title = "What's New",
                 subtitle = "Complete field research redesign with 12 phases of new features",
                 icon = FieldMindIcons.Info,
-                trailing = {
-                    BackButton(onClick = onBack)
-                }
+                heroColor = FieldMindTheme.colors.observation,
+                trailing = { BackButton(onClick = onBack) }
             )
         }
         

@@ -133,6 +133,19 @@ fun DevFullAppTestRunner(
     var report by remember { mutableStateOf(TestRunReport()) }
     var progressText by remember { mutableStateOf("") }
     var logExpanded by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val elapsedSeconds = remember { mutableStateOf(0) }
+
+    // Live timer to show test is actively running
+    LaunchedEffect(isRunning) {
+        if (isRunning) {
+            elapsedSeconds.value = 0
+            while (true) {
+                delay(1000)
+                elapsedSeconds.value += 1
+            }
+        }
+    }
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -211,27 +224,30 @@ fun DevFullAppTestRunner(
                         if (!isRunning) {
                             isRunning = true
                             logExpanded = true
+                            report = TestRunReport()
+                            errorMessage = null
                             progressText = "Starting tests..."
                             scope.launch {
-                            try {
-                                val results = mutableListOf<TestResult>()
-                                val startTime = System.currentTimeMillis()
-                                runAllTests(viewModel, context, results) { msg ->
-                                    progressText = msg
+                                try {
+                                    val results = mutableListOf<TestResult>()
+                                    val startTime = System.currentTimeMillis()
+                                    runAllTests(viewModel, context, results) { msg ->
+                                        progressText = msg
+                                    }
+                                    val completedReport = TestRunReport(
+                                        results = results.toList(),
+                                        startedAt = startTime,
+                                        completedAt = System.currentTimeMillis()
+                                    )
+                                    report = completedReport
+                                    isRunning = false
+                                    progressText = "Done — ${completedReport.passedTests}/${completedReport.totalTests} passed"
+                                } catch (e: Exception) {
+                                    errorMessage = "Test runner crash: ${e::class.simpleName}: ${e.message?.take(200) ?: "Unknown error"}"
+                                    isRunning = false
+                                    progressText = ""
                                 }
-                                val completedReport = TestRunReport(
-                                    results = results.toList(),
-                                    startedAt = startTime,
-                                    completedAt = System.currentTimeMillis()
-                                )
-                                report = completedReport
-                                isRunning = false
-                                progressText = "Done — ${completedReport.passedTests}/${completedReport.totalTests} passed"
-                            } catch (e: Exception) {
-                                progressText = "Crash: ${e::class.simpleName}: ${e.message?.take(100)}"
-                                isRunning = false
                             }
-                        }
                         }
                     },
                     enabled = !isRunning,
@@ -299,14 +315,22 @@ fun DevFullAppTestRunner(
                 )
             }
 
-            // ── Progress text ──
-            if (progressText.isNotBlank() && isRunning) {
+            // ── Progress text (always visible when running or on error) ──
+            if ((progressText.isNotBlank() && isRunning) || errorMessage != null) {
                 Text(
-                    progressText,
+                    errorMessage ?: progressText,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = if (errorMessage != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                     fontFamily = FontFamily.Monospace
                 )
+                // Show elapsed time as proof the test is actually running
+                if (isRunning) {
+                    Text(
+                        "Elapsed: ${elapsedSeconds.value}s",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    )
+                }
             }
 
             // ── Results summary ──
