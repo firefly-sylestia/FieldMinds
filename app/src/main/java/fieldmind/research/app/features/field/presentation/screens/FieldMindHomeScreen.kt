@@ -1263,9 +1263,9 @@ private fun HeroActionChip(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Icon(icon, null, tint = accent, size = 20.dp)
+            Icon(icon, null, tint = accent, size = 22.dp)
             Spacer(Modifier.width(6.dp))
-            Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, maxLines = 1)
+            Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, maxLines = 1)
         }
     }
 }
@@ -1881,7 +1881,7 @@ private fun QuickActionChip(
                 Modifier.size(36.dp)
                     .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(20.dp)),
                 contentAlignment = Alignment.Center
-            ) { Icon(icon, null, tint = accent, size = 20.dp) }
+            ) { Icon(icon, null, tint = accent, size = 22.dp) }
             Spacer(Modifier.width(10.dp))
             Text(label, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }
@@ -2775,24 +2775,26 @@ private fun DataToolMiniCard(
                 .fillMaxWidth()
                 .background(brush = gradient, shape = RoundedCornerShape(24.dp))
         ) {
-            Row(
+            Column(
                 Modifier.fillMaxWidth().padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-            Box(
-                Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
-                    .background(color.copy(alpha = 0.14f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(icon, null, tint = color, size = 18.dp)
+                Box(
+                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                        .background(color.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(icon, null, tint = color, size = 20.dp)
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(title, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
+                    Text(description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
+                }
             }
-            Spacer(Modifier.width(8.dp))
-            Column {
-                Text(title, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-            }
+        }
+    }
+}
         }
     }
 }

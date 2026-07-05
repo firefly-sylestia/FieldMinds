@@ -121,6 +121,7 @@ fun FieldMindSettingsScreen(
                 title = "Settings",
                 subtitle = "Offline-first setup, profile, capture, local AI, backup, and privacy.",
                 icon = FieldMindIcons.Settings,
+                heroColor = FieldMindTheme.colors.info,
                 trailing = {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                         IconButton(onClick = { isSearchActive = !isSearchActive; if (!isSearchActive) searchQuery = "" }, modifier = Modifier.size(40.dp)) {

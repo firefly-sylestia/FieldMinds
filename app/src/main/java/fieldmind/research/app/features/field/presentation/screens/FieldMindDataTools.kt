@@ -86,6 +86,7 @@ fun DataToolsHubScreen(
                     title = "Data tools",
                     subtitle = "Interactive tools for field data collection.",
                     icon = FieldMindIcons.Data,
+                    heroColor = FieldMindTheme.colors.data,
                     trailing = {
                     BackButton(onClick = onBack)
                 }
@@ -301,6 +302,7 @@ fun CounterToolScreen(
                         title = "Counter",
                         subtitle = "Tap +/− to tally. Tap Save to persist your count.",
                         icon = FieldMindIcons.Add,
+                        heroColor = FieldMindTheme.colors.data,
                         trailing = {
                     BackButton(onClick = onBack)
                 }
@@ -583,6 +585,7 @@ fun MeasurementToolScreen(
                         title = "Measurement",
                         subtitle = "Log a structured measurement with units and notes.",
                         icon = FieldMindIcons.Graph,
+                        heroColor = FieldMindTheme.colors.data,
                         trailing = {
                     BackButton(onClick = onBack)
                 }
@@ -798,6 +801,7 @@ fun WeatherLogToolScreen(
                         title = "Weather log",
                         subtitle = "Record current conditions at your location.",
                         icon = FieldMindIcons.Weather,
+                        heroColor = FieldMindTheme.colors.data,
                         trailing = {
                     BackButton(onClick = onBack)
                 }
@@ -987,6 +991,7 @@ fun SpeciesToolScreen(
                         title = "Species log",
                         subtitle = "Quick-capture a species observation with facts.",
                         icon = FieldMindIcons.Nature,
+                        heroColor = FieldMindTheme.colors.data,
                         trailing = {
                     BackButton(onClick = onBack)
                 }
@@ -1198,6 +1203,7 @@ fun ChecklistToolScreen(
                         title = "Checklist",
                         subtitle = "Add items, check them off, and save as a data record.",
                         icon = FieldMindIcons.Check,
+                        heroColor = FieldMindTheme.colors.data,
                         trailing = {
                     BackButton(onClick = onBack)
                 }
@@ -1338,6 +1344,7 @@ fun EventLogToolScreen(
                     title = "Event log",
                     subtitle = "Record a notable event with category and notes.",
                     icon = FieldMindIcons.List,
+                    heroColor = FieldMindTheme.colors.data,
                     trailing = {
                         BackButton(onClick = onBack)
                     }
@@ -1433,6 +1440,7 @@ fun SiteLogToolScreen(
                     title = "Site log",
                     subtitle = "Record a site visit with purpose, conditions, and findings.",
                     icon = FieldMindIcons.Map,
+                    heroColor = FieldMindTheme.colors.data,
                     trailing = {
                         BackButton(onClick = onBack)
                     }
@@ -1525,6 +1533,7 @@ fun ComparisonTableScreen(
                     title = "Comparison table",
                     subtitle = "Compare species, samples, or sites side by side.",
                     icon = FieldMindIcons.Data,
+                    heroColor = FieldMindTheme.colors.data,
                     trailing = {
                         BackButton(onClick = onBack)
                     }

@@ -123,6 +123,7 @@ fun SharedTransitionScope.KnowledgeLibraryScreen(
                 title = "Knowledge Hub",
                 subtitle = "Sources, notes, reading, flashcards, and learning.",
                 icon = FieldMindIcons.Library,
+                heroColor = FieldMindTheme.colors.source,
                 trailing = {
                     IconButton(onClick = { searchQuery = if (searchQuery.isEmpty()) "search" else "" }, modifier = Modifier.size(40.dp)) {
                         Icon(FieldMindIcons.Search, contentDescription = "Search", size = 20.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)

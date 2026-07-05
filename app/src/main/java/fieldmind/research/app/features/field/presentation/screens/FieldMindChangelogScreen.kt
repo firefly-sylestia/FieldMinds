@@ -44,6 +44,34 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.40.3 — Card Layout Fixes & heroColor Consistency ──
+        FieldMindChangelogEntry(
+            version = "0.40.3",
+            date = "2026-07-05",
+            title = "🎨 Card Layout Fixes & Header Color Consistency",
+            importance = "Patch",
+            tags = listOf("🎨", "💡", "🔧"),
+            sections = listOf(
+                "🎨 DataToolMiniCard redesigned" to listOf(
+                    "✓ Changed from Row layout (icon left + text right) to centered Column layout",
+                    "✓ Icon box: 32dp → 36dp, icon: 18dp → 20dp for better visibility",
+                    "✓ Text now center-aligned — icon above text, centered in card",
+                    "✓ The 4 mini tool cards on Home screen now show centered icon+text pattern"
+                ),
+                "💡 HeroActionChip sizing improved" to listOf(
+                    "✓ Icon size: 20dp → 22dp for more prominence",
+                    "✓ Text style: labelSmall → labelMedium for better readability",
+                    "✓ Affects the 3 main action buttons (Capture, Note, Projects) on Home header"
+                ),
+                "🔧 Explicit heroColor on all StandardScreenHeaders" to listOf(
+                    "✓ LibraryScreen: heroColor = FieldMindTheme.colors.source",
+                    "✓ DataToolsHub + 8 tool screens: heroColor = FieldMindTheme.colors.data",
+                    "✓ SettingsScreen: heroColor = FieldMindTheme.colors.info",
+                    "✓ Previously relied on auto-derived default — now explicitly set per-screen"
+                )
+            )
+        ),
+
         // ── v0.40.2 — Species Catalog: No Reload & Detail Polish ──
         FieldMindChangelogEntry(
             version = "0.40.2",
