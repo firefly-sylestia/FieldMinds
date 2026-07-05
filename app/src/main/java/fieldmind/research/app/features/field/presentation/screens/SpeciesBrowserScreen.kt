@@ -723,7 +723,6 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                         }
                     }
                 }
-                }
 
                 // ── Content sections ──
                 item { Spacer(Modifier.height(4.dp)) }

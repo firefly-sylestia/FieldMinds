@@ -1784,7 +1784,6 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
     }
 }
 
-}
 
 @Composable
 private fun IntegrityStat(value: String, label: String) {
@@ -2742,6 +2741,12 @@ fun SpeciesIdentificationSettingsPage(
 }
 
 @Composable
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Auto Generation Settings Page
+// ══════════════════════════════════════════════════════════════════════
+@Composable
 private fun StatChip(value: String, label: String, color: Color) {
     Row(
         Modifier
@@ -2756,9 +2761,6 @@ private fun StatChip(value: String, label: String, color: Color) {
     }
 }
 
-// ══════════════════════════════════════════════════════════════════════
-//  Auto Generation Settings Page
-// ══════════════════════════════════════════════════════════════════════
 
 @Composable
 fun AutoGenerationSettingsPage(

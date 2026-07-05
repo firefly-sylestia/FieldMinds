@@ -44,6 +44,27 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.40.4 — CI Compilation Error Fixes ──
+        FieldMindChangelogEntry(
+            version = "0.40.4",
+            date = "2026-07-05",
+            title = "🔧 CI Compilation Error Fixes",
+            importance = "Patch",
+            tags = listOf("🔧", "🐛"),
+            sections = listOf(
+                "🔧 ClickableCard missing Color import" to listOf(
+                    "✓ Added missing import androidx.compose.ui.graphics.Color — fixes Unresolved reference error"
+                ),
+                "🐛 Extra brace cascade in FieldMindSettingsScreen" to listOf(
+                    "✓ Removed extra closing brace at DataIntegritySettingsPage end that was causing 'Expecting top level declaration' error",
+                    "✓ Moved StatChip from local function (invalid private modifier) to top-level — fixes accessibility from SpeciesPackSettingsPage"
+                ),
+                "🔧 SpeciesBrowserScreen premature LazyColumn close" to listOf(
+                    "✓ Removed extra closing brace that was closing LazyColumn scope early, causing all item() calls to be unresolved"
+                )
+            )
+        ),
+
         // ── v0.40.3 — Card Layout Fixes & heroColor Consistency ──
         FieldMindChangelogEntry(
             version = "0.40.3",
