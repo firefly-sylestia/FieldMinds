@@ -1872,18 +1872,17 @@ private fun QuickActionChip(
         tonalElevation = 0.dp,
         modifier = Modifier.pressScale(scaleDown = 0.94f)
     ) {
-        Row(
-            Modifier.padding(horizontal = 18.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+        Column(
+            Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Box(
-                Modifier.size(36.dp)
+                Modifier.size(40.dp)
                     .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(20.dp)),
                 contentAlignment = Alignment.Center
-            ) { Icon(icon, null, tint = accent, size = 22.dp) }
-            Spacer(Modifier.width(10.dp))
-            Text(label, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+            ) { Icon(icon, null, tint = accent, size = 24.dp) }
+            Text(label, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, maxLines = 1)
         }
     }
 }

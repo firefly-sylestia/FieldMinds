@@ -63,12 +63,24 @@ internal data class FieldMindChangelogEntry(
                     "✓ Text style: labelSmall → labelMedium for better readability",
                     "✓ Affects the 3 main action buttons (Capture, Note, Projects) on Home header"
                 ),
-                "🔧 Explicit heroColor on all StandardScreenHeaders" to listOf(
-                    "✓ LibraryScreen: heroColor = FieldMindTheme.colors.source",
-                    "✓ DataToolsHub + 8 tool screens: heroColor = FieldMindTheme.colors.data",
-                    "✓ SettingsScreen: heroColor = FieldMindTheme.colors.info",
-                    "✓ Previously relied on auto-derived default — now explicitly set per-screen"
-                )
+            "🔧 Explicit heroColor on all StandardScreenHeaders" to listOf(
+                "✓ LibraryScreen: heroColor = FieldMindTheme.colors.source",
+                "✓ DataToolsHub + 8 tool screens: heroColor = FieldMindTheme.colors.data",
+                "✓ SettingsScreen: heroColor = FieldMindTheme.colors.info",
+                "✓ Previously relied on auto-derived default — now explicitly set per-screen"
+            ),
+            "🔧 ToolCardItem redesigned" to listOf(
+                "✓ Changed from SpaceBetween (icon top, text bottom) to centered Column layout",
+                "✓ Icon box: 40dp → 44dp, icon: 22dp → 24dp for better prominence",
+                "✓ Height: 140dp → 130dp, text centered with textAlign = Center",
+                "✓ Affects all 8 tool cards in DataTools hub"
+            ),
+            "🔧 QuickActionChip redesigned" to listOf(
+                "✓ Changed from horizontal Row (icon+text side-by-side) to centered Column pattern",
+                "✓ Icon box: 36dp → 40dp, icon: 22dp → 24dp",
+                "✓ Tighter 14dp horizontal padding for proportional chip sizing",
+                "✓ Affects 5 quick action chips on Home screen (Map, Export, Search, Review, Insights)"
+            )
             )
         ),
 
