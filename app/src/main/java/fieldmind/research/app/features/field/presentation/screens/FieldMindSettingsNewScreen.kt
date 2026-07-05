@@ -34,9 +34,21 @@ private data class SettingsCategory(
     val id: String,
     val icon: MaterialSymbolIcon,
     val label: String,
-    val description: String,
-    val accentColor: Color
-)
+    val description: String
+) {
+    /** Theme-aware color for this category — derived from FieldMindColors. */
+    @Composable
+    fun accentColor(): Color = when (id) {
+        "profile" -> FieldMindTheme.colors.observation
+        "display" -> FieldMindTheme.colors.question
+        "capture" -> FieldMindTheme.colors.hypothesis
+        "ai" -> FieldMindTheme.colors.source
+        "data" -> FieldMindTheme.colors.data
+        "security" -> FieldMindTheme.colors.confidenceVerify
+        "advanced" -> FieldMindTheme.colors.info
+        else -> MaterialTheme.colorScheme.primary
+    }
+}
 
 /**
  * Represents an individual setting item within a category.
@@ -56,13 +68,13 @@ private data class SettingItem(
 // ─── Category definitions ─────────────────────────────────────────────
 
 private val categories = listOf(
-    SettingsCategory("profile", FieldMindIcons.User, "Profile & Account", "Your research identity and preferences", Color(0xFF4CAF50)),
-    SettingsCategory("display", MaterialSymbolIcon("palette"), "Display & Theme", "Appearance, units, and map settings", Color(0xFF2196F3)),
-    SettingsCategory("capture", FieldMindIcons.Camera, "Data & Capture", "Observation defaults, weather, species tools", Color(0xFFFF9800)),
-    SettingsCategory("ai", MaterialSymbolIcon("smart_toy"), "AI & Intelligence", "AI assistant, local models, auto-generation", Color(0xFF9C27B0)),
-    SettingsCategory("data", MaterialSymbolIcon("storage"), "Data & Storage", "Backup, export, and data integrity", Color(0xFF00BCD4)),
-    SettingsCategory("security", FieldMindIcons.Lock, "Security & Privacy", "App lock, privacy controls, screen protection", Color(0xFFF44336)),
-    SettingsCategory("advanced", FieldMindIcons.Settings, "Advanced", "Developer tools, debugging, about", Color(0xFF607D8B))
+    SettingsCategory("profile", FieldMindIcons.User, "Profile & Account", "Your research identity and preferences"),
+    SettingsCategory("display", MaterialSymbolIcon("palette"), "Display & Theme", "Appearance, units, and map settings"),
+    SettingsCategory("capture", FieldMindIcons.Camera, "Data & Capture", "Observation defaults, weather, species tools"),
+    SettingsCategory("ai", MaterialSymbolIcon("smart_toy"), "AI & Intelligence", "AI assistant, local models, auto-generation"),
+    SettingsCategory("data", MaterialSymbolIcon("storage"), "Data & Storage", "Backup, export, and data integrity"),
+    SettingsCategory("security", FieldMindIcons.Lock, "Security & Privacy", "App lock, privacy controls, screen protection"),
+    SettingsCategory("advanced", FieldMindIcons.Settings, "Advanced", "Developer tools, debugging, about")
 )
 
 // ─── Setting items (flat list for search) ─────────────────────────────
@@ -259,16 +271,16 @@ fun FieldMindSettingsNewScreen(
                             Surface(
                                 onClick = { selectedCategory = cat.id },
                                 shape = RoundedCornerShape(24.dp),
-                                color = if (selectedCategory == cat.id) cat.accentColor.copy(alpha = 0.14f)
+                                color = if (selectedCategory == cat.id) cat.accentColor().copy(alpha = 0.14f)
                                     else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                border = if (selectedCategory == cat.id) androidx.compose.foundation.BorderStroke(1.5.dp, cat.accentColor) else null
+                                border = if (selectedCategory == cat.id) androidx.compose.foundation.BorderStroke(1.5.dp, cat.accentColor()) else null
                             ) {
                                 Row(
                                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    Icon(cat.icon, null, tint = cat.accentColor, size = 20.dp)
+                                    Icon(cat.icon, null, tint = cat.accentColor(), size = 20.dp)
                                     Text(
                                         cat.label,
                                         style = MaterialTheme.typography.labelLarge,
@@ -347,7 +359,7 @@ fun FieldMindSettingsNewScreen(
                         val cat = categories.find { it.id == item.categoryId }
                         SettingItemCard(
                             item = item,
-                            accentColor = cat?.accentColor ?: MaterialTheme.colorScheme.primary
+                            accentColor = cat?.accentColor() ?: MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -450,10 +462,10 @@ private fun CategoryCard(
                     modifier = Modifier
                         .size(36.dp)
                         .clip(RoundedCornerShape(18.dp))
-                        .background(category.accentColor.copy(alpha = 0.14f)),
+                        .background(category.accentColor().copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(category.icon, null, tint = category.accentColor, size = 20.dp)
+                    Icon(category.icon, null, tint = category.accentColor(), size = 20.dp)
                 }
                 Column(Modifier.weight(1f)) {
                     Text(category.label, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyLarge)
@@ -462,7 +474,7 @@ private fun CategoryCard(
                 Icon(MaterialSymbolIcon("chevron_right"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 20.dp)
             }
 
-            HorizontalHorizontalDivider(
+            HorizontalDivider(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
                 modifier = Modifier.padding(vertical = 8.dp)
             )
@@ -479,7 +491,7 @@ private fun CategoryCard(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Icon(item.icon, null, tint = category.accentColor, size = 20.dp)
+                        Icon(item.icon, null, tint = category.accentColor(), size = 20.dp)
                         Column(Modifier.weight(1f)) {
                             Text(item.title, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                             Text(item.subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
