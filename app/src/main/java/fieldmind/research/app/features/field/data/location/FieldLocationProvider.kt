@@ -99,6 +99,66 @@ class FieldLocationProvider(private val context: Context) {
     }
 
     /**
+     * Requests a fresh GPS fix with aggressive retry logic for better reliability.
+     *
+     * Strategy:
+     * 1. First checks [lastKnownLocation] for an instant cached result
+     * 2. Actively requests a fresh fix with a shorter timeout (5s)
+     * 3. If null, waits 2s and retries once more
+     * 4. Final fallback: returns [lastKnownLocation] again (may have appeared in the meantime)
+     *
+     * Each attempt state is reported via [onAttempt] so the UI can show meaningful progress.
+     * Delivers the final result via [onResult], always on the main thread.
+     */
+    @SuppressLint("MissingPermission")
+    fun requestCurrentLocationWithRetry(
+        onAttempt: (attempt: Int, totalAttempts: Int, status: String) -> Unit = { _, _, _ -> },
+        onResult: (CapturedLocation?) -> Unit
+    ) {
+        if (!hasAnyLocationPermission()) {
+            onAttempt(0, 3, "Location permission not granted")
+            onResult(null)
+            return
+        }
+
+        // Attempt 0: immediate cached result
+        val cached = lastKnownLocation()
+        if (cached != null) {
+            onAttempt(0, 3, "Using cached location (${cached.accuracyMeters?.toInt() ?: "?"}m)")
+            onResult(cached)
+            return
+        }
+
+        onAttempt(1, 3, "Acquiring GPS signal…")
+        requestCurrentLocation(timeoutMs = 5_000L) { loc ->
+            if (loc != null) {
+                onResult(loc)
+                return@requestCurrentLocation
+            }
+
+            // Attempt 2: retry after a brief delay for better GPS lock
+            onAttempt(2, 3, "GPS weak — retrying…")
+            android.os.Handler(Looper.getMainLooper()).postDelayed({
+                requestCurrentLocation(timeoutMs = 5_000L) { retryLoc ->
+                    if (retryLoc != null) {
+                        onResult(retryLoc)
+                    } else {
+                        // Final fallback: check lastKnownLocation one more time
+                        val finalCached = lastKnownLocation()
+                        if (finalCached != null) {
+                            onAttempt(3, 3, "Using cached location (${finalCached.accuracyMeters?.toInt() ?: "?"}m)")
+                            onResult(finalCached)
+                        } else {
+                            onAttempt(3, 3, "GPS unavailable after 2 attempts")
+                            onResult(null)
+                        }
+                    }
+                }
+            }, 2_000L)
+        }
+    }
+
+    /**
      * Checks whether the device's GPS (or any location provider) is currently enabled.
      * Returns false when GPS is turned off in system settings, even if location
      * permission has been granted.

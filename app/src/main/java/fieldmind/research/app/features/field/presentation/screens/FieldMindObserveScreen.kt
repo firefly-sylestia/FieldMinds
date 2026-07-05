@@ -282,6 +282,8 @@ fun ObserveScreen(
     var metadataAutoFetching by remember { mutableStateOf(false) }
     var metadataStatus by remember { mutableStateOf("Ready") }
     var gpsFetching by remember { mutableStateOf(false) }
+    var gpsFetchAttempt by remember { mutableIntStateOf(0) }
+    var gpsStatusText by remember { mutableStateOf("") }
     var showGpsDialog by remember { mutableStateOf(false) }
 
     fun performAutoFetch() {
@@ -291,37 +293,49 @@ fun ObserveScreen(
             return
         }
         metadataAutoFetching = true
+        gpsFetchAttempt = 0
+        gpsStatusText = ""
         metadataStatus = "Acquiring GPS…"
         if (locationProvider.hasAnyLocationPermission()) {
-            locationProvider.requestCurrentLocation { loc ->
-                if (loc != null) {
-                    capturedLocation = loc
-                    metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m accuracy) — fetching weather…"
-                    scope.launch {
-                        weatherFetching = true
-                        val snapshot = viewModel.fetchWeatherSnapshot(loc.latitude, loc.longitude)
-                        weatherSnapshot = snapshot
-                        weatherFetching = false
-                        if (snapshot != null) {
-                            // Log to offline weather catalog
-                            viewModel.saveWeatherSnapshot(snapshot, loc.latitude, loc.longitude)
-                            metadataStatus = "GPS + Weather acquired"
-                            showFastSnackbar(snackbar, scope, "Weather: ${snapshot.temperature}°C, ${snapshot.weatherDescription}")
-                        } else {
-                            metadataStatus = "GPS acquired, weather unavailable"
+            // Use retry method for better reliability
+            gpsFetching = true
+            locationProvider.requestCurrentLocationWithRetry(
+                onAttempt = { attempt, total, status ->
+                    gpsFetchAttempt = attempt
+                    gpsStatusText = status
+                    metadataStatus = status
+                },
+                onResult = { loc ->
+                    gpsFetching = false
+                    if (loc != null) {
+                        capturedLocation = loc
+                        metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m accuracy) — fetching weather…"
+                        scope.launch {
+                            weatherFetching = true
+                            val snapshot = viewModel.fetchWeatherSnapshot(loc.latitude, loc.longitude)
+                            weatherSnapshot = snapshot
+                            weatherFetching = false
+                            if (snapshot != null) {
+                                // Log to offline weather catalog
+                                viewModel.saveWeatherSnapshot(snapshot, loc.latitude, loc.longitude)
+                                metadataStatus = "GPS + Weather acquired"
+                                showFastSnackbar(snackbar, scope, "Weather: ${snapshot.temperature}°C, ${snapshot.weatherDescription}")
+                            } else {
+                                metadataStatus = "GPS acquired, weather unavailable"
+                            }
+                            metadataAutoFetching = false
                         }
+                        locationProvider.resolvePlaceName(loc.latitude, loc.longitude) { place ->
+                            if (!place.isNullOrBlank()) {
+                                capturedLocation = loc.copy(placeName = place)
+                            }
+                        }
+                    } else {
+                        metadataStatus = "GPS unavailable after 2 attempts"
                         metadataAutoFetching = false
                     }
-                    locationProvider.resolvePlaceName(loc.latitude, loc.longitude) { place ->
-                        if (!place.isNullOrBlank()) {
-                            capturedLocation = loc.copy(placeName = place)
-                        }
-                    }
-                } else {
-                    metadataStatus = "GPS unavailable — check permissions"
-                    metadataAutoFetching = false
                 }
-            }
+            )
         } else {
             metadataStatus = "Location permission required"
             metadataAutoFetching = false
@@ -754,23 +768,34 @@ fun ObserveScreen(
                             weatherDetail = weatherSnapshot?.asDisplayText(),
                             autoFetching = metadataAutoFetching,
                             gpsFetching = gpsFetching,
+                            gpsAttempt = gpsFetchAttempt,
+                            gpsStatusDetail = gpsStatusText,
                             statusText = metadataStatus,
                             onFetchGps = {
                                 if (!locationProvider.isGpsEnabled()) {
                                     showGpsDialog = true
                                 } else if (locationProvider.hasAnyLocationPermission()) {
                                     gpsFetching = true
+                                    gpsFetchAttempt = 0
+                                    gpsStatusText = ""
                                     metadataStatus = "Acquiring GPS…"
-                                    locationProvider.requestCurrentLocation { loc ->
-                                        gpsFetching = false
-                                        if (loc != null) {
-                                            capturedLocation = loc
-                                            metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m)"
-                                            showFastSnackbar(snackbar, scope, "GPS acquired")
-                                        } else {
-                                            metadataStatus = "GPS unavailable — check permissions"
+                                    locationProvider.requestCurrentLocationWithRetry(
+                                        onAttempt = { attempt, total, status ->
+                                            gpsFetchAttempt = attempt
+                                            gpsStatusText = status
+                                            metadataStatus = status
+                                        },
+                                        onResult = { loc ->
+                                            gpsFetching = false
+                                            if (loc != null) {
+                                                capturedLocation = loc
+                                                metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m)"
+                                                showFastSnackbar(snackbar, scope, "GPS acquired")
+                                            } else {
+                                                metadataStatus = "GPS unavailable after 2 attempts"
+                                            }
                                         }
-                                    }
+                                    )
                                 } else {
                                     showFastSnackbar(snackbar, scope, "Location permission required")
                                 }
@@ -1714,6 +1739,8 @@ private fun AutoMetadataStatusCard(
     weatherDetail: String? = null,
     autoFetching: Boolean = false,
     gpsFetching: Boolean = false,
+    gpsAttempt: Int = 0,
+    gpsStatusDetail: String = "",
     statusText: String = "Ready",
     onFetchGps: () -> Unit,
     onFetchWeather: () -> Unit = {},
@@ -1733,11 +1760,24 @@ private fun AutoMetadataStatusCard(
                 Icon(FieldMindIcons.Info, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
                 Column(Modifier.weight(1f)) {
                     Text("Location & weather", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                    if (autoFetching) {
-                        Text(statusText, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    if (autoFetching || gpsFetching) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(12.dp),
+                                strokeWidth = 2.dp
+                            )
+                            Text(
+                                if (gpsStatusDetail.isNotBlank()) gpsStatusDetail else statusText,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
                 }
-                if (!hasGps && !autoFetching) {
+                if (!hasGps && !autoFetching && !gpsFetching) {
                     Surface(
                         onClick = onFetchBoth,
                         shape = RoundedCornerShape(20.dp),
@@ -1754,7 +1794,13 @@ private fun AutoMetadataStatusCard(
                 MetadataStatusChip(
                     label = "GPS",
                     acquired = hasGps,
-                    detail = if (gpsFetching) "Fetching…" else if (hasGps && gpsAccuracy != null) "±${gpsAccuracy.toInt()}m" else if (hasGps) "Acquired" else null,
+                    loading = gpsFetching,
+                    detail = when {
+                        gpsFetching -> if (gpsAttempt > 0) "Attempt ${gpsAttempt + 1}/3…" else "Searching…"
+                        hasGps && gpsAccuracy != null -> "±${gpsAccuracy.toInt()}m"
+                        hasGps -> "Acquired"
+                        else -> null
+                    },
                     icon = FieldMindIcons.Location,
                     accent = if (hasGps) colors.positive else colors.warning,
                     onTap = if (!hasGps && !autoFetching && !gpsFetching) onFetchGps else null,
@@ -1813,6 +1859,7 @@ private fun MetadataStatusChip(
     icon: MaterialSymbolIcon,
     accent: Color,
     onTap: (() -> Unit)? = null,
+    loading: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val haptics = rememberFieldMindHaptics()
@@ -1827,12 +1874,20 @@ private fun MetadataStatusChip(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Icon(
-                icon,
-                null,
-                tint = if (acquired) accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                size = 20.dp
-            )
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    strokeWidth = 2.5.dp,
+                    color = accent
+                )
+            } else {
+                Icon(
+                    icon,
+                    null,
+                    tint = if (acquired) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 20.dp
+                )
+            }
             Text(
                 label,
                 style = MaterialTheme.typography.labelSmall,
@@ -1840,7 +1895,7 @@ private fun MetadataStatusChip(
                 color = if (acquired) accent else MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                detail ?: if (acquired) "Acquired" else "Tap to fetch",
+                if (loading) detail ?: "Acquiring…" else detail ?: if (acquired) "Acquired" else "Tap to fetch",
                 style = MaterialTheme.typography.labelSmall,
                 color = if (acquired) accent.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
