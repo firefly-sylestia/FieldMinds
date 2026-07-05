@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import java.text.SimpleDateFormat
@@ -42,8 +43,8 @@ fun HeroStatusCard(
 
     Card(
         shape = RoundedCornerShape(36.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
         Column(
             Modifier
@@ -60,27 +61,26 @@ fun HeroStatusCard(
                     Modifier
                         .size(52.dp)
                         .clip(RoundedCornerShape(28.dp))
-                        .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)),
+                        .background(colors.positive.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         FieldMindIcons.Archive,
                         null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        tint = colors.positive,
                         size = 28.dp
                     )
                 }
                 Column(Modifier.weight(1f)) {
                     Text(
-                        "\uD83D\uDCE6 Last backup: $lastBackupLabel",
+                        "Last backup: $lastBackupLabel",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        fontWeight = FontWeight.Bold
                     )
                     Text(
                         "$totalRecords total records across 5 types",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.72f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -95,14 +95,13 @@ fun HeroStatusCard(
                     Text(
                         "Auto-backup: ${if (autoBackupEnabled) "ON ($autoBackupInterval)" else "OFF"}",
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         if (autoBackupEnabled) "Backups are scheduled automatically"
                         else "Enable auto-backup to protect your data",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.72f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Row(
@@ -114,7 +113,7 @@ fun HeroStatusCard(
                         if (autoBackupEnabled) "ON" else "OFF",
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
-                        color = if (autoBackupEnabled) colors.positive else MaterialTheme.colorScheme.onPrimaryContainer
+                        color = if (autoBackupEnabled) colors.positive else MaterialTheme.colorScheme.onSurface
                     )
                     Switch(
                         checked = autoBackupEnabled,
@@ -137,20 +136,19 @@ fun HeroStatusCard(
                         Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(22.dp))
-                            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.4f))
+                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                             .padding(vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             value.toString(),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            fontWeight = FontWeight.ExtraBold
                         )
                         Text(
                             key.replaceFirstChar { it.uppercase() },
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
