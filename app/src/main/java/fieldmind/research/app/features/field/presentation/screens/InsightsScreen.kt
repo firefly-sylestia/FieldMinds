@@ -376,7 +376,7 @@ fun InsightsScreen(
                                     TagChip(tag.name)
                                     Text(tag.observationCount.toString(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
-                                if (tag != tags.last()) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                                if (tag != tags.last()) HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                             }
                         }
                     }

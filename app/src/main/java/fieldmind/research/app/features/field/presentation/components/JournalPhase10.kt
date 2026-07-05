@@ -225,7 +225,7 @@ fun RichTextFormattingToolbar(
             IconButton(onClick = onItalic, modifier = Modifier.size(36.dp)) { Text("I", fontWeight = FontWeight.Bold) }
             IconButton(onClick = onUnderline, modifier = Modifier.size(36.dp)) { Text("U", fontWeight = FontWeight.Bold) }
             IconButton(onClick = onStrikethrough, modifier = Modifier.size(36.dp)) { Text("S", fontWeight = FontWeight.Bold) }
-            Divider(modifier = Modifier
+            HorizontalDivider(modifier = Modifier
                 .width(1.dp)
                 .height(24.dp))
             IconButton(onClick = onLink, modifier = Modifier.size(36.dp)) { Text("🔗") }

@@ -165,7 +165,7 @@ fun HypothesisUpdateForm(
             }
         }
 
-        Divider()
+        HorizontalDivider()
 
         // Confidence slider
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -180,7 +180,7 @@ fun HypothesisUpdateForm(
             )
         }
 
-        Divider()
+        HorizontalDivider()
 
         // Evidence for/against
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {

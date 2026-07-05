@@ -310,7 +310,7 @@ private fun FullScreenMapView(
                     isActive = drawingMode == DrawingMode.DrawPolygon,
                     onClick = { onDrawingModeChanged(if (drawingMode == DrawingMode.DrawPolygon) DrawingMode.View else DrawingMode.DrawPolygon) }
                 )
-                DrawToolDivider()
+                DrawToolHorizontalDivider()
                 DrawToolButton(
                     icon = FieldMindIcons.Select,
                     label = "Select",
@@ -364,7 +364,7 @@ private fun DrawToolButton(icon: MaterialSymbolIcon, label: String, isActive: Bo
 }
 
 @Composable
-private fun DrawToolDivider() {
+private fun DrawToolHorizontalDivider() {
     Box(
         Modifier
             .width(1.dp)

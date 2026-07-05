@@ -64,7 +64,7 @@ fun ResearchHealthCard(
             }
 
             if (expanded && issues.isNotEmpty()) {
-                Divider()
+                HorizontalDivider()
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()

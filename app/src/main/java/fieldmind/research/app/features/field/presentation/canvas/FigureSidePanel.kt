@@ -178,7 +178,7 @@ fun FigureSidePanel(
                 }
             }
 
-            HorizontalDivider(
+            HorizontalHorizontalDivider(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
             )
 
@@ -591,7 +591,7 @@ private fun RelatedIdeasTab(
         }
 
         if (relatedIdeas.isNotEmpty()) {
-            HorizontalDivider(
+            HorizontalHorizontalDivider(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
             )
 
@@ -851,7 +851,7 @@ private fun QuestionsTab(
 
         // Existing questions list
         if (questions.isNotEmpty()) {
-            HorizontalDivider(
+            HorizontalHorizontalDivider(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
             )
 

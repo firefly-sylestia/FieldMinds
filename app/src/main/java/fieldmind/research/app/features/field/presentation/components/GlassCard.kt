@@ -75,7 +75,7 @@ fun GlassCard(
         modifier
             .fillMaxWidth()
             .clip(shape)
-            .hazeChild(
+            hazeEffect(
                 state = hazeState,
                 style = HazeStyle(
                     blurRadius = blurRadius,

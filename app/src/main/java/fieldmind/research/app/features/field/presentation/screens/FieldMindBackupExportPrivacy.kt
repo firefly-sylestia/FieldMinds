@@ -191,7 +191,7 @@ fun ExportPrivacyOptionsCard(
                     }
 
                     // ── Divider ──
-                    HorizontalDivider(
+                    HorizontalHorizontalDivider(
                         color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
                         modifier = Modifier.padding(vertical = 4.dp)
                     )

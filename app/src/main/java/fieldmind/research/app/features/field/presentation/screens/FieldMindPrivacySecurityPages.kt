@@ -181,7 +181,7 @@ fun ExportProtectionPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     MaterialSymbolIcon("lock")
                 )
                 if (passwordProtection) {
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Surface(
                         onClick = { showPasswordDialog = true },
                         shape = RoundedCornerShape(22.dp),
@@ -204,7 +204,7 @@ fun ExportProtectionPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                             Icon(FieldMindIcons.Forward, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
                         }
                     }
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 }
             }
         }
@@ -456,7 +456,7 @@ fun FailedUnlocksPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     settings::setFailedUnlockRequireBiometrics,
                     MaterialSymbolIcon("fingerprint")
                 )
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem(
                     "Panic Lock",
                     "After failed attempts, wipe sensitive data and reset the app",
@@ -520,11 +520,11 @@ fun MetadataProtectionPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             SettingsGroupCard {
                 ToggleItem("Remove GPS Coordinates", "Strip location data from exported media files", removeGps, settings::setMetadataRemoveGps, MaterialSymbolIcon("location_off"))
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Remove Camera Information", "Strip camera model, make, and settings", removeCamera, settings::setMetadataRemoveCamera, MaterialSymbolIcon("camera_alt"))
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Remove Device Information", "Strip device name and identifiers", removeDevice, settings::setMetadataRemoveDevice, MaterialSymbolIcon("smartphone"))
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Remove EXIF Data", "Strip all EXIF metadata from images", removeExif, settings::setMetadataRemoveExif, MaterialSymbolIcon("image"))
             }
         }
@@ -574,7 +574,7 @@ fun DecoyPinPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     MaterialSymbolIcon("lock_open")
                 )
                 if (decoyEnabled) {
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Surface(
                         onClick = { showSetupDialog = true; decoyLabelInput = decoyLabel },
                         shape = RoundedCornerShape(22.dp),

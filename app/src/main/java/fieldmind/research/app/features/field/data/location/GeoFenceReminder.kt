@@ -390,6 +390,7 @@ class GeoFenceReminder(private val context: Context) {
     /**
      * Notifies the user when a geo-fence transition occurs.
      */
+    @SuppressLint("MissingPermission")
     private fun notifyTransition(regionLabel: String, transitionType: Int) {
         val title = when (transitionType) {
             Geofence.GEOFENCE_TRANSITION_ENTER -> "Arrived at $regionLabel"

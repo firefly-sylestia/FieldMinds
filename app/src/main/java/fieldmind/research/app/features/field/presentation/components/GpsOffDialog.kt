@@ -73,7 +73,7 @@ fun GpsOffDialog(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                HorizontalDivider()
+                HorizontalHorizontalDivider()
                 Text(
                     "You can also continue without GPS — location will be missing from new observations.",
                     style = MaterialTheme.typography.bodySmall,

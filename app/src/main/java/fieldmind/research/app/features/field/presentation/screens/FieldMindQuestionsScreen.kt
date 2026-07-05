@@ -254,7 +254,7 @@ fun QuestionsScreen(
                                     }
                                 }
                             }
-                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f), modifier = Modifier.padding(vertical = 4.dp))
+                            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f), modifier = Modifier.padding(vertical = 4.dp))
                         }
 
                         // ── Or enter a custom topic ──
@@ -556,7 +556,7 @@ private fun QuestionCardWithHypotheses(
             // ── Expanded actions ──
             AnimatedVisibility(expanded) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Text("Source: ${question.sourceType}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -616,7 +616,7 @@ private fun QuestionCardWithHypotheses(
                     //  HYPOTHESIS CARDS nested under this question
                     // ══════════���═════════════════════════════════════════
                     if (hypotheses.isNotEmpty()) {
-                        HorizontalDivider(color = FieldMindTheme.colors.observation.copy(alpha = 0.12f))
+                        HorizontalHorizontalDivider(color = FieldMindTheme.colors.observation.copy(alpha = 0.12f))
 
                         Text(
                             "Hypotheses (${hypotheses.size})",
@@ -870,7 +870,7 @@ private fun HypothesisCreationDialog(
                     }
                 }
 
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 
                 // Prediction
                 FieldTextField(prediction, { prediction = it }, "What do you predict will happen?", minLines = 2, required = true, supportingText = "A testable prediction based on your question")
@@ -957,7 +957,7 @@ private fun QuickCaptureDialog(
                     }
                 }
 
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 
                 FieldTextField(subject, { subject = it }, "What did you observe?", supportingText = "e.g. Crow was feeding at dawn")
                 FieldTextField(facts, { facts = it }, "Details", minLines = 2, supportingText = "Describe what you saw, heard, or measured")
@@ -1057,7 +1057,7 @@ private fun MarkAsTestedDialog(
                     }
                 }
 
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 
                 Text("Based on the evidence collected, what is your conclusion?", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 

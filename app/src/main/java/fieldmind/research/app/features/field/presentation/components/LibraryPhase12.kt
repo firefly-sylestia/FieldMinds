@@ -153,13 +153,13 @@ fun SourceMetadataPanel(
             MetadataRow("Credibility", credibility)
 
             if (personalSummary.isNotBlank()) {
-                Divider()
+                HorizontalDivider()
                 Text("My Summary", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
                 Text(personalSummary, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
             if (keyFindings.isNotBlank()) {
-                Divider()
+                HorizontalDivider()
                 Text("Key Findings", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
                 Text(keyFindings, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }

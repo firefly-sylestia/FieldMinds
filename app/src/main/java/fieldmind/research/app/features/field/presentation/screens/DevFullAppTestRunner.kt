@@ -311,7 +311,7 @@ fun DevFullAppTestRunner(
 
             // ── Results summary ──
             if (report.isComplete) {
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Surface(
                     onClick = { logExpanded = !logExpanded },
                     shape = RoundedCornerShape(16.dp),

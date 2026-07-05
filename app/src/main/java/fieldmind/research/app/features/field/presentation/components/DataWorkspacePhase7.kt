@@ -161,7 +161,7 @@ fun DataStructurePreview(
                 }
             }
             
-            Divider(modifier = Modifier.padding(vertical = 6.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp))
             
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("📊 Recommended chart:", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer)

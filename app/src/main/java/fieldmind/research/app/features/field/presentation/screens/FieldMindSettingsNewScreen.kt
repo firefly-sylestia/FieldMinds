@@ -462,7 +462,7 @@ private fun CategoryCard(
                 Icon(MaterialSymbolIcon("chevron_right"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 20.dp)
             }
 
-            HorizontalDivider(
+            HorizontalHorizontalDivider(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
                 modifier = Modifier.padding(vertical = 8.dp)
             )

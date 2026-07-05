@@ -300,11 +300,11 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
         item {
             SettingsGroupCard {
                 ThemeToggle(themeMode, settings::setThemeMode)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("AMOLED dark mode", "Pure black backgrounds in dark mode for OLED screens. Deeper blacks save battery on OLED displays.", amoledTheme, sharedAppSettings::setAmoledTheme, MaterialSymbolIcon("dark_mode"))
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Material You dynamic color", "Use system wallpaper colors that auto-adapt to light/dark. Off keeps the FieldMind brand palette.", dynamicColor, settings::setDynamicColorEnabled, FieldMindIcons.Palette)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Color scheme", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text("Choose a premium color palette. The matching gradient style auto-selects.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -381,7 +381,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                         }
                     }
                     Spacer(Modifier.height(12.dp))
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                     Spacer(Modifier.height(8.dp))
                     Text("Gradient intensity", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text("Adjust how bold or subtle card gradients appear.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -424,7 +424,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
         item {
             SettingsGroupCard {
                 ChoiceItemForm("Default map type", listOf("Standard", "Satellite", "Terrain"), mapType, FieldMindIcons.Map, settings::setMapType)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Show my location", "Display your current position as a marker on the map.", mapShowLocation, settings::setMapShowLocation, FieldMindIcons.Location)
             }
         }
@@ -476,25 +476,25 @@ fun CaptureDefaultsSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Uni
         item {
             SettingsGroupCard {
                 ChoiceItemForm("Default category", observationCategories, category, FieldMindIcons.Observation, settings::setDefaultCategory)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ChoiceItemForm("Default confidence", confidenceOptions, confidence, FieldMindIcons.Check, settings::setDefaultConfidence)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ChoiceItemForm("Location mode", listOf("Manual only", "Approximate", "Precise"), locationMode, FieldMindIcons.Location, settings::setLocationMode)
             }
         }
         item {
             SettingsGroupCard {
                 ToggleItem("Media attachments", "Enable camera, gallery, and file evidence tools.", media, settings::setMediaAttachmentsEnabled, FieldMindIcons.Camera)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Audio recording", "Enable voice-note evidence capture.", audio, settings::setAudioRecordingEnabled, FieldMindIcons.Mic)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ChoiceItemForm("Attachment export", listOf("Reference URIs", "Copy media later", "Skip media"), exportMode, FieldMindIcons.Export, settings::setAttachmentExportMode)
             }
         }
         item {
             SettingsGroupCard {
                 ToggleItem("Daily reminders", "Schedules a daily prompt and skips after logging today's observation.", reminders, settings::setRemindersEnabled, FieldMindIcons.Notifications)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Streaks", "Shows consecutive observation days on the Today dashboard.", streaks, settings::setStreaksEnabled, FieldMindIcons.Streak)
             }
         }
@@ -557,7 +557,7 @@ fun AiAssistantSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             item {
                 SettingsGroupCard {
                     ToggleItem("Confirm before saving AI output", "AI suggestions stay as previews unless you apply them.", confirm, settings::setAiRequireConfirmBeforeSave, FieldMindIcons.Check)
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     ToggleItem("Allow attachment context", "Off by default to protect field evidence privacy.", sendAttachments, settings::setAiSendAttachments, FieldMindIcons.File)
                 }
             }
@@ -611,7 +611,7 @@ fun LocalModelSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             SettingsGroupCard {
                 ToggleItem("Enable study generator", "Generates flashcards and review content from your observations and sources using on-device logic.", localModelEnabled, settings::setLocalModelEnabled, FieldMindIcons.Sparkle)
                 if (localModelEnabled) {
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     val profiles = listOf("FieldLite — Quick cards", "FieldCore — Balanced detail", "FieldPro — Deep study")
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Generation profile", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -638,7 +638,7 @@ fun LocalModelSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                             Spacer(Modifier.height(4.dp))
                         }
                     }
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     ToggleItem("Use for flashcards/reviews", "Use generated content for flashcard review sessions.", localModelUseForStudy, settings::setLocalModelUseForStudy, FieldMindIcons.Flashcard)
                 }
             }
@@ -786,7 +786,7 @@ fun SecuritySettingsPage(
             SettingsGroupCard {
                 ToggleItem("Device biometric lock", "Fingerprint, face, or device PIN", privacy, settings::setPrivacyLockEnabled, FieldMindIcons.Lock)
 
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
                     Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Lock, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp) }
                     Column(Modifier.weight(1f)) { Text("App PIN lock", fontWeight = FontWeight.SemiBold); Text("Self-contained 4-6 digit PIN", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
@@ -795,7 +795,7 @@ fun SecuritySettingsPage(
 
                 // PIN Length (shown when PIN is active)
                 if (appPinEnabled && appPinHash.isNotBlank()) {
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text("PIN Length", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -819,7 +819,7 @@ fun SecuritySettingsPage(
 
                 // PIN setup form
                 if (showPinSetup) {
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(if (appPinHash.isNotBlank()) "Change PIN" else "Set a PIN", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
 
@@ -855,7 +855,7 @@ fun SecuritySettingsPage(
 
                 // Decoy PIN (shown when PIN is active)
                 if (appPinEnabled && appPinHash.isNotBlank()) {
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
                         Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(MaterialSymbolIcon("lock_open"), null, tint = MaterialTheme.colorScheme.tertiary, size = 22.dp) }
                         Column(Modifier.weight(1f)) { Text("Decoy PIN", fontWeight = FontWeight.SemiBold); val decoyStatus = if (decoyEnabled && settings.decoyPinHash.value.isNotBlank()) "Active — ${decoyLabel.ifBlank { "Opens clean app" }}" else "Off"; Text(decoyStatus, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
@@ -863,7 +863,7 @@ fun SecuritySettingsPage(
                     }
                 }
 
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Screenshot block", "Prevent screenshots and recordings in app switcher", screenCapture, settings::setScreenCaptureProtectionEnabled, MaterialSymbolIcon("no_photography"))
             }
         }
@@ -873,11 +873,11 @@ fun SecuritySettingsPage(
         item {
             SettingsGroupCard {
                 ChoiceItemForm("Auto Lock", listOf("Immediate", "1 minute", "5 minutes", "15 minutes"), lockTimeout, FieldMindIcons.Timer, settings::setLockTimeout)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Lock on background", "Lock when app goes to background", autoLockOnBackground, settings::setAutoLockOnBackground, FieldMindIcons.Lock)
 
                 // Failed unlock section
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("After 5 failed attempts", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     listOf("Do Nothing", "30 Second Cooldown", "5 Minute Cooldown").forEach { option ->
@@ -907,7 +907,7 @@ fun SecuritySettingsPage(
             SettingsGroupCard {
                 ToggleItem("Encrypted backups", "Encrypt backup archives with strong AES-256", backupEncryption, settings::setAutoBackupEnabled, MaterialSymbolIcon("enhanced_encryption"))
 
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
                     Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.data.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Export, null, tint = FieldMindTheme.colors.data, size = 22.dp) }
                     Column(Modifier.weight(1f)) { Text("Password protect exports", fontWeight = FontWeight.SemiBold); Text(if (exportPassEnabled && settings.exportPasswordHash.value.isNotBlank()) "Password set ✓" else "Off", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
@@ -916,7 +916,7 @@ fun SecuritySettingsPage(
 
                 // Export password setup button (shown when enabled)
                 if (exportPassEnabled) {
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     Surface(
                         onClick = { showExportPassDialog = true; exportPassInput = ""; exportPassConfirm = ""; exportPassError = false },
                         shape = RoundedCornerShape(22.dp),
@@ -934,7 +934,7 @@ fun SecuritySettingsPage(
                     }
                 }
 
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ChoiceItemForm("Encryption Level", listOf("Standard", "Strong", "Maximum"), exportEncLevel, FieldMindIcons.Lock, settings::setExportEncryptionLevel)
             }
         }
@@ -945,14 +945,14 @@ fun SecuritySettingsPage(
             SettingsGroupCard {
                 // Metadata removal
                 ToggleItem("Remove GPS coordinates", "Strip location data from exported files", metaGps, settings::setMetadataRemoveGps, MaterialSymbolIcon("location_off"))
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Remove camera info", "Strip camera model, make, and settings", metaCamera, settings::setMetadataRemoveCamera, MaterialSymbolIcon("camera_alt"))
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Remove device info", "Strip device name and identifiers", metaDevice, settings::setMetadataRemoveDevice, MaterialSymbolIcon("smartphone"))
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Remove EXIF data", "Strip all EXIF metadata from images", metaExif, settings::setMetadataRemoveExif, MaterialSymbolIcon("image"))
 
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 // App Preview inline
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("App Preview in recent apps", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -972,9 +972,9 @@ fun SecuritySettingsPage(
                     }
                 }
 
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Privacy keyboard", "Ask keyboards not to learn from input", privacyTyping, settings::setPrivacyTypingEnabled, FieldMindIcons.Lock)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Auto clear clipboard", "Clear sensitive copied data automatically", clipboardCleanup, settings::setClipboardAutoCleanupEnabled, MaterialSymbolIcon("content_copy"))
             }
         }
@@ -1061,7 +1061,7 @@ fun BackupImportSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, 
             SettingsGroupCard {
                 ToggleItem("Auto backup", "Writes private archive JSON files on the selected schedule.", autoBackupEnabled, settings::setAutoBackupEnabled, FieldMindIcons.Archive)
                 if (autoBackupEnabled) {
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     ChoiceItemForm("Backup interval", listOf("Every 6 hours", "Every 12 hours", "Daily", "Weekly", "Monthly"), autoBackupInterval, FieldMindIcons.Today, settings::setAutoBackupInterval)
                 }
             }
@@ -1369,9 +1369,9 @@ fun UnitsFormatSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             SettingsGroupCard {
                 ChoiceItemForm("Temperature", listOf("Celsius", "Fahrenheit"), tempUnit, FieldMindIcons.Weather, settings::setTempUnit)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ChoiceItemForm("Distance", listOf("km", "miles"), distanceUnit, FieldMindIcons.Map, settings::setDistanceUnit)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ChoiceItemForm("Wind speed", listOf("km/h", "mph", "knots"), windSpeedUnit, FieldMindIcons.AirWave, settings::setWindSpeedUnit)
             }
         }
@@ -1381,7 +1381,7 @@ fun UnitsFormatSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             SettingsGroupCard {
                 ChoiceItemForm("Time format", listOf("24h", "12h"), timeFormat, FieldMindIcons.Timer, settings::setTimeFormat)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ChoiceItemForm("Date format", listOf("ISO", "Local"), dateFormat, FieldMindIcons.Today, settings::setDateFormat)
             }
         }
@@ -1451,9 +1451,9 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             SettingsGroupCard {
                 ToggleItem("Auto weather", "Fetch live weather when adding observations.", autoWeather, settings::setAutoWeatherEnabled, FieldMindIcons.Weather)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ChoiceItemForm("Temperature unit", listOf("Celsius", "Fahrenheit"), tempUnit, FieldMindIcons.Weather, settings::setTempUnit)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ChoiceItemForm("Auto-refresh interval", listOf("15 min", "30 min", "60 min"), weatherRefresh, FieldMindIcons.Timer, settings::setWeatherRefreshInterval)
             }
         }
@@ -1615,17 +1615,17 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             SettingsGroupCard {
                 ToggleItem("Show temperature", "Current temperature on the weather card.", showTemp, settings::setWeatherShowTemperature, FieldMindIcons.Weather)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Show condition", "Weather condition icon and description.", showCondition, settings::setWeatherShowCondition, FieldMindIcons.Cloud)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Show humidity", "Humidity percentage.", showHumidity, settings::setWeatherShowHumidity, FieldMindIcons.Water)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Show wind", "Wind speed.", showWind, settings::setWeatherShowWind, FieldMindIcons.AirWave)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Show cloud cover", "Cloud cover percentage.", showCloud, settings::setWeatherShowCloudCover, FieldMindIcons.Cloud)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
             ToggleItem("Show pressure", "Atmospheric pressure in hPa.", showPressure, settings::setWeatherShowPressure, FieldMindIcons.Compress)
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     ToggleItem("Cloud animations", "Animated clouds and partly-cloudy sky effects.", showCloudAnimation, settings::setWeatherShowCloudAnimation, FieldMindIcons.Cloud)
         }
         }
@@ -1674,7 +1674,7 @@ fun MapSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             SettingsGroupCard {
                 ChoiceItemForm("Default map type", listOf("Standard", "Satellite", "Terrain"), mapType, FieldMindIcons.Map, settings::setMapType)
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Show my location", "Display your current position as a marker on the map.", mapShowLocation, settings::setMapShowLocation, FieldMindIcons.Location)
             }
         }
@@ -1985,7 +1985,7 @@ fun ScreenVisibilitySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Un
                         })
                     }
                     if (item.title != visibilityToggles.last().title) {
-                        HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                        HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     }
                 }
             }
@@ -2156,8 +2156,8 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Debug options", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                         ToggleItem("Debug logging", "Enable verbose logging for troubleshooting.", debugLogging, settings::setDebugLogging, FieldMindIcons.Sparkle)
-                        HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                        HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                        HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                        HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                         ToggleItem("Show weather test panel", "Show weather condition test controls on the Home screen weather widget.", showWeatherTest, settings::setShowWeatherTestPanel, MaterialSymbolIcon("test_tube"))
                         ToggleItem("Data integrity check on launch", "Run database health checks on app startup.", dataIntegrityCheck, settings::setDataIntegrityCheckOnLaunch, FieldMindIcons.Archive)
                     }
@@ -2746,7 +2746,7 @@ fun SpeciesIdentificationSettingsPage(
                             Text("Get Perenual API key (free)")
                         }
 
-                        HorizontalDivider(Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                        HorizontalHorizontalDivider(Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
                         // ── Generic species API key ──
                         Text("Other species API (optional)", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)

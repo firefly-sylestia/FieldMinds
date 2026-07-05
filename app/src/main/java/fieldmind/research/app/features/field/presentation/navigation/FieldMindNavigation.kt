@@ -375,7 +375,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
         if (expanded) {
             Row(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
                 // Tablet rail — liquid-glass side panel. .hazeChild blurs the
-                // NavHost content behind the rail (captured via .haze() below);
+                // NavHost content behind the rail (captured via hazeSource() below);
                 // .liquidGlassRefraction() applies GPU displacement & specular.
                 if (!hideChrome) {                        Surface(
                             shape = RoundedCornerShape(size = 38.dp),
@@ -392,7 +392,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                             modifier = Modifier
                                 .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
                                 .width(IntrinsicSize.Min)
-                                .hazeChild(
+                                hazeEffect(
                                     state = hazeState,
                                     style = HazeStyle(
                                         blurRadius = 32.dp,
@@ -437,7 +437,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                     onNavigateToTabRoute = null,
                     activeTabIndex = activeTabIndex,
                     onActiveTabChange = { index -> activeTabIndex = index },
-                    modifier = Modifier.weight(1f).haze(state = hazeState)
+                    modifier = Modifier.weight(1f)hazeSource(state = hazeState)
                 )
             }
         } else {
@@ -447,7 +447,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
             // The content fills the full screen edge-to-edge; the pill is
             // overlaid at the bottom with real backdrop blur via Haze.
             //
-            // IMPORTANT: .haze() is ONLY on the NavHost content, NOT the outer
+            // IMPORTANT: hazeSource() is ONLY on the NavHost content, NOT the outer
             // Box — this ensures the pill and its shadow/glow layers are never
             // captured into the blur source, preventing visible layer artifacts.
             Box(
@@ -464,7 +464,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                     onNavigateToTabRoute = null,
                     activeTabIndex = activeTabIndex,
                     onActiveTabChange = { index -> activeTabIndex = index },
-                    modifier = Modifier.fillMaxSize().haze(state = hazeState)
+                    modifier = Modifier.fillMaxSize()hazeSource(state = hazeState)
                 )
 
                 // Floating pill — liquid glass with Haze blur + GPU refraction
@@ -489,7 +489,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                                 .fillMaxWidth()
                                 .height(68.dp)
                                 .clip(RoundedCornerShape(50.dp))
-                                .hazeChild(
+                                hazeEffect(
                                     state = hazeState,
                                     style = HazeStyle(
                                         blurRadius = 32.dp,

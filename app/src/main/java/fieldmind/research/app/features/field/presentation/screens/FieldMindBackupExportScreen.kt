@@ -1153,7 +1153,7 @@ fun BackupAndRestoreScreen(
                                     Text(selectedExportFormat, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = exportFormats.find { it.name == selectedExportFormat }?.color ?: MaterialTheme.colorScheme.primary)
                                 }
                             }
-                            Divider()
+                            HorizontalDivider()
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 Icon(FieldMindIcons.Data, null, size = 20.dp, tint = MaterialTheme.colorScheme.primary)
                                 Column {
@@ -1607,7 +1607,7 @@ private fun ExportTabContent(
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                         Text(exportStepText, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     }
-                    LinearProgressIndicator(progress = exportProgress, modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(6.dp)))
+                    LinearProgressIndicator(progress = { exportProgress }, modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(6.dp)))
                 }
             }
         }
@@ -1796,7 +1796,7 @@ private fun ImportTabContent(
                         }
                     }
 
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
 
                     // ── Import mode ──
                     Text("Import mode", fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleSmall)
@@ -1980,7 +1980,7 @@ private fun BackupTabContent(
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                         Text(exportStepText, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     }
-                    LinearProgressIndicator(progress = exportProgress, modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(6.dp)))
+                    LinearProgressIndicator(progress = { exportProgress }, modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(6.dp)))
                 }
             }
         }
@@ -2077,7 +2077,7 @@ private fun BackupTabContent(
                     }
                 }
 
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
 
                 // Schedule
                 Row(
@@ -2110,7 +2110,7 @@ private fun BackupTabContent(
         
 
                 // ── Retention duration ──
-                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Row(
                     Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,

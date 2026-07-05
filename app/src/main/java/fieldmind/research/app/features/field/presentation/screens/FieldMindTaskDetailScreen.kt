@@ -163,7 +163,7 @@ fun TaskDetailScreen(
                             },
                             leadingIcon = { Icon(MaterialSymbolIcon("check_circle"), null, size = 18.dp) }
                         )
-                        HorizontalDivider()
+                        HorizontalHorizontalDivider()
                         DropdownMenuItem(
                             text = { Text("Delete", color = MaterialTheme.colorScheme.error) },                                onClick = {
                                     showOverflow = false

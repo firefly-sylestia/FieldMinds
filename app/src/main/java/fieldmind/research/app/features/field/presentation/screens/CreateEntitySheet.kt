@@ -152,7 +152,7 @@ fun CreateEntitySheet(
 private fun SectionTitle(title: String, accent: Color) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(title, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = accent)
-        HorizontalDivider(modifier = Modifier.weight(1f), color = accent.copy(alpha = 0.2f))
+        HorizontalHorizontalDivider(modifier = Modifier.weight(1f), color = accent.copy(alpha = 0.2f))
     }
 }
 
@@ -209,7 +209,7 @@ fun ProjectSelectorDialog(
                 val label = if (entityKind == "Observation") "Create $entityKind" else "Project Selector"
                 Text(label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
 
-                HorizontalDivider()
+                HorizontalHorizontalDivider()
 
                 // Existing projects
                 if (projects.isNotEmpty()) {
@@ -237,7 +237,7 @@ fun ProjectSelectorDialog(
                     }
                 }
 
-                HorizontalDivider()
+                HorizontalHorizontalDivider()
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(onClick = onCreateNew, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {

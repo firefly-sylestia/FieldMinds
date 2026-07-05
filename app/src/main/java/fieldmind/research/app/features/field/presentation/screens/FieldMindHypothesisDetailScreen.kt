@@ -155,7 +155,7 @@ fun HypothesisDetailScreen(
                                 },
                                 leadingIcon = { Icon(MaterialSymbolIcon("science"), null, size = 18.dp) }
                             )
-                            HorizontalDivider()
+                            HorizontalHorizontalDivider()
                             DropdownMenuItem(
                                 text = { Text("Delete", color = MaterialTheme.colorScheme.error) },
                                 onClick = {

@@ -517,7 +517,7 @@ fun TimerToolScreen(
                                 Text("Laps", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                                 Text("${laps.size} lap${if (laps.size != 1) "s" else ""}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                             laps.reversed().forEachIndexed { index, lapMs ->
                                 val lapNum = laps.size - index
                                 val totalSec = lapMs / 1000

@@ -221,7 +221,7 @@ private fun DialogDividerSection(
         }
         Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
     }
-    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 }
 
 /**
@@ -419,7 +419,7 @@ internal fun NewProjectDialog(
                     }
                     AnimatedVisibility(visible = showGuide, enter = expandVertically(), exit = shrinkVertically()) {
                         Column(Modifier.padding(top = 4.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            HorizontalDivider(color = FieldMindTheme.colors.project.copy(alpha = 0.12f))
+                            HorizontalHorizontalDivider(color = FieldMindTheme.colors.project.copy(alpha = 0.12f))
                             GuideRow("Question", templateGuide.question)
                             GuideRow("Background", templateGuide.background)
                             GuideRow("Method", templateGuide.methodPlan)
@@ -653,7 +653,7 @@ internal fun NewSourceDialog(viewModel: FieldMindViewModel, onDismiss: () -> Uni
                 }
                 FieldTextField(doiOrIsbn, { doiOrIsbn = it }, "DOI / ISBN")
                 FieldTextField(publisherOrJournal, { publisherOrJournal = it }, "Publisher / journal")
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                 Text("Link or file", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                 FieldTextField(link, { link = it }, "Web link")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -666,7 +666,7 @@ internal fun NewSourceDialog(viewModel: FieldMindViewModel, onDismiss: () -> Uni
                 }
                 if (fileUri.isNotBlank()) FieldTextField(fileUri, { fileUri = it }, "Attached file URI")
                 SourcePreviewCard(link = link, fileUri = fileUri)
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                 Text("Reading notes", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                 FieldTextField(summary, { summary = it }, "Main idea", minLines = 2)
                 FieldTextField(findings, { findings = it }, "Key findings", minLines = 2)
@@ -674,7 +674,7 @@ internal fun NewSourceDialog(viewModel: FieldMindViewModel, onDismiss: () -> Uni
                 FieldTextField(questions, { questions = it }, "New questions", minLines = 2)
                 FieldTextField(notes, { notes = it }, "Paper / Cornell notes", minLines = 3)
                 FieldTextField(citationStyleNote, { citationStyleNote = it }, "Citation style note")
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                 Text("Review & project", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                 Text("Reading status", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 ChoiceChips(readingStatuses, readingStatus) { readingStatus = it }

@@ -375,10 +375,10 @@ private fun TableToolbar(
         ) {
             ToolbarButton(MaterialSymbolIcon("playlist_add"), "Add row", onAddRow)
             ToolbarButton(MaterialSymbolIcon("add_column"), "Add column", onAddColumn)
-            TableToolbarDivider()
+            TableToolbarHorizontalDivider()
             ToolbarButton(MaterialSymbolIcon("remove_circle"), "Remove last row", onDeleteRow)
             ToolbarButton(MaterialSymbolIcon("remove_circle_outline"), "Remove last column", onDeleteColumn)
-            TableToolbarDivider()
+            TableToolbarHorizontalDivider()
             ToolbarButton(MaterialSymbolIcon("content_copy"), "Copy as Markdown table", onExportMarkdown)
         }
     }
@@ -392,7 +392,7 @@ private fun ToolbarButton(icon: MaterialSymbolIcon, label: String, onClick: () -
 }
 
 @Composable
-private fun TableToolbarDivider() {
+private fun TableToolbarHorizontalDivider() {
     Box(
         modifier = Modifier
             .width(1.dp)

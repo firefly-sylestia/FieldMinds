@@ -679,7 +679,7 @@ fun AnimationTuningSettingsPage(
                         lowLabel = "Bouncy",
                         highLabel = "Smooth"
                     )
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     StiffnessSlider(
                         label = "Entrance stiffness",
                         value = entranceStiffness,
@@ -703,7 +703,7 @@ fun AnimationTuningSettingsPage(
                         lowLabel = "Bouncy",
                         highLabel = "Smooth"
                     )
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     StiffnessSlider(
                         label = "Swipe-back stiffness",
                         value = swipeBackStiffness,
@@ -727,7 +727,7 @@ fun AnimationTuningSettingsPage(
                         lowLabel = "Bouncy",
                         highLabel = "Smooth"
                     )
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     StiffnessSlider(
                         label = "Tab entrance stiffness",
                         value = tabStiffness,
@@ -753,7 +753,7 @@ fun AnimationTuningSettingsPage(
                         highLabel = "Hard",
                         formatValue = { "%.0f%%".format(it) }
                     )
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    HorizontalHorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     StiffnessSlider(
                         label = "Swipe scale",
                         value = swipeScale * 100,

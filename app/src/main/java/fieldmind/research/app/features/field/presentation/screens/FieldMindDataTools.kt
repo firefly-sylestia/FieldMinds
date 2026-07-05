@@ -152,7 +152,7 @@ fun DataToolsHubScreen(
 
                         // Expandable records list
                         if (showAllRecords && dataRecords.isNotEmpty()) {
-                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                             dataRecords.take(50).forEach { record ->
                                 Row(
                                     Modifier
@@ -1589,7 +1589,7 @@ fun ComparisonTableScreen(
                                             Text(item, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                                         }
                                     }
-                                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                                    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                                 }
                                 Spacer(Modifier.size(8.dp))
                                 Button(onClick = ::saveComparison, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = tableName.isNotBlank() && rows.isNotEmpty()) {

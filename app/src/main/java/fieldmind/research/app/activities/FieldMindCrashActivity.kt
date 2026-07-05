@@ -323,7 +323,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                             Text(stringResource(R.string.crash_restart_app), style = MaterialTheme.typography.labelLarge)
                             Spacer(modifier = Modifier.width(8.dp))
                             Icon(
-                                imageVector = Icons.Filled.ArrowForward,
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                 contentDescription = null,
                                 modifier = Modifier.size(20.dp)
                             )

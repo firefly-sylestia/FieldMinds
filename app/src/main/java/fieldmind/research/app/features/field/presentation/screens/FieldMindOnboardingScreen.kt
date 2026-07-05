@@ -318,7 +318,7 @@ fun FieldMindOnboardingScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        HorizontalDivider()
+                        HorizontalHorizontalDivider()
                         Text(
                             "From Settings you can customize:",
                             style = MaterialTheme.typography.labelLarge,
@@ -1013,7 +1013,7 @@ private fun OnboardingThemePage(
                     }
                 }
 
-                HorizontalDivider(Modifier.padding(vertical = 4.dp))
+                HorizontalHorizontalDivider(Modifier.padding(vertical = 4.dp))
 
                 // Units
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
@@ -1036,7 +1036,7 @@ private fun OnboardingThemePage(
                     }
                 }
 
-                HorizontalDivider(Modifier.padding(vertical = 4.dp))
+                HorizontalHorizontalDivider(Modifier.padding(vertical = 4.dp))
 
                 // Daily goal
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
@@ -1176,10 +1176,10 @@ private fun OnboardingReviewPage(
                     ) {
                         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             ReviewRow("Name", profileName.ifBlank { "Not set" }, "Edit", onClick = { onEditPage(0) })
-                            HorizontalDivider()
+                            HorizontalHorizontalDivider()
                             ReviewRow("Role", profileRole, "Edit", onClick = { onEditPage(0) })
 
-                            HorizontalDivider()
+                            HorizontalHorizontalDivider()
                             val interestLabel = buildList {
                                 if (interests.zoology.isNotEmpty()) add("${interests.zoology.size} zoology")
                                 if (interests.botany.isNotEmpty()) add("${interests.botany.size} botany")
@@ -1190,13 +1190,13 @@ private fun OnboardingReviewPage(
                             }.joinToString(", ").ifEmpty { "Not specified" }
                             ReviewRow("Interests", interestLabel, "Edit", onClick = { onEditPage(1) })
 
-                            HorizontalDivider()
+                            HorizontalHorizontalDivider()
                             ReviewRow("Permissions", "$grantedCount/4 granted", "Edit", onClick = { onEditPage(2) })
 
-                            HorizontalDivider()
+                            HorizontalHorizontalDivider()
                             ReviewRow("Theme", selectedTheme, "Edit", onClick = { onEditPage(3) })
 
-                            HorizontalDivider()
+                            HorizontalHorizontalDivider()
                             ReviewRow("Daily goal", "$dailyGoal observation${if (dailyGoal == 1) "" else "s"} per day", "Edit", onClick = { onEditPage(3) })
                         }
                     }

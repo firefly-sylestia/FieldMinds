@@ -436,7 +436,7 @@ private fun LearnCategoryCardCompact(
             // ── Expanded topics ──
             AnimatedVisibility(visible = expanded) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    HorizontalDivider(
+                    HorizontalHorizontalDivider(
                         color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
