@@ -19,6 +19,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import java.text.SimpleDateFormat
@@ -30,14 +31,13 @@ import java.util.*
 private enum class EntityTab(
     val label: String,
     val entityType: String,
-    val icon: MaterialSymbolIcon,
-    val accent: Color
+    val icon: MaterialSymbolIcon
 ) {
-    Observations("Observations", "observation", MaterialSymbolIcon("visibility"), Color(0xFF5F7F52)),
-    Notes("Notes", "note", MaterialSymbolIcon("note"), Color(0xFF7F6B52)),
-    Questions("Questions", "question", MaterialSymbolIcon("help"), Color(0xFF527F7F)),
-    Sources("Sources", "source", MaterialSymbolIcon("book"), Color(0xFF7F527F)),
-    Projects("Projects", "project", MaterialSymbolIcon("folder"), Color(0xFF527F5F))
+    Observations("Observations", "observation", MaterialSymbolIcon("visibility")),
+    Notes("Notes", "note", MaterialSymbolIcon("note")),
+    Questions("Questions", "question", MaterialSymbolIcon("help")),
+    Sources("Sources", "source", MaterialSymbolIcon("book")),
+    Projects("Projects", "project", MaterialSymbolIcon("folder"))
 }
 
 /**
@@ -195,7 +195,7 @@ fun LinkToEntityDialog(
                                     selectedTab.icon,
                                     null,
                                     size = 24.dp,
-                                    tint = selectedTab.accent
+                                    tint = FieldMindTheme.colors.accentFor(selectedTab.entityType)
                                 )
                             }
 
@@ -255,7 +255,7 @@ fun LinkToEntityDialog(
                                     Surface(
                                         onClick = { selectedTab = tab; searchQuery = "" },
                                         shape = RoundedCornerShape(20.dp),
-                                        color = if (isSelected) tab.accent.copy(alpha = 0.15f)
+                                        color = if (isSelected) FieldMindTheme.colors.accentFor(tab.entityType).copy(alpha = 0.15f)
                                         else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         modifier = Modifier.weight(1f)
                                     ) {
@@ -270,14 +270,14 @@ fun LinkToEntityDialog(
                                                 tab.icon,
                                                 null,
                                                 size = 14.dp,
-                                                tint = if (isSelected) tab.accent
+                                                tint = if (isSelected) FieldMindTheme.colors.accentFor(tab.entityType)
                                                 else MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                             Text(
                                                 tab.label,
                                                 style = MaterialTheme.typography.labelSmall,
                                                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                                color = if (isSelected) tab.accent
+                                                color = if (isSelected) FieldMindTheme.colors.accentFor(tab.entityType)
                                                 else MaterialTheme.colorScheme.onSurfaceVariant,
                                                 maxLines = 1
                                             )
@@ -394,6 +394,7 @@ private fun EntityListItem(
     dateFormat: SimpleDateFormat,
     onLink: () -> Unit
 ) {
+    val tabAccent = FieldMindTheme.colors.accentFor(tab.entityType)
     val (primaryText, secondaryText, accentColor) = when (entity) {
         is ObservationEntity -> Triple(
             entity.subject,
@@ -402,12 +403,12 @@ private fun EntityListItem(
                 append(" · ")
                 append(dateFormat.format(Date(entity.timestamp)))
             },
-            tab.accent
+            tabAccent
         )
         is NoteEntity -> Triple(
             entity.title.ifBlank { "Untitled note" },
             entity.category,
-            tab.accent
+            tabAccent
         )
         is QuestionEntity -> Triple(
             entity.questionText,
@@ -416,7 +417,7 @@ private fun EntityListItem(
                 append(" · ")
                 append(entity.status)
             },
-            tab.accent
+            tabAccent
         )
         is SourceEntity -> Triple(
             entity.title,
@@ -427,14 +428,14 @@ private fun EntityListItem(
                     append(entity.author)
                 }
             },
-            tab.accent
+            tabAccent
         )
         is ProjectEntity -> Triple(
             entity.title,
             entity.topicType,
-            tab.accent
+            tabAccent
         )
-        else -> Triple("Unknown", "", tab.accent)
+        else -> Triple("Unknown", "", tabAccent)
     }
     val icon = when (entity) {
         is ObservationEntity -> MaterialSymbolIcon("visibility")
