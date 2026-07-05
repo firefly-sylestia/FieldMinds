@@ -44,6 +44,27 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.40.9 — StandardIconBox Reusable Composable ──
+        FieldMindChangelogEntry(
+            version = "0.40.9",
+            date = "2026-07-05",
+            title = "📦 StandardIconBox — Reusable Icon Container",
+            importance = "Patch",
+            tags = listOf("📦", "🎨", "♻️"),
+            sections = listOf(
+                "📦 New StandardIconBox composable" to listOf(
+                    "✓ IconBoxSize enum with 3 tiers: Mini (36dp/20dp), Medium (40dp/22dp), Large (44dp/24dp)",
+                    "✓ Enforces correct box size, clip radius, and icon size automatically",
+                    "✓ Optional alpha parameter (default 0.14f) for dark mode variants",
+                    "✓ Drop-in replacement for manual Box+Icon patterns across all screens"
+                ),
+                "♻️ Prevents future sizing drift" to listOf(
+                    "✓ New composables should use StandardIconBox instead of hand-coded Box/Icon sizes",
+                    "✓ Existing screens can gradually migrate from inline Box patterns to StandardIconBox"
+                )
+            )
+        ),
+
         // ── v0.40.8 — Comprehensive Card Sizing Standardization ──
         FieldMindChangelogEntry(
             version = "0.40.8",

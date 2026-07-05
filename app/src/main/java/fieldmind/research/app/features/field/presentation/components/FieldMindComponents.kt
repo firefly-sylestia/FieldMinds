@@ -1658,3 +1658,59 @@ fun NoteComposerCard(
         }
     }
 }
+
+// ══════════════════════════════════════════════════════════════════════
+//  StandardIconBox — Enforces consistent icon box sizing
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Standard sizes for icon boxes across the app.
+ * Each size enforces the correct box dimensions, clip radius, and icon size
+ * for consistent visual rhythm.
+ */
+enum class IconBoxSize(val boxDp: androidx.compose.ui.unit.Dp, val clipDp: androidx.compose.ui.unit.Dp, val iconDp: androidx.compose.ui.unit.Dp) {
+    /** Compact inline badge — 36dp box, 18dp clip, 20dp icon */
+    Mini(36.dp, 18.dp, 20.dp),
+    /** Medium tile — 40dp box, 20dp clip, 22dp icon */
+    Medium(40.dp, 20.dp, 22.dp),
+    /** Large tile/list item — 44dp box, 22dp clip, 24dp icon */
+    Large(44.dp, 22.dp, 24.dp)
+}
+
+/**
+ * A standardized icon box that enforces consistent sizing across the app.
+ *
+ * Use this composable instead of manually specifying [Modifier.size], clip,
+ * and icon dimensions. Choose the [size] that matches the visual hierarchy level.
+ *
+ * @param icon The material symbol icon to display.
+ * @param contentDescription Accessible description (null for decorative icons).
+ * @param tint The icon and box background tint color.
+ * @param size The standard size tier — Mini (36dp), Medium (40dp), Large (44dp).
+ * @param modifier Additional modifier to apply to the outer Box.
+ */
+@Composable
+fun StandardIconBox(
+    icon: MaterialSymbolIcon,
+    contentDescription: String? = null,
+    tint: Color,
+    size: IconBoxSize = IconBoxSize.Medium,
+    modifier: Modifier = Modifier,
+    alpha: Float = 0.14f
+) {
+ * @param alpha Background tint opacity (default 0.14f; use ~0.28f for dark mode variants).
+    Box(
+        modifier = modifier
+            .size(size.boxDp)
+            .clip(RoundedCornerShape(size.clipDp))
+            .background(tint.copy(alpha = alpha)),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            icon = icon,
+            contentDescription = contentDescription,
+            tint = tint,
+            size = size.iconDp
+        )
+    }
+}
