@@ -43,13 +43,10 @@ import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
  *    to dark mode (white-tinted glow in dark, cool black in light).
  *  - [cuteShadow] modifier uses theme-aware colors for ambient/spot.
  *
- *  🌸 Pastel Theme: See [fieldmind.research.app.ui.theme.PastelPrimaryLight] et al.
- *  in [Color.kt] for the full pastel M3 palette, wired as "Pastel" in
- *  [fieldmind.research.app.ui.theme.getCustomColorScheme]. Selectable from
- *  Settings → Appearance → Color scheme.
- *
- *  Pastel entity colors: [fieldmind.research.app.features.field.presentation.theme.PastelLightFieldMindColors]
- *  in [FieldMindTheme.kt] — soft sage, sky blue, blush, lavender for each research entity type.
+ *  🌟 Premium Themes: Midnight Flora, Noir Amethyst, Warm Terrain
+ *  Full M3 palettes in [Color.kt]. Selectable from Settings → Appearance → Color scheme.
+ *  Each has hand-tuned entity colors in [FieldMindTheme.kt].
+ *  Default scheme uses the original FieldMind brand (forest green + warm ochre).
  * ════════════════════════════════════════════════════════════════════════
  */
 
@@ -293,6 +290,14 @@ object CuteGradients {
         SakuraDream("Sakura Dream"),
         /** #4158D0 → #C850C0 → #FFCC70 — vibrant gradient mesh */
         SunsetVibes("Sunset Vibes"),
+
+        // ── Premium theme-specific gradients (responsive to active scheme) ──
+        /** emerald → amber → teal — matches Midnight Flora palette */
+        FloraGlow("Flora Glow"),
+        /** violet → magenta → rose — matches Noir Amethyst palette */
+        AmethystAura("Amethyst Aura"),
+        /** brown → amber → sage — matches Warm Terrain palette */
+        TerrainWarmth("Terrain Warmth"),
     }
 
     /** The user's selected gradient style — persisted in settings. */
@@ -404,6 +409,29 @@ object CuteGradients {
             } else {
                 Brush.horizontalGradient(colors = listOf(Color(0xFF4158D0).withOpacity(1f), Color(0xFFC850C0).withOpacity(1f), Color(0xFFFFCC70).withOpacity(1f)))
             }
+
+            // ── Premium theme-specific gradients ──
+            Style.FloraGlow -> Brush.horizontalGradient(
+                colors = listOf(
+                    scheme.primary.copy(alpha = (0.55f * opacity).coerceIn(0f, 1f)),
+                    scheme.tertiary.copy(alpha = (0.45f * opacity).coerceIn(0f, 1f)),
+                    scheme.secondary.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f))
+                )
+            )
+            Style.AmethystAura -> Brush.horizontalGradient(
+                colors = listOf(
+                    scheme.primary.copy(alpha = (0.50f * opacity).coerceIn(0f, 1f)),
+                    scheme.tertiary.copy(alpha = (0.45f * opacity).coerceIn(0f, 1f)),
+                    scheme.secondary.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f))
+                )
+            )
+            Style.TerrainWarmth -> Brush.horizontalGradient(
+                colors = listOf(
+                    scheme.primary.copy(alpha = (0.50f * opacity).coerceIn(0f, 1f)),
+                    scheme.tertiary.copy(alpha = (0.45f * opacity).coerceIn(0f, 1f)),
+                    scheme.secondary.copy(alpha = (0.40f * opacity).coerceIn(0f, 1f))
+                )
+            )
         }
     }
 

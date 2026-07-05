@@ -310,15 +310,9 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                         selected = customColorScheme,
                         options = listOf(
                             "Default",
-                            "Pastel",
-                            "Warm",
-                            "Cool",
-                            "Forest",
-                            "Rose",
-                            "Lavender",
-                            "Mint",
-                            "Ocean",
-                            "Monochrome"
+                            "Midnight Flora",
+                            "Noir Amethyst",
+                            "Warm Terrain"
                         ),
                         onSelected = { sharedAppSettings.setCustomColorScheme(it) },
                         icon = MaterialSymbolIcon("palette")

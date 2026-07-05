@@ -237,76 +237,215 @@ private val LightFieldMindColors = FieldMindColors(
     )
 )
 
-private val PastelLightFieldMindColors = FieldMindColors(
+// ============================================
+// Midnight Flora — Forest entity colors (vibrant greens + amber + cyan)
+// ============================================
+private val FloraLightFieldMindColors = FieldMindColors(
     isDark = false,
-    // Entity colors — soft pastel versions
-    observation = Color(0xFFA5D6A7), // Soft sage
-    question = Color(0xFF90CAF9), // Soft sky blue
-    hypothesis = Color(0xFFFFE082), // Soft amber
-    project = Color(0xFF80CBC4), // Soft teal
-    source = Color(0xFFCE93D8), // Soft lavender
-    note = Color(0xFFF48FB1), // Soft rose
-    task = Color(0xFF81C784), // Soft mint
-    folder = Color(0xFFBCAAA4), // Soft taupe
-    species = Color(0xFFA5D6A7), // Soft sage (same as observation)
-    data = Color(0xFF80DEEA), // Soft cyan
-    report = Color(0xFFFFCCBC), // Soft peach
-    flashcard = Color(0xFFF48FB1), // Soft pink
-    // State colors — pastel-tinted
-    positive = Color(0xFFA5D6A7),
-    warning = Color(0xFFFFE082),
-    info = Color(0xFF90CAF9),
-    // Confidence colors — soft pastels
-    confidenceSure = Color(0xFFA5D6A7),
-    confidenceGuess = Color(0xFFFFE082),
-    confidenceVerify = Color(0xFFEF9A9A),
+    observation = Color(0xFF1A6B4C), // Deep forest emerald
+    question = Color(0xFF1565C0),    // Rich sky blue
+    hypothesis = Color(0xFFB8860B),  // Dark goldenrod amber
+    project = Color(0xFF00695C),     // Deep teal
+    source = Color(0xFF5E35B1),      // Rich plum
+    note = Color(0xFFD45D5D),        // Warm coral rose
+    task = Color(0xFF2E7D32),        // Fresh green
+    folder = Color(0xFF6D4C41),      // Bark brown
+    species = Color(0xFF2E7D32),     // Forest green
+    data = Color(0xFF00838F),        // Vibrant cyan
+    report = Color(0xFFBF360C),      // Burnt orange
+    flashcard = Color(0xFFD81B60),   // Magenta
+    positive = Color(0xFF1A6B4C),
+    warning = Color(0xFFE67E22),
+    info = Color(0xFF1565C0),
+    confidenceSure = Color(0xFF1A6B4C),
+    confidenceGuess = Color(0xFFF39C12),
+    confidenceVerify = Color(0xFFE53935),
     categorical = listOf(
-        Color(0xFFA5D6A7), // sage
-        Color(0xFF90CAF9), // sky
-        Color(0xFFFFE082), // amber
-        Color(0xFFCE93D8), // lavender
-        Color(0xFFF48FB1), // rose
-        Color(0xFF81C784), // mint
-        Color(0xFF80CBC4), // teal
-        Color(0xFFBCAAA4), // taupe
-        Color(0xFF80DEEA), // cyan
-        Color(0xFFFFCCBC), // peach
+        Color(0xFF1A6B4C), // emerald
+        Color(0xFF1565C0), // blue
+        Color(0xFFB8860B), // amber
+        Color(0xFF5E35B1), // plum
+        Color(0xFFD45D5D), // coral
+        Color(0xFF2E7D32), // green
+        Color(0xFF00838F), // cyan
+        Color(0xFF6D4C41), // brown
+        Color(0xFFD81B60), // magenta
+        Color(0xFFBF360C), // orange
     )
 )
 
-private val PastelDarkFieldMindColors = FieldMindColors(
+private val FloraDarkFieldMindColors = FieldMindColors(
     isDark = true,
-    // Entity colors — glowing pastels on dark
-    observation = Color(0xFF81C784),
-    question = Color(0xFF64B5F6),
-    hypothesis = Color(0xFFFFD54F),
-    project = Color(0xFF4DB6AC),
-    source = Color(0xFFBA68C8),
-    note = Color(0xFFF06292),
-    task = Color(0xFF66BB6A),
-    folder = Color(0xFFA1887F),
-    species = Color(0xFF81C784),
-    data = Color(0xFF4DD0E1),
-    report = Color(0xFFFFAB91),
-    flashcard = Color(0xFFF06292),
-    // State colors — glowing pastels
-    positive = Color(0xFF81C784),
+    observation = Color(0xFF7DCDA0), // Soft green glow
+    question = Color(0xFF64B5F6),    // Sky blue
+    hypothesis = Color(0xFFF0C860),  // Warm amber glow
+    project = Color(0xFF4DB6AC),     // Teal
+    source = Color(0xFFB39DDB),      // Lavender
+    note = Color(0xFFE57373),        // Soft coral
+    task = Color(0xFF81C784),        // Mint green
+    folder = Color(0xFFA1887F),      // Warm taupe
+    species = Color(0xFF81C784),     // Mint
+    data = Color(0xFF4DD0E1),        // Cyan glow
+    report = Color(0xFFFF8A65),      // Soft orange
+    flashcard = Color(0xFFF06292),   // Pink
+    positive = Color(0xFF7DCDA0),
     warning = Color(0xFFFFD54F),
     info = Color(0xFF64B5F6),
-    // Confidence colors
-    confidenceSure = Color(0xFF81C784),
+    confidenceSure = Color(0xFF7DCDA0),
     confidenceGuess = Color(0xFFFFD54F),
     confidenceVerify = Color(0xFFEF9A9A),
     categorical = listOf(
-        Color(0xFF81C784),
+        Color(0xFF7DCDA0),
         Color(0xFF64B5F6),
-        Color(0xFFFFD54F),
-        Color(0xFFBA68C8),
-        Color(0xFFF06292),
-        Color(0xFF66BB6A),
-        Color(0xFF4DB6AC),
-        Color(0xFFA1887F),
+        Color(0xFFF0C860),
+        Color(0xFFB39DDB),
+        Color(0xFFE57373),
+        Color(0xFF81C784),
         Color(0xFF4DD0E1),
+        Color(0xFFA1887F),
+        Color(0xFFF06292),
+        Color(0xFFFF8A65),
+    )
+)
+
+// ============================================
+// Noir Amethyst — Deep violet entity colors (violet + blue + pink + cyan)
+// ============================================
+private val AmethystLightFieldMindColors = FieldMindColors(
+    isDark = false,
+    observation = Color(0xFF5B3E96), // Deep violet
+    question = Color(0xFF1565C0),    // Electric blue
+    hypothesis = Color(0xFFB8860B),  // Golden amber
+    project = Color(0xFF283593),     // Deep indigo
+    source = Color(0xFF7B1FA2),      // Rich amethyst
+    note = Color(0xFFD4726A),        // Warm rose
+    task = Color(0xFF00897B),        // Soft teal
+    folder = Color(0xFF6D4C41),      // Warm grey-brown
+    species = Color(0xFF5B3E96),     // Deep violet
+    data = Color(0xFF00ACC1),        // Bright cyan
+    report = Color(0xFFE65100),      // Warm orange
+    flashcard = Color(0xFFE91E63),   // Vibrant pink
+    positive = Color(0xFF5B3E96),
+    warning = Color(0xFFE67E22),
+    info = Color(0xFF1565C0),
+    confidenceSure = Color(0xFF5B3E96),
+    confidenceGuess = Color(0xFFF39C12),
+    confidenceVerify = Color(0xFFE53935),
+    categorical = listOf(
+        Color(0xFF5B3E96), // violet
+        Color(0xFF1565C0), // blue
+        Color(0xFFB8860B), // amber
+        Color(0xFF7B1FA2), // amethyst
+        Color(0xFFD4726A), // rose
+        Color(0xFF00897B), // teal
+        Color(0xFF00ACC1), // cyan
+        Color(0xFF6D4C41), // brown
+        Color(0xFFE91E63), // pink
+        Color(0xFFE65100), // orange
+    )
+)
+
+private val AmethystDarkFieldMindColors = FieldMindColors(
+    isDark = true,
+    observation = Color(0xFFC4A5FF), // Lavender glow
+    question = Color(0xFF64B5F6),    // Sky blue
+    hypothesis = Color(0xFFF0C860),  // Amber glow
+    project = Color(0xFF5C6BC0),     // Indigo
+    source = Color(0xFFCE93D8),      // Soft amethyst
+    note = Color(0xFFF0A098),        // Warm peach
+    task = Color(0xFF4DB6AC),        // Teal
+    folder = Color(0xFFA1887F),      // Warm taupe
+    species = Color(0xFFC4A5FF),     // Lavender glow
+    data = Color(0xFF4DD0E1),        // Cyan
+    report = Color(0xFFFF8A65),      // Soft orange
+    flashcard = Color(0xFFF48FB1),   // Pink
+    positive = Color(0xFFC4A5FF),
+    warning = Color(0xFFFFD54F),
+    info = Color(0xFF64B5F6),
+    confidenceSure = Color(0xFFC4A5FF),
+    confidenceGuess = Color(0xFFFFD54F),
+    confidenceVerify = Color(0xFFEF9A9A),
+    categorical = listOf(
+        Color(0xFFC4A5FF),
+        Color(0xFF64B5F6),
+        Color(0xFFF0C860),
+        Color(0xFFCE93D8),
+        Color(0xFFF0A098),
+        Color(0xFF4DB6AC),
+        Color(0xFF4DD0E1),
+        Color(0xFFA1887F),
+        Color(0xFFF48FB1),
+        Color(0xFFFF8A65),
+    )
+)
+
+// ============================================
+// Warm Terrain — Earthy entity colors (olive + terracotta + sage + tan)
+// ============================================
+private val TerrainLightFieldMindColors = FieldMindColors(
+    isDark = false,
+    observation = Color(0xFF558B2F), // Olive green
+    question = Color(0xFFAF5F00),    // Ochre yellow
+    hypothesis = Color(0xFFC07050),  // Terracotta
+    project = Color(0xFF6B7D6B),     // Sage green
+    source = Color(0xFF8D6E63),      // Warm brown
+    note = Color(0xFFD4726A),        // Warm rose
+    task = Color(0xFF4E6B3E),        // Deep olive
+    folder = Color(0xFF5D4037),      // Dark brown
+    species = Color(0xFF558B2F),     // Olive
+    data = Color(0xFF006D7A),        // Teal
+    report = Color(0xFFBF360C),      // Burnt sienna
+    flashcard = Color(0xFFE0616E),   // Warm pink
+    positive = Color(0xFF558B2F),
+    warning = Color(0xFFE67E22),
+    info = Color(0xFF6B7D6B),
+    confidenceSure = Color(0xFF558B2F),
+    confidenceGuess = Color(0xFFF39C12),
+    confidenceVerify = Color(0xFFE53935),
+    categorical = listOf(
+        Color(0xFF558B2F), // olive
+        Color(0xFFAF5F00), // ochre
+        Color(0xFFC07050), // terracotta
+        Color(0xFF8D6E63), // brown
+        Color(0xFFD4726A), // rose
+        Color(0xFF4E6B3E), // deep olive
+        Color(0xFF006D7A), // teal
+        Color(0xFF5D4037), // dark brown
+        Color(0xFFE0616E), // warm pink
+        Color(0xFFBF360C), // sienna
+    )
+)
+
+private val TerrainDarkFieldMindColors = FieldMindColors(
+    isDark = true,
+    observation = Color(0xFFA0BFA0), // Sage glow
+    question = Color(0xFFE8A080),    // Terracotta glow
+    hypothesis = Color(0xFFD4B896),  // Tan
+    project = Color(0xFFA0B8A0),     // Sage
+    source = Color(0xFFBCAAA4),      // Warm taupe
+    note = Color(0xFFE8A080),        // Peach
+    task = Color(0xFF81A881),        // Soft olive
+    folder = Color(0xFF8D6E63),      // Warm brown
+    species = Color(0xFFA0BFA0),     // Sage glow
+    data = Color(0xFF80CBC4),        // Soft teal
+    report = Color(0xFFFFAB91),      // Soft sienna
+    flashcard = Color(0xFFF48FB1),   // Pink
+    positive = Color(0xFFA0BFA0),
+    warning = Color(0xFFFFD54F),
+    info = Color(0xFFA0B8A0),
+    confidenceSure = Color(0xFFA0BFA0),
+    confidenceGuess = Color(0xFFFFD54F),
+    confidenceVerify = Color(0xFFEF9A9A),
+    categorical = listOf(
+        Color(0xFFA0BFA0),
+        Color(0xFFE8A080),
+        Color(0xFFD4B896),
+        Color(0xFFBCAAA4),
+        Color(0xFFE8A080),
+        Color(0xFF81A881),
+        Color(0xFF80CBC4),
+        Color(0xFF8D6E63),
+        Color(0xFFF48FB1),
         Color(0xFFFFAB91),
     )
 )
@@ -545,13 +684,19 @@ fun FieldMindTheme(
         } else scheme
     }
     val semantic = when {
-            // Hand-tuned pastel entity colors for Pastel scheme without dynamic color
-            !dynamicColor && customColorScheme == "Pastel" ->
-                if (darkTheme) PastelDarkFieldMindColors else PastelLightFieldMindColors
-            // Hand-tuned default entity colors for Default scheme without dynamic color
+            // Hand-tuned entity colors for Default scheme without dynamic color
             !dynamicColor && customColorScheme == "Default" ->
                 if (darkTheme) DarkFieldMindColors else LightFieldMindColors
-            // For custom color schemes or dynamic colors, derive from the active scheme
+            // Midnight Flora — hand-tuned forest entity colors
+            !dynamicColor && customColorScheme == "Midnight Flora" ->
+                if (darkTheme) FloraDarkFieldMindColors else FloraLightFieldMindColors
+            // Noir Amethyst — hand-tuned violet entity colors
+            !dynamicColor && customColorScheme == "Noir Amethyst" ->
+                if (darkTheme) AmethystDarkFieldMindColors else AmethystLightFieldMindColors
+            // Warm Terrain — hand-tuned earthy entity colors
+            !dynamicColor && customColorScheme == "Warm Terrain" ->
+                if (darkTheme) TerrainDarkFieldMindColors else TerrainLightFieldMindColors
+            // For dynamic colors, derive from the active scheme
             else -> deriveFieldMindColors(colorScheme, darkTheme)
         }
         .applyOverrides(entityColorOverrides)
