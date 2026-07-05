@@ -232,163 +232,139 @@ object CuteCardDefaults {
 
 /**
  * ════════════════════════════════════════════════════════════════════════
- *  🌈 Cute Gradients — Theme-aware gradient presets (Phase 5)
+ *  🌈 Cute Card Tints — Theme-aware flat color tints for card backgrounds
  *
- *  Generates beautiful, harmonious gradient pairs from the current
- *  Material 3 color scheme. Each gradient uses the scheme's container
- *  colors at various opacities to create soft, blended backgrounds.
+ *  Provides subtle single-color background tints instead of multi-stop
+ *  gradients. Each style uses one scheme container color at a very low
+ *  opacity for a clean, minimal card background that doesn't fight the
+ *  card content.
  *
  *  Usage:
  *  ```
- *  Card(
- *      modifier = Modifier.cuteGradientBackground(CuteGradients.Style.CyberpunkSunset)
- *  ) { ... }
+ *  Box(modifier = Modifier.background(brush = CuteGradients.brushFor(style)))
  *  ```
  *
  *  Or use [GradientCard] for a drop-in replacement:
  *  ```
- *  GradientCard(style = CuteGradients.Style.SecondaryBlush) { ... }
+ *  GradientCard(style = CuteGradients.Style.BlushTrio) { ... }
  *  ```
  * ════════════════════════════════════════════════════════════════════════
  */
 object CuteGradients {
 
     /**
-     * Available gradient styles. All use theme-responsive colors from the
-     * current Material color scheme for consistent, harmonious blending.
+     * Available tint styles. Each uses a single scheme container color at
+     * a very low opacity for a clean, minimal card background.
      */
     enum class Style(val displayName: String) {
-        /** surface → subtle container hints → surface — vertical background wash */
+        /** primaryContainer flat tint — the default subtle card wash */
         ScreenBackground("Screen Background"),
-        /** secondaryContainer → primaryContainer → tertiaryContainer */
+        /** secondaryContainer flat tint */
         BlushTrio("Blush Trio"),
-        /** primaryContainer → secondaryContainer → tertiaryContainer */
+        /** primaryContainer flat tint */
         RainbowSoft("Rainbow Soft"),
-        /** tertiaryContainer → secondaryContainer */
+        /** tertiaryContainer flat tint */
         CoolDream("Cool Dream"),
-        /** secondaryContainer → tertiaryContainer */
+        /** secondaryContainer flat tint */
         SpringPastel("Spring Pastel"),
-        /** primaryContainer → surfaceContainerHigh */
+        /** primaryContainer flat tint (slightly stronger) */
         SunnyLift("Sunny Lift"),
-        /** true black → deep gray — AMOLED power saving */
+        /** true black / dark gray — AMOLED power saving */
         AmoledBlack("AMOLED Black"),
-        // ── Premium theme-specific gradients (responsive to active scheme) ──
-        /** emerald → amber → teal — matches Midnight Flora palette */
+        // ── Premium theme-specific tints (responsive to active scheme) ──
+        /** scheme primary flat tint — matches Midnight Flora palette */
         FloraGlow("Flora Glow"),
-        /** violet → magenta → rose — matches Noir Amethyst palette */
+        /** scheme primary flat tint — matches Noir Amethyst palette */
         AmethystAura("Amethyst Aura"),
-        /** brown → amber → sage — matches Warm Terrain palette */
+        /** scheme primary flat tint — matches Warm Terrain palette */
         TerrainWarmth("Terrain Warmth"),
     }
 
-    /** The user's selected gradient style — persisted in settings. */
+    /** The user's selected tint style — persisted in settings. */
     const val DEFAULT_STYLE = "Screen Background"
 
     /**
-     * Returns a gradient [Brush] for the given [style].
-     * Scheme-aware styles adapt to the current MaterialTheme color scheme.
-     * Artistic styles use fixed curated color combinations for bold impact.
+     * Returns a flat tint [Brush] for the given [style].
+     * Each style is a single scheme container color at a very low opacity,
+     * producing a clean, minimal card background. The [opacity] parameter
+     * scales the tint strength uniformly across all styles.
      */
     @Composable
     fun brushFor(style: Style, opacity: Float = 0.55f): Brush {
         val scheme = MaterialTheme.colorScheme
         val isDark = (0.299f * scheme.background.red + 0.587f * scheme.background.green + 0.114f * scheme.background.blue) < 0.5f
-        // Consistently apply opacity: baseAlpha is the gradient's inherent strength,
-        // multiplied by the user's opacity preference so all gradients scale uniformly.
+        // Opacity multiplier: baseAlpha controls each style's inherent strength,
+        // multiplied by the user's opacity preference for uniform scaling.
         fun alpha(base: Float): Float = (base * opacity).coerceIn(0f, 1f)
+
         return when (style) {
-            // ── Scheme-aware (theme-responsive) — subtle container hints ──
+            // ── Scheme-aware flat tints — each uses a single container color ──
             Style.ScreenBackground -> Brush.verticalGradient(
                 colors = listOf(
-                    scheme.surface,
-                    scheme.primaryContainer.copy(alpha = alpha(0.22f)),
-                    scheme.secondaryContainer.copy(alpha = alpha(0.16f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.12f)),
-                    scheme.surface
+                    scheme.primaryContainer.copy(alpha = alpha(0.07f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.07f))
                 )
             )
-            Style.BlushTrio -> Brush.horizontalGradient(
+            Style.BlushTrio -> Brush.verticalGradient(
                 colors = listOf(
-                    scheme.secondaryContainer.copy(alpha = alpha(0.35f)),
-                    scheme.primaryContainer.copy(alpha = alpha(0.30f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.28f)),
+                    scheme.secondaryContainer.copy(alpha = alpha(0.09f)),
+                    scheme.secondaryContainer.copy(alpha = alpha(0.09f))
+                )
+            )
+            Style.CoolDream -> Brush.verticalGradient(
+                colors = listOf(
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.09f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.09f))
+                )
+            )
+            Style.RainbowSoft -> Brush.verticalGradient(
+                colors = listOf(
+                    scheme.primaryContainer.copy(alpha = alpha(0.09f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.09f))
+                )
+            )
+            Style.SpringPastel -> Brush.verticalGradient(
+                colors = listOf(
+                    scheme.secondaryContainer.copy(alpha = alpha(0.09f)),
+                    scheme.secondaryContainer.copy(alpha = alpha(0.09f))
+                )
+            )
+            Style.SunnyLift -> Brush.verticalGradient(
+                colors = listOf(
+                    scheme.primaryContainer.copy(alpha = alpha(0.12f)),
                     scheme.primaryContainer.copy(alpha = alpha(0.12f))
-                )
-            )
-            Style.CoolDream -> Brush.horizontalGradient(
-                colors = listOf(
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.32f)),
-                    scheme.secondaryContainer.copy(alpha = alpha(0.28f)),
-                    scheme.surface.copy(alpha = alpha(0.10f))
-                )
-            )
-            Style.RainbowSoft -> Brush.horizontalGradient(
-                colors = listOf(
-                    scheme.primaryContainer.copy(alpha = alpha(0.30f)),
-                    scheme.secondaryContainer.copy(alpha = alpha(0.26f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.22f)),
-                    scheme.primary.copy(alpha = alpha(0.08f))
-                )
-            )
-            Style.SpringPastel -> Brush.horizontalGradient(
-                colors = listOf(
-                    scheme.secondaryContainer.copy(alpha = alpha(0.35f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.30f)),
-                    scheme.primaryContainer.copy(alpha = alpha(0.10f))
-                )
-            )
-            Style.SunnyLift -> Brush.horizontalGradient(
-                colors = listOf(
-                    scheme.primaryContainer.copy(alpha = alpha(0.30f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.18f)),
-                    scheme.surfaceContainerHigh
                 )
             )
             Style.AmoledBlack -> {
                 if (isDark) {
-                    Brush.horizontalGradient(
-                        colors = listOf(Color.Black, Color(0xFF050505), Color(0xFF080808))
+                    Brush.verticalGradient(
+                        colors = listOf(Color.Black, Color(0xFF050505))
                     )
                 } else {
-                    Brush.horizontalGradient(
+                    Brush.verticalGradient(
                         colors = listOf(scheme.surfaceContainerLow, scheme.surfaceContainer)
                     )
                 }
             }
 
-            // ── Premium theme-specific gradients — each with its own character ──
-            Style.FloraGlow -> Brush.linearGradient(
+            // ── Premium theme-specific tints — scheme primary gives each theme's character ──
+            Style.FloraGlow -> Brush.verticalGradient(
                 colors = listOf(
-                    scheme.primary.copy(alpha = alpha(0.40f)),
-                    scheme.primaryContainer.copy(alpha = alpha(0.25f)),
-                    scheme.tertiary.copy(alpha = alpha(0.30f)),
-                    scheme.secondary.copy(alpha = alpha(0.15f)),
-                    scheme.surface
-                ),
-                start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                end = androidx.compose.ui.geometry.Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                    scheme.primary.copy(alpha = alpha(0.07f)),
+                    scheme.primary.copy(alpha = alpha(0.07f))
+                )
             )
-            Style.AmethystAura -> Brush.linearGradient(
+            Style.AmethystAura -> Brush.verticalGradient(
                 colors = listOf(
-                    scheme.primary.copy(alpha = alpha(0.38f)),
-                    scheme.tertiary.copy(alpha = alpha(0.32f)),
-                    scheme.secondaryContainer.copy(alpha = alpha(0.20f)),
-                    scheme.primaryContainer.copy(alpha = alpha(0.12f)),
-                    scheme.surface
-                ),
-                start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                end = androidx.compose.ui.geometry.Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                    scheme.primary.copy(alpha = alpha(0.07f)),
+                    scheme.primary.copy(alpha = alpha(0.07f))
+                )
             )
-            Style.TerrainWarmth -> Brush.linearGradient(
+            Style.TerrainWarmth -> Brush.verticalGradient(
                 colors = listOf(
-                    scheme.primary.copy(alpha = alpha(0.36f)),
-                    scheme.tertiary.copy(alpha = alpha(0.28f)),
-                    scheme.secondary.copy(alpha = alpha(0.22f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.12f)),
-                    scheme.surface
-                ),
-                start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                end = androidx.compose.ui.geometry.Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                    scheme.primary.copy(alpha = alpha(0.07f)),
+                    scheme.primary.copy(alpha = alpha(0.07f))
+                )
             )
         }
     }
@@ -412,14 +388,14 @@ object CuteGradients {
 }
 
 /**
- * A beautifully gradient-backed card that wraps your content.
+ * A clean, tint-backed card that wraps your content.
  *
  * Features:
- * - Theme-aware gradient background from [CuteGradients.Style]
+ * - Theme-aware flat color tint background from [CuteGradients.Style]
  * - Standard plush elevation and rounded corners
  * - All content is laid out with consistent padding
  *
- * @param style the gradient style (defaults to ScreenBackground)
+ * @param style the tint style (defaults to ScreenBackground)
  * @param shape corner shape (defaults to CuteCardDefaults.Shape = 32dp)
  * @param elevation card elevation (defaults to plushTier2 = 4dp)
  * @param modifier additional modifier
@@ -497,7 +473,7 @@ fun Modifier.cuteShadowAdaptive(
 }
 
 /**
- * A centralized screen background modifier that applies the ScreenBackground gradient
+ * A centralized screen background modifier that applies the ScreenBackground flat tint
  * at the user's preferred opacity. Use this on the outermost Box/Column of every screen
  * instead of manually copying the boilerplate everywhere.
  *
