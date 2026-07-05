@@ -1,6 +1,8 @@
 package fieldmind.research.app.features.field.presentation.theme
 
 import android.os.Build
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -10,6 +12,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -703,9 +706,80 @@ fun FieldMindTheme(
 
     val geomTypography = getTypographyForFont("Geom")
 
+    // ── Animated color scheme transition ──
+    // Smoothly animate the 10 most visible color scheme properties
+    // so the theme change feels fluid rather than a hard snap.
+    val animSpec = tween<Color>(durationMillis = 400)
+    val animatedPrimary by animateColorAsState(targetValue = colorScheme.primary, animationSpec = animSpec, label = "primary")
+    val animatedOnPrimary by animateColorAsState(targetValue = colorScheme.onPrimary, animationSpec = animSpec, label = "onPrimary")
+    val animatedPrimaryContainer by animateColorAsState(targetValue = colorScheme.primaryContainer, animationSpec = animSpec, label = "primaryContainer")
+    val animatedOnPrimaryContainer by animateColorAsState(targetValue = colorScheme.onPrimaryContainer, animationSpec = animSpec, label = "onPrimaryContainer")
+    val animatedSecondary by animateColorAsState(targetValue = colorScheme.secondary, animationSpec = animSpec, label = "secondary")
+    val animatedOnSecondary by animateColorAsState(targetValue = colorScheme.onSecondary, animationSpec = animSpec, label = "onSecondary")
+    val animatedTertiary by animateColorAsState(targetValue = colorScheme.tertiary, animationSpec = animSpec, label = "tertiary")
+    val animatedOnTertiary by animateColorAsState(targetValue = colorScheme.onTertiary, animationSpec = animSpec, label = "onTertiary")
+    val animatedBackground by animateColorAsState(targetValue = colorScheme.background, animationSpec = animSpec, label = "background")
+    val animatedOnBackground by animateColorAsState(targetValue = colorScheme.onBackground, animationSpec = animSpec, label = "onBackground")
+    val animatedSurface by animateColorAsState(targetValue = colorScheme.surface, animationSpec = animSpec, label = "surface")
+    val animatedOnSurface by animateColorAsState(targetValue = colorScheme.onSurface, animationSpec = animSpec, label = "onSurface")
+    val animatedSurfaceVariant by animateColorAsState(targetValue = colorScheme.surfaceVariant, animationSpec = animSpec, label = "surfaceVariant")
+    val animatedOnSurfaceVariant by animateColorAsState(targetValue = colorScheme.onSurfaceVariant, animationSpec = animSpec, label = "onSurfaceVariant")
+    val animatedOutline by animateColorAsState(targetValue = colorScheme.outline, animationSpec = animSpec, label = "outline")
+    val animatedError by animateColorAsState(targetValue = colorScheme.error, animationSpec = animSpec, label = "error")
+
+    val animatedColorScheme = colorScheme.copy(
+        primary = animatedPrimary,
+        onPrimary = animatedOnPrimary,
+        primaryContainer = animatedPrimaryContainer,
+        onPrimaryContainer = animatedOnPrimaryContainer,
+        secondary = animatedSecondary,
+        onSecondary = animatedOnSecondary,
+        tertiary = animatedTertiary,
+        onTertiary = animatedOnTertiary,
+        background = animatedBackground,
+        onBackground = animatedOnBackground,
+        surface = animatedSurface,
+        onSurface = animatedOnSurface,
+        surfaceVariant = animatedSurfaceVariant,
+        onSurfaceVariant = animatedOnSurfaceVariant,
+        outline = animatedOutline,
+        error = animatedError
+    )
+
+    // Animate surface container colors too for complete card/dialog depth transitions
+    val animSpecTier = tween<Color>(durationMillis = 500)
+    val animatedSurfaceContainerHighest by animateColorAsState(
+        targetValue = colorScheme.surfaceContainerHighest,
+        animationSpec = animSpecTier, label = "surfaceContainerHighest"
+    )
+    val animatedSurfaceContainerHigh by animateColorAsState(
+        targetValue = colorScheme.surfaceContainerHigh,
+        animationSpec = animSpecTier, label = "surfaceContainerHigh"
+    )
+    val animatedSurfaceContainer by animateColorAsState(
+        targetValue = colorScheme.surfaceContainer,
+        animationSpec = animSpecTier, label = "surfaceContainer"
+    )
+    val animatedSurfaceContainerLow by animateColorAsState(
+        targetValue = colorScheme.surfaceContainerLow,
+        animationSpec = animSpecTier, label = "surfaceContainerLow"
+    )
+    val animatedSurfaceContainerLowest by animateColorAsState(
+        targetValue = colorScheme.surfaceContainerLowest,
+        animationSpec = animSpecTier, label = "surfaceContainerLowest"
+    )
+
+    val fullAnimatedColorScheme = animatedColorScheme.copy(
+        surfaceContainerLowest = animatedSurfaceContainerLowest,
+        surfaceContainerLow = animatedSurfaceContainerLow,
+        surfaceContainer = animatedSurfaceContainer,
+        surfaceContainerHigh = animatedSurfaceContainerHigh,
+        surfaceContainerHighest = animatedSurfaceContainerHighest
+    )
+
     CompositionLocalProvider(LocalFieldMindColors provides semantic) {
         MaterialTheme(
-            colorScheme = colorScheme,
+            colorScheme = fullAnimatedColorScheme,
             typography = geomTypography,
             shapes = MaterialTheme.shapes,
             content = content

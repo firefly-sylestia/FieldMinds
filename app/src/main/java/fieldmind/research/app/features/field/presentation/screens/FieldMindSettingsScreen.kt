@@ -218,7 +218,7 @@ private fun SettingsNavCard(title: String, subtitle: String, icon: MaterialSymbo
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
-    val gradient = CuteGradients.brushFor(gradientStyle)
+    val gradient = CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
     Card(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).pressScale(scaleDown = 0.97f),
         shape = RoundedCornerShape(32.dp),
@@ -303,19 +303,22 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Material You dynamic color", "Use system wallpaper colors that auto-adapt to light/dark. Off keeps the FieldMind brand palette.", dynamicColor, settings::setDynamicColorEnabled, FieldMindIcons.Palette)
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Color scheme", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    OptionPickerField(
-                        label = "Color scheme",
+                    Text("Choose a premium color palette. The matching gradient style auto-selects.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    ColorSchemeSwatchPicker(
                         selected = customColorScheme,
-                        options = listOf(
-                            "Default",
-                            "Midnight Flora",
-                            "Noir Amethyst",
-                            "Warm Terrain"
-                        ),
-                        onSelected = { sharedAppSettings.setCustomColorScheme(it) },
-                        icon = MaterialSymbolIcon("palette")
+                        onSelected = { scheme ->
+                            sharedAppSettings.setCustomColorScheme(scheme)
+                            // Auto-select matching gradient style
+                            val matchedGradient = when (scheme) {
+                                "Midnight Flora" -> "Flora Glow"
+                                "Noir Amethyst" -> "Amethyst Aura"
+                                "Warm Terrain" -> "Terrain Warmth"
+                                else -> "Screen Background"
+                            }
+                            settings.setCardGradientStyle(matchedGradient)
+                        }
                     )
                 }
             }
