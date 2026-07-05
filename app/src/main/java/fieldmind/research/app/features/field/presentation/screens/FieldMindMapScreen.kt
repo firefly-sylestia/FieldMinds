@@ -888,7 +888,7 @@ private fun RegionPickerOverlay(
                                     mapView?.controller?.animateTo(
                                         GeoPoint(loc.latitude, loc.longitude),
                                         15.0, // street-level zoom
-                                        true  // animated
+                                        1000L // duration ms
                                     )
                                 }
                             }
