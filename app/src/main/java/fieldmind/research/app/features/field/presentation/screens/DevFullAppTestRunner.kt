@@ -211,22 +211,27 @@ fun DevFullAppTestRunner(
                         if (!isRunning) {
                             isRunning = true
                             logExpanded = true
-                            progressText = "Starting tests..."
-                            scope.launch {
-                                val results = mutableListOf<TestResult>()
-                                val startTime = System.currentTimeMillis()
-                                runAllTests(viewModel, context, results) { msg ->
-                                    progressText = msg
-                                }
-                                val completedReport = TestRunReport(
-                                    results = results.toList(),
-                                    startedAt = startTime,
-                                    completedAt = System.currentTimeMillis()
-                                )
-                                report = completedReport
-                                isRunning = false
-                                progressText = "Done — ${completedReport.passedTests}/${completedReport.totalTests} passed"
-                            }
+                            progressText = "Starting tests..."        scope.launch {
+            try {
+                val results = mutableListOf<TestResult>()
+                val startTime = System.currentTimeMillis()
+                progressText = "Starting tests..."
+                runAllTests(viewModel, context, results) { msg ->
+                    progressText = msg
+                }
+                val completedReport = TestRunReport(
+                    results = results.toList(),
+                    startedAt = startTime,
+                    completedAt = System.currentTimeMillis()
+                )
+                report = completedReport
+                isRunning = false
+                progressText = "Done — ${completedReport.passedTests}/${completedReport.totalTests} passed"
+            } catch (e: Exception) {
+                progressText = "Crash: ${e::class.simpleName}: ${e.message?.take(100)}"
+                isRunning = false
+            }
+        }
                         }
                     },
                     enabled = !isRunning,
