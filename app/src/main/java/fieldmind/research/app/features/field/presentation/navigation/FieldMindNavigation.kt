@@ -774,17 +774,14 @@ private fun categorizeRoute(route: String): RouteCategory = when (route) {
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransition(
-    animConfig: AnimationConfig? = null
-): EnterTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransition(): EnterTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val damping = animConfig?.entranceDampingRatio ?: 0.95f
-    val stiffness = animConfig?.entranceStiffness ?: 80f
-    val slideSpec = spring<IntOffset>(dampingRatio = damping, stiffness = stiffness * 0.5f)
-    val fadeSpec = spring<Float>(dampingRatio = damping, stiffness = stiffness)
+    // Smooth sliding using tween — no bounce, feels like swiping between pages
+    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
+    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -813,17 +810,13 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransition(
-    animConfig: AnimationConfig? = null
-): ExitTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransition(): ExitTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val damping = animConfig?.entranceDampingRatio ?: 0.95f
-    val stiffness = animConfig?.entranceStiffness ?: 80f
-    val slideSpec = spring<IntOffset>(dampingRatio = damping, stiffness = stiffness * 0.5f)
-    val fadeSpec = spring<Float>(dampingRatio = damping, stiffness = stiffness)
+    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
+    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -854,17 +847,13 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTransition(
-    animConfig: AnimationConfig? = null
-): EnterTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTransition(): EnterTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val damping = animConfig?.entranceDampingRatio ?: 0.95f
-    val stiffness = animConfig?.entranceStiffness ?: 80f
-    val slideSpec = spring<IntOffset>(dampingRatio = damping, stiffness = stiffness * 0.5f)
-    val fadeSpec = spring<Float>(dampingRatio = damping, stiffness = stiffness)
+    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
+    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -886,17 +875,13 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransition(
-    animConfig: AnimationConfig? = null
-): ExitTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransition(): ExitTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val damping = animConfig?.entranceDampingRatio ?: 0.95f
-    val stiffness = animConfig?.entranceStiffness ?: 80f
-    val slideSpec = spring<IntOffset>(dampingRatio = damping, stiffness = stiffness * 0.5f)
-    val fadeSpec = spring<Float>(dampingRatio = damping, stiffness = stiffness)
+    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
+    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -990,10 +975,10 @@ private fun FieldMindNavHost(
             navController = navController,
             startDestination = "field_tab_container",
             modifier = Modifier,
-            enterTransition = { routeEnterTransition(animConfig) },
-            exitTransition = { routeExitTransition(animConfig) },
-            popEnterTransition = { routePopEnterTransition(animConfig) },
-            popExitTransition = { routePopExitTransition(animConfig) }
+            enterTransition = { routeEnterTransition() },
+            exitTransition = { routeExitTransition() },
+            popEnterTransition = { routePopEnterTransition() },
+            popExitTransition = { routePopExitTransition() }
         ) {
             // ── Single tab container: all 5 tabs rendered simultaneously ──
             // Swipe gestures reveal the real adjacent tab content behind the current one.
