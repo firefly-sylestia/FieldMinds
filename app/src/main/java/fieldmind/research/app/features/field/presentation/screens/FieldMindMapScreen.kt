@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.data.location.*
 import fieldmind.research.app.features.field.presentation.components.*
+import org.osmdroid.views.MapView
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Marker
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
@@ -626,6 +629,23 @@ private fun DownloadRegionDialog(
     var minZoom by remember { mutableStateOf("10") }
     var maxZoom by remember { mutableStateOf("16") }
     var useLocationText by remember { mutableStateOf("Use my location") }
+    var showRegionPicker by remember { mutableStateOf(false) }
+
+    // ── Region picker (full-screen map selection) ──
+    if (showRegionPicker) {
+        RegionPickerOverlay(
+            onRegionSelected = { north, south, east, west ->
+                latNorth = "%.4f".format(north)
+                latSouth = "%.4f".format(south)
+                lonEast = "%.4f".format(east)
+                lonWest = "%.4f".format(west)
+                if (name.isBlank()) name = "Selected area"
+                showRegionPicker = false
+            },
+            onCancel = { showRegionPicker = false }
+        )
+        return
+    }
 
     SwipeableAlertDialog(
         onDismissRequest = onDismiss,
@@ -634,34 +654,43 @@ private fun DownloadRegionDialog(
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("Download tiles for offline use. Enter the bounding box coordinates, or use your current GPS location.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
-                // Use my location button
-                OutlinedButton(
-                    onClick = {
-                        useLocationText = "Getting location…"
-                        val provider = FieldLocationProvider(context)
-                        provider.requestCurrentLocation(timeoutMs = 15_000L) { loc ->
-                            if (loc != null) {
-                                val lat = String.format("%.4f", loc.latitude)
-                                val lon = String.format("%.4f", loc.longitude)
-                                // Create a ~5km bounding box around the current location
-                                val offset = 0.045 // ~5km in decimal degrees
-                                latNorth = String.format("%.4f", loc.latitude + offset)
-                                latSouth = String.format("%.4f", loc.latitude - offset)
-                                lonEast = String.format("%.4f", loc.longitude + offset)
-                                lonWest = String.format("%.4f", loc.longitude - offset)
-                                name = loc.placeName?.takeIf { it.isNotBlank() } ?: "My area"
-                                useLocationText = "✓ Location set"
-                            } else {
-                                useLocationText = "GPS unavailable — enable location"
+                // ── Action buttons row ──
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = { showRegionPicker = true },
+                        shape = RoundedCornerShape(22.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(FieldMindIcons.MapFull, null, size = 18.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Pick from map")
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            useLocationText = "Getting location…"
+                            val provider = FieldLocationProvider(context)
+                            provider.requestCurrentLocation(timeoutMs = 15_000L) { loc ->
+                                if (loc != null) {
+                                    val offset = 0.045 // ~5km in decimal degrees
+                                    latNorth = "%.4f".format(loc.latitude + offset)
+                                    latSouth = "%.4f".format(loc.latitude - offset)
+                                    lonEast = "%.4f".format(loc.longitude + offset)
+                                    lonWest = "%.4f".format(loc.longitude - offset)
+                                    name = loc.placeName?.takeIf { it.isNotBlank() } ?: "My area"
+                                    useLocationText = "✓ Location set"
+                                } else {
+                                    useLocationText = "GPS unavailable — enable location"
+                                }
                             }
-                        }
-                    },
-                    shape = RoundedCornerShape(22.dp),
-                    enabled = useLocationText != "Getting location…"
-                ) {
-                    Icon(FieldMindIcons.Location, null, size = 18.dp)
-                    Spacer(Modifier.size(6.dp))
-                    Text(useLocationText)
+                        },
+                        shape = RoundedCornerShape(22.dp),
+                        enabled = useLocationText != "Getting location…",
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(FieldMindIcons.Location, null, size = 18.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text(useLocationText)
+                    }
                 }
 
                 FieldTextField(name, { name = it }, "Region name (e.g. Study Area)")
@@ -701,6 +730,238 @@ private fun DownloadRegionDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
     )
+}
+
+/**
+ * Full-screen map overlay for selecting a rectangular bounding box by tapping two corners.
+ * First tap marks the NW corner, second tap marks the SE corner and draws the rectangle.
+ * Tapping again resets and starts over.
+ */
+@Composable
+private fun RegionPickerOverlay(
+    onRegionSelected: (north: Double, south: Double, east: Double, west: Double) -> Unit,
+    onCancel: () -> Unit
+) {
+    val context = LocalContext.current
+    var mapView by remember { mutableStateOf<MapView?>(null) }
+
+    // Two corners of the bounding box
+    var corner1 by remember { mutableStateOf<GeoPoint?>(null) }
+    var corner2 by remember { mutableStateOf<GeoPoint?>(null) }
+
+    // Derived bounding box (sorted)
+    val north = remember(corner1, corner2) {
+        if (corner1 != null && corner2 != null) maxOf(corner1!!.latitude, corner2!!.latitude) else null
+    }
+    val south = remember(corner1, corner2) {
+        if (corner1 != null && corner2 != null) minOf(corner1!!.latitude, corner2!!.latitude) else null
+    }
+    val east = remember(corner1, corner2) {
+        if (corner1 != null && corner2 != null) maxOf(corner1!!.longitude, corner2!!.longitude) else null
+    }
+    val west = remember(corner1, corner2) {
+        if (corner1 != null && corner2 != null) minOf(corner1!!.longitude, corner2!!.longitude) else null
+    }
+
+    // Rectangle polygon overlay
+    val rectPoints = remember(north, south, east, west) {
+        if (north != null && south != null && east != null && west != null) {
+            listOf(
+                north to west,  // NW
+                north to east,  // NE
+                south to east,  // SE
+                south to west   // SW
+            )
+        } else null
+    }
+
+    val statusText = when {
+        corner1 == null -> "Tap the NW corner of the area"
+        corner2 == null -> "Tap the SE corner"
+        else -> "Tap again to reset, or confirm below"
+    }
+
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+        // ── osmdroid map ──
+        AndroidView(
+            factory = { ctx ->
+                org.osmdroid.config.Configuration.getInstance().apply {
+                    userAgentValue = context.packageName
+                    osmdroidBasePath = context.cacheDir.resolve("osmdroid")
+                    osmdroidTileCache = context.cacheDir.resolve("osmdroid/tiles")
+                }
+                MapView(ctx).also { mv ->
+                    mapView = mv
+                    mv.setTileSource(org.osmdroid.tileprovider.tilesource.TileSourceFactory.MAPNIK)
+                    mv.setMultiTouchControls(true)
+                    mv.setTilesScaledToDpi(true)
+                    mv.controller.setZoom(13.0)
+                    mv.controller.setCenter(GeoPoint(20.0, 78.0)) // Default center India
+
+                    // Tap handler for region selection
+                    val eventsOverlay = org.osmdroid.views.overlay.MapEventsOverlay(object : org.osmdroid.events.MapEventsReceiver {
+                        override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
+                            if (corner1 == null || (corner1 != null && corner2 != null)) {
+                                // First tap or reset: set corner1, clear corner2
+                                corner1 = p
+                                corner2 = null
+                            } else {
+                                // Second tap: set corner2
+                                corner2 = p
+                            }
+                            // Redraw rectangle
+                            drawRegionRect(mv, corner1, corner2)
+                            return true
+                        }
+                        override fun longPressHelper(p: GeoPoint): Boolean = false
+                    })
+                    mv.overlays.add(0, eventsOverlay)
+                    mv.onResume()
+                }
+            },
+            modifier = Modifier.fillMaxSize(),
+            update = { mv ->
+                drawRegionRect(mv, corner1, corner2)
+            }
+        )
+
+        // ── Top bar with status ──
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .statusBarsPadding(),
+            color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.92f),
+            shadowElevation = 4.dp
+        ) {
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                FilledTonalIconButton(onClick = onCancel, modifier = Modifier.size(40.dp)) {
+                    Icon(FieldMindIcons.Close, null, size = 20.dp)
+                }
+                Column(Modifier.weight(1f)) {
+                    Text("Select region", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text(statusText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                if (rectPoints != null) {
+                    FilledTonalIconButton(
+                        onClick = { corner1 = null; corner2 = null },
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(FieldMindIcons.Refresh, null, size = 20.dp)
+                    }
+                }
+            }
+        }
+
+        // ── Bottom confirm bar ──
+        if (rectPoints != null) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .navigationBarsPadding(),
+                color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.92f),
+                shadowElevation = 8.dp
+            ) {
+                Row(
+                    Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text("%.4f N, %.4f S".format(north!!, south!!), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("%.4f E, %.4f W".format(east!!, west!!), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    OutlinedButton(onClick = { corner1 = null; corner2 = null }, shape = RoundedCornerShape(22.dp)) {
+                        Text("Reset")
+                    }
+                    Button(
+                        onClick = { onRegionSelected(north!!, south!!, east!!, west!!) },
+                        shape = RoundedCornerShape(22.dp)
+                    ) {
+                        Icon(FieldMindIcons.Check, null, size = 18.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Use this area")
+                    }
+                }
+            }
+        }
+
+        // ── Attribution ──
+        Text(
+            "© OpenStreetMap contributors",
+            modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+        )
+    }
+
+    // Lifecycle
+    DisposableEffect(Unit) {
+        onDispose {
+            mapView?.onPause()
+            mapView?.onDetach()
+        }
+    }
+}
+
+/**
+ * Draws (or clears) the rectangular bounding box overlay on the map.
+ * Removes all overlays except the events overlay (index 0) and adds the rectangle.
+ */
+private fun drawRegionRect(
+    mapView: MapView?,
+    corner1: GeoPoint?,
+    corner2: GeoPoint?
+) {
+    if (mapView == null) return
+    // Preserve the events overlay
+    val eventsOverlay = mapView.overlays.getOrNull(0)
+    mapView.overlays.clear()
+    if (eventsOverlay != null) mapView.overlays.add(eventsOverlay)
+
+    if (corner1 != null && corner2 != null) {
+        val n = maxOf(corner1.latitude, corner2.latitude)
+        val s = minOf(corner1.latitude, corner2.latitude)
+        val e = maxOf(corner1.longitude, corner2.longitude)
+        val w = minOf(corner1.longitude, corner2.longitude)
+
+        val rect = org.osmdroid.views.overlay.Polygon().apply {
+            setPoints(listOf(
+                GeoPoint(n, w), // NW
+                GeoPoint(n, e), // NE
+                GeoPoint(s, e), // SE
+                GeoPoint(s, w)  // SW
+            ))
+            fillPaint.color = Color.argb(30, 33, 150, 243)
+            outlinePaint.color = Color.parseColor("#2196F3")
+            outlinePaint.strokeWidth = 3f
+        }
+        mapView.overlays.add(rect)
+
+        // Show corner markers
+        listOf(corner1, corner2).forEach { p ->
+            val marker = Marker(mapView).apply {
+                position = p
+                setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+                setInfoWindow(null)
+                title = ""
+            }
+            mapView.overlays.add(marker)
+        }
+
+        // Zoom to fit the bounding box
+        mapView.zoomToBoundingBox(
+            org.osmdroid.util.BoundingBox(n, e, s, w),
+            true,
+            48
+        )
+    }
+
+    mapView.invalidate()
 }
 
 @Composable
