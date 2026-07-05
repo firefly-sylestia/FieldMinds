@@ -592,7 +592,7 @@ private fun ProjectCard(
                         },
                         leadingIcon = { Icon(MaterialSymbolIcon("file_download"), null, size = 18.dp) }
                     )
-                    HorizontalHorizontalDivider()
+                    HorizontalDivider()
                     DropdownMenuItem(
                         text = {
                             Text(

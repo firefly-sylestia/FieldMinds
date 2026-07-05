@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
-import dev.chrisbanes.haze.hazeChild
+import dev.chrisbanes.haze.hazeEffect
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 
 /**
@@ -75,7 +75,7 @@ fun GlassCard(
         modifier
             .fillMaxWidth()
             .clip(shape)
-            hazeEffect(
+            .hazeEffect(
                 state = hazeState,
                 style = HazeStyle(
                     blurRadius = blurRadius,

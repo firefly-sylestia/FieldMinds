@@ -484,9 +484,9 @@ fun FieldLogScreen(
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
-                                        HorizontalHorizontalDivider(Modifier.weight(1f))
+                                        HorizontalDivider(Modifier.weight(1f))
                                         Text("Other observations (${item.obsCount})", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                        HorizontalHorizontalDivider(Modifier.weight(1f))
+                                        HorizontalDivider(Modifier.weight(1f))
                                     }
                                 }
                                 "obs" -> {

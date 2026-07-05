@@ -323,7 +323,7 @@ fun PrivacyStatusCard(
             // Status rows
             rows.forEachIndexed { index, row ->
                 if (index > 0) {
-                    HorizontalHorizontalDivider(
+                    HorizontalDivider(
                         modifier = Modifier.padding(vertical = 6.dp),
                         color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
                     )

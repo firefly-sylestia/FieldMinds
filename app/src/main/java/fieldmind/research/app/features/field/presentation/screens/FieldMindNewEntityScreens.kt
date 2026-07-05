@@ -760,7 +760,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 }
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 
             // ── Due Date & Time ──
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -819,7 +819,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 }
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 
             // ── Checklist ──
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1551,5 +1551,5 @@ private fun DividerSection(title: String, icon: MaterialSymbolIcon? = null, acce
         if (icon != null) { Icon(icon, null, tint = accent, size = 18.dp) }
         Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
     }
-    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 }

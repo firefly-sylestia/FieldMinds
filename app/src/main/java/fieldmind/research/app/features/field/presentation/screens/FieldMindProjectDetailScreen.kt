@@ -548,7 +548,7 @@ fun ProjectDetailScreen(
                         Spacer(Modifier.size(8.dp))
                         Text("Project Settings", fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
                     }
-                    HorizontalHorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                     TextButton(
                         onClick = { showRenameDialog = false },
                         modifier = Modifier.fillMaxWidth(),
@@ -749,7 +749,7 @@ private fun ProjectCreateSheetV2(
                     CreateOptionRow(MaterialSymbolIcon("mic"), "Voice Note", "Record in the field", colors.project) { onSelect("Voice Note") }
                     CreateOptionRow(MaterialSymbolIcon("location_on"), "Location Record", "Save a place", colors.info) { onSelect("Location") }
 
-                    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 
                     // ── ANALYZE ──
                     CreateSectionTitle("ANALYZE", colors.question)
@@ -758,7 +758,7 @@ private fun ProjectCreateSheetV2(
                     CreateOptionRow(FieldMindIcons.Hypothesis, "Hypothesis", "Proposed explanation", colors.hypothesis) { onSelect("Hypothesis") }
                     CreateOptionRow(MaterialSymbolIcon("science"), "Experiment", "Test an idea", colors.flashcard) { onSelect("Experiment") }
 
-                    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 
                     // ── EVIDENCE ──
                     CreateSectionTitle("EVIDENCE", colors.source)
@@ -766,7 +766,7 @@ private fun ProjectCreateSheetV2(
                     CreateOptionRow(MaterialSymbolIcon("description"), "Document", "PDF or file", colors.warning) { onSelect("Document") }
                     CreateOptionRow(MaterialSymbolIcon("format_quote"), "Citation", "Reference material", colors.info) { onSelect("Citation") }
 
-                    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 
                     // ── PLAN ──
                     CreateSectionTitle("PLAN", colors.task)
@@ -786,7 +786,7 @@ private fun ProjectCreateSheetV2(
 private fun CreateSectionTitle(title: String, accent: Color) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(title, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = accent)
-        HorizontalHorizontalDivider(modifier = Modifier.weight(1f), color = accent.copy(alpha = 0.15f))
+        HorizontalDivider(modifier = Modifier.weight(1f), color = accent.copy(alpha = 0.15f))
     }
 }
 

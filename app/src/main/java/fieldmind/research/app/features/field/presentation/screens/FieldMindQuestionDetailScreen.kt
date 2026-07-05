@@ -186,7 +186,7 @@ fun QuestionDetailScreen(
                                 },
                                 leadingIcon = { Icon(MaterialSymbolIcon("check_circle"), null, size = 18.dp) }
                             )
-                            HorizontalHorizontalDivider()
+                            HorizontalDivider()
                             DropdownMenuItem(
                                 text = { Text("Archive", color = MaterialTheme.colorScheme.error) },
                                 onClick = {

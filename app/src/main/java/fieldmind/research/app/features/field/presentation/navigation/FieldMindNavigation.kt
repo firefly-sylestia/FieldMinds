@@ -80,8 +80,8 @@ import fieldmind.research.app.features.field.presentation.utils.AppLifecycleMana
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
-import dev.chrisbanes.haze.haze
-import dev.chrisbanes.haze.hazeChild
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.hazeEffect
 
 private fun formatElapsed(startedAt: Long): String {
     val ms = System.currentTimeMillis() - startedAt
@@ -392,7 +392,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                             modifier = Modifier
                                 .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
                                 .width(IntrinsicSize.Min)
-                                hazeEffect(
+                                .hazeEffect(
                                     state = hazeState,
                                     style = HazeStyle(
                                         blurRadius = 32.dp,
@@ -437,7 +437,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                     onNavigateToTabRoute = null,
                     activeTabIndex = activeTabIndex,
                     onActiveTabChange = { index -> activeTabIndex = index },
-                    modifier = Modifier.weight(1f)hazeSource(state = hazeState)
+                    modifier = Modifier.weight(1f).hazeSource(state = hazeState)
                 )
             }
         } else {
@@ -464,7 +464,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                     onNavigateToTabRoute = null,
                     activeTabIndex = activeTabIndex,
                     onActiveTabChange = { index -> activeTabIndex = index },
-                    modifier = Modifier.fillMaxSize()hazeSource(state = hazeState)
+                    modifier = Modifier.fillMaxSize().hazeSource(state = hazeState)
                 )
 
                 // Floating pill — liquid glass with Haze blur + GPU refraction
@@ -489,7 +489,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                                 .fillMaxWidth()
                                 .height(68.dp)
                                 .clip(RoundedCornerShape(50.dp))
-                                hazeEffect(
+                                .hazeEffect(
                                     state = hazeState,
                                     style = HazeStyle(
                                         blurRadius = 32.dp,

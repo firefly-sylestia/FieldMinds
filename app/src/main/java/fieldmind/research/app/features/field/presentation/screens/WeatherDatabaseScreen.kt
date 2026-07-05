@@ -880,7 +880,7 @@ private fun ForecastDashboard(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            HorizontalHorizontalDivider(color = textOnScene.copy(alpha = 0.15f))
+                            HorizontalDivider(color = textOnScene.copy(alpha = 0.15f))
                             Spacer(Modifier.height(2.dp))
 
                             day.precipitationSum?.let { precip ->

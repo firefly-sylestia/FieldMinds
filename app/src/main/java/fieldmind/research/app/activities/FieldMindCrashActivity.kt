@@ -3,7 +3,7 @@ package fieldmind.research.app.activities
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 
 import android.content.Context
 import android.content.Intent

@@ -346,7 +346,7 @@ fun FieldDataTable(
                                         Text(group, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold)
                                         Text(result, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
-                                    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                                 }
                             }
                         }
@@ -499,7 +499,7 @@ private fun TableDataRow(
             }
         }
     }
-    HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 }
 
 // ── Helper: Export to CSV ──

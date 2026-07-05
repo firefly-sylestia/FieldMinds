@@ -798,7 +798,7 @@ fun FieldMindCameraV2(
                         )
 
                         // ── Action buttons ──
-                        HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                         Row(
                             Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -1419,7 +1419,7 @@ private fun SpeciesFieldPanel(
                 )
 
                 // ── Action buttons ──
-                HorizontalHorizontalDivider(
+                HorizontalDivider(
                     color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
                 )
                 Row(

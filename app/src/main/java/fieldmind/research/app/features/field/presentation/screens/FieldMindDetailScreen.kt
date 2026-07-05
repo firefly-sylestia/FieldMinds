@@ -297,7 +297,7 @@ fun ObservationDetailContent(
                 )
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
             // ── 4. Species Information ──
             ObservationSpeciesInfoSection(o, viewModel)
@@ -381,7 +381,7 @@ fun ObservationDetailContent(
                         Icon(if (showProvenance) FieldMindIcons.Up else FieldMindIcons.Down, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
                     }
                     if (showProvenance) {
-                        HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             ProvenanceRow("Date & time", "${o.date} ${o.time}")
                             o.startedAt?.let { ProvenanceRow("Session start", formatTimestamp(it)) }
@@ -833,7 +833,7 @@ private fun ObservationStructuredDetailsSection(
 
             // Observation checklist chips
             if (hasChecklist) {
-                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                 Text("Checklist", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     details.observationChecklist.split(",").filter { it.isNotBlank() }.forEach { item ->
@@ -844,7 +844,7 @@ private fun ObservationStructuredDetailsSection(
 
             // Measurements
             if (hasMeasurements) {
-                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                 Text("Measurements", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 details.measurements.split(";").filter { it.isNotBlank() }.forEach { entry ->
                     val parts = entry.split("=", limit = 2)
@@ -1056,7 +1056,7 @@ private fun ObservationWeatherLocationSection(
             
             // Location details
             if (hasLocation) {
-                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (o.manualLocation.isNotBlank()) {
                         WeatherDetailRow("Location", o.manualLocation)
@@ -1450,7 +1450,7 @@ private fun NoteDetailContent(
                 }
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
             // Body
             if (n.body.isNotBlank()) {
@@ -1468,7 +1468,7 @@ private fun NoteDetailContent(
 
             // ── Open Canvas button ──
             if (onOpenCanvas != null) {
-                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                 Button(
                     onClick = { onOpenCanvas(n.id) },
                     modifier = Modifier.fillMaxWidth(),
@@ -1525,7 +1525,7 @@ private fun QuestionDetailContent(
                 }
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
             // Details
             DetailRow("Source type", qn.sourceType)
@@ -1591,7 +1591,7 @@ private fun HypothesisDetailContent(
                 }
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
             // Reasoning
             if (h.reasoning.isNotBlank()) {
@@ -1698,7 +1698,7 @@ private fun ProjectDetailContent(
                 }
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
             // Tab content (existing tabs preserved, new tabs added)
             when (tab) {
@@ -2427,7 +2427,7 @@ private fun DataRecordDetailContent(
                 }
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
             // Value display (prominent)
             Row(
@@ -2497,7 +2497,7 @@ private fun ReportDetailContent(
                 }
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
             // Research question
             if (r.question.isNotBlank()) {
@@ -2554,7 +2554,7 @@ private fun FlashcardDetailContent(
                 }
             }
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
             // Front (question)
             Box(
@@ -2877,7 +2877,7 @@ private fun SourceDetailContent(
             // ── Source Preview ──
             SourcePreviewPanel(s, onOpenReader)
 
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
             // ── Identity section ──
             SectionHeader("Identity", "Bibliographic details")
@@ -2889,7 +2889,7 @@ private fun SourceDetailContent(
 
             // ── Access section ──
             if (s.link.isNotBlank() || s.accessDate.isNotBlank()) {
-                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                 SectionHeader("Access", "Link and retrieval info")
                 if (s.link.isNotBlank()) DetailRow("Link", s.link)
                 if (s.accessDate.isNotBlank()) DetailRow("Access date", s.accessDate)
@@ -2897,7 +2897,7 @@ private fun SourceDetailContent(
 
             // ── Status section ──
             val projectTitle = projects.firstOrNull { it.id == s.relatedProjectId }?.title ?: "None"
-            HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
             SectionHeader("Status", "Progress and priority")
             DetailRow("Importance", s.importance)
             DetailRow("Reading status", s.readingStatus)
@@ -2905,7 +2905,7 @@ private fun SourceDetailContent(
 
             // ── Reading notes section ──
             if (s.personalSummary.isNotBlank() || s.keyFindings.isNotBlank() || s.whatThisSourceTaughtMe.isNotBlank() || s.paperNotes.isNotBlank() || s.questionsGenerated.isNotBlank()) {
-                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                 SectionHeader("Reading notes", "Key takeaways and reflections")
                 if (s.personalSummary.isNotBlank()) {
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

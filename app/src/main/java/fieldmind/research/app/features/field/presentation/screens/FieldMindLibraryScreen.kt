@@ -695,7 +695,7 @@ private fun QuickImportDialog(viewModel: FieldMindViewModel, onDismiss: () -> Un
             }
         }
 
-        HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
 
         FieldTextField(title, { title = it }, "Title (optional)", supportingText = "Auto-filled from URL or file name if left blank")
         ChoiceChips(listOf("Article", "Video", "Book", "PDF", "Image", "Website", "Paper"), type) { type = it }
@@ -1464,7 +1464,7 @@ private fun LibraryFlashcard(
             }
             Text(card.front, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             if (revealed) {
-                HorizontalHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
                 Text(card.back, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
                 if (onSelect == null) {
                     TextButton(onClick = onClick, contentPadding = PaddingValues(horizontal = 0.dp)) {
