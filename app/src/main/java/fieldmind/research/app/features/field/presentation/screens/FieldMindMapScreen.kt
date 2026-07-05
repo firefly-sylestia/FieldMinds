@@ -17,6 +17,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.data.database.entity.*
@@ -189,7 +194,8 @@ fun MapFieldScreen(
             MapTab.OfflineTiles -> OfflineTilesTab(
                 modifier = Modifier.padding(padding),
                 tileManager = tileManager,
-                cachedRegions = cachedRegions
+                cachedRegions = cachedRegions,
+                points = points
             )
             MapTab.Drawings -> DrawingsTab(
                 modifier = Modifier.padding(padding),
@@ -548,7 +554,8 @@ private fun TrackRecordingCard(
 private fun OfflineTilesTab(
     modifier: Modifier,
     tileManager: OsmTileManager,
-    cachedRegions: List<OsmTileRegion>
+    cachedRegions: List<OsmTileRegion>,
+    points: List<Pair<Double, Double>> = emptyList()
 ) {
     val scope = rememberCoroutineScope()
     val isDownloading by tileManager.isDownloading.collectAsState()
@@ -609,7 +616,8 @@ private fun OfflineTilesTab(
     if (showDownloadDialog) {
         DownloadRegionDialog(
             onDismiss = { showDownloadDialog = false },
-            tileManager = tileManager
+            tileManager = tileManager,
+            points = points
         )
     }
 }
@@ -617,7 +625,8 @@ private fun OfflineTilesTab(
 @Composable
 private fun DownloadRegionDialog(
     onDismiss: () -> Unit,
-    tileManager: OsmTileManager
+    tileManager: OsmTileManager,
+    points: List<Pair<Double, Double>> = emptyList()
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -634,6 +643,7 @@ private fun DownloadRegionDialog(
     // ── Region picker (full-screen map selection) ──
     if (showRegionPicker) {
         RegionPickerOverlay(
+            points = points,
             onRegionSelected = { north, south, east, west ->
                 latNorth = "%.4f".format(north)
                 latSouth = "%.4f".format(south)
@@ -739,11 +749,17 @@ private fun DownloadRegionDialog(
  */
 @Composable
 private fun RegionPickerOverlay(
+    points: List<Pair<Double, Double>> = emptyList(),
     onRegionSelected: (north: Double, south: Double, east: Double, west: Double) -> Unit,
     onCancel: () -> Unit
 ) {
     val context = LocalContext.current
     var mapView by remember { mutableStateOf<MapView?>(null) }
+    val locationProvider = remember { FieldLocationProvider(context) }
+    var zoomingToLocation by remember { mutableStateOf(false) }
+
+    // Store observation markers so drawRegionRect can preserve them across taps
+    val obsMarkers = remember { mutableListOf<Marker>() }
 
     // Two corners of the bounding box
     var corner1 by remember { mutableStateOf<GeoPoint?>(null) }
@@ -798,6 +814,20 @@ private fun RegionPickerOverlay(
                     mv.controller.setZoom(13.0)
                     mv.controller.setCenter(GeoPoint(20.0, 78.0)) // Default center India
 
+                    // Render existing observation points as markers (stored for drawRegionRect preservation)
+                    obsMarkers.clear()
+                    val obsIcon = observationMarkerBitmap(context)
+                    points.forEach { (lat, lon) ->
+                        val marker = Marker(mv).apply {
+                            position = GeoPoint(lat, lon)
+                            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+                            setInfoWindow(null)
+                            icon = obsIcon
+                        }
+                        obsMarkers.add(marker)
+                        mv.overlays.add(marker)
+                    }
+
                     // Tap handler for region selection
                     val eventsOverlay = org.osmdroid.views.overlay.MapEventsOverlay(object : org.osmdroid.events.MapEventsReceiver {
                         override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
@@ -809,8 +839,8 @@ private fun RegionPickerOverlay(
                                 // Second tap: set corner2
                                 corner2 = p
                             }
-                            // Redraw rectangle
-                            drawRegionRect(mv, corner1, corner2)
+                            // Redraw rectangle (preserving observation markers)
+                            drawRegionRect(mv, corner1, corner2, obsMarkers)
                             return true
                         }
                         override fun longPressHelper(p: GeoPoint): Boolean = false
@@ -821,7 +851,7 @@ private fun RegionPickerOverlay(
             },
             modifier = Modifier.fillMaxSize(),
             update = { mv ->
-                drawRegionRect(mv, corner1, corner2)
+                drawRegionRect(mv, corner1, corner2, obsMarkers)
             }
         )
 
@@ -845,6 +875,32 @@ private fun RegionPickerOverlay(
                 Column(Modifier.weight(1f)) {
                     Text("Select region", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     Text(statusText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                // Zoom to my location button
+                FilledTonalIconButton(
+                    onClick = {
+                        if (!zoomingToLocation && locationProvider.hasAnyLocationPermission()) {
+                            zoomingToLocation = true
+                            locationProvider.requestCurrentLocation(timeoutMs = 8_000L) { loc ->
+                                zoomingToLocation = false
+                                if (loc != null) {
+                                    mapView?.controller?.animateTo(
+                                        GeoPoint(loc.latitude, loc.longitude),
+                                        15.0, // zoom level
+                                        true  // animated
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    enabled = !zoomingToLocation,
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Icon(
+                        if (zoomingToLocation) FieldMindIcons.Sync else FieldMindIcons.Location,
+                        null,
+                        size = 20.dp
+                    )
                 }
                 if (rectPoints != null) {
                     FilledTonalIconButton(
@@ -909,19 +965,52 @@ private fun RegionPickerOverlay(
 }
 
 /**
+ * Creates a small circular bitmap drawable for rendering observation points
+ * as subtle map markers. Uses a semi-transparent teal glow with a solid
+ * center dot for clear but unobtrusive visibility.
+ */
+private fun observationMarkerBitmap(context: Context): BitmapDrawable {
+    val size = 24
+    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    val cx = (size / 2).toFloat()
+    val cy = (size / 2).toFloat()
+
+    // Outer glow ring (faint)
+    val glowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.argb(50, 0, 150, 136) // Teal with ~20% opacity
+        style = Paint.Style.FILL
+    }
+    canvas.drawCircle(cx, cy, 10f, glowPaint)
+
+    // Solid center dot
+    val dotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.argb(220, 0, 150, 136) // Teal with ~86% opacity
+        style = Paint.Style.FILL
+    }
+    canvas.drawCircle(cx, cy, 4f, dotPaint)
+
+    return BitmapDrawable(context.resources, bitmap)
+}
+
+/**
  * Draws (or clears) the rectangular bounding box overlay on the map.
- * Removes all overlays except the events overlay (index 0) and adds the rectangle.
+ * Removes all overlays except the events overlay (preserved at index 0)
+ * and re-adds any observation markers from [obsMarkers] so they persist
+ * across tap interactions.
  */
 private fun drawRegionRect(
     mapView: MapView?,
     corner1: GeoPoint?,
-    corner2: GeoPoint?
+    corner2: GeoPoint?,
+    obsMarkers: List<Marker> = emptyList()
 ) {
     if (mapView == null) return
-    // Preserve the events overlay
+    // Preserve the events overlay and re-add observation markers
     val eventsOverlay = mapView.overlays.getOrNull(0)
     mapView.overlays.clear()
     if (eventsOverlay != null) mapView.overlays.add(eventsOverlay)
+    obsMarkers.forEach { m -> mapView.overlays.add(m) }
 
     if (corner1 != null && corner2 != null) {
         val n = maxOf(corner1.latitude, corner2.latitude)
