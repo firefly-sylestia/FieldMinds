@@ -943,9 +943,9 @@ private suspend fun runAllTests(
 
     runTest(results, "Error Handling", "Card gradient style sets") {
         val original = settings.cardGradientStyle.value
-        settings.setCardGradientStyle("Sunset")
+        settings.setCardGradientStyle("Blush Trio")
         val style = settings.cardGradientStyle.first()
-        assert(style.isNotEmpty()) { "Gradient style not empty" }
+        assert(style == "Blush Trio") { "Expected Blush Trio, got $style" }
         settings.setCardGradientStyle(original)
     }
 
