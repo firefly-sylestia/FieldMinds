@@ -21,7 +21,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -383,13 +382,13 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                         shape = RoundedCornerShape(size = 38.dp),
                         color = Color.Transparent,
                         tonalElevation = 0.dp,
-                        shadowElevation = 12.dp,
+                        shadowElevation = 8.dp,
                         border = androidx.compose.foundation.BorderStroke(
                             width = 0.6.dp,
-                            color = if (isSystemInDarkTheme())
+                            color = if (FieldMindTheme.colors.isDark)
                                 MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.15f)
                             else
-                                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f)
+                                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.20f)
                         ),
                         modifier = Modifier
                             .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
@@ -401,10 +400,10 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                                     noiseFactor = 0.06f,
                                     tints = listOf(
                                         HazeTint(
-                                            color = if (isSystemInDarkTheme())
+                                            color = if (FieldMindTheme.colors.isDark)
                                                 MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.88f)
                                             else
-                                                Color(0xFFFFF5E6).copy(alpha = 0.78f)
+                                                MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f)
                                         )
                                     )
                                 )
@@ -486,10 +485,10 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                             shape = RoundedCornerShape(50.dp),
                             color = Color.Transparent,
                             tonalElevation = 0.dp,
-                            shadowElevation = 16.dp,
+                            shadowElevation = 8.dp,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(72.dp)
+                                .height(68.dp)
                                 .clip(RoundedCornerShape(50.dp))
                                 .hazeChild(
                                     state = hazeState,
@@ -498,10 +497,10 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                                         noiseFactor = 0.06f,
                                         tints = listOf(
                                             HazeTint(
-                                                color = if (isSystemInDarkTheme())
+                                                color = if (FieldMindTheme.colors.isDark)
                                                     MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.88f)
                                                 else
-                                                    Color(0xFFFFF5E6).copy(alpha = 0.78f)
+                                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f)
                                             )
                                         )
                                     )

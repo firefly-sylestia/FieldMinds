@@ -1,7 +1,6 @@
 package fieldmind.research.app.features.field.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -23,6 +22,7 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeChild
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 
 /**
  * CompositionLocal to provide a [HazeState] from a parent composable down to
@@ -65,13 +65,11 @@ fun GlassCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     val hazeState = LocalHazeState.current
-    val isDark = isSystemInDarkTheme()
+    val isDark = FieldMindTheme.colors.isDark
 
-    val glassColor = if (isDark) {
-        MaterialTheme.colorScheme.surfaceContainer.copy(alpha = tintAlpha)
-    } else {
-        Color(0xFFFFF5E6).copy(alpha = tintAlpha.coerceIn(0f, 0.92f))
-    }
+    val glassColor = MaterialTheme.colorScheme.surfaceContainer.copy(
+        alpha = if (isDark) tintAlpha else tintAlpha.coerceIn(0f, 0.85f)
+    )
 
     val cardModifier = if (hazeState != null) {
         modifier
@@ -101,7 +99,7 @@ fun GlassCard(
             containerColor = Color.Transparent
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
+            defaultElevation = 0.dp
         )
     ) {
         Box(
