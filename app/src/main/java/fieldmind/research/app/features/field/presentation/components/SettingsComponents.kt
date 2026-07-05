@@ -87,7 +87,7 @@ fun ToggleItem(
     Row(
         Modifier.fillMaxWidth().clickable {
             onCheckedChange(!checked)
-        }.padding(16.dp),
+        }.padding(18.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -146,7 +146,7 @@ fun ChoiceItemForm(
                 haptics.light()
                 showDialog = true
             }
-            .padding(16.dp),
+            .padding(18.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -200,7 +200,7 @@ fun StepperItem(
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(18.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

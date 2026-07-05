@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.heightIn
 import fieldmind.research.app.ui.theme.CuteElevations
 /**
  * A [Card] with built-in [expressiveCardPress] animation (lift + scale) and [onClick].
@@ -32,6 +33,7 @@ import fieldmind.research.app.ui.theme.CuteElevations
 fun ClickableCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    minHeight: Dp = 68.dp,
     shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
@@ -47,6 +49,7 @@ fun ClickableCard(
 ) = Card(
     modifier = modifier
         .fillMaxWidth()
+        .heightIn(min = minHeight)
         .staggeredEntrance(index = index, animate = animate)
         .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown)
         .clickable(onClick = onClick),
@@ -65,6 +68,7 @@ fun ClickableCard(
 @Composable
 fun InfoCard(
     modifier: Modifier = Modifier,
+    minHeight: Dp = 64.dp,
     shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
@@ -78,6 +82,7 @@ fun InfoCard(
 ) = Card(
     modifier = modifier
         .fillMaxWidth()
+        .heightIn(min = minHeight)
         .staggeredEntrance(index = index, animate = animate),
     shape = shape,
     colors = colors,
@@ -96,6 +101,7 @@ fun ClickableCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     fillMaxWidth: Boolean = true,
+    minHeight: Dp = 68.dp,
     shape: Shape = RoundedCornerShape(34.dp),
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
@@ -113,6 +119,7 @@ fun ClickableCard(
     ClickableCard(
         onClick = onClick,
         modifier = effectiveModifier,
+        minHeight = minHeight,
         shape = shape,
         colors = colors,
         elevation = elevation,
@@ -146,6 +153,7 @@ fun ClickableCard(
     accentColor: Color,
     modifier: Modifier = Modifier,
     tintStrength: Float = 0.08f,
+    minHeight: Dp = 68.dp,
     shape: Shape = RoundedCornerShape(34.dp),
     elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
     tonalElevation: Dp = CuteElevations.clickableTier,
@@ -155,6 +163,7 @@ fun ClickableCard(
 ) = ClickableCard(
     onClick = onClick,
     modifier = modifier,
+    minHeight = minHeight,
     shape = shape,
     colors = CardDefaults.cardColors(
         containerColor = accentColor.copy(alpha = tintStrength)
