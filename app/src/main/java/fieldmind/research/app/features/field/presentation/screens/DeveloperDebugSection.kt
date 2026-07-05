@@ -33,6 +33,7 @@ import fieldmind.research.app.features.field.presentation.components.StandardScr
 import fieldmind.research.app.features.field.presentation.components.BackButton
 import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
 import fieldmind.research.app.features.field.presentation.components.SectionHeader
+import fieldmind.research.app.features.field.presentation.components.SettingsGroupCard
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
