@@ -77,9 +77,9 @@ val ErrorContainerDark = Color(0xFF8C1D18) // Medium red container
 val OnErrorContainerDark = Color(0xFFF9DEDC) // Light text on error container
 
 // Background and surface colors
-val BackgroundDark = Color(0xFF141218) // Slightly deeper than M3 baseline for better depth
+val BackgroundDark = Color(0xFF0E0C12) // Deeper near-black for richer dark mode depth
 val OnBackgroundDark = Color(0xFFE6E1E5) // Light text on background
-val SurfaceDark = Color(0xFF141218) // Surface same as background
+val SurfaceDark = Color(0xFF0E0C12) // Surface same as background
 val OnSurfaceDark = Color(0xFFE6E1E5) // Light text on surface
 val SurfaceVariantDark = Color(0xFF49454F) // Medium gray surface variant
 val OnSurfaceVariantDark = Color(0xFFCAC4D0) // Light gray text
@@ -88,12 +88,12 @@ val OnSurfaceVariantDark = Color(0xFFCAC4D0) // Light gray text
 val OutlineDark = Color(0xFF938F99) // Light gray outline
 val OutlineVariantDark = Color(0xFF49454F) // Medium gray outline variant
 
-// Surface containers for different elevation levels
-val SurfaceContainerLowestDark = Color(0xFF1C1922) // Lowest elevation — slightly brighter than background
-val SurfaceContainerLowDark = Color(0xFF25222C) // Low elevation — visibly distinct from bg
-val SurfaceContainerDark = Color(0xFF2E2B36) // Medium elevation
-val SurfaceContainerHighDark = Color(0xFF383540) // High elevation
-val SurfaceContainerHighestDark = Color(0xFF43404A) // Highest elevation
+// Surface containers for different elevation levels — smooth +8 step progression
+val SurfaceContainerLowestDark = Color(0xFF16141E) // Lowest elevation — +8 from background
+val SurfaceContainerLowDark = Color(0xFF1E1C26)   // Low elevation — +8 from lowest
+val SurfaceContainerDark = Color(0xFF26242E)       // Medium elevation — +8 from low
+val SurfaceContainerHighDark = Color(0xFF2E2C36)   // High elevation — +8 from medium
+val SurfaceContainerHighestDark = Color(0xFF3A3842) // Highest elevation — +12 from high (premium depth)
 
 // Inverse colors for special cases
 val InverseSurfaceDark = Color(0xFFE6E1E5) // Light surface for dark theme
