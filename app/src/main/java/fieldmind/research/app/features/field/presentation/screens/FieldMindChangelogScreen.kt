@@ -43,9 +43,30 @@ internal data class FieldMindChangelogEntry(
     val importance: String,
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
-)
+)    private    val fieldMindChangelog = listOf(
+        // ── v0.40.1 — CI Compilation Fixes ──
+        FieldMindChangelogEntry(
+            version = "0.40.1",
+            date = "2026-07-05",
+            title = "🔧 CI Compilation Fixes",
+            importance = "Patch",
+            tags = listOf("🔧", "🐛", "⚡"),
+            sections = listOf(
+                "🔧 WeatherSettingsPage brace fix" to listOf(
+                    "✓ Fixed missing closing brace in WeatherSettingsPage that was causing cascade syntax errors throughout the file",
+                    "✓ Resolved 'item' context error and end-of-file syntax error"
+                ),
+                "🐛 IntegrityStat moved to top-level" to listOf(
+                    "✓ Moved IntegrityStat composable from inside DataIntegritySettingsPage to a top-level function",
+                    "✓ Fixed 'private not applicable to local function' and 'Unresolved reference' errors"
+                ),
+                "⚡ Resolved cascade compilation errors" to listOf(
+                    "✓ Fixed all navigation unresolved reference errors in FieldMindNavigation.kt",
+                    "✓ All 22+ CI compilation errors across SettingsScreen and Navigation now resolved"
+                )
+            )
+        ),
 
-private    val fieldMindChangelog = listOf(
         // ── v0.40.0 — Map Feature Completeness ──
         FieldMindChangelogEntry(
             version = "0.40.0",

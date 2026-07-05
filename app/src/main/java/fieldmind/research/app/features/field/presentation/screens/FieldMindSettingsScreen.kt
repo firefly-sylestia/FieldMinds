@@ -1527,6 +1527,7 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     }
             }
         }
+    }
         item {
             SectionHeader("Home screen widget display", "Choose which weather fields appear on the home dashboard card. The Weather Database screen always shows all available data.")
         }
@@ -1782,14 +1783,14 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
     }
 }
 
+}
+
 @Composable
 private fun IntegrityStat(value: String, label: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
         Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
-}
-
 // ══════════════════════════════════════════════════════════════════════
 //  Screen Visibility Settings Page
 // ══════════════════════════════════════════════════════════════════════
