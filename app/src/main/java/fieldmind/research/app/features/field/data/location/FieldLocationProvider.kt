@@ -145,19 +145,39 @@ class FieldLocationProvider(private val context: Context) {
     }
 
     /**
-     * Formats an [android.location.Address] into a concise place name using only the
-     * locality/city — the most stable and recognizable part of an address, without the
-     * unreliable feature/street prefix that varies by location.
+     * Formats an [android.location.Address] into a concise place name.
+     *
+     * First tries [locality] (town/village) alone — the most recognizable part.
+     * If locality is not available, falls back to [subAdminArea] (block/district).
+     * If both are available and different (common in rural India where the geocoder
+     * doesn't return a locality), combines them as "Locality, Block" for clarity.
      */
     private fun formatPlace(address: android.location.Address): String {
-        return address.locality
-            ?: address.subAdminArea  // district
-            ?: address.adminArea     // state
-            ?: address.getAddressLine(0)?.let { line ->
-                // Strip the street/feature prefix; everything after the first comma
-                val parts = line.split(",")
-                if (parts.size > 1) parts.drop(1).joinToString(",").trim() else line
+        val locality = address.locality?.trim()
+        val subArea = address.subAdminArea?.trim()
+        val adminArea = address.adminArea?.trim()
+
+        // Best case: we have a town/village name
+        if (!locality.isNullOrBlank()) {
+            // If both locality and subAdminArea exist and are different, show both
+            // e.g. "Hosur, Krishnagiri" — helps users distinguish between
+            // the village and the block they're actually in.
+            if (!subArea.isNullOrBlank() && !subArea.equals(locality, ignoreCase = true)) {
+                return "$locality, $subArea"
             }
-            ?: "Unknown place"
+            return locality
+        }
+
+        // Fallback to block/district
+        if (!subArea.isNullOrBlank()) return subArea
+
+        // Fallback to state
+        if (!adminArea.isNullOrBlank()) return adminArea
+
+        // Last resort: full address line, stripped of street/feature prefix
+        return address.getAddressLine(0)?.let { line ->
+            val parts = line.split(",")
+            if (parts.size > 1) parts.drop(1).joinToString(",").trim() else line
+        } ?: "Unknown place"
     }
 }

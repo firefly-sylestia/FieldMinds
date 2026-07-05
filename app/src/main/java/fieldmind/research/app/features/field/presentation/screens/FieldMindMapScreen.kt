@@ -617,6 +617,7 @@ private fun DownloadRegionDialog(
     tileManager: OsmTileManager
 ) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     var name by remember { mutableStateOf("") }
     var latNorth by remember { mutableStateOf("") }
     var latSouth by remember { mutableStateOf("") }
@@ -624,13 +625,45 @@ private fun DownloadRegionDialog(
     var lonWest by remember { mutableStateOf("") }
     var minZoom by remember { mutableStateOf("10") }
     var maxZoom by remember { mutableStateOf("16") }
+    var useLocationText by remember { mutableStateOf("Use my location") }
 
     SwipeableAlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Download tile region") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Text("Download tiles for offline use. Enter the bounding box coordinates.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Download tiles for offline use. Enter the bounding box coordinates, or use your current GPS location.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+                // Use my location button
+                OutlinedButton(
+                    onClick = {
+                        useLocationText = "Getting location…"
+                        val provider = FieldLocationProvider(context)
+                        provider.requestCurrentLocation(timeoutMs = 15_000L) { loc ->
+                            if (loc != null) {
+                                val lat = String.format("%.4f", loc.latitude)
+                                val lon = String.format("%.4f", loc.longitude)
+                                // Create a ~5km bounding box around the current location
+                                val offset = 0.045 // ~5km in decimal degrees
+                                latNorth = String.format("%.4f", loc.latitude + offset)
+                                latSouth = String.format("%.4f", loc.latitude - offset)
+                                lonEast = String.format("%.4f", loc.longitude + offset)
+                                lonWest = String.format("%.4f", loc.longitude - offset)
+                                name = loc.placeName?.takeIf { it.isNotBlank() } ?: "My area"
+                                useLocationText = "✓ Location set"
+                            } else {
+                                useLocationText = "GPS unavailable — enable location"
+                            }
+                        }
+                    },
+                    shape = RoundedCornerShape(22.dp),
+                    enabled = useLocationText != "Getting location…"
+                ) {
+                    Icon(FieldMindIcons.Location, null, size = 18.dp)
+                    Spacer(Modifier.size(6.dp))
+                    Text(useLocationText)
+                }
+
                 FieldTextField(name, { name = it }, "Region name (e.g. Study Area)")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FieldTextField(latNorth, { latNorth = it }, "Lat N", modifier = Modifier.weight(1f))

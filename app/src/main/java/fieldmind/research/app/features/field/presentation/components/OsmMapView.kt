@@ -104,8 +104,12 @@ fun OsmMapView(
     val avgLon = allPoints.map { it.second }.average()
     val latSpread = (allPoints.maxOf { it.first } - allPoints.minOf { it.first }).coerceAtLeast(0.01)
     val lonSpread = (allPoints.maxOf { it.second } - allPoints.minOf { it.second }).coerceAtLeast(0.01)
-    // Zoom out by 50% for preview (reduce zoom level by ~0.7 to fit more context around the point)
-    val zoom = (14.0 - log2(maxOf(latSpread, lonSpread).coerceAtLeast(0.01)) - 0.7).coerceIn(4.0, 18.0)
+    // Calculate zoom based on point spread.
+    // When points are tightly clustered (small spread), zoom calc yields ~16-18 which
+    // shows only the immediate block area. Cap at 13 so the user sees the town/village
+    // context around their observations — they can pinch-zoom in manually.
+    val rawZoom = 14.0 - log2(maxOf(latSpread, lonSpread).coerceAtLeast(0.01)) - 0.7
+    val zoom = rawZoom.coerceIn(4.0, 13.0)
 
     // Configure osmdroid once
     remember {
