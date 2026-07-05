@@ -104,23 +104,40 @@ fun FieldMindAppLock(
         }
     }
 
+    // Keep a ref to the current BiometricPrompt so we can cancel it before retrying
+    var currentBiometricPrompt by remember { mutableStateOf<BiometricPrompt?>(null) }
+    var isAuthenticating by remember { mutableStateOf(false) }
+
     fun startBiometricAuth() {
+        // Guard: prevent concurrent or rapid re-authentication attempts
+        if (isAuthenticating) return
+        isAuthenticating = true
+
         authAttempted = true
         usePinLock = false
         val activity = context as? FragmentActivity
         if (hasBiometric && activity != null) {
+            // Cancel any previous authentication session to avoid stale session conflicts
+            currentBiometricPrompt?.cancelAuthentication()
+
             val executor = ContextCompat.getMainExecutor(context)
             val prompt = BiometricPrompt(activity, executor, object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    isAuthenticating = false
+                    currentBiometricPrompt = null
                     onUnlock()
                 }
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    isAuthenticating = false
+                    currentBiometricPrompt = null
                     if (hasPin) usePinLock = true
                 }
                 override fun onAuthenticationFailed() {
+                    isAuthenticating = false
                     pinError = true
                 }
             })
+            currentBiometricPrompt = prompt
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle("FieldMind Privacy Lock")
                 .setSubtitle("Authenticate to access your research data")
@@ -130,7 +147,11 @@ fun FieldMindAppLock(
                 )
                 .build()
             prompt.authenticate(promptInfo)
-        } else if (hasDeviceCredential) {
+            return // isAuthenticating reset in callbacks above
+        }
+        // Fallback paths: no biometric prompt was shown, so unblock immediately
+        isAuthenticating = false
+        if (hasDeviceCredential) {
             val intent = keyguard.createConfirmDeviceCredentialIntent(
                 "FieldMind Privacy Lock",
                 "Authenticate to access your research data"
