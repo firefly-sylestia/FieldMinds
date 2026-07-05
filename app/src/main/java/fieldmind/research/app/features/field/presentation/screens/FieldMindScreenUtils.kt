@@ -23,6 +23,7 @@ import kotlin.text.RegexOption
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import fieldmind.research.app.ui.theme.CuteElevations
 
 internal data class ObservationCategoryField(val key: String, val label: String, val hint: String = "")
 internal data class ObservationCategoryDefinition(
@@ -175,7 +176,7 @@ internal fun FormDialog(title: String, onDismiss: () -> Unit, onSave: () -> Unit
                 .wrapContentHeight()
                 .padding(vertical = 24.dp),
             shape = RoundedCornerShape(40.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)

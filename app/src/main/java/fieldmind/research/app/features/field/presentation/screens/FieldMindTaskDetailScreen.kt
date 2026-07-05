@@ -37,6 +37,7 @@ import org.json.JSONArray
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  TASK DETAIL SCREEN
@@ -611,7 +612,7 @@ private fun <T> EntityPickerDialog(
         Card(
             shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)

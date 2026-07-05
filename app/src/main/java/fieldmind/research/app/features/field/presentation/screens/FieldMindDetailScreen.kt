@@ -59,6 +59,7 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  Detail Screen — Entity-specific rich layouts
@@ -2076,7 +2077,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
                         Card(
                             shape = RoundedCornerShape(24.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                         ) {
                             Column(Modifier.heightIn(max = 200.dp).verticalScroll(rememberScrollState())) {
                                 speciesSuggestions.forEach { record ->

@@ -36,6 +36,7 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  Unified Questions & Hypotheses Screen — Hypothesis Testing Workflow
@@ -848,7 +849,7 @@ private fun HypothesisCreationDialog(
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
             shape = RoundedCornerShape(40.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(
                 Modifier.padding(20.dp).verticalScroll(rememberScrollState()),
@@ -935,7 +936,7 @@ private fun QuickCaptureDialog(
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
             shape = RoundedCornerShape(40.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(
                 Modifier.padding(20.dp).verticalScroll(rememberScrollState()),
@@ -1035,7 +1036,7 @@ private fun MarkAsTestedDialog(
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
             shape = RoundedCornerShape(40.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(
                 Modifier.padding(20.dp).verticalScroll(rememberScrollState()),

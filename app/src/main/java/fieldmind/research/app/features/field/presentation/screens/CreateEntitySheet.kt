@@ -22,6 +22,7 @@ import fieldmind.research.app.features.field.presentation.navigation.FieldMindSc
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  Create Entity Bottom Sheet — Grouped create menu for Workspace
@@ -196,7 +197,7 @@ fun ProjectSelectorDialog(
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
             shape = RoundedCornerShape(40.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState()).padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {

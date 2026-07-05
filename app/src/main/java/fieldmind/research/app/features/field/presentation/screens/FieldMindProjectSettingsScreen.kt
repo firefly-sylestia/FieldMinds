@@ -27,6 +27,7 @@ import androidx.compose.ui.window.DialogProperties
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  PROJECT SETTINGS SCREEN
@@ -590,7 +591,7 @@ fun ProjectSettingsScreen(
             Card(
                 shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
