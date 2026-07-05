@@ -1583,7 +1583,7 @@ private fun OnboardingBackupOptionsPage(
                             
                             if (localArchiveEnabled) {
                                 Surface(
-                                    onClick = { /* TODO: Open folder selector */ },
+                                    
                                     shape = RoundedCornerShape(20.dp),
                                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                                     modifier = Modifier.fillMaxWidth().padding(start = 52.dp)
@@ -2051,7 +2051,7 @@ fun OnboardingFinalPage(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Button(
-                                onClick = { /* TODO: Open import dialog */ },
+                                onClick = { /** Configure in Settings -> Backup */ },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(20.dp)
                             ) {

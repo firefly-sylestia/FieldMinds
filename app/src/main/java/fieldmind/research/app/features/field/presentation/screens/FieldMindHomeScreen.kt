@@ -293,6 +293,9 @@ fun SharedTransitionScope.HomeScreen(
                     onStartSession = { onNavigate(FieldMindScreen.Observe) }
                 ) }
 
+            // ── Quick Actions Row ──
+            item { QuickActionsRow(onNavigate = onNavigate) }
+
             // ── Weather as animated centerpiece ──
             item {
                 LiveWeatherDashboardWidget(

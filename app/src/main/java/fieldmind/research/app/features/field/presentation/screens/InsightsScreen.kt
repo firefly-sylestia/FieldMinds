@@ -502,16 +502,22 @@ fun InsightsScreen(
 }
 
 @Composable
-private fun ResearchJourneyCard(observations: List<ObservationEntity>, questions: List<QuestionEntity>, hypotheses: List<HypothesisEntity>, projects: List<ProjectEntity>) {
+private fun ResearchJourneyCard(
+    observations: List<ObservationEntity>,
+    questions: List<QuestionEntity>,
+    hypotheses: List<HypothesisEntity>,
+    projects: List<ProjectEntity>,
+    onNavigate: (FieldMindScreen) -> Unit = {}
+) {
     Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Research journey", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Text("Question → observations → patterns → hypothesis → findings", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                AssistChip(onClick = {}, label = { Text("${questions.size} questions") }, leadingIcon = { Icon(FieldMindIcons.Question, null, size = 16.dp) })
-                AssistChip(onClick = {}, label = { Text("${observations.size} observations") }, leadingIcon = { Icon(FieldMindIcons.Observation, null, size = 16.dp) })
-                AssistChip(onClick = {}, label = { Text("${hypotheses.size} hypotheses") }, leadingIcon = { Icon(FieldMindIcons.Hypothesis, null, size = 16.dp) })
-                AssistChip(onClick = {}, label = { Text("${projects.size} projects") }, leadingIcon = { Icon(FieldMindIcons.Project, null, size = 16.dp) })
+                AssistChip(onClick = { onNavigate(FieldMindScreen.Questions) }, label = { Text("${questions.size} questions") }, leadingIcon = { Icon(FieldMindIcons.Question, null, size = 16.dp) })
+                AssistChip(onClick = { onNavigate(FieldMindScreen.Observe) }, label = { Text("${observations.size} observations") }, leadingIcon = { Icon(FieldMindIcons.Observation, null, size = 16.dp) })
+                AssistChip(onClick = { onNavigate(FieldMindScreen.Hypotheses) }, label = { Text("${hypotheses.size} hypotheses") }, leadingIcon = { Icon(FieldMindIcons.Hypothesis, null, size = 16.dp) })
+                AssistChip(onClick = { onNavigate(FieldMindScreen.Projects) }, label = { Text("${projects.size} projects") }, leadingIcon = { Icon(FieldMindIcons.Project, null, size = 16.dp) })
             }
         }
     }
