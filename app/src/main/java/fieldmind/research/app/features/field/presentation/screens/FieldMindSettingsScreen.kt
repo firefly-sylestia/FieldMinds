@@ -2209,7 +2209,7 @@ fun SpeciesToolsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = if (isDownloaded) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
                     Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Box(Modifier.size(48.dp).clip(RoundedCornerShape(22.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(if (isDownloaded) FieldMindIcons.Check else FieldMindIcons.Download, null, tint = FieldMindTheme.colors.observation, size = 24.dp) }
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(if (isDownloaded) FieldMindIcons.Check else FieldMindIcons.Download, null, tint = FieldMindTheme.colors.observation, size = 24.dp) }
                             Column(Modifier.weight(1f)) {
                                 Text(pack.regionName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                                 Text(pack.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)

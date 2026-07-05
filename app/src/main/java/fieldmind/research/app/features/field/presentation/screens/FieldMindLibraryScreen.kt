@@ -265,9 +265,9 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
                 ) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Box(
-                            Modifier.size(38.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
+                            Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
-                        ) { Icon(FieldMindIcons.OpenLink, null, tint = FieldMindTheme.colors.source, size = 20.dp) }
+                        ) { Icon(FieldMindIcons.OpenLink, null, tint = FieldMindTheme.colors.source, size = 22.dp) }
                         Column {
                             Text("Import URL", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                             Text("Paste a link", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -284,9 +284,9 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
                 ) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Box(
-                            Modifier.size(38.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
+                            Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
-                        ) { Icon(FieldMindIcons.File, null, tint = FieldMindTheme.colors.source, size = 20.dp) }
+                        ) { Icon(FieldMindIcons.File, null, tint = FieldMindTheme.colors.source, size = 22.dp) }
                         Column {
                             Text("Add evidence", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                             Text("File or photo", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1449,13 +1449,13 @@ private fun LibraryFlashcard(
                     )
                 }
                 Box(
-                    Modifier.size(34.dp).clip(RoundedCornerShape(18.dp))
+                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
                         .background(
                             if (selected) accent.copy(alpha = 0.3f)
                             else accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)
                         ),
                     contentAlignment = Alignment.Center
-                ) { Icon(icon = FieldMindIcons.Flashcard, contentDescription = null, tint = if (selected) accent else accent, size = 18.dp) }
+                ) { Icon(icon = FieldMindIcons.Flashcard, contentDescription = null, tint = if (selected) accent else accent, size = 20.dp) }
                 Text(card.type, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(Modifier.weight(1f))
                 Icon(
@@ -1591,8 +1591,8 @@ private fun BookSuggestionCard(title: String, category: String, genre: String, a
     Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.size(42.dp).clip(RoundedCornerShape(22.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
-                    Icon(icon = FieldMindIcons.Book, contentDescription = null, tint = FieldMindTheme.colors.source, size = 22.dp)
+                Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
+                    Icon(icon = FieldMindIcons.Book, contentDescription = null, tint = FieldMindTheme.colors.source, size = 24.dp)
                 }
                 Column(Modifier.weight(1f)) {
                     Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)

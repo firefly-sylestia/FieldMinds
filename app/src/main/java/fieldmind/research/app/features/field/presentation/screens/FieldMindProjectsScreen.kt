@@ -456,7 +456,7 @@ private fun ProjectCard(
         ) {
             // Project icon
             Box(
-                Modifier.size(48.dp).clip(RoundedCornerShape(22.dp))
+                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                     .background(colors.project.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {

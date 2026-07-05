@@ -279,7 +279,7 @@ fun OptionPickerDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     Box(
-                        Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                             .background(accentColor.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -684,11 +684,11 @@ fun StandardScreenHeader(
         ) {
             Box(
                 Modifier
-                    .size(48.dp)
+                    .size(44.dp)
                     .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), RoundedCornerShape(22.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon = icon, contentDescription = null, tint = heroColor, size = 26.dp)
+                Icon(icon = icon, contentDescription = null, tint = heroColor, size = 24.dp)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(
@@ -1505,8 +1505,8 @@ fun ProtocolPicker(
                         border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                     ) {
                         Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Box(Modifier.size(42.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
-                                Icon(protocol.icon, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(protocol.icon, null, tint = MaterialTheme.colorScheme.primary, size = 24.dp)
                             }
                             Column(Modifier.weight(1f)) {
                                 Text(protocol.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)

@@ -1131,7 +1131,7 @@ private fun HomeNoteCaptureDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     Box(
-                        Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                             .background(FieldMindTheme.colors.source.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -2139,11 +2139,11 @@ private fun ResearchSessionCtaCard(
                 horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
             Box(
-                Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                     .background(if (isActive) colors.observation.copy(alpha = 0.16f) else colors.positive.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(FieldMindIcons.Timer, null, tint = if (isActive) colors.observation else colors.positive, size = 26.dp)
+                Icon(FieldMindIcons.Timer, null, tint = if (isActive) colors.observation else colors.positive, size = 24.dp)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(

@@ -192,7 +192,7 @@ internal fun DialogHeader(
 ) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         Box(
-            Modifier.size(46.dp).clip(RoundedCornerShape(22.dp))
+            Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                 .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f)),
             contentAlignment = Alignment.Center
         ) {
@@ -297,10 +297,10 @@ internal fun CollapsibleSection(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Box(
-                    Modifier.size(34.dp).clip(RoundedCornerShape(18.dp))
+                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
                         .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp) }
+                ) { Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                     if (subtitle.isNotBlank()) {
@@ -482,8 +482,8 @@ private fun GuideRow(label: String, value: String) {
 private fun SourceFormHero(title: String, body: String) {
     Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Row(Modifier.fillMaxWidth().padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(48.dp).clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
-                Icon(FieldMindIcons.Source, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 26.dp)
+            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                Icon(FieldMindIcons.Source, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 24.dp)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)

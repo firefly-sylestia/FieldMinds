@@ -1715,7 +1715,7 @@ fun OnboardingBackupPage(
                             tonalElevation = 0.dp
                         ) {
                             Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Box(Modifier.size(48.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                                     Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 24.dp)
                                 }
                                 Column(Modifier.weight(1f)) {

@@ -265,10 +265,10 @@ fun ObservationDetailContent(
             // ── 2. Header with subject and badges ��─
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                         .background(colors.observation.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Observation, null, tint = colors.observation, size = 26.dp) }
+                ) { Icon(FieldMindIcons.Observation, null, tint = colors.observation, size = 24.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(o.subject.ifBlank { "Observation" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1479,10 +1479,10 @@ private fun NoteDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                         .background(colors.source.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Note, null, tint = colors.note, size = 26.dp) }
+                ) { Icon(FieldMindIcons.Note, null, tint = colors.note, size = 24.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(n.title.ifBlank { "Untitled note" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1554,10 +1554,10 @@ private fun QuestionDetailContent(
             // Header with icon and badges
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                         .background(colors.question.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Question, null, tint = colors.question, size = 26.dp) }
+                ) { Icon(FieldMindIcons.Question, null, tint = colors.question, size = 24.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(qn.questionText.ifBlank { "Question" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1623,10 +1623,10 @@ private fun HypothesisDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                         .background(colors.hypothesis.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Hypothesis, null, tint = colors.hypothesis, size = 26.dp) }
+                ) { Icon(FieldMindIcons.Hypothesis, null, tint = colors.hypothesis, size = 24.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(h.prediction.ifBlank { "Hypothesis" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     StatusChip(h.resultStatus.ifBlank { "Untested" }, resultColor)
@@ -1718,10 +1718,10 @@ private fun ProjectDetailContent(
             // Header with action bar
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                         .background(colors.project.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Project, null, tint = colors.project, size = 26.dp) }
+                ) { Icon(FieldMindIcons.Project, null, tint = colors.project, size = 24.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(p.title.ifBlank { "Project" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2459,10 +2459,10 @@ private fun DataRecordDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                         .background(colors.data.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Data, null, tint = colors.data, size = 26.dp) }
+                ) { Icon(FieldMindIcons.Data, null, tint = colors.data, size = 24.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(d.label.ifBlank { "Data record" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     InfoChip(d.toolType, icon = FieldMindIcons.Data)
@@ -2526,10 +2526,10 @@ private fun ReportDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                         .background(colors.report.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Report, null, tint = colors.report, size = 26.dp) }
+                ) { Icon(FieldMindIcons.Report, null, tint = colors.report, size = 24.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(r.title.ifBlank { "Report" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2586,10 +2586,10 @@ private fun FlashcardDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                         .background(colors.flashcard.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Flashcard, null, tint = colors.flashcard, size = 26.dp) }
+                ) { Icon(FieldMindIcons.Flashcard, null, tint = colors.flashcard, size = 24.dp) }
                 Column(Modifier.weight(1f)) {
                     Text("Flashcard", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     InfoChip(f.type, icon = FieldMindIcons.Flashcard)
@@ -2901,10 +2901,10 @@ private fun SourceDetailContent(
             // ── Header ──
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(48.dp).clip(RoundedCornerShape(24.dp))
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                         .background(colors.source.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Source, null, tint = colors.source, size = 26.dp) }
+                ) { Icon(FieldMindIcons.Source, null, tint = colors.source, size = 24.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(s.title.ifBlank { "Untitled source" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -3148,8 +3148,8 @@ private fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observati
                         onOpenReader(displayUri, att.caption.ifBlank { att.type })
                     }
                 }.padding(4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Box(Modifier.size(38.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
-                        Icon(icon = if (att.type.equals("Audio", true)) FieldMindIcons.Mic else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
+                    Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
+                        Icon(icon = if (att.type.equals("Audio", true)) FieldMindIcons.Mic else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
                     }
                     Column(Modifier.weight(1f)) {
                         Text(att.caption.ifBlank { if (att.type.equals("Audio", true)) "Audio evidence" else "Attached evidence" }, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)

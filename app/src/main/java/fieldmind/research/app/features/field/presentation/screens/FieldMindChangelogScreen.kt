@@ -44,6 +44,29 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.40.8 — Comprehensive Card Sizing Standardization ──
+        FieldMindChangelogEntry(
+            version = "0.40.8",
+            date = "2026-07-05",
+            title = "📐 Comprehensive Card Sizing Standardization",
+            importance = "Patch",
+            tags = listOf("📐", "🎨"),
+            sections = listOf(
+                "📐 Standardized icon box sizes across all files" to listOf(
+                    "✓ 48dp→44dp: DetailScreen (9x), HomeScreen (2x), Dialogs, SettingsScreen, ProjectsScreen, OnboardingScreen, Components (2x) — 17 total",
+                    "✓ 38dp→40dp: LibraryScreen (2x), DetailScreen (1x) — icons 20→22dp",
+                    "✓ 34dp→36dp: LibraryScreen, Dialogs — icons 18→20dp",
+                    "✓ 42dp→44dp: LibraryScreen, Components — icons 22→24dp",
+                    "✓ 46dp→44dp: Dialogs — icon stays 24dp",
+                    "✓ All modified boxes now use one of three standard sizes: 36dp (mini), 40dp (medium), 44dp (large)",
+                    "✓ Every icon maintains ~55% box-to-icon ratio for visual consistency"
+                ),
+                "🎨 Color swatches left at 48dp" to listOf(
+                    "✓ Color picker swatches in ProjectDetailScreen and NewEntityScreens remain 48dp for better tap target ergonomics"
+                )
+            )
+        ),
+
         // ── v0.40.7 — IntegrityStat Missing Brace Fix ──
         FieldMindChangelogEntry(
             version = "0.40.7",
