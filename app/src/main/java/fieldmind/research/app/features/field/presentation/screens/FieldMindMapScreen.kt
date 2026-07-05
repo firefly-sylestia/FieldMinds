@@ -1477,7 +1477,12 @@ private fun EditOverlayDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    onSave(overlay.copy(label = label, color = selectedColor))
+                    val updated = when (overlay) {
+                        is MapOverlay.PointOverlay -> overlay.copy(label = label, color = selectedColor)
+                        is MapOverlay.LineOverlay -> overlay.copy(label = label, color = selectedColor)
+                        is MapOverlay.PolygonOverlay -> overlay.copy(label = label, color = selectedColor)
+                    }
+                    onSave(updated)
                 },
                 shape = RoundedCornerShape(22.dp)
             ) { Text("Save") }

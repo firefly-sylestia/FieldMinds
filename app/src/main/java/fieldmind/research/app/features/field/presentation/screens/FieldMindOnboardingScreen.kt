@@ -263,6 +263,7 @@ fun FieldMindOnboardingScreen(
                     onBack = { currentPage = 7 }
                 )
                 9 -> OnboardingSpeciesIdPage(
+                    onNext = { currentPage = 10 },
                     onFinish = { finishOnboarding() },
                     onBack = { currentPage = 8 }
                 )
