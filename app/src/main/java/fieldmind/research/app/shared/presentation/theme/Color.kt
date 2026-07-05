@@ -345,3 +345,283 @@ val PastelSurfaceContainerHighestDark = Color(0xFF473E4C) // Highest
 val PastelInverseSurfaceDark = Color(0xFFFFF8FB)
 val PastelInverseOnSurfaceDark = Color(0xFF2D2D2D)
 val PastelInversePrimaryDark = PastelPrimaryDark
+
+// ============================================
+// Midnight Flora — Sophisticated deep greens + warm neutrals
+// Premium nature aesthetic. Forest emerald with warm amber accents
+// on off-white / near-black backgrounds.
+// ============================================
+
+// Light
+val FloraPrimaryLight = Color(0xFF1A6B4C)
+val FloraOnPrimaryLight = Color(0xFFFFFFFF)
+val FloraPrimaryContainerLight = Color(0xFFA8E8C8)
+val FloraOnPrimaryContainerLight = Color(0xFF002110)
+
+val FloraSecondaryLight = Color(0xFF5B6770)
+val FloraOnSecondaryLight = Color(0xFFFFFFFF)
+val FloraSecondaryContainerLight = Color(0xFFD0DCE3)
+val FloraOnSecondaryContainerLight = Color(0xFF0D1A24)
+
+val FloraTertiaryLight = Color(0xFFB8860B) // Dark goldenrod
+val FloraOnTertiaryLight = Color(0xFFFFFFFF)
+val FloraTertiaryContainerLight = Color(0xFFFFEAA0)
+val FloraOnTertiaryContainerLight = Color(0xFF2C1700)
+
+val FloraErrorLight = Color(0xFFBA1A1A)
+val FloraOnErrorLight = Color(0xFFFFFFFF)
+val FloraErrorContainerLight = Color(0xFFFFDAD6)
+val FloraOnErrorContainerLight = Color(0xFF410002)
+
+val FloraBackgroundLight = Color(0xFFF8F6F2) // Warm off-white
+val FloraOnBackgroundLight = Color(0xFF1C1B19)
+val FloraSurfaceLight = Color(0xFFF8F6F2)
+val FloraOnSurfaceLight = Color(0xFF1C1B19)
+val FloraSurfaceVariantLight = Color(0xFFE0E2E8)
+val FloraOnSurfaceVariantLight = Color(0xFF4A4A4E)
+
+val FloraOutlineLight = Color(0xFF8A8A8E)
+val FloraOutlineVariantLight = Color(0xFFD0D2D8)
+
+val FloraSurfaceContainerLowestLight = Color(0xFFFDFBFA)
+val FloraSurfaceContainerLowLight = Color(0xFFF5F1EA)
+val FloraSurfaceContainerLight = Color(0xFFEDE8DF)
+val FloraSurfaceContainerHighLight = Color(0xFFE5DED2)
+val FloraSurfaceContainerHighestLight = Color(0xFFDBD4C6)
+
+val FloraSurfaceDimLight = Color(0xFFD8D3C8)
+val FloraSurfaceBrightLight = Color(0xFFF8F6F2)
+
+val FloraInverseSurfaceLight = Color(0xFF2D2D2E)
+val FloraInverseOnSurfaceLight = Color(0xFFF2F0EA)
+val FloraInversePrimaryLight = Color(0xFF8DD5A8)
+
+// Dark
+val FloraPrimaryDark = Color(0xFF7DCDA0)
+val FloraOnPrimaryDark = Color(0xFF00391E)
+val FloraPrimaryContainerDark = Color(0xFF005230)
+val FloraOnPrimaryContainerDark = Color(0xFFA8E8C8)
+
+val FloraSecondaryDark = Color(0xFFA8B8C0)
+val FloraOnSecondaryDark = Color(0xFF1A2A34)
+val FloraSecondaryContainerDark = Color(0xFF3A4A54)
+val FloraOnSecondaryContainerDark = Color(0xFFD0DCE3)
+
+val FloraTertiaryDark = Color(0xFFF0C860)
+val FloraOnTertiaryDark = Color(0xFF492C00)
+val FloraTertiaryContainerDark = Color(0xFF694200)
+val FloraOnTertiaryContainerDark = Color(0xFFFFEAA0)
+
+val FloraErrorDark = Color(0xFFFFB4AB)
+val FloraOnErrorDark = Color(0xFF690005)
+val FloraErrorContainerDark = Color(0xFF93000A)
+val FloraOnErrorContainerDark = Color(0xFFFFDAD6)
+
+val FloraBackgroundDark = Color(0xFF0E0E10) // Near-black
+val FloraOnBackgroundDark = Color(0xFFE4E2DE)
+val FloraSurfaceDark = Color(0xFF0E0E10)
+val FloraOnSurfaceDark = Color(0xFFE4E2DE)
+val FloraSurfaceVariantDark = Color(0xFF1E1E20)
+val FloraOnSurfaceVariantDark = Color(0xFFC4C6C8)
+
+val FloraOutlineDark = Color(0xFF8E9094)
+val FloraOutlineVariantDark = Color(0xFF3A3A3E)
+
+val FloraSurfaceContainerLowestDark = Color(0xFF141416)
+val FloraSurfaceContainerLowDark = Color(0xFF1A1A1C)
+val FloraSurfaceContainerDark = Color(0xFF222224)
+val FloraSurfaceContainerHighDark = Color(0xFF2A2A2C)
+val FloraSurfaceContainerHighestDark = Color(0xFF323234)
+
+val FloraSurfaceDimDark = Color(0xFF0E0E10)
+val FloraSurfaceBrightDark = Color(0xFF3A3A3C)
+
+val FloraInverseSurfaceDark = Color(0xFFF2F0EA)
+val FloraInverseOnSurfaceDark = Color(0xFF2D2D2E)
+val FloraInversePrimaryDark = Color(0xFF1A6B4C)
+
+// ============================================
+// Noir Amethyst — Deep violet-black moody luxury
+// Premium tech/creative aesthetic. Deep violet with amethyst glow.
+// ============================================
+
+// Light
+val AmethystPrimaryLight = Color(0xFF5B3E96)
+val AmethystOnPrimaryLight = Color(0xFFFFFFFF)
+val AmethystPrimaryContainerLight = Color(0xFFEADDFF)
+val AmethystOnPrimaryContainerLight = Color(0xFF21005D)
+
+val AmethystSecondaryLight = Color(0xFF6B5E7A)
+val AmethystOnSecondaryLight = Color(0xFFFFFFFF)
+val AmethystSecondaryContainerLight = Color(0xFFF3E8FF)
+val AmethystOnSecondaryContainerLight = Color(0xFF1D192B)
+
+val AmethystTertiaryLight = Color(0xFFD4726A)
+val AmethystOnTertiaryLight = Color(0xFFFFFFFF)
+val AmethystTertiaryContainerLight = Color(0xFFFFE0DC)
+val AmethystOnTertiaryContainerLight = Color(0xFF3E1515)
+
+val AmethystErrorLight = Color(0xFFBA1A1A)
+val AmethystOnErrorLight = Color(0xFFFFFFFF)
+val AmethystErrorContainerLight = Color(0xFFFFDAD6)
+val AmethystOnErrorContainerLight = Color(0xFF410002)
+
+val AmethystBackgroundLight = Color(0xFFFCFAFF) // Crisp white-violet
+val AmethystOnBackgroundLight = Color(0xFF1C1B1F)
+val AmethystSurfaceLight = Color(0xFFFCFAFF)
+val AmethystOnSurfaceLight = Color(0xFF1C1B1F)
+val AmethystSurfaceVariantLight = Color(0xFFE8E0F0)
+val AmethystOnSurfaceVariantLight = Color(0xFF4A4555)
+
+val AmethystOutlineLight = Color(0xFF7C7588)
+val AmethystOutlineVariantLight = Color(0xFFCEC4D8)
+
+val AmethystSurfaceContainerLowestLight = Color(0xFFFFFFFF)
+val AmethystSurfaceContainerLowLight = Color(0xFFF5F0FC)
+val AmethystSurfaceContainerLight = Color(0xFFEFE8F5)
+val AmethystSurfaceContainerHighLight = Color(0xFFE8E0EE)
+val AmethystSurfaceContainerHighestLight = Color(0xFFE0D6E6)
+
+val AmethystSurfaceDimLight = Color(0xFFDCD2E2)
+val AmethystSurfaceBrightLight = Color(0xFFFCFAFF)
+
+val AmethystInverseSurfaceLight = Color(0xFF2D2B33)
+val AmethystInverseOnSurfaceLight = Color(0xFFF0ECF5)
+val AmethystInversePrimaryLight = Color(0xFFCFBFFF)
+
+// Dark
+val AmethystPrimaryDark = Color(0xFFC4A5FF)
+val AmethystOnPrimaryDark = Color(0xFF2C1B69)
+val AmethystPrimaryContainerDark = Color(0xFF4A2E8A)
+val AmethystOnPrimaryContainerDark = Color(0xFFEADDFF)
+
+val AmethystSecondaryDark = Color(0xFFB0A0C8)
+val AmethystOnSecondaryDark = Color(0xFF2A2440)
+val AmethystSecondaryContainerDark = Color(0xFF423A58)
+val AmethystOnSecondaryContainerDark = Color(0xFFF3E8FF)
+
+val AmethystTertiaryDark = Color(0xFFF0A098)
+val AmethystOnTertiaryDark = Color(0xFF4E2828)
+val AmethystTertiaryContainerDark = Color(0xFF6A3A3A)
+val AmethystOnTertiaryContainerDark = Color(0xFFFFE0DC)
+
+val AmethystErrorDark = Color(0xFFFFB4AB)
+val AmethystOnErrorDark = Color(0xFF690005)
+val AmethystErrorContainerDark = Color(0xFF93000A)
+val AmethystOnErrorContainerDark = Color(0xFFFFDAD6)
+
+val AmethystBackgroundDark = Color(0xFF0D0B12) // Deep dark purple-black
+val AmethystOnBackgroundDark = Color(0xFFE6E0EE)
+val AmethystSurfaceDark = Color(0xFF0D0B12)
+val AmethystOnSurfaceDark = Color(0xFFE6E0EE)
+val AmethystSurfaceVariantDark = Color(0xFF1E1A28)
+val AmethystOnSurfaceVariantDark = Color(0xFFC8C0D0)
+
+val AmethystOutlineDark = Color(0xFF9088A0)
+val AmethystOutlineVariantDark = Color(0xFF3A3448)
+
+val AmethystSurfaceContainerLowestDark = Color(0xFF12101A)
+val AmethystSurfaceContainerLowDark = Color(0xFF181620)
+val AmethystSurfaceContainerDark = Color(0xFF201E28)
+val AmethystSurfaceContainerHighDark = Color(0xFF282630)
+val AmethystSurfaceContainerHighestDark = Color(0xFF302E38)
+
+val AmethystSurfaceDimDark = Color(0xFF0D0B12)
+val AmethystSurfaceBrightDark = Color(0xFF383640)
+
+val AmethystInverseSurfaceDark = Color(0xFFF0ECF5)
+val AmethystInverseOnSurfaceDark = Color(0xFF2D2B33)
+val AmethystInversePrimaryDark = Color(0xFF5B3E96)
+
+// ============================================
+// Warm Terrain — Earthy tones, grounded premium
+// Brown/sage/terracotta — Aesop-inspired natural luxury.
+// ============================================
+
+// Light
+val TerrainPrimaryLight = Color(0xFF8B6B4A)
+val TerrainOnPrimaryLight = Color(0xFFFFFFFF)
+val TerrainPrimaryContainerLight = Color(0xFFF0DFD0)
+val TerrainOnPrimaryContainerLight = Color(0xFF2C1808)
+
+val TerrainSecondaryLight = Color(0xFF6B7D6B)
+val TerrainOnSecondaryLight = Color(0xFFFFFFFF)
+val TerrainSecondaryContainerLight = Color(0xFFD8E8D8)
+val TerrainOnSecondaryContainerLight = Color(0xFF0C1F13)
+
+val TerrainTertiaryLight = Color(0xFFC07050)
+val TerrainOnTertiaryLight = Color(0xFFFFFFFF)
+val TerrainTertiaryContainerLight = Color(0xFFFFE0D0)
+val TerrainOnTertiaryContainerLight = Color(0xFF3E1515)
+
+val TerrainErrorLight = Color(0xFFBA1A1A)
+val TerrainOnErrorLight = Color(0xFFFFFFFF)
+val TerrainErrorContainerLight = Color(0xFFFFDAD6)
+val TerrainOnErrorContainerLight = Color(0xFF410002)
+
+val TerrainBackgroundLight = Color(0xFFFAF6F0) // Cream
+val TerrainOnBackgroundLight = Color(0xFF1C1A16)
+val TerrainSurfaceLight = Color(0xFFFAF6F0)
+val TerrainOnSurfaceLight = Color(0xFF1C1A16)
+val TerrainSurfaceVariantLight = Color(0xFFE6E2D8)
+val TerrainOnSurfaceVariantLight = Color(0xFF4A4844)
+
+val TerrainOutlineLight = Color(0xFF7C7870)
+val TerrainOutlineVariantLight = Color(0xFFD0CCC2)
+
+val TerrainSurfaceContainerLowestLight = Color(0xFFFFFEF8)
+val TerrainSurfaceContainerLowLight = Color(0xFFF3EFE6)
+val TerrainSurfaceContainerLight = Color(0xFFEBE7DD)
+val TerrainSurfaceContainerHighLight = Color(0xFFE4DFD4)
+val TerrainSurfaceContainerHighestLight = Color(0xFFDCD7CA)
+
+val TerrainSurfaceDimLight = Color(0xFFD8D4C8)
+val TerrainSurfaceBrightLight = Color(0xFFFAF6F0)
+
+val TerrainInverseSurfaceLight = Color(0xFF2D2B28)
+val TerrainInverseOnSurfaceLight = Color(0xFFF0ECE6)
+val TerrainInversePrimaryLight = Color(0xFFD4BFA0)
+
+// Dark
+val TerrainPrimaryDark = Color(0xFFD4B896)
+val TerrainOnPrimaryDark = Color(0xFF3E2A18)
+val TerrainPrimaryContainerDark = Color(0xFF5E4232)
+val TerrainOnPrimaryContainerDark = Color(0xFFF0DFD0)
+
+val TerrainSecondaryDark = Color(0xFFA0B8A0)
+val TerrainOnSecondaryDark = Color(0xFF142A1A)
+val TerrainSecondaryContainerDark = Color(0xFF3A523A)
+val TerrainOnSecondaryContainerDark = Color(0xFFD8E8D8)
+
+val TerrainTertiaryDark = Color(0xFFE8A080)
+val TerrainOnTertiaryDark = Color(0xFF4A2420)
+val TerrainTertiaryContainerDark = Color(0xFF683A34)
+val TerrainOnTertiaryContainerDark = Color(0xFFFFE0D0)
+
+val TerrainErrorDark = Color(0xFFFFB4AB)
+val TerrainOnErrorDark = Color(0xFF690005)
+val TerrainErrorContainerDark = Color(0xFF93000A)
+val TerrainOnErrorContainerDark = Color(0xFFFFDAD6)
+
+val TerrainBackgroundDark = Color(0xFF100E0C) // Deep espresso
+val TerrainOnBackgroundDark = Color(0xFFE4E0D8)
+val TerrainSurfaceDark = Color(0xFF100E0C)
+val TerrainOnSurfaceDark = Color(0xFFE4E0D8)
+val TerrainSurfaceVariantDark = Color(0xFF1E1C18)
+val TerrainOnSurfaceVariantDark = Color(0xFFC4C0B8)
+
+val TerrainOutlineDark = Color(0xFF8E8A80)
+val TerrainOutlineVariantDark = Color(0xFF3A3832)
+
+val TerrainSurfaceContainerLowestDark = Color(0xFF141210)
+val TerrainSurfaceContainerLowDark = Color(0xFF1A1816)
+val TerrainSurfaceContainerDark = Color(0xFF22201C)
+val TerrainSurfaceContainerHighDark = Color(0xFF2A2824)
+val TerrainSurfaceContainerHighestDark = Color(0xFF32302C)
+
+val TerrainSurfaceDimDark = Color(0xFF100E0C)
+val TerrainSurfaceBrightDark = Color(0xFF383634)
+
+val TerrainInverseSurfaceDark = Color(0xFFF0ECE6)
+val TerrainInverseOnSurfaceDark = Color(0xFF2D2B28)
+val TerrainInversePrimaryDark = Color(0xFF8B6B4A)

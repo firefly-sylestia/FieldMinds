@@ -1,7 +1,6 @@
 package fieldmind.research.app.ui.theme
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -22,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 
 /**
  * ════════════════════════════════════════════════════════════════════════
@@ -130,24 +130,27 @@ data class CuteShadow(
          * In light mode, shadows use standard black with appropriate alphas.
          */
         @Composable
-        fun themeAware(elevation: Dp, isDark: Boolean = isSystemInDarkTheme()): CuteShadow {
-            val ambientAlpha = 0.12f + (elevation.value / 12f) * 0.08f
-            val spotAlpha = 0.18f + (elevation.value / 12f) * 0.14f
+        fun themeAware(elevation: Dp, isDark: Boolean = FieldMindTheme.colors.isDark): CuteShadow {
+            val ambientAlpha = 0.12f + (elevation.value / 12f) * 0.10f
+            val spotAlpha = 0.18f + (elevation.value / 12f) * 0.16f
             return if (isDark) {
-                // Dark mode: brighter white-tinted glow shadows so depth is clearly visible
-                // against dark/AMOLED backgrounds. Significantly bumped from v0.31.0 levels
-                // where shadows were too subtle (invisible on dark surfaces).
-                // At 6dp: ambient ~0.16, spot ~0.25 — clearly visible luminous lift.
+                // Premium dark mode: warm-tinted glow shadows so depth is clearly visible
+                // against dark/AMOLED backgrounds. Uses warm white (candlelight) instead
+                // of pure white for a luxurious luminous lift.
+                // At 6dp: ambient ~0.17, spot ~0.26 — clearly visible warm glow.
+                // Neutral-warm glow: works across green (Flora), purple (Amethyst),
+                // and brown (Terrain) themes without color clash.
+                val warmGlow = Color(0xFFF8F4E8)
                 CuteShadow(
                     elevation = elevation,
-                    ambientColor = Color.White.copy(alpha = ambientAlpha.coerceIn(0.08f, 0.25f)),
-                    spotColor = Color.White.copy(alpha = spotAlpha.coerceIn(0.12f, 0.35f))
+                    ambientColor = warmGlow.copy(alpha = ambientAlpha.coerceIn(0.10f, 0.30f)),
+                    spotColor = warmGlow.copy(alpha = spotAlpha.coerceIn(0.15f, 0.42f))
                 )
             } else {
                 CuteShadow(
                     elevation = elevation,
-                    ambientColor = Color.Black.copy(alpha = ambientAlpha.coerceIn(0.08f, 0.18f)),
-                    spotColor = Color.Black.copy(alpha = spotAlpha.coerceIn(0.12f, 0.28f))
+                    ambientColor = Color.Black.copy(alpha = ambientAlpha.coerceIn(0.08f, 0.20f)),
+                    spotColor = Color.Black.copy(alpha = spotAlpha.coerceIn(0.12f, 0.30f))
                 )
             }
         }
@@ -493,7 +496,7 @@ fun Modifier.cuteShadow(
 fun Modifier.cuteShadowAdaptive(
     elevation: Dp = CuteElevations.clickableTier,
     shape: Shape = CuteCardDefaults.Shape,
-    isDark: Boolean = isSystemInDarkTheme()
+    isDark: Boolean = FieldMindTheme.colors.isDark
 ): Modifier {
     val shadowStyle = CuteShadow.themeAware(elevation, isDark)
     return this.then(
