@@ -246,9 +246,7 @@ class FieldMindSettings private constructor(context: Context) {
     private val _imdApiKey = MutableStateFlow(prefs.getString(KEY_IMD_API_KEY, "") ?: "")
     val imdApiKey: StateFlow<String> = _imdApiKey.asStateFlow()
 
-    // Open-Meteo custom API configuration JSON (imported by user)
-    private val _openMeteoApiConfig = MutableStateFlow(prefs.getString(KEY_OPENMETEO_CONFIG, "") ?: "")
-    val openMeteoApiConfig: StateFlow<String> = _openMeteoApiConfig.asStateFlow()
+    // Open-Meteo uses the general weatherApiKey for commercial tier access
 
     private val _gpsMode = MutableStateFlow(prefs.getString(KEY_GPS_MODE, "On capture only") ?: "On capture only")
     val gpsMode: StateFlow<String> = _gpsMode.asStateFlow()
@@ -613,7 +611,7 @@ class FieldMindSettings private constructor(context: Context) {
     fun setOpenWeatherMapApiKey(value: String) = edit(KEY_OPENWEATHERMAP_API_KEY, value.trim()) { _openWeatherMapApiKey.value = value.trim() }
     fun setWeatherApiDotComApiKey(value: String) = edit(KEY_WEATHERAPI_API_KEY, value.trim()) { _weatherApiDotComApiKey.value = value.trim() }
     fun setImdApiKey(value: String) = edit(KEY_IMD_API_KEY, value.trim()) { _imdApiKey.value = value.trim() }
-    fun setOpenMeteoApiConfig(value: String) = edit(KEY_OPENMETEO_CONFIG, value.trim()) { _openMeteoApiConfig.value = value.trim() }
+
     fun setGpsMode(value: String) = edit(KEY_GPS_MODE, value) { _gpsMode.value = value }
     fun setDistanceUnit(value: String) = edit(KEY_DISTANCE_UNIT, value) { _distanceUnit.value = value }
     fun setWindSpeedUnit(value: String) = edit(KEY_WIND_SPEED_UNIT, value) { _windSpeedUnit.value = value }
@@ -772,7 +770,7 @@ class FieldMindSettings private constructor(context: Context) {
         _openWeatherMapApiKey.value = ""
         _weatherApiDotComApiKey.value = ""
         _imdApiKey.value = ""
-        _openMeteoApiConfig.value = ""
+
         _gpsMode.value = "On capture only"
         _distanceUnit.value = "km"
         _windSpeedUnit.value = "km/h"
@@ -890,7 +888,7 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_OPENWEATHERMAP_API_KEY, _openWeatherMapApiKey.value)
         put(KEY_WEATHERAPI_API_KEY, _weatherApiDotComApiKey.value)
         put(KEY_IMD_API_KEY, _imdApiKey.value)
-        put(KEY_OPENMETEO_CONFIG, _openMeteoApiConfig.value)
+
         put(KEY_GPS_MODE, _gpsMode.value)
         put(KEY_DISTANCE_UNIT, _distanceUnit.value)
         put(KEY_WIND_SPEED_UNIT, _windSpeedUnit.value)
@@ -1006,7 +1004,7 @@ class FieldMindSettings private constructor(context: Context) {
         applyString(KEY_OPENWEATHERMAP_API_KEY)
         applyString(KEY_WEATHERAPI_API_KEY)
         applyString(KEY_IMD_API_KEY)
-        applyString(KEY_OPENMETEO_CONFIG)
+
         applyString(KEY_GPS_MODE)
         applyString(KEY_DISTANCE_UNIT)
         applyString(KEY_WIND_SPEED_UNIT)
@@ -1125,7 +1123,7 @@ class FieldMindSettings private constructor(context: Context) {
         _openWeatherMapApiKey.value = prefs.getString(KEY_OPENWEATHERMAP_API_KEY, "") ?: ""
         _weatherApiDotComApiKey.value = prefs.getString(KEY_WEATHERAPI_API_KEY, "") ?: ""
         _imdApiKey.value = prefs.getString(KEY_IMD_API_KEY, "") ?: ""
-        _openMeteoApiConfig.value = prefs.getString(KEY_OPENMETEO_CONFIG, "") ?: ""
+
         _gpsMode.value = prefs.getString(KEY_GPS_MODE, "On capture only") ?: "On capture only"
         _distanceUnit.value = prefs.getString(KEY_DISTANCE_UNIT, "km") ?: "km"
         _windSpeedUnit.value = prefs.getString(KEY_WIND_SPEED_UNIT, "km/h") ?: "km/h"
@@ -1224,7 +1222,6 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_OPENWEATHERMAP_API_KEY = "openweathermap_api_key"
         private const val KEY_WEATHERAPI_API_KEY = "weatherapi_api_key"
         private const val KEY_IMD_API_KEY = "imd_api_key"
-        private const val KEY_OPENMETEO_CONFIG = "openmeteo_api_config"
         private const val KEY_GPS_MODE = "gps_mode"
         private const val KEY_DISTANCE_UNIT = "distance_unit"
         private const val KEY_WIND_SPEED_UNIT = "wind_speed_unit"

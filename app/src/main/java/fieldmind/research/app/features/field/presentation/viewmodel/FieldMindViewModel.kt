@@ -936,7 +936,7 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
     private var isWeatherFetching = false
         private set
 
-    /** Configure per-provider API keys and apply Open-Meteo custom config. */
+    /** Configure per-provider API keys. */
     private fun buildWeatherApiKeys(): Map<String, String> = buildMap {
         val owm = fieldSettings.openWeatherMapApiKey.value.trim()
         if (owm.isNotBlank()) put("openweathermap", owm)
@@ -944,12 +944,6 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         if (wapi.isNotBlank()) put("weatherapi", wapi)
         val imd = fieldSettings.imdApiKey.value.trim()
         if (imd.isNotBlank()) put("imd-india", imd)
-
-        // Apply Open-Meteo custom config to the singleton provider instance
-        val omConfig = fieldSettings.openMeteoApiConfig.value.trim()
-        if (omConfig.isNotBlank()) {
-            (fieldmind.research.app.features.field.data.weather.WeatherProviders.fromSlug("open-meteo") as? fieldmind.research.app.features.field.data.weather.OpenMeteoProvider)?.configureWithJson(omConfig)
-        }
     }
 
     fun fetchWeatherForLocation(latitude: Double, longitude: Double) = viewModelScope.launch {

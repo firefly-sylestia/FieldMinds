@@ -1418,32 +1418,8 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val openWeatherMapKey by settings.openWeatherMapApiKey.collectAsState()
     val weatherApiDotComKey by settings.weatherApiDotComApiKey.collectAsState()
     val imdApiKey by settings.imdApiKey.collectAsState()
-    val openMeteoConfig by settings.openMeteoApiConfig.collectAsState()
     val selectedProviderSet = remember(providerSlugs) { providerSlugs.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet().ifEmpty { setOf("met-norway") } }
     val keyProvider = remember(selectedProviderSet) { WeatherProviders.selectedProviders(selectedProviderSet.joinToString(",")).firstOrNull { it.requiresApiKey } ?: WeatherProviders.selectedProviders(selectedProviderSet.joinToString(",")).first() }
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    var showClearOpenMeteoConfigDialog by remember { mutableStateOf(false) }
-    val openMeteoConfigPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-        if (uri == null) return@rememberLauncherForActivityResult
-        scope.launch {
-            try {
-                val inputStream = context.contentResolver.openInputStream(uri)
-                val jsonString = inputStream?.bufferedReader()?.use { it.readText() } ?: ""
-                if (jsonString.isBlank()) {
-                    Toast.makeText(context, "Empty file selected.", Toast.LENGTH_SHORT).show()
-                    return@launch
-                }
-                // Validate JSON before saving
-                com.google.gson.JsonParser.parseString(jsonString)
-                settings.setOpenMeteoApiConfig(jsonString)
-                Toast.makeText(context, "Open-Meteo config imported successfully.", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                Toast.makeText(context, "Invalid JSON config: ${e.message?.take(60)}", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
     SettingsSubPage("Weather", icon = FieldMindIcons.Weather, onBack = onBack) {
         item {
             SectionHeader("Data capture", "Weather automatically attached to observations.")
@@ -1526,65 +1502,6 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         )
                     }
 
-                    // ── Open-Meteo response format selector ──
-                    Spacer(Modifier.height(8.dp))
-                    ChoiceItemForm("Response format", listOf("json", "csv", "xlsx"),
-                        try { com.google.gson.JsonParser.parseString(openMeteoConfig).asJsonObject.get("responseFormat")?.asString ?: "json" } catch (_: Exception) { "json" },
-                        FieldMindIcons.File,
-                        ) { newFormat ->
-                            scope.launch {
-                                val existing = try { com.google.gson.JsonParser.parseString(openMeteoConfig).asJsonObject } catch (_: Exception) { com.google.gson.JsonObject() }
-                                if (newFormat == "json") { existing.remove("responseFormat") } else { existing.addProperty("responseFormat", newFormat) }
-                                settings.setOpenMeteoApiConfig(existing.toString())
-                                Toast.makeText(context, "Response format set to ${newFormat.uppercase()}", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                    // ── Open-Meteo custom config import ──
-                    if ("open-meteo" in selectedProviderSet) {
-                        Spacer(Modifier.height(8.dp))
-                        Surface(
-                            onClick = {
-                                if (openMeteoConfig.isNotBlank()) {
-                                    showClearOpenMeteoConfigDialog = true
-                                } else {
-                                    openMeteoConfigPicker.launch(arrayOf("application/json", "*/*"))
-                                }
-                            },
-                            shape = RoundedCornerShape(22.dp),
-                            color = if (openMeteoConfig.isNotBlank())
-                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                            else
-                                MaterialTheme.colorScheme.surfaceContainerHigh
-                        ) {
-                            Row(
-                                Modifier.padding(14.dp).fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    if (openMeteoConfig.isNotBlank()) FieldMindIcons.Check else FieldMindIcons.File,
-                                    null,
-                                    tint = if (openMeteoConfig.isNotBlank()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                    size = 20.dp
-                                )
-                                Column(Modifier.weight(1f)) {
-                                    Text(
-                                        if (openMeteoConfig.isNotBlank()) "Custom Open-Meteo config imported" else "Import Open-Meteo API config",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                    Text(
-                                        if (openMeteoConfig.isNotBlank()) "Tap to replace or clear"
-                                        else "Import a JSON file with custom API endpoint and parameters",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            }
-                        }
-                    }
-
                     // ── Info note about free providers ──
                     Spacer(Modifier.height(4.dp))
                     Surface(
@@ -1599,14 +1516,13 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                             Icon(FieldMindIcons.Info, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
                             Text(
                                 "Each provider that requires an API key shows its own field above. " +
-                                "MET Norway, Open-Meteo, and NWS are free with no key needed. " +
+                                "Open-Meteo, MET Norway, and NWS are free with no key needed. " +
                                 "IMD is best inside India; NWS only returns data for U.S. points.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
-                }
             }
         }
         item {
@@ -1631,33 +1547,6 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         }
     }
 
-    // ── Clear Open-Meteo config confirmation dialog ──
-    if (showClearOpenMeteoConfigDialog) {
-        AlertDialog(
-            onDismissRequest = { showClearOpenMeteoConfigDialog = false },
-            icon = { Icon(FieldMindIcons.File, null, size = 28.dp) },
-            title = { Text("Open-Meteo config", fontWeight = FontWeight.Bold) },
-            text = {
-                Text("You have a custom Open-Meteo configuration imported. What would you like to do?")
-            },
-            confirmButton = {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    TextButton(onClick = {
-                        settings.setOpenMeteoApiConfig("")
-                        showClearOpenMeteoConfigDialog = false
-                        Toast.makeText(context, "Open-Meteo config cleared.", Toast.LENGTH_SHORT).show()
-                    }) { Text("Clear config") }
-                    Button(onClick = {
-                        showClearOpenMeteoConfigDialog = false
-                        openMeteoConfigPicker.launch(arrayOf("application/json", "*/*"))
-                    }) { Text("Replace config") }
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showClearOpenMeteoConfigDialog = false }) { Text("Cancel") }
-            }
-        )
-    }
 }
 
 // ══════════════════════════════════════════════════════════════════════
