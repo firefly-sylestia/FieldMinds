@@ -1714,3 +1714,42 @@ fun StandardIconBox(
         )
     }
 }
+
+// ══════════════════════════════════════════════════════════════════════
+//  InfoBadge — Compact entity type badge for inline list items
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * A compact inline badge for displaying entity type icons in list/detail items.
+ * Uses a fixed 32dp circular box with a 16dp icon — optimized for inline
+ * use where space is constrained but visual recognition is still needed.
+ *
+ * @param icon The material symbol icon representing the entity type.
+ * @param tint The icon and badge background tint color.
+ * @param contentDescription Accessible description (null for decorative icons).
+ * @param modifier Additional modifier to apply to the outer Box.
+ * @param alpha Background tint opacity (default 0.14f).
+ */
+@Composable
+fun InfoBadge(
+    icon: MaterialSymbolIcon,
+    tint: Color,
+    contentDescription: String? = null,
+    modifier: Modifier = Modifier,
+    alpha: Float = 0.14f
+) {
+    Box(
+        modifier = modifier
+            .size(32.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(tint.copy(alpha = alpha)),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            icon = icon,
+            contentDescription = contentDescription,
+            tint = tint,
+            size = 16.dp
+        )
+    }
+}

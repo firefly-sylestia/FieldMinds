@@ -2181,7 +2181,7 @@ private fun EnhancedObservationForm(
                                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                                     ) {
                                         Box(
-                                            Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
+                                            Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                                 .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                             contentAlignment = Alignment.Center
                                         ) {

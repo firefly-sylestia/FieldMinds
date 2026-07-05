@@ -44,6 +44,28 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.41.0 — InfoBadge Composable for 32dp Inline Badges ──
+        FieldMindChangelogEntry(
+            version = "0.41.0",
+            date = "2026-07-05",
+            title = "🏷️ InfoBadge — Compact Entity Type Badge",
+            importance = "Patch",
+            tags = listOf("🏷️", "🎨", "♻️"),
+            sections = listOf(
+                "🏷️ New InfoBadge composable" to listOf(
+                    "✓ Fixed 32dp circular box with 16dp icon for entity type badges",
+                    "✓ Enforces consistent clip radius (16dp) across all 5 detail screens",
+                    "✓ Optional alpha parameter (default 0.14f) for dark mode variants",
+                    "✓ Standardized ObserveScreen 32dp badge clip from 18dp→16dp to match other screens",
+                    "✓ Standardized 28dp tag chip clips to 14dp (fully circular) across DeveloperDebug, Questions, Tasks"
+                ),
+                "♻️ Prevents future badge size drift" to listOf(
+                    "✓ New inline badges should use InfoBadge instead of hand-coded Box/Icon sizes",
+                    "✓ Consistent 50% box-to-icon ratio for compact info display"
+                )
+            )
+        ),
+
         // ── v0.40.9 — StandardIconBox Reusable Composable ──
         FieldMindChangelogEntry(
             version = "0.40.9",
