@@ -498,17 +498,25 @@ private fun LiveCurrentWeatherCard(
 
     Card(
         shape = RoundedCornerShape(36.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            // Animated weather scene background
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(
+                    if (weather == null) Modifier.background(
+                        MaterialTheme.colorScheme.surfaceContainerLow,
+                        RoundedCornerShape(36.dp)
+                    ) else Modifier
+                )
+        ) {
+            // Animated weather scene fills the entire card (no card background to peek through)
             if (weather != null) {
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .clip(RoundedCornerShape(36.dp))
                 ) {AnimatedWeatherScene(
         weatherCode = weather.weatherCode,
         temperature = weather.temperature,
