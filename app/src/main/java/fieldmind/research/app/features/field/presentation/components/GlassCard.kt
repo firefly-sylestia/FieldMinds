@@ -61,14 +61,14 @@ fun GlassCard(
     modifier: Modifier = Modifier,
     shape: RoundedCornerShape = RoundedCornerShape(28.dp),
     blurRadius: Dp = 24.dp,
-    tintAlpha: Float = 0.78f,
+    tintAlpha: Float = 0.55f,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val hazeState = LocalHazeState.current
     val isDark = FieldMindTheme.colors.isDark
 
     val glassColor = MaterialTheme.colorScheme.surfaceContainer.copy(
-        alpha = if (isDark) tintAlpha else tintAlpha.coerceIn(0f, 0.85f)
+        alpha = if (isDark) tintAlpha.coerceIn(0f, 0.55f) else tintAlpha.coerceIn(0f, 0.45f)
     )
 
     val cardModifier = if (hazeState != null) {

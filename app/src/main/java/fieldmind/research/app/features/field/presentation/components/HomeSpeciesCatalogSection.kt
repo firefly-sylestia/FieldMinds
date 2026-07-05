@@ -16,6 +16,8 @@ import fieldmind.research.app.features.field.data.vision.SpeciesDatabase
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
+import fieldmind.research.app.ui.theme.cuteShadow
+import fieldmind.research.app.ui.theme.CuteElevations
 import kotlinx.coroutines.delay
 
 // ══════════════════════════════════════════════════════════════════════
@@ -46,9 +48,10 @@ fun HomeSpeciesCatalogSection(
 
     Card(
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier.fillMaxWidth()
+            .cuteShadow(elevation = 6.dp, shape = RoundedCornerShape(34.dp))
     ) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),

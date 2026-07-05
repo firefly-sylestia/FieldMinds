@@ -301,40 +301,46 @@ object CuteGradients {
             Style.ScreenBackground -> Brush.verticalGradient(
                 colors = listOf(
                     scheme.surface,
-                    scheme.primaryContainer.copy(alpha = alpha(0.15f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.10f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.22f)),
+                    scheme.secondaryContainer.copy(alpha = alpha(0.16f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.12f)),
                     scheme.surface
                 )
             )
             Style.BlushTrio -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.secondaryContainer.copy(alpha = alpha(0.30f)),
-                    scheme.primaryContainer.copy(alpha = alpha(0.28f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.25f))
+                    scheme.secondaryContainer.copy(alpha = alpha(0.35f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.30f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.28f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.12f))
                 )
             )
             Style.CoolDream -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.28f)),
-                    scheme.secondaryContainer.copy(alpha = alpha(0.25f))
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.32f)),
+                    scheme.secondaryContainer.copy(alpha = alpha(0.28f)),
+                    scheme.surface.copy(alpha = alpha(0.10f))
                 )
             )
             Style.RainbowSoft -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.primaryContainer.copy(alpha = alpha(0.25f)),
-                    scheme.secondaryContainer.copy(alpha = alpha(0.22f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.20f))
+                    scheme.primaryContainer.copy(alpha = alpha(0.30f)),
+                    scheme.secondaryContainer.copy(alpha = alpha(0.26f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.22f)),
+                    scheme.primary.copy(alpha = alpha(0.08f))
                 )
             )
             Style.SpringPastel -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.secondaryContainer.copy(alpha = alpha(0.30f)),
-                    scheme.tertiaryContainer.copy(alpha = alpha(0.28f))
+                    scheme.secondaryContainer.copy(alpha = alpha(0.35f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.30f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.10f))
                 )
             )
             Style.SunnyLift -> Brush.horizontalGradient(
                 colors = listOf(
-                    scheme.primaryContainer.copy(alpha = alpha(0.25f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.30f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.18f)),
                     scheme.surfaceContainerHigh
                 )
             )
@@ -350,27 +356,39 @@ object CuteGradients {
                 }
             }
 
-            // ── Premium theme-specific gradients — subtle primary/secondary/tertiary blends ──
-            Style.FloraGlow -> Brush.horizontalGradient(
+            // ── Premium theme-specific gradients — each with its own character ──
+            Style.FloraGlow -> Brush.linearGradient(
                 colors = listOf(
-                    scheme.primary.copy(alpha = alpha(0.32f)),
+                    scheme.primary.copy(alpha = alpha(0.40f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.25f)),
+                    scheme.tertiary.copy(alpha = alpha(0.30f)),
+                    scheme.secondary.copy(alpha = alpha(0.15f)),
+                    scheme.surface
+                ),
+                start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                end = androidx.compose.ui.geometry.Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+            )
+            Style.AmethystAura -> Brush.linearGradient(
+                colors = listOf(
+                    scheme.primary.copy(alpha = alpha(0.38f)),
+                    scheme.tertiary.copy(alpha = alpha(0.32f)),
+                    scheme.secondaryContainer.copy(alpha = alpha(0.20f)),
+                    scheme.primaryContainer.copy(alpha = alpha(0.12f)),
+                    scheme.surface
+                ),
+                start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                end = androidx.compose.ui.geometry.Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+            )
+            Style.TerrainWarmth -> Brush.linearGradient(
+                colors = listOf(
+                    scheme.primary.copy(alpha = alpha(0.36f)),
                     scheme.tertiary.copy(alpha = alpha(0.28f)),
-                    scheme.secondary.copy(alpha = alpha(0.24f))
-                )
-            )
-            Style.AmethystAura -> Brush.horizontalGradient(
-                colors = listOf(
-                    scheme.primary.copy(alpha = alpha(0.30f)),
-                    scheme.tertiary.copy(alpha = alpha(0.26f)),
-                    scheme.secondary.copy(alpha = alpha(0.22f))
-                )
-            )
-            Style.TerrainWarmth -> Brush.horizontalGradient(
-                colors = listOf(
-                    scheme.primary.copy(alpha = alpha(0.30f)),
-                    scheme.tertiary.copy(alpha = alpha(0.26f)),
-                    scheme.secondary.copy(alpha = alpha(0.22f))
-                )
+                    scheme.secondary.copy(alpha = alpha(0.22f)),
+                    scheme.tertiaryContainer.copy(alpha = alpha(0.12f)),
+                    scheme.surface
+                ),
+                start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                end = androidx.compose.ui.geometry.Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
             )
         }
     }
