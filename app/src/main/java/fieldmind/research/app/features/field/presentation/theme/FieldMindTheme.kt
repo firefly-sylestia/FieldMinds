@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.theme
 
+import android.app.Activity
 import android.os.Build
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -12,10 +13,14 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.getCustomColorScheme
 import fieldmind.research.app.ui.theme.getTypographyForFont
@@ -776,6 +781,27 @@ fun FieldMindTheme(
         surfaceContainerHigh = animatedSurfaceContainerHigh,
         surfaceContainerHighest = animatedSurfaceContainerHighest
     )
+
+    // ── System bar appearance ──
+    // Set navigation bar to a translucent frosty version of the surface color
+    // so it looks clean in light mode (white/frosty) and subtle in dark mode.
+    // This overrides enableEdgeToEdge() which doesn't account for FieldMind's
+    // manual theme mode control (System/Light/Dark independent of system setting).
+    val view = LocalView.current
+    val navBarColor = if (darkTheme) {
+        colorScheme.surface.copy(alpha = 0.20f)
+    } else {
+        // Frosty translucent white in light mode
+        colorScheme.surfaceContainerLow.copy(alpha = 0.85f)
+    }
+    SideEffect {
+        if (!view.isInEditMode) {
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
+            window.navigationBarColor = navBarColor.toArgb()
+            val insetsController = WindowCompat.getInsetsController(window, view)
+            insetsController.isAppearanceLightNavigationBars = !darkTheme
+        }
+    }
 
     CompositionLocalProvider(LocalFieldMindColors provides semantic) {
         MaterialTheme(
