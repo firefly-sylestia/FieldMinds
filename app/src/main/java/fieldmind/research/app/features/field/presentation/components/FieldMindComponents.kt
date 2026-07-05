@@ -1698,7 +1698,6 @@ fun StandardIconBox(
     modifier: Modifier = Modifier,
     alpha: Float = 0.14f
 ) {
- * @param alpha Background tint opacity (default 0.14f; use ~0.28f for dark mode variants).
     Box(
         modifier = modifier
             .size(size.boxDp)
