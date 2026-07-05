@@ -46,6 +46,35 @@ internal data class FieldMindChangelogEntry(
 )
 
 private val fieldMindChangelog = listOf(
+        // ── v0.37.0 — Map Improvements, Region Picker, GPS Retry ──
+        FieldMindChangelogEntry(
+            version = "0.37.0",
+            date = "2026-07-05",
+            title = "🗺️ Map Improvements, Region Picker & GPS Retry",
+            importance = "Major",
+            tags = listOf("🗺️", "📍", "⚡"),
+            sections = listOf(
+                "🗺️ Map zoom & place display" to listOf(
+                    "✓ Default map zoom capped at 13 — shows town/village context instead of tiny block area",
+                    "✓ Place names now combine locality + block (e.g. \"Hosur, Krishnagiri\") for richer location context",
+                    "✓ 'Use my location' button auto-fills a 5km bounding box for tile downloads from GPS"
+                ),
+                "📍 Pick from map for tile downloads" to listOf(
+                    "✓ Full-screen map region picker — tap NW then SE corner to draw bounding box",
+                    "✓ Semi-transparent rectangle overlay with corner markers",
+                    "✓ Coordinates auto-fill back to the download dialog on confirmation",
+                    "✓ Existing observation points shown as teal markers for context",
+                    "✓ 'Zoom to my location' button centers map on current GPS position"
+                ),
+                "⚡ Aggressive GPS retry" to listOf(
+                    "✓ GPS acquisition now retries automatically after 5s if first attempt fails",
+                    "✓ Falls back to cached location as final fallback",
+                    "✓ Loading spinner and attempt progress (\"Attempt 2/3…\") shown during acquisition",
+                    "✓ Works in both auto-fetch and manual GPS fetch modes"
+                )
+            )
+        ),
+
         // ── v0.36.0 — New Tools, Clickable Sessions, Snappier Animations ──
         FieldMindChangelogEntry(
             version = "0.36.0",
