@@ -39,7 +39,6 @@ fun ClickableCard(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
     elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
-    tonalElevation: Dp = CuteElevations.clickableTier,
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,
@@ -56,7 +55,6 @@ fun ClickableCard(
     shape = shape,
     colors = colors,
     elevation = elevation,
-    tonalElevation = tonalElevation,
     border = border,
     content = content
 )
@@ -74,7 +72,6 @@ fun InfoCard(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
     elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
-    tonalElevation: Dp = CuteElevations.nonClickableTier,
     border: androidx.compose.foundation.BorderStroke? = null,
     index: Int = 0,
     animate: Boolean = false,
@@ -87,7 +84,6 @@ fun InfoCard(
     shape = shape,
     colors = colors,
     elevation = elevation,
-    tonalElevation = tonalElevation,
     border = border,
     content = content
 )
@@ -107,7 +103,6 @@ fun ClickableCard(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
     elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
-    tonalElevation: Dp = CuteElevations.clickableTier,
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,
@@ -123,7 +118,6 @@ fun ClickableCard(
         shape = shape,
         colors = colors,
         elevation = elevation,
-        tonalElevation = tonalElevation,
         liftDp = liftDp,
         scaleDown = scaleDown,
         border = border,
@@ -156,7 +150,6 @@ fun ClickableCard(
     minHeight: Dp = 68.dp,
     shape: Shape = RoundedCornerShape(34.dp),
     elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
-    tonalElevation: Dp = CuteElevations.clickableTier,
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     content: @Composable ColumnScope.() -> Unit
@@ -169,7 +162,6 @@ fun ClickableCard(
         containerColor = accentColor.copy(alpha = tintStrength)
     ),
     elevation = elevation,
-    tonalElevation = tonalElevation,
     liftDp = liftDp,
     scaleDown = scaleDown,
     content = content
