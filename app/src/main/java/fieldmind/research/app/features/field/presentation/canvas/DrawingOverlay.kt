@@ -240,7 +240,7 @@ private fun DrawScope.drawSmoothPath(
             (points[i - 1].x + points[i].x) / 2f,
             (points[i - 1].y + points[i].y) / 2f
         )
-        path.quadraticBezierTo(
+        path.quadraticTo(
             points[i - 1].x, points[i - 1].y,
             mid.x, mid.y
         )

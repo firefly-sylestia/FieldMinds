@@ -62,20 +62,21 @@ fun SwipeableAlertDialog(
     text: @Composable (() -> Unit)? = null,
     confirmButton: @Composable () -> Unit,
     dismissButton: @Composable (() -> Unit)? = null,
-    shape: Shape = RoundedCornerShape(28.dp),
+    shape: Shape = RoundedCornerShape(36.dp),
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     tonalElevation: androidx.compose.ui.unit.Dp = 6.dp
 ) {
     val reduceMotion = FieldMindMotion.isReduceMotion()
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
+    val animConfig = LocalAnimationConfig.current
 
     var dragOffset by remember { mutableFloatStateOf(0f) }
     var isDragging by remember { mutableStateOf(false) }
     var isAnimatingAway by remember { mutableStateOf(false) }
     var dialogWidth by remember { mutableFloatStateOf(1f) }
 
-    val dismissThreshold = dialogWidth * 0.35f
+    val dismissThreshold = dialogWidth * animConfig.swipeThreshold
 
     // Rubber-band: compute the effective (resisted) offset so position,
     // scale, and alpha all respond consistently beyond the threshold.
@@ -96,16 +97,16 @@ fun SwipeableAlertDialog(
         animationSpec = if (isDragging)
             FieldMindMotion.expressiveFloat
         else if (isAnimatingAway)
-            FieldMindMotion.expressiveDramatic
+            animConfig.entranceSpring()
         else
-            FieldMindMotion.swipeBackSpring,
+            animConfig.swipeBackSpring(),
         label = "dialogSwipe"
     )
 
     // Drag progress for visual effects — based on rubber-banded offset
     val dragProgress = (effectiveAbs / dismissThreshold).coerceIn(0f, 1f)
     val scrimAlpha = (1f - dragProgress * 0.6f).coerceIn(0f, 1f)
-    val contentScale = 1f - dragProgress * 0.06f
+    val contentScale = 1f - dragProgress * (1f - animConfig.swipeScaleFactor)
     val contentAlpha = 1f - dragProgress * 0.3f
     val swipeCornerRadius = (dragProgress * FieldMindMotion.swipeCornerRadiusDp).dp
 

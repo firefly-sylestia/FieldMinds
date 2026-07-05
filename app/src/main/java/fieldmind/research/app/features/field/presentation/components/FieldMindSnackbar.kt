@@ -83,7 +83,7 @@ private fun SwipeableSnackbarHost(hostState: SnackbarHostState) {
                         }
                     )
                 },
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(24.dp)
         ) {
             Snackbar(
                 modifier = Modifier.offset { IntOffset(offsetX.toInt(), 0) }

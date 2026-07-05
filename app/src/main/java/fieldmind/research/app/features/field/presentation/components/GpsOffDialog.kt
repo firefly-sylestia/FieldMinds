@@ -38,9 +38,9 @@ fun GpsOffDialog(
             })
         }
     }
-    AlertDialog(
+    SwipeableAlertDialog(
         onDismissRequest = onDismiss,
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(36.dp),
         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         title = {
             Row(
@@ -52,7 +52,7 @@ fun GpsOffDialog(
                         .size(40.dp)
                         .background(
                             MaterialTheme.colorScheme.errorContainer,
-                            RoundedCornerShape(14.dp)
+                            RoundedCornerShape(22.dp)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -87,7 +87,7 @@ fun GpsOffDialog(
                     effectiveOnOpenSettings()
                     onDismiss()
                 },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )

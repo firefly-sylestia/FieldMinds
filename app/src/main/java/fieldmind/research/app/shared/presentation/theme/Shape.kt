@@ -7,20 +7,23 @@ import androidx.compose.ui.unit.dp
 // Material Design 3 Expressive Shape System
 // Uses more organic, rounded shapes for expressive design language
 val Shapes = Shapes(
+    // ── Bouncy, cute, pill-like shapes ──
+    // Extra rounded corners for a friendly, approachable feel.
+    
     // Extra small components (small chips, badges)
-    extraSmall = RoundedCornerShape(8.dp),
+    extraSmall = RoundedCornerShape(12.dp),
     
     // Small components (chips, small buttons)
-    small = RoundedCornerShape(12.dp),
+    small = RoundedCornerShape(16.dp),
     
     // Medium components (buttons, cards, FABs)
-    medium = RoundedCornerShape(16.dp),
+    medium = RoundedCornerShape(20.dp),
     
     // Large components (sheets, dialogs, large cards)
-    large = RoundedCornerShape(24.dp),
+    large = RoundedCornerShape(28.dp),
     
     // Extra large components (full-width modals, prominent surfaces)
-    extraLarge = RoundedCornerShape(32.dp)
+    extraLarge = RoundedCornerShape(36.dp)
 )
 
 

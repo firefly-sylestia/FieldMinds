@@ -1,6 +1,9 @@
 package fieldmind.research.app.features.field.presentation.theme
 
+import android.app.Activity
 import android.os.Build
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -10,10 +13,16 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.getCustomColorScheme
 import fieldmind.research.app.ui.theme.getTypographyForFont
 
 /**
@@ -236,6 +245,219 @@ private val LightFieldMindColors = FieldMindColors(
     )
 )
 
+// ============================================
+// Midnight Flora — Forest entity colors (vibrant greens + amber + cyan)
+// ============================================
+private val FloraLightFieldMindColors = FieldMindColors(
+    isDark = false,
+    observation = Color(0xFF1A6B4C), // Deep forest emerald
+    question = Color(0xFF1565C0),    // Rich sky blue
+    hypothesis = Color(0xFFB8860B),  // Dark goldenrod amber
+    project = Color(0xFF00695C),     // Deep teal
+    source = Color(0xFF5E35B1),      // Rich plum
+    note = Color(0xFFD45D5D),        // Warm coral rose
+    task = Color(0xFF2E7D32),        // Fresh green
+    folder = Color(0xFF6D4C41),      // Bark brown
+    species = Color(0xFF2E7D32),     // Forest green
+    data = Color(0xFF00838F),        // Vibrant cyan
+    report = Color(0xFFBF360C),      // Burnt orange
+    flashcard = Color(0xFFD81B60),   // Magenta
+    positive = Color(0xFF1A6B4C),
+    warning = Color(0xFFE67E22),
+    info = Color(0xFF1565C0),
+    confidenceSure = Color(0xFF1A6B4C),
+    confidenceGuess = Color(0xFFF39C12),
+    confidenceVerify = Color(0xFFE53935),
+    categorical = listOf(
+        Color(0xFF1A6B4C), // emerald
+        Color(0xFF1565C0), // blue
+        Color(0xFFB8860B), // amber
+        Color(0xFF5E35B1), // plum
+        Color(0xFFD45D5D), // coral
+        Color(0xFF2E7D32), // green
+        Color(0xFF00838F), // cyan
+        Color(0xFF6D4C41), // brown
+        Color(0xFFD81B60), // magenta
+        Color(0xFFBF360C), // orange
+    )
+)
+
+private val FloraDarkFieldMindColors = FieldMindColors(
+    isDark = true,
+    observation = Color(0xFF7DCDA0), // Soft green glow
+    question = Color(0xFF64B5F6),    // Sky blue
+    hypothesis = Color(0xFFF0C860),  // Warm amber glow
+    project = Color(0xFF4DB6AC),     // Teal
+    source = Color(0xFFB39DDB),      // Lavender
+    note = Color(0xFFE57373),        // Soft coral
+    task = Color(0xFF81C784),        // Mint green
+    folder = Color(0xFFA1887F),      // Warm taupe
+    species = Color(0xFF81C784),     // Mint
+    data = Color(0xFF4DD0E1),        // Cyan glow
+    report = Color(0xFFFF8A65),      // Soft orange
+    flashcard = Color(0xFFF06292),   // Pink
+    positive = Color(0xFF7DCDA0),
+    warning = Color(0xFFFFD54F),
+    info = Color(0xFF64B5F6),
+    confidenceSure = Color(0xFF7DCDA0),
+    confidenceGuess = Color(0xFFFFD54F),
+    confidenceVerify = Color(0xFFEF9A9A),
+    categorical = listOf(
+        Color(0xFF7DCDA0),
+        Color(0xFF64B5F6),
+        Color(0xFFF0C860),
+        Color(0xFFB39DDB),
+        Color(0xFFE57373),
+        Color(0xFF81C784),
+        Color(0xFF4DD0E1),
+        Color(0xFFA1887F),
+        Color(0xFFF06292),
+        Color(0xFFFF8A65),
+    )
+)
+
+// ============================================
+// Noir Amethyst — Deep violet entity colors (violet + blue + pink + cyan)
+// ============================================
+private val AmethystLightFieldMindColors = FieldMindColors(
+    isDark = false,
+    observation = Color(0xFF5B3E96), // Deep violet
+    question = Color(0xFF1565C0),    // Electric blue
+    hypothesis = Color(0xFFB8860B),  // Golden amber
+    project = Color(0xFF283593),     // Deep indigo
+    source = Color(0xFF7B1FA2),      // Rich amethyst
+    note = Color(0xFFD4726A),        // Warm rose
+    task = Color(0xFF00897B),        // Soft teal
+    folder = Color(0xFF6D4C41),      // Warm grey-brown
+    species = Color(0xFF5B3E96),     // Deep violet
+    data = Color(0xFF00ACC1),        // Bright cyan
+    report = Color(0xFFE65100),      // Warm orange
+    flashcard = Color(0xFFE91E63),   // Vibrant pink
+    positive = Color(0xFF5B3E96),
+    warning = Color(0xFFE67E22),
+    info = Color(0xFF1565C0),
+    confidenceSure = Color(0xFF5B3E96),
+    confidenceGuess = Color(0xFFF39C12),
+    confidenceVerify = Color(0xFFE53935),
+    categorical = listOf(
+        Color(0xFF5B3E96), // violet
+        Color(0xFF1565C0), // blue
+        Color(0xFFB8860B), // amber
+        Color(0xFF7B1FA2), // amethyst
+        Color(0xFFD4726A), // rose
+        Color(0xFF00897B), // teal
+        Color(0xFF00ACC1), // cyan
+        Color(0xFF6D4C41), // brown
+        Color(0xFFE91E63), // pink
+        Color(0xFFE65100), // orange
+    )
+)
+
+private val AmethystDarkFieldMindColors = FieldMindColors(
+    isDark = true,
+    observation = Color(0xFFC4A5FF), // Lavender glow
+    question = Color(0xFF64B5F6),    // Sky blue
+    hypothesis = Color(0xFFF0C860),  // Amber glow
+    project = Color(0xFF5C6BC0),     // Indigo
+    source = Color(0xFFCE93D8),      // Soft amethyst
+    note = Color(0xFFF0A098),        // Warm peach
+    task = Color(0xFF4DB6AC),        // Teal
+    folder = Color(0xFFA1887F),      // Warm taupe
+    species = Color(0xFFC4A5FF),     // Lavender glow
+    data = Color(0xFF4DD0E1),        // Cyan
+    report = Color(0xFFFF8A65),      // Soft orange
+    flashcard = Color(0xFFF48FB1),   // Pink
+    positive = Color(0xFFC4A5FF),
+    warning = Color(0xFFFFD54F),
+    info = Color(0xFF64B5F6),
+    confidenceSure = Color(0xFFC4A5FF),
+    confidenceGuess = Color(0xFFFFD54F),
+    confidenceVerify = Color(0xFFEF9A9A),
+    categorical = listOf(
+        Color(0xFFC4A5FF),
+        Color(0xFF64B5F6),
+        Color(0xFFF0C860),
+        Color(0xFFCE93D8),
+        Color(0xFFF0A098),
+        Color(0xFF4DB6AC),
+        Color(0xFF4DD0E1),
+        Color(0xFFA1887F),
+        Color(0xFFF48FB1),
+        Color(0xFFFF8A65),
+    )
+)
+
+// ============================================
+// Warm Terrain — Earthy entity colors (olive + terracotta + sage + tan)
+// ============================================
+private val TerrainLightFieldMindColors = FieldMindColors(
+    isDark = false,
+    observation = Color(0xFF558B2F), // Olive green
+    question = Color(0xFFAF5F00),    // Ochre yellow
+    hypothesis = Color(0xFFC07050),  // Terracotta
+    project = Color(0xFF6B7D6B),     // Sage green
+    source = Color(0xFF8D6E63),      // Warm brown
+    note = Color(0xFFD4726A),        // Warm rose
+    task = Color(0xFF4E6B3E),        // Deep olive
+    folder = Color(0xFF5D4037),      // Dark brown
+    species = Color(0xFF558B2F),     // Olive
+    data = Color(0xFF006D7A),        // Teal
+    report = Color(0xFFBF360C),      // Burnt sienna
+    flashcard = Color(0xFFE0616E),   // Warm pink
+    positive = Color(0xFF558B2F),
+    warning = Color(0xFFE67E22),
+    info = Color(0xFF6B7D6B),
+    confidenceSure = Color(0xFF558B2F),
+    confidenceGuess = Color(0xFFF39C12),
+    confidenceVerify = Color(0xFFE53935),
+    categorical = listOf(
+        Color(0xFF558B2F), // olive
+        Color(0xFFAF5F00), // ochre
+        Color(0xFFC07050), // terracotta
+        Color(0xFF8D6E63), // brown
+        Color(0xFFD4726A), // rose
+        Color(0xFF4E6B3E), // deep olive
+        Color(0xFF006D7A), // teal
+        Color(0xFF5D4037), // dark brown
+        Color(0xFFE0616E), // warm pink
+        Color(0xFFBF360C), // sienna
+    )
+)
+
+private val TerrainDarkFieldMindColors = FieldMindColors(
+    isDark = true,
+    observation = Color(0xFFA0BFA0), // Sage glow
+    question = Color(0xFFE8A080),    // Terracotta glow
+    hypothesis = Color(0xFFD4B896),  // Tan
+    project = Color(0xFFA0B8A0),     // Sage
+    source = Color(0xFFBCAAA4),      // Warm taupe
+    note = Color(0xFFE8A080),        // Peach
+    task = Color(0xFF81A881),        // Soft olive
+    folder = Color(0xFF8D6E63),      // Warm brown
+    species = Color(0xFFA0BFA0),     // Sage glow
+    data = Color(0xFF80CBC4),        // Soft teal
+    report = Color(0xFFFFAB91),      // Soft sienna
+    flashcard = Color(0xFFF48FB1),   // Pink
+    positive = Color(0xFFA0BFA0),
+    warning = Color(0xFFFFD54F),
+    info = Color(0xFFA0B8A0),
+    confidenceSure = Color(0xFFA0BFA0),
+    confidenceGuess = Color(0xFFFFD54F),
+    confidenceVerify = Color(0xFFEF9A9A),
+    categorical = listOf(
+        Color(0xFFA0BFA0),
+        Color(0xFFE8A080),
+        Color(0xFFD4B896),
+        Color(0xFFBCAAA4),
+        Color(0xFFE8A080),
+        Color(0xFF81A881),
+        Color(0xFF80CBC4),
+        Color(0xFF8D6E63),
+        Color(0xFFF48FB1),
+        Color(0xFFFFAB91),
+    )
+)
+
 private val DarkFieldMindColors = FieldMindColors(
     isDark = true,
     // Entity colors
@@ -274,6 +496,71 @@ private val DarkFieldMindColors = FieldMindColors(
 )
 
 val LocalFieldMindColors = staticCompositionLocalOf { LightFieldMindColors }
+
+/**
+ * Derives harmonious [FieldMindColors] from a Material [ColorScheme] by blending
+ * the scheme's primary color with fixed hue targets for each entity type.
+ * This ensures entity accent colors automatically adapt to any color scheme.
+ */
+private fun deriveFieldMindColors(colorScheme: ColorScheme, isDark: Boolean): FieldMindColors {
+    fun blend(a: Color, b: Color, t: Float): Color = Color(
+        (a.red * (1 - t) + b.red * t).coerceIn(0f, 1f),
+        (a.green * (1 - t) + b.green * t).coerceIn(0f, 1f),
+        (a.blue * (1 - t) + b.blue * t).coerceIn(0f, 1f),
+        (a.alpha * (1 - t) + b.alpha * t).coerceIn(0f, 1f)
+    )
+
+    val p = colorScheme.primary
+
+    // Fixed hue targets — each entity type maps to a distinct hue
+    val green = Color(0xFF4CAF50)
+    val blue = Color(0xFF2196F3)
+    val amber = Color(0xFFFFC107)
+    val teal = Color(0xFF009688)
+    val purple = Color(0xFF9C27B0)
+    val pink = Color(0xFFE91E63)
+    val brown = Color(0xFF795548)
+    val cyan = Color(0xFF00BCD4)
+    val orange = Color(0xFFFF9800)
+    val red = Color(0xFFF44336)
+
+    return FieldMindColors(
+        isDark = isDark,
+        observation = blend(p, green, 0.55f),
+        question = blend(p, blue, 0.55f),
+        hypothesis = blend(p, amber, 0.55f),
+        project = blend(p, teal, 0.5f),
+        source = blend(p, purple, 0.5f),
+        note = blend(p, pink, 0.5f),
+        task = blend(p, teal, 0.35f),
+        folder = blend(p, brown, 0.5f),
+        species = blend(p, green, 0.65f),
+        data = blend(p, cyan, 0.55f),
+        report = blend(p, orange, 0.55f),
+        flashcard = blend(p, pink, 0.65f),
+        // State colors derived from scheme
+        positive = blend(p, green, 0.4f),
+        warning = blend(p, amber, 0.5f),
+        info = blend(p, blue, 0.5f),
+        // Confidence colors
+        confidenceSure = blend(p, green, 0.3f),
+        confidenceGuess = blend(p, amber, 0.5f),
+        confidenceVerify = blend(p, red, 0.4f),
+        // Categorical palette — 10 distinct hues
+        categorical = listOf(
+            blend(p, green, 0.55f),
+            blend(p, blue, 0.55f),
+            blend(p, amber, 0.55f),
+            blend(p, purple, 0.5f),
+            blend(p, pink, 0.5f),
+            blend(p, teal, 0.4f),
+            blend(p, cyan, 0.5f),
+            blend(p, brown, 0.5f),
+            blend(p, orange, 0.55f),
+            blend(p, red, 0.4f),
+        )
+    )
+}
 
 /**
  * Accessor object so callers can read semantic colors via `FieldMindTheme.colors`.
@@ -375,6 +662,8 @@ val ENTITY_COLOR_ICONS: Map<String, MaterialSymbolIcon> = mapOf(
 fun FieldMindTheme(
     darkTheme: Boolean,
     dynamicColor: Boolean,
+    amoledTheme: Boolean = false,
+    customColorScheme: String = "Default",
     entityColorOverrides: Map<String, Long> = emptyMap(),
     content: @Composable () -> Unit
 ) {
@@ -382,17 +671,141 @@ fun FieldMindTheme(
     val colorScheme: ColorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        customColorScheme != "Default" -> getCustomColorScheme(customColorScheme, darkTheme)
         darkTheme -> BrandDark
         else -> BrandLight
+    }.let { scheme ->
+        // Apply AMOLED theme modifications if enabled and in dark mode
+        if (amoledTheme && darkTheme) {
+            scheme.copy(
+                background = Color.Black,
+                surface = Color.Black,
+                surfaceVariant = Color(0xFF121212),
+                surfaceContainer = Color(0xFF121212),
+                surfaceContainerLow = Color(0xFF0A0A0A),
+                surfaceContainerLowest = Color.Black,
+                surfaceContainerHigh = Color(0xFF1E1E1E),
+                surfaceContainerHighest = Color(0xFF2A2A2A),
+                surfaceDim = Color.Black,
+                surfaceBright = Color(0xFF2A2A2A)
+            )
+        } else scheme
     }
-    val semantic = (if (darkTheme) DarkFieldMindColors else LightFieldMindColors)
+    val semantic = when {
+            // Hand-tuned entity colors for Default scheme without dynamic color
+            !dynamicColor && customColorScheme == "Default" ->
+                if (darkTheme) DarkFieldMindColors else LightFieldMindColors
+            // Midnight Flora — hand-tuned forest entity colors
+            !dynamicColor && customColorScheme == "Midnight Flora" ->
+                if (darkTheme) FloraDarkFieldMindColors else FloraLightFieldMindColors
+            // Noir Amethyst — hand-tuned violet entity colors
+            !dynamicColor && customColorScheme == "Noir Amethyst" ->
+                if (darkTheme) AmethystDarkFieldMindColors else AmethystLightFieldMindColors
+            // Warm Terrain — hand-tuned earthy entity colors
+            !dynamicColor && customColorScheme == "Warm Terrain" ->
+                if (darkTheme) TerrainDarkFieldMindColors else TerrainLightFieldMindColors
+            // For dynamic colors, derive from the active scheme
+            else -> deriveFieldMindColors(colorScheme, darkTheme)
+        }
         .applyOverrides(entityColorOverrides)
 
     val geomTypography = getTypographyForFont("Geom")
 
+    // ── Animated color scheme transition ──
+    // Smoothly animate the 10 most visible color scheme properties
+    // so the theme change feels fluid rather than a hard snap.
+    val animSpec = tween<Color>(durationMillis = 400)
+    val animatedPrimary by animateColorAsState(targetValue = colorScheme.primary, animationSpec = animSpec, label = "primary")
+    val animatedOnPrimary by animateColorAsState(targetValue = colorScheme.onPrimary, animationSpec = animSpec, label = "onPrimary")
+    val animatedPrimaryContainer by animateColorAsState(targetValue = colorScheme.primaryContainer, animationSpec = animSpec, label = "primaryContainer")
+    val animatedOnPrimaryContainer by animateColorAsState(targetValue = colorScheme.onPrimaryContainer, animationSpec = animSpec, label = "onPrimaryContainer")
+    val animatedSecondary by animateColorAsState(targetValue = colorScheme.secondary, animationSpec = animSpec, label = "secondary")
+    val animatedOnSecondary by animateColorAsState(targetValue = colorScheme.onSecondary, animationSpec = animSpec, label = "onSecondary")
+    val animatedTertiary by animateColorAsState(targetValue = colorScheme.tertiary, animationSpec = animSpec, label = "tertiary")
+    val animatedOnTertiary by animateColorAsState(targetValue = colorScheme.onTertiary, animationSpec = animSpec, label = "onTertiary")
+    val animatedBackground by animateColorAsState(targetValue = colorScheme.background, animationSpec = animSpec, label = "background")
+    val animatedOnBackground by animateColorAsState(targetValue = colorScheme.onBackground, animationSpec = animSpec, label = "onBackground")
+    val animatedSurface by animateColorAsState(targetValue = colorScheme.surface, animationSpec = animSpec, label = "surface")
+    val animatedOnSurface by animateColorAsState(targetValue = colorScheme.onSurface, animationSpec = animSpec, label = "onSurface")
+    val animatedSurfaceVariant by animateColorAsState(targetValue = colorScheme.surfaceVariant, animationSpec = animSpec, label = "surfaceVariant")
+    val animatedOnSurfaceVariant by animateColorAsState(targetValue = colorScheme.onSurfaceVariant, animationSpec = animSpec, label = "onSurfaceVariant")
+    val animatedOutline by animateColorAsState(targetValue = colorScheme.outline, animationSpec = animSpec, label = "outline")
+    val animatedError by animateColorAsState(targetValue = colorScheme.error, animationSpec = animSpec, label = "error")
+
+    val animatedColorScheme = colorScheme.copy(
+        primary = animatedPrimary,
+        onPrimary = animatedOnPrimary,
+        primaryContainer = animatedPrimaryContainer,
+        onPrimaryContainer = animatedOnPrimaryContainer,
+        secondary = animatedSecondary,
+        onSecondary = animatedOnSecondary,
+        tertiary = animatedTertiary,
+        onTertiary = animatedOnTertiary,
+        background = animatedBackground,
+        onBackground = animatedOnBackground,
+        surface = animatedSurface,
+        onSurface = animatedOnSurface,
+        surfaceVariant = animatedSurfaceVariant,
+        onSurfaceVariant = animatedOnSurfaceVariant,
+        outline = animatedOutline,
+        error = animatedError
+    )
+
+    // Animate surface container colors too for complete card/dialog depth transitions
+    val animSpecTier = tween<Color>(durationMillis = 500)
+    val animatedSurfaceContainerHighest by animateColorAsState(
+        targetValue = colorScheme.surfaceContainerHighest,
+        animationSpec = animSpecTier, label = "surfaceContainerHighest"
+    )
+    val animatedSurfaceContainerHigh by animateColorAsState(
+        targetValue = colorScheme.surfaceContainerHigh,
+        animationSpec = animSpecTier, label = "surfaceContainerHigh"
+    )
+    val animatedSurfaceContainer by animateColorAsState(
+        targetValue = colorScheme.surfaceContainer,
+        animationSpec = animSpecTier, label = "surfaceContainer"
+    )
+    val animatedSurfaceContainerLow by animateColorAsState(
+        targetValue = colorScheme.surfaceContainerLow,
+        animationSpec = animSpecTier, label = "surfaceContainerLow"
+    )
+    val animatedSurfaceContainerLowest by animateColorAsState(
+        targetValue = colorScheme.surfaceContainerLowest,
+        animationSpec = animSpecTier, label = "surfaceContainerLowest"
+    )
+
+    val fullAnimatedColorScheme = animatedColorScheme.copy(
+        surfaceContainerLowest = animatedSurfaceContainerLowest,
+        surfaceContainerLow = animatedSurfaceContainerLow,
+        surfaceContainer = animatedSurfaceContainer,
+        surfaceContainerHigh = animatedSurfaceContainerHigh,
+        surfaceContainerHighest = animatedSurfaceContainerHighest
+    )
+
+    // ── System bar appearance ──
+    // Set navigation bar to a translucent frosty version of the surface color
+    // so it looks clean in light mode (white/frosty) and subtle in dark mode.
+    // This overrides enableEdgeToEdge() which doesn't account for FieldMind's
+    // manual theme mode control (System/Light/Dark independent of system setting).
+    val view = LocalView.current
+    val navBarColor = if (darkTheme) {
+        colorScheme.surface.copy(alpha = 0.20f)
+    } else {
+        // Frosty translucent white in light mode
+        colorScheme.surfaceContainerLow.copy(alpha = 0.85f)
+    }
+    SideEffect {
+        if (!view.isInEditMode) {
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
+            window.navigationBarColor = navBarColor.toArgb()
+            val insetsController = WindowCompat.getInsetsController(window, view)
+            insetsController.isAppearanceLightNavigationBars = !darkTheme
+        }
+    }
+
     CompositionLocalProvider(LocalFieldMindColors provides semantic) {
         MaterialTheme(
-            colorScheme = colorScheme,
+            colorScheme = fullAnimatedColorScheme,
             typography = geomTypography,
             shapes = MaterialTheme.shapes,
             content = content

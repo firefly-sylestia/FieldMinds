@@ -259,7 +259,7 @@ fun PrivacyStatusCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (allEnabled)
                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f)
@@ -300,7 +300,7 @@ fun PrivacyStatusCard(
                 val summaryText = "$enabledCount / ${rows.size} active"
                 val summaryDesc = "$enabledCount of ${rows.size} privacy features enabled"
                 Surface(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(30.dp),
                     color = if (allEnabled)
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                     else

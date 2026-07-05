@@ -99,6 +99,66 @@ class FieldLocationProvider(private val context: Context) {
     }
 
     /**
+     * Requests a fresh GPS fix with aggressive retry logic for better reliability.
+     *
+     * Strategy:
+     * 1. First checks [lastKnownLocation] for an instant cached result
+     * 2. Actively requests a fresh fix with a shorter timeout (5s)
+     * 3. If null, waits 2s and retries once more
+     * 4. Final fallback: returns [lastKnownLocation] again (may have appeared in the meantime)
+     *
+     * Each attempt state is reported via [onAttempt] so the UI can show meaningful progress.
+     * Delivers the final result via [onResult], always on the main thread.
+     */
+    @SuppressLint("MissingPermission")
+    fun requestCurrentLocationWithRetry(
+        onAttempt: (attempt: Int, totalAttempts: Int, status: String) -> Unit = { _, _, _ -> },
+        onResult: (CapturedLocation?) -> Unit
+    ) {
+        if (!hasAnyLocationPermission()) {
+            onAttempt(0, 3, "Location permission not granted")
+            onResult(null)
+            return
+        }
+
+        // Attempt 0: immediate cached result
+        val cached = lastKnownLocation()
+        if (cached != null) {
+            onAttempt(0, 3, "Using cached location (${cached.accuracyMeters?.toInt() ?: "?"}m)")
+            onResult(cached)
+            return
+        }
+
+        onAttempt(1, 3, "Acquiring GPS signal…")
+        requestCurrentLocation(timeoutMs = 5_000L) { loc ->
+            if (loc != null) {
+                onResult(loc)
+                return@requestCurrentLocation
+            }
+
+            // Attempt 2: retry after a brief delay for better GPS lock
+            onAttempt(2, 3, "GPS weak — retrying…")
+            android.os.Handler(Looper.getMainLooper()).postDelayed({
+                requestCurrentLocation(timeoutMs = 5_000L) { retryLoc ->
+                    if (retryLoc != null) {
+                        onResult(retryLoc)
+                    } else {
+                        // Final fallback: check lastKnownLocation one more time
+                        val finalCached = lastKnownLocation()
+                        if (finalCached != null) {
+                            onAttempt(3, 3, "Using cached location (${finalCached.accuracyMeters?.toInt() ?: "?"}m)")
+                            onResult(finalCached)
+                        } else {
+                            onAttempt(3, 3, "GPS unavailable after 2 attempts")
+                            onResult(null)
+                        }
+                    }
+                }
+            }, 2_000L)
+        }
+    }
+
+    /**
      * Checks whether the device's GPS (or any location provider) is currently enabled.
      * Returns false when GPS is turned off in system settings, even if location
      * permission has been granted.
@@ -145,19 +205,39 @@ class FieldLocationProvider(private val context: Context) {
     }
 
     /**
-     * Formats an [android.location.Address] into a concise place name using only the
-     * locality/city — the most stable and recognizable part of an address, without the
-     * unreliable feature/street prefix that varies by location.
+     * Formats an [android.location.Address] into a concise place name.
+     *
+     * First tries [locality] (town/village) alone — the most recognizable part.
+     * If locality is not available, falls back to [subAdminArea] (block/district).
+     * If both are available and different (common in rural India where the geocoder
+     * doesn't return a locality), combines them as "Locality, Block" for clarity.
      */
     private fun formatPlace(address: android.location.Address): String {
-        return address.locality
-            ?: address.subAdminArea  // district
-            ?: address.adminArea     // state
-            ?: address.getAddressLine(0)?.let { line ->
-                // Strip the street/feature prefix; everything after the first comma
-                val parts = line.split(",")
-                if (parts.size > 1) parts.drop(1).joinToString(",").trim() else line
+        val locality = address.locality?.trim()
+        val subArea = address.subAdminArea?.trim()
+        val adminArea = address.adminArea?.trim()
+
+        // Best case: we have a town/village name
+        if (!locality.isNullOrBlank()) {
+            // If both locality and subAdminArea exist and are different, show both
+            // e.g. "Hosur, Krishnagiri" — helps users distinguish between
+            // the village and the block they're actually in.
+            if (!subArea.isNullOrBlank() && !subArea.equals(locality, ignoreCase = true)) {
+                return "$locality, $subArea"
             }
-            ?: "Unknown place"
+            return locality
+        }
+
+        // Fallback to block/district
+        if (!subArea.isNullOrBlank()) return subArea
+
+        // Fallback to state
+        if (!adminArea.isNullOrBlank()) return adminArea
+
+        // Last resort: full address line, stripped of street/feature prefix
+        return address.getAddressLine(0)?.let { line ->
+            val parts = line.split(",")
+            if (parts.size > 1) parts.drop(1).joinToString(",").trim() else line
+        } ?: "Unknown place"
     }
 }

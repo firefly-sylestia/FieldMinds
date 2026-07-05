@@ -115,7 +115,7 @@ fun FigureSidePanel(
                             Box(
                                 modifier = Modifier
                                     .size(36.dp)
-                                    .clip(RoundedCornerShape(10.dp))
+                                    .clip(RoundedCornerShape(18.dp))
                                     .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -279,7 +279,7 @@ private fun FigureInfoCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh
     ) {
         Row(
@@ -293,7 +293,7 @@ private fun FigureInfoCard(
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(16.dp))
                     .background(
                         if (imageUri.isNotBlank())
                             MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
@@ -336,7 +336,7 @@ private fun FigureInfoCard(
 
             // Type badge
             Surface(
-                shape = RoundedCornerShape(6.dp),
+                shape = RoundedCornerShape(12.dp),
                 color = MaterialTheme.colorScheme.secondaryContainer
             ) {
                 Text(
@@ -394,7 +394,7 @@ private fun NotesTab(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             },
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(20.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
             ),
@@ -467,7 +467,7 @@ private fun InterpretationTab(
                 )
             },
             enabled = !generating,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(20.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             if (generating) {
@@ -505,7 +505,7 @@ private fun InterpretationTab(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             },
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(20.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
             ),
@@ -514,7 +514,7 @@ private fun InterpretationTab(
 
         if (interpretationText.isNotBlank()) {
             Surface(
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(16.dp),
                 color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
             ) {
                 Row(
@@ -582,7 +582,7 @@ private fun RelatedIdeasTab(
         // Link button
         OutlinedButton(
             onClick = onLinkToEntity,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(20.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -605,7 +605,7 @@ private fun RelatedIdeasTab(
             relatedIdeas.forEach { idea ->
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(18.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(
@@ -724,7 +724,7 @@ private fun QuestionsTab(
                     )
                 },
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
                 ),
@@ -733,7 +733,7 @@ private fun QuestionsTab(
 
             Surface(
                 onClick = onAddQuestion,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 color = if (newQuestionText.isNotBlank())
                     MaterialTheme.colorScheme.primary
                 else
@@ -764,7 +764,7 @@ private fun QuestionsTab(
                         "What further data would strengthen this analysis?"
                     )
                 },
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(18.dp),
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = MaterialTheme.colorScheme.tertiary
@@ -777,7 +777,7 @@ private fun QuestionsTab(
         } else {
             // Show suggested questions
             Card(
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
                 ),
@@ -815,7 +815,7 @@ private fun QuestionsTab(
                                     questionsToJson(updated)
                                 )
                             },
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(16.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(
@@ -865,7 +865,7 @@ private fun QuestionsTab(
             questions.forEach { question ->
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(18.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(

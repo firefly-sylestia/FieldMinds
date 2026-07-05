@@ -119,7 +119,7 @@ fun FieldMindInAppGallery(
                                     capturedImages.indices.toSet()
                                 }
                             },
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(20.dp)
                         ) {
                             Text(
                                 if (selectedIndices.size == capturedImages.size) "Deselect all"
@@ -161,7 +161,7 @@ fun FieldMindInAppGallery(
                         Spacer(Modifier.height(12.dp))
                         OutlinedButton(
                             onClick = onDismiss,
-                            shape = RoundedCornerShape(14.dp)
+                            shape = RoundedCornerShape(22.dp)
                         ) {
                             Text("Go back")
                         }
@@ -183,7 +183,7 @@ fun FieldMindInAppGallery(
                         Box(
                             modifier = Modifier
                                 .aspectRatio(1f)
-                                .clip(RoundedCornerShape(12.dp))
+                                .clip(RoundedCornerShape(20.dp))
                                 .clickable { toggleSelection(index) }
                         ) {
                             // Thumbnail
@@ -305,7 +305,7 @@ fun FieldMindInAppGallery(
                                     }
                                     onSelectImage(attachments)
                                 },
-                                shape = RoundedCornerShape(16.dp)
+                                shape = RoundedCornerShape(24.dp)
                             ) {
                                 Icon(FieldMindIcons.Archive, null, size = 18.dp)
                                 Spacer(Modifier.size(6.dp))

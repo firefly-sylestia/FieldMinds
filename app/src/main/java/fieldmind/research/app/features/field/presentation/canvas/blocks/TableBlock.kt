@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -301,7 +302,7 @@ fun TableBlock(
         // ── Context menu dialog ──
         if (showContextMenu && contextRowIndex >= 0) {
             val rowIdx = contextRowIndex
-            AlertDialog(
+            SwipeableAlertDialog(
                 onDismissRequest = { showContextMenu = false },
                 icon = { Icon(MaterialSymbolIcon("table_rows"), "Row options", size = 24.dp) },
                 title = { Text("Row ${rowIdx + 1}") },
@@ -358,7 +359,7 @@ private fun TableToolbar(
     onExportMarkdown: () -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         shadowElevation = 4.dp,
         modifier = Modifier
@@ -374,10 +375,10 @@ private fun TableToolbar(
         ) {
             ToolbarButton(MaterialSymbolIcon("playlist_add"), "Add row", onAddRow)
             ToolbarButton(MaterialSymbolIcon("add_column"), "Add column", onAddColumn)
-            TableToolbarDivider()
+            TableToolbarHorizontalDivider()
             ToolbarButton(MaterialSymbolIcon("remove_circle"), "Remove last row", onDeleteRow)
             ToolbarButton(MaterialSymbolIcon("remove_circle_outline"), "Remove last column", onDeleteColumn)
-            TableToolbarDivider()
+            TableToolbarHorizontalDivider()
             ToolbarButton(MaterialSymbolIcon("content_copy"), "Copy as Markdown table", onExportMarkdown)
         }
     }
@@ -391,7 +392,7 @@ private fun ToolbarButton(icon: MaterialSymbolIcon, label: String, onClick: () -
 }
 
 @Composable
-private fun TableToolbarDivider() {
+private fun TableToolbarHorizontalDivider() {
     Box(
         modifier = Modifier
             .width(1.dp)

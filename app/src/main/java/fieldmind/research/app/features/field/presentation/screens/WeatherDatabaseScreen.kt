@@ -26,6 +26,7 @@ import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
 import fieldmind.research.app.features.field.data.weather.WeatherUnitConverter
 import fieldmind.research.app.features.field.presentation.components.AnimatedWeatherScene
 import fieldmind.research.app.features.field.presentation.components.ClickableCard
+import fieldmind.research.app.features.field.presentation.screens.formatTimeFromIso
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.GpsOffDialog
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -200,7 +201,7 @@ fun WeatherDatabaseScreen(
                     .fillMaxWidth()
                     .statusBarsPadding()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp
             ) {
@@ -212,7 +213,7 @@ fun WeatherDatabaseScreen(
                     // ── Back button ──
                     Surface(
                         onClick = onBack,
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(40.dp)
                     ) {
@@ -232,7 +233,7 @@ fun WeatherDatabaseScreen(
                             .size(48.dp)
                             .background(
                                 colors.info.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f),
-                                RoundedCornerShape(14.dp)
+                                RoundedCornerShape(22.dp)
                             ),
                         contentAlignment = Alignment.Center
                     ) {
@@ -263,7 +264,7 @@ fun WeatherDatabaseScreen(
                     // ── Settings button ──
                     Surface(
                         onClick = onOpenSettings,
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(40.dp)
                     ) {
@@ -414,7 +415,7 @@ fun WeatherDatabaseScreen(
             if (weatherObs.isEmpty()) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -496,18 +497,26 @@ private fun LiveCurrentWeatherCard(
     val weatherGradient = Brush.horizontalGradient(displayColors)
 
     Card(
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        shape = RoundedCornerShape(36.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            // Animated weather scene background
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(
+                    if (weather == null) Modifier.background(
+                        MaterialTheme.colorScheme.surfaceContainerLow,
+                        RoundedCornerShape(36.dp)
+                    ) else Modifier
+                )
+        ) {
+            // Animated weather scene fills the entire card (no card background to peek through)
             if (weather != null) {
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .clip(RoundedCornerShape(28.dp))
                 ) {AnimatedWeatherScene(
         weatherCode = weather.weatherCode,
         temperature = weather.temperature,
@@ -586,7 +595,7 @@ private fun LiveCurrentWeatherCard(
 
                     // Glass-morphism detailed metrics card
                     Card(
-                        shape = RoundedCornerShape(28.dp),
+                        shape = RoundedCornerShape(36.dp),
                         colors = CardDefaults.cardColors(containerColor = if (isDarkTheme || isNight) Color.White.copy(alpha = 0.12f) else Color(0xFF1A1A3E).copy(alpha = 0.06f)),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -722,7 +731,7 @@ private fun StatCard(
         }
     }
     Card(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier
@@ -761,7 +770,7 @@ private fun ExpandMetric(value: String, label: String, icon: MaterialSymbolIcon,
 @Composable
 private fun ExpandInfoChip(icon: MaterialSymbolIcon, text: String, modifier: Modifier = Modifier, textColor: Color = Color.White) {
     val chipBg = textColor.copy(alpha = 0.12f)
-    Surface(shape = RoundedCornerShape(14.dp), color = chipBg, modifier = modifier) {
+    Surface(shape = RoundedCornerShape(22.dp), color = chipBg, modifier = modifier) {
         Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Icon(icon, null, tint = textColor.copy(alpha = 0.8f), size = 16.dp)
             Text(text, style = MaterialTheme.typography.labelSmall, color = textColor, fontWeight = FontWeight.SemiBold)
@@ -816,7 +825,7 @@ private fun ForecastDashboard(
 
                 Column(
                     Modifier
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(24.dp))
                         .clickable { expandedIdx = if (isExpanded) -1 else forecasts.indexOf(day) }
                         .background(textOnScene.copy(alpha = 0.08f))
                         .padding(10.dp)
@@ -847,7 +856,7 @@ private fun ForecastDashboard(
                     // Temperature bar
                     Box(
                         Modifier.width(28.dp).height(4.dp)
-                            .clip(RoundedCornerShape(2.dp))
+                            .clip(RoundedCornerShape(6.dp))
                             .background(
                                 Brush.horizontalGradient(
                                     listOf(
@@ -948,7 +957,7 @@ private fun WeatherRecordCard(
 ) {
     ClickableCard(
         onClick = { onOpenDetail("observation", observation.id) },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

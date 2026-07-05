@@ -91,7 +91,7 @@ fun ZoomSlider(
             modifier = Modifier
                 .size(36.dp)
                 .pressScale(scaleDown = 0.88f)
-                .clip(RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(18.dp))
                 .background(
                     MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f)
                 )
@@ -116,7 +116,7 @@ fun ZoomSlider(
             modifier = Modifier
                 .width(with(density) { 32.dp })
                 .height(with(density) { 180.dp })
-                .clip(RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(24.dp))
                 .background(
                     MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.85f)
                 )
@@ -157,7 +157,7 @@ fun ZoomSlider(
                         .align(Alignment.Center)
                         .background(
                             MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
-                            RoundedCornerShape(1.dp)
+                            RoundedCornerShape(4.dp)
                         )
                 )
             }
@@ -186,7 +186,7 @@ fun ZoomSlider(
             modifier = Modifier
                 .size(36.dp)
                 .pressScale(scaleDown = 0.88f)
-                .clip(RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(18.dp))
                 .background(
                     MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f)
                 )
@@ -214,7 +214,7 @@ fun ZoomSlider(
         ) {
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(16.dp))
                     .background(
                         MaterialTheme.colorScheme.surfaceContainerHigh.copy(
                             alpha = 0.9f * labelAlpha

@@ -4,10 +4,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,11 +21,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import fieldmind.research.app.features.field.data.database.entity.TaskEntity
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
@@ -33,6 +42,9 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.roundToInt
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  TASKS SCREEN — Full task management with sections and filtering
@@ -145,12 +157,11 @@ fun TasksScreen(
                 }
             } else {
                 items(todayTasks, key = { it.id }) { task ->
-                    TaskCard(
+                    SwipeToCompleteTaskCard(
                         task = task,
-                        isChecked = false,
                         accentColor = FieldMindTheme.colors.flashcard,
                         onToggle = {
-                            haptics.light()
+                            haptics.confirm()
                             completedTaskIds[task.id] = true
                             viewModel.updateTaskEntity(task.copy(status = "Done"))
                         },
@@ -181,12 +192,11 @@ fun TasksScreen(
                 }
             } else {
                 items(upcomingTasks, key = { it.id }) { task ->
-                    TaskCard(
+                    SwipeToCompleteTaskCard(
                         task = task,
-                        isChecked = false,
                         accentColor = FieldMindTheme.colors.observation,
                         onToggle = {
-                            haptics.light()
+                            haptics.confirm()
                             completedTaskIds[task.id] = true
                             viewModel.updateTaskEntity(task.copy(status = "Done"))
                         },
@@ -250,7 +260,7 @@ private fun TaskSectionHeader(
 ) {
     Surface(
         onClick = onToggle,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
@@ -265,7 +275,7 @@ private fun TaskSectionHeader(
             Box(
                 modifier = Modifier
                     .size(32.dp)
-                    .clip(RoundedCornerShape(10.dp))
+                    .clip(RoundedCornerShape(18.dp))
                     .background(accentColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -282,7 +292,7 @@ private fun TaskSectionHeader(
             // Count badge
             if (count > 0) {
                 Surface(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(30.dp),
                     color = accentColor.copy(alpha = 0.12f)
                 ) {
                     Text(
@@ -333,14 +343,14 @@ private fun TaskCard(
     Card(
         onClick = onTap,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isChecked)
                 MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.6f)
             else
                 MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
         Row(
             modifier = Modifier
@@ -349,15 +359,32 @@ private fun TaskCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // ── Checkbox ──
+            // ── Checkbox with spring bounce ──
+            val checkBounce = remember { Animatable(1f) }
+            val scope = rememberCoroutineScope()
+            LaunchedEffect(isChecked) {
+                if (isChecked) {
+                    checkBounce.snapTo(1.3f)
+                    checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 500f))
+                }
+            }
             Surface(
-                onClick = onToggle,
+                onClick = {
+                    scope.launch {
+                        checkBounce.snapTo(1.3f)
+                        checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                    }
+                    onToggle()
+                },
                 shape = CircleShape,
                 color = if (isChecked)
                     accentColor.copy(alpha = 0.14f)
                 else
                     MaterialTheme.colorScheme.surfaceContainerHigh,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(36.dp).graphicsLayer {
+                    scaleX = checkBounce.value
+                    scaleY = checkBounce.value
+                }
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     if (isChecked) {
@@ -414,7 +441,7 @@ private fun TaskCard(
                 ) {
                     // Priority badge
                     Surface(
-                        shape = RoundedCornerShape(6.dp),
+                        shape = RoundedCornerShape(12.dp),
                         color = priorityColor.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -492,14 +519,149 @@ private fun EmptyTaskHint(message: String) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
+//  SWIPE-TO-COMPLETE TASK CARD — Phase 4d: swipe right reveals green
+//  checkmark background; commit triggers a satisfying snap animation
+//  and marks the task as done.
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun SwipeToCompleteTaskCard(
+    task: TaskEntity,
+    accentColor: Color,
+    onToggle: () -> Unit,
+    onTap: () -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    val haptics = rememberFieldMindHaptics()
+    val density = LocalDensity.current
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+
+    var swipeOffset by remember { mutableFloatStateOf(0f) }
+    var isCommitting by remember { mutableStateOf(false) }
+    var contentWidthPx by remember { mutableFloatStateOf(1f) }
+
+    val swipeThresholdPx = with(density) { 120.dp.toPx() }
+    val maxSwipePx = with(density) { 240.dp.toPx() }
+
+    // Animated offset with spring for smooth snap/spring-back
+    val animatedOffset by animateFloatAsState(
+        targetValue = swipeOffset,
+        animationSpec = spring(dampingRatio = 0.7f, stiffness = 400f),
+        label = "swipeOffset"
+    )
+
+    val swipeProgress = (animatedOffset / swipeThresholdPx).coerceIn(0f, 1f)
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(30.dp))
+            .onGloballyPositioned { coords ->
+                contentWidthPx = coords.size.width.toFloat().coerceAtLeast(1f)
+            }
+    ) {
+        // ── Background layer: green checkmark revealed on swipe ──
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(FieldMindTheme.colors.positive.copy(alpha = 0.12f * swipeProgress))
+                .padding(end = 20.dp),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.graphicsLayer {
+                    alpha = swipeProgress
+                    scaleX = 0.5f + 0.5f * swipeProgress
+                    scaleY = 0.5f + 0.5f * swipeProgress
+                }
+            ) {
+                Text(
+                    "Complete",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = FieldMindTheme.colors.positive
+                )
+                Icon(
+                    MaterialSymbolIcon("check_circle", filled = true),
+                    "Swipe to complete",
+                    tint = FieldMindTheme.colors.positive,
+                    size = 28.dp
+                )
+            }
+        }
+
+        // ── Foreground card: slides right with gesture ──
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    translationX = animatedOffset
+                    scaleX = 1f - 0.03f * swipeProgress
+                    scaleY = 1f - 0.03f * swipeProgress
+                }
+                .then(
+                    if (!reduceMotion) {
+                        Modifier.pointerInput(Unit) {
+                            detectHorizontalDragGestures(
+                                onDragStart = {},
+                                onHorizontalDrag = { change, dragAmount ->
+                                    change.consume()
+                                    val newOffset = (swipeOffset + dragAmount).coerceIn(0f, maxSwipePx)
+                                    swipeOffset = newOffset
+                                },
+                                onDragEnd = {
+                                    if (swipeOffset >= swipeThresholdPx && !isCommitting) {
+                                        // Snap to full, brief pause, then toggle
+                                        isCommitting = true
+                                        haptics.confirm()
+                                        scope.launch {
+                                            swipeOffset = maxSwipePx * 1.5f
+                                            delay(120)
+                                            swipeOffset = 0f
+                                            isCommitting = false
+                                            onToggle()
+                                        }
+                                    } else {
+                                        // Spring back to 0
+                                        scope.launch {
+                                            swipeOffset = 0f
+                                        }
+                                    }
+                                },
+                                onDragCancel = {
+                                    scope.launch {
+                                        swipeOffset = 0f
+                                    }
+                                }
+                            )
+                        }
+                    } else {
+                        Modifier
+                    }
+                )
+        ) {
+            TaskCard(
+                task = task,
+                isChecked = false,
+                accentColor = accentColor,
+                onToggle = onToggle,
+                onTap = onTap
+            )
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
 //  STAT CARD (reused from QuestionsScreen pattern)
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
 private fun StatCard(value: String, label: String, icon: MaterialSymbolIcon, color: Color, modifier: Modifier = Modifier) {
-    Card(modifier, shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(modifier, shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Box(Modifier.size(28.dp).clip(RoundedCornerShape(10.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(28.dp).clip(RoundedCornerShape(14.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(icon, null, tint = color, size = 16.dp)
             }
             Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)

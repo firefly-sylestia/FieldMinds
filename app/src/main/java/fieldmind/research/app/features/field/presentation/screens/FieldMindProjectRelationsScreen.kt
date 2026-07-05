@@ -205,7 +205,7 @@ fun ProjectRelationsScreen(
         // ════════════════════════════════════════════════════════════
         item {
             Surface(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp,
                 modifier = Modifier.fillMaxWidth()
@@ -217,7 +217,7 @@ fun ProjectRelationsScreen(
                 ) {
                     Surface(
                         onClick = onBack,
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(40.dp)
                     ) {
@@ -226,7 +226,7 @@ fun ProjectRelationsScreen(
                         }
                     }
                     Box(
-                        Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                             .background(FieldMindTheme.colors.project.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -254,7 +254,7 @@ fun ProjectRelationsScreen(
         item {
             val totalLinked = relations.sumOf { rel -> rel.groups.sumOf { it.count } }
             Card(
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(30.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -265,7 +265,7 @@ fun ProjectRelationsScreen(
                 ) {
                     Box(
                         Modifier.size(44.dp)
-                            .clip(RoundedCornerShape(14.dp))
+                            .clip(RoundedCornerShape(22.dp))
                             .background(FieldMindTheme.colors.project.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -329,7 +329,7 @@ fun ProjectRelationsScreen(
             var expanded by remember(obs.id) { mutableStateOf(rel.groups.isNotEmpty()) }
 
             Card(
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(30.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -340,7 +340,7 @@ fun ProjectRelationsScreen(
                             haptics.light()
                             expanded = !expanded
                         },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -352,7 +352,7 @@ fun ProjectRelationsScreen(
                             // Observation icon
                             Box(
                                 Modifier.size(36.dp)
-                                    .clip(RoundedCornerShape(10.dp))
+                                    .clip(RoundedCornerShape(18.dp))
                                     .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -378,7 +378,7 @@ fun ProjectRelationsScreen(
                             val totalCount = rel.groups.sumOf { it.count }
                             if (totalCount > 0) {
                                 Surface(
-                                    shape = RoundedCornerShape(10.dp),
+                                    shape = RoundedCornerShape(18.dp),
                                     color = FieldMindTheme.colors.project.copy(alpha = 0.12f)
                                 ) {
                                     Text(
@@ -454,7 +454,7 @@ private fun RelationGroupCard(
     var expanded by remember { mutableStateOf(false) }
 
     Card(
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -463,7 +463,7 @@ private fun RelationGroupCard(
             // ── Group header ──
             Surface(
                 onClick = { expanded = !expanded },
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(22.dp),
                 color = Color.Transparent,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -474,14 +474,14 @@ private fun RelationGroupCard(
                 ) {
                     // Tree branch connector
                     Box(
-                        Modifier.size(4.dp).clip(RoundedCornerShape(2.dp))
+                        Modifier.size(4.dp).clip(RoundedCornerShape(6.dp))
                             .background(group.color.copy(alpha = 0.5f))
                     )
 
                     // Kind icon
                     Box(
                         Modifier.size(28.dp)
-                            .clip(RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(16.dp))
                             .background(group.color.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -498,7 +498,7 @@ private fun RelationGroupCard(
 
                     // Count badge
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = group.color.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -542,7 +542,7 @@ private fun RelationGroupCard(
                             ) {
                                 // Dot connector
                                 Box(
-                                    Modifier.size(6.dp).clip(RoundedCornerShape(3.dp))
+                                    Modifier.size(6.dp).clip(RoundedCornerShape(8.dp))
                                         .background(group.color.copy(alpha = 0.3f))
                                 )
                                 Text(

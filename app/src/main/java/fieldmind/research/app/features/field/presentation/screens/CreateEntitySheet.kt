@@ -22,6 +22,7 @@ import fieldmind.research.app.features.field.presentation.navigation.FieldMindSc
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  Create Entity Bottom Sheet — Grouped create menu for Workspace
@@ -93,7 +94,7 @@ fun CreateEntitySheet(
             // Sheet
             Surface(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 24.dp),
-                shape = RoundedCornerShape(32.dp),
+                shape = RoundedCornerShape(40.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 tonalElevation = 4.dp,
                 shadowElevation = 8.dp
@@ -104,7 +105,7 @@ fun CreateEntitySheet(
                 ) {
                     // Handle bar
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Box(Modifier.width(40.dp).height(4.dp).clip(RoundedCornerShape(2.dp))
+                        Box(Modifier.width(40.dp).height(4.dp).clip(RoundedCornerShape(6.dp))
                             .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)))
                     }
                     // Header
@@ -160,12 +161,12 @@ private fun CreateItemCard(label: String, icon: MaterialSymbolIcon, accent: Colo
     val haptics = rememberFieldMindHaptics()
     Card(
         modifier = Modifier.fillMaxWidth().clickable { haptics.light(); onClick() },
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = accent.copy(alpha = 0.08f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Box(Modifier.size(44.dp).clip(RoundedCornerShape(14.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(icon = icon, contentDescription = null, tint = accent, size = 24.dp)
             }
             Column(Modifier.weight(1f)) {
@@ -195,8 +196,8 @@ fun ProjectSelectorDialog(
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            shape = RoundedCornerShape(40.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState()).padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -216,11 +217,11 @@ fun ProjectSelectorDialog(
                     projects.take(5).forEach { project ->
                         Surface(
                             onClick = { onSelectProject(project) },
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(FieldMindTheme.colors.project.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.project.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                     Icon(FieldMindIcons.Project, null, tint = FieldMindTheme.colors.project, size = 22.dp)
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -239,7 +240,7 @@ fun ProjectSelectorDialog(
                 HorizontalDivider()
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(onClick = onCreateNew, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+                    OutlinedButton(onClick = onCreateNew, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
                         Icon(FieldMindIcons.Add, null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
                         Text("Create New Project")

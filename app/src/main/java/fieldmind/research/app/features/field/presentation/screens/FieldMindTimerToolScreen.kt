@@ -218,6 +218,7 @@ fun TimerToolScreen(
                 StandardScreenHeader(
                     title = if (timerMode == TimerMode.STOPWATCH) "Stopwatch" else "Timer",
                     subtitle = "Track elapsed time with laps. Runs in background with notification.",
+                    heroColor = FieldMindTheme.colors.data,
                     icon = headerIcon,
                     trailing = { BackButton(onClick = onBack) }
                 )
@@ -235,7 +236,7 @@ fun TimerToolScreen(
                         label = { Text("Stopwatch") },
                         leadingIcon = { Icon(FieldMindIcons.Timer, null, size = 16.dp) },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     )
                     FilterChip(
                         selected = timerMode == TimerMode.TIMER,
@@ -243,7 +244,7 @@ fun TimerToolScreen(
                         label = { Text("Timer") },
                         leadingIcon = { Icon(FieldMindIcons.Hourglass, null, size = 16.dp) },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = RoundedCornerShape(22.dp)
                     )
                 }
             }
@@ -252,7 +253,7 @@ fun TimerToolScreen(
             if (timerMode == TimerMode.TIMER && !isRunning && !isPaused) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -325,7 +326,7 @@ fun TimerToolScreen(
             // ── Timer display ──
             item {
                 Card(
-                    shape = RoundedCornerShape(32.dp),
+                    shape = RoundedCornerShape(40.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = when {
                             countdownFinished -> MaterialTheme.colorScheme.errorContainer
@@ -504,7 +505,7 @@ fun TimerToolScreen(
             if (laps.isNotEmpty()) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -566,7 +567,7 @@ fun TimerToolScreen(
             if (isRunning) {
                 item {
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         color = colors.info.copy(alpha = 0.08f),
                         tonalElevation = 0.dp
                     ) {

@@ -67,11 +67,11 @@ fun TextBlock(
                             Modifier.border(
                                 width = 1.5.dp,
                                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                                shape = RoundedCornerShape(6.dp)
+                                shape = RoundedCornerShape(12.dp)
                             )
                         } else Modifier
                     )
-                    .clip(RoundedCornerShape(6.dp))
+                    .clip(RoundedCornerShape(12.dp))
                     .padding(12.dp)
                     .heightIn(min = with(LocalDensity.current) { 48.toDp() }),
                 contentAlignment = Alignment.TopStart

@@ -152,7 +152,7 @@ private fun BlockToolbarContent(
     hasLinkedEntity: Boolean = false
 ) {
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = 6.dp,
         shadowElevation = 8.dp,
@@ -173,25 +173,25 @@ private fun BlockToolbarContent(
                 onClick = onDelete,
                 tint = MaterialTheme.colorScheme.error
             )
-            ToolbarDivider()
+            ToolbarHorizontalDivider()
             ToolbarAction(
                 icon = if (isCollapsed) MaterialSymbolIcon("unfold_more") else MaterialSymbolIcon("unfold_less"),
                 label = if (isCollapsed) "Expand" else "Minimize",
                 onClick = onCollapse
             )
-            ToolbarDivider()
+            ToolbarHorizontalDivider()
             ToolbarAction(
                 icon = MaterialSymbolIcon("file_copy"),
                 label = "Duplicate",
                 onClick = onDuplicate
             )
-            ToolbarDivider()
+            ToolbarHorizontalDivider()
             ToolbarAction(
                 icon = MaterialSymbolIcon("content_copy"),
                 label = "Copy",
                 onClick = onCopy
             )
-            ToolbarDivider()
+            ToolbarHorizontalDivider()
             ToolbarAction(
                 icon = MaterialSymbolIcon("arrow_upward"),
                 label = "Fwd",
@@ -202,7 +202,7 @@ private fun BlockToolbarContent(
                 label = "Back",
                 onClick = onMoveBackward
             )
-            ToolbarDivider()
+            ToolbarHorizontalDivider()
 
             // Show "Open linked" instead of "Link" when block already has a link
             if (hasLinkedEntity) {
@@ -240,7 +240,7 @@ private fun ToolbarAction(
 ) {
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(18.dp),
         color = Color.Transparent,
         modifier = Modifier
             .height(32.dp)
@@ -267,7 +267,7 @@ private fun ToolbarAction(
 }
 
 @Composable
-private fun ToolbarDivider() {
+private fun ToolbarHorizontalDivider() {
     Box(
         modifier = Modifier
             .width(1.dp)

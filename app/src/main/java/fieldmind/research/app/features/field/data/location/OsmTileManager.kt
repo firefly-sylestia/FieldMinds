@@ -61,6 +61,9 @@ class OsmTileManager(private val context: Context) {
     private val _isOffline = MutableStateFlow(false)
     val isOffline: StateFlow<Boolean> = _isOffline.asStateFlow()
 
+    /** SharedPreferences for persisted region metadata. Initialized before [init] to avoid NPE. */
+    private val regionsPrefs = context.getSharedPreferences("osmdroid_regions", Context.MODE_PRIVATE)
+
     init {
         checkConnectivity()
         refreshCachedRegions()
@@ -181,8 +184,6 @@ class OsmTileManager(private val context: Context) {
     }
 
     // ── Storage helpers ──
-
-    private val regionsPrefs = context.getSharedPreferences("osmdroid_regions", Context.MODE_PRIVATE)
 
     private fun saveRegionToStorage(region: OsmTileRegion) {
         regionsPrefs.edit().apply {

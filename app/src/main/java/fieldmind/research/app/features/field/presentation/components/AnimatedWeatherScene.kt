@@ -1,4 +1,6 @@
 package fieldmind.research.app.features.field.presentation.components
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -30,7 +32,11 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalContext
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.abs
@@ -42,6 +48,8 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+
+import fieldmind.research.app.R
 
 /**
  * Time-of-day phase for granular color palettes.
@@ -98,13 +106,33 @@ fun AnimatedWeatherScene(
         return
     }
 
+    // Load moon phase vector texture as ImageBitmap for moon body rendering
+    val context = LocalContext.current
+    val moonTextureBitmap = remember(context) {
+        val drawable = androidx.core.content.ContextCompat.getDrawable(context, R.drawable.moon_phase_texture)
+        if (drawable != null) {
+            val w = drawable.intrinsicWidth.coerceAtLeast(1)
+            val h = drawable.intrinsicHeight.coerceAtLeast(1)
+            val bitmap = android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ARGB_8888)
+            val canvas = android.graphics.Canvas(bitmap)
+            drawable.setBounds(0, 0, w, h)
+            drawable.draw(canvas)
+            bitmap.asImageBitmap()
+        } else null
+    }
+
+    // Apply texture to palette
+    val texturedPalette = if (moonTextureBitmap != null) {
+        palette.copy(moonTextureBitmap = moonTextureBitmap)
+    } else palette
+
     Box(modifier = modifier.fillMaxSize()) {
         // Background gradient — rich multi-stop with atmospheric warm band near horizon
         Canvas(modifier = Modifier.fillMaxSize()) {
             val bgColors = when {
-                palette.background.size >= 3 -> palette.background
-                palette.background.size == 2 -> listOf(palette.background[0], palette.tertiary, palette.background[1])
-                else -> listOf(palette.primary, palette.tertiary, palette.secondary)
+                texturedPalette.background.size >= 3 -> texturedPalette.background
+                texturedPalette.background.size == 2 -> listOf(texturedPalette.background[0], texturedPalette.tertiary, texturedPalette.background[1])
+                else -> listOf(texturedPalette.primary, texturedPalette.tertiary, texturedPalette.secondary)
             }
             drawRect(
                 brush = Brush.verticalGradient(
@@ -117,7 +145,7 @@ fun AnimatedWeatherScene(
             // Subtle accent glow near horizon for added depth
             drawRect(
                 brush = Brush.radialGradient(
-                    colors = listOf(palette.accent.copy(alpha = 0.08f), Color.Transparent),
+                    colors = listOf(texturedPalette.accent.copy(alpha = 0.08f), Color.Transparent),
                     center = Offset(size.width * 0.5f, size.height * 0.75f),
                     radius = size.maxDimension * 0.5f
                 ),
@@ -127,7 +155,7 @@ fun AnimatedWeatherScene(
 
         // Specific weather effects
         // weatherCode -1 = day cloudy, -2 = night sky (used by weather widget for enhanced display)
-        // All scenes use the same animation style regardless of day/night — palette provides the colors
+        // All scenes use the same animation style regardless of day/night — texturedPalette provides the colors
         // Cloudy conditions (code 2-3) now use DayCloudyScene/NightCloudyScene with high cloudIntensity
         // instead of the separate CloudyScene, so the time-of-day background, birds, aurora, ground
         // terrain, and atmospheric effects are preserved with clouds layered on top.
@@ -139,30 +167,30 @@ fun AnimatedWeatherScene(
             weatherCode == -1 || weatherCode == -2 || weatherCode in 0..3
         )
         when {
-            useEveningScene -> EveningScene(palette, compact, timeOfDay, modifier)
+            useEveningScene -> EveningScene(texturedPalette, compact, timeOfDay, modifier)
             weatherCode == -1 || weatherCode in 0..1 -> {
                 if (isDaytime) {
-                    if (showCloudAnimation) DayCloudyScene(palette, compact, timeOfDay, modifier, cloudIntensity = 0.25f)
-                    else ClearSkyScene(palette, timeOfDay, compact, modifier)
+                    if (showCloudAnimation) DayCloudyScene(texturedPalette, compact, timeOfDay, modifier, cloudIntensity = 0.25f)
+                    else ClearSkyScene(texturedPalette, timeOfDay, compact, modifier)
                 } else {
-                    ClearSkyScene(palette, timeOfDay, compact, modifier)
+                    ClearSkyScene(texturedPalette, timeOfDay, compact, modifier)
                 }
             }
             weatherCode == -2 -> {
-                if (showCloudAnimation) NightCloudyScene(palette, compact, timeOfDay, modifier, cloudIntensity = 0.25f)
-                else NightSkyScene(palette, compact, timeOfDay, modifier)
+                if (showCloudAnimation) NightCloudyScene(texturedPalette, compact, timeOfDay, modifier, cloudIntensity = 0.25f)
+                else NightSkyScene(texturedPalette, compact, timeOfDay, modifier)
             }
             weatherCode in 2..3 -> {
                 if (showCloudAnimation) {
-                    if (isDaytime) DayCloudyScene(palette, compact, timeOfDay, modifier, cloudIntensity = 0.85f)
-                    else NightCloudyScene(palette, compact, timeOfDay, modifier, cloudIntensity = 0.85f)
-                } else ClearSkyScene(palette, timeOfDay, compact, modifier)
+                    if (isDaytime) DayCloudyScene(texturedPalette, compact, timeOfDay, modifier, cloudIntensity = 0.85f)
+                    else NightCloudyScene(texturedPalette, compact, timeOfDay, modifier, cloudIntensity = 0.85f)
+                } else ClearSkyScene(texturedPalette, timeOfDay, compact, modifier)
             }
-            weatherCode in 45..48 -> FogScene(weatherCode, palette, compact, timeOfDay, modifier)
-            weatherCode in 51..67 || weatherCode in 80..82 -> RainScene(weatherCode, palette, compact, timeOfDay, modifier)
-            weatherCode in 71..77 || weatherCode in 85..86 -> SnowScene(weatherCode, palette, compact, timeOfDay, modifier)
-            weatherCode >= 95 -> ThunderstormScene(weatherCode, palette, compact, timeOfDay, modifier)
-            else -> ClearSkyScene(palette, timeOfDay, compact, modifier)
+            weatherCode in 45..48 -> FogScene(weatherCode, texturedPalette, compact, timeOfDay, modifier)
+            weatherCode in 51..67 || weatherCode in 80..82 -> RainScene(weatherCode, texturedPalette, compact, timeOfDay, modifier)
+            weatherCode in 71..77 || weatherCode in 85..86 -> SnowScene(weatherCode, texturedPalette, compact, timeOfDay, modifier)
+            weatherCode >= 95 -> ThunderstormScene(weatherCode, texturedPalette, compact, timeOfDay, modifier)
+            else -> ClearSkyScene(texturedPalette, timeOfDay, compact, modifier)
         }
     }
 }
@@ -279,6 +307,7 @@ data class WeatherPalette(
     val sunFlareColor: Color = Color(0xFFFFAB91),
     val moonColor: Color = Color(0xFFECEFF1),
     val moonGlowColor: Color = Color(0xFFE3F2FD),
+    val moonTextureBitmap: ImageBitmap? = null,
     val cloudBaseColor: Color = Color.White,
     val hazeColor: Color = Color.Transparent,
     val mountainFarColor: Color = Color(0xFF90A8C4),
@@ -717,7 +746,7 @@ private fun DayCloudyScene(
     val sunGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "sunGlow"
     )
     val windGust by infiniteTransition.animateFloat(
@@ -758,7 +787,7 @@ private fun DayCloudyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(6000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(9000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "treeSway"
     )
 
@@ -937,7 +966,7 @@ private fun NightSkyScene(
     val moonGlow by infiniteTransition.animateFloat(
         initialValue = 0.7f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "moonGlow"
     )
     val cloudMorph by infiniteTransition.animateFloat(
@@ -963,7 +992,7 @@ private fun NightSkyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "nightTreeSway"
     )
     // Bird animation (dawn/twilight only)
@@ -1114,7 +1143,7 @@ private fun NightCloudyScene(
     val moonGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "ncMoonGlow"
     )
     val cloudMorph by infiniteTransition.animateFloat(
@@ -1140,7 +1169,7 @@ private fun NightCloudyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(6500, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "ncTreeSway"
     )
     val shootingStarProgress by infiniteTransition.animateFloat(
@@ -1315,7 +1344,7 @@ private fun ClearSkyScene(
     val sunGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "sunGlow"
     )
     // Shooting stars for night mode — less frequent
@@ -1336,7 +1365,7 @@ private fun ClearSkyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(6500, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "clearTreeSway"
     )
     val birdProgress by infiniteTransition.animateFloat(
@@ -1541,13 +1570,13 @@ private fun EveningScene(
     val sunGlow by infiniteTransition.animateFloat(
         initialValue = 0.5f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "eveningSunGlow"
     )
     val moonGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "eveningMoonGlow"
     )
     val starTwinkle by infiniteTransition.animateFloat(
@@ -1571,7 +1600,7 @@ private fun EveningScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "eveningTreeSway"
     )
     val birdProgress by infiniteTransition.animateFloat(
@@ -1696,7 +1725,7 @@ private fun CloudyScene(
     val sunGlow by infiniteTransition.animateFloat(
         initialValue = 0.3f,
         targetValue = 0.7f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "cloudSunGlow"
     )
     val cloudOffset by infiniteTransition.animateFloat(
@@ -1715,7 +1744,7 @@ private fun CloudyScene(
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(5500, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(8000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "cloudTreeSway"
     )
     val birdProgress by infiniteTransition.animateFloat(
@@ -2574,12 +2603,24 @@ private fun DrawScope.drawMoon(
     drawCircle(color = Color.White.copy(alpha = 0.01f * moonGlow),
         radius = moonR * 5.0f * gm, center = Offset(cx, cy))
 
+    // Moon body shading: use VectorDrawable texture when available, else solid color
+    val litColor = palette.moonColor.copy(alpha = 1f)
+    val shadowColor = Color(0xFF0A0A1A).copy(alpha = 0.7f)
+
+    // Draw the phase shadow overlay FIRST (drawMoonPhase draws body + shadow)
     drawMoonPhase(
         phaseValue = phase, cx = cx, cy = cy, radius = moonR,
-        litColor = palette.moonColor.copy(alpha = 1f),
-        shadowColor = Color(0xFF0A0A1A).copy(alpha = 0.7f),
-        glowColor = palette.moonGlowColor
+        litColor = litColor,
+        shadowColor = shadowColor,
+        glowColor = palette.moonGlowColor,
+        moonTextureBitmap = palette.moonTextureBitmap
     )
+
+    // Draw mare & crater surface features ON TOP of the illuminated portion
+    // (subtle alpha so they appear naturally on lit side, nearly invisible on shadow)
+    if (moonR >= 8f) {
+        drawWeatherMoonSurfaceFeatures(cx, cy, moonR, litColor)
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════��══���═══
@@ -2615,6 +2656,108 @@ private fun getMoonPhaseValue(): Float {
  * circle offset to create the correct phase shape. For quarter phases a
  * straight cut path is used for a clean half-moon appearance.
  */
+
+/**
+ * Draws lunar mare (dark basaltic plains) and crater highlights on the moon surface.
+ * Uses the actual positions of prominent lunar features including Mare Imbrium,
+ * Mare Serenitatis, Mare Tranquillitatis, and major impact craters like Tycho.
+ * Ported from MoonPhaseIcon.kt for use in the animated weather scene.
+ */
+private fun DrawScope.drawWeatherMoonSurfaceFeatures(cx: Float, cy: Float, r: Float, tint: Color) {
+    data class LunarFeature(
+        val xOffset: Float, val yOffset: Float,
+        val widthFraction: Float, val heightFraction: Float, val alphaMul: Float
+    )
+
+    val features = listOf(
+        LunarFeature(-0.35f, -0.30f, 0.40f, 0.30f, 1.0f),
+        LunarFeature(-0.05f, -0.25f, 0.25f, 0.22f, 0.85f),
+        LunarFeature(0.25f, -0.10f, 0.30f, 0.25f, 0.80f),
+        LunarFeature(0.40f, 0.20f, 0.22f, 0.18f, 0.75f),
+        LunarFeature(-0.15f, 0.30f, 0.30f, 0.20f, 0.70f),
+        LunarFeature(-0.45f, 0.05f, 0.35f, 0.45f, 0.85f),
+        LunarFeature(-0.20f, -0.42f, 0.55f, 0.12f, 0.75f),
+        LunarFeature(-0.12f, 0.02f, 0.15f, 0.12f, 0.65f),
+        LunarFeature(-0.25f, 0.08f, 0.20f, 0.15f, 0.60f),
+        LunarFeature(-0.30f, 0.28f, 0.18f, 0.12f, 0.55f),
+        LunarFeature(-0.65f, -0.05f, 0.18f, 0.18f, 0.35f),
+        LunarFeature(-0.40f, -0.20f, 0.15f, 0.10f, 0.55f),
+        LunarFeature(0.20f, -0.38f, 0.10f, 0.08f, 0.50f),
+    )
+
+    val featureColor = if (tint == Color.White || tint == Color(0xFFECEFF1)) {
+        Color(0xFF607D8B).copy(alpha = 0.25f)
+    } else {
+        tint.copy(
+            red = (tint.red * 0.5f).coerceIn(0f, 1f),
+            green = (tint.green * 0.5f).coerceIn(0f, 1f),
+            blue = (tint.blue * 0.5f).coerceIn(0f, 1f),
+            alpha = tint.alpha * 0.20f
+        )
+    }
+
+    features.forEach { f ->
+        val fr = r * f.widthFraction * 0.5f
+        val fh = r * f.heightFraction * 0.5f
+        drawOval(
+            color = featureColor.copy(alpha = featureColor.alpha * f.alphaMul),
+            topLeft = Offset(cx + f.xOffset * r - fr, cy + f.yOffset * r - fh),
+            size = androidx.compose.ui.geometry.Size(fr * 2f, fh * 2f)
+        )
+    }
+
+    if (r < 14f) return
+
+    data class CraterHighlight(val xOffset: Float, val yOffset: Float, val size: Float, val brightness: Float)
+    val craters = listOf(
+        CraterHighlight(-0.08f, 0.42f, 0.08f, 0.35f),
+        CraterHighlight(-0.30f, 0.12f, 0.06f, 0.25f),
+        CraterHighlight(-0.48f, 0.20f, 0.04f, 0.20f),
+        CraterHighlight(-0.42f, -0.25f, 0.04f, 0.30f),
+        CraterHighlight(-0.15f, -0.40f, 0.05f, 0.15f),
+        CraterHighlight(-0.60f, 0.05f, 0.05f, 0.12f),
+        CraterHighlight(0.52f, 0.28f, 0.04f, 0.18f),
+        CraterHighlight(0.55f, 0.10f, 0.06f, 0.12f),
+    )
+
+    val highlightColor = if (tint == Color.White || tint == Color(0xFFECEFF1)) {
+        Color.White.copy(alpha = 0.20f)
+    } else {
+        tint.copy(
+            red = (tint.red * 1.3f).coerceIn(0f, 1f),
+            green = (tint.green * 1.3f).coerceIn(0f, 1f),
+            blue = (tint.blue * 1.3f).coerceIn(0f, 1f),
+            alpha = tint.alpha * 0.15f
+        )
+    }
+
+    craters.forEach { c ->
+        drawCircle(
+            color = highlightColor.copy(alpha = highlightColor.alpha * c.brightness),
+            radius = r * c.size * 0.5f,
+            center = Offset(cx + c.xOffset * r, cy + c.yOffset * r)
+        )
+    }
+
+    if (r >= 24f) {
+        data class CraterRim(val xOffset: Float, val yOffset: Float, val size: Float)
+        val rims = listOf(
+            CraterRim(-0.08f, 0.42f, 0.09f),
+            CraterRim(-0.30f, 0.12f, 0.07f),
+            CraterRim(-0.48f, 0.20f, 0.05f),
+            CraterRim(0.52f, 0.28f, 0.05f),
+        )
+        rims.forEach { rim ->
+            drawCircle(
+                color = featureColor.copy(alpha = 0.15f),
+                radius = r * rim.size * 0.5f,
+                center = Offset(cx + rim.xOffset * r, cy + rim.yOffset * r),
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = r * 0.02f)
+            )
+        }
+    }
+}
+
 private fun DrawScope.drawMoonPhase(
     phaseValue: Float,        // 0.0–1.0 moon phase (0=new, 0.25=waxing quarter, 0.5=full, 0.75=waning quarter)
     cx: Float,                // center x
@@ -2623,9 +2766,20 @@ private fun DrawScope.drawMoonPhase(
     litColor: Color,          // illuminated moon color
     shadowColor: Color,       // dark/shadowed portion color
     glowColor: Color,         // subtle inner glow for dark-side detail
+    moonTextureBitmap: ImageBitmap? = null,  // VectorDrawable texture for moon surface (from moon_phase SVG)
 ) {
-    // Draw full lit circle first
-    drawCircle(color = litColor, radius = radius, center = Offset(cx, cy))
+    // Draw full lit circle first (use VectorDrawable texture if available)
+    if (moonTextureBitmap != null) {
+        clipPath(Path().apply { addOval(androidx.compose.ui.geometry.Rect(cx - radius, cy - radius, cx + radius, cy + radius)) }) {
+            drawImage(
+                image = moonTextureBitmap!!,
+                dstOffset = IntOffset((cx - radius).toInt(), (cy - radius).toInt()),
+                dstSize = IntSize((radius * 2).toInt(), (radius * 2).toInt())
+            )
+        }
+    } else {
+        drawCircle(color = litColor, radius = radius, center = Offset(cx, cy))
+    }
 
     // Full moon — no shadow needed
     if (phaseValue in 0.48f..0.52f) return
@@ -3233,7 +3387,7 @@ private fun FogScene(
     )
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "fogTreeSway"
     )
     val isRimeFog = weatherCode == 48
@@ -3404,12 +3558,12 @@ private fun RainScene(
     )
     val intensity by infiniteTransition.animateFloat(
         initialValue = 0.6f, targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "intensity"
     )
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(5000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "rainTreeSway"
     )
 
@@ -3450,7 +3604,7 @@ private fun RainScene(
     val moonGlow by infiniteTransition.animateFloat(
         initialValue = 0.6f,
         targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "rainNightMoonGlow"
     )
 
@@ -3643,7 +3797,7 @@ private fun SnowScene(
     )
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(7000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "snowTreeSway"
     )
 
@@ -3829,7 +3983,7 @@ private fun ThunderstormScene(
     )
     val treeSway by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(10000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "stormTree"
     )
 

@@ -128,7 +128,6 @@ class TrackRecorder(private val context: Context) {
     /**
      * Starts a new track recording session.
      */
-    @SuppressLint("MissingPermission")
     fun startRecording(name: String? = null, sessionId: Long? = null) {
         if (!hasLocationPermission()) return
         if (_isRecording.value) return
@@ -147,15 +146,16 @@ class TrackRecorder(private val context: Context) {
 
         locationListener = createLocationListener()
         val provider = bestProvider()
-        if (provider != null) {                runCatching {
-                    locationManager.requestLocationUpdates(
-                        provider,
-                        MIN_TIME_MS,
-                        MIN_DISTANCE_M,
-                        locationListener ?: return@runCatching,
-                        Looper.getMainLooper()
-                    )
-                }
+        if (provider != null && hasLocationPermission()) {
+            runCatching {
+                locationManager.requestLocationUpdates(
+                    provider,
+                    MIN_TIME_MS,
+                    MIN_DISTANCE_M,
+                    locationListener ?: return@runCatching,
+                    Looper.getMainLooper()
+                )
+            }
         }
     }
 
@@ -186,7 +186,7 @@ class TrackRecorder(private val context: Context) {
         if (recording.isPaused) {
             removeLocationUpdates()
             val provider = bestProvider()
-            if (provider != null) {
+            if (provider != null && hasLocationPermission()) {
                 runCatching {
                     locationManager.requestLocationUpdates(
                         provider,
@@ -202,6 +202,18 @@ class TrackRecorder(private val context: Context) {
             removeLocationUpdates()
             _currentRecording.value = recording.copy(isPaused = true)
         }
+    }
+
+    /**
+     * Restores a previously saved track (e.g., after app restart).
+     */
+    fun restoreTrack(track: TrackRecording) {
+        val existing = _savedTracks.value.toMutableList()
+        // Replace if same ID, otherwise append
+        val idx = existing.indexOfFirst { it.id == track.id }
+        if (idx >= 0) existing[idx] = track
+        else existing.add(track)
+        _savedTracks.value = existing
     }
 
     /**

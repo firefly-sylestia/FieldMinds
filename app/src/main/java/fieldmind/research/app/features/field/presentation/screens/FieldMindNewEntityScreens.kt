@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +32,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalContext
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import androidx.activity.compose.BackHandler
 
 // ══════════════════════════════════════════════════════════════════════
 //  NEW PROJECT SCREEN — Redesigned: name, description, icon, color, template
@@ -39,12 +41,33 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 @Composable
 fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val haptics = rememberFieldMindHaptics()
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var selectedIcon by remember { mutableStateOf("🌿") }
-    var selectedColor by remember { mutableStateOf(0xFF1F6B4CL) }
-    var selectedTemplate by remember { mutableStateOf("Empty Project") }
-    var showTemplatePicker by remember { mutableStateOf(false) }
+    var title by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var selectedIcon by rememberSaveable { mutableStateOf("🌿") }
+    var selectedColor by rememberSaveable { mutableStateOf(0xFF1F6B4CL) }
+    var selectedTemplate by rememberSaveable { mutableStateOf("Empty Project") }
+    var showTemplatePicker by rememberSaveable { mutableStateOf(false) }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = title.isNotBlank() || description.isNotBlank()
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     val projectIcons = listOf("🌿", "🦋", "🐦", "🌲", "📷")
     val colorOptions = listOf(
@@ -92,7 +115,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         // ── Custom header: back button + title/subtitle ──
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(30.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f),
             tonalElevation = 0.dp
         ) {
@@ -103,7 +126,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             ) {
                 Surface(
                     onClick = onBack,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.size(44.dp)
                 ) {
@@ -145,7 +168,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val isSelected = selectedIcon == icon
                         Surface(
                             onClick = { haptics.light(); selectedIcon = icon },
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             color = if (isSelected) FieldMindTheme.colors.project.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) androidx.compose.foundation.BorderStroke(2.dp, FieldMindTheme.colors.project) else null,
                             modifier = Modifier.size(60.dp)
@@ -164,11 +187,11 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     colorOptions.forEach { (colorLong, color) ->
                         val isSelected = selectedColor == colorLong
-                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(16.dp)) else Modifier
+                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(24.dp)) else Modifier
                         Box(
                             modifier = Modifier
                                 .size(52.dp)
-                                .clip(RoundedCornerShape(16.dp))
+                                .clip(RoundedCornerShape(24.dp))
                                 .background(color)
                                 .then(borderMod)
                                 .clickable { haptics.light(); selectedColor = colorLong },
@@ -187,7 +210,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Text("Template", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Surface(
                     onClick = { haptics.light(); showTemplatePicker = true },
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(
@@ -197,7 +220,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             Box(
-                                Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                                     .background(FieldMindTheme.colors.project.copy(alpha = 0.12f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -219,7 +242,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             Button(
                 onClick = ::save,
                 modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(28.dp),
                 enabled = title.isNotBlank()
             ) {
                 Icon(FieldMindIcons.Project, null, size = 20.dp)
@@ -231,7 +254,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     // ── Template Picker Dialog ──
     if (showTemplatePicker) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showTemplatePicker = false },
             icon = { Icon(FieldMindIcons.Project, null, size = 28.dp) },
             title = { Text("Choose a template") },
@@ -246,7 +269,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val isSelected = selectedTemplate == template
                         Surface(
                             onClick = { haptics.light(); selectedTemplate = template; showTemplatePicker = false },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (isSelected) FieldMindTheme.colors.project.copy(alpha = 0.10f) else MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(
@@ -278,13 +301,34 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 @Composable
 fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val haptics = rememberFieldMindHaptics()
-    var question by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("Other") }
-    var source by remember { mutableStateOf("Observation") }
-    var status by remember { mutableStateOf("New") }
-    var priority by remember { mutableStateOf("Medium") }
-    var answer by remember { mutableStateOf("") }
-    var showAdvanced by remember { mutableStateOf(false) }
+    var question by rememberSaveable { mutableStateOf("") }
+    var category by rememberSaveable { mutableStateOf("Other") }
+    var source by rememberSaveable { mutableStateOf("Observation") }
+    var status by rememberSaveable { mutableStateOf("New") }
+    var priority by rememberSaveable { mutableStateOf("Medium") }
+    var answer by rememberSaveable { mutableStateOf("") }
+    var showAdvanced by rememberSaveable { mutableStateOf(false) }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = question.isNotBlank() || answer.isNotBlank()
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     val colors = FieldMindTheme.colors
     val priorityColor = mapOf(
@@ -330,7 +374,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
                         Surface(
                             onClick = { haptics.light(); priority = level },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
                             modifier = Modifier.weight(1f)
@@ -368,7 +412,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
             Spacer(Modifier.height(8.dp))
 
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(16.dp), enabled = question.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = question.isNotBlank()) {
                 Icon(FieldMindIcons.Question, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             }
         }
@@ -382,16 +426,37 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 @Composable
 fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val questions by viewModel.questions.collectAsState()
-    var prediction by remember { mutableStateOf("") }
-    var reasoning by remember { mutableStateOf("") }
-    var evidence by remember { mutableStateOf("") }
-    var support by remember { mutableStateOf("") }
-    var weaken by remember { mutableStateOf("") }
-    var test by remember { mutableStateOf("") }
-    var confidence by remember { mutableStateOf(50f) }
-    var linkedId by remember { mutableStateOf<Long?>(null) }
-    var resultStatus by remember { mutableStateOf("Unknown") }
-    var showAdvanced by remember { mutableStateOf(false) }
+    var prediction by rememberSaveable { mutableStateOf("") }
+    var reasoning by rememberSaveable { mutableStateOf("") }
+    var evidence by rememberSaveable { mutableStateOf("") }
+    var support by rememberSaveable { mutableStateOf("") }
+    var weaken by rememberSaveable { mutableStateOf("") }
+    var test by rememberSaveable { mutableStateOf("") }
+    var confidence by rememberSaveable { mutableStateOf(50f) }
+    var linkedId by rememberSaveable { mutableStateOf<Long?>(null) }
+    var resultStatus by rememberSaveable { mutableStateOf("Unknown") }
+    var showAdvanced by rememberSaveable { mutableStateOf(false) }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = prediction.isNotBlank() || reasoning.isNotBlank() || evidence.isNotBlank()
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     fun save() {
         if (prediction.isNotBlank()) {
@@ -432,12 +497,12 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Text("${confidence.toInt()}%", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
             }
             Slider(confidence, { confidence = it }, valueRange = 0f..100f)
-            LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)), color = MaterialTheme.colorScheme.primary)
+            LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = MaterialTheme.colorScheme.primary)
             CollapsibleSection("Advanced options", "Result status tracking", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
                 ChoiceChipsField("Result status", listOf("Unknown", "Supported", "Weakened", "Inconclusive"), resultStatus) { resultStatus = it }
             }
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = prediction.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = prediction.isNotBlank()) {
                 Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create hypothesis")
             }
         }
@@ -450,12 +515,33 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
 @Composable
 fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
-    var tool by remember { mutableStateOf("Counter") }
-    var label by remember { mutableStateOf("") }
-    var value by remember { mutableStateOf("0") }
-    var unit by remember { mutableStateOf(defaultUnitForTool("Counter")) }
-    var location by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }
+    var tool by rememberSaveable { mutableStateOf("Counter") }
+    var label by rememberSaveable { mutableStateOf("") }
+    var value by rememberSaveable { mutableStateOf("0") }
+    var unit by rememberSaveable { mutableStateOf(defaultUnitForTool("Counter")) }
+    var location by rememberSaveable { mutableStateOf("") }
+    var notes by rememberSaveable { mutableStateOf("") }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = label.isNotBlank() || notes.isNotBlank() || location.isNotBlank()
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     fun save() {
         if (label.isNotBlank()) {
@@ -496,7 +582,7 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             ChoiceChips(contextPresets, notes) { notes = if (notes.isBlank()) it else "$notes, $it" }
             FieldTextField(notes, { notes = it }, "Notes", minLines = 3)
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = label.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = label.isNotBlank()) {
                 Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save record")
             }
         }
@@ -510,23 +596,44 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 @Composable
 fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     // ── Form state ──
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var priority by remember { mutableStateOf("Medium") }
-    var projectId by remember { mutableStateOf<Long?>(null) }
-    var dueDate by remember { mutableStateOf("") }
-    var dueTime by remember { mutableStateOf("") }
-    var reminder by remember { mutableStateOf(0) }
-    var reminderUnit by remember { mutableStateOf("minute") }
-    var repeatInterval by remember { mutableStateOf(0) }
-    var repeatUnit by remember { mutableStateOf("") }
-    var checklistItems by remember { mutableStateOf(listOf("")) }
-    var attachmentUris by remember { mutableStateOf<List<String>>(emptyList()) }
+    var title by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var priority by rememberSaveable { mutableStateOf("Medium") }
+    var projectId by rememberSaveable { mutableStateOf<Long?>(null) }
+    var dueDate by rememberSaveable { mutableStateOf("") }
+    var dueTime by rememberSaveable { mutableStateOf("") }
+    var reminder by rememberSaveable { mutableStateOf(0) }
+    var reminderUnit by rememberSaveable { mutableStateOf("minute") }
+    var repeatInterval by rememberSaveable { mutableStateOf(0) }
+    var repeatUnit by rememberSaveable { mutableStateOf("") }
+    var checklistItems by rememberSaveable { mutableStateOf(listOf("")) }
+    var attachmentUris by rememberSaveable { mutableStateOf<List<String>>(emptyList()) }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = title.isNotBlank() || description.isNotBlank() || checklistItems.any { it.isNotBlank() }
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     val projects by viewModel.projects.collectAsState()
     val haptics = rememberFieldMindHaptics()
     val context = LocalContext.current
-    var showAttachmentMenu by remember { mutableStateOf(false) }
+    var showAttachmentMenu by rememberSaveable { mutableStateOf(false) }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -607,7 +714,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
                         Surface(
                             onClick = { haptics.light(); priority = level },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
                             modifier = Modifier.weight(1f)
@@ -670,7 +777,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val isSelected = reminder == mins
                         Surface(
                             onClick = { haptics.light(); reminder = mins },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(18.dp),
                             color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.weight(1f)
                         ) {
@@ -696,7 +803,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         val isSelected = repeatUnit == unit
                         Surface(
                             onClick = { haptics.light(); repeatUnit = unit; repeatInterval = interval },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(18.dp),
                             color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.weight(1f)
                         ) {
@@ -740,7 +847,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                                 checklistItems = checklistItems.toMutableList().also { it[index] = newVal }
                             },
                             placeholder = { Text("Checklist item", style = MaterialTheme.typography.bodySmall) },
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(20.dp),
                             modifier = Modifier.weight(1f),
                             singleLine = true,
                             textStyle = MaterialTheme.typography.bodySmall
@@ -825,7 +932,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             Button(
                 onClick = ::save,
                 modifier = Modifier.fillMaxWidth().height(50.dp),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 enabled = title.isNotBlank()
             ) {
                 Icon(FieldMindIcons.Check, null, size = 20.dp)
@@ -842,17 +949,38 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
 @Composable
 fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
-    var type by remember { mutableStateOf("Field Report") }
-    var title by remember { mutableStateOf("") }
-    var background by remember { mutableStateOf("") }
-    var question by remember { mutableStateOf("") }
-    var methods by remember { mutableStateOf("") }
-    var observations by remember { mutableStateOf("") }
-    var results by remember { mutableStateOf("") }
-    var interpretation by remember { mutableStateOf("") }
-    var conclusion by remember { mutableStateOf("") }
-    var limitations by remember { mutableStateOf("") }
-    var next by remember { mutableStateOf("") }
+    var type by rememberSaveable { mutableStateOf("Field Report") }
+    var title by rememberSaveable { mutableStateOf("") }
+    var background by rememberSaveable { mutableStateOf("") }
+    var question by rememberSaveable { mutableStateOf("") }
+    var methods by rememberSaveable { mutableStateOf("") }
+    var observations by rememberSaveable { mutableStateOf("") }
+    var results by rememberSaveable { mutableStateOf("") }
+    var interpretation by rememberSaveable { mutableStateOf("") }
+    var conclusion by rememberSaveable { mutableStateOf("") }
+    var limitations by rememberSaveable { mutableStateOf("") }
+    var next by rememberSaveable { mutableStateOf("") }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = title.isNotBlank() || background.isNotBlank() || question.isNotBlank() || observations.isNotBlank() || results.isNotBlank() || conclusion.isNotBlank()
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     fun save() {
         if (title.isNotBlank()) {
@@ -890,7 +1018,7 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             FieldTextField(limitations, { limitations = it }, "Limitations", minLines = 2)
             FieldTextField(next, { next = it }, "Next steps", minLines = 2)
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = title.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
                 Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Build report")
             }
         }
@@ -905,11 +1033,32 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val context = LocalContext.current
     val haptics = rememberFieldMindHaptics()
-    var subject by remember { mutableStateOf("") }; var category by remember { mutableStateOf("Other") }
-    var facts by remember { mutableStateOf("") }; var confidence by remember { mutableStateOf("Likely") }
-    var location by remember { mutableStateOf("") }; var latitude by remember { mutableStateOf("") }; var longitude by remember { mutableStateOf("") }
-    var tags by remember { mutableStateOf("") }; var evidence by remember { mutableStateOf("") }; var fieldContext by remember { mutableStateOf("") }
-    var showAdvanced by remember { mutableStateOf(false) }
+    var subject by rememberSaveable { mutableStateOf("") }; var category by rememberSaveable { mutableStateOf("Other") }
+    var facts by rememberSaveable { mutableStateOf("") }; var confidence by rememberSaveable { mutableStateOf("Likely") }
+    var location by rememberSaveable { mutableStateOf("") }; var latitude by rememberSaveable { mutableStateOf("") }; var longitude by rememberSaveable { mutableStateOf("") }
+    var tags by rememberSaveable { mutableStateOf("") }; var evidence by rememberSaveable { mutableStateOf("") }; var fieldContext by rememberSaveable { mutableStateOf("") }
+    var showAdvanced by rememberSaveable { mutableStateOf(false) }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = subject.isNotBlank() || facts.isNotBlank() || tags.isNotBlank() || evidence.isNotBlank() || fieldContext.isNotBlank() || location.isNotBlank()
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     fun save() {
         if (subject.isNotBlank() || facts.isNotBlank()) {
@@ -960,7 +1109,7 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 FieldTextField(fieldContext, { fieldContext = it }, "Field context", minLines = 2)
             }
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = subject.isNotBlank() || facts.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = subject.isNotBlank() || facts.isNotBlank()) {
                 Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save observation")
             }
         }
@@ -974,9 +1123,30 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 @Composable
 fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val colors = FieldMindTheme.colors
-    var title by remember { mutableStateOf("") }; var body by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("Other") }; var tags by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }; var showAdvanced by remember { mutableStateOf(false) }
+    var title by rememberSaveable { mutableStateOf("") }; var body by rememberSaveable { mutableStateOf("") }
+    var category by rememberSaveable { mutableStateOf("Other") }; var tags by rememberSaveable { mutableStateOf("") }
+    var location by rememberSaveable { mutableStateOf("") }; var showAdvanced by rememberSaveable { mutableStateOf(false) }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = title.isNotBlank() || body.isNotBlank() || tags.isNotBlank() || location.isNotBlank()
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     fun save() {
         if (title.isNotBlank() || body.isNotBlank()) {
@@ -1015,7 +1185,7 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 FieldTextField(location, { location = it }, "Location", supportingText = "Where was this note taken?")
             }
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(16.dp), enabled = title.isNotBlank() || body.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank() || body.isNotBlank()) {
                 Icon(FieldMindIcons.Note, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             }
         }
@@ -1030,17 +1200,38 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val colors = FieldMindTheme.colors
     val projects by viewModel.projects.collectAsState()
-    var type by remember { mutableStateOf("Article") }
-    var title by remember { mutableStateOf("") }; var author by remember { mutableStateOf("") }
-    var dateOrYear by remember { mutableStateOf("") }; var doiOrIsbn by remember { mutableStateOf("") }
-    var publisherOrJournal by remember { mutableStateOf("") }; var accessDate by remember { mutableStateOf(today()) }
-    var link by remember { mutableStateOf("") }; var fileUri by remember { mutableStateOf("") }
-    var citationStyleNote by remember { mutableStateOf("") }
-    var importance by remember { mutableStateOf("Normal") }; var readingStatus by remember { mutableStateOf("In progress") }
-    var summary by remember { mutableStateOf("") }; var taught by remember { mutableStateOf("") }
-    var findings by remember { mutableStateOf("") }; var questions by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }; var reliability by remember { mutableStateOf(3f) }
-    var projectId by remember { mutableStateOf<Long?>(null) }
+    var type by rememberSaveable { mutableStateOf("Article") }
+    var title by rememberSaveable { mutableStateOf("") }; var author by rememberSaveable { mutableStateOf("") }
+    var dateOrYear by rememberSaveable { mutableStateOf("") }; var doiOrIsbn by rememberSaveable { mutableStateOf("") }
+    var publisherOrJournal by rememberSaveable { mutableStateOf("") }; var accessDate by rememberSaveable { mutableStateOf(today()) }
+    var link by rememberSaveable { mutableStateOf("") }; var fileUri by rememberSaveable { mutableStateOf("") }
+    var citationStyleNote by rememberSaveable { mutableStateOf("") }
+    var importance by rememberSaveable { mutableStateOf("Normal") }; var readingStatus by rememberSaveable { mutableStateOf("In progress") }
+    var summary by rememberSaveable { mutableStateOf("") }; var taught by rememberSaveable { mutableStateOf("") }
+    var findings by rememberSaveable { mutableStateOf("") }; var questions by rememberSaveable { mutableStateOf("") }
+    var notes by rememberSaveable { mutableStateOf("") }; var reliability by rememberSaveable { mutableStateOf(3f) }
+    var projectId by rememberSaveable { mutableStateOf<Long?>(null) }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = title.isNotBlank() || author.isNotBlank() || summary.isNotBlank() || findings.isNotBlank() || taught.isNotBlank() || notes.isNotBlank()
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     fun save() {
         if (title.isNotBlank()) {
@@ -1102,7 +1293,7 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 }
             }
             Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(16.dp), enabled = title.isNotBlank()) {
+            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
                 Icon(FieldMindIcons.Source, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             }
         }
@@ -1117,8 +1308,29 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 fun NewAttachmentScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val context = LocalContext.current
     val haptics = rememberFieldMindHaptics()
-    var capturedUri by remember { mutableStateOf<String?>(null) }
-    var capturedType by remember { mutableStateOf("") }
+    var capturedUri by rememberSaveable { mutableStateOf<String?>(null) }
+    var capturedType by rememberSaveable { mutableStateOf("") }
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = capturedUri != null
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     val imagePicker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let { runCatching { context.contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION) }; capturedUri = it.toString(); capturedType = "Image" }
@@ -1165,7 +1377,7 @@ fun NewAttachmentScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 }
             }
             if (capturedUri != null) {
-                Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = FieldMindTheme.colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = FieldMindTheme.colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(MaterialSymbolIcon("check_circle"), null, tint = FieldMindTheme.colors.positive, size = 24.dp)
                         Column(Modifier.weight(1f)) {
@@ -1185,7 +1397,7 @@ fun NewAttachmentScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         onSaved = { onBack() }
                     )
                 }
-            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = capturedUri != null) {
+            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = capturedUri != null) {
                 Icon(MaterialSymbolIcon("attach_file"), null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Attach")
             }
         }
@@ -1199,12 +1411,12 @@ private fun AttachmentTypeItem(
 ) {
     Card(
         modifier = modifier.clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = accent.copy(alpha = 0.10f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.fillMaxWidth().padding(vertical = 16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(icon, null, tint = accent, size = 22.dp) }
+            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(icon, null, tint = accent, size = 22.dp) }
             Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = accent)
         }
     }
@@ -1217,9 +1429,30 @@ private fun AttachmentTypeItem(
 @Composable
 fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val colors = FieldMindTheme.colors
-    var folderName by remember { mutableStateOf("") }
-    var selectedColor by remember { mutableStateOf(0xFF1F6B4C) }
+    var folderName by rememberSaveable { mutableStateOf("") }
+    var selectedColor by rememberSaveable { mutableStateOf(0xFF1F6B4C) }
     val haptics = rememberFieldMindHaptics()
+    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
+    val isDirty = folderName.isNotBlank()
+
+    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+
+    if (showExitConfirmation) {
+        SwipeableAlertDialog(
+            onDismissRequest = { showExitConfirmation = false },
+            title = { Text("Discard changes?") },
+            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
+            confirmButton = {
+                Button(
+                    onClick = { showExitConfirmation = false; onBack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Discard") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
+            }
+        )
+    }
 
     val colorOptions = listOf(
         0xFF1F6B4CL to "Green",
@@ -1247,9 +1480,9 @@ fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     colorOptions.forEach { (colorLong, colorName) ->
                         val isSelected = selectedColor == colorLong
-                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(14.dp)) else Modifier
+                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(22.dp)) else Modifier
                         Box(
-                            modifier = Modifier.size(48.dp).clip(RoundedCornerShape(14.dp)).background(Color(colorLong))
+                            modifier = Modifier.size(48.dp).clip(RoundedCornerShape(22.dp)).background(Color(colorLong))
                                 .then(borderMod)
                                 .clickable { haptics.light(); selectedColor = colorLong },
                             contentAlignment = Alignment.Center
@@ -1271,7 +1504,7 @@ fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         onSaved = { onBack() }
                     )
                 }
-            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), enabled = folderName.isNotBlank()) {
+            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = folderName.isNotBlank()) {
                 Icon(MaterialSymbolIcon("folder"), null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create Folder")
             }
         }

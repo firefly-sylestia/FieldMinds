@@ -21,7 +21,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -252,8 +254,11 @@ fun BackupAndRestoreScreen(
             )
         }
     ) { padding ->
+        val backupScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
+
         LazyColumn(
-            Modifier
+            state = backupScrollState,
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
             contentPadding = PaddingValues(20.dp, 20.dp, 20.dp, 8.dp),
@@ -513,7 +518,7 @@ fun BackupAndRestoreScreen(
             if (exportHistory.isEmpty()) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(34.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -584,7 +589,7 @@ fun BackupAndRestoreScreen(
 
     // ── Password prompt dialog ──
     if (showPasswordPrompt) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = {
                 showPasswordPrompt = false
                 importFileUri = null
@@ -601,7 +606,7 @@ fun BackupAndRestoreScreen(
                         label = { Text("Password") },
                         placeholder = { Text("Enter backup password") },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                         trailingIcon = {
@@ -663,7 +668,7 @@ fun BackupAndRestoreScreen(
 
     // ── Conflict Resolution Dialog ──
     if (showConflictDialog) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showConflictDialog = false },
             icon = { Icon(icon = MaterialSymbolIcon("priority_high"), contentDescription = null, size = 32.dp, tint = MaterialTheme.colorScheme.error) },
             title = { Text("Duplicate records detected") },
@@ -674,7 +679,7 @@ fun BackupAndRestoreScreen(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f),
                         tonalElevation = 0.dp
                     ) {
@@ -707,7 +712,7 @@ fun BackupAndRestoreScreen(
                 }
             },
             confirmButton = {
-                Button(onClick = { showConflictDialog = false }, shape = RoundedCornerShape(12.dp)) {
+                Button(onClick = { showConflictDialog = false }, shape = RoundedCornerShape(20.dp)) {
                     Text("Continue import")
                 }
             },
@@ -716,14 +721,14 @@ fun BackupAndRestoreScreen(
                     Text("Cancel")
                 }
             },
-            shape = RoundedCornerShape(28.dp)
+            shape = RoundedCornerShape(36.dp)
         )
     }
 
     // ── Import result dialog ──
     if (showImportResultDialog && importResult != null) {
         val result = importResult ?: return
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = {
                 showImportResultDialog = false
                 importFileUri = null
@@ -753,7 +758,7 @@ fun BackupAndRestoreScreen(
                         }
                     }
                     Surface(
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(20.dp),
                         color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f)
                     ) {
                         Row(
@@ -788,7 +793,7 @@ fun BackupAndRestoreScreen(
                     importPreview = null
                 }) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(28.dp)
+            shape = RoundedCornerShape(36.dp)
         )
     }
 
@@ -1126,14 +1131,14 @@ fun BackupAndRestoreScreen(
 
     // ── Share Preview Dialog moved to ExportTabContent ──
     /*if (showSharePreview) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showSharePreview = false },
             icon = { Icon(icon = FieldMindIcons.Export, contentDescription = null, size = 32.dp, tint = MaterialTheme.colorScheme.primary) },
             title = { Text("Share Data Export") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerLow,
                         tonalElevation = 0.dp
                     ) {
@@ -1141,14 +1146,14 @@ fun BackupAndRestoreScreen(
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 Text("Format:", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
                                 Surface(
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(20.dp),
                                     color = exportFormats.find { it.name == selectedExportFormat }?.color?.copy(alpha = 0.12f) ?: MaterialTheme.colorScheme.primaryContainer,
                                     tonalElevation = 0.dp
                                 ) {
                                     Text(selectedExportFormat, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = exportFormats.find { it.name == selectedExportFormat }?.color ?: MaterialTheme.colorScheme.primary)
                                 }
                             }
-                            Divider()
+                            HorizontalDivider()
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 Icon(FieldMindIcons.Data, null, size = 20.dp, tint = MaterialTheme.colorScheme.primary)
                                 Column {
@@ -1181,7 +1186,7 @@ fun BackupAndRestoreScreen(
                 }
             },
             confirmButton = {
-                Button(onClick = { showSharePreview = false; showShareDialog = true }, shape = RoundedCornerShape(12.dp)) {
+                Button(onClick = { showSharePreview = false; showShareDialog = true }, shape = RoundedCornerShape(20.dp)) {
                     Text("Continue to share")
                 }
             },
@@ -1190,7 +1195,7 @@ fun BackupAndRestoreScreen(
                     Text("Cancel")
                 }
             },
-            shape = RoundedCornerShape(28.dp)
+            shape = RoundedCornerShape(36.dp)
         )
     }
 
@@ -1198,7 +1203,7 @@ fun BackupAndRestoreScreen(
     if (showShareDialog) {
         ModalBottomSheet(
             onDismissRequest = { showShareDialog = false },
-            shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 36.dp),
             containerColor = MaterialTheme.colorScheme.surface,
             tonalElevation = 2.dp
         ) {
@@ -1386,7 +1391,7 @@ private fun ExportTabContent(
 
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
         // ── Scope selector card ──
-        Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+        Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Icon(FieldMindIcons.Category, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -1407,7 +1412,7 @@ private fun ExportTabContent(
                 ) {
                     entityCounts.filter { it.value > 0 }.entries.take(9).forEach { (key, value) ->
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(20.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(
@@ -1435,7 +1440,7 @@ private fun ExportTabContent(
         }
 
         // ── 4-column format grid ──
-        Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+        Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Icon(FieldMindIcons.Archive, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -1453,7 +1458,7 @@ private fun ExportTabContent(
                                 Surface(
                                     onClick = { selectedExportFormat = fmt.name },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(16.dp),
+                                    shape = RoundedCornerShape(24.dp),
                                     color = if (isSelected) fmt.color.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                     border = if (isSelected) BorderStroke(1.5.dp, fmt.color) else null
                                 ) {
@@ -1463,7 +1468,7 @@ private fun ExportTabContent(
                                         verticalArrangement = Arrangement.spacedBy(4.dp)
                                     ) {
                                         Box(
-                                            Modifier.size(36.dp).clip(RoundedCornerShape(10.dp))
+                                            Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
                                                 .background(if (isSelected) fmt.color.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest),
                                             contentAlignment = Alignment.Center
                                         ) {
@@ -1490,7 +1495,7 @@ private fun ExportTabContent(
 
         // ── Preview card ──
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -1530,7 +1535,7 @@ private fun ExportTabContent(
                 ) {
                     Text("Est. size: $estimatedSize", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                     ) {
                         Text(
@@ -1559,13 +1564,13 @@ private fun ExportTabContent(
 
         // ── Folder picker ──
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             modifier = Modifier.clickable { onChooseFolder() }
         ) {
             Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(FieldMindTheme.colors.data.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.data.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("folder"), null, tint = FieldMindTheme.colors.data, size = 22.dp)
                 }
                 Column(Modifier.weight(1f)) {
@@ -1596,13 +1601,13 @@ private fun ExportTabContent(
 
         // ── Export progress ──
         AnimatedVisibility(visible = isExporting) {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                         Text(exportStepText, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     }
-                    LinearProgressIndicator(progress = exportProgress, modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)))
+                    LinearProgressIndicator(progress = { exportProgress }, modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(6.dp)))
                 }
             }
         }
@@ -1613,12 +1618,12 @@ private fun ExportTabContent(
                 onClick = { 
                     onShowSharePreview(true)
                 },
-                modifier = Modifier.weight(1f), shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.weight(1f), shape = RoundedCornerShape(24.dp),
                 enabled = !isExporting && totalEntities > 0
             ) { Icon(FieldMindIcons.Export, null, size = 18.dp); Spacer(Modifier.width(6.dp)); Text("Share") }
             Button(
                 onClick = { onExport(selectedExportFormat, "save", exportScope) },
-                modifier = Modifier.weight(1f), shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.weight(1f), shape = RoundedCornerShape(24.dp),
                 enabled = !isExporting && totalEntities > 0 && destinationUri != null
             ) { Icon(FieldMindIcons.Save, null, size = 18.dp); Spacer(Modifier.width(6.dp)); Text("Save") }
         }
@@ -1627,7 +1632,7 @@ private fun ExportTabContent(
         OutlinedButton(
             onClick = { onSwitchToImport?.invoke() },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(24.dp)
         ) { Icon(FieldMindIcons.Download, null, size = 18.dp); Spacer(Modifier.width(6.dp)); Text("Import backup") }
     }
 }
@@ -1655,14 +1660,14 @@ private fun ImportTabContent(
         // ── File drop zone ──
         if (selectedFileUri == null) {
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(
                         BorderStroke(1.5.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
-                        RoundedCornerShape(24.dp)
+                        RoundedCornerShape(34.dp)
                     )
                     .clickable { onPickFile() }
             ) {
@@ -1698,7 +1703,7 @@ private fun ImportTabContent(
         // ── File selected preview ──
         if (selectedFileUri != null) {
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -1708,7 +1713,7 @@ private fun ImportTabContent(
                         horizontalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         Box(
-                            Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                            Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                                 .background(FieldMindTheme.colors.positive.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -1718,7 +1723,7 @@ private fun ImportTabContent(
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                                 Text(fileName, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 if (fileName.endsWith(".encrypted")) {
-                                    Surface(shape = RoundedCornerShape(6.dp), color = MaterialTheme.colorScheme.error.copy(alpha = 0.15f)) {
+                                    Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.error.copy(alpha = 0.15f)) {
                                         Text("[Encrypted]", modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.error)
                                     }
                                 } else {
@@ -1728,7 +1733,7 @@ private fun ImportTabContent(
                                         fileName.endsWith(".json") -> "JSON"
                                         else -> fileName.substringAfterLast(".").uppercase()
                                     }
-                                    Surface(shape = RoundedCornerShape(6.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)) {
+                                    Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)) {
                                         Text(badge, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
                                     }
                                 }
@@ -1766,7 +1771,7 @@ private fun ImportTabContent(
                         ) {
                             items.forEach { (label, count) ->
                                 Surface(
-                                    shape = RoundedCornerShape(10.dp),
+                                    shape = RoundedCornerShape(18.dp),
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                                 ) {
                                     Row(
@@ -1803,7 +1808,7 @@ private fun ImportTabContent(
                             val selected = importMode == mode
                             Surface(
                                 onClick = { onModeChange(mode) },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = if (selected) MaterialTheme.colorScheme.primaryContainer
                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
                                 border = if (selected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
@@ -1825,7 +1830,7 @@ private fun ImportTabContent(
 
                     if (importMode == "Merge") {
                         Card(
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f)),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                             modifier = Modifier.clickable { onShowConflictDialog(true) }
@@ -1857,7 +1862,7 @@ private fun ImportTabContent(
                     Button(
                         onClick = onImport,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         enabled = !isImporting && preview != null
                     ) {
                         if (isImporting) {
@@ -1912,13 +1917,13 @@ private fun BackupTabContent(
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
         // ── Folder picker (always .fieldmind format) ──
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             modifier = Modifier.clickable { onChooseBackupFolder() }
         ) {
             Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(FieldMindTheme.colors.data.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.data.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("folder"), null, tint = FieldMindTheme.colors.data, size = 22.dp)
                 }
                 Column(Modifier.weight(1f)) {
@@ -1938,7 +1943,7 @@ private fun BackupTabContent(
 
         // ── Format info card ──
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -1969,20 +1974,20 @@ private fun BackupTabContent(
 
         // ── Backup progress ──
         AnimatedVisibility(visible = isExporting) {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                         Text(exportStepText, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     }
-                    LinearProgressIndicator(progress = exportProgress, modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)))
+                    LinearProgressIndicator(progress = { exportProgress }, modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(6.dp)))
                 }
             }
         }
 
         // ── Backup options ─��
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -2008,7 +2013,7 @@ private fun BackupTabContent(
                         label = { Text("Backup password") },
                         placeholder = { Text("Enter a strong password") },
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                         trailingIcon = {
@@ -2026,7 +2031,7 @@ private fun BackupTabContent(
                         ) {
                             LinearProgressIndicator(
                                 progress = { strength.score / 5f },
-                                modifier = Modifier.weight(1f).height(6.dp).clip(RoundedCornerShape(3.dp)),
+                                modifier = Modifier.weight(1f).height(6.dp).clip(RoundedCornerShape(8.dp)),
                                 color = Color(strength.color),
                                 trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
                             )
@@ -2039,7 +2044,7 @@ private fun BackupTabContent(
                         label = { Text("Confirm password") },
                         placeholder = { Text("Re-enter password") },
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                         trailingIcon = {
@@ -2166,7 +2171,7 @@ private fun BackupTabContent(
             val countdownFraction = if (intervalMs > 0) (1f - remainingMs.toFloat() / intervalMs.toFloat()).coerceIn(0f, 1f) else 0f
 
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.25f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -2197,7 +2202,7 @@ private fun BackupTabContent(
                             Spacer(Modifier.height(4.dp))
                             LinearProgressIndicator(
                                 progress = { countdownFraction },
-                                modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)),
+                                modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(6.dp)),
                                 color = MaterialTheme.colorScheme.tertiary,
                                 trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
                             )
@@ -2209,7 +2214,7 @@ private fun BackupTabContent(
 
         // ── Last backup info ──
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -2229,7 +2234,7 @@ private fun BackupTabContent(
         Button(
             onClick = onCreateBackup,
             modifier = Modifier.fillMaxWidth().height(56.dp),
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(24.dp),
             colors = ButtonDefaults.buttonColors(containerColor = FieldMindTheme.colors.observation)
         ) {
             Icon(FieldMindIcons.Archive, null, size = 20.dp)

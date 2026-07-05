@@ -3,6 +3,8 @@ package fieldmind.research.app.features.field.presentation.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Animatable
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -59,8 +61,10 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -68,11 +72,31 @@ import androidx.compose.ui.unit.sp
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.theme.cardBg
 import fieldmind.research.app.shared.presentation.components.icons.Icon
+import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.components.LocalPrivacyTypingEnabled
 import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
+import fieldmind.research.app.ui.theme.CuteElevations
 // FieldMindIcons is in the same package (components.FieldMindIcons)
-// FieldMindIcons is in the same package (components.FieldMindIcons)
+
+/**
+ * Displays the FieldMind logo as a leaf icon using the "eco" Material symbol.
+ *
+ * @param size The display size (default 72.dp). The icon scales proportionally.
+ * @param modifier Additional modifier to apply.
+ */
+@Composable
+fun FieldMindLogo(
+    modifier: Modifier = Modifier,
+    size: androidx.compose.ui.unit.Dp = 72.dp
+) {
+    Icon(
+        icon = FieldMindIcons.Leaf,
+        contentDescription = "FieldMind logo",
+        modifier = modifier.size(size),
+        tint = MaterialTheme.colorScheme.primary
+    )
+}
 
 // ══════════════════════════════════════════════════════════════════════
 //  FieldMindSubNavBar — shared horizontal chip/tab row for Library,
@@ -109,12 +133,12 @@ fun FieldMindSubNavBar(
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 0.dp)
     ) {
-        // Pill container
+        // Pill container — elevated with soft shadow for a plush, pill-like feel
         Surface(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
-            tonalElevation = 0.dp,
-            shadowElevation = 0.dp
+            tonalElevation = 2.dp,
+            shadowElevation = 2.dp
         ) {
             Row(
                 modifier = Modifier
@@ -137,7 +161,7 @@ fun FieldMindSubNavBar(
                                 onTabSelected(index)
                             }
                         },
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         color = if (selected)
                             MaterialTheme.colorScheme.primaryContainer
                         else
@@ -244,8 +268,8 @@ fun OptionPickerDialog(
                 .fillMaxWidth(0.94f)
                 .wrapContentHeight()
                 .padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            shape = RoundedCornerShape(40.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(
@@ -255,7 +279,7 @@ fun OptionPickerDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     Box(
-                        Modifier.size(48.dp).clip(RoundedCornerShape(16.dp))
+                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                             .background(accentColor.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -281,7 +305,7 @@ fun OptionPickerDialog(
                         leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp)
+                        shape = RoundedCornerShape(28.dp)
                     )
                 }
 
@@ -303,7 +327,7 @@ fun OptionPickerDialog(
                                 onDismiss()
                             }
                         },
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         color = if (isSelected) accentColor.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = if (isSelected) BorderStroke(1.5.dp, accentColor) else null,
                         tonalElevation = 0.dp,
@@ -316,7 +340,7 @@ fun OptionPickerDialog(
                         ) {
                             if (icon != null) {
                                 Box(
-                                    Modifier.size(36.dp).clip(RoundedCornerShape(12.dp))
+                                    Modifier.size(36.dp).clip(RoundedCornerShape(20.dp))
                                         .background(accentColor.copy(alpha = if (isSelected) 0.18f else 0.08f)),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -360,7 +384,7 @@ fun OptionPickerDialog(
                             onDismiss()
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         enabled = selectedMulti.isNotEmpty()
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -399,7 +423,7 @@ fun MultiSelectPickerField(
 
         Surface(
             onClick = { haptics.light(); showDialog = true },
-            shape = RoundedCornerShape(18.dp),
+            shape = RoundedCornerShape(28.dp),
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
             modifier = Modifier.pressScale(scaleDown = 0.97f)
@@ -478,7 +502,7 @@ fun OptionPickerField(
         
         Surface(
             onClick = { haptics.light(); showDialog = true },
-            shape = RoundedCornerShape(18.dp),
+            shape = RoundedCornerShape(28.dp),
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
             modifier = Modifier.pressScale(scaleDown = 0.97f)
@@ -539,9 +563,10 @@ fun FieldScreenHeader(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.6f),
-        tonalElevation = 0.dp
+        shape = RoundedCornerShape(30.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
+        tonalElevation = 2.dp,
+        shadowElevation = 2.dp
     ) {
         Row(
             Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
@@ -552,7 +577,7 @@ fun FieldScreenHeader(
                 Box(
                     Modifier
                         .size(42.dp)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(12.dp)),
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(20.dp)),
                     contentAlignment = Alignment.Center
                 ) { Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp) }
             }
@@ -565,7 +590,7 @@ fun FieldScreenHeader(
             if (actionIcon != null && onAction != null) {
                 Surface(
                     onClick = onAction,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.pressScale(scaleDown = 0.90f)
                 ) {
@@ -578,22 +603,47 @@ fun FieldScreenHeader(
     }
 }
 
-/** In-list section header. */
+/** In-list section header — wrapped in an elegant mini-card with soft shadow for a plush, cute look. */
 @Composable
 fun SectionHeader(
     title: String,
     subtitle: String? = null,
     modifier: Modifier = Modifier,
-    trailing: @Composable (() -> Unit)? = null
+    trailing: @Composable (() -> Unit)? = null,
+    accentColor: Color? = null,
+    index: Int = 0,
+    animate: Boolean = true
 ) {
-    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-            if (!subtitle.isNullOrBlank()) {
-                Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
+    val accent = accentColor ?: FieldMindTheme.colors.accentFor(title)
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .staggeredEntrance(index = index, animate = animate)
+            .cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(28.dp)),
+        shape = RoundedCornerShape(28.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        tonalElevation = 2.dp
+    ) {
+        Row(
+            Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Cute accent color strip on the left
+            Box(
+                Modifier
+                    .width(4.dp)
+                    .height(if (subtitle != null) 36.dp else 28.dp)
+                    .background(accent.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
+            )
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                if (!subtitle.isNullOrBlank()) {
+                    Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
+                }
             }
+            if (trailing != null) trailing()
         }
-        if (trailing != null) trailing()
     }
 }
 
@@ -622,9 +672,10 @@ fun StandardScreenHeader(
     Surface(
         modifier = modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 0.dp
+        tonalElevation = 3.dp,
+        shadowElevation = 3.dp
     ) {
         Row(
             Modifier.padding(18.dp),
@@ -633,11 +684,11 @@ fun StandardScreenHeader(
         ) {
             Box(
                 Modifier
-                    .size(48.dp)
-                    .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), RoundedCornerShape(14.dp)),
+                    .size(44.dp)
+                    .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), RoundedCornerShape(22.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon = icon, contentDescription = null, tint = heroColor, size = 26.dp)
+                Icon(icon = icon, contentDescription = null, tint = heroColor, size = 24.dp)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(
@@ -674,7 +725,7 @@ fun BackButton(
     modifier: Modifier = Modifier,
     icon: MaterialSymbolIcon = FieldMindIcons.Back,
     contentDescription: String? = null,
-    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(14.dp),
+    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(22.dp),
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh
 ) {
     Surface(
@@ -702,7 +753,7 @@ fun BackButton(
 fun EntityBadge(kind: String, modifier: Modifier = Modifier) {
     val accent = FieldMindTheme.colors.accentFor(kind)
     Surface(
-        modifier = modifier,
+        modifier = modifier.cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(999.dp)),
         shape = RoundedCornerShape(999.dp),
         color = accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f),
         contentColor = accent
@@ -718,14 +769,15 @@ fun EntityBadge(kind: String, modifier: Modifier = Modifier) {
     }
 }
 
-/** Small metadata chip with optional leading icon. */
+/** Small metadata chip with optional leading icon — elevated with a soft shadow for a plush, touchable feel. */
 @Composable
 fun InfoChip(text: String, modifier: Modifier = Modifier, icon: MaterialSymbolIcon? = null, color: Color? = null) {
     val content = color ?: MaterialTheme.colorScheme.onSurfaceVariant
     Surface(
-        modifier = modifier,
+        modifier = modifier.cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(999.dp)),
         shape = RoundedCornerShape(999.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        tonalElevation = 1.dp,
         contentColor = content
     ) {
         Row(
@@ -743,7 +795,7 @@ fun InfoChip(text: String, modifier: Modifier = Modifier, icon: MaterialSymbolIc
 fun ConfidenceChip(level: String, modifier: Modifier = Modifier) {
     val color = FieldMindTheme.colors.confidenceColor(level)
     Surface(
-        modifier = modifier,
+        modifier = modifier.cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(999.dp)),
         shape = RoundedCornerShape(999.dp),
         color = color.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f),
         contentColor = color
@@ -812,6 +864,7 @@ fun EntityCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .staggeredEntrance(index = index, animate = animate)
             .then(
                 if (onClick != null) Modifier.expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 else Modifier
@@ -819,22 +872,22 @@ fun EntityCard(
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .then(
                 if (selected) Modifier
-                    .border(1.5.dp, accent.copy(alpha = 0.6f), RoundedCornerShape(24.dp))
-                    .background(accent.copy(alpha = 0.06f), RoundedCornerShape(24.dp))
+                    .border(1.5.dp, accent.copy(alpha = 0.6f), RoundedCornerShape(34.dp))
+                    .background(accent.copy(alpha = 0.06f), RoundedCornerShape(34.dp))
                 else Modifier
             ),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
-        Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+        Row(Modifier.padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             Box(
                 Modifier
                     .size(42.dp)
-                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(13.dp)),
+                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(20.dp)),
                 contentAlignment = Alignment.Center
             ) { Icon(icon = FieldMindIcons.iconFor(kind), contentDescription = null, tint = accent, size = 22.dp) }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 if (!body.isNullOrBlank()) {
                     Text(body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 3, overflow = TextOverflow.Ellipsis)
@@ -867,20 +920,69 @@ fun MetricTile(
     modifier: Modifier = Modifier,
     accent: Color? = null,
     trend: String? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    index: Int = 0,
+    animate: Boolean = false
 ) {
     val tint = accent ?: MaterialTheme.colorScheme.primary
+
+    // ── Count-up animation for numeric values ──
+    // Parse the leading number from the value string (e.g., "42" or "5/10" or "12 observations")
+    val numericPrefix = remember(value) {
+        val cleaned = value.trimStart()
+        val numStr = cleaned.takeWhile { it.isDigit() || it == '.' }
+        numStr.toFloatOrNull()
+    }
+    val hasNumeric = numericPrefix != null
+    val countUpTarget = numericPrefix ?: 0f
+    val countUpAnimated = remember { Animatable(0f) }
+
+    // Animate from 0 to target once on first visible composition
+    var hasCountedUp by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if (hasNumeric && !hasCountedUp) {
+            hasCountedUp = true
+            countUpAnimated.snapTo(0f)
+            countUpAnimated.animateTo(
+                targetValue = countUpTarget,
+                animationSpec = tween(
+                    durationMillis = FieldMindMotion.countUpMs,
+                    easing = FastOutSlowInEasing
+                )
+            )
+        } else {
+            countUpAnimated.snapTo(countUpTarget)
+        }
+    }
+
+    // Format the animated value: preserve the suffix part of the original value
+    val displayValue = if (hasNumeric) {
+        remember(countUpAnimated.value) {
+            val suffix = value.trimStart().dropWhile { it.isDigit() || it == '.' }.trimStart()
+            val isInteger = numericPrefix == numericPrefix?.toInt()?.toFloat()
+            val formatted = if (isInteger) {
+                countUpAnimated.value.toInt().toString()
+            } else {
+                "%.1f".format(countUpAnimated.value)
+            }
+            formatted + suffix
+        }
+    } else {
+        value
+    }
+
     Card(
         modifier = modifier
+            .staggeredEntrance(index = index, animate = animate)
             .then(if (onClick != null) Modifier.expressivePress(scaleDown = 0.96f) else Modifier)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon = icon, contentDescription = null, tint = tint, size = 22.dp)
-            Text(value, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(displayValue, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (!trend.isNullOrBlank()) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(3.dp)) {
@@ -892,37 +994,67 @@ fun MetricTile(
     }
 }
 
-/** Empty-state block with an icon, message, and an optional primary action. */
+/** Enhanced empty-state block with gradient background, icon shell, and optional primary action. */
 @Composable
 fun EmptyState(
     title: String,
     body: String,
     modifier: Modifier = Modifier,
     icon: MaterialSymbolIcon = FieldMindIcons.Nature,
+    iconColor: Color = MaterialTheme.colorScheme.primary,
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null
 ) {
-    Column(
+    Card(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainerLow, RoundedCornerShape(24.dp))
-            .padding(28.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+            .cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(34.dp)),
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Box(
-            Modifier
-                .size(56.dp)
-                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(18.dp)),
-            contentAlignment = Alignment.Center
-        ) { Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 28.dp) }
-        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        Text(body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        if (actionLabel != null && onAction != null) {
-            androidx.compose.material3.Button(onClick = onAction, modifier = Modifier.padding(top = 4.dp)) {
-                Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 18.dp)
-                Spacer(Modifier.size(6.dp))
-                Text(actionLabel)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            iconColor.copy(alpha = 0.04f),
+                            MaterialTheme.colorScheme.surface
+                        )
+                    ),
+                    shape = RoundedCornerShape(34.dp)
+                )
+                .padding(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Gradient icon shell
+            Box(
+                Modifier
+                    .size(64.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(
+                                iconColor.copy(alpha = 0.20f),
+                                iconColor.copy(alpha = 0.06f)
+                            )
+                        ),
+                        shape = RoundedCornerShape(30.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon = icon, contentDescription = null, tint = iconColor, size = 30.dp)
+            }
+            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            if (actionLabel != null && onAction != null) {
+                Spacer(Modifier.height(4.dp))
+                androidx.compose.material3.Button(onClick = onAction, modifier = Modifier, shape = RoundedCornerShape(22.dp)) {
+                    Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 18.dp)
+                    Spacer(Modifier.size(6.dp))
+                    Text(actionLabel)
+                }
             }
         }
     }
@@ -967,7 +1099,7 @@ fun FieldTextField(
             }
         },
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         enabled = enabled
     )
 }
@@ -1073,7 +1205,7 @@ fun NumberField(
                         }
                     },
                     modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(20.dp)
                 ) {
                     Text("−", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 }
@@ -1090,7 +1222,7 @@ fun NumberField(
                     else if (supportingText != null) Text(supportingText)
                 },
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(28.dp),
                 enabled = enabled
             )
 
@@ -1107,7 +1239,7 @@ fun NumberField(
                         }
                     },
                     modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(20.dp)
                 ) {
                     Text("+", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 }
@@ -1127,7 +1259,7 @@ fun NumberField(
                     else if (supportingText != null) Text(supportingText)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(28.dp),
                 enabled = enabled
             )
         }
@@ -1143,7 +1275,7 @@ fun NumberField(
 fun OutlinedSection(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         color = Color.Transparent,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) { Box(Modifier.padding(14.dp)) { content() } }
@@ -1322,7 +1454,7 @@ fun ProtocolStepField(
                 Text(step.instruction, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1352,8 +1484,8 @@ fun ProtocolPicker(
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).wrapContentHeight().padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            shape = RoundedCornerShape(40.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 Text("Choose a protocol", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
@@ -1365,7 +1497,7 @@ fun ProtocolPicker(
                             .fillMaxWidth()
                             .expressivePress(scaleDown = 0.97f)
                             .clickable { onSelect(protocol) },
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh
                         ),
@@ -1373,8 +1505,8 @@ fun ProtocolPicker(
                         border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                     ) {
                         Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Box(Modifier.size(42.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
-                                Icon(protocol.icon, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(protocol.icon, null, tint = MaterialTheme.colorScheme.primary, size = 24.dp)
                             }
                             Column(Modifier.weight(1f)) {
                                 Text(protocol.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -1438,7 +1570,7 @@ fun NoteComposerCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1446,7 +1578,7 @@ fun NoteComposerCard(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                         .background(FieldMindTheme.colors.note.cardBg(FieldMindTheme.colors.isDark)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Note, null, tint = FieldMindTheme.colors.note, size = 22.dp) }
@@ -1455,7 +1587,7 @@ fun NoteComposerCard(
                         Text("New note", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                         Surface(
                             onClick = { haptics.light(); showTemplates = !showTemplates },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(18.dp),
                             color = if (showTemplates) FieldMindTheme.colors.warning.cardBg(FieldMindTheme.colors.isDark) else MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1503,7 +1635,7 @@ fun NoteComposerCard(
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 6,
                 placeholder = { Text("Start writing your note...", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
-                shape = RoundedCornerShape(18.dp)
+                shape = RoundedCornerShape(28.dp)
             )
 
             // Category & save row
@@ -1515,7 +1647,7 @@ fun NoteComposerCard(
                 ChoiceChips(categories, category, modifier = Modifier.weight(1f), onSelected = onCategoryChange)
                 Button(
                     onClick = { haptics.confirm(); onSave() },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     enabled = saveEnabled && (title.isNotBlank() || body.isNotBlank())
                 ) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -1524,5 +1656,100 @@ fun NoteComposerCard(
                 }
             }
         }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  StandardIconBox — Enforces consistent icon box sizing
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Standard sizes for icon boxes across the app.
+ * Each size enforces the correct box dimensions, clip radius, and icon size
+ * for consistent visual rhythm.
+ */
+enum class IconBoxSize(val boxDp: androidx.compose.ui.unit.Dp, val clipDp: androidx.compose.ui.unit.Dp, val iconDp: androidx.compose.ui.unit.Dp) {
+    /** Compact inline badge — 36dp box, 18dp clip, 20dp icon */
+    Mini(36.dp, 18.dp, 20.dp),
+    /** Medium tile — 40dp box, 20dp clip, 22dp icon */
+    Medium(40.dp, 20.dp, 22.dp),
+    /** Large tile/list item — 44dp box, 22dp clip, 24dp icon */
+    Large(44.dp, 22.dp, 24.dp)
+}
+
+/**
+ * A standardized icon box that enforces consistent sizing across the app.
+ *
+ * Use this composable instead of manually specifying [Modifier.size], clip,
+ * and icon dimensions. Choose the [size] that matches the visual hierarchy level.
+ *
+ * @param icon The material symbol icon to display.
+ * @param contentDescription Accessible description (null for decorative icons).
+ * @param tint The icon and box background tint color.
+ * @param size The standard size tier — Mini (36dp), Medium (40dp), Large (44dp).
+ * @param modifier Additional modifier to apply to the outer Box.
+ * @param alpha Background tint opacity (default 0.14f; use ~0.28f for dark mode variants).
+ */
+@Composable
+fun StandardIconBox(
+    icon: MaterialSymbolIcon,
+    contentDescription: String? = null,
+    tint: Color,
+    size: IconBoxSize = IconBoxSize.Medium,
+    modifier: Modifier = Modifier,
+    alpha: Float = 0.14f
+) {
+    Box(
+        modifier = modifier
+            .size(size.boxDp)
+            .clip(RoundedCornerShape(size.clipDp))
+            .background(tint.copy(alpha = alpha)),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            icon = icon,
+            contentDescription = contentDescription,
+            tint = tint,
+            size = size.iconDp
+        )
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  InfoBadge — Compact entity type badge for inline list items
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * A compact inline badge for displaying entity type icons in list/detail items.
+ * Uses a fixed 32dp circular box with a 16dp icon — optimized for inline
+ * use where space is constrained but visual recognition is still needed.
+ *
+ * @param icon The material symbol icon representing the entity type.
+ * @param tint The icon and badge background tint color.
+ * @param contentDescription Accessible description (null for decorative icons).
+ * @param modifier Additional modifier to apply to the outer Box.
+ * @param alpha Background tint opacity (default 0.14f).
+ */
+@Composable
+fun InfoBadge(
+    icon: MaterialSymbolIcon,
+    tint: Color,
+    contentDescription: String? = null,
+    modifier: Modifier = Modifier,
+    alpha: Float = 0.14f
+) {
+    Box(
+        modifier = modifier
+            .size(32.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(tint.copy(alpha = alpha)),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            icon = icon,
+            contentDescription = contentDescription,
+            tint = tint,
+            size = 16.dp
+        )
     }
 }

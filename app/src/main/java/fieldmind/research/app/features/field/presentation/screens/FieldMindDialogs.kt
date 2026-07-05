@@ -41,6 +41,9 @@ import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenceAttachment
+import fieldmind.research.app.ui.theme.CuteCardDefaults
+import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -76,7 +79,7 @@ internal fun DialogWrapper(
 
     // Confirmation dialog when exiting with unsaved changes
     if (showExitConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showExitConfirm = false },
             icon = { Icon(icon = FieldMindIcons.Info, contentDescription = null, size = 28.dp) },
             title = { Text("Unsaved changes") },
@@ -89,7 +92,7 @@ internal fun DialogWrapper(
             confirmButton = {
                 Button(
                     onClick = { showExitConfirm = false; onDismiss() },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
                     Text("Discard")
@@ -127,7 +130,7 @@ internal fun DialogWrapper(
                     // Standardized full-screen header with back button
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(20.dp),
+                        shape = RoundedCornerShape(30.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f),
                         tonalElevation = 0.dp
                     ) {
@@ -140,7 +143,7 @@ internal fun DialogWrapper(
                         ) {
                             Surface(
                                 onClick = { if (isDirty()) showExitConfirm = true else onDismiss() },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.size(44.dp)
                             ) {
@@ -162,10 +165,10 @@ internal fun DialogWrapper(
             }
         } else {
             Surface(
-                modifier = modifier.fillMaxWidth(0.94f).wrapContentHeight().padding(vertical = 24.dp),
-                shape = RoundedCornerShape(32.dp),
+                modifier = modifier.fillMaxWidth(0.94f).wrapContentHeight().padding(vertical = 24.dp).cuteShadow(elevation = CuteElevations.plushTier4, shape = CuteCardDefaults.Shape),
+                shape = CuteCardDefaults.Shape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
-                tonalElevation = 6.dp
+                tonalElevation = CuteElevations.plushTier4
             ) {
                 Column(
                     Modifier.verticalScroll(rememberScrollState()).padding(20.dp),
@@ -189,7 +192,7 @@ internal fun DialogHeader(
 ) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         Box(
-            Modifier.size(46.dp).clip(RoundedCornerShape(14.dp))
+            Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                 .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f)),
             contentAlignment = Alignment.Center
         ) {
@@ -240,7 +243,7 @@ internal fun DialogActions(
         Spacer(Modifier.size(8.dp))
         Button(
             onClick = onSave,
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(24.dp),
             enabled = saveEnabled
         ) { Text(saveLabel) }
     }
@@ -280,12 +283,12 @@ internal fun CollapsibleSection(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (expanded) MaterialTheme.colorScheme.surfaceContainerLow
-            else MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.55f)
+            else MaterialTheme.colorScheme.surfaceContainerHigh
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
         Column(Modifier.padding(4.dp)) {
             Row(
@@ -294,10 +297,10 @@ internal fun CollapsibleSection(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Box(
-                    Modifier.size(34.dp).clip(RoundedCornerShape(10.dp))
+                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
                         .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)),
                     contentAlignment = Alignment.Center
-                ) { Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp) }
+                ) { Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp) }
                 Column(Modifier.weight(1f)) {
                     Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                     if (subtitle.isNotBlank()) {
@@ -392,9 +395,9 @@ internal fun NewProjectDialog(
         // Template Guide — shows guidance from selected template without auto-filling fields
         if (templateGuide != null) {
             Card(
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(containerColor = FieldMindTheme.colors.project.copy(alpha = 0.08f)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                shape = RoundedCornerShape(28.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
+                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
             ) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -405,7 +408,7 @@ internal fun NewProjectDialog(
                         }
                         Surface(
                             onClick = { showGuide = !showGuide },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(18.dp),
                             color = FieldMindTheme.colors.project.copy(alpha = 0.12f)
                         ) {
                             Row(Modifier.padding(horizontal = 8.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -428,7 +431,7 @@ internal fun NewProjectDialog(
                                 Text("Recommended methods", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = FieldMindTheme.colors.project)
                                 FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                     templateGuide.defaultMethods.forEach { m ->
-                                        Surface(shape = RoundedCornerShape(8.dp), color = FieldMindTheme.colors.project.copy(alpha = 0.1f)) {
+                                        Surface(shape = RoundedCornerShape(16.dp), color = FieldMindTheme.colors.project.copy(alpha = 0.1f)) {
                                             Text(m, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp), color = FieldMindTheme.colors.project, fontWeight = FontWeight.Medium)
                                         }
                                     }
@@ -477,10 +480,10 @@ private fun GuideRow(label: String, value: String) {
 }
 @Composable
 private fun SourceFormHero(title: String, body: String) {
-    Card(shape = RoundedCornerShape(26.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Row(Modifier.fillMaxWidth().padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(48.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
-                Icon(FieldMindIcons.Source, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 26.dp)
+            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                Icon(FieldMindIcons.Source, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 24.dp)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
@@ -495,7 +498,7 @@ internal fun SourcePreviewCard(link: String, fileUri: String, modifier: Modifier
     val trimmedLink = link.trim()
     val videoId = remember(trimmedLink) { youtubeVideoId(trimmedLink) }
     if (trimmedLink.isBlank() && fileUri.isBlank()) return
-    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(icon = if (videoId != null) FieldMindIcons.Play else if (fileUri.isNotBlank()) FieldMindIcons.File else FieldMindIcons.OpenLink, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -509,7 +512,7 @@ internal fun SourcePreviewCard(link: String, fileUri: String, modifier: Modifier
                     model = "https://img.youtube.com/vi/$id/hqdefault.jpg",
                     contentDescription = "YouTube thumbnail",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().height(150.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                    modifier = Modifier.fillMaxWidth().height(150.dp).clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)
                 )
             }
             if (trimmedLink.isNotBlank() && videoId == null) {
@@ -538,12 +541,12 @@ private fun ProgressiveSection(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (expanded) MaterialTheme.colorScheme.surfaceContainerLow
-            else MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.6f)
+            else MaterialTheme.colorScheme.surfaceContainerHigh
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
         Column(Modifier.padding(4.dp)) {
             Row(
@@ -551,7 +554,7 @@ private fun ProgressiveSection(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Box(Modifier.size(36.dp).clip(RoundedCornerShape(11.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                Box(Modifier.size(36.dp).clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp) }
                 Column(Modifier.weight(1f)) {
@@ -720,7 +723,7 @@ internal fun NewHypothesisDialog(viewModel: FieldMindViewModel, questions: List<
             Text("${confidence.toInt()}%", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
         }
         Slider(confidence, { confidence = it }, valueRange = 0f..100f)
-        LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)), color = MaterialTheme.colorScheme.primary)
+        LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = MaterialTheme.colorScheme.primary)
         CollapsibleSection("Advanced options", "Result status tracking", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
             ChoiceChipsField("Result status", listOf("Unknown", "Supported", "Weakened", "Inconclusive"), resultStatus) { resultStatus = it }
         }
@@ -999,7 +1002,7 @@ internal fun NewObservationDialog(viewModel: FieldMindViewModel, onDismiss: () -
 
         // ── Audio recording section ──
         Spacer(Modifier.height(6.dp))
-        Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+        Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Icon(FieldMindIcons.Mic, null, tint = FieldMindTheme.colors.observation, size = 20.dp)
@@ -1098,9 +1101,9 @@ internal fun NewNoteDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit,
         if (projectId != null) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(containerColor = FieldMindTheme.colors.project.copy(alpha = 0.1f)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
+                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
             ) {
                 Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Icon(FieldMindIcons.Project, null, tint = FieldMindTheme.colors.project, size = 18.dp)
@@ -1331,7 +1334,7 @@ private fun EditObservationDialog(entity: ObservationEntity, viewModel: FieldMin
         }
         // ── Audio recording section ──
         Spacer(Modifier.height(6.dp))
-        Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+        Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Icon(FieldMindIcons.Mic, null, tint = FieldMindTheme.colors.observation, size = 20.dp)
@@ -1456,7 +1459,7 @@ private fun EditHypothesisDialog(entity: HypothesisEntity, viewModel: FieldMindV
             Text("${confidence.toInt()}%", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
         }
         Slider(confidence, { confidence = it }, valueRange = 0f..100f)
-        LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)), color = MaterialTheme.colorScheme.primary)
+        LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = MaterialTheme.colorScheme.primary)
         CollapsibleSection("Advanced options", "Result status tracking", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
             OptionPickerField(label = "Result status", selected = result, options = listOf("Unknown", "Supported", "Weakened", "Inconclusive"), onSelected = { result = it }, icon = FieldMindIcons.Check)
         }
@@ -1776,9 +1779,9 @@ internal fun ObservationLocationCard(latitude: Double, longitude: Double, manual
     val placeName = manualLocation.substringBefore(" • GPS").trim().takeIf { it.isNotBlank() && !it.startsWith("GPS") }
     Card(
         Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        shape = RoundedCornerShape(30.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1786,7 +1789,7 @@ internal fun ObservationLocationCard(latitude: Double, longitude: Double, manual
                 Text("Location", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
             }
             if (placeName != null) Text(placeName, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-            Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))) {
+            Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp))) {
                 OsmMapView(
                     points = listOf(latitude to longitude),
                     showEmptyState = false,

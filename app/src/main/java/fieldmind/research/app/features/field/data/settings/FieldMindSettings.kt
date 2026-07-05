@@ -1,8 +1,10 @@
 package fieldmind.research.app.features.field.data.settings
 
 import android.content.Context
+import androidx.compose.animation.core.Spring
 import com.google.gson.Gson
 import fieldmind.research.app.features.field.data.background.FieldMindBackgroundScheduler
+import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -244,9 +246,10 @@ class FieldMindSettings private constructor(context: Context) {
     private val _imdApiKey = MutableStateFlow(prefs.getString(KEY_IMD_API_KEY, "") ?: "")
     val imdApiKey: StateFlow<String> = _imdApiKey.asStateFlow()
 
-    // Open-Meteo custom API configuration JSON (imported by user)
-    private val _openMeteoApiConfig = MutableStateFlow(prefs.getString(KEY_OPENMETEO_CONFIG, "") ?: "")
-    val openMeteoApiConfig: StateFlow<String> = _openMeteoApiConfig.asStateFlow()
+    private val _openMeteoApiKey = MutableStateFlow(prefs.getString(KEY_OPENMETEO_API_KEY, "") ?: "")
+    val openMeteoApiKey: StateFlow<String> = _openMeteoApiKey.asStateFlow()
+
+    // Open-Meteo uses the general weatherApiKey for commercial tier access
 
     private val _gpsMode = MutableStateFlow(prefs.getString(KEY_GPS_MODE, "On capture only") ?: "On capture only")
     val gpsMode: StateFlow<String> = _gpsMode.asStateFlow()
@@ -278,10 +281,56 @@ class FieldMindSettings private constructor(context: Context) {
     // ── Developer settings ──
     private val _developerMode = MutableStateFlow(prefs.getBoolean(KEY_DEVELOPER_MODE, false))
     val developerMode: StateFlow<Boolean> = _developerMode.asStateFlow()
+    private val _showWeatherTestPanel = MutableStateFlow(prefs.getBoolean(KEY_SHOW_WEATHER_TEST_PANEL, false))
+    val showWeatherTestPanel: StateFlow<Boolean> = _showWeatherTestPanel.asStateFlow()
     private val _debugLogging = MutableStateFlow(prefs.getBoolean(KEY_DEBUG_LOGGING, false))
     val debugLogging: StateFlow<Boolean> = _debugLogging.asStateFlow()
     private val _dataIntegrityCheckOnLaunch = MutableStateFlow(prefs.getBoolean(KEY_DATA_INTEGRITY_CHECK, false))
     val dataIntegrityCheckOnLaunch: StateFlow<Boolean> = _dataIntegrityCheckOnLaunch.asStateFlow()
+
+    // ── Animation tuning settings (elegant, slow defaults) ──
+    private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.95f))
+    val animEntranceDamping: StateFlow<Float> = _animEntranceDamping.asStateFlow()
+    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, 80f))
+    val animEntranceStiffness: StateFlow<Float> = _animEntranceStiffness.asStateFlow()
+
+    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.93f))
+    val animSwipeBackDamping: StateFlow<Float> = _animSwipeBackDamping.asStateFlow()
+    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 80f))
+    val animSwipeBackStiffness: StateFlow<Float> = _animSwipeBackStiffness.asStateFlow()
+    private val _animSwipeThreshold = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_THRESHOLD, 0.20f))
+    val animSwipeThreshold: StateFlow<Float> = _animSwipeThreshold.asStateFlow()
+    private val _animSwipeScaleFactor = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_SCALE, 0.92f))
+    val animSwipeScaleFactor: StateFlow<Float> = _animSwipeScaleFactor.asStateFlow()
+    private val _animTabEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_DAMPING, 0.95f))
+    val animTabEntranceDamping: StateFlow<Float> = _animTabEntranceDamping.asStateFlow()
+    private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, 120f))
+    val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
+
+    // ── Reactive combined AnimationConfig flow (reacts to any parameter change) ──
+    private val _animationConfig = MutableStateFlow(
+        AnimationConfig(
+            entranceDampingRatio = _animEntranceDamping.value,
+            entranceStiffness = _animEntranceStiffness.value,
+            swipeBackDampingRatio = _animSwipeBackDamping.value,
+            swipeBackStiffness = _animSwipeBackStiffness.value,
+            swipeThreshold = _animSwipeThreshold.value,
+            swipeScaleFactor = _animSwipeScaleFactor.value,
+            tabEntranceDampingRatio = _animTabEntranceDamping.value,
+            tabEntranceStiffness = _animTabEntranceStiffness.value
+        )
+    )
+    /**
+     * Reactive [StateFlow] of the current [AnimationConfig], re-emitted whenever
+     * any individual animation parameter changes. Use [collectAsState] in Compose
+     * so the UI reactively updates when the user tweaks animation sliders.
+     */
+    val animationConfig: StateFlow<AnimationConfig> = _animationConfig.asStateFlow()
+
+    /** Refresh [animationConfig] from current parameter values. */
+    private fun refreshAnimationConfig() {
+        _animationConfig.value = currentAnimationConfig()
+    }
 
     // ── Species identification settings ──
     private val _speciesIdApiKey = MutableStateFlow(prefs.getString(KEY_SPECIES_ID_API_KEY, "") ?: "")
@@ -386,6 +435,22 @@ class FieldMindSettings private constructor(context: Context) {
     val appPinLength: StateFlow<String> = _appPinLength.asStateFlow()
 
     // ── Per-category entity color overrides ──
+    // ── Card gradient opacity (0.1 – 1.0, default 0.55) ──
+    private val _gradientOpacity = MutableStateFlow(prefs.getFloat(KEY_GRADIENT_OPACITY, 0.75f))
+    /** Opacity multiplier for card gradient backgrounds. Higher = more visible. */
+    val gradientOpacity: StateFlow<Float> = _gradientOpacity.asStateFlow()
+
+    fun setGradientOpacity(value: Float) = edit(KEY_GRADIENT_OPACITY, value.coerceIn(0.1f, 1.0f)) { _gradientOpacity.value = value.coerceIn(0.1f, 1.0f) }
+
+    // ── Card gradient style (Phase 5) ──
+    private val _cardGradientStyle = MutableStateFlow(
+        prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
+    )
+    /** The user's selected card gradient style (display name from [CuteGradients.Style]). */
+    val cardGradientStyle: StateFlow<String> = _cardGradientStyle.asStateFlow()
+
+    fun setCardGradientStyle(value: String) = edit(KEY_CARD_GRADIENT_STYLE, value) { _cardGradientStyle.value = value }
+
     private val _entityColors = MutableStateFlow(parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null)))
     /** Map of entity type → hex color Long (e.g. "observation" → 0xFF2E7D32). Empty = use defaults. */
     val entityColors: StateFlow<Map<String, Long>> = _entityColors.asStateFlow()
@@ -549,7 +614,8 @@ class FieldMindSettings private constructor(context: Context) {
     fun setOpenWeatherMapApiKey(value: String) = edit(KEY_OPENWEATHERMAP_API_KEY, value.trim()) { _openWeatherMapApiKey.value = value.trim() }
     fun setWeatherApiDotComApiKey(value: String) = edit(KEY_WEATHERAPI_API_KEY, value.trim()) { _weatherApiDotComApiKey.value = value.trim() }
     fun setImdApiKey(value: String) = edit(KEY_IMD_API_KEY, value.trim()) { _imdApiKey.value = value.trim() }
-    fun setOpenMeteoApiConfig(value: String) = edit(KEY_OPENMETEO_CONFIG, value.trim()) { _openMeteoApiConfig.value = value.trim() }
+    fun setOpenMeteoApiKey(value: String) = edit(KEY_OPENMETEO_API_KEY, value.trim()) { _openMeteoApiKey.value = value.trim() }
+
     fun setGpsMode(value: String) = edit(KEY_GPS_MODE, value) { _gpsMode.value = value }
     fun setDistanceUnit(value: String) = edit(KEY_DISTANCE_UNIT, value) { _distanceUnit.value = value }
     fun setWindSpeedUnit(value: String) = edit(KEY_WIND_SPEED_UNIT, value) { _windSpeedUnit.value = value }
@@ -561,6 +627,7 @@ class FieldMindSettings private constructor(context: Context) {
     fun setFieldModeAutoStartTimer(value: Boolean) = edit(KEY_FIELD_MODE_AUTO_START_TIMER, value) { _fieldModeAutoStartTimer.value = value }
     fun setFieldModeObservationSpacing(value: String) = edit(KEY_FIELD_MODE_OBSERVATION_SPACING, value) { _fieldModeObservationSpacing.value = value }
     fun setDeveloperMode(value: Boolean) = edit(KEY_DEVELOPER_MODE, value) { _developerMode.value = value }
+    fun setShowWeatherTestPanel(value: Boolean) = edit(KEY_SHOW_WEATHER_TEST_PANEL, value) { _showWeatherTestPanel.value = value }
     fun setDebugLogging(value: Boolean) = edit(KEY_DEBUG_LOGGING, value) { _debugLogging.value = value }
     fun setDataIntegrityCheckOnLaunch(value: Boolean) = edit(KEY_DATA_INTEGRITY_CHECK, value) { _dataIntegrityCheckOnLaunch.value = value }
     fun setLockTimeout(value: String) = edit(KEY_LOCK_TIMEOUT, value) { _lockTimeout.value = value }
@@ -605,6 +672,29 @@ class FieldMindSettings private constructor(context: Context) {
     fun setAppPinEnabled(value: Boolean) = edit(KEY_APP_PIN_ENABLED, value) { _appPinEnabled.value = value }
 
     fun setAppPinHash(value: String) = edit(KEY_APP_PIN_HASH, value) { _appPinHash.value = value }
+
+    fun currentAnimationConfig(): AnimationConfig {
+        return AnimationConfig(
+            entranceDampingRatio = _animEntranceDamping.value,
+            entranceStiffness = _animEntranceStiffness.value,
+            swipeBackDampingRatio = _animSwipeBackDamping.value,
+            swipeBackStiffness = _animSwipeBackStiffness.value,
+            swipeThreshold = _animSwipeThreshold.value,
+            swipeScaleFactor = _animSwipeScaleFactor.value,
+            tabEntranceDampingRatio = _animTabEntranceDamping.value,
+            tabEntranceStiffness = _animTabEntranceStiffness.value
+        )
+    }
+
+    // ── Animation tuning setters (each also refreshes the combined animationConfig) ──
+    fun setAnimEntranceDamping(value: Float) = edit(KEY_ANIM_ENTRANCE_DAMPING, value) { _animEntranceDamping.value = value; refreshAnimationConfig() }
+    fun setAnimEntranceStiffness(value: Float) = edit(KEY_ANIM_ENTRANCE_STIFFNESS, value) { _animEntranceStiffness.value = value; refreshAnimationConfig() }
+    fun setAnimSwipeBackDamping(value: Float) = edit(KEY_ANIM_SWIPE_BACK_DAMPING, value) { _animSwipeBackDamping.value = value; refreshAnimationConfig() }
+    fun setAnimSwipeBackStiffness(value: Float) = edit(KEY_ANIM_SWIPE_BACK_STIFFNESS, value) { _animSwipeBackStiffness.value = value; refreshAnimationConfig() }
+    fun setAnimSwipeThreshold(value: Float) = edit(KEY_ANIM_SWIPE_THRESHOLD, value) { _animSwipeThreshold.value = value; refreshAnimationConfig() }
+    fun setAnimSwipeScaleFactor(value: Float) = edit(KEY_ANIM_SWIPE_SCALE, value) { _animSwipeScaleFactor.value = value; refreshAnimationConfig() }
+    fun setAnimTabEntranceDamping(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_DAMPING, value) { _animTabEntranceDamping.value = value; refreshAnimationConfig() }
+    fun setAnimTabEntranceStiffness(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, value) { _animTabEntranceStiffness.value = value; refreshAnimationConfig() }
 
     fun verifyAppPin(input: String): Boolean {
         val hash = _appPinHash.value
@@ -684,7 +774,8 @@ class FieldMindSettings private constructor(context: Context) {
         _openWeatherMapApiKey.value = ""
         _weatherApiDotComApiKey.value = ""
         _imdApiKey.value = ""
-        _openMeteoApiConfig.value = ""
+        _openMeteoApiKey.value = ""
+
         _gpsMode.value = "On capture only"
         _distanceUnit.value = "km"
         _windSpeedUnit.value = "km/h"
@@ -696,6 +787,7 @@ class FieldMindSettings private constructor(context: Context) {
         _fieldModeAutoStartTimer.value = false
         _fieldModeObservationSpacing.value = "None"
         _developerMode.value = false
+        _showWeatherTestPanel.value = false
         _debugLogging.value = false
         _dataIntegrityCheckOnLaunch.value = false
         _lockTimeout.value = "Immediate"
@@ -733,6 +825,8 @@ class FieldMindSettings private constructor(context: Context) {
         _screenVisibility.value = ScreenVisibility()
         _onboardingExtendedTourCompleted.value = false
         _entityColors.value = emptyMap()
+        _cardGradientStyle.value = fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
+        _gradientOpacity.value = 0.75f
     }
 
     // ── Species identification setters ──
@@ -799,7 +893,8 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_OPENWEATHERMAP_API_KEY, _openWeatherMapApiKey.value)
         put(KEY_WEATHERAPI_API_KEY, _weatherApiDotComApiKey.value)
         put(KEY_IMD_API_KEY, _imdApiKey.value)
-        put(KEY_OPENMETEO_CONFIG, _openMeteoApiConfig.value)
+        put(KEY_OPENMETEO_API_KEY, _openMeteoApiKey.value)
+
         put(KEY_GPS_MODE, _gpsMode.value)
         put(KEY_DISTANCE_UNIT, _distanceUnit.value)
         put(KEY_WIND_SPEED_UNIT, _windSpeedUnit.value)
@@ -811,6 +906,7 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_FIELD_MODE_AUTO_START_TIMER, _fieldModeAutoStartTimer.value)
         put(KEY_FIELD_MODE_OBSERVATION_SPACING, _fieldModeObservationSpacing.value)
         put(KEY_DEVELOPER_MODE, _developerMode.value)
+        put(KEY_SHOW_WEATHER_TEST_PANEL, _showWeatherTestPanel.value)
         put(KEY_DEBUG_LOGGING, _debugLogging.value)
         put(KEY_DATA_INTEGRITY_CHECK, _dataIntegrityCheckOnLaunch.value)
         put(KEY_LOCK_TIMEOUT, _lockTimeout.value)
@@ -848,6 +944,8 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_USER_INTERESTS, UserInterests.toJson(_userInterests.value))
         put(KEY_SCREEN_VISIBILITY, ScreenVisibility.toJson(_screenVisibility.value))
         put(KEY_EXTENDED_TOUR_DONE, _onboardingExtendedTourCompleted.value)
+        put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
+        put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
     }.toString(2)
 
     /**
@@ -859,6 +957,7 @@ class FieldMindSettings private constructor(context: Context) {
         fun applyString(key: String) { if (json.has(key)) edit.putString(key, json.optString(key, "")) }
         fun applyBoolean(key: String, default: Boolean = false) { if (json.has(key)) edit.putBoolean(key, json.optBoolean(key, default)) }
         fun applyInt(key: String, default: Int = 0) { if (json.has(key)) edit.putInt(key, json.optInt(key, default)) }
+        fun applyFloat(key: String, default: Float = 0.55f) { if (json.has(key)) edit.putFloat(key, json.optDouble(key, default.toDouble()).toFloat()) }
 
         applyString(KEY_DEFAULT_CATEGORY)
         applyString(KEY_DEFAULT_CONFIDENCE)
@@ -911,7 +1010,8 @@ class FieldMindSettings private constructor(context: Context) {
         applyString(KEY_OPENWEATHERMAP_API_KEY)
         applyString(KEY_WEATHERAPI_API_KEY)
         applyString(KEY_IMD_API_KEY)
-        applyString(KEY_OPENMETEO_CONFIG)
+        applyString(KEY_OPENMETEO_API_KEY)
+
         applyString(KEY_GPS_MODE)
         applyString(KEY_DISTANCE_UNIT)
         applyString(KEY_WIND_SPEED_UNIT)
@@ -923,6 +1023,7 @@ class FieldMindSettings private constructor(context: Context) {
         applyBoolean(KEY_FIELD_MODE_AUTO_START_TIMER)
         applyString(KEY_FIELD_MODE_OBSERVATION_SPACING)
         applyBoolean(KEY_DEVELOPER_MODE)
+        applyBoolean(KEY_SHOW_WEATHER_TEST_PANEL)
         applyBoolean(KEY_DEBUG_LOGGING)
         applyBoolean(KEY_DATA_INTEGRITY_CHECK)
         applyString(KEY_LOCK_TIMEOUT)
@@ -971,6 +1072,8 @@ class FieldMindSettings private constructor(context: Context) {
         applyString(KEY_ENTITY_COLORS)
         applyBoolean(KEY_EXTENDED_TOUR_DONE)
         applyInt(KEY_DAILY_GOAL)
+        applyString(KEY_CARD_GRADIENT_STYLE)
+        applyFloat(KEY_GRADIENT_OPACITY)
 
         edit.apply()
 
@@ -1027,7 +1130,8 @@ class FieldMindSettings private constructor(context: Context) {
         _openWeatherMapApiKey.value = prefs.getString(KEY_OPENWEATHERMAP_API_KEY, "") ?: ""
         _weatherApiDotComApiKey.value = prefs.getString(KEY_WEATHERAPI_API_KEY, "") ?: ""
         _imdApiKey.value = prefs.getString(KEY_IMD_API_KEY, "") ?: ""
-        _openMeteoApiConfig.value = prefs.getString(KEY_OPENMETEO_CONFIG, "") ?: ""
+        _openMeteoApiKey.value = prefs.getString(KEY_OPENMETEO_API_KEY, "") ?: ""
+
         _gpsMode.value = prefs.getString(KEY_GPS_MODE, "On capture only") ?: "On capture only"
         _distanceUnit.value = prefs.getString(KEY_DISTANCE_UNIT, "km") ?: "km"
         _windSpeedUnit.value = prefs.getString(KEY_WIND_SPEED_UNIT, "km/h") ?: "km/h"
@@ -1039,6 +1143,7 @@ class FieldMindSettings private constructor(context: Context) {
         _fieldModeAutoStartTimer.value = prefs.getBoolean(KEY_FIELD_MODE_AUTO_START_TIMER, false)
         _fieldModeObservationSpacing.value = prefs.getString(KEY_FIELD_MODE_OBSERVATION_SPACING, "None") ?: "None"
         _developerMode.value = prefs.getBoolean(KEY_DEVELOPER_MODE, false)
+        _showWeatherTestPanel.value = prefs.getBoolean(KEY_SHOW_WEATHER_TEST_PANEL, false)
         _debugLogging.value = prefs.getBoolean(KEY_DEBUG_LOGGING, false)
         _dataIntegrityCheckOnLaunch.value = prefs.getBoolean(KEY_DATA_INTEGRITY_CHECK, false)
         _lockTimeout.value = prefs.getString(KEY_LOCK_TIMEOUT, "Immediate") ?: "Immediate"
@@ -1058,10 +1163,13 @@ class FieldMindSettings private constructor(context: Context) {
         _appPinEnabled.value = prefs.getBoolean(KEY_APP_PIN_ENABLED, false)
         _appPinHash.value = prefs.getString(KEY_APP_PIN_HASH, "") ?: ""
         _entityColors.value = parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null))
+        _cardGradientStyle.value = prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
+        _gradientOpacity.value = prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f)
     }
 
     private inline fun edit(key: String, value: String, after: () -> Unit) { prefs.edit().putString(key, value).apply(); after() }
     private inline fun edit(key: String, value: Boolean, after: () -> Unit) { prefs.edit().putBoolean(key, value).apply(); after() }
+    private inline fun edit(key: String, value: Float, after: () -> Unit) { prefs.edit().putFloat(key, value).apply(); after() }
     private inline fun edit(key: String, value: Int, after: () -> Unit) { prefs.edit().putInt(key, value).apply(); after() }
 
     companion object {
@@ -1122,7 +1230,7 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_OPENWEATHERMAP_API_KEY = "openweathermap_api_key"
         private const val KEY_WEATHERAPI_API_KEY = "weatherapi_api_key"
         private const val KEY_IMD_API_KEY = "imd_api_key"
-        private const val KEY_OPENMETEO_CONFIG = "openmeteo_api_config"
+        private const val KEY_OPENMETEO_API_KEY = "openmeteo_api_key"
         private const val KEY_GPS_MODE = "gps_mode"
         private const val KEY_DISTANCE_UNIT = "distance_unit"
         private const val KEY_WIND_SPEED_UNIT = "wind_speed_unit"
@@ -1134,6 +1242,7 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_FIELD_MODE_AUTO_START_TIMER = "field_mode_auto_start_timer"
         private const val KEY_FIELD_MODE_OBSERVATION_SPACING = "field_mode_observation_spacing"
         private const val KEY_DEVELOPER_MODE = "developer_mode"
+        private const val KEY_SHOW_WEATHER_TEST_PANEL = "show_weather_test_panel"
         private const val KEY_DEBUG_LOGGING = "debug_logging"
         private const val KEY_DATA_INTEGRITY_CHECK = "data_integrity_check"
         private const val KEY_LOCK_TIMEOUT = "lock_timeout"
@@ -1176,7 +1285,21 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_DECOY_PIN_ENABLED = "decoy_pin_enabled"
         private const val KEY_DECOY_PIN_HASH = "decoy_pin_hash"
         private const val KEY_DECOY_PIN_LABEL = "decoy_pin_label"
+        // ── Card gradient style ──
+        private const val KEY_CARD_GRADIENT_STYLE = "card_gradient_style"
+        // ── Gradient opacity ──
+        private const val KEY_GRADIENT_OPACITY = "gradient_opacity"
+
         // ── Per-category entity color overrides ──
         private const val KEY_ENTITY_COLORS = "entity_colors"
+        // ── Animation tuning keys ──
+        private const val KEY_ANIM_ENTRANCE_DAMPING = "anim_entrance_damping"
+        private const val KEY_ANIM_ENTRANCE_STIFFNESS = "anim_entrance_stiffness"
+        private const val KEY_ANIM_SWIPE_BACK_DAMPING = "anim_swipe_back_damping"
+        private const val KEY_ANIM_SWIPE_BACK_STIFFNESS = "anim_swipe_back_stiffness"
+        private const val KEY_ANIM_SWIPE_THRESHOLD = "anim_swipe_threshold"
+        private const val KEY_ANIM_SWIPE_SCALE = "anim_swipe_scale"
+        private const val KEY_ANIM_TAB_ENTRANCE_DAMPING = "anim_tab_entrance_damping"
+        private const val KEY_ANIM_TAB_ENTRANCE_STIFFNESS = "anim_tab_entrance_stiffness"
     }
 }

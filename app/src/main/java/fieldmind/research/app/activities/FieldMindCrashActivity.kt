@@ -3,7 +3,7 @@ package fieldmind.research.app.activities
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 
 import android.content.Context
 import android.content.Intent
@@ -284,7 +284,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                                     scaleX = shareButtonScale.value
                                     scaleY = shareButtonScale.value
                                 },
-                            shape = RoundedCornerShape(32.dp)
+                            shape = RoundedCornerShape(40.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Share,
@@ -318,12 +318,12 @@ class FieldMindCrashActivity : ComponentActivity() {
                                     scaleX = restartButtonScale.value
                                     scaleY = restartButtonScale.value
                                 },
-                            shape = RoundedCornerShape(32.dp)
+                            shape = RoundedCornerShape(40.dp)
                         ) {
                             Text(stringResource(R.string.crash_restart_app), style = MaterialTheme.typography.labelLarge)
                             Spacer(modifier = Modifier.width(8.dp))
                             Icon(
-                                imageVector = Icons.Filled.ArrowForward,
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                 contentDescription = null,
                                 modifier = Modifier.size(20.dp)
                             )

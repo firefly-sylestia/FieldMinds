@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import fieldmind.research.app.features.field.data.location.DrawingMode
+import fieldmind.research.app.features.field.data.location.GeofenceRegion
 import fieldmind.research.app.features.field.data.location.MapOverlay
 import fieldmind.research.app.features.field.data.location.OsmTileManager
 import org.osmdroid.config.Configuration
@@ -55,6 +56,7 @@ fun OsmMapView(
     currentTrackPoints: List<Pair<Double, Double>> = emptyList(),
     tileManager: OsmTileManager? = null,
     drawingMode: DrawingMode = DrawingMode.View,
+    geofenceRegions: List<GeofenceRegion> = emptyList(),
     modifier: Modifier = Modifier,
     showEmptyState: Boolean = true,
     height: Dp = 300.dp,
@@ -104,8 +106,12 @@ fun OsmMapView(
     val avgLon = allPoints.map { it.second }.average()
     val latSpread = (allPoints.maxOf { it.first } - allPoints.minOf { it.first }).coerceAtLeast(0.01)
     val lonSpread = (allPoints.maxOf { it.second } - allPoints.minOf { it.second }).coerceAtLeast(0.01)
-    // Zoom out by 50% for preview (reduce zoom level by ~0.7 to fit more context around the point)
-    val zoom = (14.0 - log2(maxOf(latSpread, lonSpread).coerceAtLeast(0.01)) - 0.7).coerceIn(4.0, 18.0)
+    // Calculate zoom based on point spread.
+    // When points are tightly clustered (small spread), zoom calc yields ~16-18 which
+    // shows only the immediate block area. Cap at 13 so the user sees the town/village
+    // context around their observations — they can pinch-zoom in manually.
+    val rawZoom = 14.0 - log2(maxOf(latSpread, lonSpread).coerceAtLeast(0.01)) - 0.7
+    val zoom = rawZoom.coerceIn(4.0, 13.0)
 
     // Configure osmdroid once
     remember {
@@ -120,7 +126,7 @@ fun OsmMapView(
         modifier = modifier
             .fillMaxWidth()
             .height(height)
-            .background(MaterialTheme.colorScheme.surfaceContainerHighest, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest, RoundedCornerShape(24.dp))
     ) {
         AndroidView(
             factory = { ctx ->
@@ -186,15 +192,15 @@ fun OsmMapView(
                     // Resume to start tile rendering
                     mv.onResume()
 
-                    // Initial overlay rendering
-                    renderOverlays(mv, points, savedOverlays, currentTrackPoints, pendingPoints.value, drawingMode)
+                    // Initial overlay rendering with geofence circles
+                    renderOverlays(mv, points, savedOverlays, currentTrackPoints, pendingPoints.value, drawingMode, geofenceRegions)
                 }
             },
             modifier = Modifier.fillMaxSize(),
             update = { mv ->
                 mv.controller.setZoom(zoom)
                 mv.controller.setCenter(GeoPoint(avgLat, avgLon))
-                renderOverlays(mv, points, savedOverlays, currentTrackPoints, pendingPoints.value, drawingMode)
+                renderOverlays(mv, points, savedOverlays, currentTrackPoints, pendingPoints.value, drawingMode, geofenceRegions)
             }
         )
 
@@ -202,7 +208,7 @@ fun OsmMapView(
         if (isOffline) {
             Surface(
                 modifier = Modifier.align(Alignment.TopStart).padding(8.dp),
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(16.dp),
                 color = MaterialTheme.colorScheme.errorContainer
             ) {
                 Text(
@@ -258,13 +264,37 @@ private fun renderOverlays(
     savedOverlays: List<MapOverlay>,
     currentTrackPoints: List<Pair<Double, Double>>,
     pendingPoints: List<Pair<Double, Double>>,
-    drawingMode: DrawingMode
+    drawingMode: DrawingMode,
+    geofenceRegions: List<GeofenceRegion> = emptyList()
 ) {
     // Keep the MapEventsOverlay (index 0) — everything else gets rebuilt
     val eventsOverlay = mapView.overlays.getOrNull(0)
     mapView.overlays.clear()
     if (eventsOverlay != null) {
         mapView.overlays.add(eventsOverlay)
+    }
+
+    // 0. Render geo-fence circles (behind everything)
+    geofenceRegions.forEach { region ->
+        if (region.isActive) {
+            val fenceCircle = org.osmdroid.views.overlay.Polygon().apply {
+                // Approximate circle with 36-point polygon
+                val center = GeoPoint(region.latitude, region.longitude)
+                val pts = mutableListOf<GeoPoint>()
+                val radiusDeg = region.radiusMeters / 111_320.0 // approx degrees per meter
+                for (angle in 0 until 360 step 10) {
+                    val rad = Math.toRadians(angle.toDouble())
+                    val dLat = radiusDeg * Math.cos(rad)
+                    val dLon = radiusDeg * Math.sin(rad) / Math.cos(Math.toRadians(region.latitude))
+                    pts.add(GeoPoint(region.latitude + dLat, region.longitude + dLon))
+                }
+                setPoints(pts)
+                fillPaint.color = android.graphics.Color.argb(25, 76, 175, 80)
+                outlinePaint.color = android.graphics.Color.parseColor("#4CAF50")
+                outlinePaint.strokeWidth = 2f
+            }
+            mapView.overlays.add(fenceCircle)
+        }
     }
 
     // 1. Render observation points

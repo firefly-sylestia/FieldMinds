@@ -62,6 +62,9 @@ import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.cuteShadow
+import fieldmind.research.app.ui.theme.screenBackground
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -157,17 +160,34 @@ fun ObserveScreen(
     // Core session state — uses rememberSaveable to survive configuration changes
     var session by rememberSaveable { mutableStateOf(CaptureSessionState()) }
     var capturedLocation by remember { mutableStateOf<CapturedLocation?>(null) }
+    var showEvidenceForm by remember { mutableStateOf(false) }
+
+    val researchSessions by viewModel.researchSessions.collectAsState()
+    val projects by viewModel.projects.collectAsState()
+    var sessionName by remember { mutableStateOf("") }
+    var selectedProjectId by remember { mutableStateOf<Long?>(null) }
+    var activeSessionId by remember { mutableStateOf<Long?>(null) }
+    var showSessionSummary by remember { mutableStateOf(false) }
 
     // Sync captureSessionActive with local session state on navigation to Observe screen.
-    // This prevents the nav bar from hiding when navigating to Observe without an active
-    // session — handles stale captureSessionActive state from incomplete cleanup paths.
     LaunchedEffect(Unit) {
         if (!session.isActive) {
             viewModel.setCaptureSessionActive(false)
         }
     }
 
-    var showEvidenceForm by remember { mutableStateOf(false) }
+    // When captureSessionActive is reset externally (e.g., via the navigation
+    // guard dialog in FieldMindNavigation when user taps another tab), also reset
+    // the local session state so coming back to Observe doesn't show a stale
+    // active session with a broken timer.
+    LaunchedEffect(viewModel.captureSessionActive) {
+        if (!viewModel.captureSessionActive && session.isActive) {
+            session = CaptureSessionState()
+            showEvidenceForm = false
+            activeSessionId = null
+        }
+    }
+
     var showCategoryPicker by remember { mutableStateOf(false) }
     var selectedCategories by remember { mutableStateOf(setOf("Other")) }
 
@@ -175,7 +195,7 @@ fun ObserveScreen(
     var showInAppCamera by remember { mutableStateOf(false) }
 
     // ── Species identification state ──
-    val speciesDatabase = remember { SpeciesDatabase(context) }
+    val speciesDatabase = remember { SpeciesDatabase.getInstance(context) }
     val speciesImageAnalyzer = remember { SpeciesImageAnalyzer(context) }
     val speciesPhashDb = remember { PhashDatabase(context) }
     val speciesClassifier = remember { SpeciesClassifier(context, speciesDatabase, speciesImageAnalyzer, speciesPhashDb) }
@@ -274,6 +294,8 @@ fun ObserveScreen(
     var metadataAutoFetching by remember { mutableStateOf(false) }
     var metadataStatus by remember { mutableStateOf("Ready") }
     var gpsFetching by remember { mutableStateOf(false) }
+    var gpsFetchAttempt by remember { mutableIntStateOf(0) }
+    var gpsStatusText by remember { mutableStateOf("") }
     var showGpsDialog by remember { mutableStateOf(false) }
 
     fun performAutoFetch() {
@@ -283,37 +305,49 @@ fun ObserveScreen(
             return
         }
         metadataAutoFetching = true
+        gpsFetchAttempt = 0
+        gpsStatusText = ""
         metadataStatus = "Acquiring GPS…"
         if (locationProvider.hasAnyLocationPermission()) {
-            locationProvider.requestCurrentLocation { loc ->
-                if (loc != null) {
-                    capturedLocation = loc
-                    metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m accuracy) — fetching weather…"
-                    scope.launch {
-                        weatherFetching = true
-                        val snapshot = viewModel.fetchWeatherSnapshot(loc.latitude, loc.longitude)
-                        weatherSnapshot = snapshot
-                        weatherFetching = false
-                        if (snapshot != null) {
-                            // Log to offline weather catalog
-                            viewModel.saveWeatherSnapshot(snapshot, loc.latitude, loc.longitude)
-                            metadataStatus = "GPS + Weather acquired"
-                            showFastSnackbar(snackbar, scope, "Weather: ${snapshot.temperature}°C, ${snapshot.weatherDescription}")
-                        } else {
-                            metadataStatus = "GPS acquired, weather unavailable"
+            // Use retry method for better reliability
+            gpsFetching = true
+            locationProvider.requestCurrentLocationWithRetry(
+                onAttempt = { attempt, total, status ->
+                    gpsFetchAttempt = attempt
+                    gpsStatusText = status
+                    metadataStatus = status
+                },
+                onResult = { loc ->
+                    gpsFetching = false
+                    if (loc != null) {
+                        capturedLocation = loc
+                        metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m accuracy) — fetching weather…"
+                        scope.launch {
+                            weatherFetching = true
+                            val snapshot = viewModel.fetchWeatherSnapshot(loc.latitude, loc.longitude)
+                            weatherSnapshot = snapshot
+                            weatherFetching = false
+                            if (snapshot != null) {
+                                // Log to offline weather catalog
+                                viewModel.saveWeatherSnapshot(snapshot, loc.latitude, loc.longitude)
+                                metadataStatus = "GPS + Weather acquired"
+                                showFastSnackbar(snackbar, scope, "Weather: ${snapshot.temperature}°C, ${snapshot.weatherDescription}")
+                            } else {
+                                metadataStatus = "GPS acquired, weather unavailable"
+                            }
+                            metadataAutoFetching = false
                         }
+                        locationProvider.resolvePlaceName(loc.latitude, loc.longitude) { place ->
+                            if (!place.isNullOrBlank()) {
+                                capturedLocation = loc.copy(placeName = place)
+                            }
+                        }
+                    } else {
+                        metadataStatus = "GPS unavailable after 2 attempts"
                         metadataAutoFetching = false
                     }
-                    locationProvider.resolvePlaceName(loc.latitude, loc.longitude) { place ->
-                        if (!place.isNullOrBlank()) {
-                            capturedLocation = loc.copy(placeName = place)
-                        }
-                    }
-                } else {
-                    metadataStatus = "GPS unavailable — check permissions"
-                    metadataAutoFetching = false
                 }
-            }
+            )
         } else {
             metadataStatus = "Location permission required"
             metadataAutoFetching = false
@@ -323,15 +357,22 @@ fun ObserveScreen(
     // ── Action: start evidence capture ──
     fun startCapture() {
         haptics.light()
+        val name = sessionName.ifBlank {
+            val project = projects.firstOrNull { it.id == selectedProjectId }
+            val time = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date())
+            listOfNotNull(project?.title).joinToString(" • ").ifBlank { "Observation session" } + " · $time"
+        }
+        // Activate session immediately, then create the ResearchSession in background
         session = session.copy(isActive = true, step = CaptureStep.Evidence)
         showEvidenceForm = true
         viewModel.setCaptureSessionActive(true)
-        // Auto-start timer if not already running
         if (!session.timerRunning && session.timerStartedAt == null) {
             session = session.copy(timerStartedAt = System.currentTimeMillis(), timerRunning = true)
         }
-        // Show metadata auto-fetch confirmation
         showMetadataConfirm = true
+        viewModel.addResearchSession(name, selectedProjectId) { id ->
+            activeSessionId = id
+        }
     }
     // ── Action: save observation ──
     fun saveObservation() {
@@ -342,8 +383,9 @@ fun ObserveScreen(
         }
         haptics.confirm()
         val now = System.currentTimeMillis()
+        val timerStartedAtVal = s.timerStartedAt
         val liveElapsed = s.timerAccumulatedMs +
-            if (s.timerRunning) (now - (s.timerStartedAt ?: now)) else 0L
+            if (s.timerRunning && timerStartedAtVal != null) (now - timerStartedAtVal) else 0L
 
         // Pack all enhanced capture fields into structuredDetailsJson
         val structuredJson = run {
@@ -382,8 +424,10 @@ fun ObserveScreen(
             latitude = capturedLocation?.latitude,
             longitude = capturedLocation?.longitude,
             structuredDetailsJson = structuredJson,
-            timeNote = "Captured via observation session"
-        ) {
+            timeNote = "Captured via observation session at ${formatDurationCompact(liveElapsed)}"
+        ) { observationId ->
+            // Link this observation to the active ResearchSession
+            activeSessionId?.let { viewModel.linkObservationToSession(it, observationId) }
             session = session.copy(
                 subject = "", speciesName = "", facts = "", tags = "", evidence = "",
                 fieldContext = "", manualLocation = "", attachments = emptyList(),
@@ -413,7 +457,7 @@ fun ObserveScreen(
     }
 
     if (showExitConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showExitConfirm = false },
             icon = { Icon(icon = FieldMindIcons.Info, contentDescription = null, size = 28.dp) },
             title = { Text("Unsaved observation") },
@@ -430,7 +474,7 @@ fun ObserveScreen(
                         showExitConfirm = false
                         onBack?.invoke()
                     },
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 ) { Text("Save and exit") }
             },
             dismissButton = {
@@ -454,7 +498,7 @@ fun ObserveScreen(
 
     // ── Session exit confirm (active session, clean form) ──
     if (showSessionExitConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showSessionExitConfirm = false },
             icon = {
                 Icon(
@@ -476,25 +520,32 @@ fun ObserveScreen(
                     Text("Stay on Capture")
                 }
             },
-            dismissButton = {
-                TextButton(onClick = {
-                    viewModel.setCaptureSessionActive(false)
-                    session = CaptureSessionState()
-                    showEvidenceForm = false
-                    showSessionExitConfirm = false
-                    onBack?.invoke()
-                }) {
+            dismissButton = {                    TextButton(onClick = {
+                                    viewModel.setCaptureSessionActive(false)
+                                activeSessionId?.let { id ->
+                                    val finalStartedAt = session.timerStartedAt
+                                    val durationMs = session.timerAccumulatedMs +
+                                        (if (session.timerRunning && finalStartedAt != null) System.currentTimeMillis() - finalStartedAt else 0L)
+                                        viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
+                                    }
+                                    activeSessionId = null
+                                    session = CaptureSessionState()
+                                    showEvidenceForm = false
+                                    showSessionExitConfirm = false
+                                    onBack?.invoke()
+                                }) {
                     Text("Discard session", color = MaterialTheme.colorScheme.error)
                 }
             }
         )
     }
 
+    val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color.Transparent
     ) { padding ->
-        Box(Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxSize().screenBackground(gradientOpacity)) {
             LazyColumn(
                 Modifier.fillMaxSize().padding(padding),
                 contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 96.dp),
@@ -516,6 +567,7 @@ fun ObserveScreen(
                             timerStartedAt = session.timerStartedAt,
                             timerAccumulatedMs = session.timerAccumulatedMs,
                             timerRunning = session.timerRunning,
+
                             observationCount = session.sessionObservationCount,
                             onStart = {
                                 if (!session.timerRunning) {
@@ -546,23 +598,65 @@ fun ObserveScreen(
                                 )
                             },
                             onClose = {
-                                session = CaptureSessionState()
-                                showEvidenceForm = false
                                 viewModel.setCaptureSessionActive(false)
+                                activeSessionId?.let { id ->
+                                    val timerStartedAtLocal = session.timerStartedAt
+                                    val durationMs = session.timerAccumulatedMs +
+                                        (if (session.timerRunning && timerStartedAtLocal != null) System.currentTimeMillis() - timerStartedAtLocal else 0L)
+                                    viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
+                                }
+                                activeSessionId = null
+                                showSessionSummary = true
                             }
                         )
                     }
                 } else {
                     // ── Start capture button ──
                     item {
-                        Button(
-                            onClick = { startCapture() },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(18.dp)
+                        Card(
+                            modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
+                            shape = RoundedCornerShape(36.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
-                            Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 20.dp)
-                            Spacer(Modifier.size(8.dp))
-                            Text("Start observation session")
+                            Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                                Text("Start observing", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                                Text("Capture evidence, add facts, and log observations with a live timer.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                
+                                // Session name
+                                OutlinedTextField(
+                                    value = sessionName,
+                                    onValueChange = { sessionName = it },
+                                    label = { Text("Session name (optional)") },
+                                    placeholder = { Text("e.g. Morning bird walk") },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(28.dp),
+                                    singleLine = true
+                                )
+                                
+                                // Project linking
+                                if (projects.isNotEmpty()) {
+                                    OptionPickerField(
+                                        label = "Link to project",
+                                        selected = projects.firstOrNull { it.id == selectedProjectId }?.title ?: "No project",
+                                        options = listOf("No project") + projects.map { it.title },
+                                        onSelected = { selected ->
+                                            selectedProjectId = projects.firstOrNull { it.title == selected }?.id
+                                        },
+                                        icon = FieldMindIcons.Project
+                                    )
+                                }
+                                
+                                Button(
+                                    onClick = { startCapture() },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(28.dp)
+                                ) {
+                                    Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 20.dp)
+                                    Spacer(Modifier.size(8.dp))
+                                    Text("Start observation session")
+                                }
+                            }
                         }
                     }
                 }
@@ -576,55 +670,52 @@ fun ObserveScreen(
                     }
                 }
 
-                // ── Past Observation Sessions Grouped Display ──
-                if (observations.isNotEmpty() && !session.isActive) {
-                    val sessionGroups = observations.groupBy { "all" }
-                    if (sessionGroups.size > 1 || (sessionGroups.size == 1 && sessionGroups.keys.first() != "ungrouped")) {
+                // ── Past Research Sessions ──
+                if (!session.isActive) {
+                    val completedSessions = researchSessions.filter { it.status == "Completed" }.sortedByDescending { it.endedAt }
+                    if (completedSessions.isNotEmpty()) {
                         item {
-                            var expandSessions by remember { mutableStateOf(false) }
+                            SectionHeader("Past sessions", "${completedSessions.size} completed")
+                        }
+                        items(completedSessions.take(10)) { researchSession ->
                             Card(
-                                modifier = Modifier.fillMaxWidth().expressivePress(scaleDown = 0.97f).clickable { expandSessions = !expandSessions },
-                                shape = RoundedCornerShape(20.dp),
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                                modifier = Modifier.fillMaxWidth()
+                                    .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp))
+                                    .expressiveCardPress()
+                                    .clickable { onOpenDetail("research_session", researchSession.id) },
+                                shape = RoundedCornerShape(30.dp),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                             ) {
-                                Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                        Box(Modifier.size(44.dp).clip(RoundedCornerShape(12.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.2f)), contentAlignment = Alignment.Center) {
-                                            Icon(FieldMindIcons.Timer, null, tint = FieldMindTheme.colors.observation, size = 22.dp)
-                                        }
-                                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                                            Text("${sessionGroups.size} Capture Session${if (sessionGroups.size != 1) "s" else ""}", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                                            Text("${observations.size} observations logged", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                        }
-                                        Icon(
-                                            MaterialSymbolIcon(if (expandSessions) "expand_less" else "expand_more"),
-                                            null,
-                                            size = 24.dp,
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                                Row(
+                                    Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Icon(FieldMindIcons.Session, null, tint = FieldMindTheme.colors.positive, size = 22.dp)
+                                    Column(Modifier.weight(1f)) {
+                                        Text(
+                                            researchSession.name,
+                                            style = MaterialTheme.typography.titleSmall,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        val elapsedStr = if (researchSession.totalDurationMs > 0) {
+                                            val s = researchSession.totalDurationMs / 1000
+                                            "%d:%02d".format(s / 60, s % 60)
+                                        } else ""
+                                        val obsStr = "${researchSession.observationCount} obs"
+                                        val dateStr = java.text.SimpleDateFormat("MMM d, yyyy", java.util.Locale.getDefault()).format(java.util.Date(researchSession.startedAt))
+                                        Text(
+                                            listOfNotNull(elapsedStr.takeIf { it.isNotBlank() }, obsStr, dateStr).joinToString(" • "),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }
-                                    if (expandSessions) {
-                                        Divider(Modifier.padding(vertical = 8.dp))
-                                        sessionGroups.entries.sortedByDescending { it.value.firstOrNull()?.createdAt }.take(5).forEach { (sessionId, sessionObs) ->
-                                            val firstObs = sessionObs.firstOrNull()
-                                            Row(
-                                                Modifier.fillMaxWidth().padding(8.dp, 0.dp)
-                                                    .then(
-                                                        if (firstObs != null) Modifier.clickable { onOpenDetail("observation", firstObs.id) }
-                                                        else Modifier
-                                                    ),
-                                                verticalAlignment = Alignment.CenterVertically,
-                                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                            ) {
-                                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                                    Text("${sessionObs.size} observation${if (sessionObs.size != 1) "s" else ""}", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
-                                                    Text(java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.US).format(sessionObs.first().createdAt), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                                }
-                                                Icon(MaterialSymbolIcon("chevron_right"), null, size = 18.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
-                                            }
-                                        }
-                                    }
+                                    Icon(
+                                        FieldMindIcons.Forward, null,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        size = 20.dp
+                                    )
                                 }
                             }
                         }
@@ -689,23 +780,34 @@ fun ObserveScreen(
                             weatherDetail = weatherSnapshot?.asDisplayText(),
                             autoFetching = metadataAutoFetching,
                             gpsFetching = gpsFetching,
+                            gpsAttempt = gpsFetchAttempt,
+                            gpsStatusDetail = gpsStatusText,
                             statusText = metadataStatus,
                             onFetchGps = {
                                 if (!locationProvider.isGpsEnabled()) {
                                     showGpsDialog = true
                                 } else if (locationProvider.hasAnyLocationPermission()) {
                                     gpsFetching = true
+                                    gpsFetchAttempt = 0
+                                    gpsStatusText = ""
                                     metadataStatus = "Acquiring GPS…"
-                                    locationProvider.requestCurrentLocation { loc ->
-                                        gpsFetching = false
-                                        if (loc != null) {
-                                            capturedLocation = loc
-                                            metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m)"
-                                            showFastSnackbar(snackbar, scope, "GPS acquired")
-                                        } else {
-                                            metadataStatus = "GPS unavailable — check permissions"
+                                    locationProvider.requestCurrentLocationWithRetry(
+                                        onAttempt = { attempt, total, status ->
+                                            gpsFetchAttempt = attempt
+                                            gpsStatusText = status
+                                            metadataStatus = status
+                                        },
+                                        onResult = { loc ->
+                                            gpsFetching = false
+                                            if (loc != null) {
+                                                capturedLocation = loc
+                                                metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m)"
+                                                showFastSnackbar(snackbar, scope, "GPS acquired")
+                                            } else {
+                                                metadataStatus = "GPS unavailable after 2 attempts"
+                                            }
                                         }
-                                    }
+                                    )
                                 } else {
                                     showFastSnackbar(snackbar, scope, "Location permission required")
                                 }
@@ -797,8 +899,55 @@ fun ObserveScreen(
                     }
                 }
 
+                // ── Session Summary (shown when session ends) ──
+                if (showSessionSummary) {
+                    item {
+                        Card(
+                            modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
+                            shape = RoundedCornerShape(36.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        ) {
+                            Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                                Text("Session Complete", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {                                        val finalStartedAt = session.timerStartedAt
+                                        MetricTile(
+                                            "Duration",
+                                            formatDurationCompact(
+                                                session.timerAccumulatedMs +
+                                                    (if (session.timerRunning && finalStartedAt != null) System.currentTimeMillis() - finalStartedAt else 0L)
+                                            ),
+                                            FieldMindIcons.Calendar,
+                                            Modifier.weight(1f)
+                                        )
+                                    MetricTile(
+                                        "Observations",
+                                        "${session.sessionObservationCount}",
+                                        FieldMindIcons.Observation,
+                                        Modifier.weight(1f)
+                                    )
+                                }
+                                if (sessionName.isNotBlank()) {
+                                    Text("Session: $sessionName", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                }
+                                Button(onClick = {
+                                    showSessionSummary = false
+                                    session = session.copy(
+                                        timerAccumulatedMs = 0L,
+                                        sessionObservationCount = 0
+                                    )
+                                    sessionName = ""
+                                    selectedProjectId = null
+                                }, shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth()) {
+                                    Text("Start new session")
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // ── Empty state (only when no form is open AND no saved observations) ──
-                if (!showEvidenceForm && !session.isActive && observations.isEmpty()) {
+                if (!showEvidenceForm && !session.isActive && observations.isEmpty() && !showSessionSummary) {
                     item {
                         EmptyState(
                             "No observations yet",
@@ -944,7 +1093,8 @@ private fun LiveObservationTimer(
     )
 
     Card(
-        shape = RoundedCornerShape(26.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isRunning)
                 MaterialTheme.colorScheme.primaryContainer
@@ -1099,14 +1249,15 @@ private fun EvidenceCaptureRow(
     onIdentifyFromPhoto: (String?) -> Unit = {}
 ) {
     Card(
-        shape = RoundedCornerShape(28.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
+        shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                         .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -1196,7 +1347,7 @@ private fun EvidenceButton(
 ) {
     Card(
         modifier = modifier.height(80.dp).expressivePress(scaleDown = 0.95f).clickable(onClick = onClick),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1206,7 +1357,7 @@ private fun EvidenceButton(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
-                Modifier.size(36.dp).clip(RoundedCornerShape(12.dp))
+                Modifier.size(36.dp).clip(RoundedCornerShape(20.dp))
                     .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.24f else 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -1270,24 +1421,25 @@ private fun QuickObservationForm(
     val hasLocation = manualLocation.isNotBlank()
     val hasMeasurements = measurements.values.any { it.isNotBlank() }
 
-    Card(
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
-    ) {
-        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            // Form header
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(FieldMindIcons.Edit, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
-                }
-                Text("Observation details", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+Card(
+    modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
+    shape = RoundedCornerShape(36.dp),
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+) {
+    Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        // Form header
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Box(
+                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(FieldMindIcons.Edit, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
             }
+            Text("Observation details", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        }
 
-            // Quality Score (Phase 3)
+        // Quality Score (Phase 3)
             QualityScoreCard(qualityScore)
             MissingFieldsChecklist(
                 hasSubject = subject.isNotBlank(),
@@ -1394,7 +1546,7 @@ private fun QuickObservationForm(
             // Protocol steps (when selected)
             selectedProtocol?.let { protocol ->
                 Card(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(30.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -1433,7 +1585,7 @@ private fun QuickObservationForm(
             Button(
                 onClick = onSave,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(24.dp)
             ) {
                 Icon(icon = FieldMindIcons.Check, contentDescription = null, size = 18.dp)
                 Spacer(Modifier.size(8.dp))
@@ -1466,7 +1618,8 @@ private fun QuickClassificationGrid(
     )
 
     Card(
-        shape = RoundedCornerShape(28.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
+        shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1486,10 +1639,9 @@ private fun QuickClassificationGrid(
                         val accent = colors.accentFor(cat.name)
                         Surface(
                             onClick = { onCategorySelected(cat.name) },
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             color = if (isSelected) accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
-                            tonalElevation = 0.dp,
                             modifier = Modifier.weight(1f)
                         ) {
                             Column(
@@ -1537,8 +1689,8 @@ private fun AutoFetchConfirmCard(
     onSkip: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
         ),
@@ -1550,7 +1702,7 @@ private fun AutoFetchConfirmCard(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                         .background(FieldMindTheme.colors.info.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -1568,14 +1720,14 @@ private fun AutoFetchConfirmCard(
                 OutlinedButton(
                     onClick = onSkip,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 ) {
                     Text("Skip", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Button(
                     onClick = onConfirm,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 ) {
                     Icon(FieldMindIcons.Location, null, size = 18.dp)
                     Spacer(Modifier.size(6.dp))
@@ -1599,6 +1751,8 @@ private fun AutoMetadataStatusCard(
     weatherDetail: String? = null,
     autoFetching: Boolean = false,
     gpsFetching: Boolean = false,
+    gpsAttempt: Int = 0,
+    gpsStatusDetail: String = "",
     statusText: String = "Ready",
     onFetchGps: () -> Unit,
     onFetchWeather: () -> Unit = {},
@@ -1608,7 +1762,8 @@ private fun AutoMetadataStatusCard(
     val showWeatherConfirm = remember { mutableStateOf(false) }
     
     Card(
-        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1617,14 +1772,27 @@ private fun AutoMetadataStatusCard(
                 Icon(FieldMindIcons.Info, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
                 Column(Modifier.weight(1f)) {
                     Text("Location & weather", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                    if (autoFetching) {
-                        Text(statusText, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    if (autoFetching || gpsFetching) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(12.dp),
+                                strokeWidth = 2.dp
+                            )
+                            Text(
+                                if (gpsStatusDetail.isNotBlank()) gpsStatusDetail else statusText,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
                 }
-                if (!hasGps && !autoFetching) {
+                if (!hasGps && !autoFetching && !gpsFetching) {
                     Surface(
                         onClick = onFetchBoth,
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(20.dp),
                         color = colors.info.copy(alpha = 0.12f)
                     ) {
                         Row(Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1638,7 +1806,13 @@ private fun AutoMetadataStatusCard(
                 MetadataStatusChip(
                     label = "GPS",
                     acquired = hasGps,
-                    detail = if (gpsFetching) "Fetching…" else if (hasGps && gpsAccuracy != null) "±${gpsAccuracy.toInt()}m" else if (hasGps) "Acquired" else null,
+                    loading = gpsFetching,
+                    detail = when {
+                        gpsFetching -> if (gpsAttempt > 0) "Attempt ${gpsAttempt + 1}/3…" else "Searching…"
+                        hasGps && gpsAccuracy != null -> "±${gpsAccuracy.toInt()}m"
+                        hasGps -> "Acquired"
+                        else -> null
+                    },
                     icon = FieldMindIcons.Location,
                     accent = if (hasGps) colors.positive else colors.warning,
                     onTap = if (!hasGps && !autoFetching && !gpsFetching) onFetchGps else null,
@@ -1666,7 +1840,7 @@ private fun AutoMetadataStatusCard(
             
             // Weather fetch confirmation dialog
             if (showWeatherConfirm.value) {
-                AlertDialog(
+                SwipeableAlertDialog(
                     onDismissRequest = { showWeatherConfirm.value = false },
                     icon = { Icon(FieldMindIcons.Weather, null, tint = MaterialTheme.colorScheme.primary, size = 28.dp) },
                     title = { Text("Fetch weather data?") },
@@ -1677,7 +1851,7 @@ private fun AutoMetadataStatusCard(
                                 showWeatherConfirm.value = false
                                 onFetchWeather()
                             },
-                            shape = RoundedCornerShape(14.dp)
+                            shape = RoundedCornerShape(22.dp)
                         ) { Text("Fetch weather") }
                     },
                     dismissButton = {
@@ -1697,14 +1871,14 @@ private fun MetadataStatusChip(
     icon: MaterialSymbolIcon,
     accent: Color,
     onTap: (() -> Unit)? = null,
+    loading: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val haptics = rememberFieldMindHaptics()
     Surface(
         onClick = { if (onTap != null) { haptics.light(); onTap() } },
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         color = if (acquired) accent.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
-        tonalElevation = 0.dp,
         modifier = modifier
     ) {
         Column(
@@ -1712,12 +1886,20 @@ private fun MetadataStatusChip(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Icon(
-                icon,
-                null,
-                tint = if (acquired) accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                size = 20.dp
-            )
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    strokeWidth = 2.5.dp,
+                    color = accent
+                )
+            } else {
+                Icon(
+                    icon,
+                    null,
+                    tint = if (acquired) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 20.dp
+                )
+            }
             Text(
                 label,
                 style = MaterialTheme.typography.labelSmall,
@@ -1725,7 +1907,7 @@ private fun MetadataStatusChip(
                 color = if (acquired) accent else MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                detail ?: if (acquired) "Acquired" else "Tap to fetch",
+                if (loading) detail ?: "Acquiring…" else detail ?: if (acquired) "Acquired" else "Tap to fetch",
                 style = MaterialTheme.typography.labelSmall,
                 color = if (acquired) accent.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
@@ -1752,7 +1934,8 @@ private fun SpeciesIdentificationLiveCard(
     if (!hasPhoto && identifiedSpecies == null) return
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (identifiedSpecies != null)
                 colors.observation.copy(alpha = 0.08f)
@@ -1781,7 +1964,7 @@ private fun SpeciesIdentificationLiveCard(
             if (isRunning && progress > 0f) {
                 LinearProgressIndicator(
                     progress = { progress },
-                    modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp))
+                    modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(6.dp))
                 )
                 Text(
                     "${(progress * 100).toInt()}% — Analyzing photo…",
@@ -1813,7 +1996,7 @@ private fun SpeciesIdentificationLiveCard(
                     onClick = {
                         attachments.firstOrNull { it.isImage() }?.uri?.let { onRunIdentification(it) }
                     },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(FieldMindIcons.Nature, null, size = 16.dp)
@@ -1901,7 +2084,8 @@ private fun EnhancedObservationForm(
     }
 
     Card(
-        shape = RoundedCornerShape(28.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
+        shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1909,7 +2093,7 @@ private fun EnhancedObservationForm(
             // Form header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                         .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -1959,7 +2143,7 @@ private fun EnhancedObservationForm(
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = RoundedCornerShape(28.dp),
                     singleLine = true
                 )
 
@@ -1967,11 +2151,11 @@ private fun EnhancedObservationForm(
                 AnimatedVisibility(visible = showSuggestions) {
                     Card(
                         modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                         ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                     ) {
                         Column(Modifier.padding(4.dp)) {
                             speciesSuggestions.take(5).forEach { record ->
@@ -1988,7 +2172,7 @@ private fun EnhancedObservationForm(
                                         )
                                         showSuggestions = false
                                     },
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(20.dp),
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                                 ) {
                                     Row(
@@ -1997,7 +2181,7 @@ private fun EnhancedObservationForm(
                                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                                     ) {
                                         Box(
-                                            Modifier.size(32.dp).clip(RoundedCornerShape(10.dp))
+                                            Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                                 .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                             contentAlignment = Alignment.Center
                                         ) {
@@ -2025,7 +2209,7 @@ private fun EnhancedObservationForm(
                 if (showSpeciesSearch && !showSuggestions && speciesSearchQuery.value.isNotBlank()) {
                     Surface(
                         onClick = onOpenSpeciesSearch,
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                     ) {
                         Row(
@@ -2181,7 +2365,7 @@ private fun EnhancedObservationForm(
                         onSave()
                     },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     enabled = session.subject.isNotBlank() || session.facts.isNotBlank()
                 ) {
                     Icon(FieldMindIcons.Archive, null, size = 18.dp)
@@ -2191,7 +2375,7 @@ private fun EnhancedObservationForm(
                 Button(
                     onClick = onSave,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     enabled = session.subject.isNotBlank() || session.facts.isNotBlank()
                 ) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -2222,7 +2406,7 @@ private fun EnhancedObservationForm(
 private fun QualityScoreCard(score: Int) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.45f)
     ) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2266,7 +2450,7 @@ private fun MissingFieldsChecklist(
     }
     if (missing.isEmpty()) return
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(22.dp),
         color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f)
     ) {
         Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2390,7 +2574,7 @@ private fun FieldModeScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     item {
                         Surface(
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(24.dp),
                             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                         ) {
                             Row(
@@ -2412,7 +2596,7 @@ private fun FieldModeScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 } else {
                     item { Text("Tap a type to save instantly", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold) }
                     item {
-                        Button(onClick = { haptics.light(); showQuickSnapCategory = true }, Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp)) {
+                        Button(onClick = { haptics.light(); showQuickSnapCategory = true }, Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp)) {
                             Icon(icon = FieldMindIcons.Camera, contentDescription = null, size = 18.dp)
                             Spacer(Modifier.size(8.dp))
                             Text("Quick snap")
@@ -2449,7 +2633,7 @@ private fun FieldModeScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         }
                     }
                     item {
-                        OutlinedButton(onClick = { showFull = true }, Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+                        OutlinedButton(onClick = { showFull = true }, Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
                             Icon(icon = FieldMindIcons.Edit, contentDescription = null, size = 18.dp)
                             Spacer(Modifier.size(8.dp))
                             Text("Add full details instead")
@@ -2562,7 +2746,7 @@ private fun QuickSnapCategoryPicker(
                     val accent = FieldMindTheme.colors.accentFor(category)
                     Surface(
                         onClick = { onCategorySelected(category) },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         color = if (selected) accent.copy(alpha = 0.16f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = androidx.compose.foundation.BorderStroke(
                             width = if (selected) 1.5.dp else 1.dp,
@@ -2606,7 +2790,7 @@ private fun FieldModeButton(category: String, modifier: Modifier = Modifier, onC
     val accent = FieldMindTheme.colors.accentFor("observation")
     Card(
         modifier = modifier.height(104.dp).expressivePress(scaleDown = 0.96f).clickable(onClick = onClick),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2710,10 +2894,10 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
     if (showInAppCamera) { Dialog(onDismissRequest = { showInAppCamera = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) { FieldMindCameraV2(onPhotoCaptured = { uri, mimeType -> attachments = attachments + DraftEvidenceAttachment("Photo", uri, "Camera photo", mimeType = mimeType); showInAppCamera = false; scope.launch { snackbar.showSnackbar("Photo captured.") } }, onDismiss = { showInAppCamera = false }, modifier = Modifier.fillMaxSize()) } }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SnackbarHost(snackbar)
-        Card(shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), modifier = Modifier.fillMaxWidth()) {
+        Card(shape = RoundedCornerShape(36.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Box(Modifier.size(44.dp).clip(RoundedCornerShape(14.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(icon = FieldMindIcons.Observation, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 24.dp) }
+                    Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(icon = FieldMindIcons.Observation, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 24.dp) }
                     Column(Modifier.weight(1f)) {
                         Text(if (compact) "Quick field note" else if (snapFirst) "Snap evidence" else "New observation", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                         Text(if (snapFirst) "Evidence first, then facts-only observation notes." else "Date and time are stamped automatically.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -2807,7 +2991,7 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
                         
                         // Audio recording section
                         if (audioEnabled) {
-                            Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+                            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
                                 Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                                         Icon(FieldMindIcons.Mic, null, tint = FieldMindTheme.colors.observation, size = 20.dp)
@@ -2858,7 +3042,7 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
                             scope.launch { snackbar.showSnackbar("Observation saved to your archive.") }; onSaved()
                         }
                     }
-                }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+                }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
                     Icon(icon = FieldMindIcons.Check, contentDescription = null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save observation")
                 }
             }
@@ -2873,7 +3057,7 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
 private fun ObservationQualityCard(score: Int, missing: List<String>) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.45f)
     ) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2910,7 +3094,7 @@ private fun MoodDropdown(value: String, onValueChange: (String) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text("Mood / context preset", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Box {
-            OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+            OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
                 Text(value.ifBlank { "Choose context" }, modifier = Modifier.weight(1f), textAlign = TextAlign.Start)
                 Icon(FieldMindIcons.Down, null, size = 18.dp)
             }
@@ -2941,7 +3125,7 @@ private fun autoObservationTags(subject: String, facts: String, category: String
 
 @Composable
 private fun FactsInterpretationBanner() {
-    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)).padding(12.dp),
+    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)).padding(12.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Icon(icon = FieldMindIcons.Lightbulb, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer, size = 18.dp)
         Text("Facts vs. interpretation: log what you sensed here; save guesses as a question or hypothesis.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
@@ -2952,7 +3136,7 @@ private fun FactsInterpretationBanner() {
 private fun RecordingIndicator(seconds: Int) {
     val transition = rememberInfiniteTransition(label = "rec")
     val alpha by transition.animateFloat(initialValue = 1f, targetValue = 0.25f, animationSpec = infiniteRepeatable(tween(700), RepeatMode.Reverse), label = "recDot")
-    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.errorContainer).padding(horizontal = 16.dp, vertical = 12.dp),
+    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.errorContainer).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Box(Modifier.size(12.dp).graphicsLayer { this.alpha = alpha }.clip(CircleShape).background(MaterialTheme.colorScheme.error))
         Text("Recording…", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onErrorContainer)
@@ -2984,7 +3168,7 @@ internal fun SpeciesIdButton(
     val hasPhoto = attachments.any { it.isImage() }
 
     Card(
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (identifiedSpecies != null)
                 colors.observation.copy(alpha = 0.1f)
@@ -3029,7 +3213,7 @@ internal fun SpeciesIdButton(
                     onClick = { onIdentifyFromPhoto(attachments.firstOrNull { it.isImage() }?.uri) },
                     enabled = hasPhoto && identifiedSpecies == null,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(20.dp)
                 ) {
                     Icon(FieldMindIcons.Camera, null, size = 16.dp)
                     Spacer(Modifier.size(6.dp))
@@ -3038,7 +3222,7 @@ internal fun SpeciesIdButton(
                 OutlinedButton(
                     onClick = onOpenSearch,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(20.dp)
                 ) {
                     Icon(FieldMindIcons.Search, null, size = 16.dp)
                     Spacer(Modifier.size(6.dp))
@@ -3061,13 +3245,13 @@ internal fun SpeciesIdButton(
 internal fun AttachmentPreviewList(items: List<DraftEvidenceAttachment>, onCaptionChange: (Int, String) -> Unit, onRemove: (Int) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items.forEachIndexed { index, item ->
-            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), shape = RoundedCornerShape(20.dp)) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), shape = RoundedCornerShape(30.dp)) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         if (item.isImage()) {
-                            AsyncImage(model = item.uri, contentDescription = item.caption.ifBlank { "Attached image" }, contentScale = ContentScale.Crop, modifier = Modifier.size(64.dp).clip(RoundedCornerShape(14.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest))
+                            AsyncImage(model = item.uri, contentDescription = item.caption.ifBlank { "Attached image" }, contentScale = ContentScale.Crop, modifier = Modifier.size(64.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest))
                         } else {
-                            Box(Modifier.size(64.dp).clip(RoundedCornerShape(14.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(64.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
                                 Icon(icon = if (item.type.equals("Audio", true)) FieldMindIcons.Mic else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 26.dp)
                             }
                         }

@@ -140,7 +140,7 @@ fun CalendarHeatmap(
                                 Modifier
                                     .weight(1f)
                                     .aspectRatio(1f)
-                                    .clip(RoundedCornerShape(8.dp))
+                                    .clip(RoundedCornerShape(16.dp))
                                     .background(cellColor)
                                     .clickable {
                                         selectedDay = date
@@ -170,8 +170,8 @@ fun CalendarHeatmap(
 
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("Less", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 8.sp)
-            Box(Modifier.size(10.dp).background(emptyColor, RoundedCornerShape(2.dp)))
-            colors.take(4).forEach { c -> Box(Modifier.size(10.dp).background(c, RoundedCornerShape(2.dp))) }
+            Box(Modifier.size(10.dp).background(emptyColor, RoundedCornerShape(6.dp)))
+            colors.take(4).forEach { c -> Box(Modifier.size(10.dp).background(c, RoundedCornerShape(6.dp))) }
             Text("More", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 8.sp)
         }
     }
@@ -297,7 +297,7 @@ fun RadarChart(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(16.dp))
                         .background(
                             if (isSelected) accentColor.copy(alpha = 0.12f)
                             else Color.Transparent
@@ -983,12 +983,12 @@ fun NetworkGraphTimeline(
         // Timeline slider
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Past", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 9.sp)
-            Box(Modifier.weight(1f).height(24.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)) {
+            Box(Modifier.weight(1f).height(24.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)) {
                 Box(
                     Modifier
                         .fillMaxWidth(sliderPosition)
                         .fillMaxHeight()
-                        .background(FieldMindTheme.colors.observation.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
+                        .background(FieldMindTheme.colors.observation.copy(alpha = 0.3f), RoundedCornerShape(20.dp))
                         .clickable { /* handled by pointer input */ },
                     contentAlignment = Alignment.CenterEnd
                 ) {
@@ -1061,11 +1061,11 @@ fun DataQualityMeter(
                 Text("${(fraction * 100).toInt()}%", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Box(
-                Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)
             ) {
                 Box(
                     Modifier.fillMaxWidth(fraction.coerceIn(0f, 1f)).fillMaxHeight()
-                        .background(accentColor.copy(alpha = 0.3f + fraction * 0.7f), RoundedCornerShape(3.dp))
+                        .background(accentColor.copy(alpha = 0.3f + fraction * 0.7f), RoundedCornerShape(8.dp))
                 )
             }
         }

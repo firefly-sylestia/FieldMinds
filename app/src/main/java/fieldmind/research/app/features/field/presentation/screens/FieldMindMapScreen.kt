@@ -17,17 +17,27 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.data.location.*
 import fieldmind.research.app.features.field.presentation.components.*
+import org.osmdroid.views.MapView
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Marker
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.border
+import org.json.JSONObject
 
 // ══════════════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════════
@@ -56,16 +66,44 @@ fun MapFieldScreen(
     val tileManager = remember { OsmTileManager(context) }
     val trackRecorder = remember { TrackRecorder(context) }
     val geoFenceReminder = remember { GeoFenceReminder(context) }
+    val geofenceRegions by geoFenceReminder.activeRegions.collectAsState()
 
-    // Drawing tools state
-    var savedOverlays by remember { mutableStateOf<List<MapOverlay>>(emptyList()) }
-    var drawingMode by remember { mutableStateOf(DrawingMode.View) }
     val isRecording by trackRecorder.isRecording.collectAsState()
     val currentTrack by trackRecorder.currentRecording.collectAsState()
     val savedTracks by trackRecorder.savedTracks.collectAsState()
+
+    // Drawing tools state — persisted to SharedPreferences across app restarts
+    val prefs = remember { context.getSharedPreferences("fieldmind_map", Context.MODE_PRIVATE) }
+    var savedOverlays by remember {
+        mutableStateOf(MapOverlayUtils.deserializeOverlays(prefs.getString("savedOverlays", "") ?: ""))
+    }
+    // Persist overlays whenever they change
+    LaunchedEffect(savedOverlays) {
+        prefs.edit().putString("savedOverlays", MapOverlayUtils.serializeOverlays(savedOverlays)).apply()
+    }
+
+    // Persist tracks to SharedPreferences
+    var persistedTracks by remember {
+        mutableStateOf(loadTracksFromPrefs(prefs))
+    }
+    // Sync from TrackRecorder into persisted list, and vice versa
+    LaunchedEffect(savedTracks) {
+        if (savedTracks.isNotEmpty()) {
+            persistedTracks = savedTracks
+            saveTracksToPrefs(prefs, savedTracks)
+        }
+    }
+    // On first launch, restore persisted tracks into the recorder
+    LaunchedEffect(Unit) {
+        if (persistedTracks.isNotEmpty() && savedTracks.isEmpty()) {
+            persistedTracks.forEach { trackRecorder.restoreTrack(it) }
+        }
+    }
+
+    var drawingMode by remember { mutableStateOf(DrawingMode.View) }
+    var editingOverlay by remember { mutableStateOf<MapOverlay?>(null) }
     val cachedRegions by tileManager.cachedRegions.collectAsState()
     // cachedRegions type is now List<OsmTileRegion>
-    val geofenceRegions by geoFenceReminder.activeRegions.collectAsState()
 
     // Restore saved geofences on first launch
     LaunchedEffect(Unit) {
@@ -83,6 +121,7 @@ fun MapFieldScreen(
             drawingMode = drawingMode,
             currentTrack = currentTrack,
             tileManager = tileManager,
+            geofenceRegions = geofenceRegions,
             onClose = { fullScreen = false },
             onDrawingModeChanged = { drawingMode = it },
             onOverlaysChanged = { savedOverlays = it },
@@ -115,7 +154,7 @@ fun MapFieldScreen(
                     ) {
                         Surface(
                             onClick = { onNavigate(FieldMindScreen.Home) },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.size(44.dp)
                         ) { Box(contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Back, null, size = 22.dp) } }
@@ -127,7 +166,7 @@ fun MapFieldScreen(
                         if (points.isNotEmpty()) {
                             Surface(
                                 onClick = { fullScreen = true },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(22.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.size(44.dp)
                             ) { Box(contentAlignment = Alignment.Center) { Icon(icon = MaterialSymbolIcon("fullscreen"), contentDescription = "Fullscreen map", size = 22.dp) } }
@@ -178,22 +217,23 @@ fun MapFieldScreen(
                     geoFenceReminder.addRegion(geoFenceReminder.regionFromPointOverlay(overlay))
                 },
                 onLineCreated = { savedOverlays = savedOverlays + it },
-                onPolygonCreated = { savedOverlays = savedOverlays + it },
-                onStartTrack = { trackRecorder.startRecording("Field session") },
+                onPolygonCreated = { savedOverlays = savedOverlays + it },                    onStartTrack = { trackRecorder.startRecording("Field session") },
                 onStopTrack = { trackRecorder.stopRecording() },
-                onToggleTrackPause = { trackRecorder.togglePause() }
+                onToggleTrackPause = { trackRecorder.togglePause() },
+                geofenceRegions = geofenceRegions
             )
             MapTab.OfflineTiles -> OfflineTilesTab(
                 modifier = Modifier.padding(padding),
                 tileManager = tileManager,
-                cachedRegions = cachedRegions
+                cachedRegions = cachedRegions,
+                points = points
             )
             MapTab.Drawings -> DrawingsTab(
                 modifier = Modifier.padding(padding),
                 overlays = savedOverlays,
                 onDeleteOverlay = { id -> savedOverlays = savedOverlays.filter { it.id != id } },
                 onClearAll = { savedOverlays = emptyList() },
-                onEditOverlay = { /* future: edit label/color */ }
+                onEditOverlay = { editingOverlay = it }
             )
             MapTab.Tracks -> TracksTab(
                 modifier = Modifier.padding(padding),
@@ -207,6 +247,23 @@ fun MapFieldScreen(
                 modifier = Modifier.padding(padding),
                 geoFenceReminder = geoFenceReminder,
                 geofenceRegions = geofenceRegions
+            )
+        }
+
+        // ── Overlay edit dialog ──
+        editingOverlay?.let { overlay ->
+            EditOverlayDialog(
+                overlay = overlay,
+                onSave = { edited ->
+                    val current = savedOverlays.toMutableList()
+                    val idx = current.indexOfFirst { it.id == overlay.id }
+                    if (idx >= 0) {
+                        current[idx] = edited
+                        savedOverlays = current
+                    }
+                    editingOverlay = null
+                },
+                onDismiss = { editingOverlay = null }
             )
         }
     }
@@ -223,6 +280,7 @@ private fun FullScreenMapView(
     drawingMode: DrawingMode,
     currentTrack: TrackRecording?,
     tileManager: OsmTileManager? = null,
+    geofenceRegions: List<GeofenceRegion> = emptyList(),
     onClose: () -> Unit,
     onDrawingModeChanged: (DrawingMode) -> Unit,
     onOverlaysChanged: (List<MapOverlay>) -> Unit,
@@ -239,6 +297,7 @@ private fun FullScreenMapView(
             drawingMode = drawingMode,
             currentTrackPoints = currentTrack?.points?.map { it.latitude to it.longitude } ?: emptyList(),
             tileManager = tileManager,
+            geofenceRegions = geofenceRegions,
             onPointCreated = onPointCreated,
             onLineCreated = onLineCreated,
             onPolygonCreated = onPolygonCreated,
@@ -259,7 +318,7 @@ private fun FullScreenMapView(
             }
             if (drawingMode != DrawingMode.View) {
                 Surface(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(30.dp),
                     color = MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Text(
@@ -284,7 +343,7 @@ private fun FullScreenMapView(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp),
-            shape = RoundedCornerShape(28.dp),
+            shape = RoundedCornerShape(36.dp),
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             shadowElevation = 8.dp
         ) {
@@ -310,7 +369,7 @@ private fun FullScreenMapView(
                     isActive = drawingMode == DrawingMode.DrawPolygon,
                     onClick = { onDrawingModeChanged(if (drawingMode == DrawingMode.DrawPolygon) DrawingMode.View else DrawingMode.DrawPolygon) }
                 )
-                DrawToolDivider()
+                DrawToolHorizontalDivider()
                 DrawToolButton(
                     icon = FieldMindIcons.Select,
                     label = "Select",
@@ -343,7 +402,7 @@ private fun DrawToolButton(icon: MaterialSymbolIcon, label: String, isActive: Bo
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(24.dp))
             .clickable(onClick = onClick)
             .background(bgColor)
             .padding(horizontal = 12.dp, vertical = 8.dp)
@@ -364,7 +423,7 @@ private fun DrawToolButton(icon: MaterialSymbolIcon, label: String, isActive: Bo
 }
 
 @Composable
-private fun DrawToolDivider() {
+private fun DrawToolHorizontalDivider() {
     Box(
         Modifier
             .width(1.dp)
@@ -387,6 +446,7 @@ private fun MapViewTab(
     currentTrack: TrackRecording?,
     isRecording: Boolean,
     tileManager: OsmTileManager? = null,
+    geofenceRegions: List<GeofenceRegion> = emptyList(),
     onFullScreen: () -> Unit,
     onDrawingModeChanged: (DrawingMode) -> Unit,
     onOverlaysChanged: (List<MapOverlay>) -> Unit,
@@ -411,6 +471,7 @@ private fun MapViewTab(
                     drawingMode = drawingMode,
                     currentTrackPoints = currentTrack?.points?.map { it.latitude to it.longitude } ?: emptyList(),
                     tileManager = tileManager,
+                    geofenceRegions = geofenceRegions,
                     onPointCreated = onPointCreated,
                     onLineCreated = onLineCreated,
                     onPolygonCreated = onPolygonCreated,
@@ -421,7 +482,7 @@ private fun MapViewTab(
             if (isRecording) {
                 Surface(
                     modifier = Modifier.align(Alignment.TopStart).padding(8.dp),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     color = MaterialTheme.colorScheme.errorContainer
                 ) {
                     Row(
@@ -452,7 +513,7 @@ private fun MapViewTab(
             // Drawing mode chips
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -480,7 +541,7 @@ private fun MapViewTab(
             // Stats card
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -503,8 +564,8 @@ private fun TrackRecordingCard(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = if (isRecording) MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceContainerLow)
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = if (isRecording) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -530,12 +591,12 @@ private fun TrackRecordingCard(
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = onStop, shape = RoundedCornerShape(14.dp), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) { Text("Stop") }
-                    OutlinedButton(onClick = onTogglePause, shape = RoundedCornerShape(14.dp)) { Text(if (currentTrack.isPaused) "Resume" else "Pause") }
+                    Button(onClick = onStop, shape = RoundedCornerShape(22.dp), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) { Text("Stop") }
+                    OutlinedButton(onClick = onTogglePause, shape = RoundedCornerShape(22.dp)) { Text(if (currentTrack.isPaused) "Resume" else "Pause") }
                 }
             } else {
                 Text("Record GPS tracks during your field sessions to map your survey path.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Button(onClick = onStart, shape = RoundedCornerShape(14.dp)) { Icon(FieldMindIcons.Track, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Start recording") }
+                Button(onClick = onStart, shape = RoundedCornerShape(22.dp)) { Icon(FieldMindIcons.Track, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Start recording") }
             }
         }
     }
@@ -545,7 +606,8 @@ private fun TrackRecordingCard(
 private fun OfflineTilesTab(
     modifier: Modifier,
     tileManager: OsmTileManager,
-    cachedRegions: List<OsmTileRegion>
+    cachedRegions: List<OsmTileRegion>,
+    points: List<Pair<Double, Double>> = emptyList()
 ) {
     val scope = rememberCoroutineScope()
     val isDownloading by tileManager.isDownloading.collectAsState()
@@ -561,7 +623,7 @@ private fun OfflineTilesTab(
 
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         item {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Download, null, tint = FieldMindTheme.colors.info, size = 20.dp)
@@ -572,11 +634,11 @@ private fun OfflineTilesTab(
                         Text("Cache: $cacheSize", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("${cachedRegions.size} region${if (cachedRegions.size == 1) "" else "s"}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                    Button(onClick = { showDownloadDialog = true }, shape = RoundedCornerShape(14.dp), enabled = !isDownloading) { Text("Download new region") }
+                    Button(onClick = { showDownloadDialog = true }, shape = RoundedCornerShape(22.dp), enabled = !isDownloading) { Text("Download new region") }
                     if (cachedRegions.isNotEmpty()) {
                         OutlinedButton(onClick = {
                             scope.launch { tileManager.clearAllCaches(); cacheSize = "0 KB" }
-                        }, shape = RoundedCornerShape(14.dp)) { Text("Clear all") }
+                        }, shape = RoundedCornerShape(22.dp)) { Text("Clear all") }
                     }
                 }
             }
@@ -584,7 +646,7 @@ private fun OfflineTilesTab(
         if (cachedRegions.isNotEmpty()) {
             item { Text("Cached regions", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold) }
             items(cachedRegions) { region ->
-                Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                             Text(region.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
@@ -606,7 +668,8 @@ private fun OfflineTilesTab(
     if (showDownloadDialog) {
         DownloadRegionDialog(
             onDismiss = { showDownloadDialog = false },
-            tileManager = tileManager
+            tileManager = tileManager,
+            points = points
         )
     }
 }
@@ -614,9 +677,11 @@ private fun OfflineTilesTab(
 @Composable
 private fun DownloadRegionDialog(
     onDismiss: () -> Unit,
-    tileManager: OsmTileManager
+    tileManager: OsmTileManager,
+    points: List<Pair<Double, Double>> = emptyList()
 ) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     var name by remember { mutableStateOf("") }
     var latNorth by remember { mutableStateOf("") }
     var latSouth by remember { mutableStateOf("") }
@@ -624,13 +689,72 @@ private fun DownloadRegionDialog(
     var lonWest by remember { mutableStateOf("") }
     var minZoom by remember { mutableStateOf("10") }
     var maxZoom by remember { mutableStateOf("16") }
+    var useLocationText by remember { mutableStateOf("Use my location") }
+    var showRegionPicker by remember { mutableStateOf(false) }
 
-    AlertDialog(
+    // ── Region picker (full-screen map selection) ──
+    if (showRegionPicker) {
+        RegionPickerOverlay(
+            points = points,
+            onRegionSelected = { north, south, east, west ->
+                latNorth = "%.4f".format(north)
+                latSouth = "%.4f".format(south)
+                lonEast = "%.4f".format(east)
+                lonWest = "%.4f".format(west)
+                if (name.isBlank()) name = "Selected area"
+                showRegionPicker = false
+            },
+            onCancel = { showRegionPicker = false }
+        )
+        return
+    }
+
+    SwipeableAlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Download tile region") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Text("Download tiles for offline use. Enter the bounding box coordinates.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Download tiles for offline use. Enter the bounding box coordinates, or use your current GPS location.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+                // ── Action buttons row ──
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = { showRegionPicker = true },
+                        shape = RoundedCornerShape(22.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(FieldMindIcons.MapFull, null, size = 18.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Pick from map")
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            useLocationText = "Getting location…"
+                            val provider = FieldLocationProvider(context)
+                            provider.requestCurrentLocation(timeoutMs = 15_000L) { loc ->
+                                if (loc != null) {
+                                    val offset = 0.045 // ~5km in decimal degrees
+                                    latNorth = "%.4f".format(loc.latitude + offset)
+                                    latSouth = "%.4f".format(loc.latitude - offset)
+                                    lonEast = "%.4f".format(loc.longitude + offset)
+                                    lonWest = "%.4f".format(loc.longitude - offset)
+                                    name = loc.placeName?.takeIf { it.isNotBlank() } ?: "My area"
+                                    useLocationText = "✓ Location set"
+                                } else {
+                                    useLocationText = "GPS unavailable — enable location"
+                                }
+                            }
+                        },
+                        shape = RoundedCornerShape(22.dp),
+                        enabled = useLocationText != "Getting location…",
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(FieldMindIcons.Location, null, size = 18.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text(useLocationText)
+                    }
+                }
+
                 FieldTextField(name, { name = it }, "Region name (e.g. Study Area)")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FieldTextField(latNorth, { latNorth = it }, "Lat N", modifier = Modifier.weight(1f))
@@ -662,12 +786,324 @@ private fun DownloadRegionDialog(
                     }
                     onDismiss()
                 },
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(22.dp),
                 enabled = name.isNotBlank() && latNorth.isNotBlank() && latSouth.isNotBlank() && lonEast.isNotBlank() && lonWest.isNotBlank()
             ) { Text("Download") }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
     )
+}
+
+/**
+ * Full-screen map overlay for selecting a rectangular bounding box by tapping two corners.
+ * First tap marks the NW corner, second tap marks the SE corner and draws the rectangle.
+ * Tapping again resets and starts over.
+ */
+@Composable
+private fun RegionPickerOverlay(
+    points: List<Pair<Double, Double>> = emptyList(),
+    onRegionSelected: (north: Double, south: Double, east: Double, west: Double) -> Unit,
+    onCancel: () -> Unit
+) {
+    val context = LocalContext.current
+    var mapView by remember { mutableStateOf<MapView?>(null) }
+    val locationProvider = remember { FieldLocationProvider(context) }
+    var zoomingToLocation by remember { mutableStateOf(false) }
+
+    // Store observation markers so drawRegionRect can preserve them across taps
+    val obsMarkers = remember { mutableListOf<Marker>() }
+
+    // Two corners of the bounding box
+    var corner1 by remember { mutableStateOf<GeoPoint?>(null) }
+    var corner2 by remember { mutableStateOf<GeoPoint?>(null) }
+
+    // Derived bounding box (sorted)
+    val north = remember(corner1, corner2) {
+        if (corner1 != null && corner2 != null) maxOf(corner1!!.latitude, corner2!!.latitude) else null
+    }
+    val south = remember(corner1, corner2) {
+        if (corner1 != null && corner2 != null) minOf(corner1!!.latitude, corner2!!.latitude) else null
+    }
+    val east = remember(corner1, corner2) {
+        if (corner1 != null && corner2 != null) maxOf(corner1!!.longitude, corner2!!.longitude) else null
+    }
+    val west = remember(corner1, corner2) {
+        if (corner1 != null && corner2 != null) minOf(corner1!!.longitude, corner2!!.longitude) else null
+    }
+
+    // Rectangle polygon overlay
+    val rectPoints = remember(north, south, east, west) {
+        if (north != null && south != null && east != null && west != null) {
+            listOf(
+                north to west,  // NW
+                north to east,  // NE
+                south to east,  // SE
+                south to west   // SW
+            )
+        } else null
+    }
+
+    val statusText = when {
+        corner1 == null -> "Tap the NW corner of the area"
+        corner2 == null -> "Tap the SE corner"
+        else -> "Tap again to reset, or confirm below"
+    }
+
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+        // ── osmdroid map ──
+        AndroidView(
+            factory = { ctx ->
+                org.osmdroid.config.Configuration.getInstance().apply {
+                    userAgentValue = context.packageName
+                    osmdroidBasePath = context.cacheDir.resolve("osmdroid")
+                    osmdroidTileCache = context.cacheDir.resolve("osmdroid/tiles")
+                }
+                MapView(ctx).also { mv ->
+                    mapView = mv
+                    mv.setTileSource(org.osmdroid.tileprovider.tilesource.TileSourceFactory.MAPNIK)
+                    mv.setMultiTouchControls(true)
+                    mv.setTilesScaledToDpi(true)
+                    mv.controller.setZoom(13.0)
+                    mv.controller.setCenter(GeoPoint(20.0, 78.0)) // Default center India
+
+                    // Render existing observation points as markers (stored for drawRegionRect preservation)
+                    obsMarkers.clear()
+                    val obsIcon = observationMarkerBitmap(context)
+                    points.forEach { (lat, lon) ->
+                        val marker = Marker(mv).apply {
+                            position = GeoPoint(lat, lon)
+                            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+                            setInfoWindow(null)
+                            icon = obsIcon
+                        }
+                        obsMarkers.add(marker)
+                        mv.overlays.add(marker)
+                    }
+
+                    // Tap handler for region selection
+                    val eventsOverlay = org.osmdroid.views.overlay.MapEventsOverlay(object : org.osmdroid.events.MapEventsReceiver {
+                        override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
+                            if (corner1 == null || (corner1 != null && corner2 != null)) {
+                                // First tap or reset: set corner1, clear corner2
+                                corner1 = p
+                                corner2 = null
+                            } else {
+                                // Second tap: set corner2
+                                corner2 = p
+                            }
+                            // Redraw rectangle (preserving observation markers)
+                            drawRegionRect(mv, corner1, corner2, obsMarkers)
+                            return true
+                        }
+                        override fun longPressHelper(p: GeoPoint): Boolean = false
+                    })
+                    mv.overlays.add(0, eventsOverlay)
+                    mv.onResume()
+                }
+            },
+            modifier = Modifier.fillMaxSize(),
+            update = { mv ->
+                drawRegionRect(mv, corner1, corner2, obsMarkers)
+            }
+        )
+
+        // ── Top bar with status ──
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .statusBarsPadding(),
+            color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.92f),
+            shadowElevation = 4.dp
+        ) {
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                FilledTonalIconButton(onClick = onCancel, modifier = Modifier.size(40.dp)) {
+                    Icon(FieldMindIcons.Close, null, size = 20.dp)
+                }
+                Column(Modifier.weight(1f)) {
+                    Text("Select region", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text(statusText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                // Zoom to my location button
+                val hasLocPerm = locationProvider.hasAnyLocationPermission()
+                FilledTonalIconButton(
+                    onClick = {
+                        if (hasLocPerm) {
+                            zoomingToLocation = true
+                            locationProvider.requestCurrentLocation(timeoutMs = 8_000L) { loc ->
+                                zoomingToLocation = false
+                                if (loc != null) {
+                                    mapView?.controller?.animateTo(
+                                        GeoPoint(loc.latitude, loc.longitude),
+                                        15.0, // street-level zoom
+                                        1000L // duration ms
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    enabled = !zoomingToLocation && hasLocPerm,
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Icon(
+                        FieldMindIcons.Location,
+                        null,
+                        size = 20.dp
+                    )
+                }
+                if (rectPoints != null) {
+                    FilledTonalIconButton(
+                        onClick = { corner1 = null; corner2 = null },
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(FieldMindIcons.Refresh, null, size = 20.dp)
+                    }
+                }
+            }
+        }
+
+        // ── Bottom confirm bar ──
+        if (rectPoints != null) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .navigationBarsPadding(),
+                color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.92f),
+                shadowElevation = 8.dp
+            ) {
+                Row(
+                    Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text("%.4f N, %.4f S".format(north!!, south!!), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("%.4f E, %.4f W".format(east!!, west!!), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    OutlinedButton(onClick = { corner1 = null; corner2 = null }, shape = RoundedCornerShape(22.dp)) {
+                        Text("Reset")
+                    }
+                    Button(
+                        onClick = { onRegionSelected(north!!, south!!, east!!, west!!) },
+                        shape = RoundedCornerShape(22.dp)
+                    ) {
+                        Icon(FieldMindIcons.Check, null, size = 18.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Use this area")
+                    }
+                }
+            }
+        }
+
+        // ── Attribution ──
+        Text(
+            "© OpenStreetMap contributors",
+            modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+        )
+    }
+
+    // Lifecycle
+    DisposableEffect(Unit) {
+        onDispose {
+            mapView?.onPause()
+            mapView?.onDetach()
+        }
+    }
+}
+
+/**
+ * Creates a small circular bitmap drawable for rendering observation points
+ * as subtle map markers. Uses a semi-transparent teal glow with a solid
+ * center dot for clear but unobtrusive visibility.
+ */
+private fun observationMarkerBitmap(context: Context): BitmapDrawable {
+    val size = 24
+    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    val cx = (size / 2).toFloat()
+    val cy = (size / 2).toFloat()
+
+    // Outer glow ring (faint)
+    val glowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = android.graphics.Color.argb(50, 0, 150, 136) // Teal with ~20% opacity
+        style = Paint.Style.FILL
+    }
+    canvas.drawCircle(cx, cy, 10f, glowPaint)
+
+    // Solid center dot
+    val dotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = android.graphics.Color.argb(220, 0, 150, 136) // Teal with ~86% opacity
+        style = Paint.Style.FILL
+    }
+    canvas.drawCircle(cx, cy, 4f, dotPaint)
+
+    return BitmapDrawable(context.resources, bitmap)
+}
+
+/**
+ * Draws (or clears) the rectangular bounding box overlay on the map.
+ * Removes all overlays except the events overlay (preserved at index 0)
+ * and re-adds any observation markers from [obsMarkers] so they persist
+ * across tap interactions.
+ */
+private fun drawRegionRect(
+    mapView: MapView?,
+    corner1: GeoPoint?,
+    corner2: GeoPoint?,
+    obsMarkers: List<Marker> = emptyList()
+) {
+    if (mapView == null) return
+    // Preserve the events overlay and re-add observation markers
+    val eventsOverlay = mapView.overlays.getOrNull(0)
+    mapView.overlays.clear()
+    if (eventsOverlay != null) mapView.overlays.add(eventsOverlay)
+    obsMarkers.forEach { m -> mapView.overlays.add(m) }
+
+    if (corner1 != null && corner2 != null) {
+        val n = maxOf(corner1.latitude, corner2.latitude)
+        val s = minOf(corner1.latitude, corner2.latitude)
+        val e = maxOf(corner1.longitude, corner2.longitude)
+        val w = minOf(corner1.longitude, corner2.longitude)
+
+        val rect = org.osmdroid.views.overlay.Polygon().apply {
+            setPoints(listOf(
+                GeoPoint(n, w), // NW
+                GeoPoint(n, e), // NE
+                GeoPoint(s, e), // SE
+                GeoPoint(s, w)  // SW
+            ))
+            fillPaint.color = android.graphics.Color.argb(30, 33, 150, 243)
+            outlinePaint.color = android.graphics.Color.parseColor("#2196F3")
+            outlinePaint.strokeWidth = 3f
+        }
+        mapView.overlays.add(rect)
+
+        // Show corner markers
+        listOf(corner1, corner2).forEach { p ->
+            val marker = Marker(mapView).apply {
+                position = p
+                setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+                setInfoWindow(null)
+                title = ""
+            }
+            mapView.overlays.add(marker)
+        }
+
+        // Zoom to fit the bounding box
+        mapView.zoomToBoundingBox(
+            org.osmdroid.util.BoundingBox(n, e, s, w),
+            true,
+            48
+        )
+    }
+
+    mapView.invalidate()
 }
 
 @Composable
@@ -681,7 +1117,7 @@ private fun DrawingsTab(
     val colors = FieldMindTheme.colors
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Shape, null, tint = colors.info, size = 20.dp)
@@ -693,7 +1129,7 @@ private fun DrawingsTab(
                         Text("No drawings yet. Use the drawing tools in full-screen map mode to mark sites, transects, and survey boundaries.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     if (overlays.isNotEmpty()) {
-                        OutlinedButton(onClick = onClearAll, shape = RoundedCornerShape(14.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Clear all drawings") }
+                        OutlinedButton(onClick = onClearAll, shape = RoundedCornerShape(22.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Clear all drawings") }
                     }
                 }
             }
@@ -701,7 +1137,7 @@ private fun DrawingsTab(
         items(overlays) { overlay ->
             ClickableCard(
                 onClick = { onEditOverlay(overlay) },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(
@@ -750,7 +1186,7 @@ private fun TracksTab(
 
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Track, null, tint = colors.info, size = 20.dp)
@@ -763,7 +1199,7 @@ private fun TracksTab(
         }
         if (currentTrack != null && isRecording) {
             item {
-                Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f))) {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Box(Modifier.size(8.dp).clip(CircleShape).background(MaterialTheme.colorScheme.error))
@@ -775,7 +1211,7 @@ private fun TracksTab(
             }
         }
         items(savedTracks.sortedByDescending { it.startedAt }) { track ->
-            Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
@@ -826,7 +1262,7 @@ private fun GeofencesTab(
 
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Notifications, null, tint = colors.info, size = 20.dp)
@@ -835,14 +1271,14 @@ private fun GeofencesTab(
                     Text("Mark sites and get notified when you arrive. Points drawn on the map are automatically registered as geo-fence zones.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text("${geofenceRegions.size} active region${if (geofenceRegions.size == 1) "" else "s"}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (geofenceRegions.isNotEmpty()) {
-                        OutlinedButton(onClick = { geoFenceReminder.clearAllRegions() }, shape = RoundedCornerShape(14.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Clear all") }
+                        OutlinedButton(onClick = { geoFenceReminder.clearAllRegions() }, shape = RoundedCornerShape(22.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Clear all") }
                     }
                 }
             }
         }
         items(geofenceRegions) { region ->
             Card(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(
@@ -851,7 +1287,7 @@ private fun GeofencesTab(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Box(
-                        Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                        Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                             .background(if (region.isActive) colors.observation.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceContainerHighest),
                         contentAlignment = Alignment.Center
                     ) {
@@ -883,4 +1319,178 @@ private fun GeofencesTab(
             }
         }
     }
+}
+
+// ── Track persistence helpers ──
+
+private fun saveTracksToPrefs(prefs: android.content.SharedPreferences, tracks: List<TrackRecording>) {
+    val json = org.json.JSONArray()
+    tracks.forEach { t ->
+        val j = org.json.JSONObject().apply {
+            put("id", t.id)
+            put("name", t.name)
+            put("startedAt", t.startedAt)
+            put("endedAt", t.endedAt ?: JSONObject.NULL)
+            put("distanceMeters", t.distanceMeters)
+            put("totalDurationMs", t.totalDurationMs)
+            val pts = org.json.JSONArray()
+            t.points.forEach { p ->
+                pts.put(org.json.JSONObject().apply {
+                    put("lat", p.latitude)
+                    put("lon", p.longitude)
+                    put("alt", p.altitude ?: JSONObject.NULL)
+                    put("acc", p.accuracy ?: JSONObject.NULL)
+                    put("ts", p.timestamp)
+                })
+            }
+            put("points", pts)
+        }
+        json.put(j)
+    }
+    prefs.edit().putString("savedTracks", json.toString()).apply()
+}
+
+private fun loadTracksFromPrefs(prefs: android.content.SharedPreferences): List<TrackRecording> {
+    val raw = prefs.getString("savedTracks", "") ?: ""
+    if (raw.isBlank()) return emptyList()
+    return try {
+        val arr = org.json.JSONArray(raw)
+        (0 until arr.length()).map { i ->
+            val j = arr.getJSONObject(i)
+            val pts = org.json.JSONArray(j.optString("points", "[]"))
+            TrackRecording(
+                id = j.optString("id", java.util.UUID.randomUUID().toString()),
+                name = j.optString("name", "Track"),
+                startedAt = j.optLong("startedAt", System.currentTimeMillis()),
+                endedAt = j.optLong("endedAt", -1L).let { if (it < 0) null else it },
+                distanceMeters = j.optDouble("distanceMeters", 0.0),
+                totalDurationMs = j.optLong("totalDurationMs", 0L),
+                points = (0 until pts.length()).map { k ->
+                    val p = pts.getJSONObject(k)
+                    TrackPoint(
+                        latitude = p.optDouble("lat", 0.0),
+                        longitude = p.optDouble("lon", 0.0),
+                        altitude = p.optDouble("alt", Double.NaN).let { if (it.isNaN()) null else it },
+                        accuracy = p.optDouble("acc", Double.NaN).let { if (it.isNaN()) null else it.toFloat() },
+                        timestamp = p.optLong("ts", System.currentTimeMillis())
+                    )
+                }
+            )
+        }
+    } catch (_: Exception) { emptyList() }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Edit Overlay Dialog — rename label & pick color
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Dialog for editing a map overlay's label and color.
+ * Fills in the existing values and saves on confirm.
+ */
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+private fun EditOverlayDialog(
+    overlay: MapOverlay,
+    onSave: (MapOverlay) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+    var label by remember { mutableStateOf(overlay.label) }
+    val palette = listOf(
+        0xFFF44336 to "Red",
+        0xFFFF5722 to "Deep orange",
+        0xFFFF9800 to "Amber",
+        0xFFFFC107 to "Yellow",
+        0xFF4CAF50 to "Green",
+        0xFF009688 to "Teal",
+        0xFF2196F3 to "Blue",
+        0xFF3F51B5 to "Indigo",
+        0xFF9C27B0 to "Purple",
+        0xFF607D8B to "Blue grey"
+    )
+    var selectedColor by remember { mutableStateOf(overlay.color) }
+
+    SwipeableAlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Edit overlay", fontWeight = FontWeight.Bold) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                OutlinedTextField(
+                    value = label,
+                    onValueChange = { label = it },
+                    label = { Text("Label") },
+                    placeholder = { Text(when (overlay) {
+                        is MapOverlay.PointOverlay -> "Site point"
+                        is MapOverlay.LineOverlay -> "Transect"
+                        is MapOverlay.PolygonOverlay -> "Survey boundary"
+                    }) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(22.dp)
+                )
+
+                Text("Color", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
+
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    palette.forEach { (colorLong, name) ->
+                        val colorInt = colorLong.toInt()
+                        val isSelected = selectedColor == colorLong
+                        Surface(
+                            onClick = { selectedColor = colorLong },
+                            shape = RoundedCornerShape(14.dp),
+                            color = Color(colorInt),
+                            modifier = Modifier
+                                .size(42.dp)
+                                .then(
+                                    if (isSelected) Modifier.border(
+                                        2.5.dp,
+                                        MaterialTheme.colorScheme.onSurface,
+                                        RoundedCornerShape(14.dp)
+                                    ) else Modifier
+                                )
+                        ) {
+                            if (isSelected) {
+                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        FieldMindIcons.Check,
+                                        null,
+                                        tint = Color.White,
+                                        size = 20.dp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Text(
+                    when (overlay) {
+                        is MapOverlay.PointOverlay -> "Point · %.5f, %.5f".format(overlay.latitude, overlay.longitude)
+                        is MapOverlay.LineOverlay -> "Line · ${overlay.points.size} points"
+                        is MapOverlay.PolygonOverlay -> "Polygon · ${overlay.points.size} vertices"
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val updated = when (overlay) {
+                        is MapOverlay.PointOverlay -> overlay.copy(label = label, color = selectedColor)
+                        is MapOverlay.LineOverlay -> overlay.copy(label = label, color = selectedColor)
+                        is MapOverlay.PolygonOverlay -> overlay.copy(label = label, color = selectedColor)
+                    }
+                    onSave(updated)
+                },
+                shape = RoundedCornerShape(22.dp)
+            ) { Text("Save") }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Cancel") }
+        },
+        shape = RoundedCornerShape(34.dp)
+    )
 }

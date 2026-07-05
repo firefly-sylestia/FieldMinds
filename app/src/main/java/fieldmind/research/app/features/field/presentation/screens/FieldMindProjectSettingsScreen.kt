@@ -27,6 +27,7 @@ import androidx.compose.ui.window.DialogProperties
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  PROJECT SETTINGS SCREEN
@@ -117,7 +118,7 @@ fun ProjectSettingsScreen(
         // ════════════════════════════════════════════════════════════
         item {
             Surface(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp,
                 modifier = Modifier.fillMaxWidth()
@@ -130,7 +131,7 @@ fun ProjectSettingsScreen(
                     ) {
                         Surface(
                             onClick = onBack,
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.size(40.dp)
                         ) {
@@ -155,7 +156,7 @@ fun ProjectSettingsScreen(
                                         viewModel.updateProjectEntity(project.copy(objective = projectDescription.trim()))
                                     }
                                 },
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(20.dp)
                             ) {
                                 Icon(MaterialSymbolIcon("save"), null, size = 16.dp)
                                 Spacer(Modifier.size(4.dp))
@@ -169,7 +170,7 @@ fun ProjectSettingsScreen(
                     // Project identity
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                         Box(
-                            Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                            Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                                 .background(colors.project.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -198,7 +199,7 @@ fun ProjectSettingsScreen(
                     onValueChange = { projectName = it },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -231,7 +232,7 @@ fun ProjectSettingsScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                         )
                     },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -310,7 +311,7 @@ fun ProjectSettingsScreen(
                         label = { Text("Default category") },
                         placeholder = { Text("e.g. Bird, Mammal, Plant") },
                         singleLine = true,
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -323,7 +324,7 @@ fun ProjectSettingsScreen(
                         label = { Text("Default confidence") },
                         placeholder = { Text("e.g. Sure, Likely, Unsure") },
                         singleLine = true,
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -370,7 +371,7 @@ fun ProjectSettingsScreen(
                                 context.startActivity(Intent.createChooser(intent, "Share Project"))
                             },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(20.dp)
                         ) {
                             Icon(MaterialSymbolIcon("text_snippet"), null, size = 16.dp)
                             Spacer(Modifier.size(6.dp))
@@ -404,7 +405,7 @@ fun ProjectSettingsScreen(
                                 context.startActivity(Intent.createChooser(intent, "Export Project As"))
                             },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(20.dp)
                         ) {
                             Icon(MaterialSymbolIcon("file_download"), null, size = 16.dp)
                             Spacer(Modifier.size(6.dp))
@@ -436,7 +437,7 @@ fun ProjectSettingsScreen(
                         }
                         Surface(
                             onClick = { showExportFormatPicker = true },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(18.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(
@@ -481,7 +482,7 @@ fun ProjectSettingsScreen(
                     if (onOpenBackupSettings != null) {
                         TextButton(
                             onClick = onOpenBackupSettings,
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(20.dp)
                         ) {
                             Icon(MaterialSymbolIcon("settings"), null, size = 16.dp)
                             Spacer(Modifier.size(6.dp))
@@ -517,7 +518,7 @@ fun ProjectSettingsScreen(
                                 showArchiveConfirm = true
                             }
                         },
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(20.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(
@@ -536,7 +537,7 @@ fun ProjectSettingsScreen(
         // ════════════════════════════════════════════════════════════
         item {
             Card(
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(30.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.15f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -555,7 +556,7 @@ fun ProjectSettingsScreen(
                     )
                     Button(
                         onClick = { showDeleteConfirm = true },
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(20.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -588,9 +589,9 @@ fun ProjectSettingsScreen(
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
@@ -606,7 +607,7 @@ fun ProjectSettingsScreen(
                                 exportFormat = format
                                 showExportFormatPicker = false
                             },
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(20.dp),
                             color = if (exportFormat == format) colors.project.copy(alpha = 0.12f)
                                     else MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.fillMaxWidth()
@@ -635,7 +636,7 @@ fun ProjectSettingsScreen(
     //  Archive Confirmation Dialog
     // ════════════════════════════════════════════════════════════════
     if (showArchiveConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showArchiveConfirm = false },
             icon = { Icon(MaterialSymbolIcon("archive"), null, size = 28.dp, tint = colors.project) },
             title = { Text("Archive project?") },
@@ -649,13 +650,13 @@ fun ProjectSettingsScreen(
                         viewModel.updateProjectEntity(project.copy(status = "Archived", archivedAt = System.currentTimeMillis()))
                         showArchiveConfirm = false
                     },
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(22.dp)
                 ) { Text("Archive") }
             },
             dismissButton = {
                 TextButton(onClick = { showArchiveConfirm = false }) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(24.dp)
+            shape = RoundedCornerShape(34.dp)
         )
     }
 
@@ -663,7 +664,7 @@ fun ProjectSettingsScreen(
     //  Delete Confirmation Dialog
     // ════════════════════════════════════════════════════════════════
     if (showDeleteConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
             icon = { Icon(MaterialSymbolIcon("delete_forever"), null, size = 28.dp, tint = MaterialTheme.colorScheme.error) },
             title = { Text("Delete this project?") },
@@ -685,14 +686,14 @@ fun ProjectSettingsScreen(
                         showDeleteConfirm = false
                         onBack()
                     },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Delete") }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteConfirm = false }) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(24.dp)
+            shape = RoundedCornerShape(34.dp)
         )
     }
 }
@@ -709,7 +710,7 @@ private fun SectionCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

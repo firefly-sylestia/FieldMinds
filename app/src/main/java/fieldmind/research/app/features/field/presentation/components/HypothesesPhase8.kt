@@ -47,7 +47,7 @@ fun HypothesisCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(enabled = onClick != {}) { onClick() },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -76,7 +76,7 @@ fun HypothesisCard(
                 
                 // Status badge
                 Surface(
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(16.dp),
                     color = statusColor.copy(alpha = 0.15f)
                 ) {
                     Text(
@@ -124,7 +124,7 @@ fun HypothesisStatusBadge(
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(16.dp),
         color = backgroundColor
     ) {
         Text(
@@ -165,7 +165,7 @@ fun HypothesisUpdateForm(
             }
         }
 
-        Divider()
+        HorizontalDivider()
 
         // Confidence slider
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -180,7 +180,7 @@ fun HypothesisUpdateForm(
             )
         }
 
-        Divider()
+        HorizontalDivider()
 
         // Evidence for/against
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -190,7 +190,7 @@ fun HypothesisUpdateForm(
                 onValueChange = onSupportChange,
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 2,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 label = { Text("What evidence would support or refute this?") }
             )
         }

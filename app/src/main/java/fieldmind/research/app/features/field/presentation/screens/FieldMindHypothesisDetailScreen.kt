@@ -6,7 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -30,6 +32,7 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  HYPOTHESIS DETAIL SCREEN
@@ -104,7 +107,10 @@ fun HypothesisDetailScreen(
     var showObservationPicker by remember { mutableStateOf(false) }
     var obsPickerSearch by remember { mutableStateOf("") }
 
+    val hypothesisScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
+
     LazyColumn(
+        state = hypothesisScrollState,
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
@@ -183,7 +189,7 @@ fun HypothesisDetailScreen(
                 ) {
                     // Result status badge
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = resultColor.copy(alpha = 0.12f)
                     ) {
                         Row(
@@ -209,7 +215,7 @@ fun HypothesisDetailScreen(
 
                     // Confidence badge
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = FieldMindTheme.colors.hypothesis.copy(alpha = 0.12f)
                     ) {
                         Row(
@@ -256,7 +262,7 @@ fun HypothesisDetailScreen(
                     }
                     LinearProgressIndicator(
                         progress = { animatedConfidence },
-                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
+                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
                         color = resultColor,
                         trackColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                     )
@@ -276,7 +282,7 @@ fun HypothesisDetailScreen(
                 ) {
                     Surface(
                         onClick = { onOpenDetail("question", linkedQuestion.id) },
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(20.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -286,7 +292,7 @@ fun HypothesisDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Box(
-                                Modifier.size(32.dp).clip(RoundedCornerShape(8.dp))
+                                Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                     .background(FieldMindTheme.colors.question.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -362,7 +368,7 @@ fun HypothesisDetailScreen(
                         
                         if (hypothesis.supportCriteria.isNotBlank()) {
                             Surface(
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = FieldMindTheme.colors.positive.copy(alpha = 0.08f),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -384,7 +390,7 @@ fun HypothesisDetailScreen(
 
                         if (hypothesis.weakeningCriteria.isNotBlank()) {
                             Surface(
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.error.copy(alpha = 0.08f),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -448,7 +454,7 @@ fun HypothesisDetailScreen(
                         linkedObservations.forEach { obs ->
                             Surface(
                                 onClick = { onOpenDetail("observation", obs.id) },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -458,7 +464,7 @@ fun HypothesisDetailScreen(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(8.dp))
+                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                 ) {
@@ -493,7 +499,7 @@ fun HypothesisDetailScreen(
                 Spacer(Modifier.size(8.dp))
                 OutlinedButton(
                     onClick = { showObservationPicker = true },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -557,7 +563,7 @@ fun HypothesisDetailScreen(
     //  Delete Confirmation Dialog
     // ════════════════════════════════════════════════════════════════
     if (showDeleteConfirm) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
             icon = { Icon(MaterialSymbolIcon("delete"), null, size = 28.dp, tint = MaterialTheme.colorScheme.error) },
             title = { Text("Delete hypothesis?") },
@@ -572,14 +578,14 @@ fun HypothesisDetailScreen(
                         showDeleteConfirm = false
                         onBack()
                     },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Delete") }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteConfirm = false }) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(24.dp)
+            shape = RoundedCornerShape(34.dp)
         )
     }
 
@@ -627,7 +633,7 @@ private fun MarkTestedDialog(
     var selectedStatus by remember { mutableStateOf(currentStatus) }
     val conclusions = listOf("Supported", "Refuted", "Inconclusive")
 
-    AlertDialog(
+    SwipeableAlertDialog(
         onDismissRequest = onDismiss,
         icon = { Icon(MaterialSymbolIcon("science"), null, size = 28.dp, tint = FieldMindTheme.colors.hypothesis) },
         title = { Text("Mark as tested") },
@@ -651,7 +657,7 @@ private fun MarkTestedDialog(
                     }
                     Surface(
                         onClick = { selectedStatus = conclusion },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         color = if (selectedStatus == conclusion) color.copy(alpha = 0.12f)
                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = if (selectedStatus == conclusion) androidx.compose.foundation.BorderStroke(1.5.dp, color)
@@ -665,7 +671,7 @@ private fun MarkTestedDialog(
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Box(
-                                Modifier.size(36.dp).clip(RoundedCornerShape(10.dp))
+                                Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
                                     .background(if (selectedStatus == conclusion) color.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -695,14 +701,14 @@ private fun MarkTestedDialog(
         confirmButton = {
             Button(
                 onClick = { onConfirm(selectedStatus) },
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(22.dp),
                 enabled = selectedStatus.isNotBlank()
             ) { Text("Confirm") }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancel") }
         },
-        shape = RoundedCornerShape(24.dp)
+        shape = RoundedCornerShape(34.dp)
     )
 }
 
@@ -719,7 +725,7 @@ private fun SectionCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -732,7 +738,7 @@ private fun SectionCard(
                 Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                 if (badge != null) {
                     Surface(
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(18.dp),
                         color = iconTint.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -792,9 +798,9 @@ private fun <T> EntityPickerDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
@@ -824,7 +830,7 @@ private fun <T> EntityPickerDialog(
                     placeholder = { Text("Search...") },
                     leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) },
                     singleLine = true,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -855,7 +861,7 @@ private fun <T> EntityPickerDialog(
                         items(items) { item ->
                             Surface(
                                 onClick = { onSelect(item) },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh
                             ) {
                                 Row(
@@ -868,7 +874,7 @@ private fun <T> EntityPickerDialog(
                                     Box(
                                         Modifier
                                             .size(32.dp)
-                                            .clip(RoundedCornerShape(8.dp))
+                                            .clip(RoundedCornerShape(16.dp))
                                             .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                                         contentAlignment = Alignment.Center
                                     ) {

@@ -63,7 +63,7 @@ fun ExportPrivacyOptionsCard(
     var expanded by remember { mutableStateOf(false) }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -95,7 +95,7 @@ fun ExportPrivacyOptionsCard(
                     }
                     if (activeItems.isNotEmpty()) {
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(16.dp),
                             color = colors.data.copy(alpha = 0.15f)
                         ) {
                             Text(
@@ -140,7 +140,7 @@ fun ExportPrivacyOptionsCard(
                                     val selected = gpsPrivacy == mode
                                     Surface(
                                         onClick = { onGpsPrivacyChange(mode) },
-                                        shape = RoundedCornerShape(10.dp),
+                                        shape = RoundedCornerShape(18.dp),
                                         color = if (selected) colors.data.copy(alpha = 0.14f)
                                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         border = if (selected) BorderStroke(1.2.dp, colors.data) else null,
@@ -234,7 +234,7 @@ fun ExportPrivacyOptionsCard(
                                 label = { Text(if (isBackup) "Backup password" else "Export password") },
                                 placeholder = { Text("Enter a strong password") },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(16.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 singleLine = true,
                                 keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                                 trailingIcon = {
@@ -263,7 +263,7 @@ fun ExportPrivacyOptionsCard(
                                         modifier = Modifier
                                             .weight(1f)
                                             .height(8.dp)
-                                            .clip(RoundedCornerShape(4.dp)),
+                                            .clip(RoundedCornerShape(8.dp)),
                                         color = Color(strength.color),
                                         trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                                     )
@@ -284,7 +284,7 @@ fun ExportPrivacyOptionsCard(
                                     label = { Text("Confirm password") },
                                     placeholder = { Text("Re-enter password") },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(16.dp),
+                                    shape = RoundedCornerShape(24.dp),
                                     singleLine = true,
                                     keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                                     trailingIcon = {

@@ -36,11 +36,12 @@ fun ArchiveScreen(viewModel: FieldMindViewModel, onOpenDetail: (String, Long) ->
             StandardScreenHeader(
                 title = "Search Archive",
                 subtitle = "Search forever by topic, date, place, source, project, and keyword.",
-                icon = FieldMindIcons.Search
+                icon = FieldMindIcons.Search,
+                trailing = { BackButton(onClick = onBack) }
             )
         }
         item {
-            OutlinedTextField(query, { query = it }, label = { Text("Search") }, leadingIcon = { Icon(icon = FieldMindIcons.Search, contentDescription = null, size = 20.dp) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true)
+            OutlinedTextField(query, { query = it }, label = { Text("Search") }, leadingIcon = { Icon(icon = FieldMindIcons.Search, contentDescription = null, size = 20.dp) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), singleLine = true)
         }
         val q = query.trim().lowercase()
         if (q.length < 2) {

@@ -43,7 +43,7 @@ fun ReportTemplateCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceContainerLow
         ),
@@ -57,7 +57,7 @@ fun ReportTemplateCard(
                     Text(reportType.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Surface(
-                    shape = RoundedCornerShape(6.dp),
+                    shape = RoundedCornerShape(12.dp),
                     color = MaterialTheme.colorScheme.surface
                 ) {
                     Text(
@@ -92,7 +92,7 @@ fun ReportSectionEditor(
                 .fillMaxWidth()
                 .heightIn(min = 100.dp),
             placeholder = { Text(hint) },
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(20.dp)
         )
     }
 }
@@ -112,7 +112,7 @@ fun ReportPreviewCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -151,7 +151,7 @@ fun ReportExportMenu(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -172,7 +172,7 @@ fun ReportExportMenu(
 
 @Composable
 private fun ExportButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    OutlinedButton(onClick = onClick, modifier = modifier.height(40.dp), shape = RoundedCornerShape(10.dp)) {
+    OutlinedButton(onClick = onClick, modifier = modifier.height(40.dp), shape = RoundedCornerShape(18.dp)) {
         Text(label, style = MaterialTheme.typography.labelSmall)
     }
 }
@@ -189,7 +189,7 @@ fun AutoGenerateReportOption(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onGenerate),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)

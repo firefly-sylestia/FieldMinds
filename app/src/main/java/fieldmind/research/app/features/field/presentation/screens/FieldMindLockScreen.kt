@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
+import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
 import fieldmind.research.app.features.field.presentation.components.LocalPrivacyTypingEnabled
 import fieldmind.research.app.features.field.presentation.components.PrivacyTypingIndicator
 import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
@@ -103,23 +104,40 @@ fun FieldMindAppLock(
         }
     }
 
+    // Keep a ref to the current BiometricPrompt so we can cancel it before retrying
+    var currentBiometricPrompt by remember { mutableStateOf<BiometricPrompt?>(null) }
+    var isAuthenticating by remember { mutableStateOf(false) }
+
     fun startBiometricAuth() {
+        // Guard: prevent concurrent or rapid re-authentication attempts
+        if (isAuthenticating) return
+        isAuthenticating = true
+
         authAttempted = true
         usePinLock = false
         val activity = context as? FragmentActivity
         if (hasBiometric && activity != null) {
+            // Cancel any previous authentication session to avoid stale session conflicts
+            currentBiometricPrompt?.cancelAuthentication()
+
             val executor = ContextCompat.getMainExecutor(context)
             val prompt = BiometricPrompt(activity, executor, object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    isAuthenticating = false
+                    currentBiometricPrompt = null
                     onUnlock()
                 }
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    isAuthenticating = false
+                    currentBiometricPrompt = null
                     if (hasPin) usePinLock = true
                 }
                 override fun onAuthenticationFailed() {
+                    isAuthenticating = false
                     pinError = true
                 }
             })
+            currentBiometricPrompt = prompt
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle("FieldMind Privacy Lock")
                 .setSubtitle("Authenticate to access your research data")
@@ -129,7 +147,11 @@ fun FieldMindAppLock(
                 )
                 .build()
             prompt.authenticate(promptInfo)
-        } else if (hasDeviceCredential) {
+            return // isAuthenticating reset in callbacks above
+        }
+        // Fallback paths: no biometric prompt was shown, so unblock immediately
+        isAuthenticating = false
+        if (hasDeviceCredential) {
             val intent = keyguard.createConfirmDeviceCredentialIntent(
                 "FieldMind Privacy Lock",
                 "Authenticate to access your research data"
@@ -145,8 +167,11 @@ fun FieldMindAppLock(
     }
 
     // Try biometric/device auth first, then fall back to PIN.
-    LaunchedEffect(privacyEnabled) {
-        if (privacyEnabled && !isUnlocked && !authAttempted) {
+    // Key on both privacyEnabled AND isUnlocked so the prompt re-fires
+    // when the lock screen reappears after auto-lock from backgrounding.
+    LaunchedEffect(privacyEnabled, isUnlocked) {
+        if (privacyEnabled && !isUnlocked) {
+            authAttempted = false
             startBiometricAuth()
         }
     }
@@ -154,7 +179,7 @@ fun FieldMindAppLock(
     Box(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
         Card(
             modifier = Modifier.fillMaxWidth(0.88f),
-            shape = RoundedCornerShape(32.dp),
+            shape = RoundedCornerShape(40.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -164,7 +189,7 @@ fun FieldMindAppLock(
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 // Lock icon
-                Box(Modifier.size(64.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(64.dp).clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                     Icon(FieldMindIcons.Lock, null, tint = MaterialTheme.colorScheme.primary, size = 32.dp)
                 }
 
@@ -224,7 +249,7 @@ fun FieldMindAppLock(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword, imeAction = ImeAction.Done).withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                         supportingText = if (pinError) {{ Text("Incorrect PIN. Try again.") }} else null,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(28.dp),
                         textStyle = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center, letterSpacing = 8.sp),
                         trailingIcon = {
                             if (LocalPrivacyTypingEnabled.current) {
@@ -251,7 +276,7 @@ fun FieldMindAppLock(
                         OutlinedButton(
                             onClick = { usePinLock = true },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(16.dp)
+                            shape = RoundedCornerShape(24.dp)
                         ) {
                             Text(if (usePinLock) "Using PIN" else "Use PIN")
                         }
@@ -260,7 +285,7 @@ fun FieldMindAppLock(
                         Button(
                             onClick = { startBiometricAuth() },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(16.dp)
+                            shape = RoundedCornerShape(24.dp)
                         ) {
                             Text(if (hasBiometric) "Retry biometric" else "Retry device lock")
                         }
@@ -294,12 +319,10 @@ fun DecoyAppContent(
             modifier = Modifier.padding(32.dp)
         ) {
             // Decoy brand icon
-            Box(
-                Modifier.size(80.dp).clip(RoundedCornerShape(24.dp)).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.12f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.hypothesis, size = 44.dp)
-            }
+            FieldMindLogo(
+                size = 80.dp,
+                modifier = Modifier.clip(RoundedCornerShape(34.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f))
+            )
 
             Text(
                 "Welcome to FieldMind",
@@ -320,7 +343,7 @@ fun DecoyAppContent(
             // Empty state illustration
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {

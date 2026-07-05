@@ -204,7 +204,7 @@ fun FluidBottomSheet(
                                 modifier = Modifier
                                     .width(40.dp)
                                     .height(5.dp)
-                                    .clip(RoundedCornerShape(3.dp))
+                                    .clip(RoundedCornerShape(8.dp))
                                     .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
                             )
                         }

@@ -28,6 +28,9 @@ import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.theme.FieldMindColors
+import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.cuteShadow
+import fieldmind.research.app.ui.theme.screenBackground
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -234,10 +237,11 @@ fun InsightsScreen(
         }
     }
 
+    val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color.Transparent
     ) { padding ->
-        Box(Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxSize().screenBackground(gradientOpacity)) {
             val insightsScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
             LazyColumn(
                 state = insightsScrollState,
@@ -252,7 +256,10 @@ fun InsightsScreen(
                     subtitle = "Your research at a glance — ${if (observations.isEmpty()) "start capturing to see analytics" else "${observations.size} observations analyzed"}",
                     icon = FieldMindIcons.Insights,
                     trailing = {
-                        BackButton(onClick = { onNavigate(FieldMindScreen.Search) }, icon = FieldMindIcons.Search, contentDescription = "Search")
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            BackButton(onClick = { onNavigate(FieldMindScreen.Search) }, icon = FieldMindIcons.Search, contentDescription = "Search")
+                            BackButton(onClick = onBack)
+                        }
                     }
                 )
             }
@@ -361,13 +368,13 @@ fun InsightsScreen(
             // Tags list
             if (tags.isNotEmpty()) {
                 item { SectionHeader("Top tags", "${tags.size} total") }
-                item {
-                    Card(
-                        shape = RoundedCornerShape(22.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
-                    ) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            tags.take(10).forEach { tag ->
+                item {    Card(
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(32.dp)),
+        shape = RoundedCornerShape(32.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            tags.take(10).forEach { tag ->
                                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                                     TagChip(tag.name)
                                     Text(tag.observationCount.toString(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -383,8 +390,8 @@ fun InsightsScreen(
             item { SectionHeader("Knowledge graph", "${graphData.first.size} connected entities") }
             item {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         NetworkGraphTimeline(
@@ -444,8 +451,9 @@ fun InsightsScreen(
             } else {
                 item {
                     Card(
-                        shape = RoundedCornerShape(22.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(32.dp)),
+                        shape = RoundedCornerShape(32.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                             Icon(icon = FieldMindIcons.Weather, contentDescription = null, tint = colors.info, size = 22.dp)
@@ -497,16 +505,22 @@ fun InsightsScreen(
 }
 
 @Composable
-private fun ResearchJourneyCard(observations: List<ObservationEntity>, questions: List<QuestionEntity>, hypotheses: List<HypothesisEntity>, projects: List<ProjectEntity>) {
-    Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+private fun ResearchJourneyCard(
+    observations: List<ObservationEntity>,
+    questions: List<QuestionEntity>,
+    hypotheses: List<HypothesisEntity>,
+    projects: List<ProjectEntity>,
+    onNavigate: (FieldMindScreen) -> Unit = {}
+) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Research journey", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Text("Question → observations → patterns → hypothesis → findings", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                AssistChip(onClick = {}, label = { Text("${questions.size} questions") }, leadingIcon = { Icon(FieldMindIcons.Question, null, size = 16.dp) })
-                AssistChip(onClick = {}, label = { Text("${observations.size} observations") }, leadingIcon = { Icon(FieldMindIcons.Observation, null, size = 16.dp) })
-                AssistChip(onClick = {}, label = { Text("${hypotheses.size} hypotheses") }, leadingIcon = { Icon(FieldMindIcons.Hypothesis, null, size = 16.dp) })
-                AssistChip(onClick = {}, label = { Text("${projects.size} projects") }, leadingIcon = { Icon(FieldMindIcons.Project, null, size = 16.dp) })
+                AssistChip(onClick = { onNavigate(FieldMindScreen.Questions) }, label = { Text("${questions.size} questions") }, leadingIcon = { Icon(FieldMindIcons.Question, null, size = 16.dp) })
+                AssistChip(onClick = { onNavigate(FieldMindScreen.Observe) }, label = { Text("${observations.size} observations") }, leadingIcon = { Icon(FieldMindIcons.Observation, null, size = 16.dp) })
+                AssistChip(onClick = { onNavigate(FieldMindScreen.Hypotheses) }, label = { Text("${hypotheses.size} hypotheses") }, leadingIcon = { Icon(FieldMindIcons.Hypothesis, null, size = 16.dp) })
+                AssistChip(onClick = { onNavigate(FieldMindScreen.Projects) }, label = { Text("${projects.size} projects") }, leadingIcon = { Icon(FieldMindIcons.Project, null, size = 16.dp) })
             }
         }
     }
@@ -600,7 +614,8 @@ private fun DataRecordInsightCard(record: DataRecordEntity, onClick: () -> Unit)
 @Composable
 private fun ResearchProfileCard(name: String, role: String, focus: String, todayCount: Int, weekCount: Int, goal: Int) {
     Card(
-        shape = RoundedCornerShape(26.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -668,10 +683,10 @@ private fun CollapsibleAchievements(
     }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier.pressScale(scaleDown = 0.98f).clickable { expanded = !expanded }
+        modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)).pressScale(scaleDown = 0.98f).clickable { expanded = !expanded },
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -695,8 +710,8 @@ private fun CollapsibleAchievements(
 private fun AchievementCardV2(item: ResearchAchievement, modifier: Modifier = Modifier) {
     val animatedProgress by animateFloatAsState(targetValue = item.fraction, animationSpec = tween(600), label = "achieve")
     Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(22.dp),
+        modifier = modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(32.dp)),
+        shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (item.unlocked) item.accent.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surfaceContainerHigh
         ),
@@ -705,7 +720,7 @@ private fun AchievementCardV2(item: ResearchAchievement, modifier: Modifier = Mo
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Box(
-                    Modifier.size(36.dp).clip(RoundedCornerShape(12.dp))
+                    Modifier.size(36.dp).clip(RoundedCornerShape(20.dp))
                         .background(item.accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.3f else 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -752,8 +767,9 @@ private fun GraphLegend(label: String, color: Color) {
 @Composable
 private fun InsightCard(title: String, icon: MaterialSymbolIcon, content: @Composable () -> Unit) {
     Card(
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {

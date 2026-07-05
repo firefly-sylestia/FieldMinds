@@ -230,8 +230,8 @@ fun PageCanvas(
                     modifier = Modifier
                         .width(PAGE_WIDTH_DP)
                         .height(PAGE_HEIGHT_DP)
-                        .shadow(6.dp, RoundedCornerShape(2.dp), clip = false),
-                    shape = RoundedCornerShape(2.dp),
+                        .shadow(6.dp, RoundedCornerShape(6.dp), clip = false),
+                    shape = RoundedCornerShape(6.dp),
                     color = Color.White,
                     tonalElevation = 0.dp,
                     shadowElevation = 0.dp
@@ -664,7 +664,7 @@ private fun DrawScope.drawPageSmoothPath(
             (points[i - 1].x + points[i].x) / 2f,
             (points[i - 1].y + points[i].y) / 2f
         )
-        path.quadraticBezierTo(
+        path.quadraticTo(
             points[i - 1].x, points[i - 1].y,
             mid.x, mid.y
         )
@@ -882,19 +882,19 @@ private fun PageBlock(
                     Modifier.border(
                         width = (2f / zoom).coerceAtLeast(1f).dp,
                         color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(16.dp)
                     )
                 } else Modifier
             )
             // Animated shadow/elevation with consistent ambient/spot colors
             .shadow(
                 elevation = elevation.dp,
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(16.dp),
                 ambientColor = Color(0x40000000),
                 spotColor = Color(0x28000000),
                 clip = false
             )
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surface)
             // Rotation (e.g. sticky notes have slight random rotation)
             .graphicsLayer {
@@ -1080,7 +1080,7 @@ private fun PageBlock(
                         )
                         .background(
                             MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-                            RoundedCornerShape(topStart = 4.dp)
+                            RoundedCornerShape(topStart = 8.dp)
                         )
                         .pointerInput(block.id) {
                             var cumulativeDx = 0f

@@ -16,6 +16,8 @@ import fieldmind.research.app.features.field.data.vision.SpeciesDatabase
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
+import fieldmind.research.app.ui.theme.cuteShadow
+import fieldmind.research.app.ui.theme.CuteElevations
 import kotlinx.coroutines.delay
 
 // ══════════════════════════════════════════════════════════════════════
@@ -28,7 +30,7 @@ fun HomeSpeciesCatalogSection(
     userInterests: UserInterests = UserInterests()
 ) {
     val context = LocalContext.current
-    val database = remember { SpeciesDatabase(context) }
+    val database = remember { SpeciesDatabase.getInstance(context) }
     var totalCount by remember { mutableStateOf(0) }
     var isLoading by remember { mutableStateOf(true) }
 
@@ -45,10 +47,11 @@ fun HomeSpeciesCatalogSection(
 
 
     Card(
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier.fillMaxWidth()
+            .cuteShadow(elevation = 6.dp, shape = RoundedCornerShape(34.dp))
     ) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),
@@ -57,7 +60,7 @@ fun HomeSpeciesCatalogSection(
         ) {
             // Icon
             Box(
-                Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                     .background(accentColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -73,7 +76,7 @@ fun HomeSpeciesCatalogSection(
                     Text("Species catalog", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     if (!isLoading) {
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(16.dp),
                             color = accentColor.copy(alpha = 0.1f)
                         ) {
                             Text(
@@ -96,7 +99,7 @@ fun HomeSpeciesCatalogSection(
             // Browse button
             FilledTonalButton(
                 onClick = { onNavigate(FieldMindScreen.SpeciesBrowser) },
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(22.dp),
                 colors = ButtonDefaults.filledTonalButtonColors(
                     containerColor = accentColor.copy(alpha = 0.12f)
                 )

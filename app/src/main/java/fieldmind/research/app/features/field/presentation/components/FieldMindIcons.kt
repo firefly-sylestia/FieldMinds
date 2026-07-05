@@ -125,6 +125,9 @@ object FieldMindIcons {
     val Water = MaterialSymbolIcon("water_drop")
     val Sunrise = MaterialSymbolIcon("sunny")
     val Sunset = MaterialSymbolIcon("wb_sunny")
+    // Moon phase icons — kept as MaterialSymbolIcon references for iconForCategory/find icons.
+    // For beautiful rendered moon phase icons, use the MoonPhaseIcon composable instead:
+    //   MoonPhaseIcon(phase = MoonPhase.FullMoon, tint = ...)
     val MoonNew = MaterialSymbolIcon("dark_mode")
     val MoonFull = MaterialSymbolIcon("nights_stay")
     val MoonCrescent = MaterialSymbolIcon("bedtime")

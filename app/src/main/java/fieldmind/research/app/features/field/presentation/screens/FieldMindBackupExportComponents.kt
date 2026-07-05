@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -20,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import java.text.SimpleDateFormat
@@ -42,21 +42,13 @@ fun HeroStatusCard(
     val totalRecords = entityCounts.values.sum()
 
     Card(
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        shape = RoundedCornerShape(36.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
         Column(
             Modifier
                 .fillMaxWidth()
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primaryContainer,
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
-                        )
-                    )
-                )
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
@@ -68,28 +60,27 @@ fun HeroStatusCard(
                 Box(
                     Modifier
                         .size(52.dp)
-                        .clip(RoundedCornerShape(18.dp))
-                        .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)),
+                        .clip(RoundedCornerShape(28.dp))
+                        .background(colors.positive.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         FieldMindIcons.Archive,
                         null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        tint = colors.positive,
                         size = 28.dp
                     )
                 }
                 Column(Modifier.weight(1f)) {
                     Text(
-                        "\uD83D\uDCE6 Last backup: $lastBackupLabel",
+                        "Last backup: $lastBackupLabel",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        fontWeight = FontWeight.Bold
                     )
                     Text(
                         "$totalRecords total records across 5 types",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.72f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -104,14 +95,13 @@ fun HeroStatusCard(
                     Text(
                         "Auto-backup: ${if (autoBackupEnabled) "ON ($autoBackupInterval)" else "OFF"}",
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         if (autoBackupEnabled) "Backups are scheduled automatically"
                         else "Enable auto-backup to protect your data",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.72f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Row(
@@ -123,7 +113,7 @@ fun HeroStatusCard(
                         if (autoBackupEnabled) "ON" else "OFF",
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
-                        color = if (autoBackupEnabled) colors.positive else MaterialTheme.colorScheme.onPrimaryContainer
+                        color = if (autoBackupEnabled) colors.positive else MaterialTheme.colorScheme.onSurface
                     )
                     Switch(
                         checked = autoBackupEnabled,
@@ -145,21 +135,20 @@ fun HeroStatusCard(
                     Column(
                         Modifier
                             .weight(1f)
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.4f))
+                            .clip(RoundedCornerShape(22.dp))
+                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                             .padding(vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             value.toString(),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            fontWeight = FontWeight.ExtraBold
                         )
                         Text(
                             key.replaceFirstChar { it.uppercase() },
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -186,7 +175,7 @@ fun TabPillSelector(
     )
 
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp
     ) {
@@ -198,7 +187,7 @@ fun TabPillSelector(
                 val selected = activeTab == tab
                 Surface(
                     onClick = { onTabChange(tab) },
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(24.dp),
                     color = if (selected) MaterialTheme.colorScheme.primaryContainer
                     else Color.Transparent,
                     tonalElevation = 0.dp
@@ -261,7 +250,7 @@ fun ExportHistoryItemCard(
     }
 
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.clickable { onShare() }
@@ -272,7 +261,7 @@ fun ExportHistoryItemCard(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Box(
-                Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                     .background(formatColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -313,7 +302,7 @@ fun BackupConfirmationDialog(
     onDismiss: () -> Unit
 ) {
     if (visible) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = onDismiss,
             icon = { Icon(FieldMindIcons.Archive, null, size = 28.dp) },
             title = { Text("Create backup?", fontWeight = FontWeight.Bold) },
@@ -334,7 +323,7 @@ fun BackupConfirmationDialog(
             confirmButton = {
                 Button(
                     onClick = onConfirm,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     )
@@ -343,7 +332,7 @@ fun BackupConfirmationDialog(
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(28.dp)
+            shape = RoundedCornerShape(36.dp)
         )
     }
 }
@@ -358,7 +347,7 @@ fun ExportConfirmationDialog(
     onDismiss: () -> Unit
 ) {
     if (visible) {
-        AlertDialog(
+        SwipeableAlertDialog(
             onDismissRequest = onDismiss,
             icon = { Icon(FieldMindIcons.Export, null, size = 28.dp) },
             title = { Text("Export $format?", fontWeight = FontWeight.Bold) },
@@ -371,13 +360,13 @@ fun ExportConfirmationDialog(
             confirmButton = {
                 Button(
                     onClick = onConfirm,
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(20.dp)
                 ) { Text("Export") }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(28.dp)
+            shape = RoundedCornerShape(36.dp)
         )
     }
 }

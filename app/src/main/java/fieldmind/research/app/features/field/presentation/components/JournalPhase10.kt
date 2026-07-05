@@ -47,7 +47,7 @@ fun JournalEditorHeader(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -57,7 +57,7 @@ fun JournalEditorHeader(
                 onValueChange = onTitleChange,
                 placeholder = { Text("Untitled note...") },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 textStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
             )
             
@@ -67,7 +67,7 @@ fun JournalEditorHeader(
                     onValueChange = onCategoryChange,
                     label = { Text("Category") },
                     modifier = Modifier.weight(0.4f),
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(18.dp),
                     singleLine = true
                 )
                 OutlinedTextField(
@@ -75,7 +75,7 @@ fun JournalEditorHeader(
                     onValueChange = onTagsChange,
                     label = { Text("Tags") },
                     modifier = Modifier.weight(0.6f),
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(18.dp),
                     singleLine = true
                 )
             }
@@ -97,7 +97,7 @@ fun JournalBlockPalette(
         Button(
             onClick = { expanded = !expanded },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(20.dp)
         ) {
             Text(if (expanded) "Hide blocks" else "+ Add block", fontWeight = FontWeight.SemiBold)
         }
@@ -105,7 +105,7 @@ fun JournalBlockPalette(
         if (expanded) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -130,7 +130,7 @@ private fun BlockTypeButton(blockType: JournalBlockType, onClick: () -> Unit) {
         modifier = Modifier
             .size(56.dp)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh
     ) {
         Column(
@@ -162,7 +162,7 @@ fun JournalEntryCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -210,7 +210,7 @@ fun RichTextFormattingToolbar(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -225,7 +225,7 @@ fun RichTextFormattingToolbar(
             IconButton(onClick = onItalic, modifier = Modifier.size(36.dp)) { Text("I", fontWeight = FontWeight.Bold) }
             IconButton(onClick = onUnderline, modifier = Modifier.size(36.dp)) { Text("U", fontWeight = FontWeight.Bold) }
             IconButton(onClick = onStrikethrough, modifier = Modifier.size(36.dp)) { Text("S", fontWeight = FontWeight.Bold) }
-            Divider(modifier = Modifier
+            HorizontalDivider(modifier = Modifier
                 .width(1.dp)
                 .height(24.dp))
             IconButton(onClick = onLink, modifier = Modifier.size(36.dp)) { Text("🔗") }
@@ -249,8 +249,8 @@ fun ObservationEmbedBlock(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), RoundedCornerShape(14.dp)),
-        shape = RoundedCornerShape(14.dp),
+            .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), RoundedCornerShape(22.dp)),
+        shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

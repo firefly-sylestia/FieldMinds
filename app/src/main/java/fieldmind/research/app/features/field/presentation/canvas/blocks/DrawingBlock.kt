@@ -62,7 +62,7 @@ fun DrawingBlock(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerLowest)
     ) {
         Canvas(
@@ -180,7 +180,7 @@ private fun DrawScope.drawMiniDrawing(drawing: DrawingEntity) {
                 (points[i - 1].x + points[i].x) / 2f,
                 (points[i - 1].y + points[i].y) / 2f
             )
-            quadraticBezierTo(points[i - 1].x, points[i - 1].y, mid.x, mid.y)
+            quadraticTo(points[i - 1].x, points[i - 1].y, mid.x, mid.y)
         }
         lineTo(points.last().x, points.last().y)
     }

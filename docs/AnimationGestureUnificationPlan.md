@@ -15,7 +15,7 @@
 | 2b — Per-route transitions | ✅ Complete | `routeEnterTransition()` / `routeExitTransition()` / etc. with category-based routing |
 | 2c — Pass scope to screens | ❌ Not started | `SharedTransitionScope` / `AnimatedContentScope` not passed to screen composables |
 | 3 — Swipe-to-Go-Back | ✅ Complete (with deviation) | See Phases section below |
-| 4 — Back State Preservation | ❌ Not started | `restoreState` fix partially done (intentionally disabled `restoreState` on non-tab routes to prevent ViewModel crash) |
+| 4 — Back State Preservation | ✅ Complete | `rememberSaveable(saver = LazyListState.Saver)` applied to 6 detail/settings screens: ProjectDetail, QuestionDetail, TaskDetail, HypothesisDetail, Changelog, BackupExport |
 | 5 — Press/Lift animations | ⚠️ Partially complete | Modifiers exist; applied to ~14 clickable items in LibraryScreen + ObserveScreen; `ClickableCard` wrapper not created |
 | 6 — Staggered List Animations | ❌ Not started | `EntityCard` has params but not wired at all usage sites |
 

@@ -38,9 +38,12 @@ object CrashReporter {
             Log.e(TAG, "Uncaught exception on thread ${thread.name}: $crashLog")
             appSettings.addCrashLogEntry(crashLog) // Add to crash log history
             FieldMindCrashActivity.start(application.applicationContext, crashLog)
-            // Terminate the crashed process to ensure a clean restart
-            android.os.Process.killProcess(android.os.Process.myPid())
-            System.exit(1)
+            // Crash activity runs in a separate process (:crash_process), so the main
+            // process exiting naturally is fine — the crash UI will survive. We do NOT
+            // call killProcess/exitProcess here because that would race with the
+            // system's ActivityManager trying to launch the crash activity.
+            // Simply let this handler return; the platform will clean up the crashed
+            // process on its own.
         }
     }
 

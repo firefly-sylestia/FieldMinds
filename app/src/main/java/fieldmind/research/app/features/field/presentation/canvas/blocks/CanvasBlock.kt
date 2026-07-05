@@ -143,18 +143,18 @@ fun CanvasBlock(
                     Modifier.border(
                         width = (2f / canvasState.zoom).coerceAtLeast(1f).dp,
                         color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(16.dp)
                     )
                 } else Modifier
             )
             // Shadow / elevation
             .shadow(
                 elevation = elevation.dp,
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(16.dp),
                 clip = false
             )
             // Background
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surface)
             // Long-press + drag to move (taps pass through to child composables)
             .pointerInput(block.id, canvasState.zoom) {
@@ -382,7 +382,7 @@ private fun ResizeHandle(
             )
             .background(
                 MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-                RoundedCornerShape(topStart = 4.dp)
+                RoundedCornerShape(topStart = 8.dp)
             )
             .pointerInput(Unit) {
                 var cumulativeDx = 0f

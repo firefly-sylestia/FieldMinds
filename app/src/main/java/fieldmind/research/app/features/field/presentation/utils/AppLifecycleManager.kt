@@ -121,7 +121,14 @@ object AppLifecycleManager {
         if (lockTimeoutMs < 0) return  // Disabled
         
         cancelScheduledLock()
-        handler?.postDelayed(lockTimeoutRunnable, lockTimeoutMs)
+        
+        if (lockTimeoutMs == 0L) {
+            // Immediate lock: trigger directly instead of posting to Handler,
+            // which could fire before onResume cancels it.
+            triggerLock()
+        } else {
+            handler?.postDelayed(lockTimeoutRunnable, lockTimeoutMs)
+        }
     }
     
     private fun cancelScheduledLock() {

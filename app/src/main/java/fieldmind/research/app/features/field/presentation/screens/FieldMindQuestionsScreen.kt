@@ -36,6 +36,7 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  Unified Questions & Hypotheses Screen — Hypothesis Testing Workflow
@@ -44,7 +45,8 @@ import java.util.Locale
 @Composable
 fun QuestionsScreen(
     viewModel: FieldMindViewModel,
-    onOpenDetail: (String, Long) -> Unit = { _, _ -> }
+    onOpenDetail: (String, Long) -> Unit = { _, _ -> },
+    onBack: () -> Unit = {}
 ) {
     val questions by viewModel.questions.collectAsState()
     val hypotheses by viewModel.hypotheses.collectAsState()
@@ -150,8 +152,11 @@ fun QuestionsScreen(
                 icon = FieldMindIcons.Question,
                 heroColor = FieldMindTheme.colors.question,
                 trailing = {
-                    IconButton(onClick = { searchQuery = if (searchQuery.isEmpty()) "search" else "" }, modifier = Modifier.size(40.dp)) {
-                        Icon(FieldMindIcons.Search, contentDescription = "Search", size = 20.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        IconButton(onClick = { searchQuery = if (searchQuery.isEmpty()) "search" else "" }, modifier = Modifier.size(40.dp)) {
+                            Icon(FieldMindIcons.Search, contentDescription = "Search", size = 20.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        BackButton(onClick = onBack)
                     }
                 }
             )
@@ -166,7 +171,7 @@ fun QuestionsScreen(
                     placeholder = { Text("Search questions...") },
                     leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                     trailingIcon = { if (searchQuery.isNotBlank()) IconButton(onClick = { searchQuery = "" }) { Icon(MaterialSymbolIcon("close"), contentDescription = "Clear", size = 18.dp) } },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
@@ -193,7 +198,7 @@ fun QuestionsScreen(
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(34.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -206,7 +211,7 @@ fun QuestionsScreen(
                     ) {
                         Box(
                             Modifier.size(40.dp)
-                                .clip(RoundedCornerShape(14.dp))
+                                .clip(RoundedCornerShape(22.dp))
                                 .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) { Icon(FieldMindIcons.Sparkle, null, tint = FieldMindTheme.colors.observation, size = 22.dp) }
@@ -230,7 +235,7 @@ fun QuestionsScreen(
                                         suggestedSourceType = sq.sourceType
                                         suggestedPriority = sq.priority
                                     },
-                                    shape = RoundedCornerShape(14.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     colors = CardDefaults.cardColors(
                                         containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                                     ),
@@ -298,7 +303,7 @@ fun QuestionsScreen(
                                 suggestedPriority = ""
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(22.dp),
                             enabled = autoQuestion.isNotBlank() || autoContext.isNotBlank()
                         ) { Text("Create research question") }
                     }
@@ -310,7 +315,7 @@ fun QuestionsScreen(
         item {
             Surface(
                 onClick = { showQuestionBuilder = true },
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(28.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp,
                 modifier = Modifier.fillMaxWidth().expressivePress(scaleDown = 0.97f)
@@ -330,7 +335,7 @@ fun QuestionsScreen(
         // ── Filters ──
         if (categories.size > 1) {
             item {
-                Card(shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+                Card(shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(FieldMindIcons.Filter, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
@@ -492,7 +497,7 @@ private fun QuestionCardWithHypotheses(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -505,7 +510,7 @@ private fun QuestionCardWithHypotheses(
             ) {
                 Box(
                     Modifier.size(36.dp)
-                        .clip(RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(20.dp))
                         .background(accent.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Question, null, tint = accent, size = 20.dp) }
@@ -578,7 +583,7 @@ private fun QuestionCardWithHypotheses(
                         FilledTonalButton(
                             onClick = onTest,
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(20.dp),
                             colors = ButtonDefaults.filledTonalButtonColors(
                                 containerColor = FieldMindTheme.colors.observation.copy(alpha = 0.14f),
                                 contentColor = FieldMindTheme.colors.observation
@@ -597,7 +602,7 @@ private fun QuestionCardWithHypotheses(
                                 ))
                             },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(20.dp)
                         ) {
                             Text(if (question.status == "Answered") "Reopen" else "Mark answered")
                         }
@@ -605,7 +610,7 @@ private fun QuestionCardWithHypotheses(
                         OutlinedButton(
                             onClick = { onOpenDetail("question", question.id) },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(20.dp)
                         ) {
                             Text("Detail")
                         }
@@ -678,7 +683,7 @@ private fun HypothesisCard(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
         ),
@@ -693,7 +698,7 @@ private fun HypothesisCard(
             ) {
                 // Status badge
                 Surface(
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(16.dp),
                     color = statusColor.copy(alpha = 0.14f)
                 ) {
                     Text(
@@ -743,7 +748,7 @@ private fun HypothesisCard(
                 }
                 LinearProgressIndicator(
                     progress = { animatedConfidence },
-                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
+                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
                     color = if (confidence >= 60) FieldMindTheme.colors.positive
                             else if (confidence >= 30) FieldMindTheme.colors.warning
                             else MaterialTheme.colorScheme.error,
@@ -803,7 +808,7 @@ private fun HypothesisCard(
                 OutlinedButton(
                     onClick = onAddObservation,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(18.dp)
                 ) {
                     Icon(FieldMindIcons.Add, null, size = 14.dp)
                     Spacer(Modifier.size(4.dp))
@@ -814,7 +819,7 @@ private fun HypothesisCard(
                     FilledTonalButton(
                         onClick = onMarkTested,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(10.dp)
+                        shape = RoundedCornerShape(18.dp)
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 14.dp)
                         Spacer(Modifier.size(4.dp))
@@ -847,8 +852,8 @@ private fun HypothesisCreationDialog(
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            shape = RoundedCornerShape(40.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(
                 Modifier.padding(20.dp).verticalScroll(rememberScrollState()),
@@ -857,7 +862,7 @@ private fun HypothesisCreationDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Box(
-                        Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -898,13 +903,13 @@ private fun HypothesisCreationDialog(
 
                 // Actions
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
+                    OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
                         Text("Cancel")
                     }
                     Button(
                         onClick = { onCreate(prediction, reasoning, evidenceNeeded, supportCriteria, weakeningCriteria, confidence) },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         enabled = canCreate
                     ) {
                         Text("Create hypothesis")
@@ -934,8 +939,8 @@ private fun QuickCaptureDialog(
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            shape = RoundedCornerShape(40.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(
                 Modifier.padding(20.dp).verticalScroll(rememberScrollState()),
@@ -944,7 +949,7 @@ private fun QuickCaptureDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Box(
-                        Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -972,7 +977,7 @@ private fun QuickCaptureDialog(
                 // Supporting vs refuting toggle
                 Surface(
                     onClick = { isSupporting = !isSupporting },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     color = if (isSupporting) FieldMindTheme.colors.positive.copy(alpha = 0.1f)
                             else MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
                     border = if (isSupporting) null
@@ -999,13 +1004,13 @@ private fun QuickCaptureDialog(
 
                 // Actions
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
+                    OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
                         Text("Cancel")
                     }
                     Button(
                         onClick = { onSave(subject, facts, category, isSupporting) },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         enabled = canSave
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 16.dp)
@@ -1034,8 +1039,8 @@ private fun MarkAsTestedDialog(
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
-            shape = RoundedCornerShape(32.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            shape = RoundedCornerShape(40.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(
                 Modifier.padding(20.dp).verticalScroll(rememberScrollState()),
@@ -1044,7 +1049,7 @@ private fun MarkAsTestedDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Box(
-                        Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -1075,7 +1080,7 @@ private fun MarkAsTestedDialog(
 
                     Surface(
                         onClick = { selectedConclusion = conclusion },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         color = if (selectedConclusion == conclusion) color.copy(alpha = 0.12f)
                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = if (selectedConclusion == conclusion) androidx.compose.foundation.BorderStroke(1.5.dp, color)
@@ -1088,7 +1093,7 @@ private fun MarkAsTestedDialog(
                             horizontalArrangement = Arrangement.spacedBy(14.dp)
                         ) {
                             Box(
-                                Modifier.size(40.dp).clip(RoundedCornerShape(12.dp))
+                                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
                                     .background(if (selectedConclusion == conclusion) color.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -1116,13 +1121,13 @@ private fun MarkAsTestedDialog(
 
                 // Actions
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
+                    OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
                         Text("Cancel")
                     }
                     Button(
                         onClick = { onConclude(selectedConclusion) },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(22.dp),
                         enabled = selectedConclusion.isNotBlank()
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 16.dp)
@@ -1141,9 +1146,9 @@ private fun MarkAsTestedDialog(
 
 @Composable
 private fun StatCard(value: String, label: String, icon: MaterialSymbolIcon, color: Color, modifier: Modifier = Modifier) {
-    Card(modifier, shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(modifier, shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Box(Modifier.size(28.dp).clip(RoundedCornerShape(10.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(28.dp).clip(RoundedCornerShape(14.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(icon, null, tint = color, size = 16.dp)
             }
             Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)

@@ -2,11 +2,14 @@ package fieldmind.research.app.features.field.presentation.screens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -15,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.launch
 import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
@@ -32,6 +37,7 @@ import org.json.JSONArray
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
 //  TASK DETAIL SCREEN
@@ -110,7 +116,10 @@ fun TaskDetailScreen(
     // ── Overflow menu ──
     var showOverflow by remember { mutableStateOf(false) }
 
+    val taskScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
+
     LazyColumn(
+        state = taskScrollState,
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
@@ -188,7 +197,7 @@ fun TaskDetailScreen(
                 ) {
                     // Priority badge
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(16.dp),
                         color = priorityColor.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -210,7 +219,7 @@ fun TaskDetailScreen(
                         } catch (_: Exception) { false }
 
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(16.dp),
                             color = if (isOverdue) MaterialTheme.colorScheme.error.copy(alpha = 0.12f)
                                     else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                         ) {
@@ -244,7 +253,7 @@ fun TaskDetailScreen(
                     // Status badge
                     if (task.status == "Done") {
                         Surface(
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(16.dp),
                             color = FieldMindTheme.colors.positive.copy(alpha = 0.12f)
                         ) {
                             Text(
@@ -267,7 +276,7 @@ fun TaskDetailScreen(
         if (task.status != "Done") {
             item {
                 Card(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(30.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -282,7 +291,7 @@ fun TaskDetailScreen(
                         }
                         LinearProgressIndicator(
                             progress = { animatedProgress },
-                            modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
+                            modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
                             color = priorityColor,
                             trackColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         )
@@ -326,10 +335,23 @@ fun TaskDetailScreen(
                     title = "Checklist"
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        val checklistScope = rememberCoroutineScope()
                         checklistItems.forEach { item ->
+                            val checkBounce = remember { Animatable(1f) }
+                            val isChecked = item.done
+                            LaunchedEffect(isChecked) {
+                                if (isChecked) {
+                                    checkBounce.snapTo(1.3f)
+                                    checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 500f))
+                                }
+                            }
                             Surface(
                                 onClick = {
                                     haptics.light()
+                                    checklistScope.launch {
+                                        checkBounce.snapTo(1.3f)
+                                        checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                                    }
                                     // Toggle item
                                     val arr = try { JSONArray(task.checklistJson) } catch (_: Exception) { JSONArray() }
                                     for (i in 0 until arr.length()) {
@@ -340,21 +362,24 @@ fun TaskDetailScreen(
                                     }
                                     viewModel.updateTaskEntity(task.copy(checklistJson = arr.toString()))
                                 },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f)
                             ) {
                                 Row(
                                     Modifier.fillMaxWidth().padding(12.dp),
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
-                                    // Checkbox
+                                    // Checkbox with spring bounce
                                     Surface(
                                         shape = CircleShape,
                                         color = if (item.done) FieldMindTheme.colors.positive.copy(alpha = 0.14f)
                                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                        modifier = Modifier.size(28.dp)
+                                        modifier = Modifier.size(28.dp).graphicsLayer {
+                                            scaleX = checkBounce.value
+                                            scaleY = checkBounce.value
+                                        }
                                     ) {
                                         Box(contentAlignment = Alignment.Center) {
                                             if (item.done) {
@@ -402,7 +427,7 @@ fun TaskDetailScreen(
                         linkedObs.forEach { obs ->
                             Surface(
                                 onClick = { onOpenDetail("observation", obs.id) },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -412,7 +437,7 @@ fun TaskDetailScreen(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(8.dp))
+                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -441,7 +466,7 @@ fun TaskDetailScreen(
                 Spacer(Modifier.size(8.dp))
                 OutlinedButton(
                     onClick = { showObservationPicker = true },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -463,7 +488,7 @@ fun TaskDetailScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         attachments.forEach { uri ->
                             Surface(
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -481,7 +506,7 @@ fun TaskDetailScreen(
                                         else -> MaterialSymbolIcon("attachment")
                                     }
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(8.dp))
+                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
                                             .background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -585,9 +610,9 @@ private fun <T> EntityPickerDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Card(
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(34.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
@@ -617,7 +642,7 @@ private fun <T> EntityPickerDialog(
                     placeholder = { Text("Search...") },
                     leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) },
                     singleLine = true,
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(22.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -648,7 +673,7 @@ private fun <T> EntityPickerDialog(
                         items(items) { item ->
                             Surface(
                                 onClick = { onSelect(item) },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh
                             ) {
                                 Row(
@@ -661,7 +686,7 @@ private fun <T> EntityPickerDialog(
                                     Box(
                                         Modifier
                                             .size(32.dp)
-                                            .clip(RoundedCornerShape(8.dp))
+                                            .clip(RoundedCornerShape(16.dp))
                                             .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -712,7 +737,7 @@ private fun SectionCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
