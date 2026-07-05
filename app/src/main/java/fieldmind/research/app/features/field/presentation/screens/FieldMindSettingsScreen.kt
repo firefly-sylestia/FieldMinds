@@ -2742,10 +2742,10 @@ fun SpeciesIdentificationSettingsPage(
 }
 
 }
-
 // ══════════════════════════════════════════════════════════════════════
 //  Auto Generation Settings Page
 // ══════════════════════════════════════════════════════════════════════
+
 @Composable
 private fun StatChip(value: String, label: String, color: Color) {
     Row(
