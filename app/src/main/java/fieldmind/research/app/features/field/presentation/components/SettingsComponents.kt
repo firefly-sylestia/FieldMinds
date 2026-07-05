@@ -1,8 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
 
-import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,17 +19,14 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,7 +36,6 @@ import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.ui.theme.cuteShadow
-import kotlinx.coroutines.launch
 
 // ══════════════════════════════════════════════════════════════════════
 //  SettingsGroupCard — Card with gradient background
@@ -81,8 +74,6 @@ fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
 
 /**
  * A settings row with a title, description, optional icon, and a Switch.
- * Features an animated checkmark that springs in with bounce when enabled
- * and a subtle pulse animation on the switch when toggled.
  */
 @Composable
 fun ToggleItem(
@@ -92,45 +83,8 @@ fun ToggleItem(
     onCheckedChange: (Boolean) -> Unit,
     icon: MaterialSymbolIcon? = null
 ) {
-    val scope = rememberCoroutineScope()
-    val switchPulse = remember { Animatable(1f) }
-    val checkmarkScale = remember { Animatable(0f) }
-    val checkmarkRotate = remember { Animatable(-90f) }
-
-    // Animate checkmark with spring bounce when toggled
-    LaunchedEffect(checked) {
-        if (checked) {
-            // Spring-bounce the checkmark in
-            checkmarkScale.animateTo(1f, spring(dampingRatio = 0.45f, stiffness = 300f))
-            checkmarkRotate.animateTo(0f, spring(dampingRatio = 0.5f, stiffness = 250f))
-        } else {
-            checkmarkScale.animateTo(0f, tween(150))
-            checkmarkRotate.animateTo(-90f, tween(150))
-        }
-    }
-
-    // Pulse on switch toggles
-    LaunchedEffect(checked) {
-        if (checked) {
-            switchPulse.animateTo(1.3f, spring(dampingRatio = 0.55f, stiffness = 500f))
-            switchPulse.animateTo(1f, spring(dampingRatio = 0.85f, stiffness = 350f))
-        }
-    }
-
     Row(
         Modifier.fillMaxWidth().clickable {
-            scope.launch {
-                if (!checked) {
-                    // Pre-bounce the checkmark before state changes
-                    checkmarkScale.snapTo(0f)
-                    checkmarkScale.animateTo(1.2f, spring(dampingRatio = 0.45f, stiffness = 300f))
-                    checkmarkScale.animateTo(1f, spring(dampingRatio = 0.5f, stiffness = 200f))
-                    checkmarkRotate.snapTo(-90f)
-                    checkmarkRotate.animateTo(0f, spring(dampingRatio = 0.5f, stiffness = 250f))
-                }
-                switchPulse.snapTo(1.3f)
-                switchPulse.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
-            }
             onCheckedChange(!checked)
         }.padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
@@ -147,32 +101,8 @@ fun ToggleItem(
             }
         }
 
-        // Title and body text with animated checkmark
         Column(Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                // Animated checkmark icon
-                Box(
-                    modifier = Modifier
-                        .size(18.dp)
-                        .graphicsLayer {
-                            scaleX = checkmarkScale.value.coerceAtLeast(0f)
-                            scaleY = checkmarkScale.value.coerceAtLeast(0f)
-                            rotationZ = checkmarkRotate.value
-                            alpha = if (checked) 1f else 0f
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (checked) {
-                        Icon(
-                            icon = FieldMindIcons.Check,
-                            contentDescription = "Enabled",
-                            tint = MaterialTheme.colorScheme.primary,
-                            size = 18.dp
-                        )
-                    }
-                }
-                Text(title, fontWeight = FontWeight.SemiBold)
-            }
+            Text(title, fontWeight = FontWeight.SemiBold)
             Text(
                 body,
                 style = MaterialTheme.typography.bodySmall,
@@ -182,14 +112,9 @@ fun ToggleItem(
             )
         }
 
-        // Switch with subtle pulse animation
         Switch(
             checked = checked,
-            onCheckedChange = null,
-            modifier = Modifier.graphicsLayer {
-                scaleX = switchPulse.value
-                scaleY = switchPulse.value
-            }
+            onCheckedChange = null
         )
     }
 }
