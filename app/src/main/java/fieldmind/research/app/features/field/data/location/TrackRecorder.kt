@@ -205,6 +205,18 @@ class TrackRecorder(private val context: Context) {
     }
 
     /**
+     * Restores a previously saved track (e.g., after app restart).
+     */
+    fun restoreTrack(track: TrackRecording) {
+        val existing = _savedTracks.value.toMutableList()
+        // Replace if same ID, otherwise append
+        val idx = existing.indexOfFirst { it.id == track.id }
+        if (idx >= 0) existing[idx] = track
+        else existing.add(track)
+        _savedTracks.value = existing
+    }
+
+    /**
      * Deletes a saved track by ID.
      */
     fun deleteTrack(trackId: String) {

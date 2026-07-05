@@ -46,6 +46,32 @@ internal data class FieldMindChangelogEntry(
 )
 
 private    val fieldMindChangelog = listOf(
+        // ── v0.40.0 — Map Feature Completeness ──
+        FieldMindChangelogEntry(
+            version = "0.40.0",
+            date = "2026-07-05",
+            title = "🗺️ Map Completeness: Persistence, Geo-fence Viz & Home Card",
+            importance = "Major",
+            tags = listOf("🗺️", "💾", "🎯"),
+            sections = listOf(
+                "💾 Drawings & tracks now persist" to listOf(
+                    "✓ Map overlays (points, lines, polygons) saved to SharedPreferences — survive app restart",
+                    "✓ GPS track recordings also persisted and restored on relaunch",
+                    "✓ Drawings tab and Tracks tab now show real saved data across sessions"
+                ),
+                "🎯 Geo-fence circles visible on map" to listOf(
+                    "✓ Active geo-fence regions now rendered as translucent green circles on the map",
+                    "✓ Circle radius matches the configured fence size",
+                    "✓ Visible in both tab view and full-screen map mode"
+                ),
+                "🏠 Map card on home screen" to listOf(
+                    "✓ New 'Field Map' card between Data Tools and Media sections",
+                    "✓ Quick access to the map screen from the home dashboard",
+                    "✓ Descriptive text and 'Open' button"
+                )
+            )
+        ),
+
         // ── v0.39.0 — Session Swipe Guard & State Cleanup ──
         FieldMindChangelogEntry(
             version = "0.39.0",

@@ -463,6 +463,47 @@ fun SharedTransitionScope.HomeScreen(
                 }
             }
 
+            // ── Field Map Card ──
+            item {
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                    modifier = Modifier.fillMaxWidth()
+                        .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
+                        .clickable { onNavigate(FieldMindScreen.MapScreen) }
+                ) {
+                    Row(
+                        Modifier.fillMaxWidth().padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Box(
+                            Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                                .background(FieldMindTheme.colors.info.copy(alpha = 0.14f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(FieldMindIcons.Map, null, tint = FieldMindTheme.colors.info, size = 24.dp)
+                        }
+                        Column(Modifier.weight(1f)) {
+                            Text("Field Map", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            Text("Explore observations on the map, download offline tiles, and more", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        FilledTonalButton(
+                            onClick = { onNavigate(FieldMindScreen.MapScreen) },
+                            shape = RoundedCornerShape(22.dp),
+                            colors = ButtonDefaults.filledTonalButtonColors(
+                                containerColor = FieldMindTheme.colors.info.copy(alpha = 0.12f)
+                            )
+                        ) {
+                            Text("Open", fontWeight = FontWeight.SemiBold)
+                            Spacer(Modifier.size(4.dp))
+                            Icon(FieldMindIcons.Forward, null, size = 16.dp)
+                        }
+                    }
+                }
+            }
+
             // ── Media & Collaboration Tools ──
             item {
                 val mediaToolsCards = listOf(

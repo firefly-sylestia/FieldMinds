@@ -37,6 +37,7 @@ import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.border
+import org.json.JSONObject
 
 // ══════════════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════════
@@ -65,9 +66,36 @@ fun MapFieldScreen(
     val tileManager = remember { OsmTileManager(context) }
     val trackRecorder = remember { TrackRecorder(context) }
     val geoFenceReminder = remember { GeoFenceReminder(context) }
+    val geofenceRegions by geoFenceReminder.activeRegions.collectAsState()
 
-    // Drawing tools state
-    var savedOverlays by remember { mutableStateOf<List<MapOverlay>>(emptyList()) }
+    // Drawing tools state — persisted to SharedPreferences across app restarts
+    val prefs = remember { context.getSharedPreferences("fieldmind_map", Context.MODE_PRIVATE) }
+    var savedOverlays by remember {
+        mutableStateOf(MapOverlayUtils.deserializeOverlays(prefs.getString("savedOverlays", "") ?: ""))
+    }
+    // Persist overlays whenever they change
+    LaunchedEffect(savedOverlays) {
+        prefs.edit().putString("savedOverlays", MapOverlayUtils.serializeOverlays(savedOverlays)).apply()
+    }
+
+    // Persist tracks to SharedPreferences
+    var persistedTracks by remember {
+        mutableStateOf(loadTracksFromPrefs(prefs))
+    }
+    // Sync from TrackRecorder into persisted list, and vice versa
+    LaunchedEffect(savedTracks) {
+        if (savedTracks.isNotEmpty()) {
+            persistedTracks = savedTracks
+            saveTracksToPrefs(prefs, savedTracks)
+        }
+    }
+    // On first launch, restore persisted tracks into the recorder
+    LaunchedEffect(Unit) {
+        if (persistedTracks.isNotEmpty() && savedTracks.isEmpty()) {
+            persistedTracks.forEach { trackRecorder.restoreTrack(it) }
+        }
+    }
+
     var drawingMode by remember { mutableStateOf(DrawingMode.View) }
     var editingOverlay by remember { mutableStateOf<MapOverlay?>(null) }
     val isRecording by trackRecorder.isRecording.collectAsState()
@@ -75,7 +103,6 @@ fun MapFieldScreen(
     val savedTracks by trackRecorder.savedTracks.collectAsState()
     val cachedRegions by tileManager.cachedRegions.collectAsState()
     // cachedRegions type is now List<OsmTileRegion>
-    val geofenceRegions by geoFenceReminder.activeRegions.collectAsState()
 
     // Restore saved geofences on first launch
     LaunchedEffect(Unit) {
@@ -93,6 +120,7 @@ fun MapFieldScreen(
             drawingMode = drawingMode,
             currentTrack = currentTrack,
             tileManager = tileManager,
+            geofenceRegions = geofenceRegions,
             onClose = { fullScreen = false },
             onDrawingModeChanged = { drawingMode = it },
             onOverlaysChanged = { savedOverlays = it },
@@ -188,10 +216,10 @@ fun MapFieldScreen(
                     geoFenceReminder.addRegion(geoFenceReminder.regionFromPointOverlay(overlay))
                 },
                 onLineCreated = { savedOverlays = savedOverlays + it },
-                onPolygonCreated = { savedOverlays = savedOverlays + it },
-                onStartTrack = { trackRecorder.startRecording("Field session") },
+                onPolygonCreated = { savedOverlays = savedOverlays + it },                    onStartTrack = { trackRecorder.startRecording("Field session") },
                 onStopTrack = { trackRecorder.stopRecording() },
-                onToggleTrackPause = { trackRecorder.togglePause() }
+                onToggleTrackPause = { trackRecorder.togglePause() },
+                geofenceRegions = geofenceRegions
             )
             MapTab.OfflineTiles -> OfflineTilesTab(
                 modifier = Modifier.padding(padding),
@@ -251,6 +279,7 @@ private fun FullScreenMapView(
     drawingMode: DrawingMode,
     currentTrack: TrackRecording?,
     tileManager: OsmTileManager? = null,
+    geofenceRegions: List<GeofenceRegion> = emptyList(),
     onClose: () -> Unit,
     onDrawingModeChanged: (DrawingMode) -> Unit,
     onOverlaysChanged: (List<MapOverlay>) -> Unit,
@@ -267,6 +296,7 @@ private fun FullScreenMapView(
             drawingMode = drawingMode,
             currentTrackPoints = currentTrack?.points?.map { it.latitude to it.longitude } ?: emptyList(),
             tileManager = tileManager,
+            geofenceRegions = geofenceRegions,
             onPointCreated = onPointCreated,
             onLineCreated = onLineCreated,
             onPolygonCreated = onPolygonCreated,
@@ -415,6 +445,7 @@ private fun MapViewTab(
     currentTrack: TrackRecording?,
     isRecording: Boolean,
     tileManager: OsmTileManager? = null,
+    geofenceRegions: List<GeofenceRegion> = emptyList(),
     onFullScreen: () -> Unit,
     onDrawingModeChanged: (DrawingMode) -> Unit,
     onOverlaysChanged: (List<MapOverlay>) -> Unit,
@@ -439,6 +470,7 @@ private fun MapViewTab(
                     drawingMode = drawingMode,
                     currentTrackPoints = currentTrack?.points?.map { it.latitude to it.longitude } ?: emptyList(),
                     tileManager = tileManager,
+                    geofenceRegions = geofenceRegions,
                     onPointCreated = onPointCreated,
                     onLineCreated = onLineCreated,
                     onPolygonCreated = onPolygonCreated,
@@ -1286,6 +1318,65 @@ private fun GeofencesTab(
             }
         }
     }
+}
+
+// ── Track persistence helpers ──
+
+private fun saveTracksToPrefs(prefs: android.content.SharedPreferences, tracks: List<TrackRecording>) {
+    val json = org.json.JSONArray()
+    tracks.forEach { t ->
+        val j = org.json.JSONObject().apply {
+            put("id", t.id)
+            put("name", t.name)
+            put("startedAt", t.startedAt)
+            put("endedAt", t.endedAt ?: JSONObject.NULL)
+            put("distanceMeters", t.distanceMeters)
+            put("totalDurationMs", t.totalDurationMs)
+            val pts = org.json.JSONArray()
+            t.points.forEach { p ->
+                pts.put(org.json.JSONObject().apply {
+                    put("lat", p.latitude)
+                    put("lon", p.longitude)
+                    put("alt", p.altitude ?: JSONObject.NULL)
+                    put("acc", p.accuracy ?: JSONObject.NULL)
+                    put("ts", p.timestamp)
+                })
+            }
+            put("points", pts)
+        }
+        json.put(j)
+    }
+    prefs.edit().putString("savedTracks", json.toString()).apply()
+}
+
+private fun loadTracksFromPrefs(prefs: android.content.SharedPreferences): List<TrackRecording> {
+    val raw = prefs.getString("savedTracks", "") ?: ""
+    if (raw.isBlank()) return emptyList()
+    return try {
+        val arr = org.json.JSONArray(raw)
+        (0 until arr.length()).map { i ->
+            val j = arr.getJSONObject(i)
+            val pts = org.json.JSONArray(j.optString("points", "[]"))
+            TrackRecording(
+                id = j.optString("id", java.util.UUID.randomUUID().toString()),
+                name = j.optString("name", "Track"),
+                startedAt = j.optLong("startedAt", System.currentTimeMillis()),
+                endedAt = j.optLong("endedAt", -1L).let { if (it < 0) null else it },
+                distanceMeters = j.optDouble("distanceMeters", 0.0),
+                totalDurationMs = j.optLong("totalDurationMs", 0L),
+                points = (0 until pts.length()).map { k ->
+                    val p = pts.getJSONObject(k)
+                    TrackPoint(
+                        latitude = p.optDouble("lat", 0.0),
+                        longitude = p.optDouble("lon", 0.0),
+                        altitude = p.optDouble("alt", Double.NaN).let { if (it.isNaN()) null else it },
+                        accuracy = p.optDouble("acc", Double.NaN).let { if (it.isNaN()) null else it.toFloat() },
+                        timestamp = p.optLong("ts", System.currentTimeMillis())
+                    )
+                }
+            )
+        }
+    } catch (_: Exception) { emptyList() }
 }
 
 // ══════════════════════════════════════════════════════════════════════
