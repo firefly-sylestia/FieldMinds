@@ -1149,8 +1149,8 @@ private fun OnboardingReviewPage(
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat) + slideInVertically { it / 4 }) {
                     Card(
                         shape = RoundedCornerShape(34.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                     ) {
                         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             ReviewRow("Name", profileName.ifBlank { "Not set" }, "Edit", onClick = { onEditPage(0) })
@@ -1350,8 +1350,8 @@ private fun OnboardingAiFeaturesPage(
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
                         shape = RoundedCornerShape(30.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                     ) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -1444,11 +1444,11 @@ private fun OnboardingAiFeaturesPage(
                     AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                         Card(
                             shape = RoundedCornerShape(30.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                         ) {
                             Row(
-                                Modifier.fillMaxWidth().padding(16.dp),
+                                Modifier.fillMaxWidth().padding(18.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
@@ -1794,10 +1794,10 @@ fun OnboardingDataToolsPage(
                     AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                         Card(
                             shape = RoundedCornerShape(30.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                         ) {
-                            Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                            Row(Modifier.padding(18.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                                 Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(accent.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                                     Icon(icon, null, tint = accent, size = 24.dp)
                                 }
@@ -1888,8 +1888,8 @@ fun OnboardingSpeciesIdPage(
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
                         shape = RoundedCornerShape(30.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                     ) {
                         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                             Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
@@ -1907,8 +1907,8 @@ fun OnboardingSpeciesIdPage(
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
                         shape = RoundedCornerShape(30.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                     ) {
                         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                             Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
@@ -1926,8 +1926,8 @@ fun OnboardingSpeciesIdPage(
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat)) {
                     Card(
                         shape = RoundedCornerShape(30.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                     ) {
                         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                             Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
@@ -2010,8 +2010,8 @@ fun OnboardingFinalPage(
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat) + slideInVertically { it / 4 }) {
                     Card(
                         shape = RoundedCornerShape(34.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                     ) {
                         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             Text("Quick start guide", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
@@ -2035,8 +2035,8 @@ fun OnboardingFinalPage(
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat) + slideInVertically { it / 5 }) {
                     Card(
                         shape = RoundedCornerShape(34.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                     ) {
                         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -2064,8 +2064,8 @@ fun OnboardingFinalPage(
                 AnimatedVisibility(visible = showContent, enter = fadeIn(FieldMindMotion.expressiveFloat) + slideInVertically { it / 6 }) {
                     Card(
                         shape = RoundedCornerShape(34.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
                     ) {
                         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
