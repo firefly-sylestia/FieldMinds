@@ -377,44 +377,43 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                 // Tablet rail — liquid-glass side panel. .hazeChild blurs the
                 // NavHost content behind the rail (captured via .haze() below);
                 // .liquidGlassRefraction() applies GPU displacement & specular.
-                if (!hideChrome) {
-                    Surface(
-                        shape = RoundedCornerShape(size = 38.dp),
-                        color = Color.Transparent,
-                        tonalElevation = 0.dp,
-                        shadowElevation = 8.dp,
-                        border = androidx.compose.foundation.BorderStroke(
-                            width = 0.6.dp,
-                            color = if (FieldMindTheme.colors.isDark)
-                                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.15f)
-                            else
-                                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.20f)
-                        ),
-                        modifier = Modifier
-                            .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
-                            .width(IntrinsicSize.Min)
-                            .hazeChild(
-                                state = hazeState,
-                                style = HazeStyle(
-                                    blurRadius = 32.dp,
-                                    noiseFactor = 0.06f,
-                                    tints = listOf(
-                                        HazeTint(
-                                            color = if (FieldMindTheme.colors.isDark)
-                                                MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.88f)
-                                            else
-                                                MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f)
+                if (!hideChrome) {                        Surface(
+                            shape = RoundedCornerShape(size = 38.dp),
+                            color = MaterialTheme.colorScheme.surfaceContainer,
+                            tonalElevation = 0.dp,
+                            shadowElevation = 8.dp,
+                            border = androidx.compose.foundation.BorderStroke(
+                                width = 0.6.dp,
+                                color = if (FieldMindTheme.colors.isDark)
+                                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.15f)
+                                else
+                                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.20f)
+                            ),
+                            modifier = Modifier
+                                .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
+                                .width(IntrinsicSize.Min)
+                                .hazeChild(
+                                    state = hazeState,
+                                    style = HazeStyle(
+                                        blurRadius = 32.dp,
+                                        noiseFactor = 0.06f,
+                                        tints = listOf(
+                                            HazeTint(
+                                                color = if (FieldMindTheme.colors.isDark)
+                                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.55f)
+                                                else
+                                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.45f)
+                                            )
                                         )
                                     )
                                 )
-                            )
-                            .liquidGlassRefraction()
-                    ) {
-                        NavigationRail(
-                            header = {
-                                Spacer(Modifier.height(8.dp))
-                            }
+                                .liquidGlassRefraction()
                         ) {
+                            NavigationRail(
+                                header = {
+                                    Spacer(Modifier.height(8.dp))
+                                }
+                            ) {
                             visibleTabs.forEach { screen ->
                                 val selected = isSelected(screen)
                                                 RailNavTabItem(
@@ -483,7 +482,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                         // Fresnel edge glow via the .liquidGlassRefraction() modifier.
                         Surface(
                             shape = RoundedCornerShape(50.dp),
-                            color = Color.Transparent,
+                            color = MaterialTheme.colorScheme.surfaceContainer,
                             tonalElevation = 0.dp,
                             shadowElevation = 8.dp,
                             modifier = Modifier
@@ -498,9 +497,9 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                                         tints = listOf(
                                             HazeTint(
                                                 color = if (FieldMindTheme.colors.isDark)
-                                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.88f)
+                                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.55f)
                                                 else
-                                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f)
+                                                    MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.45f)
                                             )
                                         )
                                     )

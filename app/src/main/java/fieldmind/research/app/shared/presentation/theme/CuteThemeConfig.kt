@@ -68,13 +68,13 @@ object CuteElevations {
     /** Subtle lift — background surfaces, low-focus info cards. */
     val plushTier1: Dp = 2.dp
     /** Standard card elevation — non-clickable info cards, stat displays. */
-    val plushTier2: Dp = 4.dp
+    val plushTier2: Dp = 6.dp
     /** Prominent cards — clickable cards, featured content, hero surfaces. */
-    val plushTier3: Dp = 6.dp
+    val plushTier3: Dp = 8.dp
     /** Dialogs, bottom sheets, floating elements. */
-    val plushTier4: Dp = 8.dp
+    val plushTier4: Dp = 12.dp
     /** Highest emphasis — modals, pickers, important overlays. */
-    val plushTier5: Dp = 12.dp
+    val plushTier5: Dp = 16.dp
 
     // ── Semantic depth tiers: clickable vs non-clickable ──
     /** Non-clickable cards — info display, stat tiles, section headers. Lower lift. */
@@ -128,26 +128,27 @@ data class CuteShadow(
          */
         @Composable
         fun themeAware(elevation: Dp, isDark: Boolean = FieldMindTheme.colors.isDark): CuteShadow {
-            val ambientAlpha = 0.12f + (elevation.value / 12f) * 0.10f
-            val spotAlpha = 0.18f + (elevation.value / 12f) * 0.16f
+            val ambientAlpha = 0.16f + (elevation.value / 12f) * 0.12f
+            val spotAlpha = 0.24f + (elevation.value / 12f) * 0.18f
             return if (isDark) {
                 // Premium dark mode: warm-tinted glow shadows so depth is clearly visible
                 // against dark/AMOLED backgrounds. Uses warm white (candlelight) instead
                 // of pure white for a luxurious luminous lift.
-                // At 6dp: ambient ~0.17, spot ~0.26 — clearly visible warm glow.
+                // At 6dp: ambient ~0.22, spot ~0.33 — warm glow with real presence.
+                // At 8dp: ambient ~0.24, spot ~0.36 — premium depth for clickable cards.
                 // Neutral-warm glow: works across green (Flora), purple (Amethyst),
                 // and brown (Terrain) themes without color clash.
                 val warmGlow = Color(0xFFF8F4E8)
                 CuteShadow(
                     elevation = elevation,
-                    ambientColor = warmGlow.copy(alpha = ambientAlpha.coerceIn(0.10f, 0.30f)),
-                    spotColor = warmGlow.copy(alpha = spotAlpha.coerceIn(0.15f, 0.42f))
+                    ambientColor = warmGlow.copy(alpha = ambientAlpha.coerceIn(0.14f, 0.36f)),
+                    spotColor = warmGlow.copy(alpha = spotAlpha.coerceIn(0.20f, 0.50f))
                 )
             } else {
                 CuteShadow(
                     elevation = elevation,
-                    ambientColor = Color.Black.copy(alpha = ambientAlpha.coerceIn(0.08f, 0.20f)),
-                    spotColor = Color.Black.copy(alpha = spotAlpha.coerceIn(0.12f, 0.30f))
+                    ambientColor = Color.Black.copy(alpha = ambientAlpha.coerceIn(0.10f, 0.26f)),
+                    spotColor = Color.Black.copy(alpha = spotAlpha.coerceIn(0.16f, 0.38f))
                 )
             }
         }
