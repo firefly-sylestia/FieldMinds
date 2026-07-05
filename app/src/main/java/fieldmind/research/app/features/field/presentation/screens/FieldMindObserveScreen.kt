@@ -175,6 +175,18 @@ fun ObserveScreen(
         }
     }
 
+    // When captureSessionActive is reset externally (e.g., via the navigation
+    // guard dialog in FieldMindNavigation when user taps another tab), also reset
+    // the local session state so coming back to Observe doesn't show a stale
+    // active session with a broken timer.
+    LaunchedEffect(viewModel.captureSessionActive) {
+        if (!viewModel.captureSessionActive && session.isActive) {
+            session = CaptureSessionState()
+            showEvidenceForm = false
+            activeSessionId = null
+        }
+    }
+
     var showEvidenceForm by remember { mutableStateOf(false) }
     var showCategoryPicker by remember { mutableStateOf(false) }
     var selectedCategories by remember { mutableStateOf(setOf("Other")) }

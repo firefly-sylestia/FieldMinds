@@ -46,6 +46,27 @@ internal data class FieldMindChangelogEntry(
 )
 
 private    val fieldMindChangelog = listOf(
+        // ── v0.39.0 — Session Swipe Guard & State Cleanup ──
+        FieldMindChangelogEntry(
+            version = "0.39.0",
+            date = "2026-07-05",
+            title = "🛡️ Session Swipe Guard & State Cleanup",
+            importance = "Patch",
+            tags = listOf("🛡️", "🐛", "🔄"),
+            sections = listOf(
+                "🛡️ Block swipe navigation during active session" to listOf(
+                    "✓ Horizontal swipe gesture on tabs now disabled when an observation session is active",
+                    "✓ Prevents accidental session dismissal by swiping — users must use the nav bar which shows a confirmation dialog",
+                    "✓ Previously the swipe bypassed the navigation guard entirely"
+                ),
+                "🔄 Reset stale session state on external navigation" to listOf(
+                    "✓ When capture session is dismissed via the navigation guard dialog, local session state is now properly reset",
+                    "✓ Coming back to Capture after discarding no longer shows a stale active session",
+                    "✓ LaunchedEffect watches captureSessionActive and cleans up session, form, and activeSessionId"
+                )
+            )
+        ),
+
         // ── v0.38.0 — Placeholder & No-Op Fixes ──
         FieldMindChangelogEntry(
             version = "0.38.0",

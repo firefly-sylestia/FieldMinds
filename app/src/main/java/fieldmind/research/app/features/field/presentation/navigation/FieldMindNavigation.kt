@@ -1430,7 +1430,12 @@ private fun AllTabScreen(
     // ── Determine if we can swipe left/right ──
     val canSwipeLeft = activeTabIndex < visibleTabs.size - 1
     val canSwipeRight = activeTabIndex > 0
-    val hasSwipeDirection = canSwipeLeft || canSwipeRight
+    // Block swipe gestures during an active capture session on the Observe tab
+    // so the session can't be accidentally dismissed by swiping (which bypasses
+    // the navigation confirmation dialog).
+    val observeTabIndex = visibleTabs.indexOfFirst { it == FieldMindScreen.Observe }
+    val sessionLocked = activeTabIndex == observeTabIndex && viewModel.captureSessionActive
+    val hasSwipeDirection = (canSwipeLeft || canSwipeRight) && !sessionLocked
 
     Box(
         modifier = Modifier
