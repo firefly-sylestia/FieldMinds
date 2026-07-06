@@ -541,7 +541,7 @@ fun QuestionDetailScreen(
                             }
                             if (question.answeredAt != null) {
                                 Text(
-                                    "Answered ${formatTimestamp(question.answeredAt)}",
+                                    "Answered ${formatShortTimestamp(question.answeredAt)}",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                                 )
@@ -1024,7 +1024,7 @@ private fun ActivityLogRow(icon: MaterialSymbolIcon, text: String, date: Long) {
         Text(text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.weight(1f))
         Text(
-            formatTimestamp(date),
+            formatShortTimestamp(date),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
         )
@@ -1035,7 +1035,7 @@ private fun ActivityLogRow(icon: MaterialSymbolIcon, text: String, date: Long) {
 //  Helpers
 // ══════════════════════════════════════════════════════════════════════
 
-private fun formatTimestamp(ts: Long): String {
+private fun formatShortTimestamp(ts: Long): String {
     return try {
         val fmt = SimpleDateFormat("MMM dd", Locale.getDefault())
         fmt.format(Date(ts))
