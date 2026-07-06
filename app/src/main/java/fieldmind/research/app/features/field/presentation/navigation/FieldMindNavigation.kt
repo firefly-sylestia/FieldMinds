@@ -1450,9 +1450,9 @@ private fun AllTabScreen(
         }
     }
 
-    // ── Device back button: previous tab, or exit on first tab ──
+    // ── Device back button: return to Home tab, or exit on Home tab ──
     BackHandler(enabled = !isFirstTab) {
-        onTabSelected(activeTabIndex - 1)
+        onTabSelected(0)
     }
 
     // ── System back gesture (left edge): handle all tabs ──

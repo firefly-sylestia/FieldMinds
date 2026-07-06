@@ -43,6 +43,7 @@ class AppSettings private constructor(context: Context) {
         private const val KEY_LAST_CRASH_LOG = "last_crash_log"
         private const val KEY_CRASH_LOG_HISTORY = "crash_log_history"
         private const val KEY_DEV_TEST_REPORT_HISTORY = "dev_test_report_history"
+        private const val KEY_LATEST_DEVELOPER_TEST_REPORT = "latest_developer_test_report"
 
         // ── Theme ──
         private const val KEY_USE_SYSTEM_THEME = "use_system_theme"
@@ -139,11 +140,23 @@ class AppSettings private constructor(context: Context) {
 
     fun addCrashLogEntry(log: String) {
         val currentHistory = _crashLogHistory.value.toMutableList()
-        currentHistory.add(CrashLogEntry(timestamp = System.currentTimeMillis(), log = log))
-        val limitedHistory = currentHistory.takeLast(50)
+        currentHistory.add(CrashLogEntry(timestamp = System.currentTimeMillis(), log = log))            val limitedHistory = currentHistory.takeLast(50)
         _crashLogHistory.value = limitedHistory
         prefs.edit().putString(KEY_CRASH_LOG_HISTORY, Gson().toJson(limitedHistory)).apply()
         setLastCrashLog(log)
+    }
+
+    private val _latestDeveloperTestReport =
+        MutableStateFlow<String?>(prefs.getString(KEY_LATEST_DEVELOPER_TEST_REPORT, null))
+    val latestDeveloperTestReport: StateFlow<String?> = _latestDeveloperTestReport.asStateFlow()
+
+    fun setLatestDeveloperTestReport(json: String?) {
+        _latestDeveloperTestReport.value = json
+        if (json != null) {
+            prefs.edit().putString(KEY_LATEST_DEVELOPER_TEST_REPORT, json).apply()
+        } else {
+            prefs.edit().remove(KEY_LATEST_DEVELOPER_TEST_REPORT).apply()
+        }
     }
 
     private val _devTestReportHistory = MutableStateFlow<List<DevTestReportEntry>>(
