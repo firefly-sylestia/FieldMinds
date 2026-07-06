@@ -2128,7 +2128,7 @@ private fun OpenExternallyCard(url: String, uriHandler: androidx.compose.ui.plat
     val isPdf = Regex("""\.(pdf)""", RegexOption.IGNORE_CASE).containsMatchIn(url)
     val isImage = Regex("""\.(jpg|jpeg|png|webp|gif|heic|bmp)""", RegexOption.IGNORE_CASE).containsMatchIn(url)
     val isAudio = Regex("""\.(mp3|wav|ogg|m4a|aac|flac|wma)""", RegexOption.IGNORE_CASE).containsMatchIn(url)
-    Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp, modifier = Modifier.fillMaxWidth()) {
+    InfoCard(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp, modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Icon(FieldMindIcons.File, null, tint = MaterialTheme.colorScheme.primary, size = 36.dp)
             Text("Local file", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)

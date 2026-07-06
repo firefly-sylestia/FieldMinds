@@ -492,17 +492,6 @@ fun SharedTransitionScope.HomeScreen(
                             Text("Field Map", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             Text("Explore observations on the map, download offline tiles, and more", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
-                        FilledTonalButton(
-                            onClick = { onNavigate(FieldMindScreen.MapScreen) },
-                            shape = RoundedCornerShape(22.dp),
-                            colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = FieldMindTheme.colors.info.copy(alpha = 0.12f)
-                            )
-                        ) {
-                            Text("Open", fontWeight = FontWeight.SemiBold)
-                            Spacer(Modifier.size(4.dp))
-                            Icon(FieldMindIcons.Forward, null, size = 16.dp)
-                        }
                     }
                 }
             }
@@ -1387,6 +1376,7 @@ private fun LiveWeatherDashboardWidget(
         onClick = { onNavigate(FieldMindScreen.WeatherDatabase) },
         modifier = Modifier
             .fillMaxWidth()
+            .heightIn(min = 220.dp)
             .animateContentSize(
                 animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
             )
@@ -1394,10 +1384,10 @@ private fun LiveWeatherDashboardWidget(
         shape = RoundedCornerShape(36.dp),
         color = glassColor,
         tonalElevation = 0.dp,
-        shadowElevation = 0.dp
+        shadowElevation = if (FieldMindTheme.colors.isDark) 14.dp else 6.dp
     ){
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().heightIn(min = 220.dp)
         ) {
             // Animated weather scene as background
             if (currentWeather != null) {
@@ -1438,7 +1428,7 @@ private fun LiveWeatherDashboardWidget(
 
             // Content overlay
             Column(
-                Modifier.fillMaxWidth().padding(2.dp),
+                Modifier.fillMaxWidth().padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
             // ── Header row with live indicator ──
@@ -1533,11 +1523,11 @@ private fun LiveWeatherDashboardWidget(
                 // Main temperature + condition (always visible)
                 Row(
                     Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (showTemp) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 WeatherUnitConverter.formatTemp(w.temperature, tempUnit),
                                 style = MaterialTheme.typography.displaySmall.copy(
@@ -1553,7 +1543,7 @@ private fun LiveWeatherDashboardWidget(
                         }
                     }
                     if (showCondition) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                             WeatherConditionImage(
                                 code = displayWeatherCode,
                                 isNight = displayNight,
@@ -1569,7 +1559,7 @@ private fun LiveWeatherDashboardWidget(
                     }
                     if (showHumidity) {
                         w.humidity?.let { hum ->
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
                                     "$hum%",
                                     style = MaterialTheme.typography.titleLarge,
@@ -1849,16 +1839,18 @@ internal fun WeatherConditionImage(code: Int, isNight: Boolean = false, compact:
 
 @Composable
 private fun QuickActionsRow(onNavigate: (FieldMindScreen) -> Unit) {
-    SectionHeader("Quick actions", "Map, Export, Search, Flashcards")
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 20.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        item { QuickActionChip("Map", FieldMindIcons.Map, FieldMindTheme.colors.info, FieldMindScreen.MapScreen, onNavigate) }
-        item { QuickActionChip("Export", FieldMindIcons.Export, FieldMindTheme.colors.report, FieldMindScreen.ExportStudio, onNavigate) }
-        item { QuickActionChip("Search", FieldMindIcons.Search, FieldMindTheme.colors.question, FieldMindScreen.Search, onNavigate) }
-        item { QuickActionChip("Review", FieldMindIcons.Flashcard, FieldMindTheme.colors.flashcard, FieldMindScreen.Learn, onNavigate) }
-        item { QuickActionChip("Insights", FieldMindIcons.Insights, FieldMindTheme.colors.data, FieldMindScreen.Insights, onNavigate) }
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        SectionHeader("Quick actions", "Map, Export, Search, Flashcards")
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 2.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            item { QuickActionChip("Map", FieldMindIcons.Map, FieldMindTheme.colors.info, FieldMindScreen.MapScreen, onNavigate) }
+            item { QuickActionChip("Export", FieldMindIcons.Export, FieldMindTheme.colors.report, FieldMindScreen.ExportStudio, onNavigate) }
+            item { QuickActionChip("Search", FieldMindIcons.Search, FieldMindTheme.colors.question, FieldMindScreen.Search, onNavigate) }
+            item { QuickActionChip("Review", FieldMindIcons.Flashcard, FieldMindTheme.colors.flashcard, FieldMindScreen.Learn, onNavigate) }
+            item { QuickActionChip("Insights", FieldMindIcons.Insights, FieldMindTheme.colors.data, FieldMindScreen.Insights, onNavigate) }
+        }
     }
 }
 
@@ -1873,6 +1865,8 @@ private fun QuickActionChip(
     val haptics = rememberFieldMindHaptics()
     Card(
         modifier = Modifier
+            .widthIn(min = 88.dp)
+            .heightIn(min = 96.dp)
             .wrapContentWidth()
             .expressivePress(scaleDown = 0.94f)
             .clickable { haptics.light(); onNavigate(screen) },
@@ -1890,7 +1884,7 @@ private fun QuickActionChip(
                     .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(22.dp)),
                 contentAlignment = Alignment.Center
             ) { Icon(icon, null, tint = accent, size = 24.dp) }
-            Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, maxLines = 1)
+            Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }

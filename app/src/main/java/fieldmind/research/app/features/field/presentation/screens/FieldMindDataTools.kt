@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import fieldmind.research.app.ui.theme.CuteElevations
+import org.json.JSONArray
+import org.json.JSONObject
 
 // ══════════════════════════════════════════════════════════════════════
 //  Data Tools Hub — Main hub showing all 8 data tools as clickable cards
@@ -58,7 +60,8 @@ fun DataToolsHubScreen(
     onNavigate: (FieldMindScreen) -> Unit,
     onOpenDetail: (String, Long) -> Unit = { _, _ -> }
 ) {
-    val accentColor = FieldMindTheme.colors.data
+    val colors = FieldMindTheme.colors
+    val accentColor = colors.data
     val tools = remember {
         listOf(
             ToolCardInfo("Counter", "Tally with live count", FieldMindIcons.Add, accentColor, FieldMindScreen.CounterTool),
@@ -68,7 +71,9 @@ fun DataToolsHubScreen(
             ToolCardInfo("Checklist", "Track items", FieldMindIcons.Check, accentColor, FieldMindScreen.ChecklistTool),
             ToolCardInfo("Event Log", "Record events", FieldMindIcons.List, accentColor, FieldMindScreen.EventLogTool),
             ToolCardInfo("Site Log", "Visit conditions", FieldMindIcons.Map, accentColor, FieldMindScreen.SiteLogTool),
-            ToolCardInfo("Comparison", "Species/samples", FieldMindIcons.Data, accentColor, FieldMindScreen.ComparisonTable)
+            ToolCardInfo("Comparison", "Species/samples", FieldMindIcons.Data, accentColor, FieldMindScreen.ComparisonTable),
+            ToolCardInfo("Compass", "Magnetic heading", MaterialSymbolIcon("explore"), colors.info, FieldMindScreen.CompassTool),
+            ToolCardInfo("Level", "Spirit level", MaterialSymbolIcon("straighten"), colors.data, FieldMindScreen.LevelTool)
         )
     }
 
@@ -120,6 +125,10 @@ fun DataToolsHubScreen(
                 val counterCount = dataRecords.count { it.toolType == "Counter" }
                 val measurementCount = dataRecords.count { it.toolType == "Measurement Log" }
                 val weatherCount = dataRecords.count { it.toolType == "Weather Log" }
+                val checklistCount = dataRecords.count { it.toolType == "Checklist" }
+                val eventLogCount = dataRecords.count { it.toolType == "Event Log" }
+                val siteLogCount = dataRecords.count { it.toolType == "Site Log" }
+                val comparisonCount = dataRecords.count { it.toolType == "Comparison Table" }
 
                 Card(
                     shape = RoundedCornerShape(34.dp),
@@ -144,6 +153,13 @@ fun DataToolsHubScreen(
                             RecordStat("Counter", counterCount, FieldMindIcons.Add)
                             RecordStat("Measure", measurementCount, FieldMindIcons.Graph)
                             RecordStat("Weather", weatherCount, FieldMindIcons.Weather)
+                            RecordStat("Checklist", checklistCount, FieldMindIcons.Check)
+                        }
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                            RecordStat("Events", eventLogCount, FieldMindIcons.List)
+                            RecordStat("Sites", siteLogCount, FieldMindIcons.Map)
+                            RecordStat("Compare", comparisonCount, FieldMindIcons.Data)
+                            RecordStat("Species", dataRecords.count { it.toolType == "Species" }, FieldMindIcons.Nature)
                         }
                         Text(
                             "Total: ${dataRecords.size} records",
@@ -750,8 +766,39 @@ fun WeatherLogToolScreen(
     var notes by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("") }
     var locating by remember { mutableStateOf(false) }
+    var autoFetching by remember { mutableStateOf(false) }
 
     val conditions = listOf("Clear", "Partly cloudy", "Overcast", "Foggy", "Drizzle", "Rain", "Snow", "Thunderstorm")
+
+    // Auto-fetch weather from current location using the ViewModel's weather provider
+    fun autoFetchWeather() {
+        if (autoFetching) return
+        autoFetching = true
+        locationProvider.requestCurrentLocation { captured ->
+            if (captured != null) {
+                scope.launch {
+                    val snapshot = viewModel.refreshWeatherFromLocation(forceRefresh = true)
+                    if (snapshot != null) {
+                        temperature = snapshot.temperature?.let { String.format("%.1f", it) } ?: ""
+                        condition = snapshot.weatherDescription.ifBlank { condition }
+                        humidity = snapshot.humidity?.toString() ?: ""
+                        windSpeed = snapshot.windSpeed?.let { String.format("%.1f", it) } ?: ""
+                        location = captured.asDisplayText()
+                        showFastSnackbar(snackbar, scope, "Weather auto-fetched from provider")
+                        locationProvider.resolvePlaceName(captured.latitude, captured.longitude) { place ->
+                            if (!place.isNullOrBlank()) location = captured.copy(placeName = place).asDisplayText()
+                        }
+                    } else {
+                        showFastSnackbar(snackbar, scope, "Could not fetch weather — check location/API key")
+                    }
+                    autoFetching = false
+                }
+            } else {
+                showFastSnackbar(snackbar, scope, "Could not get location")
+                autoFetching = false
+            }
+        }
+    }
 
     fun saveWeatherLog() {
         haptics.confirm()
@@ -803,7 +850,7 @@ fun WeatherLogToolScreen(
                 item {
                     StandardScreenHeader(
                         title = "Weather log",
-                        subtitle = "Record current conditions at your location.",
+                        subtitle = "Create a standalone weather data record. Observation weather auto-fetches separately via providers.",
                         icon = FieldMindIcons.Weather,
                         heroColor = FieldMindTheme.colors.data,
                         trailing = {
@@ -822,12 +869,34 @@ fun WeatherLogToolScreen(
                         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                     ) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                            Text(
-                                "Weather condition",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            OptionPickerField(label = "Condition", selected = condition, options = conditions, onSelected = { condition = it }, icon = FieldMindIcons.Info)
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    "Weather condition",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                FilledTonalButton(
+                                    onClick = { autoFetchWeather() },
+                                    enabled = !autoFetching,
+                                    shape = RoundedCornerShape(18.dp),
+                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                                ) {
+                                    if (autoFetching) {
+                                        CircularProgressIndicator(Modifier.size(14.dp), strokeWidth = 2.dp)
+                                    } else {
+                                        Icon(FieldMindIcons.Weather, null, size = 14.dp)
+                                    }
+                                    Spacer(Modifier.size(4.dp))
+                                    Text(
+                                        if (autoFetching) "Fetching..." else "Auto fetch",
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                }
+                            }
 
                             Row(
                                 Modifier.fillMaxWidth(),
@@ -1177,11 +1246,19 @@ fun ChecklistToolScreen(
         haptics.confirm()
         val checkedCount = items.count { it.second }
         val itemCount = items.size
-        val summary = items.joinToString("; ") { (name, checked) -> "${if (checked) "✓" else "○"} $name" }
+        // Store as structured JSON: [{"text":"...","done":true/false},...]
+        val jsonItems = buildString {
+            append("[")
+            items.forEachIndexed { i, (name, checked) ->
+                if (i > 0) append(",")
+                append("{\"text\":\"${name.replace("\"", "\\\"")}\",\"done\":$checked}")
+            }
+            append("]")
+        }
         viewModel.addDataRecord(
             toolType = "Checklist",
             label = "Checklist (${checkedCount}/${itemCount} checked)",
-            value = summary,
+            value = jsonItems,
             unit = "",
             notes = "",
             datasetKind = "Checklists",
@@ -1508,13 +1585,25 @@ fun ComparisonTableScreen(
         if (rows.isEmpty() || tableName.isBlank()) return
         haptics.confirm()
         val savedName = tableName.trim()
-        val summary = rows.joinToString("; ") { row ->
-            "${row.label}: ${row.items.joinToString(" vs ")}"
+        // Store as structured JSON: {"columnCount":2,"rows":[{"label":"...","items":["...","..."]},...]}
+        val jsonRoot = JSONObject().apply {
+            put("columnCount", columnCount)
+            put("rowCount", rows.size)
+            val jsonRows = JSONArray()
+            rows.forEach { row ->
+                val jsonRow = JSONObject()
+                jsonRow.put("label", row.label)
+                val jsonItems = JSONArray()
+                row.items.forEach { jsonItems.put(it) }
+                jsonRow.put("items", jsonItems)
+                jsonRows.put(jsonRow)
+            }
+            put("rows", jsonRows)
         }
         viewModel.addDataRecord(
             toolType = "Comparison Table",
             label = savedName,
-            value = summary,
+            value = jsonRoot.toString(),
             unit = "",
             notes = "$columnCount columns, ${rows.size} rows",
             datasetKind = "Comparisons",

@@ -106,6 +106,7 @@ fun ProjectDetailScreen(
     var showSourcePicker by remember { mutableStateOf(false) }
     var obsPickerSearch by remember { mutableStateOf("") }
     var srcPickerSearch by remember { mutableStateOf("") }
+    var showAllTasksInline by remember { mutableStateOf(false) }
 
     // ── Dialog states ──
     var showNewObservation by remember { mutableStateOf(false) }
@@ -458,17 +459,39 @@ fun ProjectDetailScreen(
                 })
             }
 
-            // ── All Tasks button (on All tab or Tasks tab) ──
+            // ── All Tasks toggle (on All tab or Tasks tab) — shows inline instead of navigating away
             if ((selectedTab == ProjectTab.All || selectedTab == ProjectTab.Tasks) && relatedTasks.isNotEmpty()) {
                 item {
-                    OutlinedButton(
-                        onClick = { onNavigate?.invoke(FieldMindScreen.Tasks) },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp)
-                    ) {
-                        Icon(MaterialSymbolIcon("checklist"), null, size = 18.dp)
-                        Spacer(Modifier.size(8.dp))
-                        Text("View all ${relatedTasks.size} tasks", fontWeight = FontWeight.SemiBold)
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(
+                            onClick = { showAllTasksInline = !showAllTasksInline },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(24.dp)
+                        ) {
+                            Icon(
+                                if (showAllTasksInline) MaterialSymbolIcon("expand_less") else MaterialSymbolIcon("expand_more"),
+                                null, size = 18.dp
+                            )
+                            Spacer(Modifier.size(8.dp))
+                            Text(
+                                if (showAllTasksInline) "Hide tasks" else "View all ${relatedTasks.size} tasks",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                        // Inline task list when expanded
+                        if (showAllTasksInline) {
+                            relatedTasks.forEach { t ->
+                                FeedItemCard(
+                                    item = FeedItem(
+                                        "Task", t.id, t.title, t.priority,
+                                        t.description.ifBlank { t.taskType },
+                                        if (t.dueDate.isNotBlank()) "Due ${t.dueDate}" else "No due date",
+                                        t.createdAt, accentColor = colors.task
+                                    ),
+                                    onClick = { onOpenDetail("task", t.id) }
+                                )
+                            }
+                        }
                     }
                 }
             }

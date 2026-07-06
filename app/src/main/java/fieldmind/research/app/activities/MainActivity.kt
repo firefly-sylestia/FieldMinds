@@ -17,7 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
-import fieldmind.research.app.features.field.presentation.components.applyScreenCaptureProtection
+import fieldmind.research.app.features.field.presentation.components.SecureFlagController
+import fieldmind.research.app.features.field.presentation.components.SecureFlagReason
+import fieldmind.research.app.features.field.presentation.components.shouldApplySecureFlag
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindApp
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.utils.AppLifecycleManager
@@ -86,11 +88,12 @@ class MainActivity : FragmentActivity() {
             val appPreviewMode by fieldMindViewModel.fieldSettings.appPreviewMode.collectAsState()
             val alwaysOnScreen by fieldMindViewModel.fieldSettings.alwaysOnScreenEnabled.collectAsState()
 
-            // Apply FLAG_SECURE if screen capture block is enabled OR if preview mode
-            // is set to blur/privacy (prevents content from showing in recent apps).
-            val shouldSecure = screenCaptureProtection || appPreviewMode != "Normal"
+            // Apply FLAG_SECURE only for the explicit screenshot-blocking setting.
+            // Preview modes must not silently keep screenshots blocked after the user
+            // turns screenshot blocking off.
+            val shouldSecure = shouldApplySecureFlag(screenCaptureProtection, appPreviewMode)
             LaunchedEffect(shouldSecure) {
-                applyScreenCaptureProtection(window, shouldSecure)
+                SecureFlagController.setReason(window, SecureFlagReason.GlobalScreenshotSetting, shouldSecure)
             }
 
             LaunchedEffect(alwaysOnScreen) {

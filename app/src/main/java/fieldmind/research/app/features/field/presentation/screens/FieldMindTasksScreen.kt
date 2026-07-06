@@ -50,6 +50,7 @@ import fieldmind.research.app.ui.theme.CuteElevations
 //  TASKS SCREEN — Full task management with sections and filtering
 // ══════════════════════════════════════════════════════════════════════
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TasksScreen(
     viewModel: FieldMindViewModel,
@@ -62,34 +63,147 @@ fun TasksScreen(
 
     // Track checked-off tasks locally for optimistic UI
     val completedTaskIds = remember { mutableStateMapOf<Long, Boolean>() }
+    val projects by viewModel.projects.collectAsState()
+    val scope = rememberCoroutineScope()
+
+    // Delete confirmation dialog state
+    var taskToDelete by remember { mutableStateOf<TaskEntity?>(null) }
+
+    // ── Filter state ──
+    var filterStatus by remember { mutableStateOf<String?>(null) } // null = all, "Pending", "Done"
+    var filterPriority by remember { mutableStateOf<String?>(null) } // null = all, "High", "Medium", "Low"
+    var filterProjectId by remember { mutableStateOf<Long?>(null) } // null = all projects
+    var showFilterSheet by remember { mutableStateOf(false) }
+    val hasActiveFilters = filterStatus != null || filterPriority != null || filterProjectId != null
+
+    // Apply filters to a list of tasks
+    fun applyFilters(taskList: List<TaskEntity>): List<TaskEntity> {
+        return taskList.filter { t ->
+            (filterStatus == null || t.status == filterStatus) &&
+            (filterPriority == null || t.priority == filterPriority) &&
+            (filterProjectId == null || t.projectId == filterProjectId)
+        }
+    }
 
     // ── Compute sections ──
     val todayDate = remember {
         SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(System.currentTimeMillis()))
     }
 
-    val todayTasks = remember(tasks, completedTaskIds) {
-        tasks.filter { t ->
+    val todayTasks = remember(tasks, completedTaskIds, filterStatus, filterPriority, filterProjectId) {
+        applyFilters(tasks.filter { t ->
             t.dueDate == todayDate && t.status != "Done" && completedTaskIds[t.id] != true
-        }.sortedBy { it.priority }
+        }).sortedBy { it.priority }
     }
 
-    val upcomingTasks = remember(tasks, completedTaskIds) {
-        tasks.filter { t ->
+    val upcomingTasks = remember(tasks, completedTaskIds, filterStatus, filterPriority, filterProjectId) {
+        applyFilters(tasks.filter { t ->
             t.dueDate.isNotBlank() && t.dueDate != todayDate && t.status != "Done" && completedTaskIds[t.id] != true
-        }.sortedBy { it.dueDate }
+        }).sortedBy { it.dueDate }
     }
 
-    val doneTasks = remember(tasks, completedTaskIds) {
-        tasks.filter { t ->
+    val unscheduledTasks = remember(tasks, completedTaskIds, filterStatus, filterPriority, filterProjectId) {
+        applyFilters(tasks.filter { t ->
+            t.dueDate.isBlank() && t.status != "Done" && completedTaskIds[t.id] != true
+        }).sortedByDescending { it.updatedAt }
+    }
+
+    val doneTasks = remember(tasks, completedTaskIds, filterStatus, filterPriority, filterProjectId) {
+        applyFilters(tasks.filter { t ->
             t.status == "Done" || completedTaskIds[t.id] == true
-        }.sortedByDescending { it.updatedAt }
+        }).sortedByDescending { it.updatedAt }
     }
 
     // ── Section expand state ──
     var expandedToday by remember { mutableStateOf(true) }
     var expandedUpcoming by remember { mutableStateOf(true) }
+    var expandedUnscheduled by remember { mutableStateOf(false) }
     var expandedDone by remember { mutableStateOf(false) }
+
+    // ── Filter bottom sheet ──
+    if (showFilterSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showFilterSheet = false },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
+        ) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 32.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                Text("Filter tasks", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+
+                // Status filter
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Status", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        listOf("All", "Pending", "Done").forEach { status ->
+                            FilterChip(
+                                selected = (status == "All" && filterStatus == null) || filterStatus == status,
+                                onClick = { filterStatus = if (status == "All") null else status },
+                                label = { Text(status) }
+                            )
+                        }
+                    }
+                }
+
+                // Priority filter
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Priority", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        listOf("All", "High", "Medium", "Low").forEach { priority ->
+                            FilterChip(
+                                selected = (priority == "All" && filterPriority == null) || filterPriority == priority,
+                                onClick = { filterPriority = if (priority == "All") null else priority },
+                                label = { Text(priority) }
+                            )
+                        }
+                    }
+                }
+
+                // Project filter
+                if (projects.isNotEmpty()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("Project", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            FilterChip(
+                                selected = filterProjectId == null,
+                                onClick = { filterProjectId = null },
+                                label = { Text("All projects") }
+                            )
+                            projects.forEach { project ->
+                                FilterChip(
+                                    selected = filterProjectId == project.id,
+                                    onClick = { filterProjectId = project.id },
+                                    label = { Text(project.title.take(15)) }
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Clear filters
+                if (hasActiveFilters) {
+                    TextButton(
+                        onClick = {
+                            filterStatus = null
+                            filterPriority = null
+                            filterProjectId = null
+                            showFilterSheet = false
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(MaterialSymbolIcon("clear"), null, size = 16.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Clear all filters")
+                    }
+                }
+            }
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -105,10 +219,36 @@ fun TasksScreen(
                 title = "Tasks",
                 subtitle = "Track field tasks, surveys, and to-dos.",
                 icon = MaterialSymbolIcon("checklist"),
-                heroColor = FieldMindTheme.colors.flashcard,
+                heroColor = FieldMindTheme.colors.task,
                 trailing = {
-                    IconButton(onClick = { onNavigate("field_new_task") }, modifier = Modifier.size(40.dp)) {
-                        Icon(MaterialSymbolIcon("add"), "Add task", size = 22.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        // Filter button (with active indicator)
+                        IconButton(
+                            onClick = { showFilterSheet = true },
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Box {
+                                Icon(
+                                    MaterialSymbolIcon("filter_list"),
+                                    "Filter tasks",
+                                    size = 22.dp,
+                                    tint = if (hasActiveFilters) FieldMindTheme.colors.positive
+                                           else MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                if (hasActiveFilters) {
+                                    Box(
+                                        Modifier
+                                            .align(Alignment.TopEnd)
+                                            .size(8.dp)
+                                            .clip(CircleShape)
+                                            .background(FieldMindTheme.colors.positive)
+                                    )
+                                }
+                            }
+                        }
+                        IconButton(onClick = { onNavigate("field_new_task") }, modifier = Modifier.size(40.dp)) {
+                            Icon(MaterialSymbolIcon("add"), "Add task", size = 22.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                 }
             )
@@ -119,10 +259,10 @@ fun TasksScreen(
             item {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     StatCard(
-                        value = "${todayTasks.size + upcomingTasks.size}",
+                        value = "${todayTasks.size + upcomingTasks.size + unscheduledTasks.size}",
                         label = "Pending",
                         icon = MaterialSymbolIcon("pending_actions"),
-                        color = FieldMindTheme.colors.flashcard,
+                        color = FieldMindTheme.colors.task,
                         modifier = Modifier.weight(1f)
                     )
                     StatCard(
@@ -144,7 +284,7 @@ fun TasksScreen(
                 title = "Today",
                 icon = MaterialSymbolIcon("today"),
                 count = todayTasks.size,
-                accentColor = FieldMindTheme.colors.flashcard,
+                accentColor = FieldMindTheme.colors.task,
                 expanded = expandedToday,
                 onToggle = { expandedToday = !expandedToday }
             )
@@ -159,12 +299,13 @@ fun TasksScreen(
                 items(todayTasks, key = { it.id }) { task ->
                     SwipeToCompleteTaskCard(
                         task = task,
-                        accentColor = FieldMindTheme.colors.flashcard,
+                        accentColor = FieldMindTheme.colors.task,
                         onToggle = {
                             haptics.confirm()
                             completedTaskIds[task.id] = true
                             viewModel.updateTaskEntity(task.copy(status = "Done"))
                         },
+                        onDelete = { taskToDelete = task },
                         onTap = { onNavigate("field_task_detail/${task.id}") }
                     )
                 }
@@ -200,6 +341,43 @@ fun TasksScreen(
                             completedTaskIds[task.id] = true
                             viewModel.updateTaskEntity(task.copy(status = "Done"))
                         },
+                        onDelete = { taskToDelete = task },
+                        onTap = { onNavigate("field_task_detail/${task.id}") }
+                    )
+                }
+            }
+        }
+
+        // ════════════════════════════════════════════════════════
+        //  UNSCHEDULED section
+        // ════════════════════════════════════════════════════════
+        item {
+            TaskSectionHeader(
+                title = "Unscheduled",
+                icon = MaterialSymbolIcon("inbox"),
+                count = unscheduledTasks.size,
+                accentColor = FieldMindTheme.colors.data,
+                expanded = expandedUnscheduled,
+                onToggle = { expandedUnscheduled = !expandedUnscheduled }
+            )
+        }
+
+        if (expandedUnscheduled) {
+            if (unscheduledTasks.isEmpty()) {
+                item {
+                    EmptyTaskHint("All tasks have due dates.")
+                }
+            } else {
+                items(unscheduledTasks, key = { it.id }) { task ->
+                    SwipeToCompleteTaskCard(
+                        task = task,
+                        accentColor = FieldMindTheme.colors.data,
+                        onToggle = {
+                            haptics.confirm()
+                            completedTaskIds[task.id] = true
+                            viewModel.updateTaskEntity(task.copy(status = "Done"))
+                        },
+                        onDelete = { taskToDelete = task },
                         onTap = { onNavigate("field_task_detail/${task.id}") }
                     )
                 }
@@ -236,6 +414,7 @@ fun TasksScreen(
                             completedTaskIds.remove(task.id)
                             viewModel.updateTaskEntity(task.copy(status = "Pending"))
                         },
+                        onDelete = { taskToDelete = task },
                         onTap = { onNavigate("field_task_detail/${task.id}") }
                     )
                 }
@@ -243,6 +422,28 @@ fun TasksScreen(
         }
     }
 
+    // ── Delete confirmation dialog ──
+    if (taskToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { taskToDelete = null },
+            title = { Text("Delete task") },
+            text = { Text("Are you sure you want to delete \"${taskToDelete?.title}\"? This cannot be undone.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    taskToDelete?.let { viewModel.deleteTask(it.id) }
+                    taskToDelete = null
+                    haptics.confirm()
+                }) {
+                    Text("Delete", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { taskToDelete = null }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -325,6 +526,7 @@ private fun TaskCard(
     isChecked: Boolean,
     accentColor: Color,
     onToggle: () -> Unit,
+    onDelete: () -> Unit = {},
     onTap: () -> Unit = {}
 ) {
     val priorityColor = when (task.priority) {
@@ -355,9 +557,9 @@ private fun TaskCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+                .padding(start = 8.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // ── Checkbox with spring bounce ──
             val checkBounce = remember { Animatable(1f) }
@@ -494,6 +696,50 @@ private fun TaskCard(
                     }
                 }
             }
+
+            // ── Action buttons (visible on hover/always) ──
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                // Complete/uncomplete button (prominent check circle)
+                Surface(
+                    onClick = onToggle,
+                    shape = CircleShape,
+                    color = if (isChecked)
+                        MaterialTheme.colorScheme.surfaceContainerHigh
+                    else
+                        FieldMindTheme.colors.positive.copy(alpha = 0.12f),
+                    modifier = Modifier.size(30.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            MaterialSymbolIcon(if (isChecked) "undo" else "check_circle", filled = !isChecked),
+                            if (isChecked) "Mark pending" else "Mark done",
+                            size = 18.dp,
+                            tint = if (isChecked) MaterialTheme.colorScheme.onSurfaceVariant
+                                   else FieldMindTheme.colors.positive
+                        )
+                    }
+                }
+
+                // Delete button
+                Surface(
+                    onClick = onDelete,
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.08f),
+                    modifier = Modifier.size(30.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            MaterialSymbolIcon("delete"),
+                            "Delete task",
+                            size = 16.dp,
+                            tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -529,6 +775,7 @@ private fun SwipeToCompleteTaskCard(
     task: TaskEntity,
     accentColor: Color,
     onToggle: () -> Unit,
+    onDelete: () -> Unit = {},
     onTap: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -647,6 +894,7 @@ private fun SwipeToCompleteTaskCard(
                 isChecked = false,
                 accentColor = accentColor,
                 onToggle = onToggle,
+                onDelete = onDelete,
                 onTap = onTap
             )
         }

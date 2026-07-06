@@ -1132,9 +1132,10 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         linkedObservationId: Long? = null,
         linkedSpeciesId: Long? = null,
         projectId: Long? = null,
-        parentTaskId: Long? = null
+        parentTaskId: Long? = null,
+        onSaved: ((Long) -> Unit)? = null
     ) = viewModelScope.launch {
-        repository.addTask(
+        val id = repository.addTask(
             TaskEntity(
                 title = title.trim(),
                 description = description.trim(),
@@ -1158,6 +1159,7 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                 parentTaskId = parentTaskId
             )
         )
+        onSaved?.invoke(id)
     }
 
     fun updateTaskEntity(entity: TaskEntity) = viewModelScope.launch { repository.updateTask(entity) }

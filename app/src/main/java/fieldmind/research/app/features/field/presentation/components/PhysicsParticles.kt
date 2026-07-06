@@ -79,6 +79,30 @@ class PhysicsParticleSystem(
         }
     }
 
+
+    /**
+     * Seed particles across the visible canvas so weather is visible immediately
+     * on the first animation frame instead of slowly filling from above.
+     */
+    fun seedAcrossCanvas(count: Int, vx: Float, vy: Float, size: Float, massRange: Pair<Float, Float> = 0.8f to 1.2f) {
+        repeat(count) {
+            if (particles.size < maxParticles) {
+                val mass = random.nextFloat() * (massRange.second - massRange.first) + massRange.first
+                particles.add(
+                    PhysicsParticle(
+                        x = random.nextFloat() * canvasWidth,
+                        y = random.nextFloat() * canvasHeight,
+                        vx = vx + random.nextFloat() * 0.2f - 0.1f,
+                        vy = vy,
+                        mass = mass,
+                        size = size * mass,
+                        id = particles.size
+                    )
+                )
+            }
+        }
+    }
+
     /**
      * Update all particles with physics simulation including wind gusts and turbulence
      */

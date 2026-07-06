@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -131,7 +132,14 @@ private data class CaptureSessionState(
     val timerStartedAt: Long? = null,
     val timerAccumulatedMs: Long = 0L,
     val timerRunning: Boolean = false,
-    val sessionObservationCount: Int = 0
+    val sessionObservationCount: Int = 0,
+    // ── Process-death persistence (Issue #2) ──
+    val capturedLocation: @RawValue CapturedLocation? = null,
+    val weatherSnapshot: @RawValue WeatherSnapshot? = null,
+    val activeSessionId: Long? = null,
+    val showEvidenceForm: Boolean = false,
+    val sessionName: String = "",
+    val selectedProjectId: Long? = null
 ) : Parcelable
 
 @Parcelize
@@ -159,14 +167,14 @@ fun ObserveScreen(
 
     // Core session state — uses rememberSaveable to survive configuration changes
     var session by rememberSaveable { mutableStateOf(CaptureSessionState()) }
-    var capturedLocation by remember { mutableStateOf<CapturedLocation?>(null) }
-    var showEvidenceForm by remember { mutableStateOf(false) }
+    // capturedLocation now lives in CaptureSessionState
+    // showEvidenceForm now lives in CaptureSessionState
 
     val researchSessions by viewModel.researchSessions.collectAsState()
     val projects by viewModel.projects.collectAsState()
-    var sessionName by remember { mutableStateOf("") }
-    var selectedProjectId by remember { mutableStateOf<Long?>(null) }
-    var activeSessionId by remember { mutableStateOf<Long?>(null) }
+    // sessionName now lives in CaptureSessionState
+    // selectedProjectId now lives in CaptureSessionState
+    // activeSessionId now lives in CaptureSessionState
     var showSessionSummary by remember { mutableStateOf(false) }
 
     // Sync captureSessionActive with local session state on navigation to Observe screen.
@@ -183,8 +191,8 @@ fun ObserveScreen(
     LaunchedEffect(viewModel.captureSessionActive) {
         if (!viewModel.captureSessionActive && session.isActive) {
             session = CaptureSessionState()
-            showEvidenceForm = false
-            activeSessionId = null
+            session = session.copy(showEvidenceForm = false)
+            session = session.copy(activeSessionId = null)
         }
     }
 
@@ -204,7 +212,7 @@ fun ObserveScreen(
     var identifiedSpecies by remember { mutableStateOf<SpeciesMatch?>(null) }
 
     // ── Weather snapshot from catalog cache ──
-    var weatherSnapshot by remember { mutableStateOf<WeatherSnapshot?>(null) }
+    // weatherSnapshot now lives in CaptureSessionState
     var weatherFetching by remember { mutableStateOf(false) }
 
     // ── Observations state (collected for reactive stats dashboard) ──
@@ -320,12 +328,12 @@ fun ObserveScreen(
                 onResult = { loc ->
                     gpsFetching = false
                     if (loc != null) {
-                        capturedLocation = loc
+                        session = session.copy(capturedLocation = loc)
                         metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m accuracy) — fetching weather…"
                         scope.launch {
                             weatherFetching = true
                             val snapshot = viewModel.fetchWeatherSnapshot(loc.latitude, loc.longitude)
-                            weatherSnapshot = snapshot
+                            session = session.copy(weatherSnapshot = snapshot)
                             weatherFetching = false
                             if (snapshot != null) {
                                 // Log to offline weather catalog
@@ -339,7 +347,7 @@ fun ObserveScreen(
                         }
                         locationProvider.resolvePlaceName(loc.latitude, loc.longitude) { place ->
                             if (!place.isNullOrBlank()) {
-                                capturedLocation = loc.copy(placeName = place)
+                                session = session.copy(capturedLocation = loc.copy(placeName = place))
                             }
                         }
                     } else {
@@ -357,21 +365,21 @@ fun ObserveScreen(
     // ── Action: start evidence capture ──
     fun startCapture() {
         haptics.light()
-        val name = sessionName.ifBlank {
-            val project = projects.firstOrNull { it.id == selectedProjectId }
+        val name = session.sessionName.ifBlank {
+            val project = projects.firstOrNull { it.id == session.selectedProjectId }
             val time = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date())
             listOfNotNull(project?.title).joinToString(" • ").ifBlank { "Observation session" } + " · $time"
         }
         // Activate session immediately, then create the ResearchSession in background
         session = session.copy(isActive = true, step = CaptureStep.Evidence)
-        showEvidenceForm = true
+        session = session.copy(showEvidenceForm = true)
         viewModel.setCaptureSessionActive(true)
         if (!session.timerRunning && session.timerStartedAt == null) {
             session = session.copy(timerStartedAt = System.currentTimeMillis(), timerRunning = true)
         }
         showMetadataConfirm = true
-        viewModel.addResearchSession(name, selectedProjectId) { id ->
-            activeSessionId = id
+        viewModel.addResearchSession(name, session.selectedProjectId) { id ->
+            session = session.copy(activeSessionId = id)
         }
     }
     // ── Action: save observation ──
@@ -421,13 +429,14 @@ fun ObserveScreen(
             context = s.fieldContext,
             attachments = s.attachments,
             durationMs = liveElapsed.takeIf { it > 0L },
-            latitude = capturedLocation?.latitude,
-            longitude = capturedLocation?.longitude,
+            latitude = session.capturedLocation?.latitude,
+            longitude = session.capturedLocation?.longitude,
             structuredDetailsJson = structuredJson,
+            weather = session.weatherSnapshot,
             timeNote = "Captured via observation session at ${formatDurationCompact(liveElapsed)}"
         ) { observationId ->
             // Link this observation to the active ResearchSession
-            activeSessionId?.let { viewModel.linkObservationToSession(it, observationId) }
+            session.activeSessionId?.let { viewModel.linkObservationToSession(it, observationId) }
             session = session.copy(
                 subject = "", speciesName = "", facts = "", tags = "", evidence = "",
                 fieldContext = "", manualLocation = "", attachments = emptyList(),
@@ -482,7 +491,7 @@ fun ObserveScreen(
                     TextButton(onClick = {
                         viewModel.setCaptureSessionActive(false)
                         session = CaptureSessionState()
-                        showEvidenceForm = false
+                        session = session.copy(showEvidenceForm = false)
                         showExitConfirm = false
                         onBack?.invoke()
                     }) {
@@ -522,15 +531,15 @@ fun ObserveScreen(
             },
             dismissButton = {                    TextButton(onClick = {
                                     viewModel.setCaptureSessionActive(false)
-                                activeSessionId?.let { id ->
+                                session.activeSessionId?.let { id ->
                                     val finalStartedAt = session.timerStartedAt
                                     val durationMs = session.timerAccumulatedMs +
                                         (if (session.timerRunning && finalStartedAt != null) System.currentTimeMillis() - finalStartedAt else 0L)
                                         viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
                                     }
-                                    activeSessionId = null
+                                    session = session.copy(activeSessionId = null)
                                     session = CaptureSessionState()
-                                    showEvidenceForm = false
+                                    session = session.copy(showEvidenceForm = false)
                                     showSessionExitConfirm = false
                                     onBack?.invoke()
                                 }) {
@@ -599,13 +608,13 @@ fun ObserveScreen(
                             },
                             onClose = {
                                 viewModel.setCaptureSessionActive(false)
-                                activeSessionId?.let { id ->
+                                session.activeSessionId?.let { id ->
                                     val timerStartedAtLocal = session.timerStartedAt
                                     val durationMs = session.timerAccumulatedMs +
                                         (if (session.timerRunning && timerStartedAtLocal != null) System.currentTimeMillis() - timerStartedAtLocal else 0L)
                                     viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
                                 }
-                                activeSessionId = null
+                                session = session.copy(activeSessionId = null)
                                 showSessionSummary = true
                             }
                         )
@@ -625,8 +634,8 @@ fun ObserveScreen(
                                 
                                 // Session name
                                 OutlinedTextField(
-                                    value = sessionName,
-                                    onValueChange = { sessionName = it },
+                                    value = session.sessionName,
+                                    onValueChange = { session = session.copy(sessionName = it) },
                                     label = { Text("Session name (optional)") },
                                     placeholder = { Text("e.g. Morning bird walk") },
                                     modifier = Modifier.fillMaxWidth(),
@@ -638,10 +647,10 @@ fun ObserveScreen(
                                 if (projects.isNotEmpty()) {
                                     OptionPickerField(
                                         label = "Link to project",
-                                        selected = projects.firstOrNull { it.id == selectedProjectId }?.title ?: "No project",
+                                        selected = projects.firstOrNull { it.id == session.selectedProjectId }?.title ?: "No project",
                                         options = listOf("No project") + projects.map { it.title },
                                         onSelected = { selected ->
-                                            selectedProjectId = projects.firstOrNull { it.title == selected }?.id
+                                            session = session.copy(selectedProjectId = projects.firstOrNull { it.title == selected }?.id)
                                         },
                                         icon = FieldMindIcons.Project
                                     )
@@ -723,7 +732,7 @@ fun ObserveScreen(
                 }
 
                 // ── Evidence-First Input ──
-                if (showEvidenceForm) {
+                if (session.showEvidenceForm) {
                     // Evidence capture buttons (always visible when form is open)
                     item {
                         EvidenceCaptureRow(
@@ -773,11 +782,11 @@ fun ObserveScreen(
                     // ── Auto Metadata Status — MOVED TO TOP ──
                     item {
                         AutoMetadataStatusCard(
-                            hasGps = capturedLocation != null,
-                            hasWeather = weatherSnapshot != null,
+                            hasGps = session.capturedLocation != null,
+                            hasWeather = session.weatherSnapshot != null,
                             hasTimestamp = true,
-                            gpsAccuracy = capturedLocation?.accuracyMeters,
-                            weatherDetail = weatherSnapshot?.asDisplayText(),
+                            gpsAccuracy = session.capturedLocation?.accuracyMeters,
+                            weatherDetail = session.weatherSnapshot?.asDisplayText(),
                             autoFetching = metadataAutoFetching,
                             gpsFetching = gpsFetching,
                             gpsAttempt = gpsFetchAttempt,
@@ -800,7 +809,7 @@ fun ObserveScreen(
                                         onResult = { loc ->
                                             gpsFetching = false
                                             if (loc != null) {
-                                                capturedLocation = loc
+                                                session = session.copy(capturedLocation = loc)
                                                 metadataStatus = "GPS acquired (${loc.accuracyMeters?.toInt() ?: "?"}m)"
                                                 showFastSnackbar(snackbar, scope, "GPS acquired")
                                             } else {
@@ -813,13 +822,13 @@ fun ObserveScreen(
                                 }
                             },
                             onFetchWeather = {
-                                val loc = capturedLocation
+                                val loc = session.capturedLocation
                                 if (loc != null) {
                                     scope.launch {
                                         weatherFetching = true
                                         metadataStatus = "Fetching weather…"
                                         val snapshot = viewModel.fetchWeatherSnapshot(loc.latitude, loc.longitude)
-                                        weatherSnapshot = snapshot
+                                        session = session.copy(weatherSnapshot = snapshot)
                                         weatherFetching = false
                                         if (snapshot != null) {
                                             viewModel.saveWeatherSnapshot(snapshot, loc.latitude, loc.longitude)
@@ -927,8 +936,8 @@ fun ObserveScreen(
                                         Modifier.weight(1f)
                                     )
                                 }
-                                if (sessionName.isNotBlank()) {
-                                    Text("Session: $sessionName", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                if (session.sessionName.isNotBlank()) {
+                                    Text("Session: ${session.sessionName}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                                 }
                                 Button(onClick = {
                                     showSessionSummary = false
@@ -936,8 +945,8 @@ fun ObserveScreen(
                                         timerAccumulatedMs = 0L,
                                         sessionObservationCount = 0
                                     )
-                                    sessionName = ""
-                                    selectedProjectId = null
+                                    session = session.copy(sessionName = "")
+                                    session = session.copy(selectedProjectId = null)
                                 }, shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth()) {
                                     Text("Start new session")
                                 }
@@ -947,7 +956,7 @@ fun ObserveScreen(
                 }
 
                 // ── Empty state (only when no form is open AND no saved observations) ──
-                if (!showEvidenceForm && !session.isActive && observations.isEmpty() && !showSessionSummary) {
+                if (!session.showEvidenceForm && !session.isActive && observations.isEmpty() && !showSessionSummary) {
                     item {
                         EmptyState(
                             "No observations yet",
@@ -2396,36 +2405,12 @@ private fun EnhancedObservationForm(
             }
         }
     }
-}
 
 // ══════════════════════════════════════════════════════════════════════
 //  Quality Score Card
 // ══════════════════════════════════════════════════════════════════════
 
-@Composable
-private fun QualityScoreCard(score: Int) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.45f)
-    ) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Icon(FieldMindIcons.Check, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
-                    Text("Quality", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                }
-                Text("$score%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
-            }
-            LinearProgressIndicator(progress = { score / 100f }, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(99.dp)).height(6.dp))
-        }
-    }
 }
-
 // ══════════════════════════════════════════════════════════════════════
 //  Missing Fields Checklist
 // ══════════════════════════════════════════════════════════════════════

@@ -6,49 +6,34 @@
 
 ## Request Summary
 
-Targeted FieldMind Android stability/security/weather repair pass:
-- Crash reporter must show a reliable non-blank crash screen and persist richer crash reports.
-- Collaboration sharing must not crash when no share target exists; fake export button must route to real export flow.
-- App lock must use exact 4/5/6 digit PINs, in-app numpad, consistent failed-attempt policies, cooldowns, biometric-required enforcement, and safer panic-lock handling.
-- Auto-lock must respect background timeout settings.
-- Open-Meteo must work without an API key and weather failures must expose actionable diagnostic state.
-- DevFullAppTestRunner must be cancellable, less hang-prone, restore settings, and test lock/weather/crash policies.
+Fix the CI Kotlin compilation failure in `FieldMindDetailScreen.kt` reported for `:app:compileFdroidDebugKotlin`, centered on `ComparisonDetailContent` unresolved `second` / row type inference / non-composable lambda errors.
 
 ## Context Gathered
 
-- DOX chain read: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, field data/presentation AGENTS, shared/infrastructure/resource AGENTS, `fastlane/AGENTS.md`.
-- Build/lint/test Gradle commands are prohibited in this environment.
-- Open-Meteo official docs/search confirm free API has no API key requirement; pricing/customer docs show customer endpoint uses `customer-api.open-meteo.com` and `apikey` query parameter.
-- Existing lock screen uses a device keyboard `OutlinedTextField`, cooldown threshold hardcoded at 3 despite UI saying 5, and failed policies are partially unwired.
-- Existing crash reporter starts crash activity but returns from uncaught exception handler without a re-entrancy guard or explicit process termination.
-- Existing DevFullAppTestRunner has long per-test timeout and no cancellation/restoration wrapper.
+- Re-read the applicable DOX chain before editing: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, `features/field/AGENTS.md`, and `features/field/presentation/AGENTS.md`.
+- Inspected `ComparisonDetailContent` around the reported CI lines 2858–2896.
+- Found `remember(d.value)` assigned the JSON/legacy `try` expression to an unused local `jsonResult`; because that assignment was the lambda body, `remember` returned `Unit` instead of `Pair<Int, List<ComparisonRow>>`.
+- The `Unit` return explains the cascade: `parsedData.second` unresolved, `rows` type unavailable, `row`/`items` inference failures, and misleading Compose invocation diagnostics in nested lambdas.
+- Gradle compile/build/lint/test commands remain prohibited by project instructions in this environment, so validation is limited to static checks.
 
 ## Implementation Plan
 
-1. Add testable lock/security policy helpers and wire lock screen to them.
-2. Replace unlock PIN text field with in-app numpad and exact-length verification.
-3. Harden crash reporting and crash activity fallback UI.
-4. Harden Collaboration share flows and route export to Export Studio.
-5. Improve auto-lock timeout mapping and lifecycle manager integration.
-6. Fix Open-Meteo optional key behavior, URL builder, and weather diagnostics/fresh location fallback.
-7. Improve DevFullAppTestRunner cancellation/progress/settings restore and add policy tests.
-8. Update What's New + fastlane changelog.
-9. Run allowed static checks only, then commit/push and create PR.
+1. Change `ComparisonDetailContent` so the `remember` lambda directly returns the `try/catch` `Pair`.
+2. Add an explicit `Pair<Int, List<ComparisonRow>>` type to `parsedData` to keep row inference stable.
+3. Use the existing `org.json.JSONObject` import instead of a fully qualified reference.
+4. Run static whitespace and brace-balance checks only.
+5. Commit the targeted fix and create a PR record.
 
 ## Completion Summary
 
-Implemented targeted fixes:
-- Hardened crash reporting with re-entrancy guard, richer crash metadata, guarded persistence, crash-process launch, and process termination after dispatch.
-- Replaced crash screen with minimal Compose UI plus native fallback.
-- Hardened Collaboration share/invite actions with clipboard fallback and routed export action to Export Studio.
-- Added `LockSecurityPolicy` and wired lock screen to exact PIN length, in-app numpad, 5-attempt policy, cooldown countdown, biometric-required mode, and non-destructive panic reset.
-- Improved background auto-lock timeout wiring and reset lock signal after unlock.
-- Fixed Open-Meteo free tier as no-key-required, moved URL construction to `HttpUrl.Builder`, and added weather diagnostics/fresh-location fallback.
-- Made DevFullAppTestRunner cancellable, shorter-timeout, settings-restoring, and added lock/weather/crash policy smoke checks.
-- Updated in-app What's New and fastlane changelog.
+Implemented the targeted compile fix in `app/src/main/java/fieldmind/research/app/features/field/presentation/screens/FieldMindDetailScreen.kt`:
+- `parsedData` now has an explicit `Pair<Int, List<ComparisonRow>>` type.
+- The `remember(d.value)` lambda now returns the `try/catch` result directly instead of assigning it to unused `jsonResult` and returning `Unit`.
+- JSON parsing now uses the imported `JSONObject` symbol.
 
 ## Verification Notes
 
-- Ran `git diff --check` successfully.
-- Ran ripgrep/static checks for the key repaired patterns.
-- Did not run Gradle build/lint/test commands because repository DOX explicitly prohibits them in this environment.
+- Ran `git diff --check`; no whitespace errors reported.
+- Ran a static Python brace-balance check for `FieldMindDetailScreen.kt`; final brace balance is zero.
+- Ran a static text check confirming the bad `val jsonResult = try` pattern is gone and the typed `parsedData` declaration is present.
+- Did not run Gradle compile/build/lint/test commands because repository DOX explicitly prohibits them in this environment.

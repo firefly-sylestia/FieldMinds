@@ -54,12 +54,13 @@ The `presentation/` package contains all UI code for the FieldMind research tool
 - New screen: create composable → register in `FieldMindScreens.kt` → add route in `FieldMindNavigation.kt`
 - New reusable component: add to `components/` package, keep it stateless/parameter-driven
 - Changelog entries: update `FieldMindChangelogScreen.kt` (see root `AGENTS.md` "Updating What's New")
-- Privacy-sensitive screens: use `ScreenSecurityUtils` to prevent screenshots in recents
+- Privacy-sensitive screens: use `ScreenSecurityUtils`/`SecureFlagController` reason ownership so sensitive-screen secure flags do not fight the global screenshot setting
 - Theming: use `FieldMindTheme.colors` consistently; avoid hardcoded colors
 
 ## Verification
 
 - Navigation routes resolve correctly (no 404s in app)
+- Bottom-tab device Back behavior is owned by `FieldMindNavigation` and should return non-home tabs to Today before app exit
 - Compose previews render (when added)
 - No infinite-height constraint crashes (use `Modifier.heightIn(max=...)` inside scrollable columns)
 

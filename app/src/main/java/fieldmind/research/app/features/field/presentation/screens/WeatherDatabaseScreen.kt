@@ -26,6 +26,7 @@ import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
 import fieldmind.research.app.features.field.data.weather.WeatherUnitConverter
 import fieldmind.research.app.features.field.presentation.components.AnimatedWeatherScene
 import fieldmind.research.app.features.field.presentation.components.ClickableCard
+import fieldmind.research.app.features.field.presentation.components.InfoCard
 import fieldmind.research.app.features.field.presentation.screens.formatTimeFromIso
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.GpsOffDialog

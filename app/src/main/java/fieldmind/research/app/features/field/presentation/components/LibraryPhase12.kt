@@ -218,7 +218,7 @@ private fun ExtractionButton(label: String, onClick: () -> Unit, modifier: Modif
  * Backlinks Panel - shows where a source is referenced
  */
 @Composable
-fun BacklinksPanel(
+fun SourceBacklinksPanel(
     noteReferences: Int = 0,
     projectReferences: Int = 0,
     hypothesisReferences: Int = 0,

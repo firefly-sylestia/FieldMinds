@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -151,34 +152,48 @@ fun SharedTransitionScope.DetailScreen(
 
             // Editing is handled via EditEntityDialog overlay — detail content always shows behind it
             when (kind) {
-                    "note" -> notes.firstOrNull { it.id == id }?.let { n ->
+                "note" -> {
+                    val n = notes.firstOrNull { it.id == id }
+                    if (n != null) {
                         item { NoteDetailContent(n, onOpenDetail, onOpenCanvas) }
                         item { BacklinksPanel(buildList {
                             projects.firstOrNull { it.id == n.projectId }?.let { add(Triple("project", it.title, it.id)) }
                             sources.firstOrNull { it.id == n.sourceId }?.let { add(Triple("source", it.title, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "observation" -> observations.firstOrNull { it.id == id }?.let { o ->
+                }
+                "observation" -> {
+                    val o = observations.firstOrNull { it.id == id }
+                    if (o != null) {
                         item { ObservationDetailContent(o, viewModel, onOpenReader, onOpenDetail, detailSnackbar, detailScope) }
                         item { BacklinksPanel(buildList {
                             projects.firstOrNull { it.id == o.projectId }?.let { add(Triple("project", it.title, it.id)) }
                             data.filter { it.observationId == o.id }.forEach { add(Triple("data", it.label, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "question" -> questions.firstOrNull { it.id == id }?.let { qn ->
+                }
+                "question" -> {
+                    val qn = questions.firstOrNull { it.id == id }
+                    if (qn != null) {
                         item { QuestionDetailContent(qn, hypotheses) { ans -> viewModel.setQuestionAnswer(qn, ans) } }
                         item { BacklinksPanel(buildList {
                             projects.firstOrNull { it.id == qn.relatedProjectId }?.let { add(Triple("project", it.title, it.id)) }
                             hypotheses.filter { it.linkedQuestionId == qn.id }.forEach { add(Triple("hypothesis", it.prediction, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "hypothesis" -> hypotheses.firstOrNull { it.id == id }?.let { h ->
+                }
+                "hypothesis" -> {
+                    val h = hypotheses.firstOrNull { it.id == id }
+                    if (h != null) {
                         item { HypothesisDetailContent(h) }
                         item { BacklinksPanel(buildList {
                             questions.firstOrNull { it.id == h.linkedQuestionId }?.let { add(Triple("question", it.questionText, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "project" -> projects.firstOrNull { it.id == id }?.let { p ->
+                }
+                "project" -> {
+                    val p = projects.firstOrNull { it.id == id }
+                    if (p != null) {
                         item { ProjectDetailContent(p, observations, questions, sources, data, reports, viewModel) }
                         item { BacklinksPanel(buildList {
                             observations.filter { it.projectId == p.id }.forEach { add(Triple("observation", it.subject, it.id)) }
@@ -188,7 +203,10 @@ fun SharedTransitionScope.DetailScreen(
                             reports.filter { it.projectId == p.id }.forEach { add(Triple("report", it.title, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "source" -> sources.firstOrNull { it.id == id }?.let { s ->
+                }
+                "source" -> {
+                    val s = sources.firstOrNull { it.id == id }
+                    if (s != null) {
                         item { SourceDetailContent(s, projects, onOpenReader) }
                         item { SourceActionPanel(s, projects, viewModel, onOpenDetail) }
                         item { BacklinksPanel(buildList {
@@ -196,25 +214,37 @@ fun SharedTransitionScope.DetailScreen(
                             flashcards.filter { it.sourceId == s.id }.forEach { add(Triple("flashcard", it.front, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "data" -> data.firstOrNull { it.id == id }?.let { d ->
+                }
+                "data" -> {
+                    val d = data.firstOrNull { it.id == id }
+                    if (d != null) {
                         item { DataRecordDetailContent(d) }
                         item { BacklinksPanel(buildList {
                             projects.firstOrNull { it.id == d.projectId }?.let { add(Triple("project", it.title, it.id)) }
                             observations.firstOrNull { it.id == d.observationId }?.let { add(Triple("observation", it.subject, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "report" -> reports.firstOrNull { it.id == id }?.let { r ->
+                }
+                "report" -> {
+                    val r = reports.firstOrNull { it.id == id }
+                    if (r != null) {
                         item { ReportDetailContent(r) }
                         item { BacklinksPanel(buildList { projects.firstOrNull { it.id == r.projectId }?.let { add(Triple("project", it.title, it.id)) } }, onOpenDetail) }
                     }
-                    "flashcard" -> flashcards.firstOrNull { it.id == id }?.let { f ->
+                }
+                "flashcard" -> {
+                    val f = flashcards.firstOrNull { it.id == id }
+                    if (f != null) {
                         item { FlashcardDetailContent(f) }
                         item { BacklinksPanel(buildList {
                             sources.firstOrNull { it.id == f.sourceId }?.let { add(Triple("source", it.title, it.id)) }
                             projects.firstOrNull { it.id == f.projectId }?.let { add(Triple("project", it.title, it.id)) }
                         }, onOpenDetail) }
                     }
-"research_session" -> researchSessions.firstOrNull { it.id == id }?.let { session ->
+                }
+                "research_session" -> {
+                    val session = researchSessions.firstOrNull { it.id == id }
+                    if (session != null) {
                         val linkedObsIds = sessionObservationCrossRefs.filter { it.sessionId == session.id }.map { it.observationId }.toSet()
                         val linkedObservations = observations.filter { it.id in linkedObsIds }
                         item { ResearchSessionDetailContent(session, linkedObservations, onOpenDetail, onUnlink = { obsId -> viewModel.unlinkObservationFromSession(session.id, obsId) }) }
@@ -222,14 +252,15 @@ fun SharedTransitionScope.DetailScreen(
                             projects.firstOrNull { it.id == session.projectId }?.let { add(Triple("project", it.title, it.id)) }
                         }, onOpenDetail) }
                     }
+                }
+            }
         }
     }
-    if (showEdit) EditEntityDialog(kind, id, viewModel) { showEdit = false }
-    if (showDelete) ConfirmDeleteDialog(kind, onDismiss = { showDelete = false }) {
-        deleteEntityByKind(kind, id, viewModel); showDelete = false; onBack()
+        if (showEdit) EditEntityDialog(kind, id, viewModel) { showEdit = false }
+        if (showDelete) ConfirmDeleteDialog(kind, onDismiss = { showDelete = false }) {
+            deleteEntityByKind(kind, id, viewModel); showDelete = false; onBack()
+        }
     }
-}
-}
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -395,11 +426,9 @@ fun ObservationDetailContent(
                             o.weatherSnapshotAt?.let { ProvenanceRow("Weather snapshot", formatTimestamp(it)) }
                             ProvenanceRow("Record ID", "#${o.id}")
                             ProvenanceRow("Created", formatTimestamp(o.createdAt))
-                            ProvenanceRow("Updated", formatTimestamp(o.updatedAt))
-                        }
-                    }
-                }
-            }
+                            ProvenanceRow("Updated", formatTimestamp(o.updatedAt))        }
+    }
+}
 
             // ── 15. Related Observations (re-observation chain) ──
             ReObservationLink(o, viewModel, onOpenDetail)
@@ -414,9 +443,10 @@ fun ObservationDetailContent(
     
     // Export menu dialog removed — export is handled inline in ObservationExportSection
 }
+}
 
 @Composable
-private fun ReObservationLink(
+fun ReObservationLink(
     o: ObservationEntity,
     viewModel: FieldMindViewModel,
     onOpenDetail: (String, Long) -> Unit
@@ -484,7 +514,7 @@ private fun ReObservationLink(
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-private fun ObservationSpeciesInfoSection(
+fun ObservationSpeciesInfoSection(
     o: ObservationEntity,
     viewModel: FieldMindViewModel
 ) {
@@ -630,7 +660,7 @@ private data class SpeciesInfoData(
 )
 
 @Composable
-private fun InfoRow(label: String, value: String) {
+fun InfoRow(label: String, value: String) {
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -647,7 +677,7 @@ private fun InfoRow(label: String, value: String) {
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-private fun ObservationBehaviorSection(
+fun ObservationBehaviorSection(
     o: ObservationEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -719,11 +749,9 @@ private fun ObservationBehaviorSection(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text("Sex", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(behaviorData.sex, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
-                        }
-                    }
-                }
-            }
+                            Text(behaviorData.sex, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)        }
+    }
+}
             if (behaviorData.feeding.isNotBlank() || behaviorData.nesting.isNotBlank()) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     if (behaviorData.feeding.isNotBlank()) {
@@ -735,12 +763,12 @@ private fun ObservationBehaviorSection(
                     if (behaviorData.nesting.isNotBlank()) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text("Nesting:", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(if (behaviorData.nesting == "true") "Yes" else "No", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
-                        }
-                    }
-                }
-            }
+                            Text(if (behaviorData.nesting == "true") "Yes" else "No", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)        }
+    }
+}
         }
+    }
+}
     }
 }
 
@@ -750,7 +778,7 @@ private fun ObservationBehaviorSection(
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-private fun ObservationStructuredDetailsSection(
+fun ObservationStructuredDetailsSection(
     o: ObservationEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -856,13 +884,12 @@ private fun ObservationStructuredDetailsSection(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(parts[0].trim(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(parts[1].trim(), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
-                        }
-                    }
-                }
-            }
+                            Text(parts[1].trim(), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)        }
+    }
+}
         }
     }
+}
 }
 
 private data class StructuredDetailsData(
@@ -887,10 +914,10 @@ private data class StructuredDetailsData(
 
 // ══════════════════════════════════════════════════════════════════════
 //  Quality Score Card
-// ══════��═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun QualityScoreCard(score: Int) {
+fun QualityScoreCard(score: Int) {
     val colors = FieldMindTheme.colors
     val scoreColor = when {
         score >= 80 -> colors.positive
@@ -938,7 +965,7 @@ private data class BehaviorData(
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun ObservationEvidenceCountsRow(
+fun ObservationEvidenceCountsRow(
     viewModel: FieldMindViewModel,
     observationId: Long
 ) {
@@ -975,7 +1002,7 @@ private fun ObservationEvidenceCountsRow(
     }}
 
 @Composable
-private fun EvidenceCountItem(
+fun EvidenceCountItem(
     label: String,
     count: Int,
     icon: MaterialSymbolIcon,
@@ -1005,7 +1032,7 @@ private fun EvidenceCountItem(
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun ObservationWeatherLocationSection(
+fun ObservationWeatherLocationSection(
     o: ObservationEntity,
     viewModel: FieldMindViewModel,
     tempUnit: String,
@@ -1096,7 +1123,7 @@ private fun ObservationWeatherLocationSection(
     }}
 
 @Composable
-private fun WeatherDetailRow(label: String, value: String) {
+fun WeatherDetailRow(label: String, value: String) {
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -1112,7 +1139,7 @@ private fun WeatherDetailRow(label: String, value: String) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun ObservationAiAnalysisCard(
+fun ObservationAiAnalysisCard(
     o: ObservationEntity,
     viewModel: FieldMindViewModel
 ) {
@@ -1195,7 +1222,7 @@ private fun ObservationAiAnalysisCard(
     }
 }
 
-private data class AiAnalysisData(
+data class AiAnalysisData(
     val topMatch: String,
     val topConfidence: String,
     val secondMatch: String,
@@ -1205,10 +1232,10 @@ private data class AiAnalysisData(
 
 // ══════════════════════════════════════════════════════════════════════
 //  Export & Sharing Section
-// ══════════════���═══════════════════════════════════════════════════════
+// ════════════════════════════════════��═════════════════════════════════
 
 @Composable
-private fun ObservationExportSection(
+fun ObservationExportSection(
     o: ObservationEntity,
     viewModel: FieldMindViewModel,
     context: android.content.Context,
@@ -1283,7 +1310,7 @@ private fun ObservationExportSection(
                     ) {
                         Icon(FieldMindIcons.Article, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
-                        Text("Markdown", style = MaterialTheme.typography.labelSmall)
+                        Text("Copy Markdown", style = MaterialTheme.typography.labelSmall)
                     }
                     FilledTonalButton(
                         onClick = {
@@ -1296,7 +1323,7 @@ private fun ObservationExportSection(
                     ) {
                         Icon(FieldMindIcons.Data, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
-                        Text("CSV", style = MaterialTheme.typography.labelSmall)
+                        Text("Copy CSV", style = MaterialTheme.typography.labelSmall)
                     }
                 }
                 // Row 2: JSON + Share
@@ -1312,7 +1339,7 @@ private fun ObservationExportSection(
                     ) {
                         Icon(FieldMindIcons.Data, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
-                        Text("JSON", style = MaterialTheme.typography.labelSmall)
+                        Text("Copy JSON", style = MaterialTheme.typography.labelSmall)
                     }
                     FilledTonalButton(
                         onClick = {
@@ -1332,7 +1359,7 @@ private fun ObservationExportSection(
     }}
 
 @Composable
-private fun WeatherChip(text: String, color: androidx.compose.ui.graphics.Color) {
+fun WeatherChip(text: String, color: androidx.compose.ui.graphics.Color) {
     Box(
         Modifier
             .clip(RoundedCornerShape(16.dp))
@@ -1344,7 +1371,7 @@ private fun WeatherChip(text: String, color: androidx.compose.ui.graphics.Color)
     }}
 
 @Composable
-private fun ProvenanceRow(label: String, value: String) {
+fun ProvenanceRow(label: String, value: String) {
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -1355,12 +1382,12 @@ private fun ProvenanceRow(label: String, value: String) {
     }
 }
 
-private fun formatTimestamp(millis: Long): String {
+fun formatTimestamp(millis: Long): String {
     val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
     return sdf.format(java.util.Date(millis))
 }
 
-private fun formatDuration(millis: Long): String {
+fun formatDuration(millis: Long): String {
     val totalSec = millis / 1000
     val hours = totalSec / 3600
     val minutes = (totalSec % 3600) / 60
@@ -1372,7 +1399,7 @@ private fun formatDuration(millis: Long): String {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId: Long, onOpenReader: (String, String) -> Unit) {
+fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId: Long, onOpenReader: (String, String) -> Unit) {
     val attachments by viewModel.attachmentsForObservation(observationId).collectAsState(initial = emptyList())
     val media = attachments.filter { it.type.equals("Photo", true) || it.type.equals("Gallery", true) || uriLooksImage(it.uri) || uriLooksImage(it.localPath.orEmpty()) }
     if (media.isEmpty()) return
@@ -1455,7 +1482,7 @@ private fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId
 }
 
 @Composable
-private fun ObsStatItem(value: String, label: String, icon: MaterialSymbolIcon) {
+fun ObsStatItem(value: String, label: String, icon: MaterialSymbolIcon) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Icon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
         Text(value, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1464,7 +1491,7 @@ private fun ObsStatItem(value: String, label: String, icon: MaterialSymbolIcon) 
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun NoteDetailContent(
+fun NoteDetailContent(
     n: NoteEntity,
     onOpenDetail: (String, Long) -> Unit,
     onOpenCanvas: ((Long) -> Unit)? = null
@@ -1539,7 +1566,7 @@ private fun NoteDetailContent(
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-private fun QuestionDetailContent(
+fun QuestionDetailContent(
     qn: QuestionEntity,
     hypotheses: List<HypothesisEntity>,
     onSaveAnswer: (String) -> Unit
@@ -1599,11 +1626,12 @@ private fun QuestionDetailContent(
                 }
             }
         }
-    }}
+    }
+}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun HypothesisDetailContent(
+fun HypothesisDetailContent(
     h: HypothesisEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -1679,7 +1707,7 @@ private fun HypothesisDetailContent(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ProjectDetailContent(
+fun ProjectDetailContent(
     p: ProjectEntity,
     observations: List<ObservationEntity>,
     questions: List<QuestionEntity>,
@@ -1892,7 +1920,7 @@ private fun ProjectDetailContent(
 
 // ── Quick-add dialogs for project tabs ──
 @Composable
-private fun ProjectQuickAddDialogs(
+fun ProjectQuickAddDialogs(
     projectId: Long,
     showQuestion: Boolean,
     showObservation: Boolean,
@@ -1925,7 +1953,7 @@ private fun ProjectQuickAddDialogs(
 // ── Quick-add dialog for creating observations linked to the current project ──
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ObservationQuickAddDialog(
+fun ObservationQuickAddDialog(
     projectId: Long,
     viewModel: FieldMindViewModel,
     onDismiss: () -> Unit
@@ -2022,7 +2050,7 @@ private fun ObservationQuickAddDialog(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
+fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
     val colors = FieldMindTheme.colors
     val haptics = rememberFieldMindHaptics()
     var showForm by remember { mutableStateOf(false) }
@@ -2245,7 +2273,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
+fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
     val colors = FieldMindTheme.colors
     val haptics = rememberFieldMindHaptics()
     var showForm by remember { mutableStateOf(false) }
@@ -2333,6 +2361,7 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                     Button(
                         onClick = {
                             haptics.confirm()
+                            val currentSubtasks = subtasks.toList()
                             viewModel.addTask(
                                 title = taskTitle,
                                 description = taskDesc,
@@ -2340,19 +2369,19 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                                 priority = taskPriority,
                                 dueDate = taskDueDate,
                                 assignedTo = taskAssignee,
-                                projectId = projectId
+                                projectId = projectId,
+                                onSaved = { parentId ->
+                                    currentSubtasks.forEach { sub ->
+                                        viewModel.addTask(
+                                            title = sub,
+                                            taskType = taskType,
+                                            priority = taskPriority,
+                                            projectId = projectId,
+                                            parentTaskId = parentId
+                                        )
+                                    }
+                                }
                             )
-                            // Create subtasks as separate tasks linked via parentTaskId
-                            var parentId: Long? = null
-                            subtasks.forEach { sub ->
-                                viewModel.addTask(
-                                    title = sub,
-                                    taskType = taskType,
-                                    priority = taskPriority,
-                                    projectId = projectId,
-                                    parentTaskId = parentId
-                                )
-                            }
                             showForm = false
                             taskTitle = ""; taskDesc = ""; subtasks = emptyList()
                         },
@@ -2384,9 +2413,9 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                 Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                     Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(
-                            if (task.status == "Completed") FieldMindIcons.Check else FieldMindIcons.List,
+                            if (task.status == "Done") FieldMindIcons.Check else FieldMindIcons.List,
                             null,
-                            tint = if (task.status == "Completed") colors.positive else colors.project,
+                            tint = if (task.status == "Done") colors.positive else colors.project,
                             size = 20.dp
                         )
                         Column(Modifier.weight(1f)) {
@@ -2404,28 +2433,35 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                             if (task.dueDate.isNotBlank()) {
                                 Text(task.dueDate, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-                            FilledTonalButton(
-                                onClick = {
-                                    haptics.confirm()
-                                    viewModel.updateTaskEntity(task.copy(
-                                        status = if (task.status == "Completed") "Pending" else "Completed"
-                                    ))
-                                },
-                                shape = RoundedCornerShape(18.dp),
-                                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
-                                colors = if (task.status != "Completed") ButtonDefaults.filledTonalButtonColors(
-                                    containerColor = colors.positive.copy(alpha = 0.15f),
-                                    contentColor = colors.positive
-                                ) else ButtonDefaults.filledTonalButtonColors()
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                IconButton(
+                                    onClick = { viewModel.deleteTask(task.id) },
+                                    modifier = Modifier.size(28.dp)
+                                ) {
+                                    Icon(FieldMindIcons.Close, null, tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f), size = 16.dp)
+                                }
+                                FilledTonalButton(
+                                    onClick = {
+                                        haptics.confirm()
+                                        viewModel.updateTaskEntity(task.copy(
+                                            status = if (task.status == "Done") "Pending" else "Done"
+                                        ))
+                                    },
+                                    shape = RoundedCornerShape(18.dp),
+                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                                    colors = if (task.status != "Done") ButtonDefaults.filledTonalButtonColors(
+                                        containerColor = colors.positive.copy(alpha = 0.15f),
+                                        contentColor = colors.positive
+                                    ) else ButtonDefaults.filledTonalButtonColors()
                             ) {
                                 Icon(
-                                    if (task.status == "Completed") FieldMindIcons.Forward else FieldMindIcons.Check,
+                                    if (task.status == "Done") FieldMindIcons.Forward else FieldMindIcons.Check,
                                     null,
                                     size = 14.dp
                                 )
                                 Spacer(Modifier.size(4.dp))
                                 Text(
-                                    if (task.status == "Completed") "Open" else "Complete",
+                                    if (task.status == "Done") "Open" else "Complete",
                                     style = MaterialTheme.typography.labelSmall
                                 )
                             }
@@ -2436,9 +2472,10 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
         }
     }
 }
+}
 
 @Composable
-private fun ProjectStatTile(value: String, label: String, color: androidx.compose.ui.graphics.Color) {
+fun ProjectStatTile(value: String, label: String, color: androidx.compose.ui.graphics.Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Text(value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = color)
         Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -2446,7 +2483,26 @@ private fun ProjectStatTile(value: String, label: String, color: androidx.compos
 }
 
 @Composable
-private fun DataRecordDetailContent(
+fun DataRecordDetailContent(
+    d: DataRecordEntity
+) {
+    // Dispatch to tool-specific detail composable based on toolType
+    when (d.toolType) {
+        "Counter" -> CounterDetailContent(d)
+        "Measurement Log" -> MeasurementDetailContent(d)
+        "Weather Log" -> WeatherLogDetailContent(d)
+        "Checklist" -> ChecklistDetailContent(d)
+        "Comparison Table" -> ComparisonDetailContent(d)
+        "Event Log" -> EventLogDetailContent(d)
+        "Site Log" -> SiteLogDetailContent(d)
+        else -> GenericDataRecordDetailContent(d)
+    }
+}
+
+
+// ── Generic fallback (original detail card) ──
+@Composable
+fun GenericDataRecordDetailContent(
     d: DataRecordEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -2456,7 +2512,6 @@ private fun DataRecordDetailContent(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
                     Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
@@ -2468,10 +2523,7 @@ private fun DataRecordDetailContent(
                     InfoChip(d.toolType, icon = FieldMindIcons.Data)
                 }
             }
-
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-
-            // Value display (prominent)
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
@@ -2487,16 +2539,12 @@ private fun DataRecordDetailContent(
                     Text(d.toolType, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-
-            // Location
             if (d.location.isNotBlank()) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
                     Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-
-            // Notes
             if (d.notes.isNotBlank()) {
                 Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(d.notes, style = MaterialTheme.typography.bodyMedium)
@@ -2505,8 +2553,492 @@ private fun DataRecordDetailContent(
     }
 }
 
+// ══════════════════════════════════════════════════════════════════════
+//  Tool-Specific Data Record Detail Composables
+// ══════════════════════════════════════════════════════════════════════
+
 @Composable
-private fun ReportDetailContent(
+@OptIn(ExperimentalLayoutApi::class)
+fun CounterDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.data.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Add, null, tint = colors.data, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Counter tally" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    InfoChip(d.toolType, icon = FieldMindIcons.Add)
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        d.value,
+                        style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold),
+                        color = colors.data
+                    )
+                    Text("Count", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            if (d.notes.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(d.notes, style = MaterialTheme.typography.bodyMedium)
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun MeasurementDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.data.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Graph, null, tint = colors.data, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Measurement" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    InfoChip(d.toolType, icon = FieldMindIcons.Graph)
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        "${d.value} ${d.unit}".trim(),
+                        style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+                        color = colors.data
+                    )
+                    if (d.unit.isNotBlank()) {
+                        Text("Unit: ${d.unit}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+            if (d.location.isNotBlank()) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                    Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            if (d.notes.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(d.notes, style = MaterialTheme.typography.bodyMedium)
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun WeatherLogDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    val temp = d.value.substringBefore("°").substringBefore(" ").toDoubleOrNull()
+    val components = d.value.split("|").map { it.trim() }
+    val humidity = components.firstOrNull { it.contains("%") }?.substringBefore("%")?.trim()?.toIntOrNull()
+    val wind = components.firstOrNull { it.contains("km/h") }?.substringBefore("km/h")?.trim()?.toDoubleOrNull()
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.info.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Weather, null, tint = colors.info, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Weather log" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    InfoChip(d.toolType, icon = FieldMindIcons.Weather)
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Surface(
+                shape = RoundedCornerShape(28.dp),
+                color = colors.info.copy(alpha = 0.08f),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    if (temp != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("${d.value.takeWhile { it != '\'' }}°", style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold), color = colors.info)
+                            Text("Temp", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                    if (humidity != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("${humidity}%", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = colors.info)
+                            Text("Humidity", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                    if (wind != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("${wind.toInt()}", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = colors.info)
+                            Text("Wind km/h", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+            }
+            if (d.location.isNotBlank()) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                    Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            if (d.notes.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(d.notes, style = MaterialTheme.typography.bodyMedium)
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun ChecklistDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    // Parse structured JSON: [{"text":"...","done":true/false},...]
+    // Fall back to legacy ;-separated format for backward compatibility
+    data class ChecklistItem(val text: String, val done: Boolean)
+    val parsedItems = remember(d.value) {
+        if (d.value.startsWith("[") && d.value.endsWith("]")) {
+            try {
+                val arr = org.json.JSONArray(d.value)
+                (0 until arr.length()).map { i ->
+                    val obj = arr.getJSONObject(i)
+                    ChecklistItem(obj.optString("text", ""), obj.optBoolean("done", false))
+                }.filter { it.text.isNotBlank() }
+            } catch (_: Exception) { null }
+        } else null
+    }
+    val items = remember(parsedItems, d.value) {
+        parsedItems ?: d.value.split(";").map { it.trim() }.filter { it.isNotBlank() }.map { item ->
+            if (item.startsWith("\u2713")) ChecklistItem(item.removePrefix("\u2713 "), true)
+            else ChecklistItem(item.removePrefix("\u25CB "), false)
+        }
+    }
+    val checkedItems = items.filter { it.done }
+    val totalItems = items.size
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.positive.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Check, null, tint = colors.positive, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Checklist" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        InfoChip("${checkedItems.size}/$totalItems checked", icon = FieldMindIcons.Check)
+                        InfoChip(d.toolType, icon = FieldMindIcons.Check)
+                    }
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            if (totalItems > 0) {
+                LinearProgressIndicator(
+                    progress = { checkedItems.size.toFloat() / totalItems },
+                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(6.dp)),
+                    color = colors.positive,
+                    trackColor = colors.positive.copy(alpha = 0.12f)
+                )
+            }
+            if (items.isNotEmpty()) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items.forEach { item ->
+                        Row(
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(
+                                if (item.done) colors.positive.copy(alpha = 0.06f)
+                                else MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.3f)
+                            ).padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Icon(
+                                if (item.done) MaterialSymbolIcon("check_circle", filled = true) else MaterialSymbolIcon("radio_button_unchecked"),
+                                null,
+                                tint = if (item.done) colors.positive else MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 20.dp
+                            )
+                            Text(
+                                item.text,
+                                style = MaterialTheme.typography.bodyMedium,
+                                textDecoration = if (item.done) TextDecoration.LineThrough else TextDecoration.None,
+                                color = if (item.done) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+            }
+            if (d.notes.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(d.notes, style = MaterialTheme.typography.bodyMedium)
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun ComparisonDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+
+    // Parse structured JSON: {"columnCount":2,"rows":[{"label":"...","items":["...","..."]},...]}
+    // Fall back to legacy ;-separated format for backward compatibility
+    data class ComparisonRow(val label: String, val items: List<String>)
+
+    val parsedData: Pair<Int, List<ComparisonRow>> = remember(d.value) {
+        try {
+            val json = JSONObject(d.value)
+            val cols = json.optInt("columnCount", 2)
+            val jsonRows = json.optJSONArray("rows")
+            val rowList = mutableListOf<ComparisonRow>()
+            if (jsonRows != null) {
+                for (i in 0 until jsonRows.length()) {
+                    val row = jsonRows.getJSONObject(i)
+                    val label = row.optString("label", "")
+                    val itemsArr = row.optJSONArray("items")
+                    val items = mutableListOf<String>()
+                    if (itemsArr != null) {
+                        for (j in 0 until itemsArr.length()) {
+                            items.add(itemsArr.optString(j, ""))
+                        }
+                    }
+                    if (label.isNotBlank()) {
+                        rowList.add(ComparisonRow(label, items))
+                    }
+                }
+            }
+            Pair(cols, rowList)
+        } catch (_: Exception) {
+            // Legacy format: "label: item1 vs item2; label2: itemA vs itemB"
+            val legacyRows = d.value.split(";").map { it.trim() }.filter { it.isNotBlank() }.map { entry ->
+                val label = entry.substringBefore(":").trim()
+                val values = entry.substringAfter(":").trim()
+                val items = values.split(" vs ").map { it.trim() }.filter { it.isNotBlank() }
+                ComparisonRow(label, items)
+            }
+            Pair(2, legacyRows)
+        }
+    }
+
+    val rows = parsedData.second
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.data.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Data, null, tint = colors.data, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Comparison table" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        InfoChip("${rows.size} rows", icon = FieldMindIcons.Data)
+                        InfoChip(d.toolType, icon = FieldMindIcons.Data)
+                    }
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            if (rows.isNotEmpty()) {
+                Surface(
+                    shape = RoundedCornerShape(24.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        rows.forEach { row ->
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(row.label, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(0.3f))
+                                row.items.forEachIndexed { i, v ->
+                                    Surface(
+                                        shape = RoundedCornerShape(12.dp),
+                                        color = if (i == 0) colors.data.copy(alpha = 0.1f) else colors.observation.copy(alpha = 0.1f)
+                                    ) {
+                                        Text(v, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun EventLogDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    val categoryFromValue = d.value.substringBefore(" |")
+    val dateFromValue = d.value.substringAfter("| ")
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.hypothesis.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.List, null, tint = colors.hypothesis, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Event" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (categoryFromValue.isNotBlank()) InfoChip(categoryFromValue, icon = FieldMindIcons.Category)
+                        InfoChip(d.toolType, icon = FieldMindIcons.List)
+                    }
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                if (dateFromValue.isNotBlank()) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Icon(FieldMindIcons.Calendar, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                        Text(dateFromValue, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+                if (d.notes.isNotBlank()) {
+                    val descriptionText = d.notes.substringBefore("\nDate:")
+                    Text(descriptionText, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+            if (d.location.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                    Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun SiteLogDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    val purposeFromValue = d.value.substringBefore(" | Duration:")
+    val durationPart = d.value.substringAfter("Duration: ")
+    val conditionsText = d.notes.substringAfter("Conditions: ").substringBefore("\nFindings:")
+    val findingsText = d.notes.substringAfter("Findings: ")
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.info.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Map, null, tint = colors.info, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Site visit" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (purposeFromValue.isNotBlank()) InfoChip(purposeFromValue, icon = FieldMindIcons.Info)
+                        InfoChip(d.toolType, icon = FieldMindIcons.Map)
+                    }
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                if (durationPart.isNotBlank() && durationPart != "N/A") {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Icon(FieldMindIcons.Calendar, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                        Text("Duration: $durationPart", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+                if (conditionsText.isNotBlank()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("Conditions", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(conditionsText, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+                if (findingsText.isNotBlank()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("Key findings", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(findingsText, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+            }
+            if (d.location.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                    Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+fun DataRecordProvenance(d: DataRecordEntity) {
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text("Record #${d.id}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(
+            java.text.SimpleDateFormat("MMM d, HH:mm", java.util.Locale.getDefault()).format(java.util.Date(d.timestamp)),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+fun ReportDetailContent(
     r: ReportEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -2572,7 +3104,7 @@ private fun ReportDetailContent(
 }
 
 @Composable
-private fun FlashcardDetailContent(
+fun FlashcardDetailContent(
     f: FlashcardEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -2631,7 +3163,7 @@ private fun FlashcardDetailContent(
 
 
 @Composable
-private fun ResearchSessionDetailContent(
+fun ResearchSessionDetailContent(
     session: ResearchSessionEntity,
     observations: List<ObservationEntity>,
     onOpenDetail: (String, Long) -> Unit,
@@ -2718,7 +3250,7 @@ private fun ResearchSessionDetailContent(
 }
 
 @Composable
-private fun DetailRow(label: String, value: String) {
+fun DetailRow(label: String, value: String) {
     if (value.isBlank()) return
     Row(
         Modifier.fillMaxWidth(),
@@ -2731,7 +3263,7 @@ private fun DetailRow(label: String, value: String) {
 }
 
 @Composable
-private fun AssetCountChip(label: String, count: Int, icon: MaterialSymbolIcon, color: androidx.compose.ui.graphics.Color) {
+fun AssetCountChip(label: String, count: Int, icon: MaterialSymbolIcon, color: androidx.compose.ui.graphics.Color) {
     Row(
         Modifier.clip(RoundedCornerShape(99.dp)).background(color.copy(alpha = 0.12f)).padding(horizontal = 10.dp, vertical = 7.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -2743,7 +3275,7 @@ private fun AssetCountChip(label: String, count: Int, icon: MaterialSymbolIcon, 
 }
 
 @Composable
-private fun StatusChip(status: String, color: androidx.compose.ui.graphics.Color) {
+fun StatusChip(status: String, color: androidx.compose.ui.graphics.Color) {
     Row(
         Modifier
             .clip(RoundedCornerShape(16.dp))
@@ -2762,7 +3294,7 @@ private fun StatusChip(status: String, color: androidx.compose.ui.graphics.Color
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
+fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
     val haptics = rememberFieldMindHaptics()
     Row(
         Modifier
@@ -2789,7 +3321,7 @@ private fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Unit) {
+fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Unit) {
     var editing by remember(question.id, question.answer) { mutableStateOf(question.answer.isBlank()) }
     var draft by remember(question.id) { mutableStateOf(question.answer) }
     Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
@@ -2814,7 +3346,7 @@ private fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Uni
     }
 }
 
-private fun sharePlainText(context: Context, text: String) {
+fun sharePlainText(context: Context, text: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/markdown"
         putExtra(Intent.EXTRA_TEXT, text)
@@ -2823,7 +3355,7 @@ private fun sharePlainText(context: Context, text: String) {
 }
 
 @Composable
-private fun ConfirmDeleteDialog(kind: String, onDismiss: () -> Unit, onConfirm: () -> Unit) {
+fun ConfirmDeleteDialog(kind: String, onDismiss: () -> Unit, onConfirm: () -> Unit) {
     val haptics = rememberFieldMindHaptics()
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -2839,7 +3371,7 @@ private fun ConfirmDeleteDialog(kind: String, onDismiss: () -> Unit, onConfirm: 
  * Reverse-map a weather condition description back to a WMO code for the animated icon.
  * Uses the observation's temperature to differentiate freezing vs regular rain/snow.
  */
-private fun weatherDescriptionToCode(condition: String, temp: Double?): Int {
+fun weatherDescriptionToCode(condition: String, temp: Double?): Int {
     val c = condition.lowercase()
     return when {
         c.contains("clear") || c.contains("mainly clear") || c.isBlank() -> 0
@@ -2866,7 +3398,7 @@ private fun weatherDescriptionToCode(condition: String, temp: Double?): Int {
     }
 }
 
-private fun deleteEntityByKind(kind: String, id: Long, viewModel: FieldMindViewModel) {
+fun deleteEntityByKind(kind: String, id: Long, viewModel: FieldMindViewModel) {
     when (kind) {
         "observation" -> viewModel.deleteObservation(id)
         "note" -> viewModel.deleteNote(id)
@@ -2880,13 +3412,13 @@ private fun deleteEntityByKind(kind: String, id: Long, viewModel: FieldMindViewM
     }
 }
 
-// ═════════════════��════════════════��═══════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════
 //  Source Detail Content — Sectioned layout with proper visual hierarchy
 // ══════════════════════════════════════════════════════════════════════
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun SourceDetailContent(
+fun SourceDetailContent(
     s: SourceEntity,
     projects: List<ProjectEntity>,
     onOpenReader: (String, String) -> Unit
@@ -2985,7 +3517,7 @@ private fun SourceDetailContent(
 }
 
 @Composable
-private fun DetailBody(title: String, kind: String, fields: List<Pair<String, String>>) {
+fun DetailBody(title: String, kind: String, fields: List<Pair<String, String>>) {
     Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -3003,7 +3535,7 @@ private fun DetailBody(title: String, kind: String, fields: List<Pair<String, St
 }
 
 @Composable
-private fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity>, viewModel: FieldMindViewModel, onOpenDetail: (String, Long) -> Unit) {
+fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity>, viewModel: FieldMindViewModel, onOpenDetail: (String, Long) -> Unit) {
     val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
     val clipboard = LocalClipboardManager.current
@@ -3098,7 +3630,7 @@ private fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity
 }
 
 @Composable
-private fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observationId: Long, onOpenReader: (String, String) -> Unit = { _, _ -> }) {
+fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observationId: Long, onOpenReader: (String, String) -> Unit = { _, _ -> }) {
     val attachments by viewModel.attachmentsForObservation(observationId).collectAsState(initial = emptyList())
     if (attachments.isEmpty()) return
     val images = attachments.filter { it.type.equals("Photo", true) || it.type.equals("Gallery", true) || it.uri.contains(Regex("\\.(jpg|jpeg|png|webp|gif|heic|bmp)", RegexOption.IGNORE_CASE)) }
@@ -3177,7 +3709,7 @@ private fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observati
     }
 }
 @Composable
-private fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, String) -> Unit) {
+fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, String) -> Unit) {
     val target = source.fileUri.ifBlank { source.link }
     if (target.isBlank()) return
     var showImageViewer by remember { mutableStateOf(false) }
@@ -3203,7 +3735,7 @@ private fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, Stri
 }
 
 @Composable
-private fun AttachmentOpenRow(uri: String, title: String, type: String, onOpenReader: (String, String) -> Unit) {
+fun AttachmentOpenRow(uri: String, title: String, type: String, onOpenReader: (String, String) -> Unit) {
     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).clickable { onOpenReader(uri, title) }.background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Icon(icon = if (type.equals("Image", true) || type.equals("Gallery", true) || type.equals("Photo", true) || uriLooksImage(uri)) FieldMindIcons.Gallery else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
         Column(Modifier.weight(1f)) {
@@ -3215,7 +3747,7 @@ private fun AttachmentOpenRow(uri: String, title: String, type: String, onOpenRe
 }
 
 @Composable
-private fun BacklinksPanel(links: List<Triple<String, String, Long>>, onOpenDetail: (String, Long) -> Unit) {
+fun BacklinksPanel(links: List<Triple<String, String, Long>>, onOpenDetail: (String, Long) -> Unit) {
     if (links.isEmpty()) return
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -3228,4 +3760,3 @@ private fun BacklinksPanel(links: List<Triple<String, String, Long>>, onOpenDeta
         }
     }
 }
-
