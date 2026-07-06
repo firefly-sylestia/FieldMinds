@@ -44,6 +44,34 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.43.0 — Developer QA and UI Reliability ──
+        FieldMindChangelogEntry(
+            version = "0.43.0",
+            date = "2026-07-06",
+            title = "🛠️ Developer QA, Back Navigation & Weather Polish",
+            importance = "Patch",
+            tags = listOf("🛠️", "🧭", "🌦️", "🔒"),
+            sections = listOf(
+                "🧪 Stronger developer tester" to listOf(
+                    "✓ Latest test reports now persist after leaving the developer screen",
+                    "✓ Reports include run IDs, device/app metadata, setting snapshots, full failure traces, and UI checklist results",
+                    "✓ Non-fatal crash capture is verified with a sentinel stack trace so reports reflect real captured errors"
+                ),
+                "🧭 Navigation and overlay fixes" to listOf(
+                    "✓ Hardware back on non-home tabs returns safely to Home without popping the tab container",
+                    "✓ Home reserves more bottom space so quick capture and the floating nav pill avoid covering options"
+                ),
+                "🌦️ Weather and animation polish" to listOf(
+                    "✓ Live weather metrics wrap across rows to reduce clipping on narrow screens",
+                    "✓ Cloud drift loops more seamlessly and rain remains visible from the first frame"
+                ),
+                "🔒 Screenshot toggle reliability" to listOf(
+                    "✓ Screenshot blocking now follows the explicit screen-capture setting instead of staying forced by app preview mode",
+                    "✓ Camera secure windows follow the same screenshot-protection setting"
+                )
+            )
+        ),
+
         // ── v0.42.0 — Snappier Animations Across the Board ──
         FieldMindChangelogEntry(
             version = "0.42.0",
