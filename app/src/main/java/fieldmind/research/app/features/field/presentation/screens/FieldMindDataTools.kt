@@ -1241,11 +1241,19 @@ fun ChecklistToolScreen(
         haptics.confirm()
         val checkedCount = items.count { it.second }
         val itemCount = items.size
-        val summary = items.joinToString("; ") { (name, checked) -> "${if (checked) "✓" else "○"} $name" }
+        // Store as structured JSON: [{"text":"...","done":true/false},...]
+        val jsonItems = buildString {
+            append("[")
+            items.forEachIndexed { i, (name, checked) ->
+                if (i > 0) append(",")
+                append("{\"text\":\"${name.replace("\"", "\\\"")}\",\"done\":$checked}")
+            }
+            append("]")
+        }
         viewModel.addDataRecord(
             toolType = "Checklist",
             label = "Checklist (${checkedCount}/${itemCount} checked)",
-            value = summary,
+            value = jsonItems,
             unit = "",
             notes = "",
             datasetKind = "Checklists",

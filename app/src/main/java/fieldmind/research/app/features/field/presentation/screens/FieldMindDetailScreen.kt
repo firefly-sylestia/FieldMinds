@@ -2721,8 +2721,27 @@ fun WeatherLogDetailContent(d: DataRecordEntity) {
 @OptIn(ExperimentalLayoutApi::class)
 fun ChecklistDetailContent(d: DataRecordEntity) {
     val colors = FieldMindTheme.colors
-    val items = d.value.split(";").map { it.trim() }.filter { it.isNotBlank() }
-    val checkedItems = items.filter { it.startsWith("\u2713") }
+    // Parse structured JSON: [{"text":"...","done":true/false},...]
+    // Fall back to legacy ;-separated format for backward compatibility
+    data class ChecklistItem(val text: String, val done: Boolean)
+    val parsedItems = remember(d.value) {
+        if (d.value.startsWith("[") && d.value.endsWith("]")) {
+            try {
+                val arr = org.json.JSONArray(d.value)
+                (0 until arr.length()).map { i ->
+                    val obj = arr.getJSONObject(i)
+                    ChecklistItem(obj.optString("text", ""), obj.optBoolean("done", false))
+                }.filter { it.text.isNotBlank() }
+            } catch (_: Exception) { null }
+        } else null
+    }
+    val items = remember(parsedItems, d.value) {
+        parsedItems ?: d.value.split(";").map { it.trim() }.filter { it.isNotBlank() }.map { item ->
+            if (item.startsWith("\u2713")) ChecklistItem(item.removePrefix("\u2713 "), true)
+            else ChecklistItem(item.removePrefix("\u25CB "), false)
+        }
+    }
+    val checkedItems = items.filter { it.done }
     val totalItems = items.size
 
     Card(
@@ -2757,27 +2776,25 @@ fun ChecklistDetailContent(d: DataRecordEntity) {
             if (items.isNotEmpty()) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     items.forEach { item ->
-                        val isChecked = item.startsWith("\u2713")
-                        val text = item.removePrefix("\u2713 ").removePrefix("\u25CB ")
                         Row(
                             Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(
-                                if (isChecked) colors.positive.copy(alpha = 0.06f)
+                                if (item.done) colors.positive.copy(alpha = 0.06f)
                                 else MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.3f)
                             ).padding(12.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Icon(
-                                if (isChecked) MaterialSymbolIcon("check_circle", filled = true) else MaterialSymbolIcon("radio_button_unchecked"),
+                                if (item.done) MaterialSymbolIcon("check_circle", filled = true) else MaterialSymbolIcon("radio_button_unchecked"),
                                 null,
-                                tint = if (isChecked) colors.positive else MaterialTheme.colorScheme.onSurfaceVariant,
+                                tint = if (item.done) colors.positive else MaterialTheme.colorScheme.onSurfaceVariant,
                                 size = 20.dp
                             )
                             Text(
-                                text,
+                                item.text,
                                 style = MaterialTheme.typography.bodyMedium,
-                                textDecoration = if (isChecked) TextDecoration.LineThrough else TextDecoration.None,
-                                color = if (isChecked) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurface
+                                textDecoration = if (item.done) TextDecoration.LineThrough else TextDecoration.None,
+                                color = if (item.done) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
