@@ -37,6 +37,7 @@ class AppSettings private constructor(context: Context) {
         // ── Crash Reporting ──
         private const val KEY_LAST_CRASH_LOG = "last_crash_log"
         private const val KEY_CRASH_LOG_HISTORY = "crash_log_history"
+        private const val KEY_LATEST_DEVELOPER_TEST_REPORT = "latest_developer_test_report"
 
         // ── Theme ──
         private const val KEY_USE_SYSTEM_THEME = "use_system_theme"
@@ -125,6 +126,18 @@ class AppSettings private constructor(context: Context) {
         }
     )
     val crashLogHistory: StateFlow<List<CrashLogEntry>> = _crashLogHistory.asStateFlow()
+
+    private val _latestDeveloperTestReport =
+        MutableStateFlow<String?>(prefs.getString(KEY_LATEST_DEVELOPER_TEST_REPORT, null))
+    val latestDeveloperTestReport: StateFlow<String?> = _latestDeveloperTestReport.asStateFlow()
+
+    fun setLatestDeveloperTestReport(reportJson: String?) {
+        _latestDeveloperTestReport.value = reportJson
+        prefs.edit().apply {
+            if (reportJson == null) remove(KEY_LATEST_DEVELOPER_TEST_REPORT)
+            else putString(KEY_LATEST_DEVELOPER_TEST_REPORT, reportJson)
+        }.apply()
+    }
 
     fun setLastCrashLog(log: String) {
         _lastCrashLog.value = log

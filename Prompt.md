@@ -6,49 +6,38 @@
 
 ## Request Summary
 
-Targeted FieldMind Android stability/security/weather repair pass:
-- Crash reporter must show a reliable non-blank crash screen and persist richer crash reports.
-- Collaboration sharing must not crash when no share target exists; fake export button must route to real export flow.
-- App lock must use exact 4/5/6 digit PINs, in-app numpad, consistent failed-attempt policies, cooldowns, biometric-required enforcement, and safer panic-lock handling.
-- Auto-lock must respect background timeout settings.
-- Open-Meteo must work without an API key and weather failures must expose actionable diagnostic state.
-- DevFullAppTestRunner must be cancellable, less hang-prone, restore settings, and test lock/weather/crash policies.
+Implement FieldMind QA/UI fixes from the provided task-stubs:
+- Persist and strengthen the developer full app tester report.
+- Add non-fatal crash capture verification.
+- Stabilize hardware-back behavior in the tab container.
+- Reserve bottom content space for the floating quick-capture FAB/nav pill.
+- Make the live weather widget more adaptive and less prone to clipping.
+- Improve weather cloud/rain animation continuity and rain visibility.
+- Fix screenshot-block disabling by making `FLAG_SECURE` follow the explicit screenshot toggle.
+- Improve dark-mode elevation/depth on touched surfaces.
+- Add developer-test checklist categories for UI overlap/clipping risks.
 
 ## Context Gathered
 
-- DOX chain read: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, field data/presentation AGENTS, shared/infrastructure/resource AGENTS, `fastlane/AGENTS.md`.
-- Build/lint/test Gradle commands are prohibited in this environment.
-- Open-Meteo official docs/search confirm free API has no API key requirement; pricing/customer docs show customer endpoint uses `customer-api.open-meteo.com` and `apikey` query parameter.
-- Existing lock screen uses a device keyboard `OutlinedTextField`, cooldown threshold hardcoded at 3 despite UI saying 5, and failed policies are partially unwired.
-- Existing crash reporter starts crash activity but returns from uncaught exception handler without a re-entrancy guard or explicit process termination.
-- Existing DevFullAppTestRunner has long per-test timeout and no cancellation/restoration wrapper.
+- `DevFullAppTestRunner.kt` stored reports only in local Compose state and primarily performed smoke/static checks.
+- `CrashReporter.kt` persisted uncaught crash stack traces to `AppSettings` but had no non-fatal capture API for tester verification.
+- `FieldMindNavigation.kt` uses a single `field_tab_container` route and custom tab state with `BackHandler` inside `AllTabScreen`.
+- `FieldMindHomeScreen.kt` used hardcoded bottom padding (`96.dp` content, `112.dp` FAB) while the floating nav pill is overlaid.
+- `MainActivity.kt` set `FLAG_SECURE` when either screenshot protection was enabled or app preview mode was not `Normal`, so disabling the screenshot option could still leave screenshots blocked.
+- `AnimatedWeatherScene.kt` tied rain cloud drift to fast rain progress and rendered rain particles only after the physics system filled.
 
-## Implementation Plan
+## Implementation Notes
 
-1. Add testable lock/security policy helpers and wire lock screen to them.
-2. Replace unlock PIN text field with in-app numpad and exact-length verification.
-3. Harden crash reporting and crash activity fallback UI.
-4. Harden Collaboration share flows and route export to Export Studio.
-5. Improve auto-lock timeout mapping and lifecycle manager integration.
-6. Fix Open-Meteo optional key behavior, URL builder, and weather diagnostics/fresh location fallback.
-7. Improve DevFullAppTestRunner cancellation/progress/settings restore and add policy tests.
-8. Update What's New + fastlane changelog.
-9. Run allowed static checks only, then commit/push and create PR.
+- Added persisted latest developer report storage to `AppSettings`.
+- Added `CrashReporter.recordNonFatal()` and a dev-runner sentinel test.
+- Updated dev-runner reports with run id, app/device/settings metadata, full stack traces, persisted checkpoints, and UI layout checklist entries.
+- Changed non-home tab hardware back to return to Home without popping the NavHost route.
+- Added a bottom padding parameter for Home and passed reserved chrome space from navigation.
+- Made Home weather metric rows wrap using `FlowRow` and made camera dialog secure policy follow screenshot protection.
+- Changed `MainActivity` secure-window application to use only the explicit screenshot toggle.
+- Slowed rain cloud drift, normalized/wrapped clouds in `drawCloud`, and added deterministic fallback rain streaks.
 
-## Completion Summary
+## Verification
 
-Implemented targeted fixes:
-- Hardened crash reporting with re-entrancy guard, richer crash metadata, guarded persistence, crash-process launch, and process termination after dispatch.
-- Replaced crash screen with minimal Compose UI plus native fallback.
-- Hardened Collaboration share/invite actions with clipboard fallback and routed export action to Export Studio.
-- Added `LockSecurityPolicy` and wired lock screen to exact PIN length, in-app numpad, 5-attempt policy, cooldown countdown, biometric-required mode, and non-destructive panic reset.
-- Improved background auto-lock timeout wiring and reset lock signal after unlock.
-- Fixed Open-Meteo free tier as no-key-required, moved URL construction to `HttpUrl.Builder`, and added weather diagnostics/fresh-location fallback.
-- Made DevFullAppTestRunner cancellable, shorter-timeout, settings-restoring, and added lock/weather/crash policy smoke checks.
-- Updated in-app What's New and fastlane changelog.
-
-## Verification Notes
-
-- Ran `git diff --check` successfully.
-- Ran ripgrep/static checks for the key repaired patterns.
-- Did not run Gradle build/lint/test commands because repository DOX explicitly prohibits them in this environment.
+- Do not run Gradle build/lint/test locally per root AGENTS.md.
+- Use static checks only (`git diff --check`, targeted file inspection/search).

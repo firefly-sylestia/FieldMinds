@@ -1808,24 +1808,32 @@ private fun DrawScope.drawCloud(
     morph: Float = 0f,
     cloudType: CloudType = CloudType.Cumulus
 ) {
-    val x = (baseX + offset * size.width) % (size.width + scale) - scale * 0.5f
+    val drift = ((offset % 1f) + 1f) % 1f
+    val wrap = size.width + scale * 1.6f
+    val primaryX = (baseX + drift * wrap) % wrap - scale * 0.8f
 
-    // Fade-in/out at screen edges for smooth transitions — no sudden popping
-    val fadeMargin = scale * 0.8f
-    val fadeAlpha = when {
-        x < -fadeMargin -> 0f
-        x < 0f -> ((x + fadeMargin) / fadeMargin).coerceIn(0f, 1f)
-        x > size.width -> 0f
-        x > size.width - fadeMargin -> ((size.width - x) / fadeMargin).coerceIn(0f, 1f)
-        else -> 1f
+    fun drawWrappedCloud(x: Float) {
+        // Fade-in/out at screen edges for smooth transitions — no sudden popping
+        val fadeMargin = scale * 0.8f
+        val fadeAlpha = when {
+            x < -fadeMargin -> 0f
+            x < 0f -> ((x + fadeMargin) / fadeMargin).coerceIn(0f, 1f)
+            x > size.width -> 0f
+            x > size.width - fadeMargin -> ((size.width - x) / fadeMargin).coerceIn(0f, 1f)
+            else -> 1f
+        }
+        val fadedColor = color.copy(alpha = color.alpha * fadeAlpha)
+        if (fadedColor.alpha <= 0.001f) return
+        when (cloudType) {
+            CloudType.Cumulus -> drawCumulus(x, baseY, scale, fadedColor, morph)
+            CloudType.Stratus -> drawStratus(x, baseY, scale, fadedColor, morph)
+            CloudType.Cirrus -> drawCirrus(x, baseY, scale, fadedColor, morph)
+        }
     }
-    val fadedColor = color.copy(alpha = color.alpha * fadeAlpha)
 
-    when (cloudType) {
-        CloudType.Cumulus -> drawCumulus(x, baseY, scale, fadedColor, morph)
-        CloudType.Stratus -> drawStratus(x, baseY, scale, fadedColor, morph)
-        CloudType.Cirrus -> drawCirrus(x, baseY, scale, fadedColor, morph)
-    }
+    drawWrappedCloud(primaryX)
+    drawWrappedCloud(primaryX - wrap)
+    drawWrappedCloud(primaryX + wrap)
 }
 
 /** Billowy fluffy cumulus clouds — classic rounded clusters */
@@ -3546,6 +3554,11 @@ private fun RainScene(
         animationSpec = infiniteRepeatable(tween((2000 / rainSpeed).toInt(), easing = LinearEasing), RepeatMode.Restart),
         label = "rainFall"
     )
+    val rainCloudDrift by infiniteTransition.animateFloat(
+        initialValue = 0f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(if (isHeavy) 38000 else 56000, easing = LinearEasing), RepeatMode.Restart),
+        label = "rainCloudDrift"
+    )
     val rippleProgress by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
         animationSpec = infiniteRepeatable(tween(3000, easing = LinearEasing), RepeatMode.Restart),
@@ -3628,7 +3641,7 @@ private fun RainScene(
 
         // ── Overhead clouds for drizzle/rain ──
         // Draw clouds so rain scenes have visible cloud cover overhead
-        val cloudDrift = (rainProgress * 0.2f) % 1f
+        val cloudDrift = rainCloudDrift
         val cloudScale = size.width * 0.5f
         val cloudColor = palette.cloudBaseColor.copy(alpha = if (isDark) 0.25f else 0.18f)
         val cloudDark = Color(0xFF4A5A6A).copy(alpha = if (isDark) 0.30f else 0.15f)
@@ -3661,7 +3674,7 @@ private fun RainScene(
         // Emit new rain particles continuously
         if (particleSystem.getParticleCount() < streakCount * 0.8f) {
             particleSystem.emitAtTop(
-                count = 2,
+                count = if (isHeavy) 8 else 5,
                 vx = effectiveWind * 0.3f,
                 vy = rainSpeed * 3f,
                 size = 0.008f,
@@ -3669,8 +3682,24 @@ private fun RainScene(
             )
         }
 
-        // Render physics-based rain particles
+        // Render physics-based rain particles. If the physics system has not
+        // filled yet, draw deterministic fallback streaks immediately so rain
+        // is visible on the first frame.
         val activeParticles = particleSystem.getActiveParticles()
+        if (activeParticles.size < streakCount / 3) {
+            for (streak in streaks) {
+                val sy = ((rainProgress + streak.phase) % 1f) * size.height
+                val sx = (streak.x * size.width + windGust * streak.windAffinity * size.width * 0.06f)
+                val len = (size.height * 0.08f * streak.length).coerceAtLeast(10f)
+                drawLine(
+                    color = rainColor.copy(alpha = (rainColor.alpha * 1.25f).coerceIn(0f, 0.85f)),
+                    start = Offset(sx, sy),
+                    end = Offset(sx + effectiveWind * size.width * 0.08f, sy + len),
+                    strokeWidth = if (isHeavy) 2.2f else 1.6f,
+                    cap = StrokeCap.Round
+                )
+            }
+        }
         for (particle in activeParticles) {
             val px = particle.x * size.width
             val py = particle.y * size.height
@@ -3681,7 +3710,7 @@ private fun RainScene(
 
             // Velocity-based streak length (faster particles = longer streaks)
             val streakLen = (4f + velocity * 8f) * depthFactor
-            val streakWidth = 1.2f + depthFactor * 1.2f
+            val streakWidth = 1.6f + depthFactor * 1.4f
 
             // Alpha modulated by intensity and particle visibility
             val alpha = rainColor.alpha * (0.5f + intensity * 0.5f) * depthFactor
