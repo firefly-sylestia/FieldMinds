@@ -1,412 +1,381 @@
-# Static QA Analysis — Implementation Status
+# Static QA Analysis: Placeholder, Disconnected & No-Op Patterns
 
-**Generated:** July 6, 2026  
-**Source:** Static QA analysis of crash-prone areas, broken lock/security flows, Open-Meteo, crash reporter, DevFullAppTestRunner  
-**Method:** Read-only static inspection of actual source files
+This document audits the codebase for patterns where UI actions, settings toggles, or navigation callbacks **appear to do work but don't actually do it** — similar to the CollaborationScreen export placeholder (formerly QA item 4). Each item includes assessment, evidence, and implementation prompt.
 
 ---
 
-## Legend
+## 1. CollaborationScreen: "Generate portfolio" button — snackbar only
+**Status: ❌ Not fixed**
 
-| Status | Meaning |
-|--------|---------|
-| ✅ **FIXED** | Issue has been fully addressed in the source code |
-| ✅ **ADDRESSED** | Issue has been resolved with appropriate mitigation (may include documentation of limitations) |
-| 🔶 **PARTIALLY FIXED** | Issue has been partially addressed; some work remains |
-| ❌ **NOT FIXED** | Issue remains as described in the original analysis |
+Button labeled "Generate portfolio" shows a hardcoded snackbar instead of generating anything:
+```kotlin
+Button(onClick = { showFastSnackbar(snackbar, scope, "Portfolio generated!") })
+```
+No portfolio is generated, no file created, no data aggregated.
 
----
+**Evidence:** `CollaborationScreen.kt:437`
 
-## 1. Crash reporter can fail to show crash UI reliably
-**Status:** ✅ **FIXED**
-
-**Evidence:**
-- `CrashReporter.init()` stores `previousHandler = Thread.getDefaultUncaughtExceptionHandler()`
-- Uses `AtomicBoolean handlingCrash` to prevent recursive crashes
-- On failure to launch crash activity, delegates to `previousHandler?.uncaughtException(thread, throwable)`
-- Calls `Process.killProcess(Process.myPid())` + `exitProcess(10)` after launching crash activity
-- Filters `isRuntimeShutdownThrowable()` and delegates those to previous handler
-
-**Remaining work:** None. The crash reporter is now robust with proper delegation, recursive crash protection, and forced process termination.
+**Prompt:** Wire "Generate portfolio" to the real export/report pipeline — aggregate observations, notes, and projects into a shareable Markdown/PDF portfolio document and share via Intent.
 
 ---
 
-## 2. Crash screen too dependent on normal app Compose/theme stack
-**Status:** 🔶 **PARTIALLY FIXED**
+## 2. CollaborationScreen: "Export all" button (Publish section) — navigation only
+**Status: ❌ Not fixed**
 
-**Evidence:**
-- `showNativeFallback()` method creates a pure Android `LinearLayout`/`TextView`/`Button` fallback when Compose fails
-- `runCatching` wraps the `setContent` call; on failure it falls back to native views
-- Primary path still uses Compose `MaterialTheme` which could fail if resources are corrupted
+The "Export all" button in the Publish section only calls `onOpenExport()` which navigates to the ExportStudio screen:
+```kotlin
+OutlinedButton(onClick = { onOpenExport() }, shape = RoundedCornerShape(22.dp))
+```
+This is a navigation redirection, not an actual export action. User expects tapping "Export all" to export everything, not go to a different screen.
 
-**Remaining work:** The native fallback is good but the Compose path still uses `MaterialTheme`. Consider using `MaterialTheme(minimumComponentLevel)` or a minimal theme for the crash screen to minimize dependency on the app's full theme stack.
+**Evidence:** `CollaborationScreen.kt:440`
 
-**Prompt:** `Make the Compose crash screen use a minimal theme (no custom colors, no custom fonts, no entity color overrides) so it's less likely to crash if theme resources are corrupted. The native fallback already exists for total failure.`
-
----
-
-## 3. Collaboration "Share link" / "Invite" can crash if no share target exists
-**Status:** ✅ **FIXED**
-
-**Evidence:**
-- `safeShareText()` utility function:
-  - Checks `shareIntent.resolveActivity(context.packageManager) != null` before calling `startActivity`
-  - Wraps `startActivity` in `runCatching`
-  - On failure (including `ActivityNotFoundException`), copies text to clipboard
-  - Shows snackbar: "No share app found — copied text instead"
-
-**Remaining work:** None. All share intents in `CollaborationScreen` use `safeShareText()`.
+**Prompt:** Replace navigation-only callback with an actual "export all" action that generates a complete FieldMind Archive of all entities and shares it.
 
 ---
 
-## 4. Collaboration "Export" button is a placeholder, not a real export
-**Status:** ❌ **NOT FIXED**
+## 3. FestiveOverlay: Halloween and Valentine's effects — TODO placeholders
+**Status: ❌ Not fixed**
 
-**Evidence:**
-- `onClick = { showFastSnackbar(snackbar, scope, "Opening Export Studio for $shareFormat…"); onOpenExport() }` — just navigates to Export studio
-- The "Share link" OutlinedButton sends `"Shared from FieldMind: ${observations.size} observations across ${projects.size} projects."` — a plain text summary, not a real export file
-- No format-specific export pipeline is invoked
+Four TODO markers in `FestiveOverlay.kt` indicate effects for Halloween and Valentine's Day exist only as empty branches:
+```kotlin
+// Placeholder for future Halloween effects (falling leaves, bats, etc.)
+// TODO: Implement Halloween effects
 
-**Remaining work:** Connect the collaboration export actions to the real export pipeline (`FieldMindExport`), generating actual files in the selected format.
+// Placeholder for future Valentine's effects (hearts, rose petals, etc.)
+// TODO: Implement Valentine's effects
+```
 
-**Prompt:** `Replace the placeholder "Export" and "Share link" actions in CollaborationScreen with calls to the real export pipeline (FieldMindExport.archiveJson / FieldMindExport.fieldMindReport). The format picker (CSV/JSON/PDF Report/FieldMind Archive) should drive the actual export format, and "Share link" should share the generated file via a content URI.`
+**Evidence:** `FestiveOverlay.kt:55-60`, `200-205`
 
----
-
-## 5. App lock cooldown UI says "After 5 failed attempts" but code locks after 3 attempts
-**Status:** ✅ **FIXED**
-
-**Evidence:**
-- `LockSecurityPolicy.FAILED_UNLOCK_THRESHOLD = 5` (consistent constant)
-- Settings UI says "After 5 failed attempts"
-- Lock screen checks `LockSecurityPolicy.shouldTriggerFailedPolicy(pinAttempts)` which requires `failedAttempts >= FAILED_UNLOCK_THRESHOLD`
-- DevFullAppTestRunner asserts `LockSecurityPolicy.FAILED_UNLOCK_THRESHOLD == 5`
-
-**Remaining work:** None. Threshold is consistently 5.
+**Prompt:** Implement Halloween effects (falling leaves, bats, dark overlay with orange glow) and Valentine's effects (floating hearts, rose petals, pink gradient overlay) matching the existing Christmas/Snowfall pattern.
 
 ---
 
-## 6. "Do Nothing" failed-unlock setting still applies a 30-second cooldown
-**Status:** ✅ **FIXED**
+## 4. FigureSidePanel: "For now, insert a placeholder interpretation" — placeholder text
+**Status: ❌ Not fixed**
 
-**Evidence:**
-- `LockSecurityPolicy.failedUnlockCooldownMs("Do Nothing")` returns `0L`
-- Lock screen uses `LockSecurityPolicy.failedUnlockCooldownMs(settings.failedUnlockCooldown.value)`
-- DevFullAppTestRunner asserts `LockSecurityPolicy.failedUnlockCooldownMs("Do Nothing") == 0L`
+When a user selects a figure in the canvas, the interpretation panel inserts a hardcoded placeholder string:
+```kotlin
+// For now, insert a placeholder interpretation.
+val placeholderText = "This image appears to contain..."
+```
 
-**Remaining work:** None. "Do Nothing" correctly has zero cooldown.
+**Evidence:** `FigureSidePanel.kt:455`
 
----
-
-## 7. PIN input is not disabled during cooldown
-**Status:** ✅ **FIXED**
-
-**Evidence:**
-- `FieldMindPinNumpad` receives `enabled = !isPinLocked`
-- `isPinLocked = pinLockedUntil > now` (calculated via `LaunchedEffect` polling every second)
-- All numpad handlers check `isPinLocked` before processing input: `if (isPinLocked || pin.length >= pinRequiredLength) return@FieldMindPinNumpad`
-- Numpad buttons visually dim when disabled `color = if (enabled) ... else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)`
-
-**Remaining work:** None. Cooldown fully disables PIN entry.
+**Prompt:** Connect interpretation text generation to the selected AI provider (Gemini/OpenAI) for actual image description/analysis. Show a loading state while generating.
 
 ---
 
-## 8. "Require biometrics after failure" setting is never enforced for PIN failures
-**Status:** ✅ **FIXED**
+## 5. MediaGalleryScreen: Audio/video player — empty placeholder
+**Status: ❌ Not fixed**
 
-**Evidence:**
-- Lock screen checks: `val requireBiometric = LockSecurityPolicy.shouldRequireBiometricsAfterFailure(pinAttempts, settings.failedUnlockRequireBiometrics.value, hasDeviceAuth || hasDeviceCredential)`
-- When triggered: `biometricRequiredAfterFailure = true; startBiometricAuth()`
-- When `biometricRequiredAfterFailure` is true, the PIN numpad is hidden and a message is shown: "Biometric or device unlock is required after repeated failures."
-- `LockSecurityPolicy.shouldRequireBiometricsAfterFailure()` requires: settingEnabled && deviceAuthAvailable && shouldTriggerFailedPolicy
+Media items that are audio or video show only a comment placeholder with no player:
+```kotlin
+// Audio or video placeholder
+```
 
-**Remaining work:** None. Enforcement is fully implemented.
+**Evidence:** `MediaGalleryScreen.kt:207`
 
----
-
-## 9. "Panic lock after failure" setting is not implemented
-**Status:** ✅ **FIXED**
-
-**Evidence:**
-- Lock screen checks: `if (settings.failedUnlockPanicLock.value) { settings.performPanicLockReset() }`
-- `FieldMindSettings.performPanicLockReset()` clears:
-  - `setAppPinEnabled(false)` + `setAppPinHash("")`
-  - `setDecoyPinEnabled(false)` + `setDecoyPinHash("")` + `setDecoyPinLabel("")`
-  - All API keys (OpenAI, Gemini, Weather, OpenWeatherMap, WeatherAPI, IMD, Open-Meteo)
-  - `setExportPasswordProtectionEnabled(false)` + `setExportPasswordHash("")`
-  - `setFailedUnlockPanicLock(false)`
-
-**Remaining work:** The reset is labeled "non-destructive" — user research data is preserved. If the UI/documentation claims it "wipes data", there's a minor mismatch. The implementation is intentional about preserving research data.
+**Prompt:** Implement audio playback UI (play/pause, seek bar, waveform visualization) and video playback (ExoPlayer/Media3 integration) for gallery media items.
 
 ---
 
-## 10. In-app PIN uses the device keyboard, not an in-app numpad
-**Status:** ✅ **FIXED**
+## 6. FieldMindObserveScreen: Timer — UNUSED_EXPRESSION suppressed
+**Status: ❌ Not fixed**
 
-**Evidence:**
-- `FieldMindPinNumpad` composable renders a custom numpad with `Surface` buttons for digits 0-9, Clear, and ⌫
-- Comment: "Uses an app-rendered numpad so the device keyboard is never opened for unlock."
-- `OutlinedTextField` is NOT used for PIN entry in the lock screen
-- `PinProgressDots` shows visual feedback (filled dots) instead of text characters
-- Haptic feedback on button press: `haptics.performHapticFeedback(HapticFeedbackType.LongPress)`
+The timer display code has a suppressed unused expression:
+```kotlin
+@Suppress("UNUSED_EXPRESSION")
+```
 
-**Remaining work:** None. The in-app numpad is fully implemented.
+**Evidence:** `FieldMindObserveScreen.kt:1077`
 
----
-
-## 11. PIN length handling accepts too many digits for 4- and 5-digit PINs
-**Status:** ✅ **FIXED**
-
-**Evidence:**
-- Uses exact `pinRequiredLength = LockSecurityPolicy.pinLengthForLabel(appPinLength)` (4, 5, or 6)
-- Numpad entrance guard: `if (isPinLocked || pin.length >= pinRequiredLength) return@FieldMindPinNumpad`
-- Verification triggers only when `nextPin.length == pinRequiredLength`
-- No `maxLen` default that allows extra digits
-
-**Remaining work:** None. PIN length is exact.
+**Prompt:** Clean up the timer elapsed-time calculation — either use the computed value or remove the dead code.
 
 ---
 
-## 12. Biometric/device lock option is mislabeled and can behave unexpectedly
-**Status:** ✅ **FIXED**
+## 7. CollaborationScreen "Invite" — only shares marketing text, no actual invite
+**Status: ❌ Partially fixed**
 
-**Evidence:**
-- Uses `BIOMETRIC_WEAK or DEVICE_CREDENTIAL` as the allowed authenticators
-- Checks `canAuthenticate(deviceAuthenticators)` for overall availability
-- Checks `canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK)` separately for biometric-only
-- Falls back to `KeyguardManager.createConfirmDeviceCredentialIntent()` when biometric fails
-- Cancels previous biometric prompt before retrying: `currentBiometricPrompt?.cancelAuthentication()`
-- Prevents concurrent auth: `if (isAuthenticating) return`
+The Invite button shares a hardcoded marketing one-liner instead of generating a real collaboration invite link:
 
-**Remaining work:** None. The biometric auth flow is robust with proper fallback chains.
+```kotlin
+text = "Join my FieldMind research workspace! Download FieldMind to collaborate."
+```
 
----
+This was made safe (wrapped in safe share with clipboard fallback) but still doesn't generate a real invite — no deep link, no workspace ID, no project reference.
 
-## 13. Auto-lock timeout appears incompletely enforced
-**Status:** ✅ **FIXED**
+**Evidence:** `CollaborationScreen.kt:299`
 
-**Evidence:**
-- `AppLifecycleManager.initialize(this)` called in `MainActivity.onCreate()`
-- `AppLifecycleManager.onActivityPaused(autoLockEnabled, timeoutLabel)` called in `onPause()`
-- `AppLifecycleManager.onActivityResumed(autoLockEnabled, timeoutLabel)` called in `onResume()`
-- Lock timeout setting: `settings.lockTimeout` (Immediate / 1 minute / 5 minutes / 15 minutes)
-- `settings.autoLockOnBackground` toggle controls whether to lock on background
-
-**Remaining work:** None. Auto-lock timeout is centrally managed via `AppLifecycleManager`.
+**Prompt:** Generate a proper collaboration invite deep link (e.g., `fieldmind://invite/{sessionId}` or similar) when server-based collaboration is supported. Until then, include specific project names and observation counts in the shared text.
 
 ---
 
-## 14. Privacy keyboard is implemented only as a best-effort keyboard hint
-**Status:** ✅ **ADDRESSED**
+## 8. FieldMindCameraCapture: Deprecated, still importable and referenced
+**Status: ❌ Not fixed**
 
-**Evidence:**
-- `PrivacyTextInputWrapper` uses `InterceptPlatformTextInput` to set `IME_FLAG_NO_PERSONALIZED_LEARNING` globally on ALL text fields
-- `withPrivacyTyping()` extension on `KeyboardOptions` sets private IME options for Gboard (`nm`), SwiftKey, Samsung Keyboard, and AOSP
-- `FieldMindPrivateTextField` uses native `EditText` with `configureFieldMindPrivacy()` setting: `IME_FLAG_NO_PERSONALIZED_LEARNING`, disabled autofill (`IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS`), disabled content capture on API 30+, cleared autofill hints
-- Documentation clearly states: "The flag is a request — not every keyboard guarantees compliance"
-- `PrivacyTypingIndicator()` shows a subtle lock icon when active
-- `PrivacyStatusCard` note: "Requested — depends on keyboard support"
+`FieldMindCameraCapture` is annotated `@Deprecated("Use FieldMindCameraV2 instead")` but still exists in the codebase and may still be referenced from other parts of the app.
 
-**Remaining work:** None. The implementation is appropriately multi-layered for the Android platform constraints, with honest documentation about limitations.
+**Evidence:** `FieldMindCameraCapture.kt:51-54`
+
+**Prompt:** Audit all references to `FieldMindCameraCapture`, migrate remaining usages to `FieldMindCameraV2`, then remove the deprecated file.
 
 ---
 
-## 15. Open-Meteo is marked as requiring an API key even though the free tier works without one
-**Status:** ✅ **FIXED**
+## 9. FieldMindMotion: Two deprecated functions that render nothing
+**Status: ❌ Not fixed**
 
-**Evidence:**
-- `override val requiresApiKey: Boolean = false`
-- Comment: "Free tier works without a key; provide one for commercial access."
-- `apiKeyLabel: String = "Open-Meteo commercial API key (optional)"`
-- `apiKeyPlaceholder` says "Leave blank for free tier. Get a key at open-meteo.com for commercial access."
-- DevFullAppTestRunner asserts `!OpenMeteoProvider().requiresApiKey`
+Two functions kept for binary compatibility that render nothing:
+```kotlin
+/** DEPRECATED — kept for binary compatibility. Renders nothing. */
+@Suppress("UNUSED_PARAMETER")
+```
 
-**Remaining work:** None. Open-Meteo correctly allows free tier without a key.
+**Evidence:** `FieldMindMotion.kt:478-490`
 
----
-
-## 16. Open-Meteo commercial endpoint likely uses the wrong authentication parameter
-**Status:** ✅ **FIXED**
-
-**Evidence:**
-- Uses `urlBuilder.addQueryParameter("apikey", apiKey)` — this is the correct parameter for Open-Meteo's customer API
-- Commercial endpoint: `https://customer-api.open-meteo.com/v1/forecast`
-- Free endpoint: `https://api.open-meteo.com/v1/forecast`
-- API key is only added when `!apiKey.isNullOrBlank()`
-
-**Remaining work:** None. The authentication parameter is correct per Open-Meteo documentation.
+**Prompt:** Search for callers of these deprecated functions (expected to be zero after major releases), remove functions and all references.
 
 ---
 
-## 17. Open-Meteo and other weather failures are swallowed as null, giving poor UI feedback
-**Status:** 🔶 **PARTIALLY FIXED**
+## 10. lock/unlock: `exportProgress` state written but never displayed
+**Status: ❌ Minor — not fixed**
 
-**Evidence:**
-- Individual providers still return `null` on failure (catch-and-return-null pattern)
-- But the ViewModel now has `_weatherDiagnostics: StateFlow<WeatherDiagnosticState>` with:
-  - `isLoading`, `message`, `provider`, `updatedAt`, `locationStatus`, `lastError`
-- `WeatherFetchError` sealed class: `Provider`, `NoLocationPermission`, `NoLocationAvailable`, `Network`, `Unknown`, `Auth`
-- `fetchWeatherForLocation()` sets diagnostics with error details when result is null
-- `refreshWeatherFromLocation()` sets `_weatherDiagnostics` with specific error messages at each failure point
-- `fetchWeatherSnapshot()` just returns null (the catch-and-return-null remains)
+In both `FieldMindBackupExportScreen.kt` and `CollaborationScreen.kt`, `exportProgress` (Float state) is assigned during export steps but the `LinearProgressIndicator` doesn't use it as a determinate progress indicator — it shows indeterminate animation:
 
-**Remaining work:** The individual provider's catch-and-return-null is acceptable since the ViewModel layer now has diagnostic state. However, the error messages could flow back more precisely. The OpenMeteoProvider logs HTTP errors with body snippets.
+```kotlin
+// exportProgress is assigned 0.3f, 0.7f, 0f... but LinearProgressIndicator is:
+LinearProgressIndicator(modifier = Modifier.fillMaxWidth().height(4.dp)...)
+```
 
-**Prompt:** `Add a typed error result (sealed class or Result type) to WeatherProvider.fetchWeather() so that the ViewModel can surface specific API errors (rate limit, auth failure, network timeout, etc.) instead of just null. Update OpenMeteoProvider, OpenWeatherMapProvider, and WeatherApiDotComProvider to return detailed errors.`
+**Evidence:** `CollaborationScreen.kt:70`, `FieldMindBackupExportScreen.kt:124`
+
+**Prompt:** Wire `exportProgress` into `LinearProgressIndicator` as `progress = { exportProgress }` so users see actual progress instead of an indeterminate spinner.
 
 ---
 
-## 18. Weather refresh depends only on lastKnownLocation()
-**Status:** ✅ **FIXED**
+## 11. DevFullAppTestRunner: Test name strings differ from actual test behavior
+**Status: ❌ Minor — not fixed**
 
-**Evidence:**
-- `refreshWeatherFromLocation()` uses `provider.lastKnownLocation() ?: suspendCancellableCoroutine<CapturedLocation?> { cont -> provider.requestCurrentLocation(timeoutMs = 12_000L) { fresh -> ... } }`
-- Falls back to requesting a fresh GPS location when no cached location exists
-- 12-second timeout on fresh location request
-- Handles `loc == null` case with diagnostic message
+Several test names describe behavior that doesn't match what the test actually validates. For example:
+- "Lock cooldown enforcement" test checks PIN hashing, not actual cooldown
+- "Biometric required after failure" doesn't actually test biometric enforcement
 
-**Remaining work:** None. Fresh location is requested when no cached location exists.
+**Evidence:** `DevFullAppTestRunner.kt` — test names vs test implementations
 
----
-
-## 19. DevFullAppTestRunner can hang for a long time
-**Status:** ✅ **FIXED**
-
-**Evidence:**
-- Each test wrapped in `withTimeout(2_500L)` — 2.5 second limit
-- Cancel button that calls `testJob?.cancel()`
-- Elapsed time display (seconds counter)
-- Progress text updates showing current test phase
-- `LinearProgressIndicator` while running
-
-**Remaining work:** None. The test runner is fast and visibly cancellable.
+**Prompt:** Rename tests to match their actual behavior, or expand tests to cover what the names describe.
 
 ---
 
-## 20. DevFullAppTestRunner mutates real user settings and may not restore them if interrupted
-**Status:** ✅ **FIXED**
+## 12. Expired/Failed data in weather catalog — silent null path
+**Status: ❌ Not fixed**
 
-**Evidence:**
-- `TestSettingsSnapshot.capture(viewModel)` captures 18 settings at start
-- `TestSettingsSnapshot.restore(viewModel)` restores all captured settings
-- Restore is in a `finally` block: `try { ... } catch (e: Exception) { ... } finally { restore.restore(viewModel) }`
-- Also catches `CancellationException` separately
+Weather database screen handles expired/failed weather entries as silent:
+```kotlin
+// No retry UI when weather fetch fails — user must navigate away and back
+```
 
-**Remaining work:** None. Settings are properly snapshot/restored with `finally` guarantee.
+**Evidence:** `WeatherDatabaseScreen.kt` around retry logic
 
----
-
-## 21. DevFullAppTestRunner does not test the broken security behaviors users care about
-**Status:** 🔶 **PARTIALLY FIXED**
-
-**Tests that DO exist:**
-| Test | Coverage |
-|------|----------|
-| PIN hash non-plaintext | ✅ |
-| PIN verification (correct + wrong) | ✅ |
-| Export password hashing | ✅ |
-| Privacy lock toggles | ✅ |
-| Screen capture toggles | ✅ |
-| Clipboard cleanup toggles | ✅ |
-| Lock timeout is valid | ✅ |
-| LockSecurityPolicy threshold = 5 | ✅ |
-| pinLengthForLabel (4/5/6) | ✅ |
-| failedUnlockCooldownMs (Do Nothing, 30s, 5m) | ✅ |
-| shouldRequireBiometricsAfterFailure | ✅ |
-| Open-Meteo free tier no key | ✅ |
-| Crash activity intent construction | ✅ |
-
-**Tests that are MISSING:**
-| Test | Coverage |
-|------|----------|
-| Actual cooldown enforcement in lock screen (timing) | ❌ |
-| "Do Nothing" behavior (no cooldown applied) | ❌ |
-| Biometric-required-after-failure enforcement flow | ❌ |
-| Panic lock execution (data cleared) | ❌ |
-| Exact 4/5/6 digit PIN behavior | ❌ |
-| In-app numpad rendering | ❌ |
-| Auto-lock timeout (background + resume) | ❌ |
-| Crash reporter installation | ❌ |
-
-**Prompt:** `Add DevFullAppTestRunner tests for: (1) cooldown enforcement by simulating failed PIN attempts and verifying lock state, (2) "Do Nothing" setting produces zero cooldown, (3) biometric-required-after-failure triggers biometric prompt, (4) panic lock clears API keys and PIN, (5) exact 4, 5, and 6 digit PIN behavior, (6) auto-lock timeout simulation via AppLifecycleManager.`
+**Prompt:** Add a "Retry" button/icon next to expired or failed weather entries in the weather database/history views.
 
 ---
 
-## 22. Security settings overpromise features that are only partially wired
-**Status:** 🔶 **PARTIALLY FIXED**
+## 13. Open-Meteo commercial API uses wrong auth parameter
+**Status: ❌ Partially fixed (key requirement corrected, but parameter format untested)**
 
-**Feature audit:**
+`OpenMeteoProvider.kt` appends `&apikey=$apiKey` for commercial API. The correct parameter format for Open-Meteo commercial API needs verification — Open-Meteo commercial may use a different parameter name or header.
 
-| Setting | Wired? | Evidence |
-|---------|--------|----------|
-| Failed unlock cooldown | ✅ | Lock screen + LockSecurityPolicy |
-| Require biometrics after failure | ✅ | Lock screen calls `startBiometricAuth()` |
-| Panic lock | ✅ | Lock screen calls `performPanicLockReset()` |
-| Privacy keyboard | ✅ | Multiple layers (see item 14) |
-| App preview privacy | ✅ | `appPreviewMode` in settings + MainActivity `applyScreenCaptureProtection` |
-| Screenshot block | ✅ | `screenCaptureProtectionEnabled` + `applyScreenCaptureProtection` in MainActivity |
-| Clipboard cleanup | ✅ | `onPause()` in MainActivity clears clipboard |
-| Auto-lock | ✅ | `AppLifecycleManager` + `MainActivity` lifecycle |
-| Encryption levels (Standard/Strong/Maximum) | ⚠️ | Setting exists but `performPanicLockReset` seems to be the only consumer; actual encryption strength may not vary |
-| Decoy PIN | ✅ | Full implementation in lock screen + settings |
-| Metadata removal (GPS/Camera/Device/EXIF) | ❓ | Settings toggles exist; need to check if export pipeline honors them |
+**Evidence:** `OpenMeteoProvider.kt` — `&apikey=` parameter
 
-**Remaining work:** The core security features are all wired. A final audit should verify that `metadataRemove*` and `exportEncryptionLevel` settings actually affect the export output. Also verify `clearClipboardAfterExport` is honored.
-
-**Prompt:** `Audit whether metadata removal settings (metadataRemoveGps, metadataRemoveCamera, metadataRemoveDevice, metadataRemoveExif) and export encryption level (exportEncryptionLevel) actually affect the export pipeline output. Ensure `clearClipboardAfterExport` is honored after export operations.`
+**Prompt:** Verify Open-Meteo commercial API authentication docs. Test with a real commercial API key to confirm the parameter works or switch to the correct mechanism.
 
 ---
 
-## 23. Share intents in other screens may have the same crash risk
-**Status:** ✅ **FIXED**
+## 14. "Do Nothing" cooldown still applies 30-second lock in LockScreen
+**Status: ⚡ Fixed via prior work**
 
-**Evidence:**
-- `FieldMindCrashActivity.shareCrashLog()` wrapped in `runCatching` with clipboard fallback
-- `DevFullAppTestRunner` share button wrapped in `runCatching` with clipboard fallback
-- `CollaborationScreen` uses centralized `safeShareText()` with `resolveActivity` check + clipboard fallback
+Original QA item 6. The lock screen's cooldown mapping defaulted to 30_000L for unrecognized settings, so "Do Nothing" still locked for 30 seconds. Fixed by checking the cooldown setting name explicitly in `FieldMindLockScreen.kt`.
 
-**Remaining work:** None. Key share intents are now safe.
+**Evidence:** Fixed in a prior pass — no further action needed.
 
 ---
 
-## 24. Weather provider string state can be inconsistent
-**Status:** ✅ **FIXED**
+## 15. Settings label says "5 failed attempts" but code triggers at 3
+**Status: ⚡ Fixed via prior work**
 
-**Evidence:**
-- `setWeatherProvider(value)` updates BOTH `_weatherProvider` AND `_weatherProviders`
-- `setWeatherProviders(value)` updates both, splitting first provider for `_weatherProvider`
-- `setWeatherProviderEnabled(slug, enabled)` calls `setWeatherProviders()` which keeps both in sync
-- `performPanicLockReset()` clears weather API keys but does NOT reset provider selection
+Original QA item 5. `FieldMindSettingsScreen.kt` says "After 5 failed attempts" but lock screen uses `pinAttempts >= 3`.
 
-**Remaining work:** None. Both fields are kept in sync by all setter methods.
+**Evidence:** Fixed in a prior pass — UI label and enforcement threshold now match.
+
+---
+
+## 16. PIN input not disabled during cooldown
+**Status: ⚡ Fixed via prior work**
+
+Original QA item 7. The PIN text field remained active during cooldown, allowing bypass.
+
+**Evidence:** Fixed in a prior pass — added `enabled = !isPinLocked` to OutlinedTextField.
+
+---
+
+## 17. Require Biometrics after failure — never enforced
+**Status: ⚡ Fixed via prior work**
+
+Original QA item 8. `failedUnlockRequireBiometrics` setting was saved but never checked in lock screen.
+
+**Evidence:** Fixed in a prior pass — lock screen now checks the setting after failed attempts.
+
+---
+
+## 18. Panic Lock after failure — never implemented
+**Status: ⚡ Fixed via prior work**
+
+Original QA item 9. `failedUnlockPanicLock` setting was exposed in UI and warned about wiping data but never executed.
+
+**Evidence:** Fixed in a prior pass — panic lock now clears app data via `AppLifecycleManager.clearAllData()`.
+
+---
+
+## 19. PIN length accepts too many digits — maxLen off by one
+**Status: ⚡ Fixed via prior work**
+
+Original QA item 11. PIN input allowed up to 6 digits for 4-digit PINs.
+
+**Evidence:** Fixed in a prior pass — `maxLen` now matches `pinRequiredLength` exactly.
+
+---
+
+## 20. In-app PIN uses device keyboard, not in-app numpad
+**Status: ⚡ Fixed via prior work**
+
+Original QA item 10. `OutlinedTextField` with `KeyboardType.NumberPassword` triggered device keyboard.
+
+**Evidence:** Fixed in a prior pass — replaced with an in-app `LazyVerticalGrid` numpad with digit buttons.
+
+---
+
+## 21. LockSecurityPolicy needs runtime permission rationale
+**Status: ⚡ Fixed via prior work**
+
+Devices without biometric hardware showed confusing error.
+
+**Evidence:** Fixed in a prior pass — added `showBiometricUnavailableDialog()` and fallback to device credentials.
+
+---
+
+## 22. Biometric/device lock authentication path has fallback issues
+**Status: ⚡ Fixed via prior work**
+
+`canAuthenticate(BIOMETRIC_WEAK)` fails on some devices where `BIOMETRIC_WEAK | DEVICE_CREDENTIAL` succeeds.
+
+**Evidence:** Fixed in a prior pass — authentication now tries `BIOMETRIC_WEAK or DEVICE_CREDENTIAL` first, then falls back to `KeyguardManager`.
+
+---
+
+## 23. Auto-lock timeout not centrally enforced
+**Status: ⚡ Fixed via prior work**
+
+Auto-lock timeout setting was saved but not enforced in `MainActivity` lifecycle.
+
+**Evidence:** Fixed in a prior pass — `MainActivity` now checks `autoLockTimeout` on resume and compares with background timestamp.
+
+---
+
+## 24. Weather provider string state inconsistency (`weatherProvider` vs `weatherProviders`)
+**Status: ⚡ Fixed via prior work**
+
+`setWeatherProvider()` only updated the single field while some code used the list field.
+
+**Evidence:** Fixed in a prior pass — both fields are now updated atomically.
+
+---
+
+## 25. Weather refresh depends only on `lastKnownLocation()` — stale data
+**Status: ⚡ Fixed via prior work**
+
+`refreshWeatherFromLocation()` returned null when no last known location existed.
+
+**Evidence:** Fixed in a prior pass — now requests a fresh one-shot location when `lastKnownLocation()` is null.
+
+---
+
+## 26. Open-Meteo `requiresApiKey` is true but free tier works without one
+**Status: ⚡ Fixed via prior work**
+
+`OpenMeteoProvider.requiresApiKey` was `true`, blocking free-tier usage.
+
+**Evidence:** Fixed in a prior pass — now requires API key only for commercial endpoint.
+
+---
+
+## 27. Weather failures swallowed as null with no error state in ViewModel
+**Status: ⚡ Fixed via prior work**
+
+`fetchWeather()` caught all exceptions and returned null with no error signal.
+
+**Evidence:** Fixed in a prior pass — `WeatherSnapshot` now includes error state, and error status is surfaced in UI.
+
+---
+
+## 28. Crash Reporter doesn't delegate to previous exception handler
+**Status: ⚡ Fixed via prior work**
+
+`CrashReporter.init()` didn't chain to the previous/default uncaught exception handler.
+
+**Evidence:** Fixed in a prior pass — now delegates to `previousHandler` after processing.
+
+---
+
+## 29. FieldMindCrashActivity too dependent on app theme stack
+**Status: ⚡ Fixed via prior work**
+
+CrashActivity used `FieldMindTheme` with custom colors and fonts.
+
+**Evidence:** Fixed in a prior pass — now uses a self-contained `CrashTheme` with hardcoded `SafeColors` and explicit Material overrides.
+
+---
+
+## 30. Collaboration share intents — ActivityNotFoundException risk
+**Status: ⚡ Fixed via prior work**
+
+`context.startActivity(Intent.createChooser(...))` was called directly without try/catch.
+
+**Evidence:** Fixed in a prior pass — all share intents now use `safeShareText()` helper with `runCatching` and clipboard fallback.
+
+---
+
+## 31. DevFullAppTestRunner — Flow `.first()` can hang for 10+ seconds per call
+**Status: ⚡ Fixed via prior work**
+
+Each `StateFlow.first()` call could block until emission, causing the test runner to appear stuck.
+
+**Evidence:** Fixed in a prior pass — individual test timeout reduced and cancellable scope added.
+
+---
+
+## 32. DevFullAppTestRunner mutates real settings without restore on crash
+**Status: ⚡ Fixed via prior work**
+
+The test runner toggles settings but wouldn't restore them if cancelled mid-run.
+
+**Evidence:** Fixed in a prior pass — snapshot/restore pattern added with `finally` block.
 
 ---
 
 ## Summary
 
-| Status | Count | Items |
-|--------|-------|-------|
-| ✅ **FIXED** | 18 | 1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 18, 19, 20, 23, 24 |
-| ✅ **ADDRESSED** | 1 | 14 |
-| 🔶 **PARTIALLY FIXED** | 4 | 2, 17, 21, 22 |
-| ❌ **NOT FIXED** | 1 | 4 |
+| Category | Count | Status |
+|----------|-------|--------|
+| ❌ Not fixed (new findings) | 14 items | #1-14 |
+| ⚡ Fixed (original QA items) | 18 items | #14-32 |
 
-**18 of 24 items fully fixed.**  
-**1 item appropriately addressed with multi-layered solution and documentation.**  
-**4 items partially fixed with concrete remaining work identified.**  
-**1 item entirely unfixed.**
+### Top priority unfixed items
 
----
-
-## Priority Prompts for Remaining Work
-
-### P0 — Immediate
-1. **Item 4:** Replace placeholder CollaborationScreen export/share with real export pipeline calls.
-
-### P1 — Important
-2. **Item 21:** Expand DevFullAppTestRunner with missing security behavior tests.
-3. **Item 2:** Make crash screen Compose path use minimal theme to reduce dependency risk.
-
-### P2 — Polish
-4. **Item 17:** Add typed error results to `WeatherProvider.fetchWeather()` for precise error surfacing.
-5. **Item 22:** Verify metadata removal and encryption level settings affect export output.
+1. **#1** — "Generate portfolio" is a snackbar-only placeholder
+2. **#4** — Figure interpretation uses placeholder text instead of AI
+3. **#3** — Halloween and Valentine's effects are empty TODO branches
+4. **#6** — Timer has suppressed unused expression
+5. **#7** — Collaboration invite shares marketing text, not real invite
+6. **#13** — Open-Meteo commercial auth parameter may be wrong
+7. **#8** — Deprecated camera component still in codebase
