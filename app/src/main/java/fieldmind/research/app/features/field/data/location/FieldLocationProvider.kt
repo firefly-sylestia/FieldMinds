@@ -12,8 +12,11 @@ import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcelable
 import androidx.core.content.ContextCompat
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class CapturedLocation(
     val latitude: Double,
     val longitude: Double,

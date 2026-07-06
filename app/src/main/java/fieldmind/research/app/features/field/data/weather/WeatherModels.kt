@@ -1,8 +1,12 @@
 package fieldmind.research.app.features.field.data.weather
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * Snapshot of current weather conditions + daily forecasts for a location.
  */
+@Parcelize
 data class WeatherSnapshot(
     val temperature: Double? = null,
     val weatherCode: Int = 0,
@@ -47,6 +51,7 @@ data class WeatherSnapshot(
  * Daily forecast data for a single day.
  * @param apparentTemperature Average feels-like temperature for the day (null if unavailable).
  */
+@Parcelize
 data class DailyForecast(
     val date: String,
     val temperatureMax: Double,
