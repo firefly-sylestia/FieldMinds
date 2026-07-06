@@ -473,16 +473,35 @@ fun TaskDetailScreen(
                         }
                     }
                 }
-                // Link button
-                Spacer(Modifier.size(8.dp))
-                OutlinedButton(
-                    onClick = { showObservationPicker = true },
-                    shape = RoundedCornerShape(20.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
-                    Spacer(Modifier.size(6.dp))
-                    Text("Link observation")
+                // Link buttons
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    OutlinedButton(
+                        onClick = { showObservationPicker = true },
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Link observation")
+                    }
+                    OutlinedButton(
+                        onClick = { showSpeciesPicker = true },
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(MaterialSymbolIcon("pets"), null, size = 16.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Link species")
+                    }
+                    OutlinedButton(
+                        onClick = { showEvidencePicker = true },
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(MaterialSymbolIcon("description"), null, size = 16.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Link evidence")
+                    }
                 }
             }
         }
@@ -595,6 +614,64 @@ fun TaskDetailScreen(
                 viewModel.updateTaskEntity(task.copy(linkedObservationId = obs.id))
                 showObservationPicker = false
                 obsPickerSearch = ""
+            }
+        )
+    }
+    
+    // ════════════════════════════════════════════════════════════════
+    //  Species Picker Dialog
+    // ════════════════════════════════════════════════════════════════
+    if (showSpeciesPicker) {
+        EntityPickerDialog(
+            title = "Link Species",
+            searchQuery = speciesPickerSearch,
+            onSearchChange = { speciesPickerSearch = it },
+            onDismiss = {
+                showSpeciesPicker = false
+                speciesPickerSearch = ""
+            },
+            items = species.filter { sp ->
+                speciesPickerSearch.isBlank() ||
+                sp.commonName.contains(speciesPickerSearch, ignoreCase = true) ||
+                sp.scientificName.contains(speciesPickerSearch, ignoreCase = true)
+            },
+            itemIcon = { Icon(FieldMindIcons.Nature, null, tint = FieldMindTheme.colors.species, size = 16.dp) },
+            itemPrimaryText = { it.commonName.ifBlank { it.scientificName } },
+            itemSecondaryText = { it.scientificName },
+            onSelect = { sp ->
+                haptics.confirm()
+                viewModel.updateTaskEntity(task.copy(linkedSpeciesId = sp.id))
+                showSpeciesPicker = false
+                speciesPickerSearch = ""
+            }
+        )
+    }
+    
+    // ════════════════════════════════════════════════════════════════
+    //  Evidence Picker Dialog (link a data record as evidence)
+    // ════════════════════════════════════════════════════════════════
+    if (showEvidencePicker) {
+        EntityPickerDialog(
+            title = "Link Evidence (Data Record)",
+            searchQuery = evidencePickerSearch,
+            onSearchChange = { evidencePickerSearch = it },
+            onDismiss = {
+                showEvidencePicker = false
+                evidencePickerSearch = ""
+            },
+            items = dataRecords.filter { dr ->
+                evidencePickerSearch.isBlank() ||
+                dr.label.contains(evidencePickerSearch, ignoreCase = true) ||
+                dr.toolType.contains(evidencePickerSearch, ignoreCase = true)
+            },
+            itemIcon = { Icon(FieldMindIcons.Data, null, tint = FieldMindTheme.colors.data, size = 16.dp) },
+            itemPrimaryText = { it.label.ifBlank { "Data record #" + it.id } },
+            itemSecondaryText = { it.toolType + " • " + it.value.take(30) },
+            onSelect = { dr ->
+                haptics.confirm()
+                viewModel.updateTaskEntity(task.copy(linkedEvidenceId = dr.id))
+                showEvidencePicker = false
+                evidencePickerSearch = ""
             }
         )
     }
@@ -785,6 +862,52 @@ private fun ActivityLogRow(icon: MaterialSymbolIcon, text: String, date: Long) {
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
         )
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Linked Entity Row — Reusable display for linked records
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun LinkedEntityRow(
+    icon: @Composable () -> Unit,
+    accentColor: Color,
+    primaryText: String,
+    secondaryText: String,
+    onClick: () -> Unit,
+    onUnlink: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            Modifier.fillMaxWidth().padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Box(
+                Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
+                    .background(accentColor.copy(alpha = 0.14f)),
+                contentAlignment = Alignment.Center
+            ) {
+                icon()
+            }
+            Column(Modifier.weight(1f)) {
+                Text(primaryText, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(secondaryText, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            IconButton(
+                onClick = onUnlink,
+                modifier = Modifier.size(28.dp)
+            ) {
+                Icon(MaterialSymbolIcon("link_off"), "Unlink", size = 14.dp, tint = MaterialTheme.colorScheme.error.copy(alpha = 0.6f))
+            }
+            Icon(MaterialSymbolIcon("chevron_right"), null, size = 16.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+        }
     }
 }
 
