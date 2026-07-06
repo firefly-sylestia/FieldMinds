@@ -844,7 +844,7 @@ fun SecuritySettingsPage(
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             OutlinedButton(onClick = { showPinSetup = false; pinInput = ""; pinConfirm = ""; pinError = false }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) { Text("Cancel") }
                             val minPinLen = when (appPinLen) { "5 digits" -> 5; "6 digits" -> 6; else -> 4 }
-                            Button(onClick = { if (pinInput.length >= minPinLen && pinInput == pinConfirm) { val hash = settings.hashAppPin(pinInput); settings.setAppPinHash(hash); settings.setAppPinEnabled(true); showPinSetup = false; pinInput = ""; pinConfirm = ""; pinError = false } else pinError = true }, enabled = pinInput.length >= minPinLen && pinConfirm.length >= minPinLen, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) { Text("Save PIN") }
+                            Button(onClick = { if (pinInput.length == minPinLen && pinInput == pinConfirm) { val hash = settings.hashAppPin(pinInput); settings.setAppPinHash(hash); settings.setAppPinEnabled(true); showPinSetup = false; pinInput = ""; pinConfirm = ""; pinError = false } else pinError = true }, enabled = pinInput.length == minPinLen && pinConfirm.length == minPinLen, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) { Text("Save PIN") }
                         }
                     }
                 }
@@ -969,7 +969,7 @@ fun SecuritySettingsPage(
                 }
 
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                ToggleItem("Privacy keyboard", "Ask keyboards not to learn from input", privacyTyping, settings::setPrivacyTypingEnabled, FieldMindIcons.Lock)
+                ToggleItem("Best-effort privacy keyboard", "Ask supported keyboards not to learn from input", privacyTyping, settings::setPrivacyTypingEnabled, FieldMindIcons.Lock)
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Auto clear clipboard", "Clear sensitive copied data automatically", clipboardCleanup, settings::setClipboardAutoCleanupEnabled, MaterialSymbolIcon("content_copy"))
             }

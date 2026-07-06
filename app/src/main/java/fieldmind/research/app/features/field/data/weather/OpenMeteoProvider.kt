@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.util.concurrent.TimeUnit
@@ -26,7 +27,7 @@ class OpenMeteoProvider : WeatherProvider {
     override val displayName: String = "Open-Meteo"
 
     /** Free tier works without a key; provide one for commercial access. */
-    override val requiresApiKey: Boolean = true
+    override val requiresApiKey: Boolean = false
     override val apiKeyLabel: String = "Open-Meteo commercial API key (optional)"
     override val apiKeyPlaceholder: String =
         "Leave blank for free tier. Get a key at open-meteo.com for commercial access."
@@ -56,16 +57,17 @@ class OpenMeteoProvider : WeatherProvider {
             val dailyParams =
                 "temperature_2m_max,temperature_2m_min,weather_code,precipitation_sum,wind_speed_10m_max,apparent_temperature_max,apparent_temperature_min,sunrise,sunset"
 
-            val url = buildString {
-                append(baseUrl)
-                append("?latitude=$latitude&longitude=$longitude")
-                append("&current=$currentParams")
-                append("&daily=$dailyParams")
-                append("&timezone=auto")
-                if (!apiKey.isNullOrBlank()) {
-                    append("&apikey=$apiKey")
-                }
+            val urlBuilder = baseUrl.toHttpUrl().newBuilder()
+                .addQueryParameter("latitude", latitude.toString())
+                .addQueryParameter("longitude", longitude.toString())
+                .addQueryParameter("current", currentParams)
+                .addQueryParameter("daily", dailyParams)
+                .addQueryParameter("timezone", "auto")
+            if (!apiKey.isNullOrBlank()) {
+                // Official Open-Meteo customer endpoint uses the `apikey` query parameter.
+                urlBuilder.addQueryParameter("apikey", apiKey)
             }
+            val url = urlBuilder.build()
 
             val request = Request.Builder()
                 .url(url)

@@ -1,5 +1,10 @@
 package fieldmind.research.app.features.field.presentation.screens
 
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -29,7 +34,6 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.ui.theme.screenBackground
-import java.io.File
 
 /**
  * Collaboration & Sharing — share observations, projects, and data with
@@ -124,7 +128,8 @@ fun CollaborationScreen(
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     Button(
                                         onClick = {
-                                            showFastSnackbar(snackbar, scope, "Export started ($shareFormat)")
+                                            showFastSnackbar(snackbar, scope, "Opening Export Studio for $shareFormat…")
+                                            onOpenExport()
                                         },
                                         shape = RoundedCornerShape(22.dp)
                                     ) {
@@ -134,11 +139,14 @@ fun CollaborationScreen(
                                     }
                                     OutlinedButton(
                                         onClick = {
-                                            val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                                                type = "text/plain"
-                                                putExtra(android.content.Intent.EXTRA_TEXT, "Shared from FieldMind: ${observations.size} observations across ${projects.size} projects.")
-                                            }
-                                            context.startActivity(android.content.Intent.createChooser(shareIntent, "Share via"))
+                                            safeShareText(
+                                                context = context,
+                                                snackbar = snackbar,
+                                                scope = scope,
+                                                chooserTitle = "Share via",
+                                                clipboardLabel = "FieldMind collaboration summary",
+                                                text = "Shared from FieldMind: ${observations.size} observations across ${projects.size} projects."
+                                            )
                                         },
                                         shape = RoundedCornerShape(22.dp)
                                     ) {
@@ -181,11 +189,14 @@ fun CollaborationScreen(
                                         }
                                         FilledTonalButton(
                                             onClick = {
-                                                val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                                                    type = "text/plain"
-                                                    putExtra(android.content.Intent.EXTRA_TEXT, "Join my FieldMind research workspace! Download FieldMind to collaborate.")
-                                                }
-                                                context.startActivity(android.content.Intent.createChooser(shareIntent, "Invite via"))
+                                                safeShareText(
+                                                    context = context,
+                                                    snackbar = snackbar,
+                                                    scope = scope,
+                                                    chooserTitle = "Invite via",
+                                                    clipboardLabel = "FieldMind collaboration invite",
+                                                    text = "Join my FieldMind research workspace! Download FieldMind to collaborate."
+                                                )
                                             },
                                             shape = RoundedCornerShape(22.dp)
                                         ) { Text("Invite") }
@@ -307,6 +318,35 @@ fun CollaborationScreen(
             }
         }
     }
+}
+
+private fun safeShareText(
+    context: Context,
+    snackbar: SnackbarHostState,
+    scope: kotlinx.coroutines.CoroutineScope,
+    chooserTitle: String,
+    clipboardLabel: String,
+    text: String
+) {
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, text)
+    }
+
+    val canShare = shareIntent.resolveActivity(context.packageManager) != null
+    if (canShare) {
+        runCatching { context.startActivity(Intent.createChooser(shareIntent, chooserTitle)) }
+            .onSuccess { return }
+            .onFailure { error ->
+                if (error !is ActivityNotFoundException) {
+                    android.util.Log.w("CollaborationScreen", "Share failed; copying fallback text", error)
+                }
+            }
+    }
+
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    clipboard.setPrimaryClip(ClipData.newPlainText(clipboardLabel, text))
+    showFastSnackbar(snackbar, scope, "No share app found — copied text instead")
 }
 
 @Composable

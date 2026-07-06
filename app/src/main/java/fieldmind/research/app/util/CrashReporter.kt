@@ -1,50 +1,74 @@
 package fieldmind.research.app.util
 
-import android.app.Activity
 import android.app.Application
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
+import android.os.Build
+import android.os.Process
 import android.util.Log
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import fieldmind.research.app.shared.data.model.AppSettings // Import AppSettings
+import fieldmind.research.app.BuildConfig
 import fieldmind.research.app.activities.FieldMindCrashActivity
-import kotlin.system.exitProcess
+import fieldmind.research.app.shared.data.model.AppSettings
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.concurrent.atomic.AtomicBoolean
 
 object CrashReporter {
 
     private const val TAG = "CrashReporter"
-    private lateinit var appSettings: AppSettings // Declare AppSettings
+    private val handlingCrash = AtomicBoolean(false)
+    private var appSettings: AppSettings? = null
+    private var previousHandler: Thread.UncaughtExceptionHandler? = null
 
     fun init(application: Application) {
-        appSettings = AppSettings.getInstance(application) // Initialize AppSettings
-        val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
+        appSettings = runCatching { AppSettings.getInstance(application) }.getOrNull()
+        previousHandler = Thread.getDefaultUncaughtExceptionHandler()
+
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             if (isRuntimeShutdownThrowable(throwable)) {
                 Log.w(TAG, "Ignoring uncaught exception during runtime shutdown on thread ${thread.name}")
+                previousHandler?.uncaughtException(thread, throwable)
                 return@setDefaultUncaughtExceptionHandler
             }
 
-            val crashLog = Log.getStackTraceString(throwable)
+            if (!handlingCrash.compareAndSet(false, true)) {
+                Log.e(TAG, "Recursive crash while handling previous crash", throwable)
+                previousHandler?.uncaughtException(thread, throwable) ?: Process.killProcess(Process.myPid())
+                return@setDefaultUncaughtExceptionHandler
+            }
+
+            val crashLog = buildCrashLog(thread, throwable)
             Log.e(TAG, "Uncaught exception on thread ${thread.name}: $crashLog")
-            appSettings.addCrashLogEntry(crashLog) // Add to crash log history
-            FieldMindCrashActivity.start(application.applicationContext, crashLog)
-            // Crash activity runs in a separate process (:crash_process), so the main
-            // process exiting naturally is fine — the crash UI will survive. We do NOT
-            // call killProcess/exitProcess here because that would race with the
-            // system's ActivityManager trying to launch the crash activity.
-            // Simply let this handler return; the platform will clean up the crashed
-            // process on its own.
+            runCatching { appSettings?.addCrashLogEntry(crashLog) }
+                .onFailure { Log.e(TAG, "Failed to persist crash log", it) }
+
+            val launchedCrashScreen = runCatching {
+                FieldMindCrashActivity.start(application.applicationContext, crashLog)
+            }.onFailure { Log.e(TAG, "Failed to launch crash activity", it) }.isSuccess
+
+            if (!launchedCrashScreen) {
+                previousHandler?.uncaughtException(thread, throwable)
+            }
+
+            // The crash UI runs in :crash_process. Stop the corrupted app process after the
+            // launch request has been handed to ActivityManager so the user is not left on a
+            // half-rendered/blank task.
+            Process.killProcess(Process.myPid())
+            kotlin.system.exitProcess(10)
         }
+    }
+
+    fun buildCrashLog(thread: Thread, throwable: Throwable): String = buildString {
+        appendLine("FieldMind Crash Report")
+        appendLine("Generated: ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z", Locale.US).format(Date())}")
+        appendLine("Thread: ${thread.name} (id=${thread.id})")
+        appendLine("Exception: ${throwable::class.java.name}")
+        appendLine("Message: ${throwable.message ?: "—"}")
+        appendLine("App: ${BuildConfig.APPLICATION_ID} ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+        appendLine("Build: ${BuildConfig.BUILD_TYPE}")
+        appendLine("Device: ${Build.MANUFACTURER} ${Build.MODEL}")
+        appendLine("Android: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})")
+        appendLine()
+        appendLine(Log.getStackTraceString(throwable))
     }
 
     private fun isRuntimeShutdownThrowable(throwable: Throwable?): Boolean {
@@ -52,9 +76,10 @@ object CrashReporter {
         while (cause != null) {
             val message = cause.message
             if (message != null && (
-                message.contains("Thread starting during runtime shutdown") ||
-                message.contains("Runtime shutdown in progress")
-            )) {
+                    message.contains("Thread starting during runtime shutdown") ||
+                        message.contains("Runtime shutdown in progress")
+                    )
+            ) {
                 return true
             }
             cause = cause.cause
@@ -65,83 +90,4 @@ object CrashReporter {
     fun testCrash() {
         throw RuntimeException("This is a test crash generated by the app for demonstration purposes.")
     }
-
-    // This function is no longer needed as CrashActivity handles the dialog
-    // fun showDialog(log: String) {
-    //     crashDetails = log
-    //     showCrashDialog = true
-    // }
-
-    // This composable is no longer needed as CrashActivity hosts the dialog
-    // @Composable
-    // fun CrashDialog() {
-    //     if (showCrashDialog) {
-    //         val context = LocalContext.current
-    //         Dialog(
-    //             onDismissRequest = { /* Cannot dismiss */ },
-    //             properties = DialogProperties(
-    //                 dismissOnBackPress = false,
-    //                 dismissOnClickOutside = false
-    //             )
-    //         ) {
-    //             Surface(
-    //                 shape = MaterialTheme.shapes.medium,
-    //                 color = MaterialTheme.colorScheme.surface,
-    //                 modifier = Modifier.fillMaxWidth()
-    //             ) {
-    //                 Column(
-    //                     modifier = Modifier.padding(16.dp)
-    //                 ) {
-    //                     Text(
-    //                         text = "Oops! Rhythm has crashed!",
-    //                         style = MaterialTheme.typography.headlineSmall,
-    //                         color = MaterialTheme.colorScheme.error
-    //                     )
-    //                     Spacer(modifier = Modifier.height(8.dp))
-    //                     Text(
-    //                         text = "An unexpected error occurred. Please copy the crash logs and report this issue. You can also restart the app.",
-    //                         style = MaterialTheme.typography.bodyMedium
-    //                     )
-    //                     Spacer(modifier = Modifier.Modifier.height(16.dp))
-    //                     OutlinedTextField(
-    //                         value = crashDetails ?: "No crash details available.",
-    //                         onValueChange = { /* Read-only */ },
-    //                         label = { Text("Crash Logs") },
-    //                         readOnly = true,
-    //                         modifier = Modifier
-    //                             .fillMaxWidth()
-    //                             .heightIn(max = 200.dp)
-    //                     )
-    //                     Spacer(modifier = Modifier.Modifier.height(16.dp))
-    //                     Row(
-    //                         modifier = Modifier.fillMaxWidth(),
-    //                         horizontalArrangement = Arrangement.End
-    //                     ) {
-    //                         Button(
-    //                             onClick = {
-    //                                 val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-    //                                 intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-    //                                 context.startActivity(intent)
-    //                                 exitProcess(0)
-    //                             }
-    //                         ) {
-    //                             Text("Restart App")
-    //                         }
-    //                         Spacer(modifier = Modifier.Modifier.width(8.dp))
-    //                         Button(
-    //                             onClick = {
-    //                                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    //                                 val clip = ClipData.newPlainText("Rhythm Crash Log", crashDetails)
-    //                                 clipboard.setPrimaryClip(clip)
-    //                                 exitProcess(0)
-    //                             }
-    //                         ) {
-    //                             Text("Copy Logs & Close")
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }

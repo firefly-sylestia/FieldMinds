@@ -116,9 +116,8 @@ class MainActivity : FragmentActivity() {
         super.onPause()
         // Only trigger auto-lock if setting is enabled
         val autoLockBg = fieldMindViewModel.fieldSettings.autoLockOnBackground.value
-        if (autoLockBg) {
-            AppLifecycleManager.onActivityPaused()
-        }
+        val lockTimeout = fieldMindViewModel.fieldSettings.lockTimeout.value
+        AppLifecycleManager.onActivityPaused(autoLockEnabled = autoLockBg, timeoutLabel = lockTimeout)
         // Auto-clear clipboard if configured
         val autoClearClipboard = fieldMindViewModel.fieldSettings.clipboardAutoCleanupEnabled.value
         if (autoClearClipboard) {
@@ -129,7 +128,10 @@ class MainActivity : FragmentActivity() {
 
     override fun onResume() {
         super.onResume()
-        AppLifecycleManager.onActivityResumed()
+        AppLifecycleManager.onActivityResumed(
+            autoLockEnabled = fieldMindViewModel.fieldSettings.autoLockOnBackground.value,
+            timeoutLabel = fieldMindViewModel.fieldSettings.lockTimeout.value
+        )
     }
 
     override fun onNewIntent(intent: Intent) {

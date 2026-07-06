@@ -11,6 +11,8 @@ import fieldmind.research.app.features.field.data.repository.FieldMindRepository
 import fieldmind.research.app.features.field.data.export.FieldMindExport
 import fieldmind.research.app.features.field.data.export.FieldMindExportMediaPacker
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
+import fieldmind.research.app.features.field.data.weather.WeatherDiagnosticState
+import fieldmind.research.app.features.field.data.weather.WeatherFetchError
 import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
 import fieldmind.research.app.features.field.data.analysis.DetectedPattern
 import fieldmind.research.app.features.field.data.analysis.PatternDetectionEngine
@@ -19,7 +21,9 @@ import fieldmind.research.app.features.field.data.question.QuestionGenerator
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -935,6 +939,8 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         private set
     private var isWeatherFetching = false
         private set
+    private val _weatherDiagnostics = MutableStateFlow(WeatherDiagnosticState())
+    val weatherDiagnostics: StateFlow<WeatherDiagnosticState> = _weatherDiagnostics.asStateFlow()
 
     /** Configure per-provider API keys. */
     private fun buildWeatherApiKeys(): Map<String, String> = buildMap {
@@ -949,11 +955,23 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun fetchWeatherForLocation(latitude: Double, longitude: Double) = viewModelScope.launch {
+        _weatherDiagnostics.value = WeatherDiagnosticState(isLoading = true, message = "Fetching weather…", provider = fieldSettings.weatherProviders.value)
         val legacyKey = fieldSettings.weatherApiKey.value.ifBlank { null }
         val perProviderKeys = buildWeatherApiKeys()
-        lastWeatherSnapshot = fieldmind.research.app.features.field.data.weather.WeatherProviders.fetchMergedWeather(
+        val result = fieldmind.research.app.features.field.data.weather.WeatherProviders.fetchMergedWeather(
             fieldSettings.weatherProviders.value, latitude, longitude, perProviderKeys, legacyKey
         )
+        lastWeatherSnapshot = result
+        _weatherDiagnostics.value = if (result != null) {
+            WeatherDiagnosticState(message = "Weather updated", provider = fieldSettings.weatherProviders.value, updatedAt = System.currentTimeMillis())
+        } else {
+            WeatherDiagnosticState(
+                message = "Weather provider returned no data. Check network, provider keys, or coordinates.",
+                provider = fieldSettings.weatherProviders.value,
+                updatedAt = System.currentTimeMillis(),
+                lastError = WeatherFetchError.Provider(fieldSettings.weatherProviders.value, message = "No weather data returned")
+            )
+        }
     }
 
     suspend fun fetchWeatherSnapshot(latitude: Double, longitude: Double): WeatherSnapshot? {
@@ -1000,11 +1018,34 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
             fieldmind.research.app.features.field.data.location.FieldLocationProvider(getApplication())
         }.getOrNull() ?: return null
 
-        if (!provider.hasAnyLocationPermission()) return null
+        if (!provider.hasAnyLocationPermission()) {
+            _weatherDiagnostics.value = WeatherDiagnosticState(
+                message = "Location permission is required to fetch local weather.",
+                locationStatus = "permission_missing",
+                updatedAt = System.currentTimeMillis(),
+                lastError = WeatherFetchError.NoLocationPermission
+            )
+            return null
+        }
 
         isWeatherFetching = true
+        _weatherDiagnostics.value = WeatherDiagnosticState(isLoading = true, message = "Getting location for weather…", provider = fieldSettings.weatherProviders.value)
         val result = try {
-            provider.lastKnownLocation()?.let { loc ->
+            val loc = provider.lastKnownLocation() ?: suspendCancellableCoroutine { cont ->
+                provider.requestCurrentLocation(timeoutMs = 12_000L) { fresh ->
+                    if (cont.isActive) cont.resume(fresh)
+                }
+            }
+            if (loc == null) {
+                _weatherDiagnostics.value = WeatherDiagnosticState(
+                    message = "No current or cached location was available for weather.",
+                    locationStatus = "no_location",
+                    updatedAt = System.currentTimeMillis(),
+                    lastError = WeatherFetchError.NoLocationAvailable
+                )
+                null
+            } else {
+                _weatherDiagnostics.value = WeatherDiagnosticState(isLoading = true, message = "Fetching weather…", provider = fieldSettings.weatherProviders.value, locationStatus = loc.coordinateText())
                 val legacyKey = fieldSettings.weatherApiKey.value.ifBlank { null }
                 val perProviderKeys = buildWeatherApiKeys()
                 fieldmind.research.app.features.field.data.weather.WeatherProviders.fetchMergedWeather(
@@ -1018,6 +1059,14 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         if (result != null) {
             lastWeatherSnapshot = result
             lastWeatherFetchTime = System.currentTimeMillis()
+            _weatherDiagnostics.value = WeatherDiagnosticState(message = "Weather updated", provider = fieldSettings.weatherProviders.value, updatedAt = lastWeatherFetchTime)
+        } else if (_weatherDiagnostics.value.lastError == null) {
+            _weatherDiagnostics.value = WeatherDiagnosticState(
+                message = "Weather provider returned no data. Check network, provider keys, or provider availability.",
+                provider = fieldSettings.weatherProviders.value,
+                updatedAt = System.currentTimeMillis(),
+                lastError = WeatherFetchError.Provider(fieldSettings.weatherProviders.value, message = "No weather data returned")
+            )
         }
         return result
     }
