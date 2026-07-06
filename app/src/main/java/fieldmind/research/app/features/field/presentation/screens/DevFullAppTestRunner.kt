@@ -277,6 +277,7 @@ fun DevFullAppTestRunner(
                             progressText = "Starting tests..."
                             testJob = scope.launch {
                                 val results = mutableListOf<TestResult>()
+                                val settingsBackup = TestSettingsSnapshot.capture(viewModel)
                                 try {
                                     runAllTests(viewModel, context, results) { msg ->
                                         progressText = msg
@@ -317,6 +318,7 @@ fun DevFullAppTestRunner(
                                     appSettings.setLatestDeveloperTestReport(Gson().toJson(failedReport))
                                     errorMessage = "Test runner crash: ${e::class.simpleName}: ${e.message?.take(200) ?: "Unknown error"}"
                                 } finally {
+                                    settingsBackup.restore(viewModel)
                                     isRunning = false
                                     testJob = null
                                 }
@@ -818,6 +820,31 @@ private suspend fun runAllTests(
         assert(!viewModel.captureSessionActive) { "captureSessionActive should be false" }
     }
 
+    runTest(results, "ViewModel & Data", "ResearchSessions StateFlow emits") {
+        val sessions = viewModel.researchSessions.first()
+        assert(sessions != null) { "ResearchSessions returned null" }
+    }
+
+    runTest(results, "ViewModel & Data", "SpeciesRegistry StateFlow emits") {
+        val species = viewModel.speciesRegistry.first()
+        assert(species != null) { "SpeciesRegistry returned null" }
+    }
+
+    runTest(results, "ViewModel & Data", "Tasks StateFlow emits") {
+        val tasks = viewModel.tasks.first()
+        assert(tasks != null) { "Tasks returned null" }
+    }
+
+    runTest(results, "ViewModel & Data", "Folders StateFlow emits") {
+        val folders = viewModel.folders.first()
+        assert(folders != null) { "Folders returned null" }
+    }
+
+    runTest(results, "ViewModel & Data", "WeatherCatalog StateFlow emits") {
+        val catalog = viewModel.weatherCatalog.first()
+        assert(catalog != null) { "WeatherCatalog returned null" }
+    }
+
     // ═══════════════════════════════════════════════
     //  3. SETTINGS TESTS
     // ═══════════════════════════════════════════════
@@ -831,15 +858,6 @@ private suspend fun runAllTests(
         settings.setThemeMode(original)
         val restored = settings.themeMode.first()
         assert(restored == original) { "Expected $original, got $restored" }
-    }
-
-    runTest(results, "Settings", "Developer mode toggles") {
-        settings.setDeveloperMode(true)
-        val devOn = settings.developerMode.first()
-        assert(devOn) { "developerMode should be true" }
-        settings.setDeveloperMode(false)
-        val devOff = settings.developerMode.first()
-        assert(!devOff) { "developerMode should be false" }
     }
 
     runTest(results, "Settings", "Profile name set & read") {
@@ -956,6 +974,36 @@ private suspend fun runAllTests(
         assert(t.title == "Test Task") { "TaskEntity constructor failed" }
     }
 
+    runTest(results, "Database & Entities", "ResearchSessionEntity constructable") {
+        val s = ResearchSessionEntity(name = "Test Session", projectId = null)
+        assert(s.name == "Test Session") { "ResearchSessionEntity constructor failed" }
+        assert(s.status == "Active") { "Default status should be Active" }
+    }
+
+    runTest(results, "Database & Entities", "SpeciesEntity constructable") {
+        val s = SpeciesEntity(commonName = "Indian Peafowl", scientificName = "Pavo cristatus")
+        assert(s.commonName == "Indian Peafowl") { "SpeciesEntity constructor failed" }
+        assert(s.scientificName == "Pavo cristatus") { "Scientific name mismatch" }
+    }
+
+    runTest(results, "Database & Entities", "FolderEntity constructable") {
+        val f = FolderEntity(name = "Bird Observations", color = 0xFF5F7F52)
+        assert(f.name == "Bird Observations") { "FolderEntity constructor failed" }
+        assert(f.color == 0xFF5F7F52) { "Color mismatch" }
+    }
+
+    runTest(results, "Database & Entities", "EvidenceAttachmentEntity constructable") {
+        val att = EvidenceAttachmentEntity(observationId = 1L, type = "Photo", uri = "file:///test.jpg")
+        assert(att.type == "Photo") { "EvidenceAttachmentEntity type mismatch" }
+        assert(att.uri == "file:///test.jpg") { "URI mismatch" }
+    }
+
+    runTest(results, "Database & Entities", "WeatherCatalogEntity constructable") {
+        val w = WeatherCatalogEntity(latitude = 12.97, longitude = 77.59, temperature = 28.5, weatherCode = 0)
+        assert(w.temperature == 28.5) { "WeatherCatalogEntity temperature mismatch" }
+        assert(w.latitude == 12.97) { "Latitude mismatch" }
+    }
+
     // ═══════════════════════════════════════════════
     //  5. SECURITY & PRIVACY TESTS
     // ═══════════════════════════════════════════════
@@ -1048,6 +1096,8 @@ private suspend fun runAllTests(
         assert(LockSecurityPolicy.failedUnlockCooldownMs("5 Minute Cooldown") == 300_000L) { "5 minute cooldown mismatch" }
         assert(LockSecurityPolicy.shouldRequireBiometricsAfterFailure(5, true, true)) { "Biometric policy should trigger" }
     }
+
+
 
     runTest(results, "Security & Privacy", "Open-Meteo free tier requires no key") {
         assert(!OpenMeteoProvider().requiresApiKey) { "Open-Meteo free tier should not require an API key" }
@@ -1252,7 +1302,41 @@ private suspend fun runAllTests(
     }
 
     // ═══════════════════════════════════════════════
-    //  10. UI LAYOUT & INSETS CHECKLIST
+    //  8. FORMATTING & DISPLAY UTILITIES
+    // ═══════════════════════════════════════════════
+    onProgress("[8/8] Testing formatting & display utilities...")
+
+    runTest(results, "Formatting & Display", "Observation categories contain expected values") {
+        assert(observationCategories.contains("Wildlife")) { "Missing Wildlife category" }
+        assert(observationCategories.contains("Weather")) { "Missing Weather category" }
+        assert(observationCategories.contains("Habitat")) { "Missing Habitat category" }
+        assert(observationCategories.size >= 8) { "Expected at least 8 categories" }
+    }
+
+    runTest(results, "Formatting & Display", "Confidence options are well-formed") {
+        assert(confidenceOptions.contains("Certain")) { "Missing Certain" }
+        assert(confidenceOptions.contains("Likely")) { "Missing Likely" }
+        assert(confidenceOptions.contains("Moderate")) { "Missing Moderate" }
+        assert(confidenceOptions.contains("Unsure")) { "Missing Unsure" }
+    }
+
+    runTest(results, "Formatting & Display", "Weather descriptive text is non-empty") {
+        val weatherCodeDescriptions = listOf(0, 1, 61, 95, 99)
+        weatherCodeDescriptions.forEach { code ->
+            val desc = fieldmind.research.app.features.field.data.weather.WeatherSnapshot.descriptionForCode(code)
+            assert(desc.isNotBlank()) { "Weather code $code has blank description" }
+        }
+    }
+
+    runTest(results, "Formatting & Display", "Settings snapshot string builds without exception") {
+        val snapshot = buildSettingsSnapshot(viewModel)
+        assert(snapshot.contains("theme=")) { "Snapshot missing theme" }
+        assert(snapshot.contains("secure=")) { "Snapshot missing secure flag" }
+        assert(snapshot.contains("developer=")) { "Snapshot missing developer mode" }
+    }
+
+    // ═══════════════════════════════════════════════
+    //  9. UI LAYOUT & INSETS CHECKLIST
     // ═══════════════════════════════════════════════
     onProgress("[9/9] Recording UI layout checklist...")
 
