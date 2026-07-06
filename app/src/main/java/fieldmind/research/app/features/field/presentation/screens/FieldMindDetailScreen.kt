@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -139,11 +140,9 @@ fun SharedTransitionScope.DetailScreen(
                             Icon(FieldMindIcons.Article, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
                         }
                         IconButton(onClick = { sharePlainText(context, exportText) }, modifier = Modifier.size(36.dp)) {
-                            Icon(FieldMindIcons.Export, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
-                        }
-                    }
-                }
-            }
+                            Icon(FieldMindIcons.Export, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)        }
+    }
+}
 
             if (editable && !showEdit) {
                 item { DetailActionBar(onEdit = { showEdit = true }, onDelete = { showDelete = true }) }
@@ -395,11 +394,9 @@ fun ObservationDetailContent(
                             o.weatherSnapshotAt?.let { ProvenanceRow("Weather snapshot", formatTimestamp(it)) }
                             ProvenanceRow("Record ID", "#${o.id}")
                             ProvenanceRow("Created", formatTimestamp(o.createdAt))
-                            ProvenanceRow("Updated", formatTimestamp(o.updatedAt))
-                        }
-                    }
-                }
-            }
+                            ProvenanceRow("Updated", formatTimestamp(o.updatedAt))        }
+    }
+}
 
             // ── 15. Related Observations (re-observation chain) ──
             ReObservationLink(o, viewModel, onOpenDetail)
@@ -719,11 +716,9 @@ fun ObservationBehaviorSection(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text("Sex", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(behaviorData.sex, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
-                        }
-                    }
-                }
-            }
+                            Text(behaviorData.sex, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)        }
+    }
+}
             if (behaviorData.feeding.isNotBlank() || behaviorData.nesting.isNotBlank()) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     if (behaviorData.feeding.isNotBlank()) {
@@ -735,11 +730,9 @@ fun ObservationBehaviorSection(
                     if (behaviorData.nesting.isNotBlank()) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text("Nesting:", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(if (behaviorData.nesting == "true") "Yes" else "No", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
-                        }
-                    }
-                }
-            }
+                            Text(if (behaviorData.nesting == "true") "Yes" else "No", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)        }
+    }
+}
         }
     }
 }
@@ -856,11 +849,9 @@ fun ObservationStructuredDetailsSection(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(parts[0].trim(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(parts[1].trim(), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
-                        }
-                    }
-                }
-            }
+                            Text(parts[1].trim(), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)        }
+    }
+}
         }
     }
 }
@@ -890,7 +881,7 @@ private data class StructuredDetailsData(
 // ══════��═══════════════════════════════════════════════════════════════
 
 @Composable
-fun QualityScoreCard(score: Int) {
+private fun QualityScoreCard(score: Int) {
     val colors = FieldMindTheme.colors
     val scoreColor = when {
         score >= 80 -> colors.positive
@@ -1049,11 +1040,9 @@ fun ObservationWeatherLocationSection(
                             WeatherDetailRow("Pressure", "${o.weatherPressure?.toInt()} hPa")
                         }
                         if (o.weatherCondition.isNotBlank()) {
-                            WeatherDetailRow("Condition", o.weatherCondition)
-                        }
-                    }
-                }
-            }
+                            WeatherDetailRow("Condition", o.weatherCondition)        }
+    }
+}
             
             // Location details
             if (hasLocation) {
@@ -1355,7 +1344,7 @@ fun ProvenanceRow(label: String, value: String) {
     }
 }
 
-fun formatTimestamp(millis: Long): String {
+private fun formatTimestamp(millis: Long): String {
     val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
     return sdf.format(java.util.Date(millis))
 }
@@ -1593,11 +1582,9 @@ fun QuestionDetailContent(
                         Icon(FieldMindIcons.Hypothesis, null, tint = colors.hypothesis, size = 18.dp)
                         Column(Modifier.weight(1f)) {
                             Text(h.prediction, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                            Text("Confidence: ${h.confidencePercent}%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                    }
-                }
-            }
+                            Text("Confidence: ${h.confidencePercent}%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)        }
+    }
+}
         }
     }}
 

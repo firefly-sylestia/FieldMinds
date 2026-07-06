@@ -2403,28 +2403,6 @@ private fun EnhancedObservationForm(
 //  Quality Score Card
 // ══════════════════════════════════════════════════════════════════════
 
-@Composable
-private fun QualityScoreCard(score: Int) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.45f)
-    ) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Icon(FieldMindIcons.Check, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
-                    Text("Quality", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                }
-                Text("$score%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
-            }
-            LinearProgressIndicator(progress = { score / 100f }, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(99.dp)).height(6.dp))
-        }
-    }
 }
 
 // ══════════════════════════════════════════════════════════════════════

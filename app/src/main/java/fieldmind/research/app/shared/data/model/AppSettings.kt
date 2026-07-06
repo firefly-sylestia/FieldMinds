@@ -140,7 +140,8 @@ class AppSettings private constructor(context: Context) {
 
     fun addCrashLogEntry(log: String) {
         val currentHistory = _crashLogHistory.value.toMutableList()
-        currentHistory.add(CrashLogEntry(timestamp = System.currentTimeMillis(), log = log))            val limitedHistory = currentHistory.takeLast(50)
+        currentHistory.add(CrashLogEntry(timestamp = System.currentTimeMillis(), log = log))
+            val limitedHistory = currentHistory.takeLast(50)
         _crashLogHistory.value = limitedHistory
         prefs.edit().putString(KEY_CRASH_LOG_HISTORY, Gson().toJson(limitedHistory)).apply()
         setLastCrashLog(log)

@@ -276,8 +276,8 @@ fun DevFullAppTestRunner(
                             errorMessage = null
                             progressText = "Starting tests..."
                             testJob = scope.launch {
+                                val results = mutableListOf<TestResult>()
                                 try {
-                                    val results = mutableListOf<TestResult>()
                                     runAllTests(viewModel, context, results) { msg ->
                                         progressText = msg
                                         val partial = TestRunReport(
