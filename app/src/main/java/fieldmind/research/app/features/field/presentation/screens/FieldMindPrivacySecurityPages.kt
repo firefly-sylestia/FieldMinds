@@ -312,7 +312,6 @@ fun AppPreviewPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("How should FieldMind appear in recent apps?", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text("Screenshots are controlled separately by Privacy & Security → Screen capture protection. Set that toggle off to allow screenshots.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(4.dp))
 
                     listOf(
