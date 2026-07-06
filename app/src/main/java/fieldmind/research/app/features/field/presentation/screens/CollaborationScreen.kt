@@ -579,7 +579,85 @@ fun CollaborationScreen(
                                         Spacer(Modifier.size(6.dp))
                                         Text("Generate portfolio")
                                     }
-                                    OutlinedButton(onClick = { onOpenExport() }, shape = RoundedCornerShape(22.dp)) {
+                                    OutlinedButton(
+                                        onClick = {
+                                            scope.launch {
+                                                isExporting = true
+                                                exportStepText = "Building complete export…"
+                                                try {
+                                                    withContext(Dispatchers.IO) {
+                                                        val allObs = viewModel.observations.value
+                                                        val allNotes = viewModel.notes.value
+                                                        val allQs = viewModel.questions.value
+                                                        val allHyps = viewModel.hypotheses.value
+                                                        val allProjs = viewModel.projects.value
+                                                        val allSrcs = viewModel.sources.value
+                                                        val allDrs = viewModel.dataRecords.value
+                                                        val allRpts = viewModel.reports.value
+                                                        val allFcards = viewModel.flashcards.value
+                                                        val allSpcs = viewModel.speciesRegistry.value
+                                                        val allWcat = viewModel.weatherCatalog.value
+                                                        val allSessions = viewModel.researchSessions.value
+                                                        val allTks = viewModel.tasks.value
+
+                                                        val dateStamp = SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.getDefault()).format(Date())
+                                                        val exportDir = File(context.cacheDir, "collaboration_exports").apply { mkdirs() }
+                                                        val fileName = "fieldmind-complete-$dateStamp.fieldmind"
+                                                        val exportFile = File(exportDir, fileName)
+
+                                                        val json = FieldMindExport.archiveJson(
+                                                            observations = allObs, notes = allNotes,
+                                                            questions = allQs, hypotheses = allHyps,
+                                                            projects = allProjs, sources = allSrcs,
+                                                            dataRecords = allDrs, reports = allRpts,
+                                                            flashcards = allFcards, species = allSpcs,
+                                                            weatherCatalog = allWcat,
+                                                            researchSessions = allSessions,
+                                                            tasks = allTks
+                                                        )
+
+                                                        val allAttachments = mutableMapOf<Long, List<fieldmind.research.app.features.field.data.database.entity.EvidenceAttachmentEntity>>()
+                                                        allObs.forEach { o ->
+                                                            runCatching {
+                                                                val atts = viewModel.attachmentsForObservation(o.id).first()
+                                                                if (atts.isNotEmpty()) allAttachments[o.id] = atts
+                                                            }
+                                                        }
+
+                                                        val result = fieldmind.research.app.features.field.data.export.FieldMindExportMediaPacker.buildPackage(
+                                                            context = context, archiveJson = json,
+                                                            observations = allObs, notes = allNotes,
+                                                            projects = allProjs, sources = allSrcs,
+                                                            attachments = allAttachments,
+                                                            outputDir = exportDir
+                                                        )
+                                                        result.packageFile.copyTo(exportFile, overwrite = true)
+
+                                                        val shareUri = FileProvider.getUriForFile(
+                                                            context,
+                                                            "${context.packageName}.provider",
+                                                            exportFile
+                                                        )
+                                                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                                            type = "application/octet-stream"
+                                                            putExtra(Intent.EXTRA_STREAM, shareUri)
+                                                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                        }
+                                                        context.startActivity(Intent.createChooser(shareIntent, "Export all FieldMind data"))
+                                                    }
+                                                    showFastSnackbar(snackbar, scope, "Complete export shared")
+                                                } catch (e: Exception) {
+                                                    showFastSnackbar(snackbar, scope, "Export failed: ${e.localizedMessage?.take(100) ?: "Unknown error"}")
+                                                } finally {
+                                                    isExporting = false
+                                                    exportStepText = ""
+                                                }
+                                            }
+                                        },
+                                        shape = RoundedCornerShape(22.dp),
+                                        enabled = !isExporting
+                                    ) {
                                         Icon(FieldMindIcons.Export, null, size = 18.dp)
                                         Spacer(Modifier.size(6.dp))
                                         Text("Export all")
