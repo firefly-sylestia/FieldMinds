@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 import fieldmind.research.app.features.field.data.ai.AiProvider
 import fieldmind.research.app.features.field.data.ai.GeminiResearchAssistant
 import fieldmind.research.app.features.field.data.canvas.CanvasBlockEntity

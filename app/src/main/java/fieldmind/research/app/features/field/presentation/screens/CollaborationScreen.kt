@@ -487,8 +487,8 @@ fun CollaborationScreen(
                                                                 val obsCount = allObs.count { it.projectId == p.id }
                                                                 appendLine("### ${p.title}")
                                                                 appendLine("- **Status:** ${p.status}")
-                                                                if (p.methodology.isNotBlank()) appendLine("- **Methodology:** ${p.methodology}")
-                                                                if (p.description.isNotBlank()) appendLine("- **Description:** ${p.description.take(200)}")
+                                                                if (p.methods.isNotBlank()) appendLine("- **Methodology:** ${p.methods}")
+                                                                if (p.objective.isNotBlank()) appendLine("- **Description:** ${p.objective.take(200)}")
                                                                 appendLine("- **Linked observations:** $obsCount")
                                                                 appendLine()
                                                             }
@@ -504,9 +504,9 @@ fun CollaborationScreen(
                                                                 appendLine("### ${o.subject}")
                                                                 appendLine("- **Date:** ${o.date} ${o.time}")
                                                                 appendLine("- **Category:** ${o.category}")
-                                                                appendLine("- **Confidence:** ${o.confidence}")
+                                                                appendLine("- **Confidence:** ${o.confidenceLevel}")
                                                                 if (o.manualLocation.isNotBlank()) appendLine("- **Location:** ${o.manualLocation}")
-                                                                if (o.facts.isNotBlank()) appendLine("- **Notes:** ${o.facts.take(300)}")
+                                                                if (o.factsOnlyNotes.isNotBlank()) appendLine("- **Notes:** ${o.factsOnlyNotes.take(300)}")
                                                                 if (o.tags.isNotBlank()) appendLine("- **Tags:** ${o.tags}")
                                                                 appendLine()
                                                             }
@@ -523,7 +523,7 @@ fun CollaborationScreen(
                                                             appendLine("## Research Questions")
                                                             appendLine()
                                                             allQs.forEach { q ->
-                                                                appendLine("- **${q.question}**")
+                                                                appendLine("- **${q.questionText}**")
                                                                 if (q.answer.isNotBlank()) appendLine("  - Answer: ${q.answer.take(200)}")
                                                                 appendLine()
                                                             }
