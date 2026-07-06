@@ -58,6 +58,7 @@ fun WeatherDatabaseScreen(
     val tempUnit by viewModel.fieldSettings.tempUnit.collectAsState()
     val windSpeedUnit by viewModel.fieldSettings.windSpeedUnit.collectAsState()
     val showCloudAnimation by viewModel.fieldSettings.weatherShowCloudAnimation.collectAsState()
+    val weatherDiagnostics by viewModel.weatherDiagnostics.collectAsState()
 
     // Weather Database always shows all data (display prefs only affect the home widget)
 
@@ -299,7 +300,8 @@ fun WeatherDatabaseScreen(
                     placeName = dashboardPlaceName,
                     refreshTimestampText = refreshTimestampText,
                     tempUnit = tempUnit,
-                    windSpeedUnit = windSpeedUnit
+                    windSpeedUnit = windSpeedUnit,
+                    diagnosticMessage = weatherDiagnostics.message
                 )
             }
 
@@ -459,7 +461,8 @@ private fun LiveCurrentWeatherCard(
     refreshTimestampText: String = "Updated just now",
     tempUnit: String = "Celsius",
     windSpeedUnit: String = "km/h",
-    showCloudAnimation: Boolean = true
+    showCloudAnimation: Boolean = true,
+    diagnosticMessage: String? = null
 ) {
     val colors = FieldMindTheme.colors
     val isDarkTheme = colors.isDark
@@ -688,7 +691,7 @@ private fun LiveCurrentWeatherCard(
                             size = 48.dp
                         )
                         Text(
-                            "Enable GPS for live weather",
+                            diagnosticMessage ?: "Enable GPS for live weather",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

@@ -61,7 +61,12 @@ object AppLifecycleManager {
     /**
      * Call from MainActivity.onPause() to track app backgrounding.
      */
-    fun onActivityPaused() {
+    fun onActivityPaused(autoLockEnabled: Boolean = true, timeoutLabel: String = "Immediate") {
+        if (!autoLockEnabled) {
+            cancelScheduledLock()
+            return
+        }
+        setLockTimeout(timeoutLabel)
         isAppInBackground = true
         lastInteractionTime = System.currentTimeMillis()
         scheduleAutoLock()
@@ -70,14 +75,12 @@ object AppLifecycleManager {
     /**
      * Call from MainActivity.onResume() to check if lock should be shown.
      */
-    fun onActivityResumed() {
+    fun onActivityResumed(autoLockEnabled: Boolean = true, timeoutLabel: String = "Immediate") {
+        setLockTimeout(timeoutLabel)
+        val shouldLock = autoLockEnabled && shouldTriggerLock()
         isAppInBackground = false
         cancelScheduledLock()
-        
-        // Check if timeout has passed
-        if (shouldTriggerLock()) {
-            triggerLock()
-        }
+        if (shouldLock) triggerLock()
     }
     
     /**
@@ -92,10 +95,18 @@ object AppLifecycleManager {
      */
     fun setLockTimeout(timeoutSeconds: Int) {
         parseLockTimeout(timeoutSeconds)
-        // Reschedule lock if app is in background
-        if (isAppInBackground) {
-            scheduleAutoLock()
+        if (isAppInBackground) scheduleAutoLock()
+    }
+
+    fun setLockTimeout(timeoutLabel: String) {
+        lockTimeoutMs = when (timeoutLabel) {
+            "Immediate" -> 0L
+            "1 minute" -> 60_000L
+            "5 minutes" -> 5 * 60_000L
+            "15 minutes" -> 15 * 60_000L
+            else -> 0L
         }
+        if (isAppInBackground) scheduleAutoLock()
     }
     
     /**

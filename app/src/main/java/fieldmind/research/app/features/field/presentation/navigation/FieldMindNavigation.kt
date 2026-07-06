@@ -243,7 +243,7 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             settings = viewModel.fieldSettings,
             isUnlocked = appUnlocked,
             isDecoyMode = isDecoyMode,
-            onUnlock = { appUnlocked = true },
+            onUnlock = { appUnlocked = true; AppLifecycleManager.dismissLock() },
             onDecoyUnlock = { isDecoyMode = true }
         ) {
             val privacyTyping by viewModel.fieldSettings.privacyTypingEnabled.collectAsState()

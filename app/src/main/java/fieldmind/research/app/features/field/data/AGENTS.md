@@ -16,11 +16,11 @@ The `data/` package contains all domain logic, data access, external API integra
 
 - `database/` — Room database: entities (`FieldEntities.kt`), DAOs (`FieldMindDao.kt`), database class (`FieldMindDatabase.kt`), migrations
 - `repository/` — `FieldMindRepository` — central data access facade
-- `weather/` — Weather provider integrations: `OpenMeteoProvider`, `OpenWeatherMapProvider`, `MetNorwayProvider`, `WeatherApiDotComProvider`, `IndiaMeteorologicalDepartmentProvider`, `NationalWeatherServiceProvider`, `WeatherUnitConverter`
+- `weather/` — Weather provider integrations and diagnostics: `OpenMeteoProvider`, `OpenWeatherMapProvider`, `MetNorwayProvider`, `WeatherApiDotComProvider`, `IndiaMeteorologicalDepartmentProvider`, `NationalWeatherServiceProvider`, `WeatherUnitConverter`, `WeatherDiagnosticState`
 - `vision/` — Species classification: `SpeciesClassifier`, `SpeciesImageAnalyzer`, `PhashDatabase`, `PerenualSpeciesProvider`, `SpeciesDatabase`
 - `ai/` — AI research assistant: `GeminiResearchAssistant`
 - `species/` — Taxonomy data and species catalogs
-- `security/` — Privacy: `FieldMindPrivacyManager` (biometric lock, screen protection, clipboard security)
+- `security/` — Privacy/security helpers: `FieldMindPrivacyManager` (biometric lock, screen protection, clipboard security) and `LockSecurityPolicy` (testable PIN/cooldown/failed-attempt rules)
 - `export/` — Export/import: `FieldMindReportGenerator`, `FieldMindExport`, `FieldMindExportEncryption`, `FieldMindExportMediaPacker`, `FieldTemplate`
 - `location/` — Location services: `FieldLocationProvider`, `TrackRecorder`, `MapDrawingTools`, `MaplibreOfflineManager`, `GeoFenceReminder`
 - `settings/` — `FieldMindSettings` persistence

@@ -6,31 +6,49 @@
 
 ## Request Summary
 
-Rename package from `chromahub.rhythm.app` → `fieldmind.research.app` across the entire project:
-- Move directory structure: `chromahub/rhythm/app/` → `fieldmind/research/app/`
-- Update all remaining old package declarations
-- Update all documentation, config, and XML files
+Targeted FieldMind Android stability/security/weather repair pass:
+- Crash reporter must show a reliable non-blank crash screen and persist richer crash reports.
+- Collaboration sharing must not crash when no share target exists; fake export button must route to real export flow.
+- App lock must use exact 4/5/6 digit PINs, in-app numpad, consistent failed-attempt policies, cooldowns, biometric-required enforcement, and safer panic-lock handling.
+- Auto-lock must respect background timeout settings.
+- Open-Meteo must work without an API key and weather failures must expose actionable diagnostic state.
+- DevFullAppTestRunner must be cancellable, less hang-prone, restore settings, and test lock/weather/crash policies.
 
 ## Context Gathered
 
-### Build/Manifest Already Correct
-- `app/build.gradle.kts`: namespace = `fieldmind.research.app`, applicationId = `fieldmind.research.app` ✓
-- `AndroidManifest.xml`: All class references already use `fieldmind.research.app.*` ✓
+- DOX chain read: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, field data/presentation AGENTS, shared/infrastructure/resource AGENTS, `fastlane/AGENTS.md`.
+- Build/lint/test Gradle commands are prohibited in this environment.
+- Open-Meteo official docs/search confirm free API has no API key requirement; pricing/customer docs show customer endpoint uses `customer-api.open-meteo.com` and `apikey` query parameter.
+- Existing lock screen uses a device keyboard `OutlinedTextField`, cooldown threshold hardcoded at 3 despite UI saying 5, and failed policies are partially unwired.
+- Existing crash reporter starts crash activity but returns from uncaught exception handler without a re-entrancy guard or explicit process termination.
+- Existing DevFullAppTestRunner has long per-test timeout and no cancellation/restoration wrapper.
 
-### State of Source Files
-- **100+ .kt files** in `app/src/main/java/chromahub/rhythm/app/` — already have `package fieldmind.research.app.*` declarations
-- **4 .kt files** still have old `package chromahub.rhythm.app.*` declarations:
-  - `ClipboardSecurityUtils.kt`
-  - `HardenedTextFieldUtils.kt`
-  - `AppLifecycleManager.kt`
-  - `StatsTimeRangeTest.kt` (test)
-- **Test directory**: `app/src/test/java/chromahub/rhythm/app/` — contains stats test
+## Implementation Plan
 
-### Documentation Files with Old References
-- `README.md`, `all_kt_files.txt`, `AGENTS.md`
-- All wiki files: `Architecture.md`, `Build-Instructions.md`, `Contributing.md`, `FAQ.md`, `Getting-Started.md`, `Home.md`, `Installation-Guide.md`, `Permissions.md`, `Technology-Stack.md`, `Troubleshooting.md`
-- `docs/FIELDMIND_VS_RHYTHM_FILE_ANALYSIS.md`
-- `app/AGENTS.md`
-- `app/src/main/res/values/strings.xml` (rhythm references)
-- `app/src/main/res/xml/backup_rules.xml`
+1. Add testable lock/security policy helpers and wire lock screen to them.
+2. Replace unlock PIN text field with in-app numpad and exact-length verification.
+3. Harden crash reporting and crash activity fallback UI.
+4. Harden Collaboration share flows and route export to Export Studio.
+5. Improve auto-lock timeout mapping and lifecycle manager integration.
+6. Fix Open-Meteo optional key behavior, URL builder, and weather diagnostics/fresh location fallback.
+7. Improve DevFullAppTestRunner cancellation/progress/settings restore and add policy tests.
+8. Update What's New + fastlane changelog.
+9. Run allowed static checks only, then commit/push and create PR.
 
+## Completion Summary
+
+Implemented targeted fixes:
+- Hardened crash reporting with re-entrancy guard, richer crash metadata, guarded persistence, crash-process launch, and process termination after dispatch.
+- Replaced crash screen with minimal Compose UI plus native fallback.
+- Hardened Collaboration share/invite actions with clipboard fallback and routed export action to Export Studio.
+- Added `LockSecurityPolicy` and wired lock screen to exact PIN length, in-app numpad, 5-attempt policy, cooldown countdown, biometric-required mode, and non-destructive panic reset.
+- Improved background auto-lock timeout wiring and reset lock signal after unlock.
+- Fixed Open-Meteo free tier as no-key-required, moved URL construction to `HttpUrl.Builder`, and added weather diagnostics/fresh-location fallback.
+- Made DevFullAppTestRunner cancellable, shorter-timeout, settings-restoring, and added lock/weather/crash policy smoke checks.
+- Updated in-app What's New and fastlane changelog.
+
+## Verification Notes
+
+- Ran `git diff --check` successfully.
+- Ran ripgrep/static checks for the key repaired patterns.
+- Did not run Gradle build/lint/test commands because repository DOX explicitly prohibits them in this environment.

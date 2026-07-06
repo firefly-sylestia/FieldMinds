@@ -1,0 +1,1 @@
+Stability, security, and weather repair: hardened crash reporting, safer collaboration sharing, real Export Studio routing, in-app PIN numpad, consistent failed-attempt lock policies, improved auto-lock handling, Open-Meteo free-tier fixes, weather diagnostics, and a cancellable Full App Test Runner.

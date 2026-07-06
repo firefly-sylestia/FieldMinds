@@ -44,6 +44,36 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.43.0 — Stability, Security & Weather Repair ──
+        FieldMindChangelogEntry(
+            version = "0.43.0",
+            date = "2026-07-05",
+            title = "🛡️ Stability, Security & Weather Repair",
+            importance = "Major",
+            tags = listOf("🛡️", "🔒", "🌦️", "🧪"),
+            sections = listOf(
+                "💥 Crash & collaboration hardening" to listOf(
+                    "✓ Crash reporter now captures richer reports and launches a minimal fallback crash screen",
+                    "✓ Collaboration sharing now falls back to clipboard instead of crashing when no share app is available",
+                    "✓ Collaboration export now opens the real Export Studio instead of showing a fake started message"
+                ),
+                "🔒 Lock security repair" to listOf(
+                    "✓ In-app unlock PIN now uses a built-in numpad without opening the device keyboard",
+                    "✓ 4/5/6 digit PINs now use exact-length verification and consistent failed-attempt rules",
+                    "✓ Failed unlock cooldowns, biometric-required mode, panic reset, and auto-lock timeout handling are more consistent"
+                ),
+                "🌦️ Weather diagnostics" to listOf(
+                    "✓ Open-Meteo free tier no longer requires an API key",
+                    "✓ Weather refresh can request a fresh location when cached location is missing",
+                    "✓ Weather dashboard now surfaces actionable diagnostic messages when fetches fail"
+                ),
+                "🧪 Developer test runner" to listOf(
+                    "✓ Full App Test Runner is cancellable, restores settings, and uses shorter smoke-test timeouts",
+                    "✓ Added policy checks for lock attempts, cooldowns, Open-Meteo free tier, and crash activity intent construction"
+                )
+            )
+        ),
+
         // ── v0.42.0 — Snappier Animations Across the Board ──
         FieldMindChangelogEntry(
             version = "0.42.0",
