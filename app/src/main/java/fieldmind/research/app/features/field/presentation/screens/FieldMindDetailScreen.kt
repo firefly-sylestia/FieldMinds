@@ -1076,9 +1076,11 @@ fun ObservationWeatherLocationSection(
                             WeatherDetailRow("Pressure", "${o.weatherPressure?.toInt()} hPa")
                         }
                         if (o.weatherCondition.isNotBlank()) {
-                            WeatherDetailRow("Condition", o.weatherCondition)        }
-    }
-}
+                            WeatherDetailRow("Condition", o.weatherCondition)
+                        }
+                    }
+                }
+            }
             
             // Location details
             if (hasLocation) {
@@ -1618,11 +1620,14 @@ fun QuestionDetailContent(
                         Icon(FieldMindIcons.Hypothesis, null, tint = colors.hypothesis, size = 18.dp)
                         Column(Modifier.weight(1f)) {
                             Text(h.prediction, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                            Text("Confidence: ${h.confidencePercent}%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)        }
+                            Text("Confidence: ${h.confidencePercent}%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
-        }
-    }}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -2383,6 +2388,9 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                         modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
                         enabled = taskTitle.isNotBlank()
                     ) { Text(if (subtasks.isEmpty()) "Save Task" else "Save Task with ${subtasks.size} Subtasks") }
+                }
+            }
+        }
 
         Text("Project Tasks (${projectTasks.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         if (projectTasks.isEmpty()) {
