@@ -2820,9 +2820,9 @@ fun ComparisonDetailContent(d: DataRecordEntity) {
     // Fall back to legacy ;-separated format for backward compatibility
     data class ComparisonRow(val label: String, val items: List<String>)
 
-    val parsedData = remember(d.value) {
-        val jsonResult = try {
-            val json = org.json.JSONObject(d.value)
+    val parsedData: Pair<Int, List<ComparisonRow>> = remember(d.value) {
+        try {
+            val json = JSONObject(d.value)
             val cols = json.optInt("columnCount", 2)
             val jsonRows = json.optJSONArray("rows")
             val rowList = mutableListOf<ComparisonRow>()
