@@ -25,13 +25,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -46,7 +50,7 @@ class FieldMindCrashActivity : ComponentActivity() {
 
         runCatching {
             setContent {
-                MaterialTheme {
+                CrashTheme {
                     CrashScreen(crashLog = crashLog)
                 }
             }
@@ -54,6 +58,46 @@ class FieldMindCrashActivity : ComponentActivity() {
             Log.e(TAG, "Compose crash screen failed; showing native fallback", it)
             showNativeFallback(crashLog)
         }
+    }
+
+    /**
+     * Minimal, self-contained theme for the crash screen.
+     * Uses explicit hardcoded colors so it never depends on the Activity's theme,
+     * resource loading, or any app-specific styling. If the crash was caused by
+     * corrupted theme resources, this theme still renders correctly.
+     */
+    @Composable
+    private fun CrashTheme(content: @Composable () -> Unit) {
+        MaterialTheme(
+            colorScheme = lightColorScheme(
+                primary = SafeColors.primary,
+                onPrimary = SafeColors.onPrimary,
+                primaryContainer = SafeColors.primaryContainer,
+                error = SafeColors.error,
+                onError = SafeColors.onError,
+                surface = SafeColors.surface,
+                onSurface = SafeColors.onSurface,
+                onSurfaceVariant = SafeColors.onSurfaceVariant,
+                outline = SafeColors.outline,
+                surfaceVariant = SafeColors.surfaceVariant
+            ),
+            typography = MaterialTheme.typography, // System fonts only, no custom types
+            content = content
+        )
+    }
+
+    /** Hardcoded safe colors so the crash theme never resolves theme attributes. */
+    private object SafeColors {
+        val primary = Color(0xFF1565C0)
+        val onPrimary = Color.White
+        val primaryContainer = Color(0xFFBBDEFB)
+        val error = Color(0xFFD32F2F)
+        val onError = Color.White
+        val surface = Color(0xFFF5F5F5)
+        val onSurface = Color(0xFF1C1B1F)
+        val onSurfaceVariant = Color(0xFF49454F)
+        val outline = Color(0xFF79747E)
+        val surfaceVariant = Color(0xFFE7E0EC)
     }
 
     @Composable
@@ -86,12 +130,21 @@ class FieldMindCrashActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 220.dp, max = 420.dp),
-                    textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace)
+                    textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 )
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedButton(
                         onClick = { copyCrashLog(context, crashLog) },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
                     ) { Text("Copy") }
                     Button(
                         onClick = { shareCrashLog(context, crashLog) },
