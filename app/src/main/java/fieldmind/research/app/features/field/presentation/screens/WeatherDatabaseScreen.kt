@@ -419,7 +419,7 @@ fun WeatherDatabaseScreen(
                     Card(
                         shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                        tonalElevation = 0.dp, shadowElevation = 0.dp,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
@@ -502,7 +502,7 @@ private fun LiveCurrentWeatherCard(
     Card(
         shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        tonalElevation = 0.dp, shadowElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(
@@ -600,7 +600,7 @@ private fun LiveCurrentWeatherCard(
                     Card(
                         shape = RoundedCornerShape(36.dp),
                         colors = CardDefaults.cardColors(containerColor = if (isDarkTheme || isNight) Color.White.copy(alpha = 0.12f) else Color(0xFF1A1A3E).copy(alpha = 0.06f)),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        tonalElevation = 0.dp, shadowElevation = 0.dp
                     ) {
                         Column(
                             Modifier.fillMaxWidth().padding(20.dp),
@@ -736,7 +736,7 @@ private fun StatCard(
     Card(
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        tonalElevation = 0.dp, shadowElevation = 0.dp,
         modifier = modifier
     ) {
         Column(
@@ -962,7 +962,7 @@ private fun WeatherRecordCard(
         onClick = { onOpenDetail("observation", observation.id) },
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),

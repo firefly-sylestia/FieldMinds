@@ -219,7 +219,7 @@ fun FieldLogScreen(
                         onClick = { onOpenDetail("research_session", session.id) },
                         shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        tonalElevation = 0.dp, shadowElevation = 0.dp
                     ) {
                         Row(
                             Modifier.fillMaxWidth().padding(16.dp),

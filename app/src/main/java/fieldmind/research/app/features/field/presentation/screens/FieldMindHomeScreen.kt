@@ -339,7 +339,7 @@ fun SharedTransitionScope.HomeScreen(
                 Card(
                     shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -423,7 +423,7 @@ fun SharedTransitionScope.HomeScreen(
                 Card(
                     shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -471,7 +471,7 @@ fun SharedTransitionScope.HomeScreen(
                 Card(
                     shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                         .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                         .clickable { onNavigate(FieldMindScreen.MapScreen) }
@@ -518,7 +518,7 @@ fun SharedTransitionScope.HomeScreen(
                 Card(
                     shape = RoundedCornerShape(34.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -727,7 +727,7 @@ fun SharedTransitionScope.HomeScreen(
                                                 containerColor = if (isSelected) accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest
                                             ),
                                             border = if (isSelected) androidx.compose.foundation.BorderStroke(2.dp, accent) else null,
-                                            tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier
+                                            elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                                         ) {
                                             Column(
                                                 Modifier.padding(16.dp),
@@ -1908,7 +1908,7 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1933,7 +1933,7 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
 
 @Composable
 private fun MiniActionTile(title: String, value: String, subtitle: String, icon: MaterialSymbolIcon, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(modifier = modifier.expressivePress(scaleDown = 0.96f).clickable(onClick = onClick), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier) {
+    Card(modifier = modifier.expressivePress(scaleDown = 0.96f).clickable(onClick = onClick), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
             Text(title, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
@@ -1958,7 +1958,7 @@ private fun ObservationTimelinePreview(
         }
     }.sortedWith(compareByDescending<TimelinePreviewEvent> { it.date }.thenByDescending { it.time }).take(8)
 
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier, modifier = Modifier.fillMaxWidth()) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Calendar, null, tint = FieldMindTheme.colors.project, size = 22.dp)
@@ -2134,7 +2134,7 @@ private fun ResearchSessionCtaCard(
             else MaterialTheme.colorScheme.surfaceContainerLow
         ),
         border = if (isActive) androidx.compose.foundation.BorderStroke(1.5.dp, colors.observation.copy(alpha = 0.34f)) else null,
-        tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
         Box(
             modifier = Modifier
@@ -2206,7 +2206,7 @@ private fun SessionObservationsCard(
     Card(
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(
@@ -2268,7 +2268,7 @@ private fun SessionObservationsCard(
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                     ),
-                    tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         // Session header with stats
@@ -2432,7 +2432,7 @@ internal fun DevWeatherTestPanel(
         allCodes.firstOrNull { it.first == testCode }?.second ?: "Custom ($testCode)"
     } else { "Live" }
     
-    Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier) {
+    Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2638,7 +2638,7 @@ private fun RecentCapturesCard(observations: List<ObservationEntity>, onOpenDeta
     Card(
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(
@@ -2775,7 +2775,7 @@ private fun DataToolMiniCard(
         modifier = modifier,
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-        tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
         Box(
             modifier = Modifier
@@ -2938,7 +2938,7 @@ private fun QuickCaptureOption(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
         ),
-        tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
         Row(
             Modifier.padding(16.dp).fillMaxWidth(),
@@ -3121,7 +3121,7 @@ private fun VoiceNoteCaptureDialog(
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                     ),
-                    tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(
@@ -3288,7 +3288,7 @@ private fun VoiceNoteCaptureDialog(
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                                 ),
-                                tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier
+                                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                             ) {
                                 Row(
                                     Modifier.padding(14.dp).fillMaxWidth(),
