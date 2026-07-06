@@ -6,50 +6,33 @@
 
 ## Request Summary
 
-Implemented FieldMind stability, developer tester, navigation, screenshot, weather UI, dark-depth, and rain-animation repairs from the provided task prompt.
+Fix the CI Kotlin compilation failure in `FieldMindDetailScreen.kt` where a malformed brace structure caused many top-level detail helpers to be parsed inside earlier composables and reported as unresolved references.
 
 ## Context Gathered
 
-- Re-read the required DOX chain for app, field presentation, field data, shared settings, and fastlane metadata.
-- Gradle build/lint/test commands remain prohibited in this environment; validation is limited to static checks.
-- Existing navigation uses one `field_tab_container` destination and separate `activeTabIndex`, which needed shell-owned Back handling.
-- Existing screenshot security was controlled by both Activity-level settings and composable screen-level calls, requiring reason-based ownership.
-- Existing DevFullAppTestRunner kept reports only in Compose state and needed persisted saved report history.
+- Re-read `master.md`, root `AGENTS.md`, `app/AGENTS.md`, `features/field/AGENTS.md`, and `features/field/presentation/AGENTS.md` before editing the field presentation screen.
+- The CI log reported dozens of unresolved references in `FieldMindDetailScreen.kt` plus a final `Expecting '}'` syntax error.
+- Static inspection showed later helper functions such as `WeatherDetailRow`, `ObservationAiAnalysisCard`, `DetailActionBar`, and `sharePlainText` existed in the same file but were being parsed at non-top-level brace depth.
+- Gradle compile/build/lint/test commands remain prohibited by project instructions in this environment, so validation is limited to static checks.
 
 ## Implementation Plan
 
-1. Add testable navigation Back-policy helpers and route metadata.
-2. Route bottom-tab Back to Today before app exit and use safe subpage pop fallback.
-3. Add reason-based secure-window flag ownership and make screenshot blocking follow the explicit screenshot toggle.
-4. Persist developer test reports and add diagnostics for navigation, screenshots, route placeholders, synthetic crash persistence, and crash coverage limits.
-5. Stabilize quick actions/weather card layout and strengthen dark-mode depth.
-6. Pre-seed rain particles and add immediate fallback rain streak rendering.
-7. Update in-app and fastlane changelogs.
+1. Repair the malformed brace/indentation block in `ObservationWeatherLocationSection` around the weather condition row.
+2. Repair the malformed linked-hypothesis row closure in `QuestionDetailContent`.
+3. Close the project task creation form before rendering the task list in `ProjectTasksBuilder`.
+4. Run static brace-depth/search checks to confirm helper functions are top-level again.
+5. Commit and push the fix, then create a PR record.
 
 ## Completion Summary
 
-Implemented targeted fixes:
-- Bottom-tab device Back now returns non-home tabs to Today before the app exits, while subpages use a safe pop-or-home fallback.
-- Added route metadata and tester checks for tab Back behavior, safe fallback, and placeholder routes.
-- Added reason-based secure flag control and made screenshot blocking independent from app preview mode.
-- Persisted developer test reports in `AppSettings`, added copy/clear latest report actions, synthetic crash persistence checks, screenshot policy checks, and crash coverage notes/manual checklist.
-- Stabilized quick actions layout, improved live weather card padding/min-height/responsive row behavior, and increased dark-mode weather/nav shadows.
-- Rain scenes now start with pre-seeded particles and a deterministic fallback streak field for immediate rain visibility.
-- Updated in-app What's New and fastlane changelog.
-
-## Follow-up: Card→InfoCard CI Compilation Fix (July 6, 2026)
-
-After the main stability/security pass, CI reported 25 compilation errors:
-- `FieldMindLibraryScreen.kt` (18 errors): `tonalElevation`/`shadowElevation` not found on `Card`
-- `SpeciesBrowserScreen.kt` (3 errors): same cause
-- `WeatherDatabaseScreen.kt` (4 errors): same cause
-
-**Root cause:** Material3 `Card` doesn't expose `tonalElevation`/`shadowElevation` as named parameters — those are `Surface`-only. The project's custom `InfoCard` composable wraps `Surface` and accepts both.
-
-**Fix:** Replaced all 25 raw `Card(tonalElevation=…, shadowElevation=…)` calls with `InfoCard(…)`.
-
-**Docs:** Updated `docs/CI_ERROR_POSTMORTEM.md` with Cycle H and SMART instruction #11.
+Implemented targeted syntax fixes in `FieldMindDetailScreen.kt`:
+- Restored proper closure of the weather details row/columns before the location details section.
+- Restored proper closure of the linked hypothesis row in question details.
+- Restored proper closure of the project task form card/column/conditional before the task list.
+- Confirmed all composable/helper declarations in the file return to top-level brace depth and the file has balanced braces.
 
 ## Verification Notes
 
-- Ran static Kotlin/search checks only; no Gradle compile/build/lint/test commands were run because repository DOX prohibits them in this environment.
+- Ran static brace-depth analysis with Python; all function declarations in `FieldMindDetailScreen.kt` now report brace depth `0` and final brace balance `0`.
+- Inspected the targeted diff.
+- Did not run Gradle compile/build/lint/test commands because repository DOX explicitly prohibits them in this environment.
