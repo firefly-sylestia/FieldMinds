@@ -1379,16 +1379,22 @@ private fun LiveWeatherDashboardWidget(
         label = "liveAlpha"
     )
 
-    GlassCard(
+    val glassColor = MaterialTheme.colorScheme.surfaceContainer.copy(
+        alpha = if (FieldMindTheme.colors.isDark) 0.55f else 0.45f
+    )
+
+    Surface(
+        onClick = { onNavigate(FieldMindScreen.WeatherDatabase) },
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize(
                 animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
             )
-            .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
-            .clickable { onNavigate(FieldMindScreen.WeatherDatabase) },
+            .clip(RoundedCornerShape(36.dp)),
         shape = RoundedCornerShape(36.dp),
-        tintAlpha = 0.72f
+        color = glassColor,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
     ){
         Box(
             modifier = Modifier.fillMaxWidth()
