@@ -29,18 +29,38 @@ class GeminiResearchAssistant(
     suspend fun generateContent(task: AssistantTask, userText: String): AssistantSuggestion = withContext(Dispatchers.IO) {
         if (!isAvailable()) return@withContext disabledSuggestion(task)
         when (provider) {
-            AiProvider.GEMINI -> generateGemini(task, userText)
-            AiProvider.OPENAI -> generateOpenAi(task, userText)
+            AiProvider.GEMINI -> generateGemini(task, userText, imageData = null)
+            AiProvider.OPENAI -> generateOpenAi(task, userText, imageData = null)
         }
     }
 
-    private fun generateGemini(task: AssistantTask, userText: String): AssistantSuggestion {
+    /**
+     * Generate AI content with an optional image attachment.
+     * @param imageData Pair of (base64-encoded image bytes, mimeType) or null for text-only.
+     */
+    suspend fun generateContent(task: AssistantTask, userText: String, imageData: Pair<String, String>?): AssistantSuggestion = withContext(Dispatchers.IO) {
+        if (!isAvailable()) return@withContext disabledSuggestion(task)
+        when (provider) {
+            AiProvider.GEMINI -> generateGemini(task, userText, imageData)
+            AiProvider.OPENAI -> generateOpenAi(task, userText, imageData)
+        }
+    }
+
+    private fun generateGemini(task: AssistantTask, userText: String, imageData: Pair<String, String>?): AssistantSuggestion {
         val apiKey = apiKeyProvider().orEmpty()
         val model = modelProvider().ifBlank { "gemini-1.5-flash" }
         val endpoint = URL("https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey")
         val prompt = buildPrompt(task, userText)
+        val partsArray = JSONArray()
+        partsArray.put(JSONObject().put("text", prompt))
+        if (imageData != null) {
+            val (base64, mimeType) = imageData
+            partsArray.put(JSONObject().put("inlineData", JSONObject()
+                .put("mimeType", mimeType)
+                .put("data", base64)))
+        }
         val request = JSONObject()
-            .put("contents", JSONArray().put(JSONObject().put("parts", JSONArray().put(JSONObject().put("text", prompt)))))
+            .put("contents", JSONArray().put(JSONObject().put("parts", partsArray)))
             .put("generationConfig", JSONObject().put("temperature", 0.3).put("topP", 0.8))
         val body = postJson(endpoint, request) { connection ->
             connection.setRequestProperty("Content-Type", "application/json")
@@ -57,14 +77,27 @@ class GeminiResearchAssistant(
         return AssistantSuggestion(task.title, text.ifBlank { "Gemini returned an empty draft." }, true, true)
     }
 
-    private fun generateOpenAi(task: AssistantTask, userText: String): AssistantSuggestion {
+    private fun generateOpenAi(task: AssistantTask, userText: String, imageData: Pair<String, String>?): AssistantSuggestion {
         val apiKey = apiKeyProvider().orEmpty()
         val model = modelProvider().ifBlank { "gpt-4.1-mini" }
         val endpoint = URL("https://api.openai.com/v1/responses")
+        val prompt = buildPrompt(task, userText)
+        val inputJson = if (imageData != null) {
+            val (_, mimeType) = imageData
+            // OpenAI responses API: structured input with text + image_url
+            JSONObject().put("role", "user").put("content", JSONArray().apply {
+                put(JSONObject().put("type", "input_text").put("text", prompt))
+                put(JSONObject().put("type", "input_image").put("image_url", "data:$mimeType;base64,${imageData.first}"))
+            })
+        } else {
+            JSONObject().put("role", "user").put("content", JSONArray().apply {
+                put(JSONObject().put("type", "input_text").put("text", prompt))
+            })
+        }
         val request = JSONObject()
             .put("model", model)
             .put("temperature", 0.3)
-            .put("input", buildPrompt(task, userText))
+            .put("input", JSONArray().put(inputJson))
         val body = postJson(endpoint, request) { connection ->
             connection.setRequestProperty("Content-Type", "application/json")
             connection.setRequestProperty("Authorization", "Bearer $apiKey")
@@ -183,6 +216,10 @@ enum class AssistantTask(val title: String, val instructions: String) {
     PAPER_BOOK_SUGGESTIONS(
         "Papers & books",
         "Suggest 4-6 real, free-access or easy-to-verify primary resources relevant to the topic. Prefer Wikipedia overview pages, government/university pages, OpenStax/NCBI/USGS/NOAA/NASA/EPA/Cornell resources, open metadata, and open-access papers. Never fabricate titles, authors, DOIs, or links. If unsure, suggest a search query instead."
+    ),
+    IMAGE_DESCRIPTION(
+        "Image description",
+        "Describe this figure or image in detail: identify visible subjects, objects, patterns, text, colors, and spatial relationships. Include the image caption if provided. Never invent details not visible in the image."
     )
 }
 
