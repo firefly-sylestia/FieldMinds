@@ -235,7 +235,7 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
         )
     } else if (splashActive) {
         FieldMindAnimatedSplash(
-            durationMs = 1800,
+            durationMs = 600,
             onSplashComplete = { showSplash = false }
         )
     } else {
