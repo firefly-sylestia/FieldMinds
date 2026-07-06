@@ -338,7 +338,7 @@ fun SharedTransitionScope.HomeScreen(
                 val colors = FieldMindTheme.colors
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -422,7 +422,7 @@ fun SharedTransitionScope.HomeScreen(
                 )
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -470,7 +470,7 @@ fun SharedTransitionScope.HomeScreen(
             item {
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                         .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
@@ -517,7 +517,7 @@ fun SharedTransitionScope.HomeScreen(
                 )
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -1908,7 +1908,7 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1958,7 +1958,7 @@ private fun ObservationTimelinePreview(
         }
     }.sortedWith(compareByDescending<TimelinePreviewEvent> { it.date }.thenByDescending { it.time }).take(8)
 
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Calendar, null, tint = FieldMindTheme.colors.project, size = 22.dp)
