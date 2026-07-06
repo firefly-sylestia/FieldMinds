@@ -24,7 +24,7 @@ data class CapturedLocation(
     val provider: String,
     val capturedAt: Long = System.currentTimeMillis(),
     val placeName: String? = null
-) {
+) : Parcelable {
     /** Decimal coordinates only, e.g. "12.97160, 77.59456". */
     fun coordinateText(): String = "%.5f, %.5f".format(latitude, longitude)
 

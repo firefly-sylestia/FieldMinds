@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -133,8 +134,8 @@ private data class CaptureSessionState(
     val timerRunning: Boolean = false,
     val sessionObservationCount: Int = 0,
     // ── Process-death persistence (Issue #2) ──
-    val capturedLocation: CapturedLocation? = null,
-    val weatherSnapshot: WeatherSnapshot? = null,
+    val capturedLocation: @RawValue CapturedLocation? = null,
+    val weatherSnapshot: @RawValue WeatherSnapshot? = null,
     val activeSessionId: Long? = null,
     val showEvidenceForm: Boolean = false,
     val sessionName: String = "",
@@ -649,7 +650,7 @@ fun ObserveScreen(
                                         selected = projects.firstOrNull { it.id == session.selectedProjectId }?.title ?: "No project",
                                         options = listOf("No project") + projects.map { it.title },
                                         onSelected = { selected ->
-                                            session = session.copy(selectedProjectId = projects.firstOrNull { it.title == selected }?.id
+                                            session = session.copy(selectedProjectId = projects.firstOrNull { it.title == selected }?.id)
                                         },
                                         icon = FieldMindIcons.Project
                                     )
@@ -2852,7 +2853,7 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
                 capturedLocation = captured; manualLocation = captured.asDisplayText()
                 if (autoWeatherEnabled) {
                     fetchingWeather = true; weatherStatus = "Fetching weather…"
-                    scope.launch { weatherSnapshot = viewModel.fetchWeatherSnapshot(captured.latitude, captured.longitude); weatherStatus = session.weatherSnapshot?.asDisplayText() ?: "Weather unavailable"; fetchingWeather = false }
+                    scope.launch { weatherSnapshot = viewModel.fetchWeatherSnapshot(captured.latitude, captured.longitude); weatherStatus = weatherSnapshot?.asDisplayText() ?: "Weather unavailable"; fetchingWeather = false }
                 }
                 locationProvider.resolvePlaceName(captured.latitude, captured.longitude) { place ->
                     if (!place.isNullOrBlank()) { val withPlace = captured.copy(placeName = place); capturedLocation = withPlace; manualLocation = withPlace.asDisplayText() }
@@ -2930,7 +2931,7 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
                     capturedLocation?.let { loc -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) { Icon(icon = FieldMindIcons.Check, contentDescription = null, tint = FieldMindTheme.colors.confidenceSure, size = 16.dp); Text(loc.asDisplayText(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) } }
                     FieldTextField(manualLocation, { manualLocation = it }, "Place / GPS note")
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        FilledTonalButton(onClick = { val loc = session.capturedLocation; if (loc != null) { fetchingWeather = true; weatherStatus = "Fetching weather…"; scope.launch { weatherSnapshot = viewModel.fetchWeatherSnapshot(loc.latitude, loc.longitude); weatherStatus = session.weatherSnapshot?.asDisplayText() ?: "Weather unavailable"; fetchingWeather = false } } else scope.launch { snackbar.showSnackbar("Capture GPS before fetching weather.") } }, enabled = !fetchingWeather, modifier = Modifier.weight(1f)) { Text(if (fetchingWeather) "Weather…" else "Fetch weather") }
+                        FilledTonalButton(onClick = { val loc = capturedLocation; if (loc != null) { fetchingWeather = true; weatherStatus = "Fetching weather…"; scope.launch { weatherSnapshot = viewModel.fetchWeatherSnapshot(loc.latitude, loc.longitude); weatherStatus = weatherSnapshot?.asDisplayText() ?: "Weather unavailable"; fetchingWeather = false } } else scope.launch { snackbar.showSnackbar("Capture GPS before fetching weather.") } }, enabled = !fetchingWeather, modifier = Modifier.weight(1f)) { Text(if (fetchingWeather) "Weather…" else "Fetch weather") }
                         Text(weatherStatus, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
@@ -3021,8 +3022,8 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
                         ).filterValues { it.isNotBlank() && it != "None" }
                         val finalTags = autoObservationTags(subject, facts, category, tags)
                         val finalEvidence = listOf(evidence, "Evidence count: ${attachments.size}", "Checklist: ${checklist.joinToString()}").filter { it.isNotBlank() }.joinToString(" | ")
-                        viewModel.addObservation(subject, category, facts, confidence, manualLocation, finalTags, finalEvidence, fieldContext, projectId, session.capturedLocation?.latitude, session.capturedLocation?.longitude, attachments, weatherSnapshot, enrichedDetails.toJsonObject(), startedAt = stopwatchStartedAt, endedAt = if (durationMs != null) now else null, durationMs = durationMs, changeObservedAt = changeDurationMs?.let { (stopwatchStartedAt ?: now) + it }, changeDurationMs = changeDurationMs, timeNote = listOf(timeNote, "Follow-up: $followUp".takeIf { followUp != "None" }).filterNotNull().joinToString(" | ")) {
-                            subject = ""; facts = ""; manualLocation = ""; tags = ""; evidence = ""; fieldContext = ""; attachments = emptyList(); capturedLocation = null; session = session.copy(weatherSnapshot = null); structuredDetails = emptyMap(); stopwatchStartedAt = null; stopwatchAccumulatedMs = 0L; stopwatchRunning = false
+                        viewModel.addObservation(subject, category, facts, confidence, manualLocation, finalTags, finalEvidence, fieldContext, projectId, capturedLocation?.latitude, capturedLocation?.longitude, attachments, weatherSnapshot, enrichedDetails.toJsonObject(), startedAt = stopwatchStartedAt, endedAt = if (durationMs != null) now else null, durationMs = durationMs, changeObservedAt = changeDurationMs?.let { (stopwatchStartedAt ?: now) + it }, changeDurationMs = changeDurationMs, timeNote = listOf(timeNote, "Follow-up: $followUp".takeIf { followUp != "None" }).filterNotNull().joinToString(" | ")) {
+                            subject = ""; facts = ""; manualLocation = ""; tags = ""; evidence = ""; fieldContext = ""; attachments = emptyList(); capturedLocation = null; weatherSnapshot = null; structuredDetails = emptyMap(); stopwatchStartedAt = null; stopwatchAccumulatedMs = 0L; stopwatchRunning = false
                             scope.launch { snackbar.showSnackbar("Observation saved to your archive.") }; onSaved()
                         }
                     }

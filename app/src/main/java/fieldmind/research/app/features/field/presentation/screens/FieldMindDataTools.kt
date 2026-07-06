@@ -60,7 +60,8 @@ fun DataToolsHubScreen(
     onNavigate: (FieldMindScreen) -> Unit,
     onOpenDetail: (String, Long) -> Unit = { _, _ -> }
 ) {
-    val accentColor = FieldMindTheme.colors.data
+    val colors = FieldMindTheme.colors
+    val accentColor = colors.data
     val tools = remember {
         listOf(
             ToolCardInfo("Counter", "Tally with live count", FieldMindIcons.Add, accentColor, FieldMindScreen.CounterTool),

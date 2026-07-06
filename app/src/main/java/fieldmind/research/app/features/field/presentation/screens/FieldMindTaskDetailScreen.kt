@@ -52,6 +52,8 @@ fun TaskDetailScreen(
 ) {
     val tasks by viewModel.tasks.collectAsState()
     val observations by viewModel.observations.collectAsState()
+    val species by viewModel.speciesRegistry.collectAsState()
+    val dataRecords by viewModel.dataRecords.collectAsState()
     val haptics = rememberFieldMindHaptics()
 
     val task = tasks.firstOrNull { it.id == taskId }
@@ -111,7 +113,11 @@ fun TaskDetailScreen(
 
     // ── Picker dialogs state ──
     var showObservationPicker by remember { mutableStateOf(false) }
+    var showSpeciesPicker by remember { mutableStateOf(false) }
+    var showEvidencePicker by remember { mutableStateOf(false) }
     var obsPickerSearch by remember { mutableStateOf("") }
+    var speciesPickerSearch by remember { mutableStateOf("") }
+    var evidencePickerSearch by remember { mutableStateOf("") }
 
     // ── Snackbar ──
     val taskSnackbar = remember { SnackbarHostState() }
