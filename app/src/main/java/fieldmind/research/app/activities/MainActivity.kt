@@ -86,13 +86,11 @@ class MainActivity : FragmentActivity() {
             val appPreviewMode by fieldMindViewModel.fieldSettings.appPreviewMode.collectAsState()
             val alwaysOnScreen by fieldMindViewModel.fieldSettings.alwaysOnScreenEnabled.collectAsState()
 
-            // Apply FLAG_SECURE only for the explicit screenshot protection toggle.
-            // Recents-preview privacy is handled in UI, not by forcing FLAG_SECURE,
-            // so turning screenshots off reliably clears the platform screenshot block.
-            val secureBecauseScreenshots = screenCaptureProtection
-            val secureBecausePreviewPrivacy = appPreviewMode != "Normal"
-            LaunchedEffect(secureBecauseScreenshots, secureBecausePreviewPrivacy) {
-                applyScreenCaptureProtection(window, secureBecauseScreenshots)
+            // Apply FLAG_SECURE if screen capture block is enabled OR if preview mode
+            // is set to blur/privacy (prevents content from showing in recent apps).
+            val shouldSecure = screenCaptureProtection || appPreviewMode != "Normal"
+            LaunchedEffect(shouldSecure) {
+                applyScreenCaptureProtection(window, shouldSecure)
             }
 
             LaunchedEffect(alwaysOnScreen) {

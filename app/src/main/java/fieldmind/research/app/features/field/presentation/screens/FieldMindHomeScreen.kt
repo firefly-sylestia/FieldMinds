@@ -120,8 +120,7 @@ fun SharedTransitionScope.HomeScreen(
     onNavigate: (FieldMindScreen) -> Unit,
     onOpenDetail: (String, Long) -> Unit = { _, _ -> },
     onOpenReader: (String, String) -> Unit = { _, _ -> },
-    onOpenCanvas: () -> Unit = {},
-    bottomContentPadding: androidx.compose.ui.unit.Dp = 176.dp
+    onOpenCanvas: () -> Unit = {}
 ) {
     // ── Interest-aware configuration (must be early for defaultCategory) ──
     val userInterests by viewModel.fieldSettings.userInterests.collectAsState()
@@ -187,7 +186,6 @@ fun SharedTransitionScope.HomeScreen(
     val windSpeedUnit by viewModel.fieldSettings.windSpeedUnit.collectAsState()
     val developerMode by viewModel.fieldSettings.developerMode.collectAsState()
     val showWeatherTestPanel by viewModel.fieldSettings.showWeatherTestPanel.collectAsState()
-    val screenCaptureProtection by viewModel.fieldSettings.screenCaptureProtectionEnabled.collectAsState()
 
     // ── Weather state (hoisted outside LazyColumn so it persists across scroll) ──
     var homeCurrentWeather by remember { mutableStateOf<WeatherSnapshot?>(null) }
@@ -270,7 +268,7 @@ fun SharedTransitionScope.HomeScreen(
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
     val homeScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
-    Box(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {            LazyColumn(state = homeScrollState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 20.dp, top = 0.dp, end = 20.dp, bottom = bottomContentPadding), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+    Box(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {            LazyColumn(state = homeScrollState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 0.dp, 20.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             // ── Merged Header + Goal ──
             item {
                 CompactHomeHeader(
@@ -570,7 +568,7 @@ fun SharedTransitionScope.HomeScreen(
             onClick = { showQuickCaptureSheet = true },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = bottomContentPadding - 64.dp),
+                .padding(end = 16.dp, bottom = 112.dp),
             shape = CircleShape,
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -591,7 +589,7 @@ fun SharedTransitionScope.HomeScreen(
             onDismissRequest = { showCamera = false },
             properties = DialogProperties(
                 usePlatformDefaultWidth = false,
-                securePolicy = if (screenCaptureProtection) SecureFlagPolicy.SecureOn else SecureFlagPolicy.Inherit
+                securePolicy = SecureFlagPolicy.SecureOn
             )
         ) {
             Box(Modifier.fillMaxSize().background(Color.Black)) {
@@ -1288,7 +1286,6 @@ private fun timeOfDay(): String {
 //  Live Weather Dashboard Widget — Live Open-Meteo weather with animations
 // ══════════════════════════════════════════════════════════════════════
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun LiveWeatherDashboardWidget(
     viewModel: FieldMindViewModel,
@@ -1534,10 +1531,10 @@ private fun LiveWeatherDashboardWidget(
                 val w = currentWeather
 
                 // Main temperature + condition (always visible)
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.CenterHorizontally),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (showTemp) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -1590,10 +1587,9 @@ private fun LiveWeatherDashboardWidget(
                 }
 
                 // ── Extra metrics row ──
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.CenterHorizontally),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     // Wind
                     if (showWind) {
@@ -1676,10 +1672,9 @@ private fun LiveWeatherDashboardWidget(
 
                 // ── Sunrise / Sunset ──
                 if (sunrise != null || sunset != null) {
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth().padding(top = 2.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    Row(
+                        Modifier.fillMaxWidth().padding(top = 2.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         sunrise?.let { s ->
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
