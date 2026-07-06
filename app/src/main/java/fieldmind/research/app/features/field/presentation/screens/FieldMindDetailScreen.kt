@@ -917,8 +917,7 @@ private data class StructuredDetailsData(
 // ══════��═══════════════════════════════════════════════════════════════
 
 @Composable
-}
-private fun QualityScoreCard(score: Int) {
+fun QualityScoreCard(score: Int) {
     val colors = FieldMindTheme.colors
     val scoreColor = when {
         score >= 80 -> colors.positive
@@ -1221,8 +1220,7 @@ fun ObservationAiAnalysisCard(
     }
 }
 
-}
-private data class AiAnalysisData(
+data class AiAnalysisData(
     val topMatch: String,
     val topConfidence: String,
     val secondMatch: String,
@@ -1382,9 +1380,7 @@ fun ProvenanceRow(label: String, value: String) {
     }
 }
 
-}
-}
-private fun formatTimestamp(millis: Long): String {
+fun formatTimestamp(millis: Long): String {
     val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
     return sdf.format(java.util.Date(millis))
 }
@@ -3699,4 +3695,8 @@ fun BacklinksPanel(links: List<Triple<String, String, Long>>, onOpenDetail: (Str
 }
 
 
+}
+}
+}
+}
 }
