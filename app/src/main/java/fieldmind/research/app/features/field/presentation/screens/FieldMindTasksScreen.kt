@@ -64,6 +64,10 @@ fun TasksScreen(
     // Track checked-off tasks locally for optimistic UI
     val completedTaskIds = remember { mutableStateMapOf<Long, Boolean>() }
     val projects by viewModel.projects.collectAsState()
+    val scope = rememberCoroutineScope()
+
+    // Delete confirmation dialog state
+    var taskToDelete by remember { mutableStateOf<TaskEntity?>(null) }
 
     // ── Filter state ──
     var filterStatus by remember { mutableStateOf<String?>(null) } // null = all, "Pending", "Done"
@@ -301,6 +305,7 @@ fun TasksScreen(
                             completedTaskIds[task.id] = true
                             viewModel.updateTaskEntity(task.copy(status = "Done"))
                         },
+                        onDelete = { taskToDelete = task },
                         onTap = { onNavigate("field_task_detail/${task.id}") }
                     )
                 }
@@ -336,6 +341,7 @@ fun TasksScreen(
                             completedTaskIds[task.id] = true
                             viewModel.updateTaskEntity(task.copy(status = "Done"))
                         },
+                        onDelete = { taskToDelete = task },
                         onTap = { onNavigate("field_task_detail/${task.id}") }
                     )
                 }
@@ -371,6 +377,7 @@ fun TasksScreen(
                             completedTaskIds[task.id] = true
                             viewModel.updateTaskEntity(task.copy(status = "Done"))
                         },
+                        onDelete = { taskToDelete = task },
                         onTap = { onNavigate("field_task_detail/${task.id}") }
                     )
                 }
@@ -407,6 +414,7 @@ fun TasksScreen(
                             completedTaskIds.remove(task.id)
                             viewModel.updateTaskEntity(task.copy(status = "Pending"))
                         },
+                        onDelete = { taskToDelete = task },
                         onTap = { onNavigate("field_task_detail/${task.id}") }
                     )
                 }
@@ -414,6 +422,28 @@ fun TasksScreen(
         }
     }
 
+    // ── Delete confirmation dialog ──
+    if (taskToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { taskToDelete = null },
+            title = { Text("Delete task") },
+            text = { Text("Are you sure you want to delete \"${taskToDelete?.title}\"? This cannot be undone.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    taskToDelete?.let { viewModel.deleteTask(it.id) }
+                    taskToDelete = null
+                    haptics.confirm()
+                }) {
+                    Text("Delete", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { taskToDelete = null }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -496,6 +526,7 @@ private fun TaskCard(
     isChecked: Boolean,
     accentColor: Color,
     onToggle: () -> Unit,
+    onDelete: () -> Unit = {},
     onTap: () -> Unit = {}
 ) {
     val priorityColor = when (task.priority) {
@@ -526,9 +557,9 @@ private fun TaskCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+                .padding(start = 8.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // ── Checkbox with spring bounce ──
             val checkBounce = remember { Animatable(1f) }
@@ -665,6 +696,50 @@ private fun TaskCard(
                     }
                 }
             }
+
+            // ── Action buttons (visible on hover/always) ──
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                // Complete/uncomplete button (prominent check circle)
+                Surface(
+                    onClick = onToggle,
+                    shape = CircleShape,
+                    color = if (isChecked)
+                        MaterialTheme.colorScheme.surfaceContainerHigh
+                    else
+                        FieldMindTheme.colors.positive.copy(alpha = 0.12f),
+                    modifier = Modifier.size(30.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            MaterialSymbolIcon(if (isChecked) "undo" else "check_circle", filled = !isChecked),
+                            if (isChecked) "Mark pending" else "Mark done",
+                            size = 18.dp,
+                            tint = if (isChecked) MaterialTheme.colorScheme.onSurfaceVariant
+                                   else FieldMindTheme.colors.positive
+                        )
+                    }
+                }
+
+                // Delete button
+                Surface(
+                    onClick = onDelete,
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.08f),
+                    modifier = Modifier.size(30.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            MaterialSymbolIcon("delete"),
+                            "Delete task",
+                            size = 16.dp,
+                            tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -700,6 +775,7 @@ private fun SwipeToCompleteTaskCard(
     task: TaskEntity,
     accentColor: Color,
     onToggle: () -> Unit,
+    onDelete: () -> Unit = {},
     onTap: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -818,6 +894,7 @@ private fun SwipeToCompleteTaskCard(
                 isChecked = false,
                 accentColor = accentColor,
                 onToggle = onToggle,
+                onDelete = onDelete,
                 onTap = onTap
             )
         }
