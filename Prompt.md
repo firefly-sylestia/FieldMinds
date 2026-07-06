@@ -47,6 +47,19 @@ Implemented targeted fixes:
 - Made DevFullAppTestRunner cancellable, shorter-timeout, settings-restoring, and added lock/weather/crash policy smoke checks.
 - Updated in-app What's New and fastlane changelog.
 
+## Follow-up: Card→InfoCard CI Compilation Fix (July 6, 2026)
+
+After the main stability/security pass, CI reported 25 compilation errors:
+- `FieldMindLibraryScreen.kt` (18 errors): `tonalElevation`/`shadowElevation` not found on `Card`
+- `SpeciesBrowserScreen.kt` (3 errors): same cause
+- `WeatherDatabaseScreen.kt` (4 errors): same cause
+
+**Root cause:** Material3 `Card` doesn't expose `tonalElevation`/`shadowElevation` as named parameters — those are `Surface`-only. The project's custom `InfoCard` composable wraps `Surface` and accepts both.
+
+**Fix:** Replaced all 25 raw `Card(tonalElevation=…, shadowElevation=…)` calls with `InfoCard(…)`.
+
+**Docs:** Updated `docs/CI_ERROR_POSTMORTEM.md` with Cycle H and SMART instruction #11.
+
 ## Verification Notes
 
 - Ran `git diff --check` successfully.

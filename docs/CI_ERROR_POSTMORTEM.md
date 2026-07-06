@@ -121,8 +121,21 @@ have prevented every one.
 | E | sed-induced corruption | 1 | **Yes** | Never use `sed` for multiline Kotlin; use `str_replace` |
 | F | Parameter name shadowing | 1 | **Yes** | Use `iconSize` instead of `size` inside Canvas |
 | G | @Composable getter | 1 | **Yes** | `@Composable` only on functions, never on property getters |
+| H | `Card(tonalElevation/shadowElevation)` — not params of M3 Card | 25 | **Yes** | Use `Surface`-based composables (`InfoCard`, `ClickableCard`) instead of raw `Card` when passing elevation params |
 
 **All errors in this conversation cycle were avoidable.**
+
+---
+
+### Cycle H — Card→InfoCard Migration (July 6, 2026)
+
+| Commit | Error | Root Cause |
+|--------|-------|------------|
+| `d0818855` | `tonalElevation` and `shadowElevation` not found in `FieldMindLibraryScreen.kt`, `SpeciesBrowserScreen.kt`, `WeatherDatabaseScreen.kt` | Raw `Card(...)` calls passed `tonalElevation`/`shadowElevation` — these are `Surface`-only parameters in M3; `Card` (which delegates to `Surface` internally) does **not** expose them as named parameters |
+
+**Root cause:** Material3's `Card` composable doesn't expose `tonalElevation`/`shadowElevation` named parameters — those exist only on `Surface`. The project's custom `ClickableCard` and `InfoCard` composables correctly wrap `Surface` and accept these parameters. 25 `Card(` calls across 3 files needed migration to `InfoCard(`.
+
+**✓ Avoidable:** Yes. Before using `Card(tonalElevation=…)` or `Card(shadowElevation=…)`, verify the parameter exists in the version's API. The project's custom `InfoCard` composable was designed specifically to avoid this issue.
 
 ---
 
@@ -174,6 +187,13 @@ Add the following to `AGENTS.md` or a prompt prefix:
 10. **TEST SMOKE** — For entity/data-layer changes, the DevFullAppTestRunner
     in Developer Settings can verify constructors, settings toggles, and
     database operations without a full build.
+
+11. **CARD VS SURFACE PARAMS** — `tonalElevation` and `shadowElevation` are
+    `Surface`-only parameters in Material3. `Card` does **not** expose them
+    as named parameters even though Card internally uses Surface. Use the
+    project's existing `InfoCard` (non-clickable) or `ClickableCard` (clickable)
+    composables instead of raw `Card` when you need to control tonal/shadow
+    elevation.
 ```
 
 ---
