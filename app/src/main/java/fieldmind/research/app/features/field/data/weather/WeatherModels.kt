@@ -20,7 +20,7 @@ data class WeatherSnapshot(
     val sunset: String? = null,
     val dailyForecasts: List<DailyForecast> = emptyList(),
     val fetchedAt: Long = System.currentTimeMillis()
-) {
+) : Parcelable {
     fun asDisplayText(): String = buildString {
         temperature?.let { append("%.1f°C".format(it)) }
         if (weatherDescription.isNotBlank()) {
@@ -62,4 +62,4 @@ data class DailyForecast(
     val windSpeedMax: Double? = null,
     val humidityMax: Int? = null,
     val apparentTemperature: Double? = null
-)
+) : Parcelable

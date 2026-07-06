@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -33,7 +34,11 @@ import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
+import kotlin.math.abs
 import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
@@ -111,11 +116,11 @@ fun CompassToolScreen(
                 accuracy = when (acc) {
                     SensorManager.SENSOR_STATUS_UNRELIABLE -> "Unreliable"
                     SensorManager.SENSOR_STATUS_ACCURACY_LOW -> "Low"
-                    SensorManager.SENSOR_STATUS_MEDIUM -> "Medium"
-                    SensorManager.SENSOR_STATUS_HIGH -> "High"
+                    SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> "Medium"
+                    SensorManager.SENSOR_STATUS_ACCURACY_HIGH -> "High"
                     else -> "Unknown"
                 }
-                needsCalibration = acc < SensorManager.SENSOR_STATUS_MEDIUM
+                needsCalibration = acc < SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM
             }
         }
 
@@ -180,6 +185,10 @@ fun CompassToolScreen(
                             modifier = Modifier.size(280.dp),
                             contentAlignment = Alignment.Center
                         ) {
+                            val compassSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
+                            val compassOutlineVariant = MaterialTheme.colorScheme.outlineVariant
+                            val compassOnSurface = MaterialTheme.colorScheme.onSurface
+                            val compassOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
                             Canvas(Modifier.fillMaxSize()) {
                                 val cx = size.width / 2f
                                 val cy = size.height / 2f
@@ -187,12 +196,12 @@ fun CompassToolScreen(
 
                                 // Outer ring
                                 drawCircle(
-                                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                    color = compassSurfaceHighest,
                                     radius = radius + 12f,
                                     center = Offset(cx, cy)
                                 )
                                 drawCircle(
-                                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
+                                    color = compassOutlineVariant.copy(alpha = 0.3f),
                                     radius = radius + 4f,
                                     center = Offset(cx, cy),
                                     style = Stroke(width = 2f)
@@ -221,9 +230,9 @@ fun CompassToolScreen(
                                         else -> 1f
                                     }
                                     val tickColor = when {
-                                        isMajor -> MaterialTheme.colorScheme.onSurface
-                                        isMinor -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                                        else -> MaterialTheme.colorScheme.outlineVariant
+                                        isMajor -> compassOnSurface
+                                        isMinor -> compassOnSurfaceVariant.copy(alpha = 0.5f)
+                                        else -> compassOutlineVariant
                                     }
                                     val innerR = radius - tickLen
                                     drawLine(
@@ -244,9 +253,9 @@ fun CompassToolScreen(
                                 // Cardinal letters (N, E, S, W) — always upright
                                 val cardinals = listOf(
                                     "N" to Color(0xFFE53935), // Red for North
-                                    "E" to MaterialTheme.colorScheme.onSurface,
-                                    "S" to MaterialTheme.colorScheme.onSurface,
-                                    "W" to MaterialTheme.colorScheme.onSurface
+                                    "E" to compassOnSurface,
+                                    "S" to compassOnSurface,
+                                    "W" to compassOnSurface
                                 )
                                 val paint = android.graphics.Paint().apply {
                                     textAlign = android.graphics.Paint.Align.CENTER
@@ -426,8 +435,8 @@ fun LevelToolScreen(
                 // When device is flat on its back: x=0, y=0, z=9.8
                 // Pitch: rotation around X axis (tilting forward/backward)
                 // Roll: rotation around Y axis (tilting left/right)
-                pitch = Math.toDegrees(atan2(x.toDouble(), sqrt(y * y + z * z))).toFloat()
-                roll = Math.toDegrees(atan2(y.toDouble(), sqrt(x * x + z * z))).toFloat()
+                pitch = Math.toDegrees(atan2(x.toDouble(), sqrt((y * y + z * z).toDouble()))).toFloat()
+                roll = Math.toDegrees(atan2(y.toDouble(), sqrt((x * x + z * z).toDouble()))).toFloat()
 
                 isFlat = abs(pitch) < 2f && abs(roll) < 2f
             }
@@ -491,6 +500,9 @@ fun LevelToolScreen(
                         modifier = Modifier.size(260.dp),
                         contentAlignment = Alignment.Center
                     ) {
+                        val levelSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
+                        val levelOutlineVariant = MaterialTheme.colorScheme.outlineVariant
+                        val levelOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
                         Canvas(Modifier.fillMaxSize()) {
                             val cx = size.width / 2f
                             val cy = size.height / 2f
@@ -499,12 +511,12 @@ fun LevelToolScreen(
 
                             // Outer circle
                             drawCircle(
-                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                color = levelSurfaceHighest,
                                 radius = outerRadius,
                                 center = Offset(cx, cy)
                             )
                             drawCircle(
-                                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
+                                color = levelOutlineVariant.copy(alpha = 0.3f),
                                 radius = outerRadius,
                                 center = Offset(cx, cy),
                                 style = Stroke(width = 2f)
@@ -512,14 +524,14 @@ fun LevelToolScreen(
 
                             // Inner ring
                             drawCircle(
-                                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.15f),
+                                color = levelOutlineVariant.copy(alpha = 0.15f),
                                 radius = outerRadius * 0.6f,
                                 center = Offset(cx, cy),
                                 style = Stroke(width = 1f)
                             )
 
                             // Crosshair lines
-                            val crossColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f)
+                            val crossColor = levelOnSurfaceVariant.copy(alpha = 0.2f)
                             // Vertical
                             drawLine(crossColor, Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 1f)
                             // Horizontal
@@ -556,7 +568,7 @@ fun LevelToolScreen(
 
                             // Center dot
                             drawCircle(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f),
+                                color = levelOnSurfaceVariant.copy(alpha = 0.3f),
                                 radius = 3f,
                                 center = Offset(cx, cy)
                             )
@@ -597,8 +609,8 @@ fun LevelToolScreen(
                     Text("Tilt angles", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
 
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        TiltGauge("Pitch", smoothPitch, "Forward/backward", colors.info)
-                        TiltGauge("Roll", smoothRoll, "Left/right", colors.data)
+                        TiltGauge("Pitch", smoothPitch, "Forward/backward", colors.info, modifier = Modifier.weight(1f))
+                        TiltGauge("Roll", smoothRoll, "Left/right", colors.data, modifier = Modifier.weight(1f))
                     }
 
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
@@ -614,12 +626,12 @@ fun LevelToolScreen(
 }
 
 @Composable
-private fun TiltGauge(label: String, degrees: Float, description: String, color: Color) {
+private fun TiltGauge(label: String, degrees: Float, description: String, color: Color, modifier: Modifier = Modifier) {
     val absDeg = abs(degrees)
     val isLevel = absDeg < 2f
 
     Column(
-        modifier = Modifier.weight(1f),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {

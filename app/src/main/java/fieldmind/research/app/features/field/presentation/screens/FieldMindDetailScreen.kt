@@ -2472,6 +2472,7 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
         }
     }
 }
+}
 
 @Composable
 fun ProjectStatTile(value: String, label: String, color: androidx.compose.ui.graphics.Color) {
@@ -2906,8 +2907,6 @@ fun ComparisonDetailContent(d: DataRecordEntity) {
             }
             DataRecordProvenance(d)
         }
-    }
-}
     }
 }
 
