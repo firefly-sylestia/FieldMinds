@@ -434,7 +434,147 @@ fun CollaborationScreen(
                                 }
 
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Button(onClick = { showFastSnackbar(snackbar, scope, "Portfolio generated!") }, shape = RoundedCornerShape(22.dp)) {
+                                    Button(
+                                        onClick = {
+                                            scope.launch {
+                                                val portfolio = withContext(Dispatchers.IO) {
+                                                    val allObs = viewModel.observations.value
+                                                    val allNotes = viewModel.notes.value
+                                                    val allQs = viewModel.questions.value
+                                                    val allHyps = viewModel.hypotheses.value
+                                                    val allProjs = viewModel.projects.value
+                                                    val allSrcs = viewModel.sources.value
+                                                    val allRpts = viewModel.reports.value
+                                                    val allFcards = viewModel.flashcards.value
+                                                    val allData = viewModel.dataRecords.value
+                                                    val allSessions = viewModel.researchSessions.value
+                                                    val allTks = viewModel.tasks.value
+
+                                                    val dateStamp = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
+                                                    buildString {
+                                                        appendLine("# FieldMind Research Portfolio")
+                                                        appendLine()
+                                                        appendLine("*Generated on $dateStamp*")
+                                                        appendLine()
+                                                        appendLine("---")
+                                                        appendLine()
+
+                                                        // ── Overview Stats ──
+                                                        appendLine("## Overview")
+                                                        appendLine()
+                                                        appendLine("| Category | Count |")
+                                                        appendLine("|----------|-------|")
+                                                        appendLine("| Observations | ${allObs.size} |")
+                                                        appendLine("| Notes | ${allNotes.size} |")
+                                                        appendLine("| Questions | ${allQs.size} |")
+                                                        appendLine("| Hypotheses | ${allHyps.size} |")
+                                                        appendLine("| Projects | ${allProjs.size} |")
+                                                        appendLine("| Sources | ${allSrcs.size} |")
+                                                        appendLine("| Reports | ${allRpts.size} |")
+                                                        appendLine("| Flashcards | ${allFcards.size} |")
+                                                        appendLine("| Data Records | ${allData.size} |")
+                                                        appendLine("| Research Sessions | ${allSessions.size} |")
+                                                        appendLine("| Tasks | ${allTks.size} |")
+                                                        appendLine()
+
+                                                        // ── Projects ──
+                                                        if (allProjs.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Projects")
+                                                            appendLine()
+                                                            allProjs.forEach { p ->
+                                                                val obsCount = allObs.count { it.projectId == p.id }
+                                                                appendLine("### ${p.title}")
+                                                                appendLine("- **Status:** ${p.status}")
+                                                                if (p.methodology.isNotBlank()) appendLine("- **Methodology:** ${p.methodology}")
+                                                                if (p.description.isNotBlank()) appendLine("- **Description:** ${p.description.take(200)}")
+                                                                appendLine("- **Linked observations:** $obsCount")
+                                                                appendLine()
+                                                            }
+                                                        }
+
+                                                        // ── Recent Observations ──
+                                                        if (allObs.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Recent Observations")
+                                                            appendLine()
+                                                            allObs.sortedByDescending { it.timestamp }.take(20).forEach { o ->
+                                                                appendLine("### ${o.subject}")
+                                                                appendLine("- **Date:** ${o.date} ${o.time}")
+                                                                appendLine("- **Category:** ${o.category}")
+                                                                appendLine("- **Confidence:** ${o.confidence}")
+                                                                if (o.manualLocation.isNotBlank()) appendLine("- **Location:** ${o.manualLocation}")
+                                                                if (o.facts.isNotBlank()) appendLine("- **Notes:** ${o.facts.take(300)}")
+                                                                if (o.tags.isNotBlank()) appendLine("- **Tags:** ${o.tags}")
+                                                                appendLine()
+                                                            }
+                                                            if (allObs.size > 20) {
+                                                                appendLine("... and ${allObs.size - 20} more observations")
+                                                                appendLine()
+                                                            }
+                                                        }
+
+                                                        // ── Questions & Hypotheses ──
+                                                        if (allQs.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Research Questions")
+                                                            appendLine()
+                                                            allQs.forEach { q ->
+                                                                appendLine("- **${q.question}**")
+                                                                if (q.answer.isNotBlank()) appendLine("  - Answer: ${q.answer.take(200)}")
+                                                                appendLine()
+                                                            }
+                                                        }
+
+                                                        // ── Notes ──
+                                                        if (allNotes.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Recent Notes")
+                                                            appendLine()
+                                                            allNotes.sortedByDescending { it.updatedAt }.take(10).forEach { n ->
+                                                                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(n.updatedAt))
+                                                                appendLine("- **${n.title.ifBlank { "Untitled" }}** ($date)")
+                                                                if (n.body.isNotBlank()) appendLine("  - ${n.body.take(200)}")
+                                                            }
+                                                            appendLine()
+                                                        }
+
+                                                        // ── Active Research Sessions ──
+                                                        val activeSessions = allSessions.filter { it.status == "Active" }
+                                                        if (activeSessions.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Active Research Sessions")
+                                                            appendLine()
+                                                            activeSessions.forEach { s ->
+                                                                appendLine("- ${s.name} (started: ${SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(s.startedAt))})")
+                                                            }
+                                                            appendLine()
+                                                        }
+
+                                                        // ── Footer ──
+                                                        appendLine("---")
+                                                        appendLine()
+                                                        appendLine("*Generated by FieldMind — an offline-first field research notebook.*")
+                                                        appendLine()
+                                                    }
+                                                }
+                                                safeShareText(
+                                                    context = context,
+                                                    snackbar = snackbar,
+                                                    scope = scope,
+                                                    chooserTitle = "Share portfolio via",
+                                                    clipboardLabel = "FieldMind research portfolio",
+                                                    text = portfolio
+                                                )
+                                            }
+                                        },
+                                        shape = RoundedCornerShape(22.dp)
+                                    ) {
                                         Icon(MaterialSymbolIcon("description"), null, size = 18.dp)
                                         Spacer(Modifier.size(6.dp))
                                         Text("Generate portfolio")
