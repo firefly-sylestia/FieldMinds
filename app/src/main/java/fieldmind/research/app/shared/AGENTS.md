@@ -15,7 +15,7 @@ The `shared/` package contains code shared across the entire app: base theme sys
 ## Ownership
 
 ### Data Layer (`shared/data/`)
-- `model/AppSettings.kt` — Global application settings data model (onboarding, theme, beta, crash reporting, festive overlays)
+- `model/AppSettings.kt` — Global application settings data model (onboarding, theme, beta, crash reporting, developer test report history, festive overlays)
 
 ### Presentation Layer (`shared/presentation/`)
 - `theme/` — Base theme system

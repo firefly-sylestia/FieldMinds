@@ -5,6 +5,7 @@ import android.content.ContextWrapper
 import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import java.util.WeakHashMap
 import androidx.compose.ui.platform.LocalContext
 
 /**
@@ -28,12 +29,10 @@ fun ScreenCaptureProtection(enabled: Boolean = true, onDispose: (() -> Unit)? = 
     val window = LocalContext.current.findActivity()?.window
 
     DisposableEffect(window, enabled) {
-        window?.let { applyScreenCaptureProtection(it, enabled) }
+        window?.let { SecureFlagController.setReason(it, SecureFlagReason.SensitiveScreen, enabled) }
 
         onDispose {
-            if (enabled) {
-                window?.let { applyScreenCaptureProtection(it, false) }
-            }
+            window?.let { SecureFlagController.setReason(it, SecureFlagReason.SensitiveScreen, false) }
             onDispose?.invoke()
         }
     }
@@ -62,3 +61,21 @@ fun applyScreenCaptureProtection(window: android.view.Window, enabled: Boolean) 
         window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 }
+
+
+enum class SecureFlagReason { GlobalScreenshotSetting, SensitiveScreen, AppPreviewPrivacy }
+
+object SecureFlagController {
+    private val activeReasons = WeakHashMap<android.view.Window, MutableSet<SecureFlagReason>>()
+
+    fun setReason(window: android.view.Window, reason: SecureFlagReason, enabled: Boolean) {
+        val reasons = activeReasons.getOrPut(window) { mutableSetOf() }
+        if (enabled) reasons.add(reason) else reasons.remove(reason)
+        applyScreenCaptureProtection(window, reasons.isNotEmpty())
+    }
+
+    fun shouldSecureForReasons(reasons: Set<SecureFlagReason>): Boolean = reasons.isNotEmpty()
+}
+
+fun shouldApplySecureFlag(screenCaptureProtection: Boolean, appPreviewMode: String): Boolean =
+    screenCaptureProtection

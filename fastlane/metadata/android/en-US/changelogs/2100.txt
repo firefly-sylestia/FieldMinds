@@ -1,0 +1,1 @@
+Stability update: fixes bottom-tab device Back behavior, screenshot toggle handling, persistent developer test reports, weather card clipping, quick action spacing, stronger dark-mode depth, and more visible rain animations.

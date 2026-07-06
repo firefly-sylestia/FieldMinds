@@ -3546,6 +3546,11 @@ private fun RainScene(
         animationSpec = infiniteRepeatable(tween((2000 / rainSpeed).toInt(), easing = LinearEasing), RepeatMode.Restart),
         label = "rainFall"
     )
+    val cloudProgress by infiniteTransition.animateFloat(
+        initialValue = 0f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(60_000, easing = LinearEasing), RepeatMode.Restart),
+        label = "rainCloudLoop"
+    )
     val rippleProgress by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
         animationSpec = infiniteRepeatable(tween(3000, easing = LinearEasing), RepeatMode.Restart),
@@ -3590,7 +3595,15 @@ private fun RainScene(
             gravity = if (isHeavy) 0.25f else 0.15f,
             windForce = if (isHeavy) 0.08f else 0.05f,
             dragCoefficient = if (isHeavy) 0.015f else 0.02f
-        )
+        ).also { system ->
+            system.seedAcrossCanvas(
+                count = (streakCount * 0.75f).toInt(),
+                vx = if (isHeavy) 0.04f else 0.02f,
+                vy = rainSpeed * 3f,
+                size = 0.008f,
+                massRange = if (isHeavy) 1f to 1.4f else 0.8f to 1.2f
+            )
+        }
     }
 
     // Rain color — blue-grey that blends with palette
@@ -3628,7 +3641,7 @@ private fun RainScene(
 
         // ── Overhead clouds for drizzle/rain ──
         // Draw clouds so rain scenes have visible cloud cover overhead
-        val cloudDrift = (rainProgress * 0.2f) % 1f
+        val cloudDrift = cloudProgress % 1f
         val cloudScale = size.width * 0.5f
         val cloudColor = palette.cloudBaseColor.copy(alpha = if (isDark) 0.25f else 0.18f)
         val cloudDark = Color(0xFF4A5A6A).copy(alpha = if (isDark) 0.30f else 0.15f)
@@ -3666,6 +3679,21 @@ private fun RainScene(
                 vy = rainSpeed * 3f,
                 size = 0.008f,
                 massRange = if (isHeavy) 1f to 1.4f else 0.8f to 1.2f
+            )
+        }
+
+        // Deterministic fallback streak field: keeps rain visible even before
+        // physics particles fill, and makes drizzle/rain test modes obvious.
+        streaks.forEach { streak ->
+            val y = ((rainProgress + streak.phase) % 1f) * size.height
+            val x = (streak.x * size.width + effectiveWind * y * streak.windAffinity) % size.width
+            val len = size.height * 0.055f * streak.length
+            drawLine(
+                color = rainColor.copy(alpha = (rainColor.alpha * 0.72f).coerceIn(0.22f, 0.70f)),
+                start = Offset(x, y),
+                end = Offset(x + effectiveWind * 32f, y + len),
+                strokeWidth = if (isHeavy) 1.8f else 1.2f,
+                cap = StrokeCap.Round
             )
         }
 
