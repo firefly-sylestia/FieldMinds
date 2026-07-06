@@ -68,7 +68,9 @@ fun DataToolsHubScreen(
             ToolCardInfo("Checklist", "Track items", FieldMindIcons.Check, accentColor, FieldMindScreen.ChecklistTool),
             ToolCardInfo("Event Log", "Record events", FieldMindIcons.List, accentColor, FieldMindScreen.EventLogTool),
             ToolCardInfo("Site Log", "Visit conditions", FieldMindIcons.Map, accentColor, FieldMindScreen.SiteLogTool),
-            ToolCardInfo("Comparison", "Species/samples", FieldMindIcons.Data, accentColor, FieldMindScreen.ComparisonTable)
+            ToolCardInfo("Comparison", "Species/samples", FieldMindIcons.Data, accentColor, FieldMindScreen.ComparisonTable),
+            ToolCardInfo("Compass", "Magnetic heading", MaterialSymbolIcon("explore"), colors.info, FieldMindScreen.CompassTool),
+            ToolCardInfo("Level", "Spirit level", MaterialSymbolIcon("straighten"), colors.data, FieldMindScreen.LevelTool)
         )
     }
 
