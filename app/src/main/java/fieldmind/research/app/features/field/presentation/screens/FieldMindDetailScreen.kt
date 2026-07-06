@@ -140,9 +140,11 @@ fun SharedTransitionScope.DetailScreen(
                             Icon(FieldMindIcons.Article, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
                         }
                         IconButton(onClick = { sharePlainText(context, exportText) }, modifier = Modifier.size(36.dp)) {
-                            Icon(FieldMindIcons.Export, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)        }
-    }
-}
+                            Icon(FieldMindIcons.Export, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
+                        }
+                    }
+                }
+            }
 
             if (editable && !showEdit) {
                 item { DetailActionBar(onEdit = { showEdit = true }, onDelete = { showDelete = true }) }
@@ -440,6 +442,7 @@ fun ObservationDetailContent(
     }
     
     // Export menu dialog removed — export is handled inline in ObservationExportSection
+}
 }
 
 @Composable
@@ -766,6 +769,8 @@ fun ObservationBehaviorSection(
         }
     }
 }
+    }
+}
 
 // ══════════════════════════════════════════════════════════════════════
 //  Comprehensive Structured Details Section — Shows ALL enhanced fields
@@ -885,6 +890,7 @@ fun ObservationStructuredDetailsSection(
         }
     }
 }
+}
 
 private data class StructuredDetailsData(
     val speciesName: String,
@@ -911,6 +917,7 @@ private data class StructuredDetailsData(
 // ══════��═══════════════════════════════════════════════════════════════
 
 @Composable
+}
 private fun QualityScoreCard(score: Int) {
     val colors = FieldMindTheme.colors
     val scoreColor = when {
@@ -1214,6 +1221,7 @@ fun ObservationAiAnalysisCard(
     }
 }
 
+}
 private data class AiAnalysisData(
     val topMatch: String,
     val topConfidence: String,
@@ -1374,6 +1382,8 @@ fun ProvenanceRow(label: String, value: String) {
     }
 }
 
+}
+}
 private fun formatTimestamp(millis: Long): String {
     val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
     return sdf.format(java.util.Date(millis))
@@ -3689,3 +3699,4 @@ fun BacklinksPanel(links: List<Triple<String, String, Long>>, onOpenDetail: (Str
 }
 
 
+}
