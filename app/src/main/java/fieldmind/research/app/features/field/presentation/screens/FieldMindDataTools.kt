@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import fieldmind.research.app.ui.theme.CuteElevations
+import org.json.JSONArray
+import org.json.JSONObject
 
 // ══════════════════════════════════════════════════════════════════════
 //  Data Tools Hub — Main hub showing all 8 data tools as clickable cards
@@ -1582,13 +1584,25 @@ fun ComparisonTableScreen(
         if (rows.isEmpty() || tableName.isBlank()) return
         haptics.confirm()
         val savedName = tableName.trim()
-        val summary = rows.joinToString("; ") { row ->
-            "${row.label}: ${row.items.joinToString(" vs ")}"
+        // Store as structured JSON: {"columnCount":2,"rows":[{"label":"...","items":["...","..."]},...]}
+        val jsonRoot = JSONObject().apply {
+            put("columnCount", columnCount)
+            put("rowCount", rows.size)
+            val jsonRows = JSONArray()
+            rows.forEach { row ->
+                val jsonRow = JSONObject()
+                jsonRow.put("label", row.label)
+                val jsonItems = JSONArray()
+                row.items.forEach { jsonItems.put(it) }
+                jsonRow.put("items", jsonItems)
+                jsonRows.put(jsonRow)
+            }
+            put("rows", jsonRows)
         }
         viewModel.addDataRecord(
             toolType = "Comparison Table",
             label = savedName,
-            value = summary,
+            value = jsonRoot.toString(),
             unit = "",
             notes = "$columnCount columns, ${rows.size} rows",
             datasetKind = "Comparisons",

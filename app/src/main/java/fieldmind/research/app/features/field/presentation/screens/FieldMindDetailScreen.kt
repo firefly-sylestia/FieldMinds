@@ -2814,11 +2814,47 @@ fun ChecklistDetailContent(d: DataRecordEntity) {
 @OptIn(ExperimentalLayoutApi::class)
 fun ComparisonDetailContent(d: DataRecordEntity) {
     val colors = FieldMindTheme.colors
-    val rows = d.value.split(";").map { it.trim() }.filter { it.isNotBlank() }
-    val columnCount = try {
-        val match = Regex("(\\d+)\\s*columns?").find(d.notes)
-        match?.groupValues?.get(1)?.toIntOrNull() ?: 2
-    } catch (_: Exception) { 2 }
+
+    // Parse structured JSON: {"columnCount":2,"rows":[{"label":"...","items":["...","..."]},...]}
+    // Fall back to legacy ;-separated format for backward compatibility
+    data class ComparisonRow(val label: String, val items: List<String>)
+
+    val parsedData = remember(d.value) {
+        val jsonResult = try {
+            val json = org.json.JSONObject(d.value)
+            val cols = json.optInt("columnCount", 2)
+            val jsonRows = json.optJSONArray("rows")
+            val rowList = mutableListOf<ComparisonRow>()
+            if (jsonRows != null) {
+                for (i in 0 until jsonRows.length()) {
+                    val row = jsonRows.getJSONObject(i)
+                    val label = row.optString("label", "")
+                    val itemsArr = row.optJSONArray("items")
+                    val items = mutableListOf<String>()
+                    if (itemsArr != null) {
+                        for (j in 0 until itemsArr.length()) {
+                            items.add(itemsArr.optString(j, ""))
+                        }
+                    }
+                    if (label.isNotBlank()) {
+                        rowList.add(ComparisonRow(label, items))
+                    }
+                }
+            }
+            Pair(cols, rowList)
+        } catch (_: Exception) {
+            // Legacy format: "label: item1 vs item2; label2: itemA vs itemB"
+            val legacyRows = d.value.split(";").map { it.trim() }.filter { it.isNotBlank() }.map { entry ->
+                val label = entry.substringBefore(":").trim()
+                val values = entry.substringAfter(":").trim()
+                val items = values.split(" vs ").map { it.trim() }.filter { it.isNotBlank() }
+                ComparisonRow(label, items)
+            }
+            Pair(2, legacyRows)
+        }
+    }
+
+    val rows = parsedData.second
 
     Card(
         shape = RoundedCornerShape(34.dp),
@@ -2849,15 +2885,13 @@ fun ComparisonDetailContent(d: DataRecordEntity) {
                 ) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         rows.forEach { row ->
-                            val label = row.substringBefore(":")
-                            val values = row.substringAfter(":").split("vs").map { it.trim() }
                             Row(
                                 Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(label, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(0.3f))
-                                values.forEachIndexed { i, v ->
+                                Text(row.label, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(0.3f))
+                                row.items.forEachIndexed { i, v ->
                                     Surface(
                                         shape = RoundedCornerShape(12.dp),
                                         color = if (i == 0) colors.data.copy(alpha = 0.1f) else colors.observation.copy(alpha = 0.1f)
@@ -2872,6 +2906,8 @@ fun ComparisonDetailContent(d: DataRecordEntity) {
             }
             DataRecordProvenance(d)
         }
+    }
+}
     }
 }
 
