@@ -219,7 +219,7 @@ fun TasksScreen(
                 title = "Tasks",
                 subtitle = "Track field tasks, surveys, and to-dos.",
                 icon = MaterialSymbolIcon("checklist"),
-                heroColor = FieldMindTheme.colors.flashcard,
+                heroColor = FieldMindTheme.colors.task,
                 trailing = {
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         // Filter button (with active indicator)
@@ -262,7 +262,7 @@ fun TasksScreen(
                         value = "${todayTasks.size + upcomingTasks.size + unscheduledTasks.size}",
                         label = "Pending",
                         icon = MaterialSymbolIcon("pending_actions"),
-                        color = FieldMindTheme.colors.flashcard,
+                        color = FieldMindTheme.colors.task,
                         modifier = Modifier.weight(1f)
                     )
                     StatCard(
@@ -284,7 +284,7 @@ fun TasksScreen(
                 title = "Today",
                 icon = MaterialSymbolIcon("today"),
                 count = todayTasks.size,
-                accentColor = FieldMindTheme.colors.flashcard,
+                accentColor = FieldMindTheme.colors.task,
                 expanded = expandedToday,
                 onToggle = { expandedToday = !expandedToday }
             )
@@ -299,7 +299,7 @@ fun TasksScreen(
                 items(todayTasks, key = { it.id }) { task ->
                     SwipeToCompleteTaskCard(
                         task = task,
-                        accentColor = FieldMindTheme.colors.flashcard,
+                        accentColor = FieldMindTheme.colors.task,
                         onToggle = {
                             haptics.confirm()
                             completedTaskIds[task.id] = true

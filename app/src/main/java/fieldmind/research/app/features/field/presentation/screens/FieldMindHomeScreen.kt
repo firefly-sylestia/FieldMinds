@@ -492,17 +492,6 @@ fun SharedTransitionScope.HomeScreen(
                             Text("Field Map", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             Text("Explore observations on the map, download offline tiles, and more", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
-                        FilledTonalButton(
-                            onClick = { onNavigate(FieldMindScreen.MapScreen) },
-                            shape = RoundedCornerShape(22.dp),
-                            colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = FieldMindTheme.colors.info.copy(alpha = 0.12f)
-                            )
-                        ) {
-                            Text("Open", fontWeight = FontWeight.SemiBold)
-                            Spacer(Modifier.size(4.dp))
-                            Icon(FieldMindIcons.Forward, null, size = 16.dp)
-                        }
                     }
                 }
             }

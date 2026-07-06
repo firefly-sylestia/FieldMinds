@@ -113,11 +113,16 @@ fun TaskDetailScreen(
     var showObservationPicker by remember { mutableStateOf(false) }
     var obsPickerSearch by remember { mutableStateOf("") }
 
+    // ── Snackbar ──
+    val taskSnackbar = remember { SnackbarHostState() }
+    val taskScope = rememberCoroutineScope()
+
     // ── Overflow menu ──
     var showOverflow by remember { mutableStateOf(false) }
 
     val taskScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
 
+    Box(Modifier.fillMaxSize()) {
     LazyColumn(
         state = taskScrollState,
         modifier = Modifier
@@ -146,12 +151,18 @@ fun TaskDetailScreen(
                     DropdownMenu(expanded = showOverflow, onDismissRequest = { showOverflow = false }) {
                         DropdownMenuItem(
                             text = { Text("Edit task") },
-                            onClick = { showOverflow = false },
+                            onClick = {
+                                showOverflow = false
+                                taskScope.launch { taskSnackbar.showSnackbar("Coming soon") }
+                            },
                             leadingIcon = { Icon(MaterialSymbolIcon("edit"), null, size = 18.dp) }
                         )
                         DropdownMenuItem(
                             text = { Text("Duplicate") },
-                            onClick = { showOverflow = false },
+                            onClick = {
+                                showOverflow = false
+                                taskScope.launch { taskSnackbar.showSnackbar("Coming soon") }
+                            },
                             leadingIcon = { Icon(MaterialSymbolIcon("content_copy"), null, size = 18.dp) }
                         )
                         DropdownMenuItem(
@@ -507,10 +518,10 @@ fun TaskDetailScreen(
                                     }
                                     Box(
                                         Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
-                                            .background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)),
+                                            .background(FieldMindTheme.colors.task.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Icon(icon, null, tint = FieldMindTheme.colors.flashcard, size = 16.dp)
+                                        Icon(icon, null, tint = FieldMindTheme.colors.task, size = 16.dp)
                                     }
                                     Text(
                                         uri.substringAfterLast("/").take(30),
@@ -587,6 +598,15 @@ fun TaskDetailScreen(
             }
         )
     }
+    
+    // ── Snackbar overlay ──
+    SnackbarHost(
+        hostState = taskSnackbar,
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(16.dp)
+    )
+}
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -743,7 +763,7 @@ private fun SectionCard(
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Icon(icon, null, size = 18.dp, tint = FieldMindTheme.colors.flashcard)
+                Icon(icon, null, size = 18.dp, tint = FieldMindTheme.colors.task)
                 Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
             }
             content()

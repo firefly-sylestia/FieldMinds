@@ -1310,7 +1310,7 @@ fun ObservationExportSection(
                     ) {
                         Icon(FieldMindIcons.Article, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
-                        Text("Markdown", style = MaterialTheme.typography.labelSmall)
+                        Text("Copy Markdown", style = MaterialTheme.typography.labelSmall)
                     }
                     FilledTonalButton(
                         onClick = {
@@ -1323,7 +1323,7 @@ fun ObservationExportSection(
                     ) {
                         Icon(FieldMindIcons.Data, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
-                        Text("CSV", style = MaterialTheme.typography.labelSmall)
+                        Text("Copy CSV", style = MaterialTheme.typography.labelSmall)
                     }
                 }
                 // Row 2: JSON + Share
@@ -1339,7 +1339,7 @@ fun ObservationExportSection(
                     ) {
                         Icon(FieldMindIcons.Data, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
-                        Text("JSON", style = MaterialTheme.typography.labelSmall)
+                        Text("Copy JSON", style = MaterialTheme.typography.labelSmall)
                     }
                     FilledTonalButton(
                         onClick = {
@@ -2433,19 +2433,26 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                             if (task.dueDate.isNotBlank()) {
                                 Text(task.dueDate, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-                            FilledTonalButton(
-                                onClick = {
-                                    haptics.confirm()
-                                    viewModel.updateTaskEntity(task.copy(
-                                        status = if (task.status == "Done") "Pending" else "Done"
-                                    ))
-                                },
-                                shape = RoundedCornerShape(18.dp),
-                                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
-                                colors = if (task.status != "Done") ButtonDefaults.filledTonalButtonColors(
-                                    containerColor = colors.positive.copy(alpha = 0.15f),
-                                    contentColor = colors.positive
-                                ) else ButtonDefaults.filledTonalButtonColors()
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                IconButton(
+                                    onClick = { viewModel.deleteTask(task.id) },
+                                    modifier = Modifier.size(28.dp)
+                                ) {
+                                    Icon(FieldMindIcons.Close, null, tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f), size = 16.dp)
+                                }
+                                FilledTonalButton(
+                                    onClick = {
+                                        haptics.confirm()
+                                        viewModel.updateTaskEntity(task.copy(
+                                            status = if (task.status == "Done") "Pending" else "Done"
+                                        ))
+                                    },
+                                    shape = RoundedCornerShape(18.dp),
+                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                                    colors = if (task.status != "Done") ButtonDefaults.filledTonalButtonColors(
+                                        containerColor = colors.positive.copy(alpha = 0.15f),
+                                        contentColor = colors.positive
+                                    ) else ButtonDefaults.filledTonalButtonColors()
                             ) {
                                 Icon(
                                     if (task.status == "Done") FieldMindIcons.Forward else FieldMindIcons.Check,

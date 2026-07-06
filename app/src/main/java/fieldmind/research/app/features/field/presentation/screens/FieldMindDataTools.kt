@@ -120,6 +120,10 @@ fun DataToolsHubScreen(
                 val counterCount = dataRecords.count { it.toolType == "Counter" }
                 val measurementCount = dataRecords.count { it.toolType == "Measurement Log" }
                 val weatherCount = dataRecords.count { it.toolType == "Weather Log" }
+                val checklistCount = dataRecords.count { it.toolType == "Checklist" }
+                val eventLogCount = dataRecords.count { it.toolType == "Event Log" }
+                val siteLogCount = dataRecords.count { it.toolType == "Site Log" }
+                val comparisonCount = dataRecords.count { it.toolType == "Comparison Table" }
 
                 Card(
                     shape = RoundedCornerShape(34.dp),
@@ -144,6 +148,13 @@ fun DataToolsHubScreen(
                             RecordStat("Counter", counterCount, FieldMindIcons.Add)
                             RecordStat("Measure", measurementCount, FieldMindIcons.Graph)
                             RecordStat("Weather", weatherCount, FieldMindIcons.Weather)
+                            RecordStat("Checklist", checklistCount, FieldMindIcons.Check)
+                        }
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                            RecordStat("Events", eventLogCount, FieldMindIcons.List)
+                            RecordStat("Sites", siteLogCount, FieldMindIcons.Map)
+                            RecordStat("Compare", comparisonCount, FieldMindIcons.Data)
+                            RecordStat("Species", dataRecords.count { it.toolType == "Species" }, FieldMindIcons.Nature)
                         }
                         Text(
                             "Total: ${dataRecords.size} records",
