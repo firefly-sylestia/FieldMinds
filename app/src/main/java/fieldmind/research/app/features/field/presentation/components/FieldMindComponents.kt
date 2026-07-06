@@ -270,7 +270,7 @@ fun OptionPickerDialog(
                 .padding(vertical = 24.dp),
             shape = RoundedCornerShape(40.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
         ) {
             Column(
                 Modifier.verticalScroll(rememberScrollState()).padding(20.dp),
@@ -1010,7 +1010,7 @@ fun EmptyState(
             .fillMaxWidth()
             .cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(34.dp)),
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(

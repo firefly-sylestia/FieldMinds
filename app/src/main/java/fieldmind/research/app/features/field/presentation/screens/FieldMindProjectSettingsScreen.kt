@@ -590,7 +590,7 @@ fun ProjectSettingsScreen(
         ) {
             Card(
                 shape = RoundedCornerShape(34.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
                 modifier = Modifier
                     .fillMaxWidth()

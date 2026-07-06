@@ -48,7 +48,7 @@ fun HomeSpeciesCatalogSection(
 
     Card(
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier.fillMaxWidth()
             .cuteShadow(elevation = 6.dp, shape = RoundedCornerShape(34.dp))

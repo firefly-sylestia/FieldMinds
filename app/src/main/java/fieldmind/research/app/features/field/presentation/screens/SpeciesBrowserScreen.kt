@@ -754,7 +754,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                         if (record.habitat.isNotBlank()) {
                             Card(
                                 shape = RoundedCornerShape(28.dp),
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                                 modifier = Modifier.weight(1f)
                             ) {
@@ -779,7 +779,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                         if (record.diet.isNotBlank()) {
                             Card(
                                 shape = RoundedCornerShape(28.dp),
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                                 modifier = Modifier.weight(1f)
                             ) {
@@ -971,7 +971,7 @@ private fun DetailSection(
 ) {
     Card(
         shape = RoundedCornerShape(30.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
         modifier = Modifier.fillMaxWidth()
     ) {

@@ -198,7 +198,7 @@ fun ProjectSelectorDialog(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
             shape = RoundedCornerShape(40.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState()).padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 // Header
