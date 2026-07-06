@@ -80,6 +80,12 @@ fun TasksScreen(
         }.sortedBy { it.dueDate }
     }
 
+    val unscheduledTasks = remember(tasks, completedTaskIds) {
+        tasks.filter { t ->
+            t.dueDate.isBlank() && t.status != "Done" && completedTaskIds[t.id] != true
+        }.sortedByDescending { it.updatedAt }
+    }
+
     val doneTasks = remember(tasks, completedTaskIds) {
         tasks.filter { t ->
             t.status == "Done" || completedTaskIds[t.id] == true
@@ -89,6 +95,7 @@ fun TasksScreen(
     // ── Section expand state ──
     var expandedToday by remember { mutableStateOf(true) }
     var expandedUpcoming by remember { mutableStateOf(true) }
+    var expandedUnscheduled by remember { mutableStateOf(false) }
     var expandedDone by remember { mutableStateOf(false) }
 
     LazyColumn(
@@ -119,7 +126,7 @@ fun TasksScreen(
             item {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     StatCard(
-                        value = "${todayTasks.size + upcomingTasks.size}",
+                        value = "${todayTasks.size + upcomingTasks.size + unscheduledTasks.size}",
                         label = "Pending",
                         icon = MaterialSymbolIcon("pending_actions"),
                         color = FieldMindTheme.colors.flashcard,
@@ -195,6 +202,41 @@ fun TasksScreen(
                     SwipeToCompleteTaskCard(
                         task = task,
                         accentColor = FieldMindTheme.colors.observation,
+                        onToggle = {
+                            haptics.confirm()
+                            completedTaskIds[task.id] = true
+                            viewModel.updateTaskEntity(task.copy(status = "Done"))
+                        },
+                        onTap = { onNavigate("field_task_detail/${task.id}") }
+                    )
+                }
+            }
+        }
+
+        // ════════════════════════════════════════════════════════
+        //  UNSCHEDULED section
+        // ════════════════════════════════════════════════════════
+        item {
+            TaskSectionHeader(
+                title = "Unscheduled",
+                icon = MaterialSymbolIcon("inbox"),
+                count = unscheduledTasks.size,
+                accentColor = FieldMindTheme.colors.data,
+                expanded = expandedUnscheduled,
+                onToggle = { expandedUnscheduled = !expandedUnscheduled }
+            )
+        }
+
+        if (expandedUnscheduled) {
+            if (unscheduledTasks.isEmpty()) {
+                item {
+                    EmptyTaskHint("All tasks have due dates.")
+                }
+            } else {
+                items(unscheduledTasks, key = { it.id }) { task ->
+                    SwipeToCompleteTaskCard(
+                        task = task,
+                        accentColor = FieldMindTheme.colors.data,
                         onToggle = {
                             haptics.confirm()
                             completedTaskIds[task.id] = true

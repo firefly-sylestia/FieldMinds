@@ -2333,6 +2333,7 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                     Button(
                         onClick = {
                             haptics.confirm()
+                            val currentSubtasks = subtasks.toList()
                             viewModel.addTask(
                                 title = taskTitle,
                                 description = taskDesc,
@@ -2340,28 +2341,25 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                                 priority = taskPriority,
                                 dueDate = taskDueDate,
                                 assignedTo = taskAssignee,
-                                projectId = projectId
+                                projectId = projectId,
+                                onSaved = { parentId ->
+                                    currentSubtasks.forEach { sub ->
+                                        viewModel.addTask(
+                                            title = sub,
+                                            taskType = taskType,
+                                            priority = taskPriority,
+                                            projectId = projectId,
+                                            parentTaskId = parentId
+                                        )
+                                    }
+                                }
                             )
-                            // Create subtasks as separate tasks linked via parentTaskId
-                            var parentId: Long? = null
-                            subtasks.forEach { sub ->
-                                viewModel.addTask(
-                                    title = sub,
-                                    taskType = taskType,
-                                    priority = taskPriority,
-                                    projectId = projectId,
-                                    parentTaskId = parentId
-                                )
-                            }
                             showForm = false
                             taskTitle = ""; taskDesc = ""; subtasks = emptyList()
                         },
                         modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
                         enabled = taskTitle.isNotBlank()
                     ) { Text(if (subtasks.isEmpty()) "Save Task" else "Save Task with ${subtasks.size} Subtasks") }
-                }
-            }
-        }
 
         Text("Project Tasks (${projectTasks.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         if (projectTasks.isEmpty()) {
@@ -2384,9 +2382,9 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                 Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                     Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(
-                            if (task.status == "Completed") FieldMindIcons.Check else FieldMindIcons.List,
+                            if (task.status == "Done") FieldMindIcons.Check else FieldMindIcons.List,
                             null,
-                            tint = if (task.status == "Completed") colors.positive else colors.project,
+                            tint = if (task.status == "Done") colors.positive else colors.project,
                             size = 20.dp
                         )
                         Column(Modifier.weight(1f)) {
@@ -2408,24 +2406,24 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
                                 onClick = {
                                     haptics.confirm()
                                     viewModel.updateTaskEntity(task.copy(
-                                        status = if (task.status == "Completed") "Pending" else "Completed"
+                                        status = if (task.status == "Done") "Pending" else "Done"
                                     ))
                                 },
                                 shape = RoundedCornerShape(18.dp),
                                 contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
-                                colors = if (task.status != "Completed") ButtonDefaults.filledTonalButtonColors(
+                                colors = if (task.status != "Done") ButtonDefaults.filledTonalButtonColors(
                                     containerColor = colors.positive.copy(alpha = 0.15f),
                                     contentColor = colors.positive
                                 ) else ButtonDefaults.filledTonalButtonColors()
                             ) {
                                 Icon(
-                                    if (task.status == "Completed") FieldMindIcons.Forward else FieldMindIcons.Check,
+                                    if (task.status == "Done") FieldMindIcons.Forward else FieldMindIcons.Check,
                                     null,
                                     size = 14.dp
                                 )
                                 Spacer(Modifier.size(4.dp))
                                 Text(
-                                    if (task.status == "Completed") "Open" else "Complete",
+                                    if (task.status == "Done") "Open" else "Complete",
                                     style = MaterialTheme.typography.labelSmall
                                 )
                             }

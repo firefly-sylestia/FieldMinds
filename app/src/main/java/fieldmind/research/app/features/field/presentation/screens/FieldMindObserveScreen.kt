@@ -424,6 +424,7 @@ fun ObserveScreen(
             latitude = capturedLocation?.latitude,
             longitude = capturedLocation?.longitude,
             structuredDetailsJson = structuredJson,
+            weather = weatherSnapshot,
             timeNote = "Captured via observation session at ${formatDurationCompact(liveElapsed)}"
         ) { observationId ->
             // Link this observation to the active ResearchSession
