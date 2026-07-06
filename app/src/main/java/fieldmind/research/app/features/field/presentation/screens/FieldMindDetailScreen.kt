@@ -150,34 +150,48 @@ fun SharedTransitionScope.DetailScreen(
 
             // Editing is handled via EditEntityDialog overlay — detail content always shows behind it
             when (kind) {
-                    "note" -> notes.firstOrNull { it.id == id }?.let { n ->
+                    "note" -> {
+                        val n = notes.firstOrNull { it.id == id }
+                        if (n != null) {
                         item { NoteDetailContent(n, onOpenDetail, onOpenCanvas) }
                         item { BacklinksPanel(buildList {
                             projects.firstOrNull { it.id == n.projectId }?.let { add(Triple("project", it.title, it.id)) }
                             sources.firstOrNull { it.id == n.sourceId }?.let { add(Triple("source", it.title, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "observation" -> observations.firstOrNull { it.id == id }?.let { o ->
+                    }
+                    "observation" -> {
+                        val o = observations.firstOrNull { it.id == id }
+                        if (o != null) {
                         item { ObservationDetailContent(o, viewModel, onOpenReader, onOpenDetail, detailSnackbar, detailScope) }
                         item { BacklinksPanel(buildList {
                             projects.firstOrNull { it.id == o.projectId }?.let { add(Triple("project", it.title, it.id)) }
                             data.filter { it.observationId == o.id }.forEach { add(Triple("data", it.label, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "question" -> questions.firstOrNull { it.id == id }?.let { qn ->
+                    }
+                    "question" -> {
+                        val qn = questions.firstOrNull { it.id == id }
+                        if (qn != null) {
                         item { QuestionDetailContent(qn, hypotheses) { ans -> viewModel.setQuestionAnswer(qn, ans) } }
                         item { BacklinksPanel(buildList {
                             projects.firstOrNull { it.id == qn.relatedProjectId }?.let { add(Triple("project", it.title, it.id)) }
                             hypotheses.filter { it.linkedQuestionId == qn.id }.forEach { add(Triple("hypothesis", it.prediction, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "hypothesis" -> hypotheses.firstOrNull { it.id == id }?.let { h ->
+                    }
+                    "hypothesis" -> {
+                        val h = hypotheses.firstOrNull { it.id == id }
+                        if (h != null) {
                         item { HypothesisDetailContent(h) }
                         item { BacklinksPanel(buildList {
                             questions.firstOrNull { it.id == h.linkedQuestionId }?.let { add(Triple("question", it.questionText, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "project" -> projects.firstOrNull { it.id == id }?.let { p ->
+                    }
+                    "project" -> {
+                        val p = projects.firstOrNull { it.id == id }
+                        if (p != null) {
                         item { ProjectDetailContent(p, observations, questions, sources, data, reports, viewModel) }
                         item { BacklinksPanel(buildList {
                             observations.filter { it.projectId == p.id }.forEach { add(Triple("observation", it.subject, it.id)) }
@@ -187,7 +201,10 @@ fun SharedTransitionScope.DetailScreen(
                             reports.filter { it.projectId == p.id }.forEach { add(Triple("report", it.title, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "source" -> sources.firstOrNull { it.id == id }?.let { s ->
+                    }
+                    "source" -> {
+                        val s = sources.firstOrNull { it.id == id }
+                        if (s != null) {
                         item { SourceDetailContent(s, projects, onOpenReader) }
                         item { SourceActionPanel(s, projects, viewModel, onOpenDetail) }
                         item { BacklinksPanel(buildList {
@@ -195,31 +212,44 @@ fun SharedTransitionScope.DetailScreen(
                             flashcards.filter { it.sourceId == s.id }.forEach { add(Triple("flashcard", it.front, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "data" -> data.firstOrNull { it.id == id }?.let { d ->
+                    }
+                    "data" -> {
+                        val d = data.firstOrNull { it.id == id }
+                        if (d != null) {
                         item { DataRecordDetailContent(d) }
                         item { BacklinksPanel(buildList {
                             projects.firstOrNull { it.id == d.projectId }?.let { add(Triple("project", it.title, it.id)) }
                             observations.firstOrNull { it.id == d.observationId }?.let { add(Triple("observation", it.subject, it.id)) }
                         }, onOpenDetail) }
                     }
-                    "report" -> reports.firstOrNull { it.id == id }?.let { r ->
+                    }
+                    "report" -> {
+                        val r = reports.firstOrNull { it.id == id }
+                        if (r != null) {
                         item { ReportDetailContent(r) }
                         item { BacklinksPanel(buildList { projects.firstOrNull { it.id == r.projectId }?.let { add(Triple("project", it.title, it.id)) } }, onOpenDetail) }
                     }
-                    "flashcard" -> flashcards.firstOrNull { it.id == id }?.let { f ->
+                    }
+                    "flashcard" -> {
+                        val f = flashcards.firstOrNull { it.id == id }
+                        if (f != null) {
                         item { FlashcardDetailContent(f) }
                         item { BacklinksPanel(buildList {
                             sources.firstOrNull { it.id == f.sourceId }?.let { add(Triple("source", it.title, it.id)) }
                             projects.firstOrNull { it.id == f.projectId }?.let { add(Triple("project", it.title, it.id)) }
                         }, onOpenDetail) }
                     }
-"research_session" -> researchSessions.firstOrNull { it.id == id }?.let { session ->
+                    }
+"research_session" -> {
+                        val session = researchSessions.firstOrNull { it.id == id }
+                        if (session != null) {
                         val linkedObsIds = sessionObservationCrossRefs.filter { it.sessionId == session.id }.map { it.observationId }.toSet()
                         val linkedObservations = observations.filter { it.id in linkedObsIds }
                         item { ResearchSessionDetailContent(session, linkedObservations, onOpenDetail, onUnlink = { obsId -> viewModel.unlinkObservationFromSession(session.id, obsId) }) }
                         item { BacklinksPanel(buildList {
                             projects.firstOrNull { it.id == session.projectId }?.let { add(Triple("project", it.title, it.id)) }
                         }, onOpenDetail) }
+                    }
                     }
         }
     }
@@ -3659,4 +3689,3 @@ fun BacklinksPanel(links: List<Triple<String, String, Long>>, onOpenDetail: (Str
 }
 
 
-}
