@@ -1031,7 +1031,7 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         isWeatherFetching = true
         _weatherDiagnostics.value = WeatherDiagnosticState(isLoading = true, message = "Getting location for weather…", provider = fieldSettings.weatherProviders.value)
         val result = try {
-            val loc = provider.lastKnownLocation() ?: suspendCancellableCoroutine { cont ->
+            val loc = provider.lastKnownLocation() ?: suspendCancellableCoroutine<fieldmind.research.app.features.field.data.location.CapturedLocation?> { cont ->
                 provider.requestCurrentLocation(timeoutMs = 12_000L) { fresh ->
                     if (cont.isActive) cont.resume(fresh)
                 }

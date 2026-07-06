@@ -65,7 +65,7 @@ fun ExportPrivacyOptionsCard(
     Card(
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(0.dp)) {
             // ── Collapsible header: ▶ Privacy & encryption ──
