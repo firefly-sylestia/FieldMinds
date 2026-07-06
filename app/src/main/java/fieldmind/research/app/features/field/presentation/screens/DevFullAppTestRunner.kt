@@ -30,8 +30,15 @@ import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.data.security.LockSecurityPolicy
 import fieldmind.research.app.features.field.data.weather.OpenMeteoProvider
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
+import fieldmind.research.app.features.field.presentation.components.SecureFlagController
+import fieldmind.research.app.features.field.presentation.components.SecureFlagReason
+import fieldmind.research.app.features.field.presentation.components.shouldApplySecureFlag
+import fieldmind.research.app.features.field.presentation.navigation.FieldMindBackAction
+import fieldmind.research.app.features.field.presentation.navigation.fieldMindBackAction
+import fieldmind.research.app.features.field.presentation.navigation.fieldMindRouteMetadata
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
+import fieldmind.research.app.shared.data.model.AppSettings
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.*
@@ -39,6 +46,7 @@ import kotlinx.coroutines.flow.first
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import fieldmind.research.app.util.CrashReporter
 
 // ══════════════════════════════════════════════════════════════════════
 //  Test Result Data
@@ -100,6 +108,18 @@ private data class TestRunReport(
         appendLine("═══════════════════════════════════")
         appendLine("  Device: ${Build.MANUFACTURER} ${Build.MODEL} (API ${Build.VERSION.SDK_INT})")
         appendLine("═══════════════════════════════════")
+        appendLine()
+        appendLine("Crash coverage note:")
+        appendLine("Captured: uncaught JVM exceptions that reach the default handler.")
+        appendLine("Not captured here: ANRs, native crashes, process kills, swallowed exceptions, and non-crashing UI clipping/visual bugs.")
+        appendLine()
+        appendLine("Manual UI checklist (device required):")
+        appendLine("[ ] Bottom-nav Back returns to Today and keeps content/indicator in sync")
+        appendLine("[ ] Quick actions do not overlap nearby content")
+        appendLine("[ ] Live weather details do not clip at large font sizes")
+        appendLine("[ ] Rain particles are visible and rain clouds loop smoothly")
+        appendLine("[ ] Screenshot blocking off allows screenshots")
+        appendLine("[ ] Dark-mode cards/nav have visible depth")
     }
 
     private fun formatTimestamp(millis: Long): String {
@@ -131,6 +151,8 @@ fun DevFullAppTestRunner(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val appSettings = remember(context) { AppSettings.getInstance(context) }
+    val persistedReports by appSettings.devTestReportHistory.collectAsState()
 
     var isRunning by remember { mutableStateOf(false) }
     var report by remember { mutableStateOf(TestRunReport()) }
@@ -218,6 +240,20 @@ fun DevFullAppTestRunner(
                 }
             }
 
+
+            if (!report.isComplete && persistedReports.isNotEmpty()) {
+                Surface(
+                    shape = RoundedCornerShape(18.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text("Latest saved report is available", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
+                        Text("Reports persist after leaving this screen. Copy or share the latest saved report below.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+
             // ── Run / Share buttons ──
             Row(
                 Modifier.fillMaxWidth(),
@@ -245,6 +281,7 @@ fun DevFullAppTestRunner(
                                         completedAt = System.currentTimeMillis()
                                     )
                                     report = completedReport
+                                    appSettings.addDevTestReport(completedReport.toShareableText())
                                     progressText = "Done — ${completedReport.passedTests}/${completedReport.totalTests} passed"
                                 } catch (e: CancellationException) {
                                     errorMessage = "Test runner cancelled"
@@ -329,6 +366,27 @@ fun DevFullAppTestRunner(
                     ) {
                         Icon(FieldMindIcons.Share, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
                     }
+                }
+            }
+
+
+            if (persistedReports.isNotEmpty()) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = {
+                            val latest = persistedReports.last().report
+                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            clipboard.setPrimaryClip(ClipData.newPlainText("FieldMind Latest Test Report", latest))
+                            Toast.makeText(context, "Latest saved report copied", Toast.LENGTH_SHORT).show()
+                        },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(22.dp)
+                    ) { Text("Copy latest", fontWeight = FontWeight.SemiBold) }
+                    OutlinedButton(
+                        onClick = { appSettings.clearDevTestReports() },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(22.dp)
+                    ) { Text("Clear reports", fontWeight = FontWeight.SemiBold) }
                 }
             }
 
@@ -614,6 +672,23 @@ private suspend fun runAllTests(
         tabRoutes.forEach { r -> assert(r.isNotBlank()) { "Tab route is blank" } }
     }
 
+    runTest(results, "Navigation & Tabs", "Device Back on tabs returns to Today") {
+        listOf(1, 2, 3, 4).forEach { index ->
+            assert(fieldMindBackAction("field_tab_container", index) == FieldMindBackAction.ReturnToHomeTab) { "Tab $index should return to Today" }
+        }
+        assert(fieldMindBackAction("field_tab_container", 0) == FieldMindBackAction.AllowSystemExit) { "Today should allow system Back" }
+    }
+
+    runTest(results, "Navigation & Tabs", "Subpage Back has safe home fallback") {
+        assert(fieldMindBackAction("field_settings", 0, canPopSubPage = true) == FieldMindBackAction.PopSubPage) { "Subpage should pop when possible" }
+        assert(fieldMindBackAction("field_settings", 0, canPopSubPage = false) == FieldMindBackAction.NavigateHomeFallback) { "Failed pop should navigate home" }
+    }
+
+    runTest(results, "Navigation & Tabs", "Placeholder routes are reported") {
+        val placeholders = fieldMindRouteMetadata.filter { it.status == "placeholder" }
+        assert(placeholders.map { it.route }.containsAll(listOf("field_hypotheses", "field_analysis", "field_progress"))) { "Expected placeholder route metadata missing" }
+    }
+
     runTest(results, "Navigation & Tabs", "All settings screens have routes") {
         val routes = listOf(
             "field_settings", "field_settings_profile",
@@ -892,6 +967,14 @@ private suspend fun runAllTests(
         settings.setScreenCaptureProtectionEnabled(original)
     }
 
+    runTest(results, "Security & Privacy", "Screenshot secure-flag policy is explicit") {
+        assert(!shouldApplySecureFlag(false, "Normal")) { "Screenshots should be allowed when blocking is off" }
+        assert(shouldApplySecureFlag(true, "Normal")) { "Screenshots should be blocked when setting is on" }
+        assert(!shouldApplySecureFlag(false, "Blur")) { "Preview mode must not silently keep screenshots blocked" }
+        assert(SecureFlagController.shouldSecureForReasons(setOf(SecureFlagReason.SensitiveScreen))) { "Sensitive screen reason should secure" }
+        assert(!SecureFlagController.shouldSecureForReasons(emptySet())) { "No reasons should allow screenshots" }
+    }
+
     runTest(results, "Security & Privacy", "Clipboard auto-cleanup toggles") {
         val original = settings.clipboardAutoCleanupEnabled.value
         settings.setClipboardAutoCleanupEnabled(true)
@@ -1061,6 +1144,19 @@ private suspend fun runAllTests(
         val appSettings = fieldmind.research.app.shared.data.model.AppSettings.getInstance(context)
         val logs = appSettings.crashLogHistory.first()
         assert(logs != null) { "Crash log history returned null" }
+    }
+
+    runTest(results, "Error Handling", "Synthetic crash report persists") {
+        val appSettings = AppSettings.getInstance(context)
+        val log = CrashReporter.buildCrashLog(Thread.currentThread(), IllegalStateException("Synthetic tester crash report"))
+        appSettings.addCrashLogEntry(log)
+        val latest = appSettings.crashLogHistory.first().lastOrNull()?.log.orEmpty()
+        assert(latest.contains("Synthetic tester crash report")) { "Synthetic crash report did not persist" }
+    }
+
+    runTest(results, "Error Handling", "Crash coverage is documented") {
+        val reportText = TestRunReport(startedAt = 1L, completedAt = 2L).toShareableText()
+        assert(reportText.contains("Not captured here: ANRs")) { "Crash coverage limitation missing" }
     }
 
     runTest(results, "Error Handling", "Data integrity check toggles") {

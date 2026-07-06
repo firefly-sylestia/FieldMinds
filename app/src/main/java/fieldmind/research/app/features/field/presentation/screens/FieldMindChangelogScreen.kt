@@ -44,6 +44,36 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.44.0 — Stability Tester, Navigation, Screenshots & Weather UI ──
+        FieldMindChangelogEntry(
+            version = "0.44.0",
+            date = "2026-07-06",
+            title = "🧭 Stability Tester, Navigation, Screenshots & Weather UI",
+            importance = "Major",
+            tags = listOf("🧭", "🧪", "📸", "🌧️", "🌙"),
+            sections = listOf(
+                "🧭 Navigation & device Back" to listOf(
+                    "✓ Bottom-tab Back now returns Projects/Insights/Library to Today before exiting",
+                    "✓ Subpage Back uses a safe home fallback if the back stack cannot pop",
+                    "✓ Developer diagnostics now test tab Back behavior and placeholder route metadata"
+                ),
+                "🧪 Persistent developer reports" to listOf(
+                    "✓ Test reports are saved to durable app settings so they remain after leaving Developer Settings",
+                    "✓ Reports now include crash coverage limits and a manual UI checklist",
+                    "✓ Added synthetic crash persistence and screenshot policy checks"
+                ),
+                "📸 Screenshot control" to listOf(
+                    "✓ Screenshot blocking is now controlled by the explicit screenshot toggle instead of preview mode",
+                    "✓ Secure-window ownership is reason based so sensitive screens and global settings do not fight each other"
+                ),
+                "🌧️ Weather polish" to listOf(
+                    "✓ Live weather card gets a stable viewport, real padding, and stronger dark-mode elevation",
+                    "✓ Quick actions now use a stable layout wrapper to prevent overlap",
+                    "✓ Rain scenes pre-seed particles and draw fallback streaks for immediate visibility"
+                )
+            )
+        ),
+
         // ── v0.43.1 — CI Compilation Fix ──
         FieldMindChangelogEntry(
             version = "0.43.1",
