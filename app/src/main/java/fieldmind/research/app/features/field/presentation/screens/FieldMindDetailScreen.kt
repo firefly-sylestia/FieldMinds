@@ -416,7 +416,7 @@ fun ObservationDetailContent(
 }
 
 @Composable
-private fun ReObservationLink(
+fun ReObservationLink(
     o: ObservationEntity,
     viewModel: FieldMindViewModel,
     onOpenDetail: (String, Long) -> Unit
@@ -484,7 +484,7 @@ private fun ReObservationLink(
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-private fun ObservationSpeciesInfoSection(
+fun ObservationSpeciesInfoSection(
     o: ObservationEntity,
     viewModel: FieldMindViewModel
 ) {
@@ -630,7 +630,7 @@ private data class SpeciesInfoData(
 )
 
 @Composable
-private fun InfoRow(label: String, value: String) {
+fun InfoRow(label: String, value: String) {
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -647,7 +647,7 @@ private fun InfoRow(label: String, value: String) {
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-private fun ObservationBehaviorSection(
+fun ObservationBehaviorSection(
     o: ObservationEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -750,7 +750,7 @@ private fun ObservationBehaviorSection(
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-private fun ObservationStructuredDetailsSection(
+fun ObservationStructuredDetailsSection(
     o: ObservationEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -890,7 +890,7 @@ private data class StructuredDetailsData(
 // ══════��═══════════════════════════════════════════════════════════════
 
 @Composable
-private fun QualityScoreCard(score: Int) {
+fun QualityScoreCard(score: Int) {
     val colors = FieldMindTheme.colors
     val scoreColor = when {
         score >= 80 -> colors.positive
@@ -938,7 +938,7 @@ private data class BehaviorData(
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun ObservationEvidenceCountsRow(
+fun ObservationEvidenceCountsRow(
     viewModel: FieldMindViewModel,
     observationId: Long
 ) {
@@ -975,7 +975,7 @@ private fun ObservationEvidenceCountsRow(
     }}
 
 @Composable
-private fun EvidenceCountItem(
+fun EvidenceCountItem(
     label: String,
     count: Int,
     icon: MaterialSymbolIcon,
@@ -1005,7 +1005,7 @@ private fun EvidenceCountItem(
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun ObservationWeatherLocationSection(
+fun ObservationWeatherLocationSection(
     o: ObservationEntity,
     viewModel: FieldMindViewModel,
     tempUnit: String,
@@ -1096,7 +1096,7 @@ private fun ObservationWeatherLocationSection(
     }}
 
 @Composable
-private fun WeatherDetailRow(label: String, value: String) {
+fun WeatherDetailRow(label: String, value: String) {
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -1112,7 +1112,7 @@ private fun WeatherDetailRow(label: String, value: String) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun ObservationAiAnalysisCard(
+fun ObservationAiAnalysisCard(
     o: ObservationEntity,
     viewModel: FieldMindViewModel
 ) {
@@ -1208,7 +1208,7 @@ private data class AiAnalysisData(
 // ══════════════���═══════════════════════════════════════════════════════
 
 @Composable
-private fun ObservationExportSection(
+fun ObservationExportSection(
     o: ObservationEntity,
     viewModel: FieldMindViewModel,
     context: android.content.Context,
@@ -1332,7 +1332,7 @@ private fun ObservationExportSection(
     }}
 
 @Composable
-private fun WeatherChip(text: String, color: androidx.compose.ui.graphics.Color) {
+fun WeatherChip(text: String, color: androidx.compose.ui.graphics.Color) {
     Box(
         Modifier
             .clip(RoundedCornerShape(16.dp))
@@ -1344,7 +1344,7 @@ private fun WeatherChip(text: String, color: androidx.compose.ui.graphics.Color)
     }}
 
 @Composable
-private fun ProvenanceRow(label: String, value: String) {
+fun ProvenanceRow(label: String, value: String) {
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -1355,12 +1355,12 @@ private fun ProvenanceRow(label: String, value: String) {
     }
 }
 
-private fun formatTimestamp(millis: Long): String {
+fun formatTimestamp(millis: Long): String {
     val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
     return sdf.format(java.util.Date(millis))
 }
 
-private fun formatDuration(millis: Long): String {
+fun formatDuration(millis: Long): String {
     val totalSec = millis / 1000
     val hours = totalSec / 3600
     val minutes = (totalSec % 3600) / 60
@@ -1372,7 +1372,7 @@ private fun formatDuration(millis: Long): String {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId: Long, onOpenReader: (String, String) -> Unit) {
+fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId: Long, onOpenReader: (String, String) -> Unit) {
     val attachments by viewModel.attachmentsForObservation(observationId).collectAsState(initial = emptyList())
     val media = attachments.filter { it.type.equals("Photo", true) || it.type.equals("Gallery", true) || uriLooksImage(it.uri) || uriLooksImage(it.localPath.orEmpty()) }
     if (media.isEmpty()) return
@@ -1455,7 +1455,7 @@ private fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId
 }
 
 @Composable
-private fun ObsStatItem(value: String, label: String, icon: MaterialSymbolIcon) {
+fun ObsStatItem(value: String, label: String, icon: MaterialSymbolIcon) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Icon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 18.dp)
         Text(value, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1464,7 +1464,7 @@ private fun ObsStatItem(value: String, label: String, icon: MaterialSymbolIcon) 
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun NoteDetailContent(
+fun NoteDetailContent(
     n: NoteEntity,
     onOpenDetail: (String, Long) -> Unit,
     onOpenCanvas: ((Long) -> Unit)? = null
@@ -1539,7 +1539,7 @@ private fun NoteDetailContent(
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-private fun QuestionDetailContent(
+fun QuestionDetailContent(
     qn: QuestionEntity,
     hypotheses: List<HypothesisEntity>,
     onSaveAnswer: (String) -> Unit
@@ -1603,7 +1603,7 @@ private fun QuestionDetailContent(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun HypothesisDetailContent(
+fun HypothesisDetailContent(
     h: HypothesisEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -1679,7 +1679,7 @@ private fun HypothesisDetailContent(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ProjectDetailContent(
+fun ProjectDetailContent(
     p: ProjectEntity,
     observations: List<ObservationEntity>,
     questions: List<QuestionEntity>,
@@ -1892,7 +1892,7 @@ private fun ProjectDetailContent(
 
 // ── Quick-add dialogs for project tabs ──
 @Composable
-private fun ProjectQuickAddDialogs(
+fun ProjectQuickAddDialogs(
     projectId: Long,
     showQuestion: Boolean,
     showObservation: Boolean,
@@ -1925,7 +1925,7 @@ private fun ProjectQuickAddDialogs(
 // ── Quick-add dialog for creating observations linked to the current project ──
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ObservationQuickAddDialog(
+fun ObservationQuickAddDialog(
     projectId: Long,
     viewModel: FieldMindViewModel,
     onDismiss: () -> Unit
@@ -2022,7 +2022,7 @@ private fun ObservationQuickAddDialog(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
+fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
     val colors = FieldMindTheme.colors
     val haptics = rememberFieldMindHaptics()
     var showForm by remember { mutableStateOf(false) }
@@ -2245,7 +2245,7 @@ private fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewMode
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
+fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
     val colors = FieldMindTheme.colors
     val haptics = rememberFieldMindHaptics()
     var showForm by remember { mutableStateOf(false) }
@@ -2436,7 +2436,7 @@ private fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) 
 }
 
 @Composable
-private fun ProjectStatTile(value: String, label: String, color: androidx.compose.ui.graphics.Color) {
+fun ProjectStatTile(value: String, label: String, color: androidx.compose.ui.graphics.Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Text(value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = color)
         Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -2444,7 +2444,7 @@ private fun ProjectStatTile(value: String, label: String, color: androidx.compos
 }
 
 @Composable
-private fun DataRecordDetailContent(
+fun DataRecordDetailContent(
     d: DataRecordEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -2504,7 +2504,7 @@ private fun DataRecordDetailContent(
 }
 
 @Composable
-private fun ReportDetailContent(
+fun ReportDetailContent(
     r: ReportEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -2570,7 +2570,7 @@ private fun ReportDetailContent(
 }
 
 @Composable
-private fun FlashcardDetailContent(
+fun FlashcardDetailContent(
     f: FlashcardEntity
 ) {
     val colors = FieldMindTheme.colors
@@ -2629,7 +2629,7 @@ private fun FlashcardDetailContent(
 
 
 @Composable
-private fun ResearchSessionDetailContent(
+fun ResearchSessionDetailContent(
     session: ResearchSessionEntity,
     observations: List<ObservationEntity>,
     onOpenDetail: (String, Long) -> Unit,
@@ -2716,7 +2716,7 @@ private fun ResearchSessionDetailContent(
 }
 
 @Composable
-private fun DetailRow(label: String, value: String) {
+fun DetailRow(label: String, value: String) {
     if (value.isBlank()) return
     Row(
         Modifier.fillMaxWidth(),
@@ -2729,7 +2729,7 @@ private fun DetailRow(label: String, value: String) {
 }
 
 @Composable
-private fun AssetCountChip(label: String, count: Int, icon: MaterialSymbolIcon, color: androidx.compose.ui.graphics.Color) {
+fun AssetCountChip(label: String, count: Int, icon: MaterialSymbolIcon, color: androidx.compose.ui.graphics.Color) {
     Row(
         Modifier.clip(RoundedCornerShape(99.dp)).background(color.copy(alpha = 0.12f)).padding(horizontal = 10.dp, vertical = 7.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -2741,7 +2741,7 @@ private fun AssetCountChip(label: String, count: Int, icon: MaterialSymbolIcon, 
 }
 
 @Composable
-private fun StatusChip(status: String, color: androidx.compose.ui.graphics.Color) {
+fun StatusChip(status: String, color: androidx.compose.ui.graphics.Color) {
     Row(
         Modifier
             .clip(RoundedCornerShape(16.dp))
@@ -2760,7 +2760,7 @@ private fun StatusChip(status: String, color: androidx.compose.ui.graphics.Color
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
+fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
     val haptics = rememberFieldMindHaptics()
     Row(
         Modifier
@@ -2787,7 +2787,7 @@ private fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Unit) {
+fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Unit) {
     var editing by remember(question.id, question.answer) { mutableStateOf(question.answer.isBlank()) }
     var draft by remember(question.id) { mutableStateOf(question.answer) }
     Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
@@ -2812,7 +2812,7 @@ private fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Uni
     }
 }
 
-private fun sharePlainText(context: Context, text: String) {
+fun sharePlainText(context: Context, text: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/markdown"
         putExtra(Intent.EXTRA_TEXT, text)
@@ -2821,7 +2821,7 @@ private fun sharePlainText(context: Context, text: String) {
 }
 
 @Composable
-private fun ConfirmDeleteDialog(kind: String, onDismiss: () -> Unit, onConfirm: () -> Unit) {
+fun ConfirmDeleteDialog(kind: String, onDismiss: () -> Unit, onConfirm: () -> Unit) {
     val haptics = rememberFieldMindHaptics()
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -2837,7 +2837,7 @@ private fun ConfirmDeleteDialog(kind: String, onDismiss: () -> Unit, onConfirm: 
  * Reverse-map a weather condition description back to a WMO code for the animated icon.
  * Uses the observation's temperature to differentiate freezing vs regular rain/snow.
  */
-private fun weatherDescriptionToCode(condition: String, temp: Double?): Int {
+fun weatherDescriptionToCode(condition: String, temp: Double?): Int {
     val c = condition.lowercase()
     return when {
         c.contains("clear") || c.contains("mainly clear") || c.isBlank() -> 0
@@ -2864,7 +2864,7 @@ private fun weatherDescriptionToCode(condition: String, temp: Double?): Int {
     }
 }
 
-private fun deleteEntityByKind(kind: String, id: Long, viewModel: FieldMindViewModel) {
+fun deleteEntityByKind(kind: String, id: Long, viewModel: FieldMindViewModel) {
     when (kind) {
         "observation" -> viewModel.deleteObservation(id)
         "note" -> viewModel.deleteNote(id)
@@ -2884,7 +2884,7 @@ private fun deleteEntityByKind(kind: String, id: Long, viewModel: FieldMindViewM
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun SourceDetailContent(
+fun SourceDetailContent(
     s: SourceEntity,
     projects: List<ProjectEntity>,
     onOpenReader: (String, String) -> Unit
@@ -2983,7 +2983,7 @@ private fun SourceDetailContent(
 }
 
 @Composable
-private fun DetailBody(title: String, kind: String, fields: List<Pair<String, String>>) {
+fun DetailBody(title: String, kind: String, fields: List<Pair<String, String>>) {
     Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -3001,7 +3001,7 @@ private fun DetailBody(title: String, kind: String, fields: List<Pair<String, St
 }
 
 @Composable
-private fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity>, viewModel: FieldMindViewModel, onOpenDetail: (String, Long) -> Unit) {
+fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity>, viewModel: FieldMindViewModel, onOpenDetail: (String, Long) -> Unit) {
     val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
     val clipboard = LocalClipboardManager.current
@@ -3096,7 +3096,7 @@ private fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity
 }
 
 @Composable
-private fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observationId: Long, onOpenReader: (String, String) -> Unit = { _, _ -> }) {
+fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observationId: Long, onOpenReader: (String, String) -> Unit = { _, _ -> }) {
     val attachments by viewModel.attachmentsForObservation(observationId).collectAsState(initial = emptyList())
     if (attachments.isEmpty()) return
     val images = attachments.filter { it.type.equals("Photo", true) || it.type.equals("Gallery", true) || it.uri.contains(Regex("\\.(jpg|jpeg|png|webp|gif|heic|bmp)", RegexOption.IGNORE_CASE)) }
@@ -3175,7 +3175,7 @@ private fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observati
     }
 }
 @Composable
-private fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, String) -> Unit) {
+fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, String) -> Unit) {
     val target = source.fileUri.ifBlank { source.link }
     if (target.isBlank()) return
     var showImageViewer by remember { mutableStateOf(false) }
@@ -3201,7 +3201,7 @@ private fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, Stri
 }
 
 @Composable
-private fun AttachmentOpenRow(uri: String, title: String, type: String, onOpenReader: (String, String) -> Unit) {
+fun AttachmentOpenRow(uri: String, title: String, type: String, onOpenReader: (String, String) -> Unit) {
     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).clickable { onOpenReader(uri, title) }.background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Icon(icon = if (type.equals("Image", true) || type.equals("Gallery", true) || type.equals("Photo", true) || uriLooksImage(uri)) FieldMindIcons.Gallery else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
         Column(Modifier.weight(1f)) {
@@ -3213,7 +3213,7 @@ private fun AttachmentOpenRow(uri: String, title: String, type: String, onOpenRe
 }
 
 @Composable
-private fun BacklinksPanel(links: List<Triple<String, String, Long>>, onOpenDetail: (String, Long) -> Unit) {
+fun BacklinksPanel(links: List<Triple<String, String, Long>>, onOpenDetail: (String, Long) -> Unit) {
     if (links.isEmpty()) return
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -3227,3 +3227,5 @@ private fun BacklinksPanel(links: List<Triple<String, String, Long>>, onOpenDeta
     }
 }
 
+
+}
