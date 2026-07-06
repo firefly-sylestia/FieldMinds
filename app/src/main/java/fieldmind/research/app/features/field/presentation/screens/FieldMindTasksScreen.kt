@@ -50,6 +50,7 @@ import fieldmind.research.app.ui.theme.CuteElevations
 //  TASKS SCREEN — Full task management with sections and filtering
 // ══════════════════════════════════════════════════════════════════════
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TasksScreen(
     viewModel: FieldMindViewModel,
@@ -62,34 +63,51 @@ fun TasksScreen(
 
     // Track checked-off tasks locally for optimistic UI
     val completedTaskIds = remember { mutableStateMapOf<Long, Boolean>() }
+    val projects by viewModel.projects.collectAsState()
+
+    // ── Filter state ──
+    var filterStatus by remember { mutableStateOf<String?>(null) } // null = all, "Pending", "Done"
+    var filterPriority by remember { mutableStateOf<String?>(null) } // null = all, "High", "Medium", "Low"
+    var filterProjectId by remember { mutableStateOf<Long?>(null) } // null = all projects
+    var showFilterSheet by remember { mutableStateOf(false) }
+    val hasActiveFilters = filterStatus != null || filterPriority != null || filterProjectId != null
+
+    // Apply filters to a list of tasks
+    fun applyFilters(taskList: List<TaskEntity>): List<TaskEntity> {
+        return taskList.filter { t ->
+            (filterStatus == null || t.status == filterStatus) &&
+            (filterPriority == null || t.priority == filterPriority) &&
+            (filterProjectId == null || t.projectId == filterProjectId)
+        }
+    }
 
     // ── Compute sections ──
     val todayDate = remember {
         SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(System.currentTimeMillis()))
     }
 
-    val todayTasks = remember(tasks, completedTaskIds) {
-        tasks.filter { t ->
+    val todayTasks = remember(tasks, completedTaskIds, filterStatus, filterPriority, filterProjectId) {
+        applyFilters(tasks.filter { t ->
             t.dueDate == todayDate && t.status != "Done" && completedTaskIds[t.id] != true
-        }.sortedBy { it.priority }
+        }).sortedBy { it.priority }
     }
 
-    val upcomingTasks = remember(tasks, completedTaskIds) {
-        tasks.filter { t ->
+    val upcomingTasks = remember(tasks, completedTaskIds, filterStatus, filterPriority, filterProjectId) {
+        applyFilters(tasks.filter { t ->
             t.dueDate.isNotBlank() && t.dueDate != todayDate && t.status != "Done" && completedTaskIds[t.id] != true
-        }.sortedBy { it.dueDate }
+        }).sortedBy { it.dueDate }
     }
 
-    val unscheduledTasks = remember(tasks, completedTaskIds) {
-        tasks.filter { t ->
+    val unscheduledTasks = remember(tasks, completedTaskIds, filterStatus, filterPriority, filterProjectId) {
+        applyFilters(tasks.filter { t ->
             t.dueDate.isBlank() && t.status != "Done" && completedTaskIds[t.id] != true
-        }.sortedByDescending { it.updatedAt }
+        }).sortedByDescending { it.updatedAt }
     }
 
-    val doneTasks = remember(tasks, completedTaskIds) {
-        tasks.filter { t ->
+    val doneTasks = remember(tasks, completedTaskIds, filterStatus, filterPriority, filterProjectId) {
+        applyFilters(tasks.filter { t ->
             t.status == "Done" || completedTaskIds[t.id] == true
-        }.sortedByDescending { it.updatedAt }
+        }).sortedByDescending { it.updatedAt }
     }
 
     // ── Section expand state ──
@@ -97,6 +115,91 @@ fun TasksScreen(
     var expandedUpcoming by remember { mutableStateOf(true) }
     var expandedUnscheduled by remember { mutableStateOf(false) }
     var expandedDone by remember { mutableStateOf(false) }
+
+    // ── Filter bottom sheet ──
+    if (showFilterSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showFilterSheet = false },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
+        ) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 32.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                Text("Filter tasks", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+
+                // Status filter
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Status", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        listOf("All", "Pending", "Done").forEach { status ->
+                            FilterChip(
+                                selected = (status == "All" && filterStatus == null) || filterStatus == status,
+                                onClick = { filterStatus = if (status == "All") null else status },
+                                label = { Text(status) }
+                            )
+                        }
+                    }
+                }
+
+                // Priority filter
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Priority", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        listOf("All", "High", "Medium", "Low").forEach { priority ->
+                            FilterChip(
+                                selected = (priority == "All" && filterPriority == null) || filterPriority == priority,
+                                onClick = { filterPriority = if (priority == "All") null else priority },
+                                label = { Text(priority) }
+                            )
+                        }
+                    }
+                }
+
+                // Project filter
+                if (projects.isNotEmpty()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("Project", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            FilterChip(
+                                selected = filterProjectId == null,
+                                onClick = { filterProjectId = null },
+                                label = { Text("All projects") }
+                            )
+                            projects.forEach { project ->
+                                FilterChip(
+                                    selected = filterProjectId == project.id,
+                                    onClick = { filterProjectId = project.id },
+                                    label = { Text(project.title.take(15)) }
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Clear filters
+                if (hasActiveFilters) {
+                    TextButton(
+                        onClick = {
+                            filterStatus = null
+                            filterPriority = null
+                            filterProjectId = null
+                            showFilterSheet = false
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(MaterialSymbolIcon("clear"), null, size = 16.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Clear all filters")
+                    }
+                }
+            }
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -114,8 +217,34 @@ fun TasksScreen(
                 icon = MaterialSymbolIcon("checklist"),
                 heroColor = FieldMindTheme.colors.flashcard,
                 trailing = {
-                    IconButton(onClick = { onNavigate("field_new_task") }, modifier = Modifier.size(40.dp)) {
-                        Icon(MaterialSymbolIcon("add"), "Add task", size = 22.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        // Filter button (with active indicator)
+                        IconButton(
+                            onClick = { showFilterSheet = true },
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Box {
+                                Icon(
+                                    MaterialSymbolIcon("filter_list"),
+                                    "Filter tasks",
+                                    size = 22.dp,
+                                    tint = if (hasActiveFilters) FieldMindTheme.colors.positive
+                                           else MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                if (hasActiveFilters) {
+                                    Box(
+                                        Modifier
+                                            .align(Alignment.TopEnd)
+                                            .size(8.dp)
+                                            .clip(CircleShape)
+                                            .background(FieldMindTheme.colors.positive)
+                                    )
+                                }
+                            }
+                        }
+                        IconButton(onClick = { onNavigate("field_new_task") }, modifier = Modifier.size(40.dp)) {
+                            Icon(MaterialSymbolIcon("add"), "Add task", size = 22.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                 }
             )

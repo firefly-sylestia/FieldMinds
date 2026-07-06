@@ -2447,6 +2447,25 @@ fun ProjectStatTile(value: String, label: String, color: androidx.compose.ui.gra
 fun DataRecordDetailContent(
     d: DataRecordEntity
 ) {
+    // Dispatch to tool-specific detail composable based on toolType
+    when (d.toolType) {
+        "Counter" -> CounterDetailContent(d)
+        "Measurement Log" -> MeasurementDetailContent(d)
+        "Weather Log" -> WeatherLogDetailContent(d)
+        "Checklist" -> ChecklistDetailContent(d)
+        "Comparison Table" -> ComparisonDetailContent(d)
+        "Event Log" -> EventLogDetailContent(d)
+        "Site Log" -> SiteLogDetailContent(d)
+        else -> GenericDataRecordDetailContent(d)
+    }
+}
+
+
+// ── Generic fallback (original detail card) ──
+@Composable
+fun GenericDataRecordDetailContent(
+    d: DataRecordEntity
+) {
     val colors = FieldMindTheme.colors
     Card(
         shape = RoundedCornerShape(34.dp),
@@ -2454,7 +2473,6 @@ fun DataRecordDetailContent(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
                     Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
@@ -2466,10 +2484,7 @@ fun DataRecordDetailContent(
                     InfoChip(d.toolType, icon = FieldMindIcons.Data)
                 }
             }
-
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-
-            // Value display (prominent)
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
@@ -2485,21 +2500,450 @@ fun DataRecordDetailContent(
                     Text(d.toolType, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-
-            // Location
             if (d.location.isNotBlank()) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
                     Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-
-            // Notes
             if (d.notes.isNotBlank()) {
                 Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(d.notes, style = MaterialTheme.typography.bodyMedium)
             }
         }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Tool-Specific Data Record Detail Composables
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun CounterDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.data.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Add, null, tint = colors.data, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Counter tally" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    InfoChip(d.toolType, icon = FieldMindIcons.Add)
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        d.value,
+                        style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold),
+                        color = colors.data
+                    )
+                    Text("Count", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            if (d.notes.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(d.notes, style = MaterialTheme.typography.bodyMedium)
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun MeasurementDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.data.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Graph, null, tint = colors.data, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Measurement" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    InfoChip(d.toolType, icon = FieldMindIcons.Graph)
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        "${d.value} ${d.unit}".trim(),
+                        style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+                        color = colors.data
+                    )
+                    if (d.unit.isNotBlank()) {
+                        Text("Unit: ${d.unit}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+            if (d.location.isNotBlank()) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                    Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            if (d.notes.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(d.notes, style = MaterialTheme.typography.bodyMedium)
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun WeatherLogDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    val temp = d.value.substringBefore("°").substringBefore(" ").toDoubleOrNull()
+    val components = d.value.split("|").map { it.trim() }
+    val humidity = components.firstOrNull { it.contains("%") }?.substringBefore("%")?.trim()?.toIntOrNull()
+    val wind = components.firstOrNull { it.contains("km/h") }?.substringBefore("km/h")?.trim()?.toDoubleOrNull()
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.info.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Weather, null, tint = colors.info, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Weather log" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    InfoChip(d.toolType, icon = FieldMindIcons.Weather)
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Surface(
+                shape = RoundedCornerShape(28.dp),
+                color = colors.info.copy(alpha = 0.08f),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    if (temp != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("${d.value.takeWhile { it != '\'' }}°", style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold), color = colors.info)
+                            Text("Temp", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                    if (humidity != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("${humidity}%", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = colors.info)
+                            Text("Humidity", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                    if (wind != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("${wind.toInt()}", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = colors.info)
+                            Text("Wind km/h", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+            }
+            if (d.location.isNotBlank()) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                    Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            if (d.notes.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(d.notes, style = MaterialTheme.typography.bodyMedium)
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun ChecklistDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    val items = d.value.split(";").map { it.trim() }.filter { it.isNotBlank() }
+    val checkedItems = items.filter { it.startsWith("\u2713") }
+    val totalItems = items.size
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.positive.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Check, null, tint = colors.positive, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Checklist" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        InfoChip("${checkedItems.size}/$totalItems checked", icon = FieldMindIcons.Check)
+                        InfoChip(d.toolType, icon = FieldMindIcons.Check)
+                    }
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            if (totalItems > 0) {
+                LinearProgressIndicator(
+                    progress = { checkedItems.size.toFloat() / totalItems },
+                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(6.dp)),
+                    color = colors.positive,
+                    trackColor = colors.positive.copy(alpha = 0.12f)
+                )
+            }
+            if (items.isNotEmpty()) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items.forEach { item ->
+                        val isChecked = item.startsWith("\u2713")
+                        val text = item.removePrefix("\u2713 ").removePrefix("\u25CB ")
+                        Row(
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(
+                                if (isChecked) colors.positive.copy(alpha = 0.06f)
+                                else MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.3f)
+                            ).padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Icon(
+                                if (isChecked) MaterialSymbolIcon("check_circle", filled = true) else MaterialSymbolIcon("radio_button_unchecked"),
+                                null,
+                                tint = if (isChecked) colors.positive else MaterialTheme.colorScheme.onSurfaceVariant,
+                                size = 20.dp
+                            )
+                            Text(
+                                text,
+                                style = MaterialTheme.typography.bodyMedium,
+                                textDecoration = if (isChecked) TextDecoration.LineThrough else TextDecoration.None,
+                                color = if (isChecked) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+            }
+            if (d.notes.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Text("Notes", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(d.notes, style = MaterialTheme.typography.bodyMedium)
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun ComparisonDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    val rows = d.value.split(";").map { it.trim() }.filter { it.isNotBlank() }
+    val columnCount = try {
+        val match = Regex("(\\d+)\\s*columns?").find(d.notes)
+        match?.groupValues?.get(1)?.toIntOrNull() ?: 2
+    } catch (_: Exception) { 2 }
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.data.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Data, null, tint = colors.data, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Comparison table" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        InfoChip("${rows.size} rows", icon = FieldMindIcons.Data)
+                        InfoChip(d.toolType, icon = FieldMindIcons.Data)
+                    }
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            if (rows.isNotEmpty()) {
+                Surface(
+                    shape = RoundedCornerShape(24.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        rows.forEach { row ->
+                            val label = row.substringBefore(":")
+                            val values = row.substringAfter(":").split("vs").map { it.trim() }
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(label, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(0.3f))
+                                values.forEachIndexed { i, v ->
+                                    Surface(
+                                        shape = RoundedCornerShape(12.dp),
+                                        color = if (i == 0) colors.data.copy(alpha = 0.1f) else colors.observation.copy(alpha = 0.1f)
+                                    ) {
+                                        Text(v, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun EventLogDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    val categoryFromValue = d.value.substringBefore(" |")
+    val dateFromValue = d.value.substringAfter("| ")
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.hypothesis.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.List, null, tint = colors.hypothesis, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Event" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (categoryFromValue.isNotBlank()) InfoChip(categoryFromValue, icon = FieldMindIcons.Category)
+                        InfoChip(d.toolType, icon = FieldMindIcons.List)
+                    }
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                if (dateFromValue.isNotBlank()) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Icon(FieldMindIcons.Calendar, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                        Text(dateFromValue, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+                if (d.notes.isNotBlank()) {
+                    val descriptionText = d.notes.substringBefore("\nDate:")
+                    Text(descriptionText, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+            if (d.location.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                    Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun SiteLogDetailContent(d: DataRecordEntity) {
+    val colors = FieldMindTheme.colors
+    val purposeFromValue = d.value.substringBefore(" | Duration:")
+    val durationPart = d.value.substringAfter("Duration: ")
+    val conditionsText = d.notes.substringAfter("Conditions: ").substringBefore("\nFindings:")
+    val findingsText = d.notes.substringAfter("Findings: ")
+
+    Card(
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.info.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) { Icon(FieldMindIcons.Map, null, tint = colors.info, size = 24.dp) }
+                Column(Modifier.weight(1f)) {
+                    Text(d.label.ifBlank { "Site visit" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (purposeFromValue.isNotBlank()) InfoChip(purposeFromValue, icon = FieldMindIcons.Info)
+                        InfoChip(d.toolType, icon = FieldMindIcons.Map)
+                    }
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                if (durationPart.isNotBlank() && durationPart != "N/A") {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Icon(FieldMindIcons.Calendar, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                        Text("Duration: $durationPart", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+                if (conditionsText.isNotBlank()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("Conditions", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(conditionsText, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+                if (findingsText.isNotBlank()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("Key findings", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(findingsText, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+            }
+            if (d.location.isNotBlank()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                    Text(d.location, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            DataRecordProvenance(d)
+        }
+    }
+}
+
+@Composable
+fun DataRecordProvenance(d: DataRecordEntity) {
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text("Record #${d.id}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(
+            java.text.SimpleDateFormat("MMM d, HH:mm", java.util.Locale.getDefault()).format(java.util.Date(d.timestamp)),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
