@@ -1,0 +1,1 @@
+Fixed 25 CI compilation errors: replaced raw Card(tonalElevation/shadowElevation) calls with InfoCard across Library, Species Browser, and Weather Database screens.\n

@@ -752,7 +752,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         if (record.habitat.isNotBlank()) {
-                            Card(
+                            InfoCard(
                                 shape = RoundedCornerShape(28.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
@@ -777,7 +777,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             }
                         }
                         if (record.diet.isNotBlank()) {
-                            Card(
+                            InfoCard(
                                 shape = RoundedCornerShape(28.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
@@ -969,7 +969,7 @@ private fun DetailSection(
     accent: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.primary,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Card(
+    InfoCard(
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,

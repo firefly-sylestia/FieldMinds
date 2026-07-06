@@ -44,6 +44,23 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.43.1 — CI Compilation Fix ──
+        FieldMindChangelogEntry(
+            version = "0.43.1",
+            date = "2026-07-06",
+            title = "🔧 CI Compilation Fix — Card tonalElevation",
+            importance = "Patch",
+            tags = listOf("🔧", "🐛", "⚡"),
+            sections = listOf(
+                "🔧 Card → InfoCard migration" to listOf(
+                    "✓ Replaced 25 raw `Card(tonalElevation=…, shadowElevation=…)` calls with `InfoCard` across 3 screen files",
+                    "✓ `Card` in current Material3 version doesn't support `tonalElevation`/`shadowElevation` params — those are `Surface`-only",
+                    "✓ `InfoCard` wraps `Surface` and properly accepts both elevation parameters",
+                    "✓ Fixes all 25 CI compilation errors in FieldMindLibraryScreen (18), SpeciesBrowserScreen (3), and WeatherDatabaseScreen (4)"
+                )
+            )
+        ),
+
         // ── v0.43.0 — Stability, Security & Weather Repair ──
         FieldMindChangelogEntry(
             version = "0.43.0",
