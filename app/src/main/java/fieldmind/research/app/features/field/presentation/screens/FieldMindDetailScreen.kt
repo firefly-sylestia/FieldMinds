@@ -242,7 +242,7 @@ fun SharedTransitionScope.DetailScreen(
                         }, onOpenDetail) }
                     }
                     }
-"research_session" -> {
+                    "research_session" -> {
                         val session = researchSessions.firstOrNull { it.id == id }
                         if (session != null) {
                         val linkedObsIds = sessionObservationCrossRefs.filter { it.sessionId == session.id }.map { it.observationId }.toSet()
@@ -259,8 +259,6 @@ fun SharedTransitionScope.DetailScreen(
     if (showDelete) ConfirmDeleteDialog(kind, onDismiss = { showDelete = false }) {
         deleteEntityByKind(kind, id, viewModel); showDelete = false; onBack()
     }
-}
-}
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -914,7 +912,7 @@ private data class StructuredDetailsData(
 
 // ══════════════════════════════════════════════════════════════════════
 //  Quality Score Card
-// ══════��═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════
 
 @Composable
 fun QualityScoreCard(score: Int) {
@@ -1230,7 +1228,7 @@ data class AiAnalysisData(
 
 // ══════════════════════════════════════════════════════════════════════
 //  Export & Sharing Section
-// ═══════��══════���═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════
 
 @Composable
 fun ObservationExportSection(
@@ -3345,7 +3343,7 @@ fun deleteEntityByKind(kind: String, id: Long, viewModel: FieldMindViewModel) {
     }
 }
 
-// ═════════════════��════════════════��═══════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════
 //  Source Detail Content — Sectioned layout with proper visual hierarchy
 // ══════════════════════════════════════════════════════════════════════
 
