@@ -761,8 +761,39 @@ fun WeatherLogToolScreen(
     var notes by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("") }
     var locating by remember { mutableStateOf(false) }
+    var autoFetching by remember { mutableStateOf(false) }
 
     val conditions = listOf("Clear", "Partly cloudy", "Overcast", "Foggy", "Drizzle", "Rain", "Snow", "Thunderstorm")
+
+    // Auto-fetch weather from current location using the ViewModel's weather provider
+    fun autoFetchWeather() {
+        if (autoFetching) return
+        autoFetching = true
+        locationProvider.requestCurrentLocation { captured ->
+            if (captured != null) {
+                scope.launch {
+                    val snapshot = viewModel.refreshWeatherFromLocation(forceRefresh = true)
+                    if (snapshot != null) {
+                        temperature = snapshot.temperature?.let { String.format("%.1f", it) } ?: ""
+                        condition = snapshot.weatherDescription.ifBlank { condition }
+                        humidity = snapshot.humidity?.toString() ?: ""
+                        windSpeed = snapshot.windSpeed?.let { String.format("%.1f", it) } ?: ""
+                        location = captured.asDisplayText()
+                        showFastSnackbar(snackbar, scope, "Weather auto-fetched from provider")
+                        locationProvider.resolvePlaceName(captured.latitude, captured.longitude) { place ->
+                            if (!place.isNullOrBlank()) location = captured.copy(placeName = place).asDisplayText()
+                        }
+                    } else {
+                        showFastSnackbar(snackbar, scope, "Could not fetch weather — check location/API key")
+                    }
+                    autoFetching = false
+                }
+            } else {
+                showFastSnackbar(snackbar, scope, "Could not get location")
+                autoFetching = false
+            }
+        }
+    }
 
     fun saveWeatherLog() {
         haptics.confirm()
@@ -814,7 +845,7 @@ fun WeatherLogToolScreen(
                 item {
                     StandardScreenHeader(
                         title = "Weather log",
-                        subtitle = "Record current conditions at your location.",
+                        subtitle = "Create a standalone weather data record. Observation weather auto-fetches separately via providers.",
                         icon = FieldMindIcons.Weather,
                         heroColor = FieldMindTheme.colors.data,
                         trailing = {
@@ -833,12 +864,34 @@ fun WeatherLogToolScreen(
                         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                     ) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                            Text(
-                                "Weather condition",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            OptionPickerField(label = "Condition", selected = condition, options = conditions, onSelected = { condition = it }, icon = FieldMindIcons.Info)
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    "Weather condition",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                FilledTonalButton(
+                                    onClick = { autoFetchWeather() },
+                                    enabled = !autoFetching,
+                                    shape = RoundedCornerShape(18.dp),
+                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                                ) {
+                                    if (autoFetching) {
+                                        CircularProgressIndicator(Modifier.size(14.dp), strokeWidth = 2.dp)
+                                    } else {
+                                        Icon(FieldMindIcons.Weather, null, size = 14.dp)
+                                    }
+                                    Spacer(Modifier.size(4.dp))
+                                    Text(
+                                        if (autoFetching) "Fetching..." else "Auto fetch",
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                }
+                            }
 
                             Row(
                                 Modifier.fillMaxWidth(),
