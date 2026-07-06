@@ -1,0 +1,1 @@
+Developer QA and UI reliability fixes: persisted full app test reports, non-fatal crash verification, safer tab back behavior, better bottom spacing for quick capture/nav, adaptive live weather details, smoother clouds/rain visibility, and screenshot toggle fixes.
