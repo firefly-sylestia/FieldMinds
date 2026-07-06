@@ -62,7 +62,6 @@ import java.util.Locale
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import fieldmind.research.app.ui.theme.CuteElevations
-import fieldmind.research.app.features.field.presentation.screens.FieldMindDialogs.EditEntityDialog
 
 // ══════════════════════════════════════════════════════════════════════
 //  Detail Screen — Entity-specific rich layouts
@@ -1231,7 +1230,7 @@ data class AiAnalysisData(
 
 // ══════════════════════════════════════════════════════════════════════
 //  Export & Sharing Section
-// ══════════════���═══════════════════════════════════════════════════════
+// ═══════��══════���═══════════════════════════════════════════════════════
 
 @Composable
 fun ObservationExportSection(
