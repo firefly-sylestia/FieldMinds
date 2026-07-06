@@ -86,13 +86,11 @@ class MainActivity : FragmentActivity() {
             val appPreviewMode by fieldMindViewModel.fieldSettings.appPreviewMode.collectAsState()
             val alwaysOnScreen by fieldMindViewModel.fieldSettings.alwaysOnScreenEnabled.collectAsState()
 
-            // Apply FLAG_SECURE only for the explicit screenshot protection toggle.
-            // Recents-preview privacy is handled in UI, not by forcing FLAG_SECURE,
-            // so turning screenshots off reliably clears the platform screenshot block.
-            val secureBecauseScreenshots = screenCaptureProtection
-            val secureBecausePreviewPrivacy = appPreviewMode != "Normal"
-            LaunchedEffect(secureBecauseScreenshots, secureBecausePreviewPrivacy) {
-                applyScreenCaptureProtection(window, secureBecauseScreenshots)
+            // Apply FLAG_SECURE if screen capture block is enabled OR if preview mode
+            // is set to blur/privacy (prevents content from showing in recent apps).
+            val shouldSecure = screenCaptureProtection || appPreviewMode != "Normal"
+            LaunchedEffect(shouldSecure) {
+                applyScreenCaptureProtection(window, shouldSecure)
             }
 
             LaunchedEffect(alwaysOnScreen) {
@@ -118,9 +116,8 @@ class MainActivity : FragmentActivity() {
         super.onPause()
         // Only trigger auto-lock if setting is enabled
         val autoLockBg = fieldMindViewModel.fieldSettings.autoLockOnBackground.value
-        if (autoLockBg) {
-            AppLifecycleManager.onActivityPaused()
-        }
+        val lockTimeout = fieldMindViewModel.fieldSettings.lockTimeout.value
+        AppLifecycleManager.onActivityPaused(autoLockEnabled = autoLockBg, timeoutLabel = lockTimeout)
         // Auto-clear clipboard if configured
         val autoClearClipboard = fieldMindViewModel.fieldSettings.clipboardAutoCleanupEnabled.value
         if (autoClearClipboard) {
@@ -131,7 +128,10 @@ class MainActivity : FragmentActivity() {
 
     override fun onResume() {
         super.onResume()
-        AppLifecycleManager.onActivityResumed()
+        AppLifecycleManager.onActivityResumed(
+            autoLockEnabled = fieldMindViewModel.fieldSettings.autoLockOnBackground.value,
+            timeoutLabel = fieldMindViewModel.fieldSettings.lockTimeout.value
+        )
     }
 
     override fun onNewIntent(intent: Intent) {

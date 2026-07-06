@@ -44,30 +44,49 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
-        // ── v0.43.0 — Developer QA and UI Reliability ──
+        // ── v0.43.1 — CI Compilation Fix ──
+        FieldMindChangelogEntry(
+            version = "0.43.1",
+            date = "2026-07-06",
+            title = "🔧 CI Compilation Fix — Card tonalElevation",
+            importance = "Patch",
+            tags = listOf("🔧", "🐛", "⚡"),
+            sections = listOf(
+                "🔧 Card → InfoCard migration" to listOf(
+                    "✓ Replaced 25 raw `Card(tonalElevation=…, shadowElevation=…)` calls with `InfoCard` across 3 screen files",
+                    "✓ `Card` in current Material3 version doesn't support `tonalElevation`/`shadowElevation` params — those are `Surface`-only",
+                    "✓ `InfoCard` wraps `Surface` and properly accepts both elevation parameters",
+                    "✓ Fixes all 25 CI compilation errors in FieldMindLibraryScreen (18), SpeciesBrowserScreen (3), and WeatherDatabaseScreen (4)"
+                )
+            )
+        ),
+
+        // ── v0.43.0 — Stability, Security & Weather Repair ──
         FieldMindChangelogEntry(
             version = "0.43.0",
-            date = "2026-07-06",
-            title = "🛠️ Developer QA, Back Navigation & Weather Polish",
-            importance = "Patch",
-            tags = listOf("🛠️", "🧭", "🌦️", "🔒"),
+            date = "2026-07-05",
+            title = "🛡️ Stability, Security & Weather Repair",
+            importance = "Major",
+            tags = listOf("🛡️", "🔒", "🌦️", "🧪"),
             sections = listOf(
-                "🧪 Stronger developer tester" to listOf(
-                    "✓ Latest test reports now persist after leaving the developer screen",
-                    "✓ Reports include run IDs, device/app metadata, setting snapshots, full failure traces, and UI checklist results",
-                    "✓ Non-fatal crash capture is verified with a sentinel stack trace so reports reflect real captured errors"
+                "💥 Crash & collaboration hardening" to listOf(
+                    "✓ Crash reporter now captures richer reports and launches a minimal fallback crash screen",
+                    "✓ Collaboration sharing now falls back to clipboard instead of crashing when no share app is available",
+                    "✓ Collaboration export now opens the real Export Studio instead of showing a fake started message"
                 ),
-                "🧭 Navigation and overlay fixes" to listOf(
-                    "✓ Hardware back on non-home tabs returns safely to Home without popping the tab container",
-                    "✓ Home reserves more bottom space so quick capture and the floating nav pill avoid covering options"
+                "🔒 Lock security repair" to listOf(
+                    "✓ In-app unlock PIN now uses a built-in numpad without opening the device keyboard",
+                    "✓ 4/5/6 digit PINs now use exact-length verification and consistent failed-attempt rules",
+                    "✓ Failed unlock cooldowns, biometric-required mode, panic reset, and auto-lock timeout handling are more consistent"
                 ),
-                "🌦️ Weather and animation polish" to listOf(
-                    "✓ Live weather metrics wrap across rows to reduce clipping on narrow screens",
-                    "✓ Cloud drift loops more seamlessly and rain remains visible from the first frame"
+                "🌦️ Weather diagnostics" to listOf(
+                    "✓ Open-Meteo free tier no longer requires an API key",
+                    "✓ Weather refresh can request a fresh location when cached location is missing",
+                    "✓ Weather dashboard now surfaces actionable diagnostic messages when fetches fail"
                 ),
-                "🔒 Screenshot toggle reliability" to listOf(
-                    "✓ Screenshot blocking now follows the explicit screen-capture setting instead of staying forced by app preview mode",
-                    "✓ Camera secure windows follow the same screenshot-protection setting"
+                "🧪 Developer test runner" to listOf(
+                    "✓ Full App Test Runner is cancellable, restores settings, and uses shorter smoke-test timeouts",
+                    "✓ Added policy checks for lock attempts, cooldowns, Open-Meteo free tier, and crash activity intent construction"
                 )
             )
         ),

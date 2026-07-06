@@ -1,5 +1,11 @@
 package fieldmind.research.app.features.field.presentation.screens
 
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -21,6 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
+import fieldmind.research.app.features.field.data.export.FieldMindExport
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
@@ -29,7 +37,14 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.ui.theme.screenBackground
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * Collaboration & Sharing — share observations, projects, and data with
@@ -49,8 +64,11 @@ fun CollaborationScreen(
     val context = LocalContext.current
 
     var expandedSection by remember { mutableStateOf<String?>(null) }
-    var shareFormat by remember { mutableStateOf("CSV") }
+    var shareFormat by remember { mutableStateOf("FieldMind Archive") }
     var includeMedia by remember { mutableStateOf(true) }
+    var isExporting by remember { mutableStateOf(false) }
+    var exportProgress by remember { mutableFloatStateOf(0f) }
+    var exportStepText by remember { mutableStateOf("") }
 
     val shareFormats = listOf("CSV", "JSON", "PDF Report", "FieldMind Archive")
 
@@ -121,30 +139,191 @@ fun CollaborationScreen(
                                     Text("Include media attachments", style = MaterialTheme.typography.bodySmall)
                                 }
 
+                                if (isExporting) {
+                                    LinearProgressIndicator(
+                                        modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp))
+                                    )
+                                    Text(
+                                        exportStepText,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     Button(
                                         onClick = {
-                                            showFastSnackbar(snackbar, scope, "Export started ($shareFormat)")
+                                            scope.launch {
+                                                isExporting = true
+                                                exportProgress = 0f
+                                                exportStepText = "Preparing $shareFormat…"
+                                                try {
+                                                    withContext(Dispatchers.IO) {
+                                                        val dateStamp = SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.getDefault()).format(Date())
+                                                        val exportDir = File(context.cacheDir, "collaboration_exports").apply { mkdirs() }
+
+                                                        // Collect all entity data from ViewModel
+                                                        val obs = viewModel.observations.value
+                                                        val nts = viewModel.notes.value
+                                                        val qs = viewModel.questions.value
+                                                        val hyps = viewModel.hypotheses.value
+                                                        val projs = viewModel.projects.value
+                                                        val srcs = viewModel.sources.value
+                                                        val drs = viewModel.dataRecords.value
+                                                        val rpts = viewModel.reports.value
+                                                        val fcards = viewModel.flashcards.value
+                                                        val spcs = viewModel.speciesRegistry.value
+                                                        val wcat = viewModel.weatherCatalog.value
+                                                        val rsessions = viewModel.researchSessions.value
+                                                        val tks = viewModel.tasks.value
+
+                                                        exportProgress = 0.3f
+                                                        exportStepText = "Generating $shareFormat…"
+
+                                                        val ext = when (shareFormat) {
+                                                            "CSV" -> "csv"
+                                                            "JSON" -> "json"
+                                                            "PDF Report" -> "pdf"
+                                                            "FieldMind Archive" -> "fieldmind"
+                                                            else -> "md"
+                                                        }
+                                                        val fileName = "fieldmind-collab-$dateStamp.$ext"
+                                                        val exportFile = File(exportDir, fileName)
+
+                                                        when (shareFormat) {
+                                                            "CSV" -> {
+                                                                exportFile.writeText(FieldMindExport.observationsCsv(obs))
+                                                            }
+                                                            "JSON" -> {
+                                                                val json = FieldMindExport.archiveJson(
+                                                                    observations = obs, notes = nts,
+                                                                    questions = qs, hypotheses = hyps,
+                                                                    projects = projs, sources = srcs,
+                                                                    dataRecords = drs, reports = rpts,
+                                                                    flashcards = fcards, species = spcs,
+                                                                    weatherCatalog = wcat,
+                                                                    researchSessions = rsessions,
+                                                                    tasks = tks
+                                                                )
+                                                                exportFile.writeText(json)
+                                                            }
+                                                            "PDF Report" -> {
+                                                                val bodyText = obs.joinToString("\n") {
+                                                                    FieldMindExport.singleObservationMarkdown(it)
+                                                                }
+                                                                exportFile.writeBytes(
+                                                                    FieldMindExport.simplePdfBytes("FieldMind Collaboration", bodyText)
+                                                                )
+                                                            }
+                                                            "FieldMind Archive" -> {
+                                                                val json = FieldMindExport.archiveJson(
+                                                                    observations = obs, notes = nts,
+                                                                    questions = qs, hypotheses = hyps,
+                                                                    projects = projs, sources = srcs,
+                                                                    dataRecords = drs, reports = rpts,
+                                                                    flashcards = fcards, species = spcs,
+                                                                    weatherCatalog = wcat,
+                                                                    researchSessions = rsessions,
+                                                                    tasks = tks
+                                                                )
+                                                                val allAttachments = mutableMapOf<Long, List<fieldmind.research.app.features.field.data.database.entity.EvidenceAttachmentEntity>>()
+                                                        obs.forEach { o ->
+                                                            runCatching {
+                                                                val atts = viewModel.attachmentsForObservation(o.id).first()
+                                                                if (atts.isNotEmpty()) allAttachments[o.id] = atts
+                                                            }
+                                                        }
+                                                        val result = fieldmind.research.app.features.field.data.export.FieldMindExportMediaPacker.buildPackage(
+                                                                    context = context, archiveJson = json,
+                                                                    observations = obs, notes = nts,
+                                                                    projects = projs, sources = srcs,
+                                                                    attachments = allAttachments,
+                                                                    outputDir = exportDir
+                                                                )
+                                                                result.packageFile.copyTo(exportFile, overwrite = true)
+                                                            }
+                                                        }
+
+                                                        exportProgress = 0.7f
+                                                        exportStepText = "Building share intent…"
+
+                                                        val shareUri = FileProvider.getUriForFile(
+                                                            context,
+                                                            "${context.packageName}.provider",
+                                                            exportFile
+                                                        )
+                                                        val mimeType = when (shareFormat) {
+                                                            "CSV" -> "text/csv"
+                                                            "JSON" -> "application/json"
+                                                            "PDF Report" -> "application/pdf"
+                                                            "FieldMind Archive" -> "application/octet-stream"
+                                                            else -> "text/plain"
+                                                        }
+
+                                                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                                            type = mimeType
+                                                            putExtra(Intent.EXTRA_STREAM, shareUri)
+                                                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                        }
+                                                        context.startActivity(Intent.createChooser(shareIntent, "Share FieldMind data"))
+                                                    }
+                                                    exportStepText = "Done"
+                                                    showFastSnackbar(snackbar, scope, "$shareFormat exported and shared")
+                                                } catch (e: Exception) {
+                                                    showFastSnackbar(snackbar, scope, "Export failed: ${e.localizedMessage?.take(100) ?: "Unknown error"}")
+                                                } finally {
+                                                    isExporting = false
+                                                    exportProgress = 0f
+                                                }
+                                            }
                                         },
-                                        shape = RoundedCornerShape(22.dp)
+                                        shape = RoundedCornerShape(22.dp),
+                                        enabled = !isExporting
                                     ) {
                                         Icon(MaterialSymbolIcon("file_download"), null, size = 18.dp)
                                         Spacer(Modifier.size(6.dp))
-                                        Text("Export")
+                                        Text("Export & share")
                                     }
                                     OutlinedButton(
                                         onClick = {
-                                            val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                                                type = "text/plain"
-                                                putExtra(android.content.Intent.EXTRA_TEXT, "Shared from FieldMind: ${observations.size} observations across ${projects.size} projects.")
+                                            // Generate a brief Markdown summary and share as text
+                                            val summary = buildString {
+                                                appendLine("# FieldMind Collaboration Summary")
+                                                appendLine()
+                                                appendLine("Shared from FieldMind on ${SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())}")
+                                                appendLine()
+                                                appendLine("## Stats")
+                                                appendLine("- Observations: ${observations.size}")
+                                                appendLine("- Projects: ${projects.size}")
+                                                appendLine("- Notes: ${viewModel.notes.value.size}")
+                                                appendLine("- Sources: ${viewModel.sources.value.size}")
+                                                appendLine()
+                                                appendLine("## Recent observations")
+                                                observations.take(10).forEach { obs ->
+                                                    appendLine("- ${obs.subject} (${obs.date} ${obs.time})")
+                                                }
+                                                if (observations.size > 10) {
+                                                    appendLine("- ... and ${observations.size - 10} more")
+                                                }
+                                                appendLine()
+                                                appendLine("---")
+                                                appendLine("Generated by FieldMind — an offline-first research notebook.")
                                             }
-                                            context.startActivity(android.content.Intent.createChooser(shareIntent, "Share via"))
+                                            safeShareText(
+                                                context = context,
+                                                snackbar = snackbar,
+                                                scope = scope,
+                                                chooserTitle = "Share summary via",
+                                                clipboardLabel = "FieldMind collaboration summary",
+                                                text = summary
+                                            )
                                         },
                                         shape = RoundedCornerShape(22.dp)
                                     ) {
                                         Icon(MaterialSymbolIcon("share"), null, size = 18.dp)
                                         Spacer(Modifier.size(6.dp))
-                                        Text("Share link")
+                                        Text("Share summary")
                                     }
                                 }
                             }
@@ -181,11 +360,14 @@ fun CollaborationScreen(
                                         }
                                         FilledTonalButton(
                                             onClick = {
-                                                val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                                                    type = "text/plain"
-                                                    putExtra(android.content.Intent.EXTRA_TEXT, "Join my FieldMind research workspace! Download FieldMind to collaborate.")
-                                                }
-                                                context.startActivity(android.content.Intent.createChooser(shareIntent, "Invite via"))
+                                                safeShareText(
+                                                    context = context,
+                                                    snackbar = snackbar,
+                                                    scope = scope,
+                                                    chooserTitle = "Invite via",
+                                                    clipboardLabel = "FieldMind collaboration invite",
+                                                    text = "Join my FieldMind research workspace! Download FieldMind to collaborate."
+                                                )
                                             },
                                             shape = RoundedCornerShape(22.dp)
                                         ) { Text("Invite") }
@@ -252,12 +434,230 @@ fun CollaborationScreen(
                                 }
 
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Button(onClick = { showFastSnackbar(snackbar, scope, "Portfolio generated!") }, shape = RoundedCornerShape(22.dp)) {
+                                    Button(
+                                        onClick = {
+                                            scope.launch {
+                                                val portfolio = withContext(Dispatchers.IO) {
+                                                    val allObs = viewModel.observations.value
+                                                    val allNotes = viewModel.notes.value
+                                                    val allQs = viewModel.questions.value
+                                                    val allHyps = viewModel.hypotheses.value
+                                                    val allProjs = viewModel.projects.value
+                                                    val allSrcs = viewModel.sources.value
+                                                    val allRpts = viewModel.reports.value
+                                                    val allFcards = viewModel.flashcards.value
+                                                    val allData = viewModel.dataRecords.value
+                                                    val allSessions = viewModel.researchSessions.value
+                                                    val allTks = viewModel.tasks.value
+
+                                                    val dateStamp = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
+                                                    buildString {
+                                                        appendLine("# FieldMind Research Portfolio")
+                                                        appendLine()
+                                                        appendLine("*Generated on $dateStamp*")
+                                                        appendLine()
+                                                        appendLine("---")
+                                                        appendLine()
+
+                                                        // ── Overview Stats ──
+                                                        appendLine("## Overview")
+                                                        appendLine()
+                                                        appendLine("| Category | Count |")
+                                                        appendLine("|----------|-------|")
+                                                        appendLine("| Observations | ${allObs.size} |")
+                                                        appendLine("| Notes | ${allNotes.size} |")
+                                                        appendLine("| Questions | ${allQs.size} |")
+                                                        appendLine("| Hypotheses | ${allHyps.size} |")
+                                                        appendLine("| Projects | ${allProjs.size} |")
+                                                        appendLine("| Sources | ${allSrcs.size} |")
+                                                        appendLine("| Reports | ${allRpts.size} |")
+                                                        appendLine("| Flashcards | ${allFcards.size} |")
+                                                        appendLine("| Data Records | ${allData.size} |")
+                                                        appendLine("| Research Sessions | ${allSessions.size} |")
+                                                        appendLine("| Tasks | ${allTks.size} |")
+                                                        appendLine()
+
+                                                        // ── Projects ──
+                                                        if (allProjs.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Projects")
+                                                            appendLine()
+                                                            allProjs.forEach { p ->
+                                                                val obsCount = allObs.count { it.projectId == p.id }
+                                                                appendLine("### ${p.title}")
+                                                                appendLine("- **Status:** ${p.status}")
+                                                                if (p.methods.isNotBlank()) appendLine("- **Methodology:** ${p.methods}")
+                                                                if (p.objective.isNotBlank()) appendLine("- **Description:** ${p.objective.take(200)}")
+                                                                appendLine("- **Linked observations:** $obsCount")
+                                                                appendLine()
+                                                            }
+                                                        }
+
+                                                        // ── Recent Observations ──
+                                                        if (allObs.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Recent Observations")
+                                                            appendLine()
+                                                            allObs.sortedByDescending { it.timestamp }.take(20).forEach { o ->
+                                                                appendLine("### ${o.subject}")
+                                                                appendLine("- **Date:** ${o.date} ${o.time}")
+                                                                appendLine("- **Category:** ${o.category}")
+                                                                appendLine("- **Confidence:** ${o.confidenceLevel}")
+                                                                if (o.manualLocation.isNotBlank()) appendLine("- **Location:** ${o.manualLocation}")
+                                                                if (o.factsOnlyNotes.isNotBlank()) appendLine("- **Notes:** ${o.factsOnlyNotes.take(300)}")
+                                                                if (o.tags.isNotBlank()) appendLine("- **Tags:** ${o.tags}")
+                                                                appendLine()
+                                                            }
+                                                            if (allObs.size > 20) {
+                                                                appendLine("... and ${allObs.size - 20} more observations")
+                                                                appendLine()
+                                                            }
+                                                        }
+
+                                                        // ── Questions & Hypotheses ──
+                                                        if (allQs.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Research Questions")
+                                                            appendLine()
+                                                            allQs.forEach { q ->
+                                                                appendLine("- **${q.questionText}**")
+                                                                if (q.answer.isNotBlank()) appendLine("  - Answer: ${q.answer.take(200)}")
+                                                                appendLine()
+                                                            }
+                                                        }
+
+                                                        // ── Notes ──
+                                                        if (allNotes.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Recent Notes")
+                                                            appendLine()
+                                                            allNotes.sortedByDescending { it.updatedAt }.take(10).forEach { n ->
+                                                                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(n.updatedAt))
+                                                                appendLine("- **${n.title.ifBlank { "Untitled" }}** ($date)")
+                                                                if (n.body.isNotBlank()) appendLine("  - ${n.body.take(200)}")
+                                                            }
+                                                            appendLine()
+                                                        }
+
+                                                        // ── Active Research Sessions ──
+                                                        val activeSessions = allSessions.filter { it.status == "Active" }
+                                                        if (activeSessions.isNotEmpty()) {
+                                                            appendLine("---")
+                                                            appendLine()
+                                                            appendLine("## Active Research Sessions")
+                                                            appendLine()
+                                                            activeSessions.forEach { s ->
+                                                                appendLine("- ${s.name} (started: ${SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(s.startedAt))})")
+                                                            }
+                                                            appendLine()
+                                                        }
+
+                                                        // ── Footer ──
+                                                        appendLine("---")
+                                                        appendLine()
+                                                        appendLine("*Generated by FieldMind — an offline-first field research notebook.*")
+                                                        appendLine()
+                                                    }
+                                                }
+                                                safeShareText(
+                                                    context = context,
+                                                    snackbar = snackbar,
+                                                    scope = scope,
+                                                    chooserTitle = "Share portfolio via",
+                                                    clipboardLabel = "FieldMind research portfolio",
+                                                    text = portfolio
+                                                )
+                                            }
+                                        },
+                                        shape = RoundedCornerShape(22.dp)
+                                    ) {
                                         Icon(MaterialSymbolIcon("description"), null, size = 18.dp)
                                         Spacer(Modifier.size(6.dp))
                                         Text("Generate portfolio")
                                     }
-                                    OutlinedButton(onClick = { onOpenExport() }, shape = RoundedCornerShape(22.dp)) {
+                                    OutlinedButton(
+                                        onClick = {
+                                            scope.launch {
+                                                isExporting = true
+                                                exportStepText = "Building complete export…"
+                                                try {
+                                                    withContext(Dispatchers.IO) {
+                                                        val allObs = viewModel.observations.value
+                                                        val allNotes = viewModel.notes.value
+                                                        val allQs = viewModel.questions.value
+                                                        val allHyps = viewModel.hypotheses.value
+                                                        val allProjs = viewModel.projects.value
+                                                        val allSrcs = viewModel.sources.value
+                                                        val allDrs = viewModel.dataRecords.value
+                                                        val allRpts = viewModel.reports.value
+                                                        val allFcards = viewModel.flashcards.value
+                                                        val allSpcs = viewModel.speciesRegistry.value
+                                                        val allWcat = viewModel.weatherCatalog.value
+                                                        val allSessions = viewModel.researchSessions.value
+                                                        val allTks = viewModel.tasks.value
+
+                                                        val dateStamp = SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.getDefault()).format(Date())
+                                                        val exportDir = File(context.cacheDir, "collaboration_exports").apply { mkdirs() }
+                                                        val fileName = "fieldmind-complete-$dateStamp.fieldmind"
+                                                        val exportFile = File(exportDir, fileName)
+
+                                                        val json = FieldMindExport.archiveJson(
+                                                            observations = allObs, notes = allNotes,
+                                                            questions = allQs, hypotheses = allHyps,
+                                                            projects = allProjs, sources = allSrcs,
+                                                            dataRecords = allDrs, reports = allRpts,
+                                                            flashcards = allFcards, species = allSpcs,
+                                                            weatherCatalog = allWcat,
+                                                            researchSessions = allSessions,
+                                                            tasks = allTks
+                                                        )
+
+                                                        val allAttachments = mutableMapOf<Long, List<fieldmind.research.app.features.field.data.database.entity.EvidenceAttachmentEntity>>()
+                                                        allObs.forEach { o ->
+                                                            runCatching {
+                                                                val atts = viewModel.attachmentsForObservation(o.id).first()
+                                                                if (atts.isNotEmpty()) allAttachments[o.id] = atts
+                                                            }
+                                                        }
+
+                                                        val result = fieldmind.research.app.features.field.data.export.FieldMindExportMediaPacker.buildPackage(
+                                                            context = context, archiveJson = json,
+                                                            observations = allObs, notes = allNotes,
+                                                            projects = allProjs, sources = allSrcs,
+                                                            attachments = allAttachments,
+                                                            outputDir = exportDir
+                                                        )
+                                                        result.packageFile.copyTo(exportFile, overwrite = true)
+
+                                                        val shareUri = FileProvider.getUriForFile(
+                                                            context,
+                                                            "${context.packageName}.provider",
+                                                            exportFile
+                                                        )
+                                                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                                            type = "application/octet-stream"
+                                                            putExtra(Intent.EXTRA_STREAM, shareUri)
+                                                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                        }
+                                                        context.startActivity(Intent.createChooser(shareIntent, "Export all FieldMind data"))
+                                                    }
+                                                    showFastSnackbar(snackbar, scope, "Complete export shared")
+                                                } catch (e: Exception) {
+                                                    showFastSnackbar(snackbar, scope, "Export failed: ${e.localizedMessage?.take(100) ?: "Unknown error"}")
+                                                } finally {
+                                                    isExporting = false
+                                                    exportStepText = ""
+                                                }
+                                            }
+                                        },
+                                        shape = RoundedCornerShape(22.dp),
+                                        enabled = !isExporting
+                                    ) {
                                         Icon(FieldMindIcons.Export, null, size = 18.dp)
                                         Spacer(Modifier.size(6.dp))
                                         Text("Export all")
@@ -307,6 +707,35 @@ fun CollaborationScreen(
             }
         }
     }
+}
+
+private fun safeShareText(
+    context: Context,
+    snackbar: SnackbarHostState,
+    scope: kotlinx.coroutines.CoroutineScope,
+    chooserTitle: String,
+    clipboardLabel: String,
+    text: String
+) {
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, text)
+    }
+
+    val canShare = shareIntent.resolveActivity(context.packageManager) != null
+    if (canShare) {
+        runCatching { context.startActivity(Intent.createChooser(shareIntent, chooserTitle)) }
+            .onSuccess { return }
+            .onFailure { error ->
+                if (error !is ActivityNotFoundException) {
+                    android.util.Log.w("CollaborationScreen", "Share failed; copying fallback text", error)
+                }
+            }
+    }
+
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    clipboard.setPrimaryClip(ClipData.newPlainText(clipboardLabel, text))
+    showFastSnackbar(snackbar, scope, "No share app found — copied text instead")
 }
 
 @Composable

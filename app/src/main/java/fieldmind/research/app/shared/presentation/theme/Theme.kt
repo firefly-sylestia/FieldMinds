@@ -537,18 +537,19 @@ fun RhythmTheme(
         else -> LightColorScheme
     }.let { scheme ->
         // Apply AMOLED theme modifications if enabled and in dark mode
+        // Uses wider contrast steps so card depth remains visible even on pure black backgrounds
         if (amoledTheme && darkTheme) {
             scheme.copy(
                 background = Color.Black,
                 surface = Color.Black,
-                surfaceVariant = Color(0xFF121212),
-                surfaceContainer = Color(0xFF121212),
-                surfaceContainerLow = Color(0xFF0A0A0A),
+                surfaceVariant = Color(0xFF141414),
+                surfaceContainer = Color(0xFF1E1E1E),
+                surfaceContainerLow = Color(0xFF141414),
                 surfaceContainerLowest = Color.Black,
-                surfaceContainerHigh = Color(0xFF1E1E1E),
-                surfaceContainerHighest = Color(0xFF2A2A2A),
+                surfaceContainerHigh = Color(0xFF2A2A2A),
+                surfaceContainerHighest = Color(0xFF363636),
                 surfaceDim = Color.Black,
-                surfaceBright = Color(0xFF2A2A2A)
+                surfaceBright = Color(0xFF363636)
             )
         } else scheme
     }

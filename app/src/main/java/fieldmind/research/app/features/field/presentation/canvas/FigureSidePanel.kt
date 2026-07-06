@@ -22,11 +22,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import android.content.Context
+import android.graphics.BitmapFactory
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import fieldmind.research.app.features.field.data.ai.AiProvider
+import fieldmind.research.app.features.field.data.ai.GeminiResearchAssistant
 import fieldmind.research.app.features.field.data.canvas.CanvasBlockEntity
 import fieldmind.research.app.features.field.data.canvas.FigureMetaEntity
+import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import fieldmind.research.app.features.field.data.ai.AssistantTask
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -416,6 +427,34 @@ private fun InterpretationTab(
     figureMeta: FigureMetaEntity?
 ) {
     var generating by remember { mutableStateOf(false) }
+    var generationError by remember { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    // Create AI assistant from settings
+    val assistant = remember {
+        val settings = FieldMindSettings.getInstance(context)
+        val isEnabled = settings.geminiEnabled.value
+        val provider = try {
+            AiProvider.valueOf(settings.aiProvider.value.uppercase())
+        } catch (_: Exception) { AiProvider.GEMINI }
+        GeminiResearchAssistant(
+            enabled = isEnabled,
+            provider = provider,
+            apiKeyProvider = {
+                when (provider) {
+                    AiProvider.GEMINI -> settings.geminiApiKey.value
+                    AiProvider.OPENAI -> settings.openAiApiKey.value
+                }
+            },
+            modelProvider = {
+                when (provider) {
+                    AiProvider.GEMINI -> settings.geminiModel.value.ifBlank { "gemini-1.5-flash" }
+                    AiProvider.OPENAI -> settings.openAiModel.value.ifBlank { "gpt-4.1-mini" }
+                }
+            }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -441,6 +480,26 @@ private fun InterpretationTab(
             )
         }
 
+        if (!assistant.isAvailable()) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(MaterialSymbolIcon("warning"), null, size = 16.dp, tint = MaterialTheme.colorScheme.error)
+                    Text(
+                        "${assistant.providerLabel()} not configured. Enable it in Settings.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                }
+            }
+        }
+
         Text(
             "Use AI to analyze this figure, or write your own interpretation below.",
             style = MaterialTheme.typography.bodySmall,
@@ -451,20 +510,64 @@ private fun InterpretationTab(
         Button(
             onClick = {
                 generating = true
-                // AI generation would call GeminiResearchAssistant here.
-                // For now, insert a placeholder interpretation.
-                onInterpretationChange(
-                    buildString {
-                        appendLine("AI-generated interpretation will appear here.")
-                        appendLine()
-                        appendLine("The figure shows a ${block.type} block positioned at (${block.positionX.toInt()}, ${block.positionY.toInt()}) on the canvas.")
-                        appendLine("Dimensions: ${block.width.toInt()}px × ${block.height.toInt()}px")
-                        if (figureMeta?.caption?.isNotBlank() == true) {
-                            appendLine("Caption: ${figureMeta.caption}")
+                generationError = null
+                scope.launch {
+                    try {
+                        // Extract image URI from block content
+                        val imageUri = runCatching {
+                            val json = JSONObject(block.contentJson)
+                            json.optString("uri", "")
+                        }.getOrDefault("")
+
+                        val caption = figureMeta?.caption.orEmpty()
+                        val userText = buildString {
+                            appendLine("Analyze this ${block.type} block from a research canvas.")
+                            appendLine("Block dimensions: ${block.width.toInt()} × ${block.height.toInt()}px")
+                            appendLine("Position: (${block.positionX.toInt()}, ${block.positionY.toInt()})")
+                            if (caption.isNotBlank()) {
+                                appendLine("\nCaption: $caption")
+                            }
+                            appendLine("\nDescribe what you see in detail: subjects, objects, patterns, colors, text, spatial relationships, and any notable features.")
                         }
+
+                        if (imageUri.isNotBlank()) {
+                            // Load image and encode as base64
+                            val imageData = withContext(Dispatchers.IO) {
+                                loadImageAsBase64(context, imageUri)
+                            }
+                            if (imageData != null) {
+                                val suggestion = assistant.generateContent(
+                                    AssistantTask.IMAGE_DESCRIPTION,
+                                    userText,
+                                    imageData
+                                )
+                                onInterpretationChange(suggestion.body)
+                            } else {
+                                // Image unavailable — use text-only analysis
+                                val suggestion = assistant.generateContent(
+                                    AssistantTask.IMAGE_DESCRIPTION,
+                                    userText,
+                                    imageData = null
+                                )
+                                onInterpretationChange(
+                                    "[Image could not be loaded from: $imageUri]\n\n${suggestion.body}"
+                                )
+                            }
+                        } else {
+                            // No image URI — describe block metadata
+                            val suggestion = assistant.generateContent(
+                                AssistantTask.IMAGE_DESCRIPTION,
+                                userText,
+                                imageData = null
+                            )
+                            onInterpretationChange(suggestion.body)
+                        }
+                    } catch (e: Exception) {
+                        generationError = e.localizedMessage?.take(200) ?: "Unexpected error"
+                    } finally {
                         generating = false
                     }
-                )
+                }
             },
             enabled = !generating,
             shape = RoundedCornerShape(20.dp),
@@ -486,6 +589,26 @@ private fun InterpretationTab(
                 )
                 Spacer(Modifier.width(6.dp))
                 Text("Generate AI Interpretation", style = MaterialTheme.typography.labelMedium)
+            }
+        }
+
+        if (generationError != null) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(MaterialSymbolIcon("error"), null, size = 16.dp, tint = MaterialTheme.colorScheme.error)
+                    Text(
+                        generationError ?: "",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                }
             }
         }
 
@@ -539,6 +662,48 @@ private fun InterpretationTab(
             }
         }
     }
+}
+
+/**
+ * Load an image from a content URI and return it as (base64-encoded data, mimeType).
+ * Uses inSampleSize scaling to keep the payload under ~4 MB for API limits.
+ */
+private suspend fun loadImageAsBase64(context: Context, uriStr: String): Pair<String, String>? = withContext(Dispatchers.IO) {
+    try {
+        val uri = Uri.parse(uriStr)
+        val mimeType = context.contentResolver.getType(uri) ?: "image/jpeg"
+
+        // Decode with size limit: max 1024px on the longest side
+        val opts = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+        context.contentResolver.openInputStream(uri)?.use { input ->
+            BitmapFactory.decodeStream(input, null, opts)
+        }
+        val maxDim = maxOf(opts.outWidth, opts.outHeight)
+        val sampleSize = when {
+            maxDim > 2048 -> maxDim / 1024
+            maxDim > 1024 -> 2
+            else -> 1
+        }
+        val decodeOpts = BitmapFactory.Options().apply {
+            inSampleSize = sampleSize
+        }
+        val bitmap = context.contentResolver.openInputStream(uri)?.use { input ->
+            BitmapFactory.decodeStream(input, null, decodeOpts)
+        } ?: return@withContext null
+
+        val output = java.io.ByteArrayOutputStream()
+        bitmap.compress(
+            if (mimeType.contains("png")) android.graphics.Bitmap.CompressFormat.PNG
+            else android.graphics.Bitmap.CompressFormat.JPEG,
+            85, // quality
+            output
+        )
+        val base64 = android.util.Base64.encodeToString(output.toByteArray(), android.util.Base64.NO_WRAP)
+        bitmap.recycle()
+        base64 to mimeType
+    } catch (_: Exception) { null }
 }
 
 // ══════════════════════════════════════════════════════════════════════

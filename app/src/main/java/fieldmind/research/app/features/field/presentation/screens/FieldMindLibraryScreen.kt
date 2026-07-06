@@ -229,10 +229,10 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
         // ── Stats summary card ──
         if (items.isNotEmpty()) {
             item {
-                Card(
+                InfoCard(
                     shape = RoundedCornerShape(32.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                    tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -364,11 +364,11 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
         groupedItems.forEach { (type, sources) ->
             val isExpanded = expandedCategories.contains(type)
             item {
-                Card(
+                InfoCard(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(30.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                    tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
                     Column(Modifier.padding(4.dp)) {
                         Row(
@@ -452,11 +452,11 @@ private fun SourceCardWithCitations(
     val haptics = rememberFieldMindHaptics()
     var showCitationMenu by remember { mutableStateOf(false) }
 
-    Card(
+    InfoCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             // Main content row
@@ -526,10 +526,10 @@ private fun SourceCardWithCitations(
 
             // Citation format picker
             AnimatedVisibility(showCitationMenu) {
-                Card(
+                InfoCard(
                     shape = RoundedCornerShape(24.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                    tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text("Copy citation as…", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1034,10 +1034,10 @@ private fun ReadingTimerDialog(onDismiss: () -> Unit) {
         // Session summary
         if (elapsedSeconds > 0 && !isRunning) {
             val readMin = elapsedSeconds / 60
-            Card(
+            InfoCard(
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                tonalElevation = 0.dp, shadowElevation = 0.dp
             ) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
@@ -1084,7 +1084,7 @@ private fun NotePanel(viewModel: FieldMindViewModel, items: List<NoteEntity>, on
         item { LibraryAddButton(if (showAdd) "Close note composer" else "Add note") { showAdd = !showAdd } }
         if (showAdd) item { NoteCaptureCard(viewModel = viewModel, initialCategory = selectedCategory.takeIf { it != "All" } ?: observationCategories.last()) { showAdd = false } }
         item {
-            Card(shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+            InfoCard(shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f).clickable { categoriesExpanded = !categoriesExpanded }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(icon = FieldMindIcons.Category, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -1129,10 +1129,10 @@ private fun PaperReadingPanel(items: List<SourceEntity>, onOpenDetail: (String, 
         }
         if (items.isNotEmpty()) {
             item {
-                Card(
+                InfoCard(
                     shape = RoundedCornerShape(30.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                    tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1233,10 +1233,10 @@ private fun FlashcardPanel(
         // ── Bulk select / delete toolbar ──
         if (items.isNotEmpty()) {
             item {
-                Card(
+                InfoCard(
                     shape = RoundedCornerShape(30.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                    tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
                     Row(
                         Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
@@ -1378,7 +1378,7 @@ private fun FlashcardPanel(
 
 @Composable
 private fun LocalStudyModelCard(enabled: Boolean, downloaded: Boolean, model: String, onGenerate: () -> Unit) {
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    InfoCard(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Icon(icon = FieldMindIcons.Sparkle, contentDescription = null, tint = FieldMindTheme.colors.flashcard, size = 24.dp)
@@ -1416,7 +1416,7 @@ private fun LibraryFlashcard(
     var revealed by remember(card.id) { mutableStateOf(false) }
     val accent = FieldMindTheme.colors.flashcard
     val rotation by androidx.compose.animation.core.animateFloatAsState(if (revealed) 180f else 0f, animationSpec = tween(360), label = "libraryCardFlip")
-    Card(
+    InfoCard(
         modifier = modifier
             .fillMaxWidth()
             .graphicsLayer { rotationY = rotation; cameraDistance = 28f }
@@ -1430,7 +1430,7 @@ private fun LibraryFlashcard(
             containerColor = if (selected) FieldMindTheme.colors.flashcard.copy(alpha = 0.12f)
                            else MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Column(
             Modifier
@@ -1481,11 +1481,11 @@ private fun LibraryFlashcard(
 
 @Composable
 private fun LearnScreenRedirect(onOpenReader: (String, String) -> Unit, onOpenLearn: () -> Unit) {
-    Card(
+    InfoCard(
         modifier = Modifier.fillMaxSize().padding(20.dp),
         shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Column(
             Modifier.fillMaxSize().padding(32.dp),
@@ -1588,7 +1588,7 @@ private fun LearnPanel(viewModel: FieldMindViewModel, onOpenReader: (String, Str
 
 @Composable
 private fun BookSuggestionCard(title: String, category: String, genre: String, author: String, why: String, freeUrl: String, buyUrl: String, onOpenReader: (String, String) -> Unit) {
-    Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    InfoCard(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
@@ -1612,12 +1612,12 @@ private fun BookSuggestionCard(title: String, category: String, genre: String, a
 private fun LearnCategoryCard(category: LearnCategory, onOpenResource: (LearnResource) -> Unit) {
     var expanded by rememberSaveable(category.name) { mutableStateOf(false) }
     val accent = FieldMindTheme.colors.accentFor(category.name)
-    Card(
+    InfoCard(
         modifier = Modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {                Row(
                     modifier = Modifier
@@ -1683,11 +1683,11 @@ private fun LearnCategoryCard(category: LearnCategory, onOpenResource: (LearnRes
 @Composable
 private fun OnlineApiProposalCard() {
     var expanded by rememberSaveable { mutableStateOf(false) }
-    Card(
+    InfoCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(
@@ -1728,11 +1728,11 @@ private fun OnlineApiProposalCard() {
 
 @Composable
 private fun ResearchAssistantCard() {
-    Card(
+    InfoCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(
@@ -1764,7 +1764,7 @@ private fun ResearchAssistantCard() {
 
 @Composable
 private fun ResearchJourneyHero(next: ResearchMilestone, signals: String, onOpenReader: (String, String) -> Unit) {
-    Card(shape = RoundedCornerShape(38.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+    InfoCard(shape = RoundedCornerShape(38.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), tonalElevation = 0.dp, shadowElevation = 0.dp, modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(56.dp).clip(RoundedCornerShape(28.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(next.icon, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 30.dp) }
@@ -1785,7 +1785,7 @@ private fun ResearchMilestoneCard(milestone: ResearchMilestone, onOpenReader: (S
     var expanded by remember { mutableStateOf(false) }
     EntityCard(milestone.title, "learn", body = milestone.body, meta = listOf(milestone.resource.kind), onClick = { expanded = !expanded }, animate = true)
     AnimatedVisibility(expanded) {
-        Card(shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+        InfoCard(shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), tonalElevation = 0.dp, shadowElevation = 0.dp) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(milestone.resource.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 Text(milestone.resource.why, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1804,7 +1804,7 @@ private fun GuidedPathCard(path: GuidedPath, onOpenReader: (String, String) -> U
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -2128,7 +2128,7 @@ private fun OpenExternallyCard(url: String, uriHandler: androidx.compose.ui.plat
     val isPdf = Regex("""\.(pdf)""", RegexOption.IGNORE_CASE).containsMatchIn(url)
     val isImage = Regex("""\.(jpg|jpeg|png|webp|gif|heic|bmp)""", RegexOption.IGNORE_CASE).containsMatchIn(url)
     val isAudio = Regex("""\.(mp3|wav|ogg|m4a|aac|flac|wma)""", RegexOption.IGNORE_CASE).containsMatchIn(url)
-    Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+    Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp, modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Icon(FieldMindIcons.File, null, tint = MaterialTheme.colorScheme.primary, size = 36.dp)
             Text("Local file", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)

@@ -235,7 +235,7 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
         )
     } else if (splashActive) {
         FieldMindAnimatedSplash(
-            durationMs = 1800,
+            durationMs = 600,
             onSplashComplete = { showSplash = false }
         )
     } else {
@@ -243,7 +243,7 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             settings = viewModel.fieldSettings,
             isUnlocked = appUnlocked,
             isDecoyMode = isDecoyMode,
-            onUnlock = { appUnlocked = true },
+            onUnlock = { appUnlocked = true; AppLifecycleManager.dismissLock() },
             onDecoyUnlock = { isDecoyMode = true }
         ) {
             val privacyTyping by viewModel.fieldSettings.privacyTypingEnabled.collectAsState()
@@ -380,8 +380,8 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                 if (!hideChrome) {                        Surface(
                             shape = RoundedCornerShape(size = 38.dp),
                             color = MaterialTheme.colorScheme.surfaceContainer,
-                            tonalElevation = if (FieldMindTheme.colors.isDark) 8.dp else 0.dp,
-                            shadowElevation = if (FieldMindTheme.colors.isDark) 18.dp else 8.dp,
+                            tonalElevation = 0.dp,
+                            shadowElevation = 8.dp,
                             border = androidx.compose.foundation.BorderStroke(
                                 width = 0.6.dp,
                                 color = if (FieldMindTheme.colors.isDark)
@@ -483,8 +483,8 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
                         Surface(
                             shape = RoundedCornerShape(50.dp),
                             color = MaterialTheme.colorScheme.surfaceContainer,
-                            tonalElevation = if (FieldMindTheme.colors.isDark) 8.dp else 0.dp,
-                            shadowElevation = if (FieldMindTheme.colors.isDark) 18.dp else 8.dp,
+                            tonalElevation = 0.dp,
+                            shadowElevation = 8.dp,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(68.dp)
@@ -1281,8 +1281,7 @@ private fun TabContentBox(
                         onNavigate = onNav,
                         onOpenDetail = openDetail,
                         onOpenReader = openReader,
-                        onOpenCanvas = { onOpenCanvas(0L) },
-                        bottomContentPadding = 176.dp
+                        onOpenCanvas = { onOpenCanvas(0L) }
                     )
                 }
             }
@@ -1399,11 +1398,9 @@ private fun AllTabScreen(
         }
     }
 
-    // ── Device back button: return to Home from any non-home tab.
-    // Keep tab-container back handling inside tab state so hardware back does
-    // not pop the NavHost's single tab-container route or corrupt sub-page navigation.
+    // ── Device back button: previous tab, or exit on first tab ──
     BackHandler(enabled = !isFirstTab) {
-        onTabSelected(0)
+        onTabSelected(activeTabIndex - 1)
     }
 
     // ── System back gesture (left edge): handle all tabs ──
@@ -1571,8 +1568,7 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
                         onNavigate = noopNav,
                         onOpenDetail = noopDetail,
                         onOpenReader = noopReader,
-                        onOpenCanvas = noop,
-                        bottomContentPadding = 176.dp
+                        onOpenCanvas = noop
                     )
                 }
             }

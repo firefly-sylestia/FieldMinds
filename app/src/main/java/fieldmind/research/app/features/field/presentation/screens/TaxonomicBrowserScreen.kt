@@ -367,7 +367,7 @@ private fun TaxoLevelCard(
         onClick = onClick,
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        tonalElevation = 0.dp, shadowElevation = 0.dp,
         modifier = Modifier
             
     ) {

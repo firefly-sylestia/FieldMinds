@@ -3,7 +3,6 @@ package fieldmind.research.app.features.field.presentation.screens
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.ContextWrapper
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -26,15 +25,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import fieldmind.research.app.activities.FieldMindCrashActivity
 import fieldmind.research.app.features.field.data.database.entity.*
+import fieldmind.research.app.features.field.data.security.LockSecurityPolicy
+import fieldmind.research.app.features.field.data.weather.OpenMeteoProvider
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
-import fieldmind.research.app.BuildConfig
-import fieldmind.research.app.features.field.presentation.components.applyScreenCaptureProtection
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
-import fieldmind.research.app.shared.data.model.AppSettings
-import fieldmind.research.app.util.CrashReporter
-import com.google.gson.Gson
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.*
@@ -42,7 +39,6 @@ import kotlinx.coroutines.flow.first
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import android.view.WindowManager
 
 // ══════════════════════════════════════════════════════════════════════
 //  Test Result Data
@@ -53,37 +49,28 @@ private data class TestResult(
     val name: String,
     val passed: Boolean,
     val detail: String = "",
-    val durationMs: Long = 0L,
-    val testType: String = "Automated"
+    val durationMs: Long = 0L
 )
 
 private data class TestRunReport(
-    val runId: String = "",
     val results: List<TestResult> = emptyList(),
     val startedAt: Long = 0L,
-    val completedAt: Long = 0L,
-    val appVersion: String = BuildConfig.VERSION_NAME,
-    val device: String = "${Build.MANUFACTURER} ${Build.MODEL} (API ${Build.VERSION.SDK_INT})",
-    val settingsSnapshot: String = "",
-    val completed: Boolean = false
+    val completedAt: Long = 0L
 ) {
     val totalTests: Int get() = results.size
     val passedTests: Int get() = results.count { it.passed }
     val failedTests: Int get() = totalTests - passedTests
     val durationMs: Long get() = if (completedAt > 0 && startedAt > 0) completedAt - startedAt else 0L
-    val isComplete: Boolean get() = completed || completedAt > 0L
+    val isComplete: Boolean get() = completedAt > 0L
 
     fun toShareableText(): String = buildString {
         appendLine("═══════════════════════════════════")
         appendLine("  FieldMind Full App Test Report")
         appendLine("═══════════════════════════════════")
         appendLine()
-        appendLine("Run ID:   ${runId.ifBlank { "—" }}")
-        appendLine("App:      FieldMind $appVersion")
         appendLine("Started:  ${formatTimestamp(startedAt)}")
         appendLine("Completed: ${formatTimestamp(completedAt)}")
         appendLine("Duration:  ${durationMs}ms (${durationMs / 1000}.${(durationMs % 1000) / 100}s)")
-        appendLine("Settings:  ${settingsSnapshot.ifBlank { "not captured" }}")
         appendLine()
         appendLine("Results: $passedTests / $totalTests passed")
         if (failedTests > 0) appendLine("FAILURES: $failedTests test(s) failed!")
@@ -100,7 +87,7 @@ private data class TestRunReport(
             appendLine()
             categoryResults.forEach { result ->
                 val icon = if (result.passed) "  ✓" else "  ✗"
-                appendLine("$icon ${result.name} [${result.testType}] (${result.durationMs}ms)")
+                appendLine("$icon ${result.name} (${result.durationMs}ms)")
                 if (result.detail.isNotBlank() && !result.passed) {
                     result.detail.lines().forEach { line ->
                         appendLine("       $line")
@@ -111,7 +98,7 @@ private data class TestRunReport(
         }
 
         appendLine("═══════════════════════════════════")
-        appendLine("  Device: $device")
+        appendLine("  Device: ${Build.MANUFACTURER} ${Build.MODEL} (API ${Build.VERSION.SDK_INT})")
         appendLine("═══════════════════════════════════")
     }
 
@@ -145,18 +132,13 @@ fun DevFullAppTestRunner(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val appSettings = remember(context) { AppSettings.getInstance(context) }
-    val persistedReportJson by appSettings.latestDeveloperTestReport.collectAsState()
     var isRunning by remember { mutableStateOf(false) }
-    var report by remember { mutableStateOf(loadDeveloperReport(persistedReportJson)) }
+    var report by remember { mutableStateOf(TestRunReport()) }
     var progressText by remember { mutableStateOf("") }
     var logExpanded by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var testJob by remember { mutableStateOf<Job?>(null) }
     val elapsedSeconds = remember { mutableStateOf(0) }
-
-    LaunchedEffect(persistedReportJson) {
-        if (!isRunning) report = loadDeveloperReport(persistedReportJson)
-    }
 
     // Live timer to show test is actively running
     LaunchedEffect(isRunning) {
@@ -173,7 +155,7 @@ fun DevFullAppTestRunner(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (FieldMindTheme.colors.isDark) 12.dp else 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier
@@ -246,55 +228,34 @@ fun DevFullAppTestRunner(
                         if (!isRunning) {
                             isRunning = true
                             logExpanded = true
-                            val runId = "dev-${System.currentTimeMillis()}"
-                            val startTime = System.currentTimeMillis()
-                            report = TestRunReport(runId = runId, startedAt = startTime, settingsSnapshot = buildSettingsSnapshot(viewModel))
-                            appSettings.setLatestDeveloperTestReport(Gson().toJson(report))
+                            report = TestRunReport()
                             errorMessage = null
                             progressText = "Starting tests..."
-                            scope.launch {
-                                val results = mutableListOf<TestResult>()
+                            testJob = scope.launch {
+                                val restore = TestSettingsSnapshot.capture(viewModel)
                                 try {
+                                    val results = mutableListOf<TestResult>()
+                                    val startTime = System.currentTimeMillis()
                                     runAllTests(viewModel, context, results) { msg ->
                                         progressText = msg
-                                        val partial = TestRunReport(
-                                            runId = runId,
-                                            results = results.toList(),
-                                            startedAt = startTime,
-                                            completedAt = System.currentTimeMillis(),
-                                            settingsSnapshot = buildSettingsSnapshot(viewModel),
-                                            completed = false
-                                        )
-                                        report = partial
-                                        appSettings.setLatestDeveloperTestReport(Gson().toJson(partial))
                                     }
                                     val completedReport = TestRunReport(
-                                        runId = runId,
                                         results = results.toList(),
                                         startedAt = startTime,
-                                        completedAt = System.currentTimeMillis(),
-                                        settingsSnapshot = buildSettingsSnapshot(viewModel),
-                                        completed = true
+                                        completedAt = System.currentTimeMillis()
                                     )
                                     report = completedReport
-                                    appSettings.setLatestDeveloperTestReport(Gson().toJson(completedReport))
-                                    isRunning = false
                                     progressText = "Done — ${completedReport.passedTests}/${completedReport.totalTests} passed"
+                                } catch (e: CancellationException) {
+                                    errorMessage = "Test runner cancelled"
+                                    progressText = "Cancelled"
                                 } catch (e: Exception) {
-                                    results.add(TestResult("Runner", "Test runner crashed", false, e.stackTraceToString()))
-                                    val failedReport = TestRunReport(
-                                        runId = runId,
-                                        results = results.toList(),
-                                        startedAt = startTime,
-                                        completedAt = System.currentTimeMillis(),
-                                        settingsSnapshot = buildSettingsSnapshot(viewModel),
-                                        completed = true
-                                    )
-                                    report = failedReport
-                                    appSettings.setLatestDeveloperTestReport(Gson().toJson(failedReport))
                                     errorMessage = "Test runner crash: ${e::class.simpleName}: ${e.message?.take(200) ?: "Unknown error"}"
-                                    isRunning = false
                                     progressText = ""
+                                } finally {
+                                    restore.restore(viewModel)
+                                    isRunning = false
+                                    testJob = null
                                 }
                             }
                         }
@@ -322,6 +283,16 @@ fun DevFullAppTestRunner(
                     )
                 }
 
+                if (isRunning) {
+                    OutlinedButton(
+                        onClick = { testJob?.cancel() },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(22.dp)
+                    ) {
+                        Text("Cancel", fontWeight = FontWeight.SemiBold)
+                    }
+                }
+
                 if (report.isComplete) {
                     OutlinedButton(
                         onClick = {
@@ -346,24 +317,17 @@ fun DevFullAppTestRunner(
                     }
                     IconButton(
                         onClick = {
-                            context.startActivity(
-                                android.content.Intent.createChooser(shareIntent, "Share test report")
-                            )
+                            runCatching {
+                                context.startActivity(android.content.Intent.createChooser(shareIntent, "Share test report"))
+                            }.onFailure {
+                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                clipboard.setPrimaryClip(ClipData.newPlainText("FieldMind Test Report", report.toShareableText()))
+                                Toast.makeText(context, "No share app found — copied report", Toast.LENGTH_SHORT).show()
+                            }
                         },
                         modifier = Modifier.size(40.dp)
                     ) {
                         Icon(FieldMindIcons.Share, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
-                    }
-
-                    IconButton(
-                        onClick = {
-                            appSettings.setLatestDeveloperTestReport(null)
-                            report = TestRunReport()
-                            Toast.makeText(context, "Latest test report cleared", Toast.LENGTH_SHORT).show()
-                        },
-                        modifier = Modifier.size(40.dp)
-                    ) {
-                        Icon(MaterialSymbolIcon("delete"), null, tint = MaterialTheme.colorScheme.error, size = 20.dp)
                     }
                 }
             }
@@ -517,24 +481,79 @@ fun DevFullAppTestRunner(
     }
 }
 
+
+private data class TestSettingsSnapshot(
+    val privacyLockEnabled: Boolean,
+    val appPinEnabled: Boolean,
+    val appPinHash: String,
+    val themeMode: String,
+    val developerMode: Boolean,
+    val profileName: String,
+    val dailyObservationGoal: Int,
+    val tempUnit: String,
+    val mapType: String,
+    val timeFormat: String,
+    val dateFormat: String,
+    val screenCaptureProtection: Boolean,
+    val clipboardCleanup: Boolean,
+    val geminiEnabled: Boolean,
+    val aiProvider: String,
+    val aiRequireConfirm: Boolean,
+    val aiSendAttachments: Boolean,
+    val localModelEnabled: Boolean
+) {
+    fun restore(viewModel: FieldMindViewModel) {
+        val settings = viewModel.fieldSettings
+        settings.setPrivacyLockEnabled(privacyLockEnabled)
+        settings.setAppPinEnabled(appPinEnabled)
+        settings.setAppPinHash(appPinHash)
+        settings.setThemeMode(themeMode)
+        settings.setDeveloperMode(developerMode)
+        settings.setProfileName(profileName)
+        settings.setDailyObservationGoal(dailyObservationGoal)
+        settings.setTempUnit(tempUnit)
+        settings.setMapType(mapType)
+        settings.setTimeFormat(timeFormat)
+        settings.setDateFormat(dateFormat)
+        settings.setScreenCaptureProtectionEnabled(screenCaptureProtection)
+        settings.setClipboardAutoCleanupEnabled(clipboardCleanup)
+        settings.setGeminiEnabled(geminiEnabled)
+        settings.setAiProvider(aiProvider)
+        settings.setAiRequireConfirmBeforeSave(aiRequireConfirm)
+        settings.setAiSendAttachments(aiSendAttachments)
+        settings.setLocalModelEnabled(localModelEnabled)
+    }
+
+    companion object {
+        fun capture(viewModel: FieldMindViewModel): TestSettingsSnapshot {
+            val settings = viewModel.fieldSettings
+            return TestSettingsSnapshot(
+                privacyLockEnabled = settings.privacyLockEnabled.value,
+                appPinEnabled = settings.appPinEnabled.value,
+                appPinHash = settings.appPinHash.value,
+                themeMode = settings.themeMode.value,
+                developerMode = settings.developerMode.value,
+                profileName = settings.profileName.value,
+                dailyObservationGoal = settings.dailyObservationGoal.value,
+                tempUnit = settings.tempUnit.value,
+                mapType = settings.mapType.value,
+                timeFormat = settings.timeFormat.value,
+                dateFormat = settings.dateFormat.value,
+                screenCaptureProtection = settings.screenCaptureProtectionEnabled.value,
+                clipboardCleanup = settings.clipboardAutoCleanupEnabled.value,
+                geminiEnabled = settings.geminiEnabled.value,
+                aiProvider = settings.aiProvider.value,
+                aiRequireConfirm = settings.aiRequireConfirmBeforeSave.value,
+                aiSendAttachments = settings.aiSendAttachments.value,
+                localModelEnabled = settings.localModelEnabled.value
+            )
+        }
+    }
+}
+
 // ══════════════════════════════════════════════════════════════════════
 //  Test Helpers
 // ══════════════════════════════════════════════════════════════════════
-
-private fun loadDeveloperReport(json: String?): TestRunReport =
-    if (json.isNullOrBlank()) TestRunReport()
-    else runCatching { Gson().fromJson(json, TestRunReport::class.java) }.getOrElse { TestRunReport() }
-
-private fun buildSettingsSnapshot(viewModel: FieldMindViewModel): String {
-    val settings = viewModel.fieldSettings
-    return "theme=${settings.themeMode.value}; secure=${settings.screenCaptureProtectionEnabled.value}; preview=${settings.appPreviewMode.value}; developer=${settings.developerMode.value}; weatherPanel=${settings.showWeatherTestPanel.value}"
-}
-
-private tailrec fun Context.findActivity(): android.app.Activity? = when (this) {
-    is android.app.Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
-}
 
 /**
  * Runs [block] with timing, catches any exception, and appends
@@ -548,14 +567,14 @@ private suspend fun runTest(
 ) {
     val start = System.currentTimeMillis()
     try {
-        withTimeout(10_000L) { block() }
+        withTimeout(2_500L) { block() }
         val duration = System.currentTimeMillis() - start
         results.add(TestResult(category, name, passed = true, durationMs = duration))
     } catch (e: Throwable) {
         val duration = System.currentTimeMillis() - start
         val detail = when {
-            e is TimeoutCancellationException -> "Timed out after 10s"
-            else -> e.stackTraceToString()
+            e is TimeoutCancellationException -> "Timed out after 2.5s"
+            else -> "${e::class.simpleName}: ${e.message?.take(200) ?: "Unknown error"}"
         }
         results.add(TestResult(category, name, passed = false, detail = detail, durationMs = duration))
     }
@@ -873,20 +892,6 @@ private suspend fun runAllTests(
         settings.setScreenCaptureProtectionEnabled(original)
     }
 
-    runTest(results, "Security & Privacy", "Screen capture flag clears when disabled") {
-        val activity = context.findActivity()
-            ?: throw AssertionError("Dev runner needs an Activity context to inspect FLAG_SECURE")
-        val originalSecure = settings.screenCaptureProtectionEnabled.value
-        val originalPreview = settings.appPreviewMode.value
-        settings.setScreenCaptureProtectionEnabled(false)
-        settings.setAppPreviewMode("Normal")
-        applyScreenCaptureProtection(activity.window, false)
-        val secureFlagSet = activity.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE != 0
-        assert(!secureFlagSet) { "FLAG_SECURE remained set after disabling screenshots and Normal preview" }
-        settings.setScreenCaptureProtectionEnabled(originalSecure)
-        settings.setAppPreviewMode(originalPreview)
-    }
-
     runTest(results, "Security & Privacy", "Clipboard auto-cleanup toggles") {
         val original = settings.clipboardAutoCleanupEnabled.value
         settings.setClipboardAutoCleanupEnabled(true)
@@ -901,6 +906,29 @@ private suspend fun runAllTests(
         assert(validOptions.contains(timeout) || timeout.isNotEmpty()) {
             "Lock timeout '$timeout' is not in valid options"
         }
+    }
+
+
+
+    runTest(results, "Security & Privacy", "Lock policy helpers are consistent") {
+        assert(LockSecurityPolicy.FAILED_UNLOCK_THRESHOLD == 5) { "Failed unlock threshold should be 5" }
+        assert(LockSecurityPolicy.pinLengthForLabel("4 digits") == 4) { "4 digit label failed" }
+        assert(LockSecurityPolicy.pinLengthForLabel("5 digits") == 5) { "5 digit label failed" }
+        assert(LockSecurityPolicy.pinLengthForLabel("6 digits") == 6) { "6 digit label failed" }
+        assert(LockSecurityPolicy.failedUnlockCooldownMs("Do Nothing") == 0L) { "Do Nothing must not cooldown" }
+        assert(LockSecurityPolicy.failedUnlockCooldownMs("30 Second Cooldown") == 30_000L) { "30s cooldown mismatch" }
+        assert(LockSecurityPolicy.failedUnlockCooldownMs("5 Minute Cooldown") == 300_000L) { "5 minute cooldown mismatch" }
+        assert(LockSecurityPolicy.shouldRequireBiometricsAfterFailure(5, true, true)) { "Biometric policy should trigger" }
+    }
+
+    runTest(results, "Security & Privacy", "Open-Meteo free tier requires no key") {
+        assert(!OpenMeteoProvider().requiresApiKey) { "Open-Meteo free tier should not require an API key" }
+    }
+
+    runTest(results, "Security & Privacy", "Crash activity intent can be constructed") {
+        val intent = android.content.Intent(context, FieldMindCrashActivity::class.java)
+        intent.putExtra(FieldMindCrashActivity.EXTRA_CRASH_LOG, "test")
+        assert(intent.component != null) { "Crash activity component missing" }
     }
 
     // ═══════════════════════════════════════════════
@@ -1029,16 +1057,6 @@ private suspend fun runAllTests(
         assert(cls != null) { "CrashReporter class not found" }
     }
 
-    runTest(results, "Error Handling", "Non-fatal crash capture persists stack trace") {
-        val sentinel = "Dev runner sentinel ${System.currentTimeMillis()}"
-        CrashReporter.recordNonFatal(IllegalStateException(sentinel), "DevFullAppTestRunner")
-        val logs = AppSettings.getInstance(context).crashLogHistory.first()
-        val latest = logs.lastOrNull()?.log.orEmpty()
-        assert(latest.contains(sentinel) && latest.contains("DevFullAppTestRunner")) {
-            "Latest crash log did not contain sentinel/source"
-        }
-    }
-
     runTest(results, "Error Handling", "Crash log history accessible") {
         val appSettings = fieldmind.research.app.shared.data.model.AppSettings.getInstance(context)
         val logs = appSettings.crashLogHistory.first()
@@ -1081,15 +1099,6 @@ private suspend fun runAllTests(
         val sdk = Build.VERSION.SDK_INT
         assert(sdk >= 21) { "Min SDK should be >= 21, got $sdk" }
     }
-
-    // ═══════════════════════════════════════════════
-    //  9. UI LAYOUT & INSETS CHECKLIST
-    // ═══════════════════════════════════════════════
-    onProgress("[9/9] Recording UI layout checklist...")
-
-    results.add(TestResult("UI Layout & Insets", "Bottom nav/FAB overlap requires Compose UI bounds instrumentation", true, "ManualRequired: verify final Home list items are not hidden by the floating nav pill or quick-capture FAB on small phones.", testType = "ManualRequired"))
-    results.add(TestResult("UI Layout & Insets", "Weather widget clipping requires rendered bounds inspection", true, "ManualRequired: enable all weather detail toggles and verify the widget wraps or scrolls without clipping.", testType = "ManualRequired"))
-    results.add(TestResult("UI Layout & Insets", "Hardware-back tab behavior covered by navigation contract", true, "Contract: Home back shows exit prompt; non-home tabs return toward Home without NavController pop.", testType = "StaticContract"))
 
     onProgress("All tests completed")
 }

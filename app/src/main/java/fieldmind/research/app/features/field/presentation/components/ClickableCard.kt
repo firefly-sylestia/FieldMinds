@@ -1,32 +1,36 @@
 package fieldmind.research.app.features.field.presentation.components
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.heightIn
 import fieldmind.research.app.ui.theme.CuteElevations
+
 /**
- * A [Card] with built-in [expressiveCardPress] animation (lift + scale) and [onClick].
+ * A clickable card with built-in [expressiveCardPress] animation (lift + scale),
+ * explicit [tonalElevation] for visible dark-mode depth (surfaceTint overlay),
+ * and [shadowElevation] for the drop shadow.
  *
- * This is the primary clickable card wrapper for FieldMind. Use it anywhere a card
- * should respond to tap with the signature iOS-style lift-and-scale feedback.
+ * Uses [Surface] internally (instead of [androidx.compose.material3.Card]) so that
+ * [tonalElevation] and [shadowElevation] can be controlled separately. This is the
+ * primary mechanism for M3 primary-tinted depth in dark mode.
  *
- * Defaults mirror the project conventions:
+ * Defaults:
  * - RoundedCornerShape(34.dp)
- * - surfaceContainerLow background (subtle contrast from screen background)
- * - 6dp plush elevation (clickableTier) with soft shadow
+ * - surfaceContainerLow background
+ * - tonalElevation = clickableTier (8dp) — produces visible primary-tint overlay on dark backgrounds
+ * - shadowElevation = clickableTier (8dp)
  * - 1.5dp lift, 0.985 scale-down on press
  */
 @Composable
@@ -38,30 +42,34 @@ fun ClickableCard(
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
+    tonalElevation: Dp = CuteElevations.clickableTier,
+    shadowElevation: Dp = CuteElevations.clickableTier,
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,
     index: Int = 0,
     animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
-) = Card(
+) = Surface(
+    onClick = onClick,
     modifier = modifier
         .fillMaxWidth()
         .heightIn(min = minHeight)
         .staggeredEntrance(index = index, animate = animate)
-        .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown)
-        .clickable(onClick = onClick),
+        .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
     shape = shape,
-    colors = colors,
-    elevation = elevation,
-    border = border,
-    content = content
-)
+    color = colors.containerColor,
+    contentColor = colors.contentColor,
+    tonalElevation = tonalElevation,
+    shadowElevation = shadowElevation,
+    border = border
+) {
+    Column(modifier = Modifier.fillMaxWidth(), content = content)
+}
 
 /**
  * A non-clickable information card with the same visual style as [ClickableCard].
- * Use this when you need the same card look but without interactive behavior.
+ * Uses [Surface] with explicit [tonalElevation] / [shadowElevation] for dark-mode depth.
  */
 @Composable
 fun InfoCard(
@@ -71,22 +79,26 @@ fun InfoCard(
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+    tonalElevation: Dp = CuteElevations.nonClickableTier,
+    shadowElevation: Dp = CuteElevations.nonClickableTier,
     border: androidx.compose.foundation.BorderStroke? = null,
     index: Int = 0,
     animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
-) = Card(
+) = Surface(
     modifier = modifier
         .fillMaxWidth()
         .heightIn(min = minHeight)
         .staggeredEntrance(index = index, animate = animate),
     shape = shape,
-    colors = colors,
-    elevation = elevation,
-    border = border,
-    content = content
-)
+    color = colors.containerColor,
+    contentColor = colors.contentColor,
+    tonalElevation = tonalElevation,
+    shadowElevation = shadowElevation,
+    border = border
+) {
+    Column(modifier = Modifier.fillMaxWidth(), content = content)
+}
 
 /**
  * Overload that controls whether [fillMaxWidth] is applied.
@@ -102,7 +114,8 @@ fun ClickableCard(
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
+    tonalElevation: Dp = CuteElevations.clickableTier,
+    shadowElevation: Dp = CuteElevations.clickableTier,
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     border: androidx.compose.foundation.BorderStroke? = null,
@@ -117,7 +130,8 @@ fun ClickableCard(
         minHeight = minHeight,
         shape = shape,
         colors = colors,
-        elevation = elevation,
+        tonalElevation = tonalElevation,
+        shadowElevation = shadowElevation,
         liftDp = liftDp,
         scaleDown = scaleDown,
         border = border,
@@ -136,7 +150,6 @@ fun ClickableCard(
  * @param tintStrength how strong the tint should be (default 0.06f for subtle, 0.10f for noticeable)
  * @param modifier modifier
  * @param shape corner shape
- * @param elevation card elevation
  * @param liftDp lift amount on press
  * @param scaleDown scale amount on press
  * @param content card content
@@ -149,7 +162,8 @@ fun ClickableCard(
     tintStrength: Float = 0.08f,
     minHeight: Dp = 68.dp,
     shape: Shape = RoundedCornerShape(34.dp),
-    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
+    tonalElevation: Dp = CuteElevations.clickableTier,
+    shadowElevation: Dp = CuteElevations.clickableTier,
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
     content: @Composable ColumnScope.() -> Unit
@@ -161,7 +175,8 @@ fun ClickableCard(
     colors = CardDefaults.cardColors(
         containerColor = accentColor.copy(alpha = tintStrength)
     ),
-    elevation = elevation,
+    tonalElevation = tonalElevation,
+    shadowElevation = shadowElevation,
     liftDp = liftDp,
     scaleDown = scaleDown,
     content = content

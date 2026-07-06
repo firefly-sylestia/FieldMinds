@@ -561,6 +561,29 @@ class FieldMindSettings private constructor(context: Context) {
     fun setFailedUnlockCooldown(value: String) = edit(KEY_FAILED_UNLOCK_COOLDOWN, value) { _failedUnlockCooldown.value = value }
     fun setFailedUnlockRequireBiometrics(value: Boolean) = edit(KEY_FAILED_UNLOCK_BIOMETRICS, value) { _failedUnlockRequireBiometrics.value = value }
     fun setFailedUnlockPanicLock(value: Boolean) = edit(KEY_FAILED_UNLOCK_PANIC_LOCK, value) { _failedUnlockPanicLock.value = value }
+
+    /**
+     * Non-destructive panic reset: removes locally stored lock/API secrets and disables
+     * security toggles that would otherwise trap the user after repeated failed unlocks.
+     * User research data is intentionally preserved until a dedicated, confirmed wipe flow exists.
+     */
+    fun performPanicLockReset() {
+        setAppPinEnabled(false)
+        setAppPinHash("")
+        setDecoyPinEnabled(false)
+        setDecoyPinHash("")
+        setDecoyPinLabel("")
+        setOpenAiApiKey("")
+        setGeminiApiKey("")
+        setWeatherApiKey("")
+        setOpenWeatherMapApiKey("")
+        setWeatherApiDotComApiKey("")
+        setImdApiKey("")
+        setOpenMeteoApiKey("")
+        setExportPasswordProtectionEnabled(false)
+        setExportPasswordHash("")
+        setFailedUnlockPanicLock(false)
+    }
     fun setMetadataRemoveGps(value: Boolean) = edit(KEY_METADATA_REMOVE_GPS, value) { _metadataRemoveGps.value = value }
     fun setMetadataRemoveCamera(value: Boolean) = edit(KEY_METADATA_REMOVE_CAMERA, value) { _metadataRemoveCamera.value = value }
     fun setMetadataRemoveDevice(value: Boolean) = edit(KEY_METADATA_REMOVE_DEVICE, value) { _metadataRemoveDevice.value = value }
@@ -598,7 +621,11 @@ class FieldMindSettings private constructor(context: Context) {
     }
 
     fun setWeatherShowCloudAnimation(value: Boolean) = edit(KEY_WEATHER_SHOW_CLOUD_ANIMATION, value) { _weatherShowCloudAnimation.value = value }
-    fun setWeatherProvider(value: String) = edit(KEY_WEATHER_PROVIDER, value) { _weatherProvider.value = value }
+    fun setWeatherProvider(value: String) = edit(KEY_WEATHER_PROVIDER, value) {
+        _weatherProvider.value = value
+        _weatherProviders.value = value
+        prefs.edit().putString(KEY_WEATHER_PROVIDERS, value).apply()
+    }
     fun setWeatherProviders(value: String) = edit(KEY_WEATHER_PROVIDERS, value) {
         _weatherProviders.value = value
         _weatherProvider.value = value.split(",").firstOrNull { it.isNotBlank() } ?: "met-norway"

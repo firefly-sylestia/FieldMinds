@@ -1,341 +1,202 @@
 package fieldmind.research.app.activities
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button as AndroidButton
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.Preview
-import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
-import kotlin.system.exitProcess
-import androidx.compose.foundation.background
-import androidx.compose.foundation.Image
-import androidx.compose.ui.res.painterResource
-import fieldmind.research.app.R
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.EaseInOut
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.animation.animateContentSize
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import kotlin.system.exitProcess
 
 class FieldMindCrashActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val crashLog = intent.getStringExtra(EXTRA_CRASH_LOG) ?: "No crash log available."
 
-        val crashLog = intent.getStringExtra(EXTRA_CRASH_LOG)
+        runCatching {
+            setContent {
+                CrashTheme {
+                    CrashScreen(crashLog = crashLog)
+                }
+            }
+        }.onFailure {
+            Log.e(TAG, "Compose crash screen failed; showing native fallback", it)
+            showNativeFallback(crashLog)
+        }
+    }
 
-        setContent {
-            FieldMindTheme(darkTheme = true, dynamicColor = false) {
-                FieldMindCrashScreen(crashLog = crashLog)
+    /**
+     * Minimal, self-contained theme for the crash screen.
+     * Uses explicit hardcoded colors so it never depends on the Activity's theme,
+     * resource loading, or any app-specific styling. If the crash was caused by
+     * corrupted theme resources, this theme still renders correctly.
+     */
+    @Composable
+    private fun CrashTheme(content: @Composable () -> Unit) {
+        MaterialTheme(
+            colorScheme = lightColorScheme(
+                primary = SafeColors.primary,
+                onPrimary = SafeColors.onPrimary,
+                primaryContainer = SafeColors.primaryContainer,
+                error = SafeColors.error,
+                onError = SafeColors.onError,
+                surface = SafeColors.surface,
+                onSurface = SafeColors.onSurface,
+                onSurfaceVariant = SafeColors.onSurfaceVariant,
+                outline = SafeColors.outline,
+                surfaceVariant = SafeColors.surfaceVariant
+            ),
+            typography = MaterialTheme.typography, // System fonts only, no custom types
+            content = content
+        )
+    }
+
+    /** Hardcoded safe colors so the crash theme never resolves theme attributes. */
+    private object SafeColors {
+        val primary = Color(0xFF1565C0)
+        val onPrimary = Color.White
+        val primaryContainer = Color(0xFFBBDEFB)
+        val error = Color(0xFFD32F2F)
+        val onError = Color.White
+        val surface = Color(0xFFF5F5F5)
+        val onSurface = Color(0xFF1C1B1F)
+        val onSurfaceVariant = Color(0xFF49454F)
+        val outline = Color(0xFF79747E)
+        val surfaceVariant = Color(0xFFE7E0EC)
+    }
+
+    @Composable
+    private fun CrashScreen(crashLog: String) {
+        val context = LocalContext.current
+        Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .verticalScroll(rememberScrollState())
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    "FieldMind crashed",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.error
+                )
+                Text(
+                    "A crash report was captured. Share it with the developer or restart FieldMind.",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                OutlinedTextField(
+                    value = crashLog,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Crash report") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 220.dp, max = 420.dp),
+                    textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                )
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    OutlinedButton(
+                        onClick = { copyCrashLog(context, crashLog) },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) { Text("Copy") }
+                    Button(
+                        onClick = { shareCrashLog(context, crashLog) },
+                        modifier = Modifier.weight(1f)
+                    ) { Text("Share") }
+                }
+                Button(
+                    onClick = { restartApp(context) },
+                    modifier = Modifier.fillMaxWidth()
+                ) { Text("Restart FieldMind") }
             }
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun FieldMindCrashScreen(crashLog: String?) {
-        val context = LocalContext.current
-        val scope = rememberCoroutineScope()
-
-        // Responsive sizing
-        val configuration = LocalConfiguration.current
-        val isTablet = configuration.screenWidthDp >= 600
-        val contentMaxWidth = 600.dp
-        val cardPadding = if (isTablet) 32.dp else 28.dp
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(
-                    horizontal = if (isTablet) 24.dp else 0.dp,
-                    vertical = if (isTablet) 24.dp else 0.dp
-                ),
-            contentAlignment = if (isTablet) Alignment.Center else Alignment.TopCenter
-        ) {
-            // Crash card container
-            Surface(
-                color = MaterialTheme.colorScheme.surface,
-                shape = MaterialTheme.shapes.extraLarge,
-                tonalElevation = 0.dp,
-                modifier = if (isTablet) {
-                    Modifier
-                        .fillMaxWidth()
-                        .widthIn(max = contentMaxWidth)
-                } else {
-                    Modifier.fillMaxSize()
-                }
-                    .then(if (isTablet) Modifier else Modifier.fillMaxHeight())
-                    .animateContentSize(
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                            stiffness = Spring.StiffnessLow
-                        )
-                    )
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                        .padding(
-                            start = cardPadding,
-                            end = cardPadding,
-                            top = cardPadding * 2,
-                            bottom = cardPadding
-                        ),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    // Bug icon centered at top, onboarding style
-                    AnimatedVisibility(
-                        visible = true,
-                        enter = scaleIn(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                stiffness = Spring.StiffnessLow
-                            )
-                        ) + fadeIn()
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 32.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Warning,
-                                contentDescription = stringResource(R.string.crash_bug_report),
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(56.dp)
-                            )
-                        }
-                    }
-
-                    // Left-aligned texts
-                    Text(
-                        text = stringResource(R.string.crashactivity_uh_oh_looks_like),
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Start,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-
-                    Text(
-                        text = stringResource(R.string.crashactivity_dont_fret_our_app),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Start,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(bottom = 32.dp)
-                    )
-
-                    // Crash log text field
-                    OutlinedTextField(
-                        value = crashLog ?: "No crash log available",
-                        onValueChange = { /* Read-only */ },
-                        label = { Text(stringResource(R.string.crashactivity_secret_crash_scrolls)) },
-                        readOnly = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 250.dp)
-                            .padding(bottom = 40.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                        )
-                    )
-
-                    // App logo and name at center
-                    val infiniteTransition = rememberInfiniteTransition(label = "crash_animations")
-                    val logoGlow by infiniteTransition.animateFloat(
-                        initialValue = 0.6f,
-                        targetValue = 1f,
-                        animationSpec = infiniteRepeatable(
-                            animation = tween(2000, easing = EaseInOut),
-                            repeatMode = RepeatMode.Reverse
-                        ),
-                        label = "logoGlow"
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 48.dp)
-                    ) {
-                        // App logo with glowing effect
-                        AnimatedVisibility(
-                            visible = true,
-                            enter = scaleIn(
-                                animationSpec = spring(
-                                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                                    stiffness = Spring.StiffnessMediumLow
-                                )
-                            ) + fadeIn(
-                                animationSpec = tween(1000)
-                            )
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(80.dp)
-                                    .clip(CircleShape),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                                    contentDescription = stringResource(R.string.updates_rhythm_logo_cd),
-                                    modifier = Modifier
-                                        .size(80.dp)
-                                        .graphicsLayer {
-                                            alpha = logoGlow
-                                        }
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.width(3.dp))
-
-                        // App name
-                        AnimatedVisibility(
-                            visible = true,
-                            enter = scaleIn(
-                                animationSpec = spring(
-                                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                                    stiffness = Spring.StiffnessMedium
-                                )
-                            ) + fadeIn(animationSpec = tween(800, delayMillis = 200))
-                        ) {
-                            Text(
-                                text = "FieldMind",
-                                style = MaterialTheme.typography.displaySmall,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-
-                    // Onboarding-style buttons at bottom
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 32.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // Share button
-                        val shareButtonScale = remember { Animatable(1f) }
-                        OutlinedButton(
-                            onClick = {
-                                scope.launch {
-                                    shareButtonScale.animateTo(0.92f, animationSpec = tween(100))
-                                    shareButtonScale.animateTo(1f, animationSpec = spring(
-                                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                                        stiffness = Spring.StiffnessHigh
-                                    ))
-                                }
-                                val shareIntent = Intent().apply {
-                                    action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_TEXT, "FieldMind App Crash Log:\n\n$crashLog")
-                                    type = "text/plain"
-                                }
-                                context.startActivity(Intent.createChooser(shareIntent, "Share Crash Log"))
-                            },
-                            modifier = Modifier
-                                .height(56.dp)
-                                .weight(1f)
-                                .graphicsLayer {
-                                    scaleX = shareButtonScale.value
-                                    scaleY = shareButtonScale.value
-                                },
-                            shape = RoundedCornerShape(40.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Share,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(stringResource(R.string.crashactivity_share), style = MaterialTheme.typography.labelLarge)
-                        }
-
-                        // Restart button
-                        val restartButtonScale = remember { Animatable(1f) }
-                        Button(
-                            onClick = {
-                                scope.launch {
-                                    restartButtonScale.animateTo(0.92f, animationSpec = tween(100))
-                                    restartButtonScale.animateTo(1f, animationSpec = spring(
-                                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                                        stiffness = Spring.StiffnessHigh
-                                    ))
-                                }
-                                val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-                                intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                                context.startActivity(intent)
-                                exitProcess(0)
-                            },
-                            modifier = Modifier
-                                .height(56.dp)
-                                .weight(1f)
-                                .graphicsLayer {
-                                    scaleX = restartButtonScale.value
-                                    scaleY = restartButtonScale.value
-                                },
-                            shape = RoundedCornerShape(40.dp)
-                        ) {
-                            Text(stringResource(R.string.crash_restart_app), style = MaterialTheme.typography.labelLarge)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    }
-
-                }
-            }
+    private fun showNativeFallback(crashLog: String) {
+        val padding = (20 * resources.displayMetrics.density).toInt()
+        val content = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(padding, padding, padding, padding)
         }
+        content.addView(TextView(this).apply {
+            text = "FieldMind crashed"
+            textSize = 24f
+            setTypeface(typeface, android.graphics.Typeface.BOLD)
+        })
+        content.addView(TextView(this).apply {
+            text = "A crash report was captured."
+            textSize = 16f
+        })
+        content.addView(TextView(this).apply {
+            text = crashLog
+            textSize = 12f
+            typeface = android.graphics.Typeface.MONOSPACE
+            setTextIsSelectable(true)
+        })
+        content.addView(AndroidButton(this).apply {
+            text = "Copy crash report"
+            setOnClickListener { copyCrashLog(this@FieldMindCrashActivity, crashLog) }
+        })
+        content.addView(AndroidButton(this).apply {
+            text = "Share crash report"
+            setOnClickListener { shareCrashLog(this@FieldMindCrashActivity, crashLog) }
+        })
+        content.addView(AndroidButton(this).apply {
+            text = "Restart FieldMind"
+            setOnClickListener { restartApp(this@FieldMindCrashActivity) }
+        })
+        setContentView(ScrollView(this).apply { addView(content) })
     }
 
     companion object {
+        private const val TAG = "FieldMindCrashActivity"
         const val EXTRA_CRASH_LOG = "extra_crash_log"
 
         fun start(context: Context, crashLog: String) {
@@ -345,13 +206,32 @@ class FieldMindCrashActivity : ComponentActivity() {
             }
             context.startActivity(intent)
         }
-    }
 
-    @Preview(showBackground = true)
-    @Composable
-    fun PreviewFieldMindCrashScreen() {
-        FieldMindTheme(darkTheme = true, dynamicColor = false) {
-            FieldMindCrashScreen(crashLog = "Sample crash log details here.\nAnother line of log.")
+        private fun copyCrashLog(context: Context, crashLog: String) {
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboard.setPrimaryClip(ClipData.newPlainText("FieldMind Crash Report", crashLog))
+            Toast.makeText(context, "Crash report copied", Toast.LENGTH_SHORT).show()
+        }
+
+        private fun shareCrashLog(context: Context, crashLog: String) {
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "FieldMind Crash Report")
+                putExtra(Intent.EXTRA_TEXT, crashLog)
+            }
+            runCatching {
+                context.startActivity(Intent.createChooser(shareIntent, "Share crash report").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }.onFailure {
+                copyCrashLog(context, crashLog)
+            }
+        }
+
+        private fun restartApp(context: Context) {
+            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
+            if (intent != null) context.startActivity(intent)
+            exitProcess(0)
         }
     }
 }

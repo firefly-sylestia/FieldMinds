@@ -21,6 +21,7 @@ import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.CuteElevations
 
 /**
  * Unified collapsible "Privacy & encryption" card used in both Export and Backup tabs.
@@ -65,7 +66,7 @@ fun ExportPrivacyOptionsCard(
     Card(
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(0.dp)) {
             // ── Collapsible header: ▶ Privacy & encryption ──

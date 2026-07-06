@@ -371,7 +371,7 @@ fun InsightsScreen(
                 item {    Card(
         modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(32.dp)),
         shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             tags.take(10).forEach { tag ->
@@ -391,7 +391,7 @@ fun InsightsScreen(
             item {
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         NetworkGraphTimeline(
@@ -453,7 +453,7 @@ fun InsightsScreen(
                     Card(
                         modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(32.dp)),
                         shape = RoundedCornerShape(32.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                     ) {
                         Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                             Icon(icon = FieldMindIcons.Weather, contentDescription = null, tint = colors.info, size = 22.dp)
@@ -512,7 +512,7 @@ private fun ResearchJourneyCard(
     projects: List<ProjectEntity>,
     onNavigate: (FieldMindScreen) -> Unit = {}
 ) {
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Research journey", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Text("Question → observations → patterns → hypothesis → findings", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -685,7 +685,7 @@ private fun CollapsibleAchievements(
     Card(
         modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)).pressScale(scaleDown = 0.98f).clickable { expanded = !expanded },
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -769,7 +769,7 @@ private fun InsightCard(title: String, icon: MaterialSymbolIcon, content: @Compo
     Card(
         modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {

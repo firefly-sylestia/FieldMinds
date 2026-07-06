@@ -9,31 +9,30 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import fieldmind.research.app.features.field.data.security.LockSecurityPolicy
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
-import fieldmind.research.app.features.field.presentation.components.LocalPrivacyTypingEnabled
-import fieldmind.research.app.features.field.presentation.components.PrivacyTypingIndicator
-import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -61,11 +60,7 @@ fun FieldMindAppLock(
     val appPinEnabled by settings.appPinEnabled.collectAsState()
     val appPinHash by settings.appPinHash.collectAsState()
     val appPinLength by settings.appPinLength.collectAsState()
-    val pinRequiredLength = when (appPinLength) {
-        "5 digits" -> 5
-        "6 digits" -> 6
-        else -> 4
-    }
+    val pinRequiredLength = LockSecurityPolicy.pinLengthForLabel(appPinLength)
     val decoyEnabled by settings.decoyPinEnabled.collectAsState()
     val decoyPinHash by settings.decoyPinHash.collectAsState()
     val hasPin = appPinEnabled && appPinHash.isNotBlank()
@@ -85,14 +80,26 @@ fun FieldMindAppLock(
     val context = LocalContext.current
     val keyguard = remember(context) { context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager }
     val biometricManager = remember(context) { BiometricManager.from(context) }
+    val deviceAuthenticators = BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    val hasDeviceAuth = biometricManager.canAuthenticate(deviceAuthenticators) == BiometricManager.BIOMETRIC_SUCCESS
     val hasBiometric = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
     val hasDeviceCredential = keyguard.isDeviceSecure
-    var usePinLock by remember { mutableStateOf(false) }
-    var pin by remember { mutableStateOf("") }
-    var pinError by remember { mutableStateOf(false) }
-    var pinAttempts by remember { mutableIntStateOf(0) }
-    var pinLockedUntil by remember { mutableLongStateOf(0L) }
-    val isPinLocked = pinLockedUntil > System.currentTimeMillis()
+    var usePinLock by rememberSaveable { mutableStateOf(false) }
+    var pin by rememberSaveable { mutableStateOf("") }
+    var pinError by rememberSaveable { mutableStateOf(false) }
+    var pinAttempts by rememberSaveable { mutableIntStateOf(0) }
+    var pinLockedUntil by rememberSaveable { mutableLongStateOf(0L) }
+    var biometricRequiredAfterFailure by rememberSaveable { mutableStateOf(false) }
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(pinLockedUntil) {
+        while (pinLockedUntil > System.currentTimeMillis()) {
+            now = System.currentTimeMillis()
+            kotlinx.coroutines.delay(1_000L)
+        }
+        now = System.currentTimeMillis()
+    }
+    val isPinLocked = pinLockedUntil > now
+    val cooldownRemainingSeconds = ((pinLockedUntil - now).coerceAtLeast(0L) + 999L) / 1000L
     var authAttempted by remember { mutableStateOf(false) }
 
     val unlockLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -114,9 +121,9 @@ fun FieldMindAppLock(
         isAuthenticating = true
 
         authAttempted = true
-        usePinLock = false
+        if (!biometricRequiredAfterFailure) usePinLock = false
         val activity = context as? FragmentActivity
-        if (hasBiometric && activity != null) {
+        if (hasDeviceAuth && activity != null) {
             // Cancel any previous authentication session to avoid stale session conflicts
             currentBiometricPrompt?.cancelAuthentication()
 
@@ -125,6 +132,7 @@ fun FieldMindAppLock(
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     isAuthenticating = false
                     currentBiometricPrompt = null
+                    biometricRequiredAfterFailure = false
                     onUnlock()
                 }
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
@@ -142,8 +150,7 @@ fun FieldMindAppLock(
                 .setTitle("FieldMind Privacy Lock")
                 .setSubtitle("Authenticate to access your research data")
                 .setAllowedAuthenticators(
-                    BiometricManager.Authenticators.BIOMETRIC_WEAK or
-                            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+                    deviceAuthenticators
                 )
                 .build()
             prompt.authenticate(promptInfo)
@@ -204,64 +211,97 @@ fun FieldMindAppLock(
 
                 Spacer(Modifier.height(8.dp))
 
-                // PIN input (for in-app PIN mode)
+                // PIN input (for in-app PIN mode). Uses an app-rendered numpad so the
+                // device keyboard is never opened for unlock.
                 if (usePinLock && hasPin) {
                     Text("Enter PIN ($pinRequiredLength digits)", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    OutlinedTextField(
-                        value = pin,
-                        onValueChange = {
-                            val maxLen = maxOf(pinRequiredLength, 6)
-                            if (it.length <= maxLen) {
-                                pin = it
+                    PinProgressDots(length = pinRequiredLength, filled = pin.length, isError = pinError)
+                    if (pinError) {
+                        Text("Incorrect PIN. Try again.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                    }
+                    if (biometricRequiredAfterFailure) {
+                        Text(
+                            "Biometric or device unlock is required after repeated failures.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error,
+                            textAlign = TextAlign.Center
+                        )
+                    } else {
+                        val remaining = (LockSecurityPolicy.FAILED_UNLOCK_THRESHOLD - pinAttempts).coerceAtLeast(0)
+                        if (pinAttempts > 0) {
+                            Text(
+                                "$pinAttempts/${LockSecurityPolicy.FAILED_UNLOCK_THRESHOLD} failed attempts • $remaining remaining",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        FieldMindPinNumpad(
+                            enabled = !isPinLocked,
+                            onDigit = { digit ->
+                                if (isPinLocked || pin.length >= pinRequiredLength) return@FieldMindPinNumpad
                                 pinError = false
-                                // Check decoy PIN first (if enabled)
-                                if (it.length >= pinRequiredLength && hasDecoy && settings.verifyDecoyPin(it)) {
-                                    pinAttempts = 0
-                                    onDecoyUnlock?.invoke()
-                                    pin = ""
-                                }
-                                // Then check real PIN
-                                else if (it.length >= pinRequiredLength && settings.verifyAppPin(it)) {
-                                    pinAttempts = 0
-                                    onUnlock()
-                                } else if (it.length >= pinRequiredLength) {
-                                    pinAttempts++
-                                    pinError = true
-                                    pin = ""
-                                    if (pinAttempts >= 3) {
-                                        // Apply failed unlock cooldown if configured
-                                        val cooldownSetting = settings.failedUnlockCooldown.value
-                                        val cooldownMs = when (cooldownSetting) {
-                                            "30 Second Cooldown" -> 30_000L
-                                            "5 Minute Cooldown" -> 300_000L
-                                            else -> 30_000L // Default 30s
+                                val nextPin = pin + digit
+                                pin = nextPin
+                                if (nextPin.length == pinRequiredLength) {
+                                    when {
+                                        hasDecoy && settings.verifyDecoyPin(nextPin) -> {
+                                            pinAttempts = 0
+                                            pin = ""
+                                            onDecoyUnlock?.invoke()
                                         }
-                                        pinLockedUntil = System.currentTimeMillis() + cooldownMs
-                                        pinAttempts = 0
+                                        settings.verifyAppPin(nextPin) -> {
+                                            pinAttempts = 0
+                                            biometricRequiredAfterFailure = false
+                                            pin = ""
+                                            onUnlock()
+                                        }
+                                        else -> {
+                                            pinAttempts++
+                                            pinError = true
+                                            pin = ""
+                                            if (LockSecurityPolicy.shouldTriggerFailedPolicy(pinAttempts)) {
+                                                val requireBiometric = LockSecurityPolicy.shouldRequireBiometricsAfterFailure(
+                                                    failedAttempts = pinAttempts,
+                                                    settingEnabled = settings.failedUnlockRequireBiometrics.value,
+                                                    deviceAuthAvailable = hasDeviceAuth || hasDeviceCredential
+                                                )
+                                                val cooldownMs = LockSecurityPolicy.failedUnlockCooldownMs(settings.failedUnlockCooldown.value)
+                                                if (settings.failedUnlockPanicLock.value) {
+                                                    settings.performPanicLockReset()
+                                                }
+                                                if (requireBiometric) {
+                                                    biometricRequiredAfterFailure = true
+                                                    startBiometricAuth()
+                                                }
+                                                if (cooldownMs > 0L) {
+                                                    pinLockedUntil = System.currentTimeMillis() + cooldownMs
+                                                }
+                                                pinAttempts = 0
+                                            }
+                                        }
                                     }
                                 }
+                            },
+                            onBackspace = {
+                                if (!isPinLocked && pin.isNotEmpty()) {
+                                    pin = pin.dropLast(1)
+                                    pinError = false
+                                }
+                            },
+                            onClear = {
+                                if (!isPinLocked) {
+                                    pin = ""
+                                    pinError = false
+                                }
                             }
-                        },
-                        visualTransformation = PasswordVisualTransformation(),
-                        label = { Text("PIN") },
-                        singleLine = true,
-                        isError = pinError,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword, imeAction = ImeAction.Done).withPrivacyTyping(LocalPrivacyTypingEnabled.current),
-                        supportingText = if (pinError) {{ Text("Incorrect PIN. Try again.") }} else null,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(28.dp),
-                        textStyle = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center, letterSpacing = 8.sp),
-                        trailingIcon = {
-                            if (LocalPrivacyTypingEnabled.current) {
-                                PrivacyTypingIndicator()
-                            }
-                        }
-                    )
+                        )
+                    }
                 }
 
                 if (usePinLock && isPinLocked) {
                     Text(
-                        "Too many attempts. Try again in 30 seconds.",
+                        "Too many attempts. Try again in ${cooldownRemainingSeconds}s.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error,
                         textAlign = TextAlign.Center
@@ -281,13 +321,86 @@ fun FieldMindAppLock(
                             Text(if (usePinLock) "Using PIN" else "Use PIN")
                         }
                     }
-                    if (hasBiometric || hasDeviceCredential) {
+                    if (hasDeviceAuth || hasDeviceCredential) {
                         Button(
                             onClick = { startBiometricAuth() },
                             modifier = Modifier.weight(1f),
                             shape = RoundedCornerShape(24.dp)
                         ) {
                             Text(if (hasBiometric) "Retry biometric" else "Retry device lock")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun PinProgressDots(length: Int, filled: Int, isError: Boolean) {
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+        repeat(length) { index ->
+            Box(
+                Modifier
+                    .size(16.dp)
+                    .clip(CircleShape)
+                    .background(
+                        when {
+                            isError -> MaterialTheme.colorScheme.error
+                            index < filled -> MaterialTheme.colorScheme.primary
+                            else -> MaterialTheme.colorScheme.outlineVariant
+                        }
+                    )
+            )
+        }
+    }
+}
+
+@Composable
+private fun FieldMindPinNumpad(
+    enabled: Boolean,
+    onDigit: (String) -> Unit,
+    onBackspace: () -> Unit,
+    onClear: () -> Unit
+) {
+    val haptics = LocalHapticFeedback.current
+    val rows = listOf(
+        listOf("1", "2", "3"),
+        listOf("4", "5", "6"),
+        listOf("7", "8", "9"),
+        listOf("Clear", "0", "⌫")
+    )
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+        rows.forEach { row ->
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                row.forEach { key ->
+                    val action = {
+                        if (enabled) {
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                            when (key) {
+                                "Clear" -> onClear()
+                                "⌫" -> onBackspace()
+                                else -> onDigit(key)
+                            }
+                        }
+                    }
+                    Surface(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(54.dp)
+                            .clip(RoundedCornerShape(22.dp))
+                            .clickable(
+                                enabled = enabled,
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = action
+                            ),
+                        shape = RoundedCornerShape(22.dp),
+                        color = if (enabled) MaterialTheme.colorScheme.surfaceContainerHighest else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(key, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }

@@ -77,9 +77,9 @@ val ErrorContainerDark = Color(0xFF8C1D18) // Medium red container
 val OnErrorContainerDark = Color(0xFFF9DEDC) // Light text on error container
 
 // Background and surface colors
-val BackgroundDark = Color(0xFF0E0C12) // Deeper near-black for richer dark mode depth
+val BackgroundDark = Color(0xFF08060C) // Deeper near-black void — One UI-inspired deep background for visible card depth contrast
 val OnBackgroundDark = Color(0xFFE6E1E5) // Light text on background
-val SurfaceDark = Color(0xFF0E0C12) // Surface same as background
+val SurfaceDark = Color(0xFF0E0C12) // Surface same as original background — keeps M3 convention
 val OnSurfaceDark = Color(0xFFE6E1E5) // Light text on surface
 val SurfaceVariantDark = Color(0xFF49454F) // Medium gray surface variant
 val OnSurfaceVariantDark = Color(0xFFCAC4D0) // Light gray text
@@ -88,12 +88,13 @@ val OnSurfaceVariantDark = Color(0xFFCAC4D0) // Light gray text
 val OutlineDark = Color(0xFF938F99) // Light gray outline
 val OutlineVariantDark = Color(0xFF49454F) // Medium gray outline variant
 
-// Surface containers for different elevation levels — smooth +8 step progression
-val SurfaceContainerLowestDark = Color(0xFF16141E) // Lowest elevation — +8 from background
-val SurfaceContainerLowDark = Color(0xFF1E1C26)   // Low elevation — +8 from lowest
-val SurfaceContainerDark = Color(0xFF26242E)       // Medium elevation — +8 from low
-val SurfaceContainerHighDark = Color(0xFF2E2C36)   // High elevation — +8 from medium
-val SurfaceContainerHighestDark = Color(0xFF3A3842) // Highest elevation — +12 from high (premium depth)
+// Surface containers for different elevation levels — widened +12/+12/+12/+12/+14 step progression for visible dark mode layering
+// One UI 8.5 uses tonal elevation and wider container gaps so each tier is perceptible on OLED dark backgrounds
+val SurfaceContainerLowestDark = Color(0xFF16141E) // Lowest elevation — +8 from surface
+val SurfaceContainerLowDark = Color(0xFF22202A)   // Low elevation — +12 from lowest
+val SurfaceContainerDark = Color(0xFF2E2C36)       // Medium elevation — +12 from low
+val SurfaceContainerHighDark = Color(0xFF3A3842)   // High elevation — +12 from medium
+val SurfaceContainerHighestDark = Color(0xFF46444E) // Highest elevation — +12 from high — premium depth contrast
 
 // Inverse colors for special cases
 val InverseSurfaceDark = Color(0xFFE6E1E5) // Light surface for dark theme
@@ -185,11 +186,11 @@ val FloraOnSurfaceVariantDark = Color(0xFFC4C6C8)
 val FloraOutlineDark = Color(0xFF8E9094)
 val FloraOutlineVariantDark = Color(0xFF3A3A3E)
 
-val FloraSurfaceContainerLowestDark = Color(0xFF161618) // +8 from background
-val FloraSurfaceContainerLowDark = Color(0xFF1E1E20)  // +8 from lowest
-val FloraSurfaceContainerDark = Color(0xFF262628)    // +8 from low
-val FloraSurfaceContainerHighDark = Color(0xFF2E2E30) // +8 from medium
-val FloraSurfaceContainerHighestDark = Color(0xFF3A3A3C) // +12 from high — premium depth contrast
+val FloraSurfaceContainerLowestDark = Color(0xFF161618) // +12 from surface
+val FloraSurfaceContainerLowDark = Color(0xFF222224)   // +12 from lowest
+val FloraSurfaceContainerDark = Color(0xFF2E2E30)       // +12 from low
+val FloraSurfaceContainerHighDark = Color(0xFF3A3A3C)   // +12 from medium
+val FloraSurfaceContainerHighestDark = Color(0xFF464648) // +14 from high — premium depth
 
 val FloraSurfaceDimDark = Color(0xFF0E0E10)
 val FloraSurfaceBrightDark = Color(0xFF3A3A3C)
@@ -268,7 +269,7 @@ val AmethystOnErrorDark = Color(0xFF690005)
 val AmethystErrorContainerDark = Color(0xFF93000A)
 val AmethystOnErrorContainerDark = Color(0xFFFFDAD6)
 
-val AmethystBackgroundDark = Color(0xFF0D0B12) // Deep dark purple-black
+val AmethystBackgroundDark = Color(0xFF07050E) // Deeper void for visible card depth
 val AmethystOnBackgroundDark = Color(0xFFE6E0EE)
 val AmethystSurfaceDark = Color(0xFF0D0B12)
 val AmethystOnSurfaceDark = Color(0xFFE6E0EE)
@@ -278,11 +279,11 @@ val AmethystOnSurfaceVariantDark = Color(0xFFC8C0D0)
 val AmethystOutlineDark = Color(0xFF9088A0)
 val AmethystOutlineVariantDark = Color(0xFF3A3448)
 
-val AmethystSurfaceContainerLowestDark = Color(0xFF15131A) // +8 from background
-val AmethystSurfaceContainerLowDark = Color(0xFF1D1B22)    // +8 from lowest
-val AmethystSurfaceContainerDark = Color(0xFF25232A)       // +8 from low
-val AmethystSurfaceContainerHighDark = Color(0xFF2D2B32)   // +8 from medium
-val AmethystSurfaceContainerHighestDark = Color(0xFF39373E) // +12 from high — premium depth
+val AmethystSurfaceContainerLowestDark = Color(0xFF15131A) // +12 from surface
+val AmethystSurfaceContainerLowDark = Color(0xFF21232E)   // +12 from lowest
+val AmethystSurfaceContainerDark = Color(0xFF2D2B36)       // +12 from low
+val AmethystSurfaceContainerHighDark = Color(0xFF393742)   // +12 from medium
+val AmethystSurfaceContainerHighestDark = Color(0xFF45434E) // +14 from high — premium depth
 
 val AmethystSurfaceDimDark = Color(0xFF0D0B12)
 val AmethystSurfaceBrightDark = Color(0xFF383640)
@@ -361,7 +362,7 @@ val TerrainOnErrorDark = Color(0xFF690005)
 val TerrainErrorContainerDark = Color(0xFF93000A)
 val TerrainOnErrorContainerDark = Color(0xFFFFDAD6)
 
-val TerrainBackgroundDark = Color(0xFF100E0C) // Deep espresso
+val TerrainBackgroundDark = Color(0xFF0A0806) // Deeper void for visible card depth
 val TerrainOnBackgroundDark = Color(0xFFE4E0D8)
 val TerrainSurfaceDark = Color(0xFF100E0C)
 val TerrainOnSurfaceDark = Color(0xFFE4E0D8)
@@ -371,11 +372,11 @@ val TerrainOnSurfaceVariantDark = Color(0xFFC4C0B8)
 val TerrainOutlineDark = Color(0xFF8E8A80)
 val TerrainOutlineVariantDark = Color(0xFF3A3832)
 
-val TerrainSurfaceContainerLowestDark = Color(0xFF181614) // +8 from background
-val TerrainSurfaceContainerLowDark = Color(0xFF201E1C)    // +8 from lowest
-val TerrainSurfaceContainerDark = Color(0xFF282624)       // +8 from low
-val TerrainSurfaceContainerHighDark = Color(0xFF302E2C)   // +8 from medium
-val TerrainSurfaceContainerHighestDark = Color(0xFF3C3A38) // +12 from high — premium depth
+val TerrainSurfaceContainerLowestDark = Color(0xFF181614) // +12 from surface
+val TerrainSurfaceContainerLowDark = Color(0xFF242220)   // +12 from lowest
+val TerrainSurfaceContainerDark = Color(0xFF302E2C)       // +12 from low
+val TerrainSurfaceContainerHighDark = Color(0xFF3C3A38)   // +12 from medium
+val TerrainSurfaceContainerHighestDark = Color(0xFF484644) // +14 from high — premium depth
 
 val TerrainSurfaceDimDark = Color(0xFF100E0C)
 val TerrainSurfaceBrightDark = Color(0xFF383634)

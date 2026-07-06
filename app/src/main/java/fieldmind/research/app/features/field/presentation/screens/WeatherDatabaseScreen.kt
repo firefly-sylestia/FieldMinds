@@ -58,6 +58,7 @@ fun WeatherDatabaseScreen(
     val tempUnit by viewModel.fieldSettings.tempUnit.collectAsState()
     val windSpeedUnit by viewModel.fieldSettings.windSpeedUnit.collectAsState()
     val showCloudAnimation by viewModel.fieldSettings.weatherShowCloudAnimation.collectAsState()
+    val weatherDiagnostics by viewModel.weatherDiagnostics.collectAsState()
 
     // Weather Database always shows all data (display prefs only affect the home widget)
 
@@ -299,7 +300,8 @@ fun WeatherDatabaseScreen(
                     placeName = dashboardPlaceName,
                     refreshTimestampText = refreshTimestampText,
                     tempUnit = tempUnit,
-                    windSpeedUnit = windSpeedUnit
+                    windSpeedUnit = windSpeedUnit,
+                    diagnosticMessage = weatherDiagnostics.message
                 )
             }
 
@@ -414,10 +416,10 @@ fun WeatherDatabaseScreen(
             // Weather records
             if (weatherObs.isEmpty()) {
                 item {
-                    Card(
+                    InfoCard(
                         shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                        tonalElevation = 0.dp, shadowElevation = 0.dp,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
@@ -459,7 +461,8 @@ private fun LiveCurrentWeatherCard(
     refreshTimestampText: String = "Updated just now",
     tempUnit: String = "Celsius",
     windSpeedUnit: String = "km/h",
-    showCloudAnimation: Boolean = true
+    showCloudAnimation: Boolean = true,
+    diagnosticMessage: String? = null
 ) {
     val colors = FieldMindTheme.colors
     val isDarkTheme = colors.isDark
@@ -496,10 +499,10 @@ private fun LiveCurrentWeatherCard(
     }
     val weatherGradient = Brush.horizontalGradient(displayColors)
 
-    Card(
+    InfoCard(
         shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        tonalElevation = 0.dp, shadowElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(
@@ -594,10 +597,10 @@ private fun LiveCurrentWeatherCard(
                     }
 
                     // Glass-morphism detailed metrics card
-                    Card(
+                    InfoCard(
                         shape = RoundedCornerShape(36.dp),
                         colors = CardDefaults.cardColors(containerColor = if (isDarkTheme || isNight) Color.White.copy(alpha = 0.12f) else Color(0xFF1A1A3E).copy(alpha = 0.06f)),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        tonalElevation = 0.dp, shadowElevation = 0.dp
                     ) {
                         Column(
                             Modifier.fillMaxWidth().padding(20.dp),
@@ -688,7 +691,7 @@ private fun LiveCurrentWeatherCard(
                             size = 48.dp
                         )
                         Text(
-                            "Enable GPS for live weather",
+                            diagnosticMessage ?: "Enable GPS for live weather",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -730,10 +733,10 @@ private fun StatCard(
             else -> 24.sp
         }
     }
-    Card(
+    InfoCard(
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        tonalElevation = 0.dp, shadowElevation = 0.dp,
         modifier = modifier
     ) {
         Column(
@@ -959,7 +962,7 @@ private fun WeatherRecordCard(
         onClick = { onOpenDetail("observation", observation.id) },
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),

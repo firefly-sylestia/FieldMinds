@@ -120,8 +120,7 @@ fun SharedTransitionScope.HomeScreen(
     onNavigate: (FieldMindScreen) -> Unit,
     onOpenDetail: (String, Long) -> Unit = { _, _ -> },
     onOpenReader: (String, String) -> Unit = { _, _ -> },
-    onOpenCanvas: () -> Unit = {},
-    bottomContentPadding: androidx.compose.ui.unit.Dp = 176.dp
+    onOpenCanvas: () -> Unit = {}
 ) {
     // ── Interest-aware configuration (must be early for defaultCategory) ──
     val userInterests by viewModel.fieldSettings.userInterests.collectAsState()
@@ -187,7 +186,6 @@ fun SharedTransitionScope.HomeScreen(
     val windSpeedUnit by viewModel.fieldSettings.windSpeedUnit.collectAsState()
     val developerMode by viewModel.fieldSettings.developerMode.collectAsState()
     val showWeatherTestPanel by viewModel.fieldSettings.showWeatherTestPanel.collectAsState()
-    val screenCaptureProtection by viewModel.fieldSettings.screenCaptureProtectionEnabled.collectAsState()
 
     // ── Weather state (hoisted outside LazyColumn so it persists across scroll) ──
     var homeCurrentWeather by remember { mutableStateOf<WeatherSnapshot?>(null) }
@@ -270,7 +268,7 @@ fun SharedTransitionScope.HomeScreen(
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
     val homeScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
-    Box(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {            LazyColumn(state = homeScrollState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 20.dp, top = 0.dp, end = 20.dp, bottom = bottomContentPadding), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+    Box(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {            LazyColumn(state = homeScrollState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 0.dp, 20.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             // ── Merged Header + Goal ──
             item {
                 CompactHomeHeader(
@@ -340,7 +338,7 @@ fun SharedTransitionScope.HomeScreen(
                 val colors = FieldMindTheme.colors
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -424,7 +422,7 @@ fun SharedTransitionScope.HomeScreen(
                 )
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -472,7 +470,7 @@ fun SharedTransitionScope.HomeScreen(
             item {
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                         .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
@@ -519,7 +517,7 @@ fun SharedTransitionScope.HomeScreen(
                 )
                 Card(
                     shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -570,7 +568,7 @@ fun SharedTransitionScope.HomeScreen(
             onClick = { showQuickCaptureSheet = true },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = bottomContentPadding - 64.dp),
+                .padding(end = 16.dp, bottom = 112.dp),
             shape = CircleShape,
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -591,7 +589,7 @@ fun SharedTransitionScope.HomeScreen(
             onDismissRequest = { showCamera = false },
             properties = DialogProperties(
                 usePlatformDefaultWidth = false,
-                securePolicy = if (screenCaptureProtection) SecureFlagPolicy.SecureOn else SecureFlagPolicy.Inherit
+                securePolicy = SecureFlagPolicy.SecureOn
             )
         ) {
             Box(Modifier.fillMaxSize().background(Color.Black)) {
@@ -1288,7 +1286,6 @@ private fun timeOfDay(): String {
 //  Live Weather Dashboard Widget — Live Open-Meteo weather with animations
 // ══════════════════════════════════════════════════════════════════════
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun LiveWeatherDashboardWidget(
     viewModel: FieldMindViewModel,
@@ -1382,16 +1379,22 @@ private fun LiveWeatherDashboardWidget(
         label = "liveAlpha"
     )
 
-    GlassCard(
+    val glassColor = MaterialTheme.colorScheme.surfaceContainer.copy(
+        alpha = if (FieldMindTheme.colors.isDark) 0.55f else 0.45f
+    )
+
+    Surface(
+        onClick = { onNavigate(FieldMindScreen.WeatherDatabase) },
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize(
                 animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
             )
-            .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
-            .clickable { onNavigate(FieldMindScreen.WeatherDatabase) },
+            .clip(RoundedCornerShape(36.dp)),
         shape = RoundedCornerShape(36.dp),
-        tintAlpha = 0.72f
+        color = glassColor,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
     ){
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -1528,10 +1531,10 @@ private fun LiveWeatherDashboardWidget(
                 val w = currentWeather
 
                 // Main temperature + condition (always visible)
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.CenterHorizontally),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (showTemp) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -1584,10 +1587,9 @@ private fun LiveWeatherDashboardWidget(
                 }
 
                 // ── Extra metrics row ──
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.CenterHorizontally),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     // Wind
                     if (showWind) {
@@ -1670,10 +1672,9 @@ private fun LiveWeatherDashboardWidget(
 
                 // ── Sunrise / Sunset ──
                 if (sunrise != null || sunset != null) {
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth().padding(top = 2.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    Row(
+                        Modifier.fillMaxWidth().padding(top = 2.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         sunrise?.let { s ->
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1870,24 +1871,26 @@ private fun QuickActionChip(
     onNavigate: (FieldMindScreen) -> Unit
 ) {
     val haptics = rememberFieldMindHaptics()
-    Surface(
-        onClick = { haptics.light(); onNavigate(screen) },
-        shape = RoundedCornerShape(30.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 0.dp,
-        modifier = Modifier.pressScale(scaleDown = 0.94f)
+    Card(
+        modifier = Modifier
+            .wrapContentWidth()
+            .expressivePress(scaleDown = 0.94f)
+            .clickable { haptics.light(); onNavigate(screen) },
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {
         Column(
-            Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Box(
-                Modifier.size(40.dp)
-                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(20.dp)),
+                Modifier.size(44.dp)
+                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(22.dp)),
                 contentAlignment = Alignment.Center
             ) { Icon(icon, null, tint = accent, size = 24.dp) }
-            Text(label, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, maxLines = 1)
+            Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, maxLines = 1)
         }
     }
 }
@@ -1905,7 +1908,7 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1955,7 +1958,7 @@ private fun ObservationTimelinePreview(
         }
     }.sortedWith(compareByDescending<TimelinePreviewEvent> { it.date }.thenByDescending { it.time }).take(8)
 
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
+    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Calendar, null, tint = FieldMindTheme.colors.project, size = 22.dp)
@@ -2008,7 +2011,7 @@ private fun CurrentProjectResearchCard(
     val connectedSources = sources.count { it.relatedProjectId == project.id }
     val connectedReports = reports.count { it.projectId == project.id }
 
-    ClickableCard(onClick = onOpen, shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
+    ClickableCard(onClick = onOpen, shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier, modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Project, null, tint = FieldMindTheme.colors.project, size = 24.dp)
@@ -2202,7 +2205,7 @@ private fun SessionObservationsCard(
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
     Card(
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -2429,7 +2432,7 @@ internal fun DevWeatherTestPanel(
         allCodes.firstOrNull { it.first == testCode }?.second ?: "Custom ($testCode)"
     } else { "Live" }
     
-    Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+    Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2634,7 +2637,7 @@ private fun RecentCapturesCard(observations: List<ObservationEntity>, onOpenDeta
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
     Card(
         shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
         modifier = Modifier.fillMaxWidth()
     ) {
