@@ -2,6 +2,7 @@ package fieldmind.research.app.features.field.presentation.screens
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -812,7 +813,7 @@ private fun buildWeatherHtml(
     appendLine("<table><thead><tr>")
     appendLine("<th>Time</th><th>Temp</th><th>Condition</th><th>Humidity</th><th>Wind</th><th>Cloud</th><th>Pressure</th><th>Location</th>")
     appendLine("</tr></thead><tbody>")
-    sorted.forEach { w ->
+    catalog.forEach { w ->
         val ts = SimpleDateFormat("MMM d, HH:mm", Locale.getDefault()).format(Date(w.fetchedAt))
         val temp = w.temperature?.let { "%.1f°".format(it) } ?: "--"
         val cond = htmlEscape(w.weatherDescription.ifBlank { "—" })
