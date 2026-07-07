@@ -139,7 +139,7 @@ fun ResearchSessionScreen(
     var metadataStatus by remember { mutableStateOf("Ready") }
 
     // ── Species identification state ──
-    val speciesDatabase = remember { SpeciesDatabase(context) }
+    val speciesDatabase = remember { SpeciesDatabase.getInstance(context) }
     val speciesImageAnalyzer = remember { SpeciesImageAnalyzer(context) }
     val speciesPhashDb = remember { PhashDatabase(context) }
     val perenualKey by viewModel.fieldSettings.perenualApiKey.collectAsState()

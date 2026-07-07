@@ -1348,9 +1348,9 @@ private suspend fun runAllTests(
     }
 
     runTest(results, "Extended Coverage", "ReportEntity constructable") {
-        val r = ReportEntity(title = "Test Report", format = "Markdown", content = "# Report")
+        val r = ReportEntity(title = "Test Report", type = "Field Report")
         assert(r.title == "Test Report") { "ReportEntity title mismatch" }
-        assert(r.format == "Markdown") { "ReportEntity format mismatch" }
+        assert(r.type == "Field Report") { "ReportEntity type mismatch" }
     }
 
     runTest(results, "Extended Coverage", "TagEntity constructable") {
@@ -1377,8 +1377,9 @@ private suspend fun runAllTests(
         assert(Build.VERSION.SDK_INT >= 21) { "Min SDK should be >= 21, got ${Build.VERSION.SDK_INT}" }
     }
 
-    runTest(results, "Extended Coverage", "Remote/config provider detection is non-null") {
-        assert(!OpenMeteoProvider().name.isNullOrBlank()) { "OpenMeteo provider name is blank" }
+    runTest(results, "Extended Coverage", "OpenMeteo provider display name is non-blank") {
+        assert(OpenMeteoProvider().displayName.isNotBlank()) { "OpenMeteo provider display name is blank" }
+        assert(OpenMeteoProvider().slug.isNotBlank()) { "OpenMeteo provider slug is blank" }
     }
 
     runTest(results, "Extended Coverage", "Observation categories contain expected values") {
@@ -1395,27 +1396,7 @@ private suspend fun runAllTests(
         assert(confidenceOptions.contains("Unsure")) { "Missing Unsure" }
     }
 
-    runTest(results, "Formatting & Display", "Weather descriptive text is non-empty") {
-        val weatherCodeDescriptions = listOf(0, 1, 61, 95, 99)
-        weatherCodeDescriptions.forEach { code ->
-            val desc = fieldmind.research.app.features.field.data.weather.WeatherSnapshot.descriptionForCode(code)
-            assert(desc.isNotBlank()) { "Weather code $code has blank description" }
-        }
-    }
-
-    runTest(results, "Extended Coverage", "Confidence options are well-formed") {
-        assert(confidenceOptions.contains("Certain")) { "Missing Certain" }
-        assert(confidenceOptions.contains("Likely")) { "Missing Likely" }
-        assert(confidenceOptions.contains("Moderate")) { "Missing Moderate" }
-        assert(confidenceOptions.contains("Unsure")) { "Missing Unsure" }
-    }
-
-    runTest(results, "Extended Coverage", "Settings string builds without exception") {
-        val snapshot = buildSettingsSnapshot(viewModel)
-        assert(snapshot.contains("theme=")) { "Snapshot missing theme" }
-        assert(snapshot.contains("secure=")) { "Snapshot missing secure flag" }
-        assert(snapshot.contains("developer=")) { "Snapshot missing developer mode" }
-    }
+    // (Deduplicated — these tests are covered in Extended Coverage above)
 
     // ═══════════════════════════════════════════════
     //  9. UI LAYOUT & INSETS CHECKLIST
