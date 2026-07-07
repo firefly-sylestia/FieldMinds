@@ -2,10 +2,6 @@ package fieldmind.research.app.features.field.presentation.screens
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import fieldmind.research.app.features.field.data.database.entity.WeatherCatalogEntity
+import fieldmind.research.app.features.field.data.location.FieldLocationProvider
 import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
 import fieldmind.research.app.features.field.data.weather.WeatherUnitConverter
 import fieldmind.research.app.features.field.presentation.components.*
@@ -52,6 +49,7 @@ private val DEFAULT_SCHEDULE_SLOTS = listOf(6, 9, 12, 15, 18, 21) // 6AM, 9AM, 1
 /** Interval-based mode: capture every N hours. */
 private val INTERVAL_OPTIONS = listOf(1, 2, 3, 4, 6, 8, 12)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherCatalogScreen(
     viewModel: FieldMindViewModel,
@@ -73,14 +71,21 @@ fun WeatherCatalogScreen(
     var isRefreshing by remember { mutableStateOf(false) }
     var weatherError by remember { mutableStateOf(false) }
 
+    // ── Location provider for scheduled capture ──
+    val locProvider = remember { runCatching { FieldLocationProvider(context) }.getOrNull() }
+
     // ── Schedule state ──
     var useIntervalMode by remember { mutableStateOf(false) }
     var selectedSlots by remember { mutableStateOf(DEFAULT_SCHEDULE_SLOTS.toSet()) }
     var selectedInterval by remember { mutableIntStateOf(3) }
     var isAutoCapturing by remember { mutableStateOf(false) }
 
+    // ── Track which hours already captured today (to avoid duplicates within the window) ──
+    var capturedHoursToday by remember { mutableStateOf(setOf<Int>()) }
+
     // ── Fetch weather on open ──
     LaunchedEffect(Unit) {
+        isRefreshing = true
         val cached = viewModel.lastWeatherSnapshot
         if (cached != null) {
             currentWeather = cached
@@ -93,38 +98,60 @@ fun WeatherCatalogScreen(
         } else if (currentWeather == null) {
             weatherError = true
         }
+        isRefreshing = false
     }
 
     // ── Auto-capture coroutine ──
     LaunchedEffect(isAutoCapturing, selectedSlots, selectedInterval, useIntervalMode) {
         if (!isAutoCapturing) return@LaunchedEffect
+        // Reset captured set when starting fresh
+        capturedHoursToday = emptySet()
+
         while (true) {
             val now = Calendar.getInstance()
             val currentHour = now.get(Calendar.HOUR_OF_DAY)
             val currentMinute = now.get(Calendar.MINUTE)
 
             val shouldCapture = if (useIntervalMode) {
-                // Capture at the start of each interval (e.g. every 3 hours from midnight)
-                currentHour % selectedInterval == 0 && currentMinute < 2
+                // Capture at the start of each interval
+                currentHour % selectedInterval == 0 && currentMinute < 5 && currentHour !in capturedHoursToday
             } else {
-                currentHour in selectedSlots && currentMinute < 2
+                currentHour in selectedSlots && currentMinute < 5 && currentHour !in capturedHoursToday
             }
 
             if (shouldCapture) {
-                val snapshot = viewModel.refreshWeatherFromLocation(forceRefresh = true)
-                if (snapshot != null) {
-                    currentWeather = snapshot
-                    // Also save to catalog via the ViewModel's fetchAndSave
-                    viewModel.fetchWeatherForLocation(
-                        snapshot.fetchedAt.toDouble().toLong().toDouble(), // placeholder — actual save happens in refreshWeatherFromLocation
-                        0.0
-                    )
-                    scope.launch { snackbar.showSnackbar("Weather captured at ${now.get(Calendar.HOUR_OF_DAY)}:${"%02d".format(now.get(Calendar.MINUTE))}") }
+                isRefreshing = true
+                // Use location provider to get current coordinates, then fetch & save to catalog
+                if (locProvider != null && locProvider.hasAnyLocationPermission()) {
+                    locProvider.lastKnownLocation()?.let { loc ->
+                        val snapshot = viewModel.fetchAndSaveWeatherSnapshot(
+                            loc.latitude, loc.longitude,
+                            forceRefresh = true,
+                            placeName = loc.placeName ?: ""
+                        )
+                        if (snapshot != null) {
+                            currentWeather = snapshot
+                            weatherError = false
+                            capturedHoursToday = capturedHoursToday + currentHour
+                            scope.launch {
+                                snackbar.showSnackbar(
+                                    "Weather captured at ${currentHour}:${"%02d".format(currentMinute)}"
+                                )
+                            }
+                        }
+                    }
                 }
+                isRefreshing = false
             }
 
             // Check every 60 seconds
             delay(60_000L)
+
+            // Reset captured set at midnight
+            val hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            if (hourNow == 0 && currentMinute < 1) {
+                capturedHoursToday = emptySet()
+            }
         }
     }
 
@@ -185,9 +212,7 @@ fun WeatherCatalogScreen(
                         subtitle = "Scheduled weather data collection",
                         icon = MaterialSymbolIcon("cloud"),
                         heroColor = colors.info,
-                        trailing = { Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            BackButton(onClick = onBack)
-                        }}
+                        trailing = { BackButton(onClick = onBack) }
                     )
                 }
 
@@ -354,17 +379,17 @@ private fun WeatherCatalogCurrentCard(
                 Text("Weather unavailable — enable GPS", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
             } else {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.weight(1f)) {
-                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = colors.info)
-                    Text("Fetching weather…", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (isRefreshing) {
+                        CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = colors.info)
+                    }
+                    Text(if (isRefreshing) "Refreshing…" else "Fetching weather…", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-            }
-            if (isRefreshing) {
-                CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScheduleControlCard(
     useIntervalMode: Boolean,
@@ -391,7 +416,6 @@ private fun ScheduleControlCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text("Capture schedule", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                // Start / Stop button
                 if (isAutoCapturing) {
                     FilledTonalButton(
                         onClick = onStopCapture,
@@ -434,7 +458,6 @@ private fun ScheduleControlCard(
             }
 
             if (useIntervalMode) {
-                // Interval picker
                 Text("Capture every:", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     INTERVAL_OPTIONS.forEach { interval ->
@@ -447,10 +470,8 @@ private fun ScheduleControlCard(
                     }
                 }
             } else {
-                // Slot picker
                 Text("Times of day (24h):", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 val allSlots = (0..23).toList()
-                // Show in rows of 6
                 for (row in 0..3) {
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         allSlots.drop(row * 6).take(6).forEach { hour ->
@@ -502,6 +523,7 @@ private fun ScheduleControlCard(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DateGroupSelector(
     groups: List<String>,
@@ -598,7 +620,6 @@ private fun WeatherCatalogRecordCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Temperature (large)
             Text(
                 record.temperature?.let { WeatherUnitConverter.formatTemp(it, tempUnit) } ?: "--",
                 style = MaterialTheme.typography.titleLarge,
@@ -606,7 +627,6 @@ private fun WeatherCatalogRecordCard(
                 color = colors.info
             )
 
-            // Details
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                     if (record.weatherDescription.isNotBlank()) {
@@ -623,7 +643,6 @@ private fun WeatherCatalogRecordCard(
                 Text(timeStr, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
             }
 
-            // Weather icon
             Box(
                 Modifier.size(40.dp).clip(CircleShape).background(colors.info.copy(alpha = 0.08f)),
                 contentAlignment = Alignment.Center
