@@ -290,13 +290,7 @@ fun SharedTransitionScope.HomeScreen(
                     lastSessionLabel = if (lastSession != null) "Resume your last session" else null,
                     activeSessionName = activeSession?.name,
                     timerMs = liveTimerMs,
-                    onStartSession = {
-                        if (activeSession != null) {
-                            onOpenDetail("research_session", activeSession.id)
-                        } else {
-                            onNavigate(FieldMindScreen.Observe)
-                        }
-                    }
+                    onStartSession = { onNavigate(FieldMindScreen.ResearchSession) }
                 ) }
 
             // ── Quick Actions Row ──

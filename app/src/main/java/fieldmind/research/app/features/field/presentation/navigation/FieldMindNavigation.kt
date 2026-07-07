@@ -168,6 +168,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object TaxonomicBrowser : FieldMindScreen("field_taxonomic_browser", "Taxonomic Browser", FieldMindIcons.Category)
     data object FieldLog : FieldMindScreen("field_log", "Field Log", FieldMindIcons.List)
     data object TimerTool : FieldMindScreen("field_timer", "Timer", FieldMindIcons.Timer)
+    data object ResearchSession : FieldMindScreen("field_research_session", "Research Session", MaterialSymbolIcon("science"))
     data object CompassTool : FieldMindScreen("field_compass_tool", "Compass", MaterialSymbolIcon("explore"))
     data object LevelTool : FieldMindScreen("field_level_tool", "Level", MaterialSymbolIcon("straighten"))
 
@@ -821,6 +822,7 @@ private fun categorizeRoute(route: String): RouteCategory = when (route) {
             FieldMindScreen.SpeciesBrowser.route, FieldMindScreen.TaxonomicBrowser.route,
             FieldMindScreen.FieldLog.route, FieldMindScreen.TimerTool.route,
             FieldMindScreen.CompassTool.route, FieldMindScreen.LevelTool.route,
+            FieldMindScreen.ResearchSession.route,
             FieldMindScreen.Flashcards.route,
             FieldMindScreen.WeatherDatabase.route,
             FieldMindScreen.WeatherCatalog.route
@@ -1163,6 +1165,7 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.SiteLogTool.route) { SwipeBackHost(onBack = { safeBack() }) { SiteLogToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.ComparisonTable.route) { SwipeBackHost(onBack = { safeBack() }) { ComparisonTableScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.TimerTool.route) { SwipeBackHost(onBack = { safeBack() }) { TimerToolScreen(onBack = { safeBack() }) } }
+            composable(FieldMindScreen.ResearchSession.route) { SwipeBackHost(onBack = { safeBack() }) { ResearchSessionScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.CompassTool.route) { SwipeBackHost(onBack = { safeBack() }) { CompassToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.LevelTool.route) { SwipeBackHost(onBack = { safeBack() }) { LevelToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable("field_task_detail/{taskId}") { entry ->
@@ -1693,6 +1696,7 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         route == FieldMindScreen.Flashcards.route -> FlashcardSessionScreen(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.WeatherDatabase.route -> WeatherDatabaseScreen(viewModel = viewModel, onBack = noop, onOpenSettings = noop, onOpenDetail = noopDetail)
         route == FieldMindScreen.WeatherCatalog.route -> WeatherCatalogScreen(viewModel = viewModel, onBack = noop, onOpenSettings = noop)
+        route == FieldMindScreen.ResearchSession.route -> ResearchSessionScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
 
         // ── Settings hub (many callbacks) ──
         route == FieldMindScreen.Settings.route -> FieldMindSettingsScreen(
