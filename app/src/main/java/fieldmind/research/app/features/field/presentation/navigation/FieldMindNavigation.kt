@@ -107,6 +107,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object MapScreen : FieldMindScreen("field_map", "Map", FieldMindIcons.Map)
     data object ExportStudio : FieldMindScreen("field_export_studio", "Export", FieldMindIcons.Export)
     data object WeatherDatabase : FieldMindScreen("field_weather_database", "Weather", FieldMindIcons.Weather)
+    data object WeatherCatalog : FieldMindScreen("field_weather_catalog", "Weather Catalog", MaterialSymbolIcon("cloud"))
 
     data object Learn : FieldMindScreen("field_learn", "Learn", FieldMindIcons.School)
     data object FieldMode : FieldMindScreen("field_mode", "Field Mode", FieldMindIcons.Bolt)
@@ -821,7 +822,8 @@ private fun categorizeRoute(route: String): RouteCategory = when (route) {
             FieldMindScreen.FieldLog.route, FieldMindScreen.TimerTool.route,
             FieldMindScreen.CompassTool.route, FieldMindScreen.LevelTool.route,
             FieldMindScreen.Flashcards.route,
-            FieldMindScreen.WeatherDatabase.route
+            FieldMindScreen.WeatherDatabase.route,
+            FieldMindScreen.WeatherCatalog.route
         ) -> RouteCategory.Tool
         else -> RouteCategory.Other
     }
@@ -1071,6 +1073,7 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.Progress.route) { SwipeBackHost(onBack = { safeBack() }) { InsightsScreen(viewModel = viewModel, onBack = { safeBack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Flashcards.route) { SwipeBackHost(onBack = { safeBack() }) { FlashcardSessionScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.WeatherDatabase.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherDatabaseScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenSettings = { navController.navigateToDestination(FieldMindScreen.SettingsWeather.route) }, onOpenDetail = openDetail) } }
+            composable(FieldMindScreen.WeatherCatalog.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherCatalogScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenSettings = { navController.navigateToDestination(FieldMindScreen.SettingsWeather.route) }) } }
             composable(FieldMindScreen.Settings.route) {
                 SwipeBackHost(onBack = { safeBack() }) {
                     FieldMindSettingsScreen(
@@ -1689,6 +1692,7 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         route == FieldMindScreen.Progress.route -> InsightsScreen(viewModel = viewModel, onBack = noop, onNavigate = noopNav, onOpenDetail = noopDetail)
         route == FieldMindScreen.Flashcards.route -> FlashcardSessionScreen(viewModel = viewModel, onBack = noop)
         route == FieldMindScreen.WeatherDatabase.route -> WeatherDatabaseScreen(viewModel = viewModel, onBack = noop, onOpenSettings = noop, onOpenDetail = noopDetail)
+        route == FieldMindScreen.WeatherCatalog.route -> WeatherCatalogScreen(viewModel = viewModel, onBack = noop, onOpenSettings = noop)
 
         // ── Settings hub (many callbacks) ──
         route == FieldMindScreen.Settings.route -> FieldMindSettingsScreen(
