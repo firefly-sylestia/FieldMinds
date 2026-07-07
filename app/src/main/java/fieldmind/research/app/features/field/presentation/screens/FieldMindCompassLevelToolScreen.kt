@@ -15,12 +15,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -316,7 +316,10 @@ fun CompassToolScreen(
                                 // Rotate the entire needle so the red tip aims at magnetic north.
                                 // Canvas rotate() rotates clockwise for positive degrees; we want the needle
                                 // to rotate counterclockwise when the heading increases, so we use -smoothAzimuth.
-                                rotate(degrees = -smoothAzimuth, pivot = Offset(cx, cy)) {
+                                // Use withTransform to scope the rotation to only the needle drawing.
+                                withTransform({
+                                    rotate(degrees = -smoothAzimuth, pivot = Offset(cx, cy))
+                                }) {
                                     // North half (red) — triangle pointing up
                                     val northPath = Path().apply {
                                         moveTo(cx, cy - needleLen)
@@ -743,8 +746,8 @@ fun LevelToolScreen(
                     Text("Tilt angles", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
 
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        TiltGauge("Pitch", effectivePitch, "Forward/backward", colors.info)
-                        TiltGauge("Roll", effectiveRoll, "Left/right", colors.data)
+                        TiltGauge("Pitch", effectivePitch, "Forward/backward", colors.info, Modifier.weight(1f))
+                        TiltGauge("Roll", effectiveRoll, "Left/right", colors.data, Modifier.weight(1f))
                     }
 
                     // Reference controls
@@ -838,7 +841,7 @@ private fun TiltGauge(label: String, degrees: Float, description: String, color:
     val isLevel = absDeg < 2f
 
     Column(
-        modifier = modifier.weight(1f),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
