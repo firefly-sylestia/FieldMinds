@@ -2,34 +2,35 @@
 
 ## DOX Framework
 
-**DOX chain:** `master.md` ← `AGENTS.md` (root) ← `app/AGENTS.md` ← `app/src/main/res/AGENTS.md` ← `Prompt.md` (this file — work log)
+**DOX chain:** `master.md` ← `AGENTS.md` (root) ← `app/AGENTS.md` ← `app/src/main/java/fieldmind/research/app/features/field/AGENTS.md` ← `app/src/main/java/fieldmind/research/app/features/field/presentation/AGENTS.md` ← `Prompt.md` (this file — work log)
 
 ## Request Summary
 
-Fix the CI Android resource merge failure for `:app:mergeFdroidDebugResources`, where `strings.xml` failed to flatten `widget_fieldmind_species_desc` because of an invalid escape/unicode parsing issue.
+Fix the CI Kotlin compilation failure reported from the GitHub Actions job log URL.
 
 ## Context Gathered
 
-- Re-read the applicable DOX chain before editing: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, and `app/src/main/res/AGENTS.md`.
-- CI reports `widget_fieldmind_species_desc` as the failing string resource.
-- Local `strings.xml` contains `widget_fieldmind_species_desc` with the text `Species count, today's sightings, and last species seen`.
-- Android resource parsing can be strict about apostrophes/escapes in string resources; removing the apostrophe avoids the flattening/parser issue without changing app behavior materially.
-- Gradle compile/build/lint/test commands remain prohibited by project instructions in this environment, so validation is limited to static checks.
+- Re-read the applicable DOX chain before editing: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, `features/field/AGENTS.md`, and `features/field/presentation/AGENTS.md`.
+- CI reports the first hard syntax errors in `FieldMindViewModel.kt` at lines 96/116/125, plus many cascading unresolved references.
+- Local inspection shows the dashboard widget coroutine launch was accidentally appended to a `//` comment on line 83, so the `viewModelScope.launch(...) {` statement was commented out while its body remained active in `init`.
+- The missing coroutine opening brace causes suspend `collect` calls outside a coroutine and then cascades into parser/member declaration errors and unresolved ViewModel members across screens.
+- Project instructions prohibit Gradle compile/build/lint/test commands in this environment.
 
 ## Implementation Plan
 
-1. Update `widget_fieldmind_species_desc` to avoid the apostrophe in `today's`.
-2. Run static XML and diff checks only; do not run Gradle tasks.
-3. Commit and push the targeted resource fix.
+1. Restore the commented-out `viewModelScope.launch(Dispatchers.IO) {` onto its own line in `FieldMindViewModel.kt`.
+2. Run static Kotlin brace/parser-oriented checks and diff checks only; do not run Gradle tasks.
+3. Commit and push the targeted CI fix.
 4. Create a PR record.
 
 ## Completion Summary
 
-Implemented a targeted resource fix in `app/src/main/res/values/strings.xml`:
-- Reworded `widget_fieldmind_species_desc` from `today's sightings` to `sightings today`, removing the apostrophe that triggered Android resource flattening/parsing failure in CI.
+Implemented a targeted Kotlin syntax fix in `FieldMindViewModel.kt`:
+- Restored the dashboard widget `viewModelScope.launch(Dispatchers.IO) { ... }` block by moving it off the preceding line comment and onto its own statement line.
+- This resolves the CI parser cascade where `collect` appeared outside a coroutine and later ViewModel members were parsed incorrectly/unresolved.
 
 ## Verification Notes
 
-- Ran a Python XML parse check for `app/src/main/res/values/strings.xml`; it parsed successfully.
+- Ran a Python static delimiter/comment regression check against `FieldMindViewModel.kt`; it passed.
 - Ran `git diff --check`; no whitespace errors reported.
 - Did not run Gradle compile/build/lint/test commands because repository DOX explicitly prohibits them in this environment.
