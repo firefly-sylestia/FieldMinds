@@ -1577,13 +1577,34 @@ private fun AllTabScreen(
                                 if (animX.value > threshold && canSwipeRight) {
                                     haptics.confirm()
                                     wasSwipeTriggered = true
-                                    scope.launch { animX.snapTo(0f) }
-                                    onTabSelected(activeTabIndex - 1)
+                                    scope.launch {
+                                        // Animate the current tab to slide fully off-screen
+                                        // with a bouncy spring, revealing the adjacent tab.
+                                        // Matches the nav bar bounce style (stiffness=300).
+                                        animX.animateTo(
+                                            contentWidth,
+                                            animationSpec = spring(
+                                                dampingRatio = 0.65f,
+                                                stiffness = 300f
+                                            )
+                                        )
+                                        animX.snapTo(0f)
+                                        onTabSelected(activeTabIndex - 1)
+                                    }
                                 } else if (animX.value < -threshold && canSwipeLeft) {
                                     haptics.confirm()
                                     wasSwipeTriggered = true
-                                    scope.launch { animX.snapTo(0f) }
-                                    onTabSelected(activeTabIndex + 1)
+                                    scope.launch {
+                                        animX.animateTo(
+                                            -contentWidth,
+                                            animationSpec = spring(
+                                                dampingRatio = 0.65f,
+                                                stiffness = 300f
+                                            )
+                                        )
+                                        animX.snapTo(0f)
+                                        onTabSelected(activeTabIndex + 1)
+                                    }
                                 } else {
                                     scope.launch {
                                         animX.animateTo(
@@ -1628,7 +1649,7 @@ private fun AllTabScreen(
                     index < activeTabIndex -> -(contentWidth * 2f)
                     else -> contentWidth * 2f
                 },
-                scale = if (isAdjacent) 0.94f else 1f,
+                scale = if (isAdjacent) 0.94f + 0.06f * swipeProgress else 1f,
                 alpha = if (isAdjacent) adjAlpha else 0f,
                 userInputEnabled = false,
                 viewModel = viewModel,
