@@ -1410,6 +1410,9 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                                 observations = obs,
                                 notes = nts,
                                 sources = srcs,
+                                species = speciesRegistry.value,
+                                projects = projects.value,
+                                patterns = detectedPatterns.value,
                                 existing = existingCards
                             )
                             val capped = generated.take(AUTO_GEN_DAILY_CAP - todayGenCount)
