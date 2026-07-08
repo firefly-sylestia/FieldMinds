@@ -1371,17 +1371,14 @@ private fun TabContentBox(
             .fillMaxSize()
             .offset { IntOffset((offsetX + slideInFromPx * (1f - entranceProgress)).roundToInt(), 0) }
             .graphicsLayer {
-                // ── Entrance animation for newly active tab ──
-                // When a tab becomes active via tapping (entranceProgress animates 0→1),
-                // the content scales up from 0.95 and fades in from alpha 0.7,
-                // creating a smooth "pop" entrance. For swipe gestures the entrance
-                // animation is fast enough (spring, ~300ms) to blend naturally with
-                // the slide animation driven by animX.
-                val entranceScale = 0.95f + 0.05f * entranceProgress
-                val entranceAlpha = 0.7f + 0.3f * entranceProgress
+                // ── Entrance micro-scale for newly active tab ──
+                // When a tab becomes active via tapping, just a subtle scale pop
+                // (0.98 → 1.0) with full opacity — no alpha fade, no blank screen.
+                // Swipe-triggered changes skip this entirely (entranceProgress = 1).
+                val entranceScale = 0.98f + 0.02f * entranceProgress
                 scaleX = scale * entranceScale
                 scaleY = scale * entranceScale
-                this.alpha = alpha * entranceAlpha
+                this.alpha = alpha
                 clip = true
             }
             .then(
@@ -1588,14 +1585,13 @@ private fun AllTabScreen(
                                     haptics.confirm()
                                     wasSwipeTriggered = true
                                     scope.launch {
-                                        // Animate the current tab to slide fully off-screen
-                                        // with a bouncy spring, revealing the adjacent tab.
-                                        // Matches the nav bar bounce style (stiffness=300).
+                                        // Fast ease-out slide — no bounce, just a smooth
+                                        // slide off-screen before switching tabs.
                                         animX.animateTo(
                                             contentWidth,
-                                            animationSpec = spring(
-                                                dampingRatio = 0.65f,
-                                                stiffness = 300f
+                                            animationSpec = tween(
+                                                durationMillis = 200,
+                                                easing = FastOutSlowInEasing
                                             )
                                         )
                                         animX.snapTo(0f)
@@ -1607,9 +1603,9 @@ private fun AllTabScreen(
                                     scope.launch {
                                         animX.animateTo(
                                             -contentWidth,
-                                            animationSpec = spring(
-                                                dampingRatio = 0.65f,
-                                                stiffness = 300f
+                                            animationSpec = tween(
+                                                durationMillis = 200,
+                                                easing = FastOutSlowInEasing
                                             )
                                         )
                                         animX.snapTo(0f)
