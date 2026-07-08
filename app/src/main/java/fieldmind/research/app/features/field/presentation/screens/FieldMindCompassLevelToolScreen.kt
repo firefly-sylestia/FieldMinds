@@ -800,15 +800,23 @@ private fun SensorMiniCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Icon(icon, null, tint = progressColor, size = 22.dp)                Text(
-                    value,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold,
-                    color = progressColor,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+            Icon(icon, null, tint = progressColor, size = 22.dp)
+            val displayFontSize = remember(value) {
+                when {
+                    value.length > 9 -> 11.sp
+                    value.length > 6 -> 13.sp
+                    else -> 15.sp
+                }
+            }
+            Text(
+                value,
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = displayFontSize),
+                fontWeight = FontWeight.Bold,
+                color = progressColor,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
             Box(
                 modifier = Modifier.fillMaxWidth().height(4.dp)
                     .clip(RoundedCornerShape(2.dp))
