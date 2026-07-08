@@ -132,7 +132,7 @@ fun SharedTransitionScope.KnowledgeLibraryScreen(
             )
             if (searchQuery.isNotEmpty()) {
                 Spacer(Modifier.height(12.dp))
-                TextField(
+                OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     modifier = Modifier.fillMaxWidth(),
@@ -140,7 +140,7 @@ fun SharedTransitionScope.KnowledgeLibraryScreen(
                     leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                     trailingIcon = { if (searchQuery.isNotBlank()) IconButton(onClick = { searchQuery = "" }) { Icon(MaterialSymbolIcon("close"), contentDescription = "Clear", size = 18.dp) } },
                     shape = RoundedCornerShape(20.dp),
-                    colors = TextFieldDefaults.colors(
+                    colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                     ),

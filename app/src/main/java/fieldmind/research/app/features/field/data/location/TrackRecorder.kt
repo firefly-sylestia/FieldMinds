@@ -326,13 +326,31 @@ class TrackRecorder(private val context: Context) {
             Intent(ACTION_STOP_TRACKING),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        val pauseIntent = PendingIntent.getBroadcast(
+            context,
+            1,
+            Intent(ACTION_STOP_TRACKING).setAction("fieldmind.PAUSE_TRACK_RECORDING"),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val openMapIntent = PendingIntent.getActivity(
+            context,
+            2,
+            Intent(context, fieldmind.research.app.activities.MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra(fieldmind.research.app.activities.MainActivity.EXTRA_FIELDMIND_DESTINATION, "field_map")
+            },
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Tracking: ${recording.name}")
             .setContentText("Recording GPS track…")
-            .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+            .setSmallIcon(fieldmind.research.app.R.drawable.ic_notification)
+            .setColor(0xFF6750A4.toInt())
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .addAction(android.R.drawable.ic_media_pause, "Stop", stopIntent)
+            .addAction(android.R.drawable.ic_media_play, "Pause", pauseIntent)
+            .addAction(android.R.drawable.ic_dialog_map, "Map", openMapIntent)
             .build()
         runCatching {
             NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)

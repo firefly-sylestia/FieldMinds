@@ -79,6 +79,56 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
             if (enabled && obs.isNotEmpty()) PatternDetectionEngine.detectAll(obs) else emptyList()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
         startAutoGeneration()
+
+        // Push widget data on init and whenever any relevant StateFlow changes            viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            // Collect all relevant flows — emits whenever any count changes
+            // Nested combines because combine() only supports up to 5 flows
+            combine(
+                combine(observations, notes) { _, _ -> Unit },
+                combine(questions, projects) { _, _ -> Unit },
+                combine(sources, reports) { _, _ -> Unit }
+            ) { _, _, _ -> Unit }.collect {
+                fieldmind.research.app.infrastructure.widget.glance.FieldMindDashboardWidget.updateData(getApplication())
+            }
+        }
+
+        // Push research streak widget data whenever observations change
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            observations.collect { obsList ->
+                val today = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
+                val prefs = getApplication<android.app.Application>()
+                    .getSharedPreferences("fieldmind_streak", android.content.Context.MODE_PRIVATE)
+                val currentStreak = prefs.getInt("current_streak", 0)
+                val bestStreak = prefs.getInt("best_streak", 0)
+                val todayCount = obsList.count { it.date == today }
+                val totalSightings = obsList.size
+                fieldmind.research.app.infrastructure.widget.glance.FieldMindResearchStreakWidget.updateData(
+                    getApplication(),
+                    currentStreak = currentStreak,
+                    bestStreak = bestStreak,
+                    hasTodayEntry = todayCount > 0,
+                    totalSightings = totalSightings
+                )
+            }
+        }
+
+        // Push species widget data whenever observations change
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            observations.collect {
+                fieldmind.research.app.infrastructure.widget.glance.FieldMindSpeciesWidget.updateData(
+                    getApplication()
+                )
+            }
+        }
+
+        // Push quickstats widget data whenever observations or projects change
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            combine(observations, projects) { _, _ -> Unit }.collect {
+                fieldmind.research.app.infrastructure.widget.glance.FieldMindQuickStatsWidget.updateData(
+                    getApplication()
+                )
+            }
+        }
     }
 
     fun addObservation(
@@ -1119,6 +1169,19 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
             lastWeatherSnapshot = result
             lastWeatherFetchTime = System.currentTimeMillis()
             _weatherDiagnostics.value = WeatherDiagnosticState(message = "Weather updated", provider = fieldSettings.weatherProviders.value, updatedAt = lastWeatherFetchTime)
+
+            // Push weather update to weather widget
+            viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                fieldmind.research.app.infrastructure.widget.glance.FieldMindWeatherWidget.updateData(
+                    getApplication(),
+                    result.temperature,
+                    result.weatherDescription,
+                    result.humidity,
+                    result.windSpeed,
+                    "",
+                    result.weatherCode
+                )
+            }
         } else if (_weatherDiagnostics.value.lastError == null) {
             _weatherDiagnostics.value = WeatherDiagnosticState(
                 message = "Weather provider returned no data. Check network, provider keys, or provider availability.",
@@ -1410,6 +1473,9 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                                 observations = obs,
                                 notes = nts,
                                 sources = srcs,
+                                species = speciesRegistry.value,
+                                projects = projects.value,
+                                patterns = detectedPatterns.value,
                                 existing = existingCards
                             )
                             val capped = generated.take(AUTO_GEN_DAILY_CAP - todayGenCount)
@@ -1439,7 +1505,10 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                         runCatching {
                             val generated = QuestionGenerator.generateAll(
                                 observations = obs,
+                                species = speciesRegistry.value,
+                                projects = projects.value,
                                 sources = srcs,
+                                patterns = detectedPatterns.value,
                                 existing = existingQuestions
                             )
                             val capped = generated.take(AUTO_GEN_DAILY_CAP - todayGenCount)

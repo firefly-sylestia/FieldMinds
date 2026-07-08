@@ -43,7 +43,8 @@ fun QuestionDetailScreen(
     questionId: Long,
     viewModel: FieldMindViewModel,
     onBack: () -> Unit = {},
-    onOpenDetail: (String, Long) -> Unit = { _, _ -> }
+    onOpenDetail: (String, Long) -> Unit = { _, _ -> },
+    onOpenEdit: (String, Long) -> Unit = { _, _ -> }
 ) {
     val questions by viewModel.questions.collectAsState()
     val hypotheses by viewModel.hypotheses.collectAsState()
@@ -166,7 +167,7 @@ fun QuestionDetailScreen(
                         DropdownMenu(expanded = showOverflow, onDismissRequest = { showOverflow = false }) {
                             DropdownMenuItem(
                                 text = { Text("Edit question") },
-                                onClick = { showOverflow = false },
+                                onClick = { showOverflow = false; onOpenEdit("question", questionId) },
                                 leadingIcon = { Icon(MaterialSymbolIcon("edit"), null, size = 18.dp) }
                             )
                             DropdownMenuItem(

@@ -47,6 +47,7 @@ import fieldmind.research.app.features.field.presentation.components.SwipeBackHo
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.LocalSharedTransitionScope
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
+import fieldmind.research.app.features.field.data.learn.FieldSkillsLessons
 import fieldmind.research.app.features.field.presentation.screens.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
@@ -122,6 +123,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object Progress : FieldMindScreen("field_progress", "Progress", FieldMindIcons.Check)
     data object Flashcards : FieldMindScreen("field_flashcards_session", "Review", FieldMindIcons.Flashcard)
     data object Reader : FieldMindScreen("field_reader", "Reader", FieldMindIcons.Book)
+    data object LessonViewer : FieldMindScreen("field_lesson/{lessonSlug}", "Lesson", MaterialSymbolIcon("school"))
     data object Settings : FieldMindScreen("field_settings", "Settings", FieldMindIcons.Settings)
     data object SettingsProfile : FieldMindScreen("field_settings_profile", "Profile", FieldMindIcons.Nature)
     data object SettingsAppearance : FieldMindScreen("field_settings_appearance", "Appearance", FieldMindIcons.Palette)
@@ -143,6 +145,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object SettingsAutoGen : FieldMindScreen("field_settings_auto_gen", "Auto generation", FieldMindIcons.Sparkle)
     data object SettingsSecurityScore : FieldMindScreen("field_settings_security_score", "Security Score", MaterialSymbolIcon("security"))
     data object SettingsAnimationTuning : FieldMindScreen("field_settings_animation_tuning", "Animation Tuning", MaterialSymbolIcon("tune"))
+    data object SettingsNotifications : FieldMindScreen("field_settings_notifications", "Notifications", FieldMindIcons.Notifications)
 
 
     // ── Tasks screen ──
@@ -812,6 +815,7 @@ private fun categorizeRoute(route: String): RouteCategory = when (route) {
         route.startsWith("field_settings") -> RouteCategory.SettingsSubPage
         route.startsWith("field_detail/") -> RouteCategory.Detail
         route.startsWith("field_new_") -> RouteCategory.Creation
+        route.startsWith("field_edit/") -> RouteCategory.Creation
         route in listOf(
             FieldMindScreen.CounterTool.route, FieldMindScreen.MeasurementTool.route,
             FieldMindScreen.WeatherLogTool.route, FieldMindScreen.SpeciesTool.route,
@@ -1058,8 +1062,17 @@ private fun FieldMindNavHost(
                     onPopBackStack = { navController.popBackStack() }
                 )
             }
-            composable(FieldMindScreen.Learn.route) { SwipeBackHost(onBack = { safeBack() }) { FieldMindLearnScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenReader = openReader) } }
+            composable(FieldMindScreen.Learn.route) { SwipeBackHost(onBack = { safeBack() }) { FieldMindLearnScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenReader = openReader, onOpenLesson = { slug -> navController.navigateToDestination("field_lesson/$slug") }) } }
             composable(FieldMindScreen.Reader.route) { SwipeBackHost(onBack = { safeBack() }) { LearnReaderScreen(url = readerTarget.first, title = readerTarget.second, onBack = { safeBack() }) } }
+            composable("field_lesson/{lessonSlug}") { entry ->
+                val lessonSlug = entry.arguments?.getString("lessonSlug") ?: ""
+                SwipeBackHost(onBack = { safeBack() }) {
+                    val lesson = FieldSkillsLessons.bySlug[lessonSlug]
+                    if (lesson != null) {
+                        LessonViewerScreen(lesson = lesson, onBack = { safeBack() })
+                    }
+                }
+            }
             composable(FieldMindScreen.FieldMode.route) { SwipeBackHost(onBack = { safeBack() }) { ObserveScreen(viewModel = viewModel, compactFieldMode = true, onBack = { safeBack() }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Questions.route) { SwipeBackHost(onBack = { safeBack() }) { QuestionsScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenDetail = openDetail) } }
             // NOTE: Hypotheses currently renders QuestionsScreen — a dedicated hypotheses
@@ -1101,7 +1114,8 @@ private fun FieldMindNavHost(
                         onOpenDeveloper = { navController.navigateToDestination(FieldMindScreen.SettingsDeveloper.route) },
                         onOpenSpeciesPacks = { navController.navigateToDestination(FieldMindScreen.SettingsSpeciesPacks.route) },
                         onOpenSpeciesId = { navController.navigateToDestination(FieldMindScreen.SettingsSpeciesId.route) },
-                        onOpenAutoGen = { navController.navigateToDestination(FieldMindScreen.SettingsAutoGen.route) }
+                        onOpenAutoGen = { navController.navigateToDestination(FieldMindScreen.SettingsAutoGen.route) },
+                        onOpenNotifications = { navController.navigateToDestination(FieldMindScreen.SettingsNotifications.route) }
                     )
                 }
             }
@@ -1145,6 +1159,7 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.SettingsSpeciesPacks.route) { SwipeBackHost(onBack = { safeBack() }) { SpeciesPackSettingsPage(onBack = { safeBack() }) } }
             composable(FieldMindScreen.SettingsSpeciesId.route) { SwipeBackHost(onBack = { safeBack() }) { SpeciesIdentificationSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.SettingsAutoGen.route) { SwipeBackHost(onBack = { safeBack() }) { AutoGenerationSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
+            composable(FieldMindScreen.SettingsNotifications.route) { SwipeBackHost(onBack = { safeBack() }) { NotificationsSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.CounterTool.route) { SwipeBackHost(onBack = { safeBack() }) { CounterToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.MeasurementTool.route) { SwipeBackHost(onBack = { safeBack() }) { MeasurementToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.WeatherLogTool.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherLogToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
@@ -1176,7 +1191,8 @@ private fun FieldMindNavHost(
                         taskId = taskId,
                         viewModel = viewModel,
                         onBack = { safeBack() },
-                        onOpenDetail = openDetail
+                        onOpenDetail = openDetail,
+                        onOpenEdit = { kind, id -> navController.navigateToDestination("field_edit/$kind/$id") }
                     )
                 }
             }
@@ -1187,7 +1203,20 @@ private fun FieldMindNavHost(
                         questionId = questionId,
                         viewModel = viewModel,
                         onBack = { safeBack() },
-                        onOpenDetail = openDetail
+                        onOpenDetail = openDetail,
+                        onOpenEdit = { kind, id -> navController.navigateToDestination("field_edit/$kind/$id") }
+                    )
+                }
+            }
+            composable("field_hypothesis_detail/{hypothesisId}") { entry ->
+                val hypothesisId = entry.arguments?.getString("hypothesisId")?.toLongOrNull() ?: 0L
+                SwipeBackHost(onBack = { safeBack() }) {
+                    HypothesisDetailScreen(
+                        hypothesisId = hypothesisId,
+                        viewModel = viewModel,
+                        onBack = { safeBack() },
+                        onOpenDetail = openDetail,
+                        onOpenEdit = { kind, id -> navController.navigateToDestination("field_edit/$kind/$id") }
                     )
                 }
             }
@@ -1263,8 +1292,66 @@ private fun FieldMindNavHost(
                         onOpenReader = openReader,
                         onOpenCanvas = { noteId ->
                             navController.navigateToDestination("field_canvas/$noteId")
+                        },
+                        onOpenEdit = { editKind, editId ->
+                            navController.navigateToDestination("field_edit/$editKind/$editId")
                         }
                     )
+                }
+            }
+            // ── Edit entity routes (full-screen, same composable as creation, with entity pre-filled) ──
+            composable("field_edit/{kind}/{id}") { entry ->
+                val kind = entry.arguments?.getString("kind") ?: "observation"
+                val id = entry.arguments?.getString("id")?.toLongOrNull() ?: 0L
+                SwipeBackHost(onBack = { safeBack() }) {
+                    val observations by viewModel.observations.collectAsState()
+                    val notes by viewModel.notes.collectAsState()
+                    val questions by viewModel.questions.collectAsState()
+                    val hypotheses by viewModel.hypotheses.collectAsState()
+                    val projects by viewModel.projects.collectAsState()
+                    val sources by viewModel.sources.collectAsState()
+                    val dataRecords by viewModel.dataRecords.collectAsState()
+                    val reports by viewModel.reports.collectAsState()
+                    val tasks by viewModel.tasks.collectAsState()
+                    when (kind) {
+                        "observation" -> observations.firstOrNull { it.id == id }?.let {
+                            NewObservationScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "note" -> notes.firstOrNull { it.id == id }?.let {
+                            NewNoteScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "project" -> projects.firstOrNull { it.id == id }?.let {
+                            NewProjectScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "question" -> questions.firstOrNull { it.id == id }?.let {
+                            NewQuestionScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "hypothesis" -> hypotheses.firstOrNull { it.id == id }?.let {
+                            NewHypothesisScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "source" -> sources.firstOrNull { it.id == id }?.let {
+                            NewSourceScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "data" -> dataRecords.firstOrNull { it.id == id }?.let { entity ->
+                            when (entity.toolType) {
+                                "Counter" -> CounterToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Measurement Log" -> MeasurementToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Weather Log" -> WeatherLogToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Checklist" -> ChecklistToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Event Log" -> EventLogToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Site Log" -> SiteLogToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Comparison Table" -> ComparisonTableScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                else -> NewDataRecordScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                            }
+                        }
+                        "report" -> reports.firstOrNull { it.id == id }?.let {
+                            NewReportScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "task" -> tasks.firstOrNull { it.id == id }?.let {
+                            NewTaskScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        else -> safeBack()
+                    }
                 }
             }
         } // end NavHost
@@ -1310,17 +1397,14 @@ private fun TabContentBox(
             .fillMaxSize()
             .offset { IntOffset((offsetX + slideInFromPx * (1f - entranceProgress)).roundToInt(), 0) }
             .graphicsLayer {
-                // ── Entrance animation for newly active tab ──
-                // When a tab becomes active via tapping (entranceProgress animates 0→1),
-                // the content scales up from 0.95 and fades in from alpha 0.7,
-                // creating a smooth "pop" entrance. For swipe gestures the entrance
-                // animation is fast enough (spring, ~300ms) to blend naturally with
-                // the slide animation driven by animX.
-                val entranceScale = 0.95f + 0.05f * entranceProgress
-                val entranceAlpha = 0.7f + 0.3f * entranceProgress
+                // ── Entrance micro-scale for newly active tab ──
+                // When a tab becomes active via tapping, just a subtle scale pop
+                // (0.98 → 1.0) with full opacity — no alpha fade, no blank screen.
+                // Swipe-triggered changes skip this entirely (entranceProgress = 1).
+                val entranceScale = 0.98f + 0.02f * entranceProgress
                 scaleX = scale * entranceScale
                 scaleY = scale * entranceScale
-                this.alpha = alpha * entranceAlpha
+                this.alpha = alpha
                 clip = true
             }
             .then(
@@ -1419,30 +1503,15 @@ private fun AllTabScreen(
     var contentWidth by remember { mutableFloatStateOf(1f) }
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
+    var hapticFiredCrossThreshold by remember { mutableStateOf(false) }
 
     val isFirstTab = activeTabIndex == 0
 
-    // ── Double-tap to exit from Home tab ──
-    val backPressTime = remember { mutableStateOf(0L) }
-    val doubleTapInterval = 2000L
-    val snackbar = LocalFieldMindSnackbar.current
+    // ── Exit confirmation dialog from Home tab ──
+    var showExitConfirm by remember { mutableStateOf(false) }
     val activity = LocalContext.current as? android.app.Activity
     BackHandler(enabled = isFirstTab) {
-        val now = System.currentTimeMillis()
-        if (now - backPressTime.value < doubleTapInterval) {
-            activity?.moveTaskToBack(true)
-        } else {
-            backPressTime.value = now
-            scope.launch {
-                snackbar.currentSnackbarData?.dismiss()
-                snackbar.showSnackbar(
-                    message = "Press back again to exit",
-                    duration = SnackbarDuration.Indefinite
-                )
-                delay(1500L)
-                snackbar.currentSnackbarData?.dismiss()
-            }
-        }
+        showExitConfirm = true
     }
 
     // ── Tab entrance animation (scale+fade+slide on tap-switch) ──
@@ -1458,17 +1527,24 @@ private fun AllTabScreen(
     LaunchedEffect(activeTabIndex) {
         if (activeTabIndex != lastActiveIndex) {
             // Determine slide direction: new tab to the right → slides from right (dir=+1)
-            // If swipe-triggered, skip the entrance slide (swipe already shows the reveal)
-            val dir = if (wasSwipeTriggered) 0 else (if (activeTabIndex > lastActiveIndex) 1 else -1)
-            wasSwipeTriggered = false
-            tabSlideDirection = dir
-            lastActiveIndex = activeTabIndex
-            tabEntranceProgress.snapTo(0f)
-            tabEntranceProgress.animateTo(
-                1f,
-                animationSpec = animConfig.tabEntranceSpring()
-            )
-            tabSlideDirection = 0
+            // If swipe-triggered, skip the entrance animation entirely and keep the tab
+            // at full scale/alpha since the swipe gesture already revealed the content.
+            if (wasSwipeTriggered) {
+                wasSwipeTriggered = false
+                tabSlideDirection = 0
+                lastActiveIndex = activeTabIndex
+                tabEntranceProgress.snapTo(1f)
+            } else {
+                // Button tap: no off-screen slide — just a subtle scale pop (0.98→1.0)
+                // The slide was causing the new tab to appear to animate from a blank screen.
+                tabSlideDirection = 0
+                lastActiveIndex = activeTabIndex
+                tabEntranceProgress.snapTo(0f)
+                tabEntranceProgress.animateTo(
+                    1f,
+                    animationSpec = animConfig.tabEntranceSpring()
+                )
+            }
         }
     }
 
@@ -1518,20 +1594,35 @@ private fun AllTabScreen(
                                     rawTarget < 0f && !canSwipeLeft -> 0f
                                     else -> rawTarget.coerceIn(-maxSwipe, maxSwipe)
                                 }
-                                scope.launch { animX.snapTo(clampedTarget) }
+                                scope.launch {
+                                    animX.snapTo(clampedTarget)
+                                    // Fire haptic the moment the swipe crosses the threshold
+                                    val thresholdPx = contentWidth * animConfig.swipeThreshold
+                                    if (abs(clampedTarget) >= thresholdPx && !hapticFiredCrossThreshold) {
+                                        hapticFiredCrossThreshold = true
+                                        haptics.confirm()
+                                    }
+                                }
                             },
                             onDragEnd = {
-                                val threshold = contentWidth * 0.18f
+                                hapticFiredCrossThreshold = false
+                                val threshold = contentWidth * animConfig.swipeThreshold
                                 if (animX.value > threshold && canSwipeRight) {
                                     haptics.confirm()
                                     wasSwipeTriggered = true
-                                    scope.launch { animX.snapTo(0f) }
-                                    onTabSelected(activeTabIndex - 1)
+                                    scope.launch {
+                                        // Switch tab IMMEDIATELY — no waiting for off-screen animation.
+                                        // Adjacent tab is already rendered behind current one.
+                                        animX.snapTo(0f)
+                                        onTabSelected(activeTabIndex - 1)
+                                    }
                                 } else if (animX.value < -threshold && canSwipeLeft) {
                                     haptics.confirm()
                                     wasSwipeTriggered = true
-                                    scope.launch { animX.snapTo(0f) }
-                                    onTabSelected(activeTabIndex + 1)
+                                    scope.launch {
+                                        animX.snapTo(0f)
+                                        onTabSelected(activeTabIndex + 1)
+                                    }
                                 } else {
                                     scope.launch {
                                         animX.animateTo(
@@ -1542,6 +1633,7 @@ private fun AllTabScreen(
                                 }
                             },
                             onDragCancel = {
+                                hapticFiredCrossThreshold = false
                                 scope.launch {
                                     animX.animateTo(
                                         0f,
@@ -1576,7 +1668,7 @@ private fun AllTabScreen(
                     index < activeTabIndex -> -(contentWidth * 2f)
                     else -> contentWidth * 2f
                 },
-                scale = if (isAdjacent) 0.94f else 1f,
+                scale = if (isAdjacent) 0.94f + 0.06f * swipeProgress else 1f,
                 alpha = if (isAdjacent) adjAlpha else 0f,
                 userInputEnabled = false,
                 viewModel = viewModel,
@@ -1610,6 +1702,34 @@ private fun AllTabScreen(
             visibleTabs = visibleTabs,
             onTabSelected = onTabSelected,
             slideInFromPx = tabSlideDirection * contentWidth
+        )
+    }
+
+    // ── Exit confirmation dialog ──
+    if (showExitConfirm) {
+        AlertDialog(
+            onDismissRequest = { showExitConfirm = false },
+            icon = { Icon(MaterialSymbolIcon("exit_to_app"), contentDescription = null, size = 28.dp) },
+            title = { Text("Exit FieldMind?") },
+            text = { Text("Your data is saved automatically. You can pick up where you left off.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        haptics.confirm()
+                        activity?.moveTaskToBack(true)
+                        showExitConfirm = false
+                    },
+                    shape = RoundedCornerShape(22.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+                ) { Text("Exit") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirm = false }) {
+                    Text("Cancel")
+                }
+            }
         )
     }
 }
@@ -1694,7 +1814,12 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         }
 
         // ── Exact-match static routes ──
-        route == FieldMindScreen.Learn.route -> FieldMindLearnScreen(viewModel = viewModel, onBack = noop, onOpenReader = noopReader)
+        route.startsWith("field_lesson/") -> {
+            val slug = route.removePrefix("field_lesson/")
+            val lesson = FieldSkillsLessons.bySlug[slug]
+            if (lesson != null) LessonViewerScreen(lesson = lesson, onBack = noop)
+        }
+        route == FieldMindScreen.Learn.route -> FieldMindLearnScreen(viewModel = viewModel, onBack = noop, onOpenReader = noopReader, onOpenLesson = {})
         route == FieldMindScreen.Reader.route -> LearnReaderScreen(url = "", title = "", onBack = noop)
         route == FieldMindScreen.FieldMode.route -> ObserveScreen(viewModel = viewModel, compactFieldMode = true, onBack = noop, onOpenDetail = noopDetail)
         route == FieldMindScreen.Questions.route -> QuestionsScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)

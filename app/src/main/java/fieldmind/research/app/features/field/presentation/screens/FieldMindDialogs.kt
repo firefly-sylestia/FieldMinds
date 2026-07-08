@@ -326,13 +326,31 @@ internal fun CollapsibleSection(
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-internal fun NewQuestionDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, projectId: Long? = null) {
-    var question by remember { mutableStateOf("") }; var category by remember { mutableStateOf("Other") }; var source by remember { mutableStateOf("Observation") }; var status by remember { mutableStateOf("New") }; var priority by remember { mutableStateOf("Medium") }
-    var answer by remember { mutableStateOf("") }; var showAdvanced by remember { mutableStateOf(false) }
+internal fun NewQuestionDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, projectId: Long? = null, entity: QuestionEntity? = null) {
+    var question by remember { mutableStateOf(entity?.questionText ?: "") }
+    var category by remember { mutableStateOf(entity?.category ?: "Other") }
+    var source by remember { mutableStateOf(entity?.sourceType ?: "Observation") }
+    var status by remember { mutableStateOf(entity?.status ?: "New") }
+    var priority by remember { mutableStateOf(entity?.priority ?: "Medium") }
+    var answer by remember { mutableStateOf(entity?.answer ?: "") }
+    var showAdvanced by remember { mutableStateOf(false) }
 
     fun save() {
         if (question.isNotBlank()) {
-            viewModel.addQuestion(question, category, source, status, priority, projectId = projectId, answer = answer)
+            if (entity != null) {
+                val latest = viewModel.questions.value.firstOrNull { it.id == entity.id } ?: entity
+                viewModel.updateQuestionEntity(latest.copy(
+                    questionText = question.trim(),
+                    category = category,
+                    sourceType = source,
+                    status = status,
+                    priority = priority,
+                    answer = answer.trim(),
+                    answeredAt = if (answer.isBlank()) null else (latest.answeredAt ?: System.currentTimeMillis())
+                ))
+            } else {
+                viewModel.addQuestion(question, category, source, status, priority, projectId = projectId, answer = answer)
+            }
             onDismiss()
         }
     }
@@ -375,16 +393,50 @@ internal fun NewProjectDialog(
     initialConnectionMap: String = "",
     initialTags: String = "",
     onDismiss: () -> Unit,
-    templateGuide: ProjectTemplateDef? = null
+    templateGuide: ProjectTemplateDef? = null,
+    entity: ProjectEntity? = null
 ) {
-    var title by remember(initialTitle) { mutableStateOf(initialTitle) }; var topic by remember(initialTopic) { mutableStateOf(initialTopic.ifBlank { "Biology" }) }; var objective by remember(initialObjective) { mutableStateOf(initialObjective) }; var question by remember(initialQuestion) { mutableStateOf(initialQuestion) }
-    var background by remember(initialBackground) { mutableStateOf(initialBackground) }; var methods by remember(initialMethods) { mutableStateOf(initialMethods) }; var hypothesis by remember(initialHypothesis) { mutableStateOf(initialHypothesis) }; var dataPlan by remember(initialDataPlan) { mutableStateOf(initialDataPlan) }; var analysis by remember(initialAnalysis) { mutableStateOf(initialAnalysis) }; var conclusion by remember(initialConclusion) { mutableStateOf(initialConclusion) }; var nextAction by remember(initialNextAction) { mutableStateOf(initialNextAction) }
-    var projectType by remember(initialProjectType) { mutableStateOf(initialProjectType.ifBlank { "Observation" }) }; var selectedMethods by remember(initialSelectedMethods) { mutableStateOf(initialSelectedMethods) }; var connectionMap by remember(initialConnectionMap) { mutableStateOf(initialConnectionMap) }; var tags by remember(initialTags) { mutableStateOf(initialTags) }; var showAdvanced by remember { mutableStateOf(initialProjectType.isNotBlank() || initialSelectedMethods.isNotBlank() || initialTags.isNotBlank()) }
+    var title by remember(initialTitle.ifBlank { entity?.title ?: "" }) { mutableStateOf(entity?.title ?: initialTitle) }
+    var topic by remember(initialTopic.ifBlank { entity?.topicType ?: "Biology" }) { mutableStateOf(entity?.topicType ?: initialTopic.ifBlank { "Biology" }) }
+    var objective by remember(initialObjective.ifBlank { entity?.objective ?: "" }) { mutableStateOf(entity?.objective ?: initialObjective) }
+    var question by remember(initialQuestion.ifBlank { entity?.researchQuestion ?: "" }) { mutableStateOf(entity?.researchQuestion ?: initialQuestion) }
+    var background by remember(initialBackground.ifBlank { entity?.backgroundNotes ?: "" }) { mutableStateOf(entity?.backgroundNotes ?: initialBackground) }
+    var methods by remember(initialMethods.ifBlank { entity?.methods ?: "" }) { mutableStateOf(entity?.methods ?: initialMethods) }
+    var hypothesis by remember(initialHypothesis.ifBlank { entity?.hypothesisSummary ?: "" }) { mutableStateOf(entity?.hypothesisSummary ?: initialHypothesis) }
+    var dataPlan by remember(initialDataPlan.ifBlank { entity?.dataSummary ?: "" }) { mutableStateOf(entity?.dataSummary ?: initialDataPlan) }
+    var analysis by remember(initialAnalysis.ifBlank { entity?.analysis ?: "" }) { mutableStateOf(entity?.analysis ?: initialAnalysis) }
+    var conclusion by remember(initialConclusion.ifBlank { entity?.conclusion ?: "" }) { mutableStateOf(entity?.conclusion ?: initialConclusion) }
+    var nextAction by remember(initialNextAction.ifBlank { entity?.futureQuestions ?: "" }) { mutableStateOf(entity?.futureQuestions ?: initialNextAction) }
+    var projectType by remember((initialProjectType.ifBlank { entity?.projectType ?: "Observation" })) { mutableStateOf(entity?.projectType ?: initialProjectType.ifBlank { "Observation" }) }
+    var selectedMethods by remember(initialSelectedMethods.ifBlank { entity?.selectedMethods ?: "" }) { mutableStateOf(entity?.selectedMethods ?: initialSelectedMethods) }
+    var connectionMap by remember(initialConnectionMap.ifBlank { entity?.connectionMap ?: "" }) { mutableStateOf(entity?.connectionMap ?: initialConnectionMap) }
+    var tags by remember { mutableStateOf(initialTags) }
+    var showAdvanced by remember { mutableStateOf(initialProjectType.isNotBlank() || initialSelectedMethods.isNotBlank() || initialTags.isNotBlank() || entity != null) }
     var showGuide by remember { mutableStateOf(templateGuide != null) }
 
     fun save() {
         if (title.isNotBlank()) {
-            viewModel.addProject(title, topic, objective, question, methods, nextAction, background, hypothesis, dataPlan, analysis, conclusion, projectType = projectType, selectedMethods = selectedMethods, connectionMap = listOfNotNull(connectionMap.takeIf { it.isNotBlank() }, tags.takeIf { it.isNotBlank() }?.let { "Template tags: $it" }).joinToString("\n"))
+            if (entity != null) {
+                val latest = viewModel.projects.value.firstOrNull { it.id == entity.id } ?: entity
+                viewModel.updateProjectEntity(latest.copy(
+                    title = title.trim(),
+                    topicType = topic.trim().ifBlank { "General" },
+                    objective = objective.trim(),
+                    researchQuestion = question.trim(),
+                    backgroundNotes = background.trim(),
+                    methods = methods.trim(),
+                    hypothesisSummary = hypothesis.trim(),
+                    dataSummary = dataPlan.trim(),
+                    analysis = analysis.trim(),
+                    conclusion = conclusion.trim(),
+                    futureQuestions = nextAction.trim(),
+                    projectType = projectType,
+                    selectedMethods = selectedMethods,
+                    connectionMap = connectionMap
+                ))
+            } else {
+                viewModel.addProject(title, topic, objective, question, methods, nextAction, background, hypothesis, dataPlan, analysis, conclusion, projectType = projectType, selectedMethods = selectedMethods, connectionMap = listOfNotNull(connectionMap.takeIf { it.isNotBlank() }, tags.takeIf { it.isNotBlank() }?.let { "Template tags: $it" }).joinToString("\n"))
+            }
             onDismiss()
         }
     }
@@ -575,29 +627,29 @@ private fun ProgressiveSection(
 }
 
 @Composable
-internal fun NewSourceDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, initialProjectId: Long? = null) {
+internal fun NewSourceDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, initialProjectId: Long? = null, entity: SourceEntity? = null) {
     val context = LocalContext.current
     val projects by viewModel.projects.collectAsState()
     val haptics = rememberFieldMindHaptics()
-    var type by remember { mutableStateOf("Article") }
-    var title by remember { mutableStateOf("") }
-    var author by remember { mutableStateOf("") }
-    var dateOrYear by remember { mutableStateOf("") }
-    var doiOrIsbn by remember { mutableStateOf("") }
-    var publisherOrJournal by remember { mutableStateOf("") }
-    var accessDate by remember { mutableStateOf(today()) }
-    var link by remember { mutableStateOf("") }
-    var fileUri by remember { mutableStateOf("") }
-    var citationStyleNote by remember { mutableStateOf("") }
-    var importance by remember { mutableStateOf("Normal") }
-    var readingStatus by remember { mutableStateOf("In progress") }
-    var summary by remember { mutableStateOf("") }
-    var taught by remember { mutableStateOf("") }
-    var findings by remember { mutableStateOf("") }
-    var questions by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }
-    var reliability by remember { mutableStateOf(3f) }
-    var projectId by remember { mutableStateOf(initialProjectId) }
+    var type by remember { mutableStateOf(entity?.type ?: "Article") }
+    var title by remember { mutableStateOf(entity?.title ?: "") }
+    var author by remember { mutableStateOf(entity?.author ?: "") }
+    var dateOrYear by remember { mutableStateOf(entity?.dateOrYear ?: "") }
+    var doiOrIsbn by remember { mutableStateOf(entity?.doiOrIsbn ?: "") }
+    var publisherOrJournal by remember { mutableStateOf(entity?.publisherOrJournal ?: "") }
+    var accessDate by remember { mutableStateOf(entity?.accessDate ?: today()) }
+    var link by remember { mutableStateOf(entity?.link ?: "") }
+    var fileUri by remember { mutableStateOf(entity?.fileUri ?: "") }
+    var citationStyleNote by remember { mutableStateOf(entity?.citationStyleNote ?: "") }
+    var importance by remember { mutableStateOf(entity?.importance ?: "Normal") }
+    var readingStatus by remember { mutableStateOf(entity?.readingStatus ?: "In progress") }
+    var summary by remember { mutableStateOf(entity?.personalSummary ?: "") }
+    var taught by remember { mutableStateOf(entity?.whatThisSourceTaughtMe ?: "") }
+    var findings by remember { mutableStateOf(entity?.keyFindings ?: "") }
+    var questions by remember { mutableStateOf(entity?.questionsGenerated ?: "") }
+    var notes by remember { mutableStateOf(entity?.paperNotes ?: "") }
+    var reliability by remember { mutableStateOf((entity?.reliabilityScore ?: 3).toFloat()) }
+    var projectId by remember { mutableStateOf(entity?.relatedProjectId ?: initialProjectId) }
     val docPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) {
             runCatching { context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
@@ -616,27 +668,54 @@ internal fun NewSourceDialog(viewModel: FieldMindViewModel, onDismiss: () -> Uni
 
     fun save() {
         if (title.isNotBlank()) {
-            viewModel.addSource(
-                type = type,
-                title = title.trim(),
-                author = author.trim(),
-                link = link.trim(),
-                summary = summary.trim(),
-                taught = taught.trim(),
-                reliability = reliability.toInt(),
-                keyFindings = findings.trim(),
-                questionsGenerated = questions.trim(),
-                paperNotes = notes.trim(),
-                projectId = projectId,
-                dateOrYear = dateOrYear.trim(),
-                doiOrIsbn = doiOrIsbn.trim(),
-                publisherOrJournal = publisherOrJournal.trim(),
-                accessDate = accessDate.trim(),
-                fileUri = fileUri.trim(),
-                citationStyleNote = citationStyleNote.trim(),
-                importance = importance,
-                readingStatus = readingStatus
-            )
+            if (entity != null) {
+                val latest = viewModel.sources.value.firstOrNull { it.id == entity.id } ?: entity
+                viewModel.updateSourceEntity(
+                    latest.copy(
+                        type = type,
+                        title = title.trim(),
+                        author = author.trim(),
+                        dateOrYear = dateOrYear.trim(),
+                        doiOrIsbn = doiOrIsbn.trim(),
+                        publisherOrJournal = publisherOrJournal.trim(),
+                        accessDate = accessDate.trim(),
+                        link = link.trim(),
+                        fileUri = fileUri.trim(),
+                        citationStyleNote = citationStyleNote.trim(),
+                        importance = importance,
+                        personalSummary = summary.trim(),
+                        keyFindings = findings.trim(),
+                        whatThisSourceTaughtMe = taught.trim(),
+                        questionsGenerated = questions.trim(),
+                        reliabilityScore = reliability.toInt(),
+                        readingStatus = readingStatus,
+                        paperNotes = notes.trim(),
+                        relatedProjectId = projectId
+                    )
+                )
+            } else {
+                viewModel.addSource(
+                    type = type,
+                    title = title.trim(),
+                    author = author.trim(),
+                    link = link.trim(),
+                    summary = summary.trim(),
+                    taught = taught.trim(),
+                    reliability = reliability.toInt(),
+                    keyFindings = findings.trim(),
+                    questionsGenerated = questions.trim(),
+                    paperNotes = notes.trim(),
+                    projectId = projectId,
+                    dateOrYear = dateOrYear.trim(),
+                    doiOrIsbn = doiOrIsbn.trim(),
+                    publisherOrJournal = publisherOrJournal.trim(),
+                    accessDate = accessDate.trim(),
+                    fileUri = fileUri.trim(),
+                    citationStyleNote = citationStyleNote.trim(),
+                    importance = importance,
+                    readingStatus = readingStatus
+                )
+            }
             onDismiss()
         }
     }
@@ -693,13 +772,36 @@ internal fun NewSourceDialog(viewModel: FieldMindViewModel, onDismiss: () -> Uni
     }
 }
 @Composable
-internal fun NewHypothesisDialog(viewModel: FieldMindViewModel, questions: List<QuestionEntity>, onDismiss: () -> Unit) {
-    var prediction by remember { mutableStateOf("") }; var reasoning by remember { mutableStateOf("") }; var evidence by remember { mutableStateOf("") }; var support by remember { mutableStateOf("") }; var weaken by remember { mutableStateOf("") }; var test by remember { mutableStateOf("") }; var confidence by remember { mutableStateOf(50f) }; var linkedId by remember { mutableStateOf(questions.firstOrNull()?.id) }
-    var resultStatus by remember { mutableStateOf("Unknown") }; var showAdvanced by remember { mutableStateOf(false) }
+internal fun NewHypothesisDialog(viewModel: FieldMindViewModel, questions: List<QuestionEntity>, onDismiss: () -> Unit, entity: HypothesisEntity? = null) {
+    var prediction by remember { mutableStateOf(entity?.prediction ?: "") }
+    var reasoning by remember { mutableStateOf(entity?.reasoning ?: "") }
+    var evidence by remember { mutableStateOf(entity?.evidenceNeeded ?: "") }
+    var support by remember { mutableStateOf(entity?.supportCriteria ?: "") }
+    var weaken by remember { mutableStateOf(entity?.weakeningCriteria ?: "") }
+    var test by remember { mutableStateOf(entity?.testMethod ?: "") }
+    var confidence by remember { mutableStateOf((entity?.confidencePercent ?: 50).toFloat()) }
+    var linkedId by remember { mutableStateOf(entity?.linkedQuestionId ?: questions.firstOrNull()?.id) }
+    var resultStatus by remember { mutableStateOf(entity?.resultStatus ?: "Unknown") }
+    var showAdvanced by remember { mutableStateOf(false) }
 
     fun save() {
         if (prediction.isNotBlank()) {
-            viewModel.addHypothesis(linkedId, prediction, evidence, confidence.toInt(), reasoning, support, weaken, test, resultStatus = resultStatus)
+            if (entity != null) {
+                val latest = viewModel.hypotheses.value.firstOrNull { it.id == entity.id } ?: entity
+                viewModel.updateHypothesisEntity(latest.copy(
+                    prediction = prediction.trim(),
+                    reasoning = reasoning.trim(),
+                    evidenceNeeded = evidence.trim(),
+                    supportCriteria = support.trim(),
+                    weakeningCriteria = weaken.trim(),
+                    testMethod = test.trim(),
+                    resultStatus = resultStatus,
+                    confidencePercent = confidence.toInt(),
+                    linkedQuestionId = linkedId
+                ))
+            } else {
+                viewModel.addHypothesis(linkedId, prediction, evidence, confidence.toInt(), reasoning, support, weaken, test, resultStatus = resultStatus)
+            }
             onDismiss()
         }
     }
@@ -770,12 +872,29 @@ private fun notesLabelForTool(tool: String): String = when (tool) {
 }
 
 @Composable
-internal fun NewDataRecordDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
-    var tool by remember { mutableStateOf("Counter") }; var label by remember { mutableStateOf("") }; var value by remember { mutableStateOf("0") }; var unit by remember { mutableStateOf(defaultUnitForTool("Counter")) }; var location by remember { mutableStateOf("") }; var notes by remember { mutableStateOf("") }
+internal fun NewDataRecordDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, entity: DataRecordEntity? = null) {
+    var tool by remember { mutableStateOf(entity?.toolType ?: "Counter") }
+    var label by remember { mutableStateOf(entity?.label ?: "") }
+    var value by remember { mutableStateOf(entity?.value ?: "0") }
+    var unit by remember { mutableStateOf(entity?.unit ?: defaultUnitForTool(entity?.toolType ?: "Counter")) }
+    var location by remember { mutableStateOf(entity?.location ?: "") }
+    var notes by remember { mutableStateOf(entity?.notes ?: "") }
 
     fun save() {
         if (label.isNotBlank()) {
-            viewModel.addDataRecord(tool, label, value, unit, notes, location)
+            if (entity != null) {
+                val latest = viewModel.dataRecords.value.firstOrNull { it.id == entity.id } ?: entity
+                viewModel.updateDataRecordEntity(latest.copy(
+                    toolType = tool,
+                    label = label.trim(),
+                    value = value.trim(),
+                    unit = unit.trim(),
+                    location = location.trim(),
+                    notes = notes.trim()
+                ))
+            } else {
+                viewModel.addDataRecord(tool, label, value, unit, notes, location)
+            }
             onDismiss()
         }
     }
@@ -804,12 +923,39 @@ internal fun NewDataRecordDialog(viewModel: FieldMindViewModel, onDismiss: () ->
     }
 }
 @Composable
-internal fun NewReportDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
-    var type by remember { mutableStateOf("Field Report") }; var title by remember { mutableStateOf("") }; var background by remember { mutableStateOf("") }; var question by remember { mutableStateOf("") }; var methods by remember { mutableStateOf("") }; var observations by remember { mutableStateOf("") }; var results by remember { mutableStateOf("") }; var interpretation by remember { mutableStateOf("") }; var conclusion by remember { mutableStateOf("") }; var limitations by remember { mutableStateOf("") }; var next by remember { mutableStateOf("") }
+internal fun NewReportDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, entity: ReportEntity? = null) {
+    var type by remember { mutableStateOf(entity?.type ?: "Field Report") }
+    var title by remember { mutableStateOf(entity?.title ?: "") }
+    var background by remember { mutableStateOf(entity?.background ?: "") }
+    var question by remember { mutableStateOf(entity?.question ?: "") }
+    var methods by remember { mutableStateOf(entity?.methods ?: "") }
+    var observations by remember { mutableStateOf(entity?.observations ?: "") }
+    var results by remember { mutableStateOf(entity?.results ?: "") }
+    var interpretation by remember { mutableStateOf(entity?.interpretation ?: "") }
+    var conclusion by remember { mutableStateOf(entity?.conclusion ?: "") }
+    var limitations by remember { mutableStateOf(entity?.limitations ?: "") }
+    var next by remember { mutableStateOf(entity?.nextSteps ?: "") }
 
     fun save() {
         if (title.isNotBlank()) {
-            viewModel.addReport(type, title, background, question, methods, observations, results, interpretation, conclusion, limitations, next)
+            if (entity != null) {
+                val latest = viewModel.reports.value.firstOrNull { it.id == entity.id } ?: entity
+                viewModel.updateReportEntity(latest.copy(
+                    type = type,
+                    title = title.trim(),
+                    background = background.trim(),
+                    question = question.trim(),
+                    methods = methods.trim(),
+                    observations = observations.trim(),
+                    results = results.trim(),
+                    interpretation = interpretation.trim(),
+                    conclusion = conclusion.trim(),
+                    limitations = limitations.trim(),
+                    nextSteps = next.trim()
+                ))
+            } else {
+                viewModel.addReport(type, title, background, question, methods, observations, results, interpretation, conclusion, limitations, next)
+            }
             onDismiss()
         }
     }
@@ -835,12 +981,25 @@ internal fun NewReportDialog(viewModel: FieldMindViewModel, onDismiss: () -> Uni
     }
 }
 @Composable
-internal fun NewFlashcardDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
-    var type by remember { mutableStateOf("concept") }; var front by remember { mutableStateOf("") }; var back by remember { mutableStateOf("") }; var useSm2 by remember { mutableStateOf(false) }
+internal fun NewFlashcardDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, entity: FlashcardEntity? = null) {
+    var type by remember { mutableStateOf(entity?.type ?: "concept") }
+    var front by remember { mutableStateOf(entity?.front ?: "") }
+    var back by remember { mutableStateOf(entity?.back ?: "") }
+    var useSm2 by remember { mutableStateOf(entity?.deckMode == "sm2") }
 
     fun save() {
         if (front.isNotBlank() && back.isNotBlank()) {
-            viewModel.addFlashcard(front, back, type, deckMode = if (useSm2) "sm2" else "basic")
+            if (entity != null) {
+                val latest = viewModel.flashcards.value.firstOrNull { it.id == entity.id } ?: entity
+                viewModel.updateFlashcardEntity(latest.copy(
+                    type = type,
+                    front = front.trim(),
+                    back = back.trim(),
+                    deckMode = if (useSm2) "sm2" else "basic"
+                ))
+            } else {
+                viewModel.addFlashcard(front, back, type, deckMode = if (useSm2) "sm2" else "basic")
+            }
             onDismiss()
         }
     }
@@ -864,13 +1023,19 @@ internal fun NewFlashcardDialog(viewModel: FieldMindViewModel, onDismiss: () -> 
 }
 
 @Composable
-internal fun NewObservationDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, projectId: Long? = null) {
+internal fun NewObservationDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, projectId: Long? = null, entity: ObservationEntity? = null) {
     val context = LocalContext.current
     val haptics = rememberFieldMindHaptics()
-    var subject by remember { mutableStateOf("") }; var category by remember { mutableStateOf("Other") }
-    var facts by remember { mutableStateOf("") }; var confidence by remember { mutableStateOf("Likely") }
-    var location by remember { mutableStateOf("") }; var latitude by remember { mutableStateOf("") }; var longitude by remember { mutableStateOf("") }
-    var tags by remember { mutableStateOf("") }; var evidence by remember { mutableStateOf("") }; var fieldContext by remember { mutableStateOf("") }
+    var subject by remember { mutableStateOf(entity?.subject ?: "") }
+    var category by remember { mutableStateOf(entity?.category ?: "Other") }
+    var facts by remember { mutableStateOf(entity?.factsOnlyNotes ?: "") }
+    var confidence by remember { mutableStateOf(entity?.confidenceLevel ?: "Likely") }
+    var location by remember { mutableStateOf(entity?.manualLocation ?: "") }
+    var latitude by remember { mutableStateOf(entity?.latitude?.toString() ?: "") }
+    var longitude by remember { mutableStateOf(entity?.longitude?.toString() ?: "") }
+    var tags by remember { mutableStateOf(entity?.tags ?: "") }
+    var evidence by remember { mutableStateOf(entity?.evidenceSummary ?: "") }
+    var fieldContext by remember { mutableStateOf(entity?.moodOrContext ?: "") }
     var attachments by remember { mutableStateOf<List<DraftEvidenceAttachment>>(emptyList()) }
     var showCamera by remember { mutableStateOf(false) }
     var locating by remember { mutableStateOf(false) }
@@ -939,20 +1104,36 @@ internal fun NewObservationDialog(viewModel: FieldMindViewModel, onDismiss: () -
 
     fun save() {
         if (subject.isNotBlank() || facts.isNotBlank()) {
-            val effectiveSubject = subject.ifBlank { facts.take(48).ifBlank { "$category observation" } }
-            viewModel.addObservation(
-                subject = effectiveSubject,
-                category = category,
-                facts = facts.ifBlank { "Quick $category observation." },
-                confidence = confidence,
-                manualLocation = location.ifBlank { "" },
-                latitude = latitude.toDoubleOrNull(),
-                longitude = longitude.toDoubleOrNull(),
-                tags = if (tags.isNotBlank()) "$tags, $category" else category,
-                evidence = evidence,
-                context = fieldContext,
-                projectId = projectId
-            )
+            if (entity != null) {
+                val latest = viewModel.observations.value.firstOrNull { it.id == entity.id } ?: entity
+                viewModel.updateObservation(latest.copy(
+                    subject = subject.trim(),
+                    category = category,
+                    factsOnlyNotes = facts.trim(),
+                    confidenceLevel = confidence,
+                    manualLocation = location.trim(),
+                    latitude = latitude.toDoubleOrNull(),
+                    longitude = longitude.toDoubleOrNull(),
+                    evidenceSummary = evidence.trim(),
+                    moodOrContext = fieldContext.trim()
+                ), tags)
+            } else {
+                val effectiveSubject = subject.ifBlank { facts.take(48).ifBlank { "$category observation" } }
+                viewModel.addObservation(
+                    subject = effectiveSubject,
+                    category = category,
+                    facts = facts.ifBlank { "Quick $category observation." },
+                    confidence = confidence,
+                    manualLocation = location.ifBlank { "" },
+                    latitude = latitude.toDoubleOrNull(),
+                    longitude = longitude.toDoubleOrNull(),
+                    tags = if (tags.isNotBlank()) "$tags, $category" else category,
+                    evidence = evidence,
+                    context = fieldContext,
+                    projectId = projectId
+                )
+            }
+            attachments.forEach { viewModel.addAttachmentToObservation(entity?.id ?: 0L, it) }
             onDismiss()
         }
     }
@@ -1059,11 +1240,14 @@ internal fun NewObservationDialog(viewModel: FieldMindViewModel, onDismiss: () -
 }
 
 @Composable
-internal fun NewNoteDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, projectId: Long? = null) {
+internal fun NewNoteDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit, projectId: Long? = null, entity: NoteEntity? = null) {
     val context = LocalContext.current
     val haptics = rememberFieldMindHaptics()
-    var title by remember { mutableStateOf("") }; var body by remember { mutableStateOf("") }; var category by remember { mutableStateOf("Other") }
-    var tags by remember { mutableStateOf("") }; var location by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf(entity?.title ?: "") }
+    var body by remember { mutableStateOf(entity?.body ?: "") }
+    var category by remember { mutableStateOf(entity?.category ?: "Other") }
+    var tags by remember { mutableStateOf(entity?.tags ?: "") }
+    var location by remember { mutableStateOf("") }
     var showAdvanced by remember { mutableStateOf(false) }
     var showCamera by remember { mutableStateOf(false) }
     var attachments by remember { mutableStateOf<List<DraftEvidenceAttachment>>(emptyList()) }
@@ -1082,15 +1266,26 @@ internal fun NewNoteDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit,
 
     fun save() {
         if (title.isNotBlank() || body.isNotBlank()) {
-            val fallbackTitle = body.lineSequence().firstOrNull { it.isNotBlank() }?.take(48) ?: "Untitled note"
-            viewModel.addNote(
-                title = title.ifBlank { fallbackTitle },
-                body = body,
-                category = category,
-                tags = tags,
-                projectId = projectId,
-                onSaved = { onDismiss() }
-            )
+            if (entity != null) {
+                val latest = viewModel.notes.value.firstOrNull { it.id == entity.id } ?: entity
+                viewModel.updateNoteEntity(latest.copy(
+                    title = title.trim().ifBlank { body.take(36) },
+                    body = body.trim(),
+                    category = category,
+                    tags = tags.trim(),
+                    attachmentUris = latest.attachmentUris
+                ))
+            } else {
+                val fallbackTitle = body.lineSequence().firstOrNull { it.isNotBlank() }?.take(48) ?: "Untitled note"
+                viewModel.addNote(
+                    title = title.ifBlank { fallbackTitle },
+                    body = body,
+                    category = category,
+                    tags = tags,
+                    projectId = projectId,
+                    onSaved = { onDismiss() }
+                )
+            }
             onDismiss()
         }
     }
@@ -1158,26 +1353,18 @@ internal fun NewNoteDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit,
 @Composable
 internal fun EditEntityDialog(kind: String, id: Long, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
     when (kind) {
-        "observation" -> viewModel.observations.collectAsState().value.firstOrNull { it.id == id }?.let { EditObservationDialog(it, viewModel, onDismiss) }
-        "note" -> viewModel.notes.collectAsState().value.firstOrNull { it.id == id }?.let { EditNoteDialog(it, viewModel, onDismiss) }
-        "question" -> viewModel.questions.collectAsState().value.firstOrNull { it.id == id }?.let { EditQuestionDialog(it, viewModel, onDismiss) }
-        "hypothesis" -> viewModel.hypotheses.collectAsState().value.firstOrNull { it.id == id }?.let { EditHypothesisDialog(it, viewModel, onDismiss) }
-        "project" -> viewModel.projects.collectAsState().value.firstOrNull { it.id == id }?.let { EditProjectDialog(it, viewModel, onDismiss) }
-        "source" -> viewModel.sources.collectAsState().value.firstOrNull { it.id == id }?.let { EditSourceDialog(it, viewModel, onDismiss) }
-        "data" -> viewModel.dataRecords.collectAsState().value.firstOrNull { it.id == id }?.let { entity ->
-            when (entity.toolType) {
-                "Counter" -> EditCounterDialog(entity, viewModel, onDismiss)
-                "Measurement Log" -> EditMeasurementDialog(entity, viewModel, onDismiss)
-                "Weather Log" -> EditWeatherLogDialog(entity, viewModel, onDismiss)
-                "Checklist" -> EditChecklistDialog(entity, viewModel, onDismiss)
-                "Event Log" -> EditEventLogDialog(entity, viewModel, onDismiss)
-                "Site Log" -> EditSiteLogDialog(entity, viewModel, onDismiss)
-                "Comparison Table" -> EditComparisonDialog(entity, viewModel, onDismiss)
-                else -> EditDataRecordDialog(entity, viewModel, onDismiss)
-            }
+        "observation" -> viewModel.observations.collectAsState().value.firstOrNull { it.id == id }?.let { NewObservationDialog(viewModel, onDismiss, entity = it) }
+        "note" -> viewModel.notes.collectAsState().value.firstOrNull { it.id == id }?.let { NewNoteDialog(viewModel, onDismiss, entity = it) }
+        "question" -> viewModel.questions.collectAsState().value.firstOrNull { it.id == id }?.let { NewQuestionDialog(viewModel, onDismiss, entity = it) }
+        "hypothesis" -> {
+            val questions = viewModel.questions.collectAsState().value
+            viewModel.hypotheses.collectAsState().value.firstOrNull { it.id == id }?.let { NewHypothesisDialog(viewModel, questions, onDismiss, entity = it) }
         }
-        "report" -> viewModel.reports.collectAsState().value.firstOrNull { it.id == id }?.let { EditReportDialog(it, viewModel, onDismiss) }
-        "flashcard" -> viewModel.flashcards.collectAsState().value.firstOrNull { it.id == id }?.let { EditFlashcardDialog(it, viewModel, onDismiss) }
+        "project" -> viewModel.projects.collectAsState().value.firstOrNull { it.id == id }?.let { NewProjectDialog(viewModel, onDismiss = onDismiss, entity = it) }
+        "source" -> viewModel.sources.collectAsState().value.firstOrNull { it.id == id }?.let { NewSourceDialog(viewModel, onDismiss, entity = it) }
+        "data" -> viewModel.dataRecords.collectAsState().value.firstOrNull { it.id == id }?.let { NewDataRecordDialog(viewModel, onDismiss, entity = it) }
+        "report" -> viewModel.reports.collectAsState().value.firstOrNull { it.id == id }?.let { NewReportDialog(viewModel, onDismiss, entity = it) }
+        "flashcard" -> viewModel.flashcards.collectAsState().value.firstOrNull { it.id == id }?.let { NewFlashcardDialog(viewModel, onDismiss, entity = it) }
         "task" -> viewModel.tasks.collectAsState().value.firstOrNull { it.id == id }?.let { EditTaskDialog(it, viewModel, onDismiss) }
         else -> onDismiss()
     }
@@ -1198,7 +1385,9 @@ internal fun EditTaskDialog(entity: TaskEntity, viewModel: FieldMindViewModel, o
 
     fun save() {
         if (title.isNotBlank()) {
-            viewModel.updateTaskEntity(entity.copy(
+            // Use the latest entity from ViewModel state to avoid stale closures
+            val latestEntity = viewModel.tasks.value.firstOrNull { it.id == entity.id } ?: entity
+            viewModel.updateTaskEntity(latestEntity.copy(
                 title = title.trim(),
                 description = description.trim(),
                 taskType = taskType,

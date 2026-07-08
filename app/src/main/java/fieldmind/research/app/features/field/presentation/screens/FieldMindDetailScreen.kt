@@ -75,7 +75,8 @@ fun SharedTransitionScope.DetailScreen(
     onBack: () -> Unit,
     onOpenDetail: (String, Long) -> Unit = { _, _ -> },
     onOpenReader: (String, String) -> Unit = { _, _ -> },
-    onOpenCanvas: ((Long) -> Unit)? = null
+    onOpenCanvas: ((Long) -> Unit)? = null,
+    onOpenEdit: (String, Long) -> Unit = { _, _ -> }
 ) {
     val observations by viewModel.observations.collectAsState()
     val notes by viewModel.notes.collectAsState()
@@ -256,7 +257,7 @@ fun SharedTransitionScope.DetailScreen(
             }
         }
     }
-        if (showEdit) EditEntityDialog(kind, id, viewModel) { showEdit = false }
+        if (showEdit) { onOpenEdit(kind, id); showEdit = false }
         if (showDelete) ConfirmDeleteDialog(kind, onDismiss = { showDelete = false }) {
             deleteEntityByKind(kind, id, viewModel); showDelete = false; onBack()
         }

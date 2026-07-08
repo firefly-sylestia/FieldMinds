@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.annotation.SuppressLint
 import android.os.Build
+
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -398,12 +399,32 @@ class GeoFenceReminder(private val context: Context) {
             Geofence.GEOFENCE_TRANSITION_DWELL -> "Still near $regionLabel"
             else -> "Region: $regionLabel"
         }
+        val openMapIntent = PendingIntent.getActivity(
+            context,
+            0,
+            Intent(context, fieldmind.research.app.activities.MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra(fieldmind.research.app.activities.MainActivity.EXTRA_FIELDMIND_DESTINATION, "field_map")
+            },
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val openAppIntent = PendingIntent.getActivity(
+            context,
+            1,
+            Intent(context, fieldmind.research.app.activities.MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+            .setSmallIcon(fieldmind.research.app.R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText("Geo-fence reminder from FieldMind")
+            .setColor(0xFF6750A4.toInt())
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
+            .addAction(android.R.drawable.ic_dialog_map, "Open Map", openMapIntent)
+            .addAction(android.R.drawable.ic_menu_compass, "Open FieldMind", openAppIntent)
             .build()
         runCatching {
             NotificationManagerCompat.from(context).notify(

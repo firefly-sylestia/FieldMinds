@@ -246,9 +246,10 @@ class FieldMindTimerService : Service() {
         )
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_menu_compass)
+            .setSmallIcon(fieldmind.research.app.R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(text)
+            .setColor(0xFF6750A4.toInt())
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .addAction(android.R.drawable.ic_media_play, "Open Field Mode", pendingIntent)

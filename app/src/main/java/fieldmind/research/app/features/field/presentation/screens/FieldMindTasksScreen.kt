@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,6 +38,7 @@ import fieldmind.research.app.features.field.data.database.entity.TaskEntity
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
+import androidx.compose.runtime.saveable.rememberSaveable
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import java.text.SimpleDateFormat
@@ -205,7 +207,9 @@ fun TasksScreen(
         }
     }
 
+    val tasksScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     LazyColumn(
+        state = tasksScrollState,
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()

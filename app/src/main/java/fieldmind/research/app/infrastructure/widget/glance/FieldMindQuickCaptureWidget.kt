@@ -2,6 +2,7 @@ package fieldmind.research.app.infrastructure.widget.glance
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,10 +39,13 @@ import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
 
+private val BRAND_PRIMARY = Color(0xFF1F6B4C)
+private val BRAND_ACCENT = Color(0xFF1F6B4C)
+
 /**
- * Quick Capture Widget — 2×1 cells
- * One-tap observation capture from the Android home screen.
- * Shows camera icon + "Quick Observe" + observation count.
+ * FieldMind Quick Capture Widget — 2×1 cells
+ * Premium glassmorphic design with FieldMind brand colors.
+ * One-tap access to observation capture with elegant branding.
  */
 class FieldMindQuickCaptureWidget : GlanceAppWidget() {
 
@@ -51,92 +55,60 @@ class FieldMindQuickCaptureWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
             val currentSize = LocalSize.current
-            GlanceTheme {
-                QuickCaptureUi(currentSize)
-            }
+            GlanceTheme { QuickCaptureUi(currentSize) }
         }
     }
 
     @Composable
     private fun QuickCaptureUi(size: DpSize) {
-        val minWidth = size.width.value.toInt()
+        val isWide = size.width.value.toInt() >= 180
 
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(GlanceTheme.colors.surface)
-                .cornerRadius(24.dp)
+                .cornerRadius(32.dp)
                 .clickable(actionStartActivity<MainActivity>())
-                .padding(16.dp)
         ) {
-            if (minWidth >= 180) {
-                // Wide layout: icon + text + count
-                Row(
-                    modifier = GlanceModifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = GlanceModifier
-                            .size(48.dp)
-                            .background(GlanceTheme.colors.primaryContainer)
-                            .cornerRadius(14.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            provider = ImageProvider(R.drawable.ic_notification),
-                            contentDescription = "Capture",
-                            modifier = GlanceModifier.size(28.dp)
-                        )
+            // ── Glassmorphic layered background ──
+            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainerLow).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainer).cornerRadius(32.dp)) { }
+            // ── Brand accent top bar ──
+            Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(ColorProvider(BRAND_ACCENT)).cornerRadius(1.5f.dp)) { }
+
+            Box(modifier = GlanceModifier.fillMaxSize().padding(14.dp)) {
+                if (isWide) {
+                    Row(modifier = GlanceModifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+                        // Brand icon pill
+                        Box(
+                            modifier = GlanceModifier.size(48.dp)
+                                .background(ColorProvider(BRAND_PRIMARY.copy(alpha = 0.12f)))
+                                .cornerRadius(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(provider = ImageProvider(R.drawable.ic_notification), contentDescription = "Capture", modifier = GlanceModifier.size(26.dp))
+                        }
+                        Spacer(GlanceModifier.width(14.dp))
+                        Column(modifier = GlanceModifier.defaultWeight()) {
+                            Text("Quick Observe", style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurface))
+                            Spacer(GlanceModifier.height(3.dp))
+                            Text("Tap to capture", style = TextStyle(fontSize = 11.sp, color = GlanceTheme.colors.onSurfaceVariant))
+                        }
+                        // Brand green dot
+                        Box(modifier = GlanceModifier.size(8.dp).background(ColorProvider(BRAND_PRIMARY)).cornerRadius(4.dp)) { }
                     }
-                    Spacer(GlanceModifier.width(12.dp))
-                    Column(modifier = GlanceModifier.defaultWeight()) {
-                        Text(
-                            text = "Quick Observe",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = GlanceTheme.colors.onSurface
-                            )
-                        )
-                        Spacer(GlanceModifier.height(2.dp))
-                        Text(
-                            text = "Tap to capture an observation",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                color = GlanceTheme.colors.onSurfaceVariant
-                            )
-                        )
+                } else {
+                    Column(modifier = GlanceModifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = GlanceModifier.size(40.dp)
+                                .background(ColorProvider(BRAND_PRIMARY.copy(alpha = 0.12f)))
+                                .cornerRadius(14.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(provider = ImageProvider(R.drawable.ic_notification), contentDescription = "Capture", modifier = GlanceModifier.size(22.dp))
+                        }
+                        Spacer(GlanceModifier.height(8.dp))
+                        Text("Observe", style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurface))
                     }
-                }
-            } else {
-                // Narrow layout: icon + text vertical
-                Column(
-                    modifier = GlanceModifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = GlanceModifier
-                            .size(40.dp)
-                            .background(GlanceTheme.colors.primaryContainer)
-                            .cornerRadius(12.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            provider = ImageProvider(R.drawable.ic_notification),
-                            contentDescription = "Capture",
-                            modifier = GlanceModifier.size(24.dp)
-                        )
-                    }
-                    Spacer(GlanceModifier.height(8.dp))
-                    Text(
-                        text = "Observe",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = GlanceTheme.colors.onSurface
-                        )
-                    )
                 }
             }
         }

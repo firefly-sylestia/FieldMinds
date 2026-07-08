@@ -4,16 +4,25 @@ import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import fieldmind.research.app.infrastructure.worker.FieldMindSessionReminderWorker
+import fieldmind.research.app.infrastructure.worker.FieldMindTaskReminderWorker
+import fieldmind.research.app.infrastructure.worker.FieldMindWeatherAlertWorker
 import java.util.concurrent.TimeUnit
 
 /** Central WorkManager wiring for FieldMind background features exposed in Settings. */
 object FieldMindBackgroundScheduler {
     private const val AUTO_BACKUP_WORK = "fieldmind_auto_backup"
     private const val DAILY_REMINDER_WORK = "fieldmind_daily_reminder"
+    private const val WEATHER_ALERT_WORK = "fieldmind_weather_alert"
+    private const val TASK_REMINDER_WORK = "fieldmind_task_reminder"
+    private const val SESSION_REMINDER_WORK = "fieldmind_session_reminder"
 
-    fun syncAll(context: Context, autoBackupEnabled: Boolean, autoBackupInterval: String, remindersEnabled: Boolean) {
+    fun syncAll(context: Context, autoBackupEnabled: Boolean, autoBackupInterval: String, remindersEnabled: Boolean, weatherAlertsEnabled: Boolean = true, taskRemindersEnabled: Boolean = true, sessionRemindersEnabled: Boolean = true) {
         scheduleAutoBackup(context, autoBackupEnabled, autoBackupInterval)
         scheduleDailyReminder(context, remindersEnabled)
+        scheduleWeatherAlerts(context, weatherAlertsEnabled)
+        scheduleTaskReminders(context, taskRemindersEnabled)
+        scheduleSessionReminders(context, sessionRemindersEnabled)
     }
 
     fun scheduleAutoBackup(context: Context, enabled: Boolean, intervalLabel: String) {
@@ -45,6 +54,42 @@ object FieldMindBackgroundScheduler {
             .addTag(DAILY_REMINDER_WORK)
             .build()
         workManager.enqueueUniquePeriodicWork(DAILY_REMINDER_WORK, ExistingPeriodicWorkPolicy.UPDATE, request)
+    }
+
+    fun scheduleWeatherAlerts(context: Context, enabled: Boolean) {
+        val workManager = WorkManager.getInstance(context.applicationContext)
+        if (!enabled) {
+            workManager.cancelUniqueWork(WEATHER_ALERT_WORK)
+            return
+        }
+        val request = PeriodicWorkRequestBuilder<FieldMindWeatherAlertWorker>(2, TimeUnit.HOURS)
+            .addTag(WEATHER_ALERT_WORK)
+            .build()
+        workManager.enqueueUniquePeriodicWork(WEATHER_ALERT_WORK, ExistingPeriodicWorkPolicy.UPDATE, request)
+    }
+
+    fun scheduleTaskReminders(context: Context, enabled: Boolean) {
+        val workManager = WorkManager.getInstance(context.applicationContext)
+        if (!enabled) {
+            workManager.cancelUniqueWork(TASK_REMINDER_WORK)
+            return
+        }
+        val request = PeriodicWorkRequestBuilder<FieldMindTaskReminderWorker>(6, TimeUnit.HOURS)
+            .addTag(TASK_REMINDER_WORK)
+            .build()
+        workManager.enqueueUniquePeriodicWork(TASK_REMINDER_WORK, ExistingPeriodicWorkPolicy.UPDATE, request)
+    }
+
+    fun scheduleSessionReminders(context: Context, enabled: Boolean) {
+        val workManager = WorkManager.getInstance(context.applicationContext)
+        if (!enabled) {
+            workManager.cancelUniqueWork(SESSION_REMINDER_WORK)
+            return
+        }
+        val request = PeriodicWorkRequestBuilder<FieldMindSessionReminderWorker>(1, TimeUnit.DAYS)
+            .addTag(SESSION_REMINDER_WORK)
+            .build()
+        workManager.enqueueUniquePeriodicWork(SESSION_REMINDER_WORK, ExistingPeriodicWorkPolicy.UPDATE, request)
     }
 
     /**

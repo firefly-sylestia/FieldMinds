@@ -26,6 +26,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -455,13 +456,12 @@ fun ObserveScreen(
     var showExitConfirm by remember { mutableStateOf(false) }
     var showSessionExitConfirm by remember { mutableStateOf(false) }
 
-    BackHandler(enabled = true) {
+    // Only intercept back when there's actual dirty content or an active session
+    BackHandler(enabled = hasDirtyContent || session.isActive) {
         if (hasDirtyContent) {
             showExitConfirm = true
-        } else if (session.isActive) {
-            showSessionExitConfirm = true
         } else {
-            onBack?.invoke()
+            showSessionExitConfirm = true
         }
     }
 
@@ -550,13 +550,15 @@ fun ObserveScreen(
     }
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
+    val observeScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         containerColor = Color.Transparent
     ) { padding ->
         Box(Modifier.fillMaxSize().screenBackground(gradientOpacity)) {
             LazyColumn(
-                Modifier.fillMaxSize().padding(padding),
+                state = observeScrollState,
+                modifier = Modifier.fillMaxSize().padding(padding),
                 contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 96.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {

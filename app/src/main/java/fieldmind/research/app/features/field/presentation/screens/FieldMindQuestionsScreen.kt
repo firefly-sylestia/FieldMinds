@@ -90,7 +90,7 @@ fun QuestionsScreen(
     // Generated questions from observations
     val suggestedQuestions = remember(observations, sources, questions) {
         if (observations.isNotEmpty()) {
-            QuestionGenerator.generateAll(observations, sources, questions).filter { generated ->
+            QuestionGenerator.generateAll(observations = observations, sources = sources, existing = questions).filter { generated ->
                 !questions.any { q -> q.questionText.lowercase().trim() == generated.questionText.lowercase().trim() }
             }
         } else emptyList()
@@ -164,7 +164,7 @@ fun QuestionsScreen(
 
         if (searchQuery.isNotEmpty()) {
             item {
-                TextField(
+                OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     modifier = Modifier.fillMaxWidth(),
@@ -172,7 +172,7 @@ fun QuestionsScreen(
                     leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                     trailingIcon = { if (searchQuery.isNotBlank()) IconButton(onClick = { searchQuery = "" }) { Icon(MaterialSymbolIcon("close"), contentDescription = "Clear", size = 18.dp) } },
                     shape = RoundedCornerShape(20.dp),
-                    colors = TextFieldDefaults.colors(
+                    colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                     ),

@@ -48,7 +48,8 @@ fun TaskDetailScreen(
     taskId: Long,
     viewModel: FieldMindViewModel,
     onBack: () -> Unit = {},
-    onOpenDetail: (String, Long) -> Unit = { _, _ -> }
+    onOpenDetail: (String, Long) -> Unit = { _, _ -> },
+    onOpenEdit: (String, Long) -> Unit = { _, _ -> }
 ) {
     val tasks by viewModel.tasks.collectAsState()
     val observations by viewModel.observations.collectAsState()
@@ -125,7 +126,6 @@ fun TaskDetailScreen(
 
     // ── Overflow menu ──
     var showOverflow by remember { mutableStateOf(false) }
-    var showEditTask by remember { mutableStateOf(false) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
 
     val taskScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
@@ -161,7 +161,7 @@ fun TaskDetailScreen(
                             text = { Text("Edit task") },
                             onClick = {
                                 showOverflow = false
-                                showEditTask = true
+                                onOpenEdit("task", taskId)
                             },
                             leadingIcon = { Icon(MaterialSymbolIcon("edit"), null, size = 18.dp) }
                         )
@@ -431,19 +431,23 @@ fun TaskDetailScreen(
                                         checkBounce.snapTo(1.3f)
                                         checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
                                     }
-                                    // Toggle item
-                                    val arr = try { JSONArray(task.checklistJson) } catch (_: Exception) { JSONArray() }
-                                    for (i in 0 until arr.length()) {
-                                        val obj = arr.getJSONObject(i)
-                                        if (obj.optString("text", "") == item.text) {
-                                            obj.put("done", !item.done)
+                                    // Toggle item — read latest task data from ViewModel state directly
+                                    checklistScope.launch {
+                                        // Read the LATEST task from the ViewModel's state to avoid stale closures
+                                        val latestTask = viewModel.tasks.value.firstOrNull { it.id == taskId } ?: task
+                                        val arr = try { JSONArray(latestTask.checklistJson) } catch (_: Exception) { JSONArray() }
+                                        for (i in 0 until arr.length()) {
+                                            val obj = arr.getJSONObject(i)
+                                            if (obj.optString("text", "") == item.text) {
+                                                obj.put("done", !obj.optBoolean("done", false))
+                                            }
                                         }
+                                        viewModel.updateTaskEntity(latestTask.copy(checklistJson = arr.toString()))
                                     }
-                                    viewModel.updateTaskEntity(task.copy(checklistJson = arr.toString()))
                                 },
                                 shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                modifier = Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f)
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 Row(
                                     Modifier.fillMaxWidth().padding(12.dp),
@@ -751,10 +755,7 @@ fun TaskDetailScreen(
             .align(Alignment.BottomCenter)
             .padding(16.dp)
     )
-    // ── Edit task dialog overlay ──
-    if (showEditTask) {
-        EditTaskDialog(entity = task, viewModel = viewModel, onDismiss = { showEditTask = false })
-    }
+
 }
 }
 

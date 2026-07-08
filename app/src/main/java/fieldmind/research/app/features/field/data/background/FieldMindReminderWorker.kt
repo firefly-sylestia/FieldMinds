@@ -53,17 +53,23 @@ class FieldMindReminderWorker(context: Context, params: WorkerParameters) : Coro
             manager.createNotificationChannel(channel)
         }
 
-        val intent = Intent(applicationContext, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val openAppIntent = PendingIntent.getActivity(applicationContext, 0, Intent(applicationContext, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val recordIntent = PendingIntent.getActivity(applicationContext, 1, Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(MainActivity.EXTRA_FIELDMIND_DESTINATION, "field_capture")
+        }, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val body = if (streak > 0) "Keep your $streak-day research streak alive with one factual observation." else "Capture one factual observation to start today's field record."
         val notification = NotificationCompat.Builder(applicationContext, channelId)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle("FieldMind observation reminder")
             .setContentText(body)
+            .setColor(0xFF6750A4.toInt())
             .setStyle(NotificationCompat.BigTextStyle().bigText(body))
-            .setContentIntent(pendingIntent)
+            .setContentIntent(openAppIntent)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .addAction(android.R.drawable.ic_menu_camera, "Record", recordIntent)
+            .addAction(android.R.drawable.ic_menu_compass, "Open App", openAppIntent)
             .build()
         NotificationManagerCompat.from(applicationContext).notify(4102, notification)
     }

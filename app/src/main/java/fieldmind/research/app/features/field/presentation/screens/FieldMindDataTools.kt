@@ -276,15 +276,16 @@ private fun RecordStat(label: String, count: Int, icon: MaterialSymbolIcon) {
 @Composable
 fun CounterToolScreen(
     viewModel: FieldMindViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    entity: DataRecordEntity? = null
 ) {
     val dataRecords by viewModel.dataRecords.collectAsState()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
 
-    var count by remember { mutableIntStateOf(0) }
-    var label by remember { mutableStateOf("") }
+    var count by remember(entity) { mutableIntStateOf(entity?.value?.toIntOrNull() ?: 0) }
+    var label by remember(entity) { mutableStateOf(entity?.label ?: "") }
     var showHistory by remember { mutableStateOf(false) }
     val counterRecords = remember(dataRecords) {
         dataRecords.filter { it.toolType == "Counter" }.sortedByDescending { it.timestamp }
@@ -302,8 +303,19 @@ fun CounterToolScreen(
         if (count <= 0) return
         haptics.confirm()
         val labelToUse = label.ifBlank { "Counter tally" }
-        viewModel.addCounter(labelToUse, count, "Manual save at $count") { success ->
-            showFastSnackbar(snackbar, scope, if (success) "Saved count: $count" else "Failed to save — try again")
+        if (entity != null) {
+            viewModel.updateDataRecordEntity(entity.copy(
+                label = labelToUse,
+                value = count.toString(),
+                unit = "count",
+                notes = "Manual save at $count"
+            ))
+            showFastSnackbar(snackbar, scope, "Updated count: $count")
+            onBack()
+        } else {
+            viewModel.addCounter(labelToUse, count, "Manual save at $count") { success ->
+                showFastSnackbar(snackbar, scope, if (success) "Saved count: $count" else "Failed to save — try again")
+            }
         }
     }
 
@@ -548,17 +560,18 @@ fun CounterToolScreen(
 @Composable
 fun MeasurementToolScreen(
     viewModel: FieldMindViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    entity: DataRecordEntity? = null
 ) {
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
 
-    var label by remember { mutableStateOf("") }
-    var value by remember { mutableStateOf("") }
-    var unit by remember { mutableStateOf("cm") }
-    var notes by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
+    var label by remember(entity) { mutableStateOf(entity?.label ?: "") }
+    var value by remember(entity) { mutableStateOf(entity?.value ?: "") }
+    var unit by remember(entity) { mutableStateOf(entity?.unit?.ifBlank { "cm" } ?: "cm") }
+    var notes by remember(entity) { mutableStateOf(entity?.notes ?: "") }
+    var location by remember(entity) { mutableStateOf(entity?.location ?: "") }
 
     val commonUnits = listOf("cm", "m", "mm", "km", "g", "kg", "°C", "°F", "%", "mL", "L", "ppm", "mg/L", "lux", "dB")
     var showUnitPicker by remember { mutableStateOf(false) }
@@ -571,23 +584,35 @@ fun MeasurementToolScreen(
         val savedLabel = label.trim()
         val savedValue = value.trim()
         val savedUnit = unit.trim()
-        viewModel.addDataRecord(
-            toolType = "Measurement Log",
-            label = savedLabel,
-            value = savedValue,
-            unit = savedUnit,
-            notes = notes.trim(),
-            location = location.trim(),
-            datasetKind = "Measurements",
-            chartPreference = "Line",
-            onResult = { success ->
-                showFastSnackbar(snackbar, scope, if (success) "Measurement saved: $savedLabel = $savedValue $savedUnit" else "Failed to save measurement — try again")
-            }
-        )
-        label = ""
-        value = ""
-        notes = ""
-        location = ""
+        if (entity != null) {
+            viewModel.updateDataRecordEntity(entity.copy(
+                label = savedLabel,
+                value = savedValue,
+                unit = savedUnit,
+                notes = notes.trim(),
+                location = location.trim()
+            ))
+            showFastSnackbar(snackbar, scope, "Updated measurement: $savedLabel = $savedValue $savedUnit")
+            onBack()
+        } else {
+            viewModel.addDataRecord(
+                toolType = "Measurement Log",
+                label = savedLabel,
+                value = savedValue,
+                unit = savedUnit,
+                notes = notes.trim(),
+                location = location.trim(),
+                datasetKind = "Measurements",
+                chartPreference = "Line",
+                onResult = { success ->
+                    showFastSnackbar(snackbar, scope, if (success) "Measurement saved: $savedLabel = $savedValue $savedUnit" else "Failed to save measurement — try again")
+                }
+            )
+            label = ""
+            value = ""
+            notes = ""
+            location = ""
+        }
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -751,7 +776,8 @@ fun MeasurementToolScreen(
 @Composable
 fun WeatherLogToolScreen(
     viewModel: FieldMindViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    entity: DataRecordEntity? = null
 ) {
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -759,12 +785,29 @@ fun WeatherLogToolScreen(
     val context = androidx.compose.ui.platform.LocalContext.current
     val locationProvider = remember { fieldmind.research.app.features.field.data.location.FieldLocationProvider(context) }
 
-    var temperature by remember { mutableStateOf("") }
-    var condition by remember { mutableStateOf("Clear") }
-    var humidity by remember { mutableStateOf("") }
-    var windSpeed by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
+    // Parse initial values from entity
+    val initialTemp = remember(entity) {
+        entity?.value?.let { Regex("(-?\\d+\\.?\\d*)°C").find(it)?.groupValues?.getOrNull(1) } ?: ""
+    }
+    val initialCondition = remember(entity) {
+        entity?.value?.let { v ->
+            val conditions = listOf("Clear", "Partly cloudy", "Overcast", "Foggy", "Drizzle", "Rain", "Snow", "Thunderstorm")
+            conditions.firstOrNull { v.contains(it, ignoreCase = true) } ?: "Clear"
+        } ?: "Clear"
+    }
+    val initialHumidity = remember(entity) {
+        entity?.value?.let { Regex("(\\d+)% humidity").find(it)?.groupValues?.getOrNull(1) } ?: ""
+    }
+    val initialWind = remember(entity) {
+        entity?.value?.let { Regex("(-?\\d+\\.?\\d*) km/h wind").find(it)?.groupValues?.getOrNull(1) } ?: ""
+    }
+
+    var temperature by remember(initialTemp) { mutableStateOf(initialTemp) }
+    var condition by remember(initialCondition) { mutableStateOf(initialCondition) }
+    var humidity by remember(initialHumidity) { mutableStateOf(initialHumidity) }
+    var windSpeed by remember(initialWind) { mutableStateOf(initialWind) }
+    var notes by remember(entity) { mutableStateOf(entity?.notes ?: "") }
+    var location by remember(entity) { mutableStateOf(entity?.location ?: "") }
     var locating by remember { mutableStateOf(false) }
     var autoFetching by remember { mutableStateOf(false) }
 
@@ -809,19 +852,31 @@ fun WeatherLogToolScreen(
             windSpeed.takeIf { it.isNotBlank() }?.let { append(" | ${it} km/h wind") }
         }
         val savedCondition = condition
-        viewModel.addDataRecord(
-            toolType = "Weather Log",
-            label = "Weather: $condition",
-            value = value.trim(),
-            unit = "",
-            notes = notes.trim(),
-            location = location.trim(),
-            datasetKind = "Weather logs",
-            chartPreference = "Line",
-            onResult = { success ->
-                showFastSnackbar(snackbar, scope, if (success) "Weather log saved: $savedCondition" else "Failed to save weather log — try again")
-            }
-        )
+        if (entity != null) {
+            viewModel.updateDataRecordEntity(entity.copy(
+                label = "Weather: $condition",
+                value = value.trim(),
+                unit = "",
+                notes = notes.trim(),
+                location = location.trim()
+            ))
+            showFastSnackbar(snackbar, scope, "Updated weather log: $savedCondition")
+            onBack()
+        } else {
+            viewModel.addDataRecord(
+                toolType = "Weather Log",
+                label = "Weather: $condition",
+                value = value.trim(),
+                unit = "",
+                notes = notes.trim(),
+                location = location.trim(),
+                datasetKind = "Weather logs",
+                chartPreference = "Line",
+                onResult = { success ->
+                    showFastSnackbar(snackbar, scope, if (success) "Weather log saved: $savedCondition" else "Failed to save weather log — try again")
+                }
+            )
+        }
     }
 
     fun fetchLocation() {
@@ -1214,13 +1269,26 @@ fun SpeciesToolScreen(
 @Composable
 fun ChecklistToolScreen(
     viewModel: FieldMindViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    entity: DataRecordEntity? = null
 ) {
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
 
-    var items by remember { mutableStateOf(listOf<Pair<String, Boolean>>()) }
+    // Parse initial items from entity.value JSON
+    val initialItems = remember(entity) {
+        entity?.value?.let { raw ->
+            try {
+                val arr = JSONArray(raw)
+                (0 until arr.length()).map { i ->
+                    val obj = arr.getJSONObject(i)
+                    obj.getString("text") to obj.getBoolean("done")
+                }
+            } catch (_: Exception) { emptyList() }
+        } ?: emptyList()
+    }
+    var items by remember(initialItems) { mutableStateOf(initialItems) }
     var newItemText by remember { mutableStateOf("") }
 
     fun addItem() {
@@ -1255,18 +1323,29 @@ fun ChecklistToolScreen(
             }
             append("]")
         }
-        viewModel.addDataRecord(
-            toolType = "Checklist",
-            label = "Checklist (${checkedCount}/${itemCount} checked)",
-            value = jsonItems,
-            unit = "",
-            notes = "",
-            datasetKind = "Checklists",
-            chartPreference = "Bar",
-            onResult = { success ->
-                showFastSnackbar(snackbar, scope, if (success) "Checklist saved (${checkedCount}/${itemCount})" else "Failed to save checklist — try again")
-            }
-        )
+        if (entity != null) {
+            viewModel.updateDataRecordEntity(entity.copy(
+                label = "Checklist (${checkedCount}/${itemCount} checked)",
+                value = jsonItems,
+                unit = "",
+                notes = ""
+            ))
+            showFastSnackbar(snackbar, scope, "Updated checklist (${checkedCount}/${itemCount})")
+            onBack()
+        } else {
+            viewModel.addDataRecord(
+                toolType = "Checklist",
+                label = "Checklist (${checkedCount}/${itemCount} checked)",
+                value = jsonItems,
+                unit = "",
+                notes = "",
+                datasetKind = "Checklists",
+                chartPreference = "Bar",
+                onResult = { success ->
+                    showFastSnackbar(snackbar, scope, if (success) "Checklist saved (${checkedCount}/${itemCount})" else "Failed to save checklist — try again")
+                }
+            )
+        }
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -1379,16 +1458,27 @@ fun ChecklistToolScreen(
 @Composable
 fun EventLogToolScreen(
     viewModel: FieldMindViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    entity: DataRecordEntity? = null
 ) {
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
 
-    var title by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("Sighting") }
-    var description by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())) }
+    val initialCategory = remember(entity) {
+        entity?.value?.let { Regex("^(.+?) \\|").find(it)?.groupValues?.getOrNull(1) } ?: "Sighting"
+    }
+    val initialDate = remember(entity) {
+        entity?.value?.let { Regex("\\| (.+?)$").find(it)?.groupValues?.getOrNull(1)?.trim() } ?: SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    }
+    val initialDescription = remember(entity) {
+        entity?.notes?.let { Regex("^([\\s\\S]*?)(\\nDate:.*)?$").find(it)?.groupValues?.getOrNull(1)?.trim() } ?: ""
+    }
+
+    var title by remember(entity) { mutableStateOf(entity?.label ?: "") }
+    var category by remember(initialCategory) { mutableStateOf(initialCategory) }
+    var description by remember(initialDescription) { mutableStateOf(initialDescription) }
+    var date by remember(initialDate) { mutableStateOf(initialDate) }
     var showCategoryPicker by remember { mutableStateOf(false) }
 
     val categories = listOf("Sighting", "Discovery", "Change", "Visit", "Weather Event", "Other")
@@ -1397,20 +1487,31 @@ fun EventLogToolScreen(
         if (title.isBlank()) return
         haptics.confirm()
         val savedTitle = title.trim()
-        viewModel.addDataRecord(
-            toolType = "Event Log",
-            label = savedTitle,
-            value = "$category | $date",
-            unit = "",
-            notes = "$description\nDate: $date",
-            datasetKind = "Events",
-            chartPreference = "Bar",
-            onResult = { success ->
-                showFastSnackbar(snackbar, scope, if (success) "Event saved: $savedTitle" else "Failed to save event — try again")
-            }
-        )
-        title = ""
-        description = ""
+        if (entity != null) {
+            viewModel.updateDataRecordEntity(entity.copy(
+                label = savedTitle,
+                value = "$category | $date",
+                unit = "",
+                notes = "$description\nDate: $date"
+            ))
+            showFastSnackbar(snackbar, scope, "Updated event: $savedTitle")
+            onBack()
+        } else {
+            viewModel.addDataRecord(
+                toolType = "Event Log",
+                label = savedTitle,
+                value = "$category | $date",
+                unit = "",
+                notes = "$description\nDate: $date",
+                datasetKind = "Events",
+                chartPreference = "Bar",
+                onResult = { success ->
+                    showFastSnackbar(snackbar, scope, if (success) "Event saved: $savedTitle" else "Failed to save event — try again")
+                }
+            )
+            title = ""
+            description = ""
+        }
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -1473,17 +1574,32 @@ fun EventLogToolScreen(
 @Composable
 fun SiteLogToolScreen(
     viewModel: FieldMindViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    entity: DataRecordEntity? = null
 ) {
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
 
-    var siteName by remember { mutableStateOf("") }
-    var purpose by remember { mutableStateOf("Survey") }
-    var conditions by remember { mutableStateOf("") }
-    var findings by remember { mutableStateOf("") }
-    var duration by remember { mutableStateOf("") }
+    // Parse fields from entity
+    val initialPurpose = remember(entity) {
+        entity?.value?.let { Regex("^(.+?) \\|").find(it)?.groupValues?.getOrNull(1) } ?: "Survey"
+    }
+    val initialDuration = remember(entity) {
+        entity?.value?.let { Regex("Duration: (.+?)$").find(it)?.groupValues?.getOrNull(1) } ?: ""
+    }
+    val initialConditions = remember(entity) {
+        entity?.notes?.let { Regex("Conditions: ([\\s\\S]*?)(\\nFindings:|$)").find(it)?.groupValues?.getOrNull(1)?.trim() } ?: ""
+    }
+    val initialFindings = remember(entity) {
+        entity?.notes?.let { Regex("Findings: ([\\s\\S]*)$").find(it)?.groupValues?.getOrNull(1)?.trim() } ?: ""
+    }
+
+    var siteName by remember(entity) { mutableStateOf(entity?.label ?: "") }
+    var purpose by remember(initialPurpose) { mutableStateOf(initialPurpose) }
+    var conditions by remember(initialConditions) { mutableStateOf(initialConditions) }
+    var findings by remember(initialFindings) { mutableStateOf(initialFindings) }
+    var duration by remember(initialDuration) { mutableStateOf(initialDuration) }
 
     val purposes = listOf("Survey", "Monitoring", "Collection", "Observation", "Maintenance", "Exploration")
 
@@ -1491,22 +1607,33 @@ fun SiteLogToolScreen(
         if (siteName.isBlank()) return
         haptics.confirm()
         val savedName = siteName.trim()
-        viewModel.addDataRecord(
-            toolType = "Site Log",
-            label = savedName,
-            value = "$purpose | Duration: ${duration.ifBlank { "N/A" }}",
-            unit = "",
-            notes = "Conditions: $conditions\nFindings: $findings",
-            datasetKind = "Site visits",
-            chartPreference = "Bar",
-            onResult = { success ->
-                showFastSnackbar(snackbar, scope, if (success) "Site log saved: $savedName" else "Failed to save site log — try again")
-            }
-        )
-        siteName = ""
-        conditions = ""
-        findings = ""
-        duration = ""
+        if (entity != null) {
+            viewModel.updateDataRecordEntity(entity.copy(
+                label = savedName,
+                value = "$purpose | Duration: ${duration.ifBlank { "N/A" }}",
+                unit = "",
+                notes = "Conditions: $conditions\nFindings: $findings"
+            ))
+            showFastSnackbar(snackbar, scope, "Updated site log: $savedName")
+            onBack()
+        } else {
+            viewModel.addDataRecord(
+                toolType = "Site Log",
+                label = savedName,
+                value = "$purpose | Duration: ${duration.ifBlank { "N/A" }}",
+                unit = "",
+                notes = "Conditions: $conditions\nFindings: $findings",
+                datasetKind = "Site visits",
+                chartPreference = "Bar",
+                onResult = { success ->
+                    showFastSnackbar(snackbar, scope, if (success) "Site log saved: $savedName" else "Failed to save site log — try again")
+                }
+            )
+            siteName = ""
+            conditions = ""
+            findings = ""
+            duration = ""
+        }
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -1559,17 +1686,44 @@ fun SiteLogToolScreen(
 @Composable
 fun ComparisonTableScreen(
     viewModel: FieldMindViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    entity: DataRecordEntity? = null
 ) {
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
 
-    var tableName by remember { mutableStateOf("") }
-    var columnCount by remember { mutableIntStateOf(2) }
-    var rows by remember { mutableStateOf(listOf<DataComparisonRow>()) }
+    // Parse initial rows from entity.value JSON
+    val initialRows = remember(entity) {
+        entity?.value?.let { raw ->
+            try {
+                val root = JSONObject(raw)
+                val jsonRows = root.getJSONArray("rows")
+                (0 until jsonRows.length()).map { i ->
+                    val row = jsonRows.getJSONObject(i)
+                    val items = row.getJSONArray("items")
+                    DataComparisonRow(
+                        label = row.getString("label"),
+                        items = (0 until items.length()).map { items.getString(it) }
+                    )
+                }
+            } catch (_: Exception) { emptyList() }
+        } ?: emptyList()
+    }
+    val initialColumnCount = remember(entity) {
+        entity?.value?.let { raw ->
+            try {
+                val root = JSONObject(raw)
+                root.optInt("columnCount", 2).coerceAtLeast(2)
+            } catch (_: Exception) { 2 }
+        } ?: 2
+    }
+
+    var tableName by remember(entity) { mutableStateOf(entity?.label ?: "") }
+    var columnCount by remember(initialColumnCount) { mutableIntStateOf(initialColumnCount) }
+    var rows by remember(initialRows) { mutableStateOf(initialRows) }
     var newRowLabel by remember { mutableStateOf("") }
-    var newRowValues by remember { mutableStateOf(List(2) { "" }) }
+    var newRowValues by remember { mutableStateOf(List(initialColumnCount) { "" }) }
 
     fun addRow() {
         val label = newRowLabel.trim()
@@ -1600,18 +1754,29 @@ fun ComparisonTableScreen(
             }
             put("rows", jsonRows)
         }
-        viewModel.addDataRecord(
-            toolType = "Comparison Table",
-            label = savedName,
-            value = jsonRoot.toString(),
-            unit = "",
-            notes = "$columnCount columns, ${rows.size} rows",
-            datasetKind = "Comparisons",
-            chartPreference = "Bar",
-            onResult = { success ->
-                showFastSnackbar(snackbar, scope, if (success) "Table saved: $savedName" else "Failed to save table — try again")
-            }
-        )
+        if (entity != null) {
+            viewModel.updateDataRecordEntity(entity.copy(
+                label = savedName,
+                value = jsonRoot.toString(),
+                unit = "",
+                notes = "$columnCount columns, ${rows.size} rows"
+            ))
+            showFastSnackbar(snackbar, scope, "Updated table: $savedName")
+            onBack()
+        } else {
+            viewModel.addDataRecord(
+                toolType = "Comparison Table",
+                label = savedName,
+                value = jsonRoot.toString(),
+                unit = "",
+                notes = "$columnCount columns, ${rows.size} rows",
+                datasetKind = "Comparisons",
+                chartPreference = "Bar",
+                onResult = { success ->
+                    showFastSnackbar(snackbar, scope, if (success) "Table saved: $savedName" else "Failed to save table — try again")
+                }
+            )
+        }
     }
 
     Box(Modifier.fillMaxSize()) {

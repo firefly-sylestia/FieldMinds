@@ -138,6 +138,15 @@ class FieldMindSettings private constructor(context: Context) {
     private val _remindersEnabled = MutableStateFlow(prefs.getBoolean(KEY_REMINDERS, false))
     val remindersEnabled: StateFlow<Boolean> = _remindersEnabled.asStateFlow()
 
+    private val _weatherAlertsEnabled = MutableStateFlow(prefs.getBoolean(KEY_WEATHER_ALERTS, true))
+    val weatherAlertsEnabled: StateFlow<Boolean> = _weatherAlertsEnabled.asStateFlow()
+
+    private val _taskRemindersEnabled = MutableStateFlow(prefs.getBoolean(KEY_TASK_REMINDERS, true))
+    val taskRemindersEnabled: StateFlow<Boolean> = _taskRemindersEnabled.asStateFlow()
+
+    private val _sessionRemindersEnabled = MutableStateFlow(prefs.getBoolean(KEY_SESSION_REMINDERS, true))
+    val sessionRemindersEnabled: StateFlow<Boolean> = _sessionRemindersEnabled.asStateFlow()
+
     private val _streaksEnabled = MutableStateFlow(prefs.getBoolean(KEY_STREAKS, true))
     val streaksEnabled: StateFlow<Boolean> = _streaksEnabled.asStateFlow()
 
@@ -488,7 +497,10 @@ class FieldMindSettings private constructor(context: Context) {
             appContext,
             _autoBackupEnabled.value,
             _autoBackupInterval.value,
-            _remindersEnabled.value
+            _remindersEnabled.value,
+            _weatherAlertsEnabled.value,
+            _taskRemindersEnabled.value,
+            _sessionRemindersEnabled.value
         )
     }
 
@@ -510,6 +522,18 @@ class FieldMindSettings private constructor(context: Context) {
     fun setRemindersEnabled(value: Boolean) = edit(KEY_REMINDERS, value) {
         _remindersEnabled.value = value
         FieldMindBackgroundScheduler.scheduleDailyReminder(appContext, value)
+    }
+    fun setWeatherAlertsEnabled(value: Boolean) = edit(KEY_WEATHER_ALERTS, value) {
+        _weatherAlertsEnabled.value = value
+        FieldMindBackgroundScheduler.scheduleWeatherAlerts(appContext, value)
+    }
+    fun setTaskRemindersEnabled(value: Boolean) = edit(KEY_TASK_REMINDERS, value) {
+        _taskRemindersEnabled.value = value
+        FieldMindBackgroundScheduler.scheduleTaskReminders(appContext, value)
+    }
+    fun setSessionRemindersEnabled(value: Boolean) = edit(KEY_SESSION_REMINDERS, value) {
+        _sessionRemindersEnabled.value = value
+        FieldMindBackgroundScheduler.scheduleSessionReminders(appContext, value)
     }
     fun setStreaksEnabled(value: Boolean) = edit(KEY_STREAKS, value) { _streaksEnabled.value = value }
     fun setDefaultExportFormat(value: String) = edit(KEY_EXPORT_FORMAT, value) { _defaultExportFormat.value = value }
@@ -765,6 +789,9 @@ class FieldMindSettings private constructor(context: Context) {
         _aiRequireConfirmBeforeSave.value = true
         _aiSendAttachments.value = false
         _remindersEnabled.value = false
+        _weatherAlertsEnabled.value = true
+        _taskRemindersEnabled.value = true
+        _sessionRemindersEnabled.value = true
         _streaksEnabled.value = true
         _defaultExportFormat.value = "Markdown"
         _privacyLockEnabled.value = false
@@ -884,6 +911,9 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_AI_CONFIRM, _aiRequireConfirmBeforeSave.value)
         put(KEY_AI_SEND_ATTACHMENTS, _aiSendAttachments.value)
         put(KEY_REMINDERS, _remindersEnabled.value)
+        put(KEY_WEATHER_ALERTS, _weatherAlertsEnabled.value)
+        put(KEY_TASK_REMINDERS, _taskRemindersEnabled.value)
+        put(KEY_SESSION_REMINDERS, _sessionRemindersEnabled.value)
         put(KEY_STREAKS, _streaksEnabled.value)
         put(KEY_EXPORT_FORMAT, _defaultExportFormat.value)
         put(KEY_PRIVACY_LOCK, _privacyLockEnabled.value)
@@ -1001,6 +1031,9 @@ class FieldMindSettings private constructor(context: Context) {
         applyBoolean(KEY_AI_CONFIRM, true)
         applyBoolean(KEY_AI_SEND_ATTACHMENTS)
         applyBoolean(KEY_REMINDERS)
+        applyBoolean(KEY_WEATHER_ALERTS, true)
+        applyBoolean(KEY_TASK_REMINDERS, true)
+        applyBoolean(KEY_SESSION_REMINDERS, true)
         applyBoolean(KEY_STREAKS, true)
         applyString(KEY_EXPORT_FORMAT)
         applyBoolean(KEY_PRIVACY_LOCK)
@@ -1121,6 +1154,9 @@ class FieldMindSettings private constructor(context: Context) {
         _aiRequireConfirmBeforeSave.value = prefs.getBoolean(KEY_AI_CONFIRM, true)
         _aiSendAttachments.value = prefs.getBoolean(KEY_AI_SEND_ATTACHMENTS, false)
         _remindersEnabled.value = prefs.getBoolean(KEY_REMINDERS, false)
+        _weatherAlertsEnabled.value = prefs.getBoolean(KEY_WEATHER_ALERTS, true)
+        _taskRemindersEnabled.value = prefs.getBoolean(KEY_TASK_REMINDERS, true)
+        _sessionRemindersEnabled.value = prefs.getBoolean(KEY_SESSION_REMINDERS, true)
         _streaksEnabled.value = prefs.getBoolean(KEY_STREAKS, true)
         _defaultExportFormat.value = prefs.getString(KEY_EXPORT_FORMAT, "Markdown") ?: "Markdown"
         _privacyLockEnabled.value = prefs.getBoolean(KEY_PRIVACY_LOCK, false)
@@ -1221,6 +1257,9 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_AI_CONFIRM = "ai_confirm"
         private const val KEY_AI_SEND_ATTACHMENTS = "ai_send_attachments"
         private const val KEY_REMINDERS = "reminders"
+        private const val KEY_WEATHER_ALERTS = "weather_alerts"
+        private const val KEY_TASK_REMINDERS = "task_reminders"
+        private const val KEY_SESSION_REMINDERS = "session_reminders"
         private const val KEY_STREAKS = "streaks"
         private const val KEY_EXPORT_FORMAT = "export_format"
         private const val KEY_PRIVACY_LOCK = "privacy_lock"

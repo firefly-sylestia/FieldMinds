@@ -5,20 +5,25 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
@@ -34,13 +39,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.CoroutineScope
@@ -48,7 +58,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Shows a snackbar message. Cancels any previous snackbar first so messages never stack.
- * Uses ExtraShort duration (1.5s) by default for fast, unobtrusive feedback.
+ * Uses Short duration by default for fast, unobtrusive feedback.
  * Supports interactive action buttons.
  */
 fun showFastSnackbar(
@@ -99,16 +109,18 @@ private fun snackbarStyle(message: String): SnackbarStyle {
 }
 
 /**
- * A unified top-positioned, theme-aware, swipeable, interactive snackbar overlay.
+ * A unified top-positioned, glassmorphic, swipeable, interactive snackbar overlay.
  *
  * Features:
  * - Top-positioned with slide-in + bouncy scale animation
+ * - Glassmorphic styling matching compass/level aesthetic
  * - Swipe horizontally to dismiss
- * - Tap/dismiss anywhere on the snackbar to dismiss
+ * - Tap anywhere on the snackbar to dismiss
  * - Styled by message content: save (green), error (red), warning (amber), achievement (gold)
+ * - Icon in a colored circle with 12% alpha (glass metric pattern)
+ * - Gradient accent top bar (3dp)
  * - Action buttons remain interactive (tap to act)
  * - Fully theme-aware via MaterialTheme color scheme
- * - Faster auto-dismiss (Short duration ~3-4s)
  */
 @Composable
 fun FieldMindSnackbarOverlay(
@@ -120,6 +132,23 @@ fun FieldMindSnackbarOverlay(
     val message = data?.visuals?.message.orEmpty()
     val style = snackbarStyle(message)
     val hasData = data != null
+    val colors = FieldMindTheme.colors
+
+    // ── Accent color derived from message style ──
+    // Extract composable values BEFORE remember (remember's lambda has @DisallowComposableCalls)
+    val themePositive = FieldMindTheme.colors.positive
+    val themeError = MaterialTheme.colorScheme.error
+    val themeWarning = FieldMindTheme.colors.warning
+    val themeInfo = FieldMindTheme.colors.info
+    val accentColor = remember(style) {
+        when {
+            style.isAchievement -> Color(0xFFFFD700) // gold
+            style.isSave -> themePositive
+            style.isError -> themeError
+            style.isWarning -> themeWarning
+            else -> themeInfo
+        }
+    }
 
     // Swipe-to-dismiss state
     var offsetX by remember { mutableStateOf(0f) }
@@ -146,39 +175,20 @@ fun FieldMindSnackbarOverlay(
                 dampingRatio = Spring.DampingRatioMediumBouncy,
                 stiffness = Spring.StiffnessLow
             )
-        ) + fadeIn(),
-        exit = slideOutVertically(targetOffsetY = { -it / 2 }) + fadeOut(),
+        ) + fadeIn(animationSpec = tween(200)),
+        exit = slideOutVertically(targetOffsetY = { -it / 2 }) + fadeOut(animationSpec = tween(150)),
         modifier = modifier
     ) {
         data?.let { snackbarData ->
-            val bgColor = when {
-                style.isAchievement -> MaterialTheme.colorScheme.tertiaryContainer
-                style.isSave -> MaterialTheme.colorScheme.primaryContainer
-                style.isError -> MaterialTheme.colorScheme.errorContainer
-                style.isWarning -> MaterialTheme.colorScheme.tertiaryContainer
-                else -> MaterialTheme.colorScheme.inverseSurface
-            }
-            val contentColor = when {
-                style.isAchievement -> MaterialTheme.colorScheme.onTertiaryContainer
-                style.isSave -> MaterialTheme.colorScheme.onPrimaryContainer
-                style.isError -> MaterialTheme.colorScheme.onErrorContainer
-                style.isWarning -> MaterialTheme.colorScheme.onTertiaryContainer
-                else -> MaterialTheme.colorScheme.inverseOnSurface
-            }
-            val icon = when {
-                style.isAchievement -> MaterialSymbolIcon("emoji_events")
-                style.isSave -> MaterialSymbolIcon("check_circle")
-                style.isError -> MaterialSymbolIcon("error")
-                style.isWarning -> MaterialSymbolIcon("warning")
-                else -> MaterialSymbolIcon("info")
-            }
+            // Glass background: surfaceContainerLow with subtle accent tint
+            val bgColor = MaterialTheme.colorScheme.surfaceContainerLow
 
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset { IntOffset(offsetX.toInt(), 0) }
                     .graphicsLayer { scaleX = scale; scaleY = scale }
-                    .shadow(12.dp, RoundedCornerShape(30.dp))
+                    .shadow(16.dp, RoundedCornerShape(32.dp), ambientColor = accentColor.copy(alpha = 0.08f), spotColor = accentColor.copy(alpha = 0.12f))
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
@@ -194,55 +204,87 @@ fun FieldMindSnackbarOverlay(
                             }
                         )
                     },
-                shape = RoundedCornerShape(30.dp),
+                shape = RoundedCornerShape(32.dp),
                 color = bgColor,
-                tonalElevation = 6.dp
+                tonalElevation = 0.dp
             ) {
-                // Whole snackbar is clickable to dismiss (but allow action buttons through)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { snackbarData.dismiss() }
-                        )
-                ) {
-                    Row(
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    // ── Gradient accent top bar (3dp, matching glass card style) ──
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 18.dp, vertical = 14.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Icon(
-                            icon = icon,
-                            contentDescription = null,
-                            tint = contentColor,
-                            size = 24.dp
-                        )
-                        Text(
-                            text = message,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = if (style.isSave || style.isAchievement)
-                                FontWeight.SemiBold else FontWeight.Normal,
-                            color = contentColor,
-                            modifier = Modifier.weight(1f)
-                        )
-                        val actionLabel = snackbarData.visuals.actionLabel
-                        if (actionLabel != null) {
-                            TextButton(
-                                onClick = {
-                                    snackbarData.dismiss()
-                                    // The SnackbarResult.ActionPerformed is already handled
-                                    // by showFastSnackbar's callback
-                                }
-                            ) {
-                                Text(
-                                    actionLabel,
-                                    fontWeight = FontWeight.Bold,
-                                    color = contentColor
+                            .height(3.dp)
+                            .clip(RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
+                            .background(
+                                Brush.horizontalGradient(
+                                    listOf(accentColor.copy(alpha = 0.7f), accentColor)
                                 )
+                            )
+                    )
+
+                    // Whole snackbar is clickable to dismiss (but allow action buttons through)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { snackbarData.dismiss() }
+                            )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 14.dp, end = 18.dp, top = 16.dp, bottom = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            // ── Glass icon circle (32dp, 12% alpha, matching glass metric pattern) ──
+                            Box(
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .clip(RoundedCornerShape(18.dp))
+                                    .background(accentColor.copy(alpha = 0.12f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                val icon = when {
+                                    style.isAchievement -> MaterialSymbolIcon("emoji_events")
+                                    style.isSave -> MaterialSymbolIcon("check_circle")
+                                    style.isError -> MaterialSymbolIcon("error")
+                                    style.isWarning -> MaterialSymbolIcon("warning")
+                                    else -> MaterialSymbolIcon("info")
+                                }
+                                Icon(
+                                    icon = icon,
+                                    contentDescription = null,
+                                    tint = accentColor,
+                                    size = 20.dp
+                                )
+                            }
+
+                            Text(
+                                text = message,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = if (style.isSave || style.isAchievement)
+                                    FontWeight.SemiBold else FontWeight.Normal,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f)
+                            )
+
+                            val actionLabel = snackbarData.visuals.actionLabel
+                            if (actionLabel != null) {
+                                Spacer(Modifier.width(4.dp))
+                                TextButton(onClick = {
+                                    snackbarData.dismiss()
+                                }) {
+                                    Text(
+                                        actionLabel,
+                                        fontWeight = FontWeight.Bold,
+                                        color = accentColor
+                                    )
+                                }
                             }
                         }
                     }
