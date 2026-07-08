@@ -614,7 +614,7 @@ fun CompassToolScreen(
                             Icon(MaterialSymbolIcon("arrow_forward"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f), size = 14.dp)
                             Text("Last", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                             Text(
-                                lastSpecies.take(10),
+                                lastSpecies.take(12).trimEnd(),
                                 style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold,
                                 color = colors.info, maxLines = 1
                             )
