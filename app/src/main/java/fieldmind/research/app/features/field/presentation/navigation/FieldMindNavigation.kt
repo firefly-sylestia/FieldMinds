@@ -1518,15 +1518,15 @@ private fun AllTabScreen(
                 lastActiveIndex = activeTabIndex
                 tabEntranceProgress.snapTo(1f)
             } else {
-                val dir = if (activeTabIndex > lastActiveIndex) 1 else -1
-                tabSlideDirection = dir
+                // Button tap: no off-screen slide — just a subtle scale pop (0.98→1.0)
+                // The slide was causing the new tab to appear to animate from a blank screen.
+                tabSlideDirection = 0
                 lastActiveIndex = activeTabIndex
                 tabEntranceProgress.snapTo(0f)
                 tabEntranceProgress.animateTo(
                     1f,
                     animationSpec = animConfig.tabEntranceSpring()
                 )
-                tabSlideDirection = 0
             }
         }
     }
@@ -1593,33 +1593,16 @@ private fun AllTabScreen(
                                 if (animX.value > threshold && canSwipeRight) {
                                     haptics.confirm()
                                     wasSwipeTriggered = true
-                                    scope.launch {
-                                        // Fast ease-out slide — no bounce, just a smooth
-                                        // slide off-screen before switching tabs.
-                                        animX.animateTo(
-                                            contentWidth,
-                                            animationSpec = tween(
-                                                durationMillis = 200,
-                                                easing = FastOutSlowInEasing
-                                            )
-                                        )
-                                        animX.snapTo(0f)
-                                        onTabSelected(activeTabIndex - 1)
-                                    }
+                                    // Switch tab IMMEDIATELY — no waiting for animation.
+                                    // The adjacent tab is already rendered behind the current
+                                    // one, so content is ready. Just snap the offset and switch.
+                                    animX.snapTo(0f)
+                                    onTabSelected(activeTabIndex - 1)
                                 } else if (animX.value < -threshold && canSwipeLeft) {
                                     haptics.confirm()
                                     wasSwipeTriggered = true
-                                    scope.launch {
-                                        animX.animateTo(
-                                            -contentWidth,
-                                            animationSpec = tween(
-                                                durationMillis = 200,
-                                                easing = FastOutSlowInEasing
-                                            )
-                                        )
-                                        animX.snapTo(0f)
-                                        onTabSelected(activeTabIndex + 1)
-                                    }
+                                    animX.snapTo(0f)
+                                    onTabSelected(activeTabIndex + 1)
                                 } else {
                                     scope.launch {
                                         animX.animateTo(
