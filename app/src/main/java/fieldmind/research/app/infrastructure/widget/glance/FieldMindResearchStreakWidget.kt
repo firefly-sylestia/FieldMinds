@@ -36,9 +36,9 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 
-private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7), Color(0xFF17211B))
-private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC), Color(0xFF202A23))
-private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4), Color(0xFF2A342D))
+private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7))
+private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC))
+private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4))
 
 private val BRAND_POSITIVE = Color(0xFF1F6B4C)
 private val BRAND_WARNING = Color(0xFFE67E22)
