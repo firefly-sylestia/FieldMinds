@@ -340,7 +340,17 @@ fun CompassToolScreen(
                 subtitle = "Real-time $headingLabelVersion heading" + if (useTrueNorth && abs(declination) > 0.5f) " (δ ${"%.1f°".format(abs(declination))})" else "",
                 icon = MaterialSymbolIcon("explore"),
                 heroColor = colors.info,
-                trailing = { BackButton(onClick = onBack) }
+                trailing = {
+                    Row(horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(
+                            onClick = { haptics.light(); showCalibrationGuide = true },
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Icon(MaterialSymbolIcon("tune"), null, tint = colors.info, size = 18.dp)
+                        }
+                        BackButton(onClick = onBack)
+                    }
+                }
             )
 
             // ── Glassmorphic Compass Face ──
