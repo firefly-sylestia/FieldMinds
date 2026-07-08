@@ -834,9 +834,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Smooth sliding using tween — no bounce, feels like swiping between pages
-    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
-    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
+    // Spring-based sliding and fading — smooth, responsive feel
+    val slideSpec = FieldMindMotion.slideOffsetSpring
+    val fadeSpec = FieldMindMotion.expressiveFloat
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -870,8 +870,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
-    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
+    // Spring-based sliding and fading — smooth, responsive feel
+    val slideSpec = FieldMindMotion.slideOffsetSpring
+    val fadeSpec = FieldMindMotion.expressiveFloat
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -907,8 +908,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
-    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
+    // Spring-based sliding and fading — smooth, responsive feel
+    val slideSpec = FieldMindMotion.slideOffsetSpring
+    val fadeSpec = FieldMindMotion.expressiveFloat
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -935,8 +937,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
-    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
+    // Spring-based sliding and fading — smooth, responsive feel
+    val slideSpec = FieldMindMotion.slideOffsetSpring
+    val fadeSpec = FieldMindMotion.expressiveFloat
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -1290,7 +1293,8 @@ private fun TabContentBox(
     sharedTransitionScope: SharedTransitionScope? = null,
     entranceProgress: Float = 1f, // 0 = just became active (scale up + fade in), 1 = fully entered
     visibleTabs: List<FieldMindScreen> = emptyList(),
-    onTabSelected: ((Int) -> Unit)? = null
+    onTabSelected: ((Int) -> Unit)? = null,
+    slideInFromPx: Float = 0f // horizontal slide offset for directional entrance
 ) {
     val onNav: (FieldMindScreen) -> Unit = { screen ->
         val tabIdx = visibleTabs.indexOf(screen)
@@ -1304,7 +1308,7 @@ private fun TabContentBox(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .offset { IntOffset(offsetX.roundToInt(), 0) }
+            .offset { IntOffset((offsetX + slideInFromPx * (1f - entranceProgress)).roundToInt(), 0) }
             .graphicsLayer {
                 // ── Entrance animation for newly active tab ──
                 // When a tab becomes active via tapping (entranceProgress animates 0→1),
@@ -1441,21 +1445,30 @@ private fun AllTabScreen(
         }
     }
 
-    // ── Tab entrance animation (scale-up + fade-in on tap-switch) ──
-    // When a tab is activated via tapping (not swiping), the content
-    // smoothly scales up from 0.95 and fades in from alpha 0.7 using
-    // spring physics for a polished "pop" entrance.
+    // ── Tab entrance animation (scale+fade+slide on tap-switch) ──
+    // When a tab is activated via tapping, the new content slides in
+    // from the appropriate direction (like the predictive back peek).
+    // Swipe-triggered tab changes don't use the slide since the swipe
+    // gesture already provides the directional reveal.
     val tabEntranceProgress = remember { Animatable(1f) }
     var lastActiveIndex by remember { mutableIntStateOf(activeTabIndex) }
+    var tabSlideDirection by remember { mutableIntStateOf(0) } // +1=from right, -1=from left, 0=none
+    var wasSwipeTriggered by remember { mutableStateOf(false) }
     val animConfig = fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig.current
     LaunchedEffect(activeTabIndex) {
         if (activeTabIndex != lastActiveIndex) {
+            // Determine slide direction: new tab to the right → slides from right (dir=+1)
+            // If swipe-triggered, skip the entrance slide (swipe already shows the reveal)
+            val dir = if (wasSwipeTriggered) 0 else (if (activeTabIndex > lastActiveIndex) 1 else -1)
+            wasSwipeTriggered = false
+            tabSlideDirection = dir
             lastActiveIndex = activeTabIndex
             tabEntranceProgress.snapTo(0f)
             tabEntranceProgress.animateTo(
                 1f,
                 animationSpec = animConfig.tabEntranceSpring()
             )
+            tabSlideDirection = 0
         }
     }
 
@@ -1511,10 +1524,12 @@ private fun AllTabScreen(
                                 val threshold = contentWidth * 0.18f
                                 if (animX.value > threshold && canSwipeRight) {
                                     haptics.confirm()
+                                    wasSwipeTriggered = true
                                     scope.launch { animX.snapTo(0f) }
                                     onTabSelected(activeTabIndex - 1)
                                 } else if (animX.value < -threshold && canSwipeLeft) {
                                     haptics.confirm()
+                                    wasSwipeTriggered = true
                                     scope.launch { animX.snapTo(0f) }
                                     onTabSelected(activeTabIndex + 1)
                                 } else {
@@ -1576,7 +1591,7 @@ private fun AllTabScreen(
             )
         }
 
-        // Phase 2: Active tab (on top) — with entrance animation from tapping
+        // Phase 2: Active tab (on top) — with entrance + directional slide from tapping
         TabContentBox(
             screen = visibleTabs[activeTabIndex],
             offsetX = animX.value,
@@ -1593,7 +1608,8 @@ private fun AllTabScreen(
             sharedTransitionScope = sharedTransitionScope,
             entranceProgress = tabEntranceProgress.value,
             visibleTabs = visibleTabs,
-            onTabSelected = onTabSelected
+            onTabSelected = onTabSelected,
+            slideInFromPx = tabSlideDirection * contentWidth
         )
     }
 }
