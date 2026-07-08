@@ -2475,7 +2475,7 @@
 
     <!-- FieldMind Widgets - New (v2.0) -->
     <string name="widget_fieldmind_species">Species Sighting</string>
-    <string name="widget_fieldmind_species_desc">Species count, today's sightings, and last species seen</string>
+    <string name="widget_fieldmind_species_desc">Species count, sightings today, and last species seen</string>
     <string name="widget_fieldmind_streak">Research Streak</string>
     <string name="widget_fieldmind_streak_desc">Current observation streak and research stats</string>
     <string name="widget_fieldmind_quickstats">Quick Stats</string>
