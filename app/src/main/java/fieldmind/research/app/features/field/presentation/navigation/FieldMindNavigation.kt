@@ -1315,8 +1315,17 @@ private fun FieldMindNavHost(
                         "source" -> sources.firstOrNull { it.id == id }?.let {
                             NewSourceScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
                         }
-                        "data" -> dataRecords.firstOrNull { it.id == id }?.let {
-                            NewDataRecordScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        "data" -> dataRecords.firstOrNull { it.id == id }?.let { entity ->
+                            when (entity.toolType) {
+                                "Counter" -> CounterToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Measurement Log" -> MeasurementToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Weather Log" -> WeatherLogToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Checklist" -> ChecklistToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Event Log" -> EventLogToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Site Log" -> SiteLogToolScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                "Comparison Table" -> ComparisonTableScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                                else -> NewDataRecordScreen(viewModel = viewModel, onBack = { safeBack() }, entity = entity)
+                            }
                         }
                         "report" -> reports.firstOrNull { it.id == id }?.let {
                             NewReportScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
