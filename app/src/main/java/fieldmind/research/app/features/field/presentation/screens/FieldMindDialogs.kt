@@ -1273,7 +1273,7 @@ internal fun NewNoteDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit,
                     body = body.trim(),
                     category = category,
                     tags = tags.trim(),
-                    attachmentUris = attachments.filterIsInstance<DraftEvidenceAttachment>().joinToString(",") { it.uri }
+                    attachmentUris = latest.attachmentUris
                 ))
             } else {
                 val fallbackTitle = body.lineSequence().firstOrNull { it.isNotBlank() }?.take(48) ?: "Untitled note"
