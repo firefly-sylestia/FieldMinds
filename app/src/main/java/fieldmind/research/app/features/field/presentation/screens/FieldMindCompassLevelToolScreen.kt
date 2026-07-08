@@ -338,7 +338,7 @@ fun CompassToolScreen(
             // ── Header ──
             StandardScreenHeader(
                 title = "Compass",
-                subtitle = "Real-time $headingLabelVersion heading" + if (useTrueNorth && abs(declination) > 0.5f) " (δ ${\"%.1f°\".format(abs(declination))})" else "",
+                subtitle = "Real-time $headingLabelVersion heading" + if (useTrueNorth && abs(declination) > 0.5f) " (δ ${"%.1f°".format(abs(declination))})" else "",
                 icon = MaterialSymbolIcon("explore"),
                 heroColor = colors.info,
                 trailing = { BackButton(onClick = onBack) }
