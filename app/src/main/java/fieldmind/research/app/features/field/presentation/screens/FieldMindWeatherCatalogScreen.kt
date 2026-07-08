@@ -31,8 +31,8 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
-
 import kotlin.math.roundToInt
 
 // ══════════════════════════════════════════════════════════════════════
@@ -66,10 +66,15 @@ fun WeatherCatalogScreen(
     val tempUnit by viewModel.fieldSettings.tempUnit.collectAsState()
     val windUnit by viewModel.fieldSettings.windSpeedUnit.collectAsState()
 
-    // ── Live weather (read from ViewModel so background captures show immediately) ──
-    val currentWeather: WeatherSnapshot? get() = viewModel.lastWeatherSnapshot
+    // ── Live weather (updated reactively from ViewModel) ──
+    var currentWeather by remember { mutableStateOf(viewModel.lastWeatherSnapshot) }
     var isRefreshing by remember { mutableStateOf(false) }
     var weatherError by remember { mutableStateOf(false) }
+
+    // Keep currentWeather in sync with ViewModel's last snapshot
+    LaunchedEffect(viewModel.lastWeatherSnapshot) {
+        viewModel.lastWeatherSnapshot?.let { currentWeather = it }
+    }
 
     // ── Capture state lives in the ViewModel so it survives screen navigation ──
 

@@ -200,7 +200,7 @@ fun DataToolsHubScreen(
                                         record.value,
                                         style = MaterialTheme.typography.titleSmall,
                                         fontWeight = FontWeight.Bold,
-                                        color = accentColor
+                                        color = colors.data
                                     )
                                     Icon(FieldMindIcons.Forward, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
                                 }
