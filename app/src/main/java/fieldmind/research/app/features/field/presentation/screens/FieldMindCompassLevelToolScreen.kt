@@ -31,7 +31,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -1254,7 +1253,7 @@ private fun CompassInterferenceCard(
 //  Avoids compile-time dependency on android.location.GeomagneticField
 //  which may not be available in all SDK environments.
 //  Accuracy: roughly ±2–5° for most locations (sufficient for compass use).
-// ══════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════��═════════════════════════════
 
 private fun approximateDeclination(lat: Float, lon: Float): Float {
     // Eccentric geomagnetic dipole position (IGRF-14 epoch 2025 approximation)
