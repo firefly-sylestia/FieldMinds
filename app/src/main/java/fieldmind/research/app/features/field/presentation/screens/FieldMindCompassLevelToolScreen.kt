@@ -533,7 +533,7 @@ fun CompassToolScreen(
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Icon(MaterialSymbolIcon("show_chart"), null, tint = colors.data, size = 16.dp)
-                            Text("Field (μT)", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Field (μT)", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
                         if (fieldReadings.size >= 2) {
                             MagneticFieldChart(fieldReadings.toList(), fieldStatus.second)
@@ -555,7 +555,7 @@ fun CompassToolScreen(
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Icon(MaterialSymbolIcon("straighten"), null, tint = colors.data, size = 16.dp)
-                            Text("Tilt", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Tilt", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
                         TiltWithSparkline("Pitch", compassPitch, colors.info, pitchReadings.toList())
                         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.15f))
@@ -617,7 +617,8 @@ fun CompassToolScreen(
                             Text(
                                 lastSpecies.take(12).trimEnd(),
                                 style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold,
-                                color = colors.info, maxLines = 1
+                                color = colors.info, maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
                     }
@@ -1190,7 +1191,7 @@ private fun CompassCalibrationGuide(
                     Surface(shape = RoundedCornerShape(14.dp), color = colors.positive.copy(alpha = 0.1f), modifier = Modifier.fillMaxWidth()) {
                         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(MaterialSymbolIcon("check_circle", filled = true), null, tint = colors.positive, size = 20.dp)
-                            Text("Calibrated — heading is now accurate.", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, color = colors.positive)
+                            Text("Calibrated — heading is now accurate.", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, color = colors.positive, maxLines = 2, overflow = TextOverflow.Ellipsis)
                         }
                     }
                 }
@@ -1228,8 +1229,8 @@ private fun CompassInterferenceCard(
         ) {
             Icon(MaterialSymbolIcon(if (isStrong) "gpp_bad" else "warning"), null, tint = iconColor, size = 22.dp)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(title, fontWeight = FontWeight.SemiBold, color = iconColor, style = MaterialTheme.typography.labelMedium)
-                Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(title, fontWeight = FontWeight.SemiBold, color = iconColor, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 3, overflow = TextOverflow.Ellipsis)
             }
             TextButton(onClick = onDismiss, contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp), modifier = Modifier.align(Alignment.Top)) {
                 Icon(MaterialSymbolIcon("close"), contentDescription = "Dismiss", modifier = Modifier.size(16.dp), tint = iconColor.copy(alpha = 0.7f))
@@ -1790,7 +1791,7 @@ private fun TiltGauge(label: String, degrees: Float, description: String, color:
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text("%.1f°".format(degrees), style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.ExtraBold, fontSize = 32.sp), color = if (abs(degrees) < 2f) FieldMindTheme.colors.positive else color)
         Text(label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-        Text(description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
 }
 
