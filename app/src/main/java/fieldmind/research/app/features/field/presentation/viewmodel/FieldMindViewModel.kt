@@ -79,6 +79,11 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
             if (enabled && obs.isNotEmpty()) PatternDetectionEngine.detectAll(obs) else emptyList()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
         startAutoGeneration()
+
+        // Push initial data to widgets
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            fieldmind.research.app.infrastructure.widget.glance.FieldMindDashboardWidget.updateData(getApplication())
+        }
     }
 
     fun addObservation(
@@ -1119,6 +1124,19 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
             lastWeatherSnapshot = result
             lastWeatherFetchTime = System.currentTimeMillis()
             _weatherDiagnostics.value = WeatherDiagnosticState(message = "Weather updated", provider = fieldSettings.weatherProviders.value, updatedAt = lastWeatherFetchTime)
+
+            // Push weather update to weather widget
+            viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                fieldmind.research.app.infrastructure.widget.glance.FieldMindWeatherWidget.updateData(
+                    getApplication(),
+                    result.temperature,
+                    result.weatherDescription,
+                    result.humidity,
+                    result.windSpeed,
+                    "",
+                    result.weatherCode
+                )
+            }
         } else if (_weatherDiagnostics.value.lastError == null) {
             _weatherDiagnostics.value = WeatherDiagnosticState(
                 message = "Weather provider returned no data. Check network, provider keys, or provider availability.",

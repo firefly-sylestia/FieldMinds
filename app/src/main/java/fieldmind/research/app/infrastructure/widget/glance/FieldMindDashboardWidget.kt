@@ -14,6 +14,7 @@ import androidx.glance.LocalSize
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
@@ -40,8 +41,8 @@ import fieldmind.research.app.R
 
 /**
  * Research Dashboard Widget — 4×3 cells
- * Glassmorphic stats dashboard with accent-colored stat cards.
- * Overview of observations, questions, projects, notes, sources, reports.
+ * Glassmorphic stats dashboard with real data from the database.
+ * Shows observation, project, note, source, report counts.
  */
 class FieldMindDashboardWidget : GlanceAppWidget() {
 
@@ -54,22 +55,100 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
         const val KEY_REPORT_COUNT = "report_count"
         const val KEY_SESSION_ACTIVE = "session_active"
         const val KEY_SESSION_MINUTES = "session_minutes"
+
+        const val PREFS_NAME = "fieldmind_dashboard_widget"
+
+        /**
+         * Immediately queries the database and pushes updated counts to widget state.
+         * Call from any coroutine/IO context (e.g. ViewModel, WorkManager, BroadcastReceiver).
+         */
+        suspend fun updateData(context: Context) {
+            val dao = fieldmind.research.app.features.field.data.database.FieldMindDatabase.getInstance(context).fieldMindDao()
+            val obsCount = dao.observeObservations().let { flow ->
+                var result = 0
+                kotlinx.coroutines.flow.first { list ->
+                    result = list.size
+                    true
+                }
+                result
+            }
+            val noteCount = dao.observeNotes().let { flow ->
+                var result = 0
+                kotlinx.coroutines.flow.first { list ->
+                    result = list.size
+                    true
+                }
+                result
+            }
+            val questionCount = dao.observeQuestions().let { flow ->
+                var result = 0
+                kotlinx.coroutines.flow.first { list ->
+                    result = list.size
+                    true
+                }
+                result
+            }
+            val projectCount = dao.observeProjects().let { flow ->
+                var result = 0
+                kotlinx.coroutines.flow.first { list ->
+                    result = list.size
+                    true
+                }
+                result
+            }
+            val sourceCount = dao.observeSources().let { flow ->
+                var result = 0
+                kotlinx.coroutines.flow.first { list ->
+                    result = list.size
+                    true
+                }
+                result
+            }
+
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.edit()
+                .putInt(KEY_OBSERVATION_COUNT, obsCount)
+                .putInt(KEY_NOTE_COUNT, noteCount)
+                .putInt(KEY_QUESTION_COUNT, questionCount)
+                .putInt(KEY_PROJECT_COUNT, projectCount)
+                .putInt(KEY_SOURCE_COUNT, sourceCount)
+                .apply()
+
+            // Push update to all instances of this widget
+            GlanceAppWidgetManager(context).updateAll(FieldMindDashboardWidget::class.java)
+        }
     }
 
     override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
     override val sizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val obsCount = prefs.getInt(KEY_OBSERVATION_COUNT, 0).toString()
+        val noteCount = prefs.getInt(KEY_NOTE_COUNT, 0).toString()
+        val questionCount = prefs.getInt(KEY_QUESTION_COUNT, 0).toString()
+        val projectCount = prefs.getInt(KEY_PROJECT_COUNT, 0).toString()
+        val sourceCount = prefs.getInt(KEY_SOURCE_COUNT, 0).toString()
+        val reportCount = prefs.getInt(KEY_REPORT_COUNT, 0).toString()
+
         provideContent {
             val currentSize = LocalSize.current
             GlanceTheme {
-                DashboardUi(currentSize)
+                DashboardUi(
+                    currentSize,
+                    obsCount, noteCount, questionCount,
+                    projectCount, sourceCount, reportCount
+                )
             }
         }
     }
 
     @Composable
-    private fun DashboardUi(size: DpSize) {
+    private fun DashboardUi(
+        size: DpSize,
+        obsCount: String, noteCount: String, questionCount: String,
+        projectCount: String, sourceCount: String, reportCount: String
+    ) {
         val minWidth = size.width.value.toInt()
         val isWide = minWidth >= 250
 
@@ -136,21 +215,21 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
 
                         // Stats grid — 3 rows × 2 columns
                         Row(modifier = GlanceModifier.fillMaxWidth()) {
-                            GlassStatCard("Observations", "0", GlanceTheme.colors.primary, GlanceModifier.defaultWeight())
+                            GlassStatCard("Observations", obsCount, GlanceTheme.colors.primary, GlanceModifier.defaultWeight())
                             Spacer(GlanceModifier.width(8.dp))
-                            GlassStatCard("Questions", "0", ColorProvider(0xFF3B82F6), GlanceModifier.defaultWeight())
+                            GlassStatCard("Questions", questionCount, ColorProvider(0xFF3B82F6), GlanceModifier.defaultWeight())
                         }
                         Spacer(GlanceModifier.height(8.dp))
                         Row(modifier = GlanceModifier.fillMaxWidth()) {
-                            GlassStatCard("Projects", "0", GlanceTheme.colors.tertiary, GlanceModifier.defaultWeight())
+                            GlassStatCard("Projects", projectCount, GlanceTheme.colors.tertiary, GlanceModifier.defaultWeight())
                             Spacer(GlanceModifier.width(8.dp))
-                            GlassStatCard("Sources", "0", GlanceTheme.colors.error, GlanceModifier.defaultWeight())
+                            GlassStatCard("Sources", sourceCount, GlanceTheme.colors.error, GlanceModifier.defaultWeight())
                         }
                         Spacer(GlanceModifier.height(8.dp))
                         Row(modifier = GlanceModifier.fillMaxWidth()) {
-                            GlassStatCard("Notes", "0", ColorProvider(0xFF22C55E), GlanceModifier.defaultWeight())
+                            GlassStatCard("Notes", noteCount, ColorProvider(0xFF22C55E), GlanceModifier.defaultWeight())
                             Spacer(GlanceModifier.width(8.dp))
-                            GlassStatCard("Reports", "0", ColorProvider(0xFFF59E0B), GlanceModifier.defaultWeight())
+                            GlassStatCard("Reports", reportCount, ColorProvider(0xFFF59E0B), GlanceModifier.defaultWeight())
                         }
 
                         Spacer(GlanceModifier.defaultWeight())
@@ -165,7 +244,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                         )
                     }
                 } else {
-                    // Narrow layout: compact vertical list
+                    // Narrow layout: compact vertical list with real data
                     Column(modifier = GlanceModifier.fillMaxSize()) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
@@ -188,11 +267,10 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                             )
                         }
                         Spacer(GlanceModifier.height(10.dp))
-
-                        CompactStatRow("Observations", "0", GlanceTheme.colors.primary)
-                        CompactStatRow("Questions", "0", ColorProvider(0xFF3B82F6))
-                        CompactStatRow("Projects", "0", GlanceTheme.colors.tertiary)
-                        CompactStatRow("Notes", "0", ColorProvider(0xFF22C55E))
+                        CompactStatRow("Observations", obsCount, GlanceTheme.colors.primary)
+                        CompactStatRow("Questions", questionCount, ColorProvider(0xFF3B82F6))
+                        CompactStatRow("Projects", projectCount, GlanceTheme.colors.tertiary)
+                        CompactStatRow("Notes", noteCount, ColorProvider(0xFF22C55E))
 
                         Spacer(GlanceModifier.defaultWeight())
                         Text(
@@ -241,7 +319,6 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                 .padding(vertical = 3.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Accent dot
             Box(
                 modifier = GlanceModifier
                     .size(6.dp)

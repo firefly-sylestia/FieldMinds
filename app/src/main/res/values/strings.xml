@@ -17,6 +17,7 @@
     <string name="widget_fieldmind_quick_capture_desc">One-tap observation capture from your home screen</string>
     <string name="widget_fieldmind_dashboard">FieldMind Dashboard</string>
     <string name="widget_fieldmind_dashboard_desc">View your latest observations and stats at a glance</string>
+    <string name="widget_fieldmind_weather_desc">Current temperature, humidity, and wind at a glance</string>
     <string name="widget_fieldmind_today_observations">Today</string>
     <string name="widget_fieldmind_active_projects">Active</string>
     <string name="widget_fieldmind_notes">Notes</string>

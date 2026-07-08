@@ -71,6 +71,18 @@
                 android:resource="@xml/widget_info_fieldmind_dashboard" />
         </receiver>
 
+        <!-- FieldMind Weather Widget -->
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindWeatherWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_weather" />
+        </receiver>
+
         <activity
             android:name="fieldmind.research.app.activities.MainActivity"
             android:exported="true"

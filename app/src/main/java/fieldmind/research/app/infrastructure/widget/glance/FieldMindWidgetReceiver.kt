@@ -18,3 +18,11 @@ class FieldMindQuickCaptureWidgetReceiver : GlanceAppWidgetReceiver() {
 class FieldMindDashboardWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = FieldMindDashboardWidget()
 }
+
+/**
+ * Receiver for the FieldMind Weather widget.
+ * Shows current temperature and conditions.
+ */
+class FieldMindWeatherWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = FieldMindWeatherWidget()
+}
