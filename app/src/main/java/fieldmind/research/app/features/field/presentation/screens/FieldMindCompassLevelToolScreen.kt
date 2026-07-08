@@ -54,6 +54,9 @@ import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.atan2
@@ -579,6 +582,44 @@ fun CompassToolScreen(
                     Icon(MaterialSymbolIcon("tune"), null, size = 16.dp)
                     Spacer(Modifier.size(6.dp))
                     Text("Calibrate", fontWeight = FontWeight.SemiBold)
+                }
+            }
+
+            // ── Species sightings counter ──
+            val allObservations = viewModel?.let { vm ->
+                vm.observations.collectAsState().value
+            } ?: emptyList()
+            val todayStr = remember { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()) }
+            val totalSightings = remember(allObservations) { allObservations.size }
+            val uniqueSpecies = remember(allObservations) { allObservations.map { it.subject.lowercase() }.distinct().size }
+            val todayCount = remember(allObservations, todayStr) { allObservations.count { it.date == todayStr } }
+            val lastSpecies = remember(allObservations) { allObservations.maxByOrNull { it.createdAt }?.subject }
+
+            Card(
+                shape = RoundedCornerShape(30.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SpeciesStatColumn(label = "Sightings", value = totalSightings.toString(), icon = MaterialSymbolIcon("visibility"), accent = colors.info)
+                    SpeciesStatColumn(label = "Species", value = uniqueSpecies.toString(), icon = MaterialSymbolIcon("pets"), accent = colors.data)
+                    SpeciesStatColumn(label = "Today", value = todayCount.toString(), icon = MaterialSymbolIcon("today"), accent = colors.positive)
+                    if (lastSpecies != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(MaterialSymbolIcon("arrow_forward"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f), size = 14.dp)
+                            Text("Last", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                            Text(
+                                lastSpecies.take(10),
+                                style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold,
+                                color = colors.info, maxLines = 1
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -1752,4 +1793,16 @@ private fun TiltGauge(label: String, degrees: Float, description: String, color:
     }
 }
 
-
+@Composable
+private fun SpeciesStatColumn(
+    label: String,
+    value: String,
+    icon: MaterialSymbolIcon,
+    accent: Color
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Icon(icon, null, tint = accent, size = 20.dp)
+        Text(value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = accent)
+        Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
+    }
+}
