@@ -105,7 +105,8 @@ fun FieldMindSettingsScreen(
     onOpenSpeciesPacks: (() -> Unit)? = null,
     onOpenSpeciesId: (() -> Unit)? = null,
     onOpenAutoGen: (() -> Unit)? = null,
-    onOpenScreenVisibility: (() -> Unit)? = null
+    onOpenScreenVisibility: (() -> Unit)? = null,
+    onOpenNotifications: (() -> Unit)? = null
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
@@ -175,11 +176,7 @@ fun FieldMindSettingsScreen(
         item { SettingsNavCard("Capture defaults", "Categories, confidence, goal, location", FieldMindIcons.Capture, FieldMindTheme.colors.observation) { onOpenCapture?.invoke() } }
         item { SettingsNavCard("Weather", "Auto-weather, temperature unit, refresh, widget display", FieldMindIcons.Weather, FieldMindTheme.colors.info) { onOpenWeather?.invoke() } }
         item { SettingsNavCard("Species tools", "Image ID, API keys, model packs, and regional catalogs", FieldMindIcons.Nature, FieldMindTheme.colors.observation) { onOpenSpeciesId?.invoke() } }
-
-        // ╔════════════════════════════════════════════╗
-        // ║  TOOLS                                     ║
-        // ╚══���═════════════════════════════════════════╝
-
+        item { SettingsNavCard("Notifications", "Weather alerts, task reminders, and session prompts", FieldMindIcons.Notifications, FieldMindTheme.colors.info) { onOpenNotifications?.invoke() } }
 
         // ╔════════════════════════════════════════════╗
         // ║  AI ASSISTANCE                             ║
@@ -504,6 +501,42 @@ fun CaptureDefaultsSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Uni
             }
         }
 
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Notifications Settings Page
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+fun NotificationsSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+    val settings = viewModel.fieldSettings
+    val reminders by settings.remindersEnabled.collectAsState()
+    val weatherAlerts by settings.weatherAlertsEnabled.collectAsState()
+    val taskReminders by settings.taskRemindersEnabled.collectAsState()
+    val sessionReminders by settings.sessionRemindersEnabled.collectAsState()
+
+    SettingsSubPage("Notifications", icon = FieldMindIcons.Notifications, onBack = onBack) {
+        item { SectionHeader("Background jobs", "Enable or disable each WorkManager-backed notification job independently.") }
+        item {
+            SettingsGroupCard {
+                ToggleItem("Daily reminders", "Schedules a daily prompt and skips after logging today's observation.", reminders, settings::setRemindersEnabled, FieldMindIcons.Notifications)
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                ToggleItem("Weather alerts", "Periodically checks conditions and alerts on storms, heavy rain, snow, and extreme heat.", weatherAlerts, settings::setWeatherAlertsEnabled, FieldMindIcons.Weather)
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                ToggleItem("Task reminders", "Checks for overdue, due-today, and due-soon tasks and sends notifications.", taskReminders, settings::setTaskRemindersEnabled, FieldMindIcons.Check)
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                ToggleItem("Session reminders", "Daily prompts to start a research session based on time of day.", sessionReminders, settings::setSessionRemindersEnabled, FieldMindIcons.Timer)
+            }
+        }
+        item {
+            Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("How it works", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                    Text("Each notification type runs as a separate WorkManager periodic job. Toggling a notification off cancels its recurring schedule. Data is checked locally — no network calls are made for notifications.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+        }
     }
 }
 
