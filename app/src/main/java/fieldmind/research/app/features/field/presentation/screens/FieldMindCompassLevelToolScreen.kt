@@ -226,13 +226,6 @@ fun CompassToolScreen(
         onDispose { sensorManager.unregisterListener(listener) }
     }
 
-    // ── Smooth animated azimuth (spring for fluid feel) ──
-    val smoothAzimuth by animateFloatAsState(
-        targetValue = azimuth,
-        animationSpec = spring(dampingRatio = 0.7f, stiffness = 200f),
-        label = "azimuth"
-    )
-
     // ── Display azimuth: magnetic or true north corrected ──
     val displayAzimuth by remember(azimuth, declination, useTrueNorth) {
         derivedStateOf {
