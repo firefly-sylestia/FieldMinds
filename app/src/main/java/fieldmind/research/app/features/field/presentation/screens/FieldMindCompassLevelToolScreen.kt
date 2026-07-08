@@ -1,10 +1,15 @@
 package fieldmind.research.app.features.field.presentation.screens
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateFloat
@@ -74,6 +79,7 @@ fun CompassToolScreen(
     val context = LocalContext.current
     val colors = FieldMindTheme.colors
     val snackbar = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     // ── Sensor state ──
     var azimuth by remember { mutableFloatStateOf(0f) }
@@ -102,9 +108,12 @@ fun CompassToolScreen(
     var useTrueNorth by remember { mutableStateOf(false) }
     var declination by remember { mutableFloatStateOf(0f) }
     var locationLabel by remember { mutableStateOf("—") }
+    var hasLocationPermission by remember { mutableStateOf(
+        ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    ) }
 
-    // Look up magnetic declination from last known location
-    LaunchedEffect(Unit) {
+    // Extract location + declination lookup into a reusable function
+    fun fetchDeclination() {
         try {
             val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? android.location.LocationManager
             val location = locationManager?.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER)
@@ -121,6 +130,27 @@ fun CompassToolScreen(
             }
         } catch (_: SecurityException) {
             // Location permission not granted — declination stays 0
+            hasLocationPermission = false
+        }
+    }
+
+    // Location permission request launcher
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        hasLocationPermission = granted
+        if (granted) {
+            fetchDeclination()
+            useTrueNorth = true
+        } else {
+            showFastSnackbar(snackbar, scope, "Location permission required for true north heading")
+        }
+    }
+
+    // Try to fetch declination on mount if permission is already granted
+    LaunchedEffect(Unit) {
+        if (hasLocationPermission) {
+            fetchDeclination()
         }
     }
 
@@ -386,7 +416,14 @@ fun CompassToolScreen(
                                     modifier = Modifier.clickable(
                                         interactionSource = remember { MutableInteractionSource() },
                                         indication = null,
-                                        onClick = { haptics.light(); useTrueNorth = !useTrueNorth }
+                                        onClick = {
+                                            haptics.light()
+                                            if (!useTrueNorth && !hasLocationPermission) {
+                                                locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                                            } else {
+                                                useTrueNorth = !useTrueNorth
+                                            }
+                                        }
                                     )
                                 ) {
                                     Row(
