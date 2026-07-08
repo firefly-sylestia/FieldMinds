@@ -125,7 +125,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                 .apply()
 
             // Push update to all instances of this widget
-            GlanceAppWidgetManager(context).updateAll(FieldMindDashboardWidget::class)
+            GlanceAppWidgetManager(context).update(FieldMindDashboardWidget::class.java)
         }
     }
 

@@ -85,7 +85,7 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
                 .apply()
 
             // Trigger widget update
-            GlanceAppWidgetManager(context).updateAll(FieldMindWeatherWidget::class)
+            GlanceAppWidgetManager(context).update(FieldMindWeatherWidget::class.java)
         }
     }
 
