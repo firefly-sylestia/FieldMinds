@@ -179,6 +179,34 @@ fun CompassToolScreen(
         dirs[index]
     }
 
+    // ── Subtle haptic pulse when passing N/E/S/W cardinals ──
+    // Uses a ±3° detection zone; fires haptics.light() only on entry
+    var nearN by remember { mutableStateOf(false) }
+    var nearE by remember { mutableStateOf(false) }
+    var nearS by remember { mutableStateOf(false) }
+    var nearW by remember { mutableStateOf(false) }
+    LaunchedEffect(azimuth) {
+        // N (0° / 360°): wrap-around via minOf
+        val enteringN = minOf(azimuth, 360f - azimuth) < 3f
+        if (enteringN && !nearN) haptics.light()
+        nearN = enteringN
+
+        // E (90°)
+        val enteringE = abs(azimuth - 90f) < 3f
+        if (enteringE && !nearE) haptics.light()
+        nearE = enteringE
+
+        // S (180°)
+        val enteringS = abs(azimuth - 180f) < 3f
+        if (enteringS && !nearS) haptics.light()
+        nearS = enteringS
+
+        // W (270°)
+        val enteringW = abs(azimuth - 270f) < 3f
+        if (enteringW && !nearW) haptics.light()
+        nearW = enteringW
+    }
+
     Box(Modifier.fillMaxSize()) {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.background,
