@@ -14,7 +14,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -41,10 +40,10 @@ import kotlin.math.sqrt
 // ══════════════════════════════════════════════════════════════════════
 //  Compass Tool — Real-time compass heading using magnetometer + accelerometer
 //  Features:
-//    - Rotating needle points toward magnetic north
-//    - Fixed compass rose with cardinal letters (N, E, S, W)
+//    - Rotating compass rose with cardinal letters (N, E, S, W)
+//    - Fixed heading indicator shows device direction on the dial
+//    - remapCoordinateSystem for tilt-compensated heading in any orientation
 //    - Low-pass filtered sensor values for smooth readings
-//    - Tilt-compensated heading via getRotationMatrix + getOrientation
 //    - Pitch/roll displayed for orientation awareness
 // ══════════════════════════════════════════════════════════════════════
 
@@ -65,8 +64,7 @@ fun CompassToolScreen(
     var compassRoll by remember { mutableFloatStateOf(0f) }    // roll from orientation (deg)
 
     // ── Calibration state ──
-    var needsCalibration by remember { mutableStateOf(false) }
-    var calibrationProgress by remember { mutableFloatStateOf(0f) }
+    var needsCalibration by remember { mutableStateOf(true) }
 
     // ── Sensor listener ──
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
@@ -78,10 +76,9 @@ fun CompassToolScreen(
         val geomagnetic = FloatArray(3)
         val rotationMatrix = FloatArray(9)
         val orientation = FloatArray(3)
-        var calibrationSamples = 0
         var firstGravity = true
         var firstGeomagnetic = true
-        val alpha = 0.18f  // Low-pass filter coefficient (lower = smoother but slower)
+        val alpha = 0.30f  // Low-pass filter coefficient (higher = more responsive)
 
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
@@ -119,22 +116,18 @@ fun CompassToolScreen(
 
                 if (!firstGravity && !firstGeomagnetic &&
                     SensorManager.getRotationMatrix(rotationMatrix, null, gravity, geomagnetic)) {
-                    SensorManager.getOrientation(rotationMatrix, orientation)
-                    // orientation[0] = azimuth
+                    // Remap for landscape/portrait-agnostic heading (works in any orientation)
+                    val remappedMatrix = FloatArray(9)
+                    SensorManager.remapCoordinateSystem(
+                        rotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, remappedMatrix
+                    )
+                    SensorManager.getOrientation(remappedMatrix, orientation)
+                    // orientation[0] = azimuth (tilt-compensated)
                     val azimuthDeg = Math.toDegrees(orientation[0].toDouble()).toFloat()
                     azimuth = (azimuthDeg + 360) % 360
                     // orientation[1] = pitch, orientation[2] = roll
                     compassPitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
                     compassRoll = Math.toDegrees(orientation[2].toDouble()).toFloat()
-
-                    // Calibration quality estimate: accumulating samples
-                    calibrationSamples++
-                    if (calibrationSamples <= 60) {
-                        calibrationProgress = calibrationSamples / 60f
-                    } else {
-                        needsCalibration = false
-                        calibrationProgress = 1f
-                    }
                 }
             }
 
@@ -150,8 +143,8 @@ fun CompassToolScreen(
             }
         }
 
-        sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
-        sensorManager.registerListener(listener, magnetometer, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_GAME)
+        sensorManager.registerListener(listener, magnetometer, SensorManager.SENSOR_DELAY_GAME)
 
         onDispose {
             sensorManager.unregisterListener(listener)
@@ -233,127 +226,108 @@ fun CompassToolScreen(
                                     style = Stroke(width = 2f)
                                 )
 
-                                // Compass face
+                                // Compass face background
                                 drawCircle(
                                     color = Color.Transparent,
                                     radius = radius,
                                     center = Offset(cx, cy)
                                 )
 
-                                // ── Fixed degree ticks (do NOT rotate) ──
-                                for (deg in 0 until 360 step 2) {
-                                    val rad = Math.toRadians(deg.toDouble())
-                                    val isMajor = deg % 90 == 0
-                                    val isMinor = deg % 10 == 0
-                                    val tickLen = when {
-                                        isMajor -> radius * 0.25f
-                                        isMinor -> radius * 0.12f
-                                        else -> radius * 0.06f
-                                    }
-                                    val tickWidth = when {
-                                        isMajor -> 3f
-                                        isMinor -> 2f
-                                        else -> 1f
-                                    }
-                                    val tickColor = when {
-                                        isMajor -> compassOnSurface
-                                        isMinor -> compassOnSurfaceVariant.copy(alpha = 0.5f)
-                                        else -> compassOutlineVariant
-                                    }
-                                    val innerR = radius - tickLen
-                                    // Canvas convention: 0° = up (-y), angle increases clockwise
-                                    val tx = cx + (innerR * sin(rad)).toFloat()
-                                    val ty = cy - (innerR * cos(rad)).toFloat()
-                                    val ex = cx + (radius * sin(rad)).toFloat()
-                                    val ey = cy - (radius * cos(rad)).toFloat()
-                                    drawLine(
-                                        color = tickColor,
-                                        start = Offset(tx, ty),
-                                        end = Offset(ex, ey),
-                                        strokeWidth = tickWidth,
-                                        cap = StrokeCap.Round
-                                    )
-                                }
-
-                                // ── Fixed cardinal letters (N, E, S, W) ──
-                                val cardinals = listOf(
-                                    "N" to Color(0xFFE53935), // Red for North
-                                    "E" to compassOnSurface,
-                                    "S" to compassOnSurface,
-                                    "W" to compassOnSurface
-                                )
-                                val paint = android.graphics.Paint().apply {
-                                    textAlign = android.graphics.Paint.Align.CENTER
-                                    isAntiAlias = true
-                                }
-                                cardinals.forEachIndexed { i, (label, color) ->
-                                    val angle = i * 90.0
-                                    val rad = Math.toRadians(angle)
-                                    val labelR = radius * 0.72f
-                                    val x = cx + (labelR * sin(rad)).toFloat()
-                                    val y = cy - (labelR * cos(rad)).toFloat()
-
-                                    paint.color = color.toArgb()
-                                    paint.textSize = when (label) {
-                                        "N" -> 42f
-                                        else -> 32f
-                                    }
-                                    paint.setFakeBoldText(label == "N")
-                                    drawContext.canvas.nativeCanvas.drawText(
-                                        label, x, y + paint.textSize / 3f, paint
-                                    )
-                                }
-
-                                // ── Rotating compass needle ──
-                                // The needle rotates so its red tip always points toward magnetic north.
-                                // When heading=0° (facing N), the needle points up toward the 'N' marker.
-                                // When heading=90° (facing E), the needle rotates -90° to point left (west =
-                                // magnetic north relative to the user's heading).
-                                val needleLen = radius * 0.70f
-                                val southLen = radius * 0.50f
-                                val needleWidth = radius * 0.07f
-
-                                // Rotate the entire needle so the red tip aims at magnetic north.
-                                // Canvas rotate() rotates clockwise for positive degrees; we want the needle
-                                // to rotate counterclockwise when the heading increases, so we use -smoothAzimuth.
-                                // Use withTransform to scope the rotation to only the needle drawing.
+                                // ── Rotating compass rose (ticks + cardinal labels) ──
+                                // The entire face rotates so the N label always points to magnetic north.
+                                // Rotate by -smoothAzimuth: positive heading means device faces clockwise
+                                // from north, so the face rotates counterclockwise to compensate.
                                 withTransform({
                                     rotate(degrees = -smoothAzimuth, pivot = Offset(cx, cy))
                                 }) {
-                                    // North half (red) — triangle pointing up
-                                    val northPath = Path().apply {
-                                        moveTo(cx, cy - needleLen)
-                                        lineTo(cx - needleWidth, cy)
-                                        lineTo(cx + needleWidth, cy)
-                                        close()
+                                    // Degree ticks
+                                    for (deg in 0 until 360 step 2) {
+                                        val rad = Math.toRadians(deg.toDouble())
+                                        val isMajor = deg % 90 == 0
+                                        val isMinor = deg % 10 == 0
+                                        val tickLen = when {
+                                            isMajor -> radius * 0.25f
+                                            isMinor -> radius * 0.12f
+                                            else -> radius * 0.06f
+                                        }
+                                        val tickWidth = when {
+                                            isMajor -> 3f
+                                            isMinor -> 2f
+                                            else -> 1f
+                                        }
+                                        val tickColor = when {
+                                            isMajor -> compassOnSurface
+                                            isMinor -> compassOnSurfaceVariant.copy(alpha = 0.5f)
+                                            else -> compassOutlineVariant
+                                        }
+                                        val innerR = radius - tickLen
+                                        val tx = cx + (innerR * sin(rad)).toFloat()
+                                        val ty = cy - (innerR * cos(rad)).toFloat()
+                                        val ex = cx + (radius * sin(rad)).toFloat()
+                                        val ey = cy - (radius * cos(rad)).toFloat()
+                                        drawLine(
+                                            color = tickColor,
+                                            start = Offset(tx, ty),
+                                            end = Offset(ex, ey),
+                                            strokeWidth = tickWidth,
+                                            cap = StrokeCap.Round
+                                        )
                                     }
-                                    drawPath(northPath, color = Color(0xFFE53935))
 
-                                    // South half (gray) — triangle pointing down
-                                    val southPath = Path().apply {
-                                        moveTo(cx, cy + southLen)
-                                        lineTo(cx - needleWidth, cy)
-                                        lineTo(cx + needleWidth, cy)
-                                        close()
+                                    // Cardinal letters (N, E, S, W)
+                                    val cardinals = listOf(
+                                        "N" to Color(0xFFE53935), // Red for North
+                                        "E" to compassOnSurface,
+                                        "S" to compassOnSurface,
+                                        "W" to compassOnSurface
+                                    )
+                                    val paint = android.graphics.Paint().apply {
+                                        textAlign = android.graphics.Paint.Align.CENTER
+                                        isAntiAlias = true
                                     }
-                                    drawPath(southPath, color = Color(0xFFBDBDBD))
+                                    cardinals.forEachIndexed { i, (label, color) ->
+                                        val angle = i * 90.0
+                                        val rad = Math.toRadians(angle)
+                                        val labelR = radius * 0.78f
+                                        val x = cx + (labelR * sin(rad)).toFloat()
+                                        val y = cy - (labelR * cos(rad)).toFloat()
 
-                                    // Needle outline for definition
-                                    val outlinePath = Path().apply {
-                                        moveTo(cx, cy - needleLen)
-                                        lineTo(cx - needleWidth, cy)
-                                        lineTo(cx, cy + southLen)
-                                        lineTo(cx + needleWidth, cy)
-                                        close()
+                                        paint.color = color.toArgb()
+                                        paint.textSize = when (label) {
+                                            "N" -> 42f
+                                            else -> 32f
+                                        }
+                                        paint.isFakeBoldText = label == "N"
+                                        drawContext.canvas.nativeCanvas.drawText(
+                                            label, x, y + paint.textSize / 3f, paint
+                                        )
                                     }
-                                    drawPath(outlinePath,
-                                        color = Color(0xFF888888).copy(alpha = 0.3f),
-                                        style = Stroke(width = 1f))
-
-                                    // Center pivot
-                                    drawCircle(color = Color.White, radius = 6f, center = Offset(cx, cy))
-                                    drawCircle(color = Color(0xFFE53935), radius = 3.5f, center = Offset(cx, cy))
                                 }
+
+                                // ── Fixed heading indicator (red triangle at top of compass) ──
+                                // Points to the top of the screen — shows which way the device is facing
+                                val indicatorLen = radius * 0.22f
+                                val indicatorWidth = radius * 0.07f
+                                val headingPath = Path().apply {
+                                    moveTo(cx, cy - radius + 4f)
+                                    lineTo(cx - indicatorWidth, cy - radius + 4f + indicatorLen)
+                                    lineTo(cx + indicatorWidth, cy - radius + 4f + indicatorLen)
+                                    close()
+                                }
+                                drawPath(headingPath, color = Color(0xFFE53935))
+
+                                // South indicator (small gray notch at bottom)
+                                val southMarkPath = Path().apply {
+                                    moveTo(cx - indicatorWidth * 0.6f, cy + radius - 4f - indicatorLen * 0.5f)
+                                    lineTo(cx, cy + radius - 4f)
+                                    lineTo(cx + indicatorWidth * 0.6f, cy + radius - 4f - indicatorLen * 0.5f)
+                                    close()
+                                }
+                                drawPath(southMarkPath, color = Color(0xFF9E9E9E))
+
+                                // Center pivot
+                                drawCircle(color = Color.White, radius = 5f, center = Offset(cx, cy))
+                                drawCircle(color = Color(0xFFE53935), radius = 2.5f, center = Offset(cx, cy))
                             }
                         }
 
@@ -434,22 +408,7 @@ fun CompassToolScreen(
                             }
                         }
 
-                        // Calibration progress
-                        if (calibrationProgress < 1f) {
-                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Text(
-                                    "Calibrating... ${(calibrationProgress * 100).roundToInt()}%",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                LinearProgressIndicator(
-                                    progress = { calibrationProgress },
-                                    modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)),
-                                    color = colors.info,
-                                    trackColor = colors.info.copy(alpha = 0.12f)
-                                )
-                            }
-                        }
+
                     }
                 }
 
@@ -461,7 +420,7 @@ fun CompassToolScreen(
                 ) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text("Tips", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = colors.info)
-                        Text("• The red needle end always points toward magnetic north", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("• The red heading indicator (top) shows the direction your device is pointing", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("• Pitch/Roll show the device's tilt in the current orientation", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("• Keep away from metal objects and magnets", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("• Wave in a figure-8 pattern to re-calibrate", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
