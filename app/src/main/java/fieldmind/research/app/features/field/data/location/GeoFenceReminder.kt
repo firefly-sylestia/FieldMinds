@@ -399,9 +399,10 @@ class GeoFenceReminder(private val context: Context) {
             else -> "Region: $regionLabel"
         }
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+            .setSmallIcon(fieldmind.research.app.R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText("Geo-fence reminder from FieldMind")
+            .setColor(0xFF6750A4.toInt())
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .build()

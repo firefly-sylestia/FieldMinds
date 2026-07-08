@@ -118,6 +118,7 @@ class FieldMindStreakWorker(
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle("FieldMind research streak")
             .setContentText(message)
+            .setColor(0xFF6750A4.toInt())
             .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

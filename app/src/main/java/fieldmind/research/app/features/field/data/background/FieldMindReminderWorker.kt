@@ -60,6 +60,7 @@ class FieldMindReminderWorker(context: Context, params: WorkerParameters) : Coro
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle("FieldMind observation reminder")
             .setContentText(body)
+            .setColor(0xFF6750A4.toInt())
             .setStyle(NotificationCompat.BigTextStyle().bigText(body))
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
