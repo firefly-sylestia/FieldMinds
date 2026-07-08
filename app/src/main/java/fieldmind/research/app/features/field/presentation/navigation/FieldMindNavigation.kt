@@ -1593,16 +1593,19 @@ private fun AllTabScreen(
                                 if (animX.value > threshold && canSwipeRight) {
                                     haptics.confirm()
                                     wasSwipeTriggered = true
-                                    // Switch tab IMMEDIATELY — no waiting for animation.
-                                    // The adjacent tab is already rendered behind the current
-                                    // one, so content is ready. Just snap the offset and switch.
-                                    animX.snapTo(0f)
-                                    onTabSelected(activeTabIndex - 1)
+                                    scope.launch {
+                                        // Switch tab IMMEDIATELY — no waiting for off-screen animation.
+                                        // Adjacent tab is already rendered behind current one.
+                                        animX.snapTo(0f)
+                                        onTabSelected(activeTabIndex - 1)
+                                    }
                                 } else if (animX.value < -threshold && canSwipeLeft) {
                                     haptics.confirm()
                                     wasSwipeTriggered = true
-                                    animX.snapTo(0f)
-                                    onTabSelected(activeTabIndex + 1)
+                                    scope.launch {
+                                        animX.snapTo(0f)
+                                        onTabSelected(activeTabIndex + 1)
+                                    }
                                 } else {
                                     scope.launch {
                                         animX.animateTo(
