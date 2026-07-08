@@ -39,13 +39,14 @@ import androidx.activity.compose.BackHandler
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: ProjectEntity? = null) {
+    val isEditing = entity != null
     val haptics = rememberFieldMindHaptics()
-    var title by rememberSaveable { mutableStateOf("") }
-    var description by rememberSaveable { mutableStateOf("") }
-    var selectedIcon by rememberSaveable { mutableStateOf("🌿") }
+    var title by rememberSaveable { mutableStateOf(entity?.title ?: "") }
+    var description by rememberSaveable { mutableStateOf(entity?.objective ?: "") }
+    var selectedIcon by rememberSaveable { mutableStateOf(entity?.selectedMethods ?: "🌿") }
     var selectedColor by rememberSaveable { mutableStateOf(0xFF1F6B4CL) }
-    var selectedTemplate by rememberSaveable { mutableStateOf("Empty Project") }
+    var selectedTemplate by rememberSaveable { mutableStateOf(entity?.topicType ?: entity?.projectType ?: "Empty Project") }
     var showTemplatePicker by rememberSaveable { mutableStateOf(false) }
     var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || description.isNotBlank()
@@ -89,24 +90,35 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     fun save() {
         if (title.isNotBlank()) {
-            // Store icon in tags, color as hex in connectionMap, template as topicType
             val colorHex = "#%06X".format(selectedColor and 0xFFFFFF)
-            viewModel.addProject(
-                title = title,
-                topicType = selectedTemplate,
-                objective = description,
-                researchQuestion = "",
-                methods = "",
-                futureQuestions = "",
-                backgroundNotes = "",
-                hypothesisSummary = "",
-                dataSummary = "",
-                analysis = "",
-                conclusion = "",
-                projectType = selectedTemplate,
-                selectedMethods = selectedIcon,
-                connectionMap = colorHex
-            )
+            if (isEditing) {
+                val latest = viewModel.projects.value.firstOrNull { it.id == entity!!.id } ?: entity!!
+                viewModel.updateProjectEntity(latest.copy(
+                    title = title,
+                    topicType = selectedTemplate,
+                    objective = description,
+                    projectType = selectedTemplate,
+                    selectedMethods = selectedIcon,
+                    connectionMap = colorHex
+                ))
+            } else {
+                viewModel.addProject(
+                    title = title,
+                    topicType = selectedTemplate,
+                    objective = description,
+                    researchQuestion = "",
+                    methods = "",
+                    futureQuestions = "",
+                    backgroundNotes = "",
+                    hypothesisSummary = "",
+                    dataSummary = "",
+                    analysis = "",
+                    conclusion = "",
+                    projectType = selectedTemplate,
+                    selectedMethods = selectedIcon,
+                    connectionMap = colorHex
+                )
+            }
             onBack()
         }
     }
@@ -135,8 +147,8 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     }
                 }
                 Column {
-                    Text("New Project", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                    Text("Create a research workspace", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(if (isEditing) "Edit Project" else "New Project", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Text(if (isEditing) "Update your research workspace" else "Create a research workspace", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
@@ -299,14 +311,15 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: QuestionEntity? = null) {
+    val isEditing = entity != null
     val haptics = rememberFieldMindHaptics()
-    var question by rememberSaveable { mutableStateOf("") }
-    var category by rememberSaveable { mutableStateOf("Other") }
-    var source by rememberSaveable { mutableStateOf("Observation") }
-    var status by rememberSaveable { mutableStateOf("New") }
-    var priority by rememberSaveable { mutableStateOf("Medium") }
-    var answer by rememberSaveable { mutableStateOf("") }
+    var question by rememberSaveable { mutableStateOf(entity?.questionText ?: "") }
+    var category by rememberSaveable { mutableStateOf(entity?.category ?: "Other") }
+    var source by rememberSaveable { mutableStateOf(entity?.sourceType ?: "Observation") }
+    var status by rememberSaveable { mutableStateOf(entity?.status ?: "New") }
+    var priority by rememberSaveable { mutableStateOf(entity?.priority ?: "Medium") }
+    var answer by rememberSaveable { mutableStateOf(entity?.answer ?: "") }
     var showAdvanced by rememberSaveable { mutableStateOf(false) }
     var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = question.isNotBlank() || answer.isNotBlank()
@@ -339,14 +352,26 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     fun save() {
         if (question.isNotBlank()) {
-            viewModel.addQuestion(question, category, source, status, priority, answer = answer)
+            if (isEditing) {
+                val latest = viewModel.questions.value.firstOrNull { it.id == entity!!.id } ?: entity!!
+                viewModel.updateQuestionEntity(latest.copy(
+                    questionText = question.trim(),
+                    category = category,
+                    sourceType = source,
+                    status = status,
+                    priority = priority,
+                    answer = answer.trim()
+                ))
+            } else {
+                viewModel.addQuestion(question, category, source, status, priority, answer = answer)
+            }
             onBack()
         }
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
         StandardScreenHeader(
-            title = "New Question",
+            title = if (isEditing) "Edit Question" else "New Question",
             subtitle = "Turn curiosity into something observable, measurable, comparable, or verifiable.",
             icon = FieldMindIcons.Question,
             heroColor = colors.question,
@@ -424,17 +449,18 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: HypothesisEntity? = null) {
+    val isEditing = entity != null
     val questions by viewModel.questions.collectAsState()
-    var prediction by rememberSaveable { mutableStateOf("") }
-    var reasoning by rememberSaveable { mutableStateOf("") }
-    var evidence by rememberSaveable { mutableStateOf("") }
-    var support by rememberSaveable { mutableStateOf("") }
-    var weaken by rememberSaveable { mutableStateOf("") }
-    var test by rememberSaveable { mutableStateOf("") }
-    var confidence by rememberSaveable { mutableStateOf(50f) }
-    var linkedId by rememberSaveable { mutableStateOf<Long?>(null) }
-    var resultStatus by rememberSaveable { mutableStateOf("Unknown") }
+    var prediction by rememberSaveable { mutableStateOf(entity?.prediction ?: "") }
+    var reasoning by rememberSaveable { mutableStateOf(entity?.reasoning ?: "") }
+    var evidence by rememberSaveable { mutableStateOf(entity?.evidenceNeeded ?: "") }
+    var support by rememberSaveable { mutableStateOf(entity?.supportCriteria ?: "") }
+    var weaken by rememberSaveable { mutableStateOf(entity?.weakeningCriteria ?: "") }
+    var test by rememberSaveable { mutableStateOf(entity?.testMethod ?: "") }
+    var confidence by rememberSaveable { mutableStateOf((entity?.confidencePercent ?: 50).toFloat()) }
+    var linkedId by rememberSaveable { mutableStateOf(entity?.linkedQuestionId) }
+    var resultStatus by rememberSaveable { mutableStateOf(entity?.resultStatus ?: "Unknown") }
     var showAdvanced by rememberSaveable { mutableStateOf(false) }
     var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = prediction.isNotBlank() || reasoning.isNotBlank() || evidence.isNotBlank()
@@ -460,14 +486,29 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     fun save() {
         if (prediction.isNotBlank()) {
-            viewModel.addHypothesis(linkedId, prediction, evidence, confidence.toInt(), reasoning, support, weaken, test, resultStatus = resultStatus)
+            if (isEditing) {
+                val latest = viewModel.hypotheses.value.firstOrNull { it.id == entity!!.id } ?: entity!!
+                viewModel.updateHypothesisEntity(latest.copy(
+                    prediction = prediction.trim(),
+                    reasoning = reasoning.trim(),
+                    evidenceNeeded = evidence.trim(),
+                    supportCriteria = support.trim(),
+                    weakeningCriteria = weaken.trim(),
+                    testMethod = test.trim(),
+                    confidencePercent = confidence.toInt(),
+                    linkedQuestionId = linkedId,
+                    resultStatus = resultStatus
+                ))
+            } else {
+                viewModel.addHypothesis(linkedId, prediction, evidence, confidence.toInt(), reasoning, support, weaken, test, resultStatus = resultStatus)
+            }
             onBack()
         }
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
         StandardScreenHeader(
-            title = "New Hypothesis",
+            title = if (isEditing) "Edit Hypothesis" else "New Hypothesis",
             subtitle = "State the prediction, what would support it, and what would weaken it.",
             icon = FieldMindIcons.Hypothesis,
             heroColor = FieldMindTheme.colors.hypothesis,
@@ -514,13 +555,14 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
-    var tool by rememberSaveable { mutableStateOf("Counter") }
-    var label by rememberSaveable { mutableStateOf("") }
-    var value by rememberSaveable { mutableStateOf("0") }
-    var unit by rememberSaveable { mutableStateOf(defaultUnitForTool("Counter")) }
-    var location by rememberSaveable { mutableStateOf("") }
-    var notes by rememberSaveable { mutableStateOf("") }
+fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: DataRecordEntity? = null) {
+    val isEditing = entity != null
+    var tool by rememberSaveable { mutableStateOf(entity?.toolType ?: "Counter") }
+    var label by rememberSaveable { mutableStateOf(entity?.label ?: "") }
+    var value by rememberSaveable { mutableStateOf(entity?.value ?: "0") }
+    var unit by rememberSaveable { mutableStateOf(entity?.unit ?: defaultUnitForTool(entity?.toolType ?: "Counter")) }
+    var location by rememberSaveable { mutableStateOf(entity?.location ?: "") }
+    var notes by rememberSaveable { mutableStateOf(entity?.notes ?: "") }
     var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = label.isNotBlank() || notes.isNotBlank() || location.isNotBlank()
 
@@ -545,14 +587,26 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     fun save() {
         if (label.isNotBlank()) {
-            viewModel.addDataRecord(tool, label, value, unit, notes, location)
+            if (isEditing) {
+                val latest = viewModel.dataRecords.value.firstOrNull { it.id == entity!!.id } ?: entity!!
+                viewModel.updateDataRecordEntity(latest.copy(
+                    toolType = tool,
+                    label = label.trim(),
+                    value = value.trim(),
+                    unit = unit.trim(),
+                    notes = notes.trim(),
+                    location = location.trim()
+                ))
+            } else {
+                viewModel.addDataRecord(tool, label, value, unit, notes, location)
+            }
             onBack()
         }
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
         StandardScreenHeader(
-            title = "New Data Record",
+            title = if (isEditing) "Edit Data Record" else "New Data Record",
             subtitle = "Choose a preset so units and labels match the kind of thing you measured.",
             icon = FieldMindIcons.Data,
             heroColor = FieldMindTheme.colors.data,
@@ -594,20 +648,21 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: TaskEntity? = null) {
+    val isEditing = entity != null
     // ── Form state ──
-    var title by rememberSaveable { mutableStateOf("") }
-    var description by rememberSaveable { mutableStateOf("") }
-    var priority by rememberSaveable { mutableStateOf("Medium") }
-    var projectId by rememberSaveable { mutableStateOf<Long?>(null) }
-    var dueDate by rememberSaveable { mutableStateOf("") }
-    var dueTime by rememberSaveable { mutableStateOf("") }
-    var reminder by rememberSaveable { mutableStateOf(0) }
-    var reminderUnit by rememberSaveable { mutableStateOf("minute") }
-    var repeatInterval by rememberSaveable { mutableStateOf(0) }
-    var repeatUnit by rememberSaveable { mutableStateOf("") }
+    var title by rememberSaveable { mutableStateOf(entity?.title ?: "") }
+    var description by rememberSaveable { mutableStateOf(entity?.description ?: "") }
+    var priority by rememberSaveable { mutableStateOf(entity?.priority ?: "Medium") }
+    var projectId by rememberSaveable { mutableStateOf(entity?.projectId) }
+    var dueDate by rememberSaveable { mutableStateOf(entity?.dueDate ?: "") }
+    var dueTime by rememberSaveable { mutableStateOf(entity?.dueTime ?: "") }
+    var reminder by rememberSaveable { mutableStateOf(entity?.reminder ?: 0) }
+    var reminderUnit by rememberSaveable { mutableStateOf(entity?.reminderUnit ?: "minute") }
+    var repeatInterval by rememberSaveable { mutableStateOf(entity?.repeatInterval ?: 0) }
+    var repeatUnit by rememberSaveable { mutableStateOf(entity?.repeatUnit ?: "") }
     var checklistItems by rememberSaveable { mutableStateOf(listOf("")) }
-    var attachmentUris by rememberSaveable { mutableStateOf<List<String>>(emptyList()) }
+    var attachmentUris by rememberSaveable { mutableStateOf(entity?.attachmentUris?.split(",")?.filter { it.isNotBlank() } ?: emptyList()) }
     var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || description.isNotBlank() || checklistItems.any { it.isNotBlank() }
 
@@ -669,27 +724,45 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     put("done", false)
                 })
             }
-            viewModel.addTask(
-                title = title,
-                description = description,
-                priority = priority,
-                dueDate = dueDate,
-                dueTime = dueTime,
-                projectId = projectId,
-                checklistJson = checklistArr.toString(),
-                attachmentUris = attachmentUris.joinToString(","),
-                reminder = reminder,
-                reminderUnit = "minute",
-                repeatInterval = repeatInterval,
-                repeatUnit = repeatUnit
-            )
+            if (isEditing) {
+                val latest = viewModel.tasks.value.firstOrNull { it.id == entity!!.id } ?: entity!!
+                viewModel.updateTaskEntity(latest.copy(
+                    title = title,
+                    description = description,
+                    priority = priority,
+                    dueDate = dueDate,
+                    dueTime = dueTime,
+                    projectId = projectId,
+                    checklistJson = checklistArr.toString(),
+                    attachmentUris = attachmentUris.joinToString(","),
+                    reminder = reminder,
+                    reminderUnit = reminderUnit,
+                    repeatInterval = repeatInterval,
+                    repeatUnit = repeatUnit
+                ))
+            } else {
+                viewModel.addTask(
+                    title = title,
+                    description = description,
+                    priority = priority,
+                    dueDate = dueDate,
+                    dueTime = dueTime,
+                    projectId = projectId,
+                    checklistJson = checklistArr.toString(),
+                    attachmentUris = attachmentUris.joinToString(","),
+                    reminder = reminder,
+                    reminderUnit = "minute",
+                    repeatInterval = repeatInterval,
+                    repeatUnit = repeatUnit
+                )
+            }
             onBack()
         }
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
         StandardScreenHeader(
-            title = "New Task",
+            title = if (isEditing) "Edit Task" else "New Task",
             subtitle = "Define a field task, survey, or to-do.",
             icon = MaterialSymbolIcon("checklist"),
             heroColor = FieldMindTheme.colors.flashcard,
@@ -948,18 +1021,19 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
-    var type by rememberSaveable { mutableStateOf("Field Report") }
-    var title by rememberSaveable { mutableStateOf("") }
-    var background by rememberSaveable { mutableStateOf("") }
-    var question by rememberSaveable { mutableStateOf("") }
-    var methods by rememberSaveable { mutableStateOf("") }
-    var observations by rememberSaveable { mutableStateOf("") }
-    var results by rememberSaveable { mutableStateOf("") }
-    var interpretation by rememberSaveable { mutableStateOf("") }
-    var conclusion by rememberSaveable { mutableStateOf("") }
-    var limitations by rememberSaveable { mutableStateOf("") }
-    var next by rememberSaveable { mutableStateOf("") }
+fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: ReportEntity? = null) {
+    val isEditing = entity != null
+    var type by rememberSaveable { mutableStateOf(entity?.type ?: "Field Report") }
+    var title by rememberSaveable { mutableStateOf(entity?.title ?: "") }
+    var background by rememberSaveable { mutableStateOf(entity?.background ?: "") }
+    var question by rememberSaveable { mutableStateOf(entity?.question ?: "") }
+    var methods by rememberSaveable { mutableStateOf(entity?.methods ?: "") }
+    var observations by rememberSaveable { mutableStateOf(entity?.observations ?: "") }
+    var results by rememberSaveable { mutableStateOf(entity?.results ?: "") }
+    var interpretation by rememberSaveable { mutableStateOf(entity?.interpretation ?: "") }
+    var conclusion by rememberSaveable { mutableStateOf(entity?.conclusion ?: "") }
+    var limitations by rememberSaveable { mutableStateOf(entity?.limitations ?: "") }
+    var next by rememberSaveable { mutableStateOf(entity?.nextSteps ?: "") }
     var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || background.isNotBlank() || question.isNotBlank() || observations.isNotBlank() || results.isNotBlank() || conclusion.isNotBlank()
 
@@ -984,14 +1058,31 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     fun save() {
         if (title.isNotBlank()) {
-            viewModel.addReport(type, title, background, question, methods, observations, results, interpretation, conclusion, limitations, next)
+            if (isEditing) {
+                val latest = viewModel.reports.value.firstOrNull { it.id == entity!!.id } ?: entity!!
+                viewModel.updateReportEntity(latest.copy(
+                    type = type,
+                    title = title.trim(),
+                    background = background.trim(),
+                    question = question.trim(),
+                    methods = methods.trim(),
+                    observations = observations.trim(),
+                    results = results.trim(),
+                    interpretation = interpretation.trim(),
+                    conclusion = conclusion.trim(),
+                    limitations = limitations.trim(),
+                    nextSteps = next.trim()
+                ))
+            } else {
+                viewModel.addReport(type, title, background, question, methods, observations, results, interpretation, conclusion, limitations, next)
+            }
             onBack()
         }
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
         StandardScreenHeader(
-            title = "Report Builder",
+            title = if (isEditing) "Edit Report" else "Report Builder",
             subtitle = "Create a clean local draft: claim, evidence, reasoning, limitations, and next steps.",
             icon = FieldMindIcons.Report,
             heroColor = FieldMindTheme.colors.report,
@@ -1030,13 +1121,14 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: ObservationEntity? = null) {
+    val isEditing = entity != null
     val context = LocalContext.current
     val haptics = rememberFieldMindHaptics()
-    var subject by rememberSaveable { mutableStateOf("") }; var category by rememberSaveable { mutableStateOf("Other") }
-    var facts by rememberSaveable { mutableStateOf("") }; var confidence by rememberSaveable { mutableStateOf("Likely") }
-    var location by rememberSaveable { mutableStateOf("") }; var latitude by rememberSaveable { mutableStateOf("") }; var longitude by rememberSaveable { mutableStateOf("") }
-    var tags by rememberSaveable { mutableStateOf("") }; var evidence by rememberSaveable { mutableStateOf("") }; var fieldContext by rememberSaveable { mutableStateOf("") }
+    var subject by rememberSaveable { mutableStateOf(entity?.subject ?: "") }; var category by rememberSaveable { mutableStateOf(entity?.category ?: "Other") }
+    var facts by rememberSaveable { mutableStateOf(entity?.factsOnlyNotes ?: "") }; var confidence by rememberSaveable { mutableStateOf(entity?.confidenceLevel ?: "Likely") }
+    var location by rememberSaveable { mutableStateOf(entity?.manualLocation ?: "") }; var latitude by rememberSaveable { mutableStateOf(entity?.latitude?.toString() ?: "") }; var longitude by rememberSaveable { mutableStateOf(entity?.longitude?.toString() ?: "") }
+    var tags by rememberSaveable { mutableStateOf(entity?.tags ?: "") }; var evidence by rememberSaveable { mutableStateOf(entity?.evidenceSummary ?: "") }; var fieldContext by rememberSaveable { mutableStateOf(entity?.moodOrContext ?: "") }
     var showAdvanced by rememberSaveable { mutableStateOf(false) }
     var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = subject.isNotBlank() || facts.isNotBlank() || tags.isNotBlank() || evidence.isNotBlank() || fieldContext.isNotBlank() || location.isNotBlank()
@@ -1063,25 +1155,41 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     fun save() {
         if (subject.isNotBlank() || facts.isNotBlank()) {
             val effectiveSubject = subject.ifBlank { facts.take(48).ifBlank { "$category observation" } }
-            viewModel.addObservation(
-                subject = effectiveSubject,
-                category = category,
-                facts = facts.ifBlank { "Quick $category observation." },
-                confidence = confidence,
-                manualLocation = location.ifBlank { "" },
-                latitude = latitude.toDoubleOrNull(),
-                longitude = longitude.toDoubleOrNull(),
-                tags = if (tags.isNotBlank()) "$tags, $category" else category,
-                evidence = evidence,
-                context = fieldContext
-            )
+            if (isEditing) {
+                val latest = viewModel.observations.value.firstOrNull { it.id == entity!!.id } ?: entity!!
+                viewModel.updateObservation(latest.copy(
+                    subject = effectiveSubject,
+                    category = category,
+                    factsOnlyNotes = facts.ifBlank { "Quick $category observation." },
+                    confidenceLevel = confidence,
+                    manualLocation = location.ifBlank { "" },
+                    latitude = latitude.toDoubleOrNull() ?: latest.latitude,
+                    longitude = longitude.toDoubleOrNull() ?: latest.longitude,
+                    tags = if (tags.isNotBlank()) "$tags, $category" else category,
+                    evidenceSummary = evidence,
+                    moodOrContext = fieldContext
+                ))
+            } else {
+                viewModel.addObservation(
+                    subject = effectiveSubject,
+                    category = category,
+                    facts = facts.ifBlank { "Quick $category observation." },
+                    confidence = confidence,
+                    manualLocation = location.ifBlank { "" },
+                    latitude = latitude.toDoubleOrNull(),
+                    longitude = longitude.toDoubleOrNull(),
+                    tags = if (tags.isNotBlank()) "$tags, $category" else category,
+                    evidence = evidence,
+                    context = fieldContext
+                )
+            }
             onBack()
         }
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
         StandardScreenHeader(
-            title = "New Observation",
+            title = if (isEditing) "Edit Observation" else "New Observation",
             subtitle = "Record what you observed — species, conditions, evidence.",
             icon = FieldMindIcons.Observation,
             heroColor = FieldMindTheme.colors.observation,
@@ -1121,10 +1229,11 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: NoteEntity? = null) {
+    val isEditing = entity != null
     val colors = FieldMindTheme.colors
-    var title by rememberSaveable { mutableStateOf("") }; var body by rememberSaveable { mutableStateOf("") }
-    var category by rememberSaveable { mutableStateOf("Other") }; var tags by rememberSaveable { mutableStateOf("") }
+    var title by rememberSaveable { mutableStateOf(entity?.title ?: "") }; var body by rememberSaveable { mutableStateOf(entity?.body ?: "") }
+    var category by rememberSaveable { mutableStateOf(entity?.category ?: "Other") }; var tags by rememberSaveable { mutableStateOf(entity?.tags ?: "") }
     var location by rememberSaveable { mutableStateOf("") }; var showAdvanced by rememberSaveable { mutableStateOf(false) }
     var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || body.isNotBlank() || tags.isNotBlank() || location.isNotBlank()
@@ -1151,20 +1260,30 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     fun save() {
         if (title.isNotBlank() || body.isNotBlank()) {
             val fallbackTitle = body.lineSequence().firstOrNull { it.isNotBlank() }?.take(48) ?: "Untitled note"
-            viewModel.addNote(
-                title = title.ifBlank { fallbackTitle },
-                body = body,
-                category = category,
-                tags = tags,
-                onSaved = { onBack() }
-            )
+            if (isEditing) {
+                val latest = viewModel.notes.value.firstOrNull { it.id == entity!!.id } ?: entity!!
+                viewModel.updateNoteEntity(latest.copy(
+                    title = title.ifBlank { fallbackTitle },
+                    body = body,
+                    category = category,
+                    tags = tags
+                ))
+            } else {
+                viewModel.addNote(
+                    title = title.ifBlank { fallbackTitle },
+                    body = body,
+                    category = category,
+                    tags = tags,
+                    onSaved = { onBack() }
+                )
+            }
             onBack()
         }
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
         StandardScreenHeader(
-            title = "New Note",
+            title = if (isEditing) "Edit Note" else "New Note",
             subtitle = "Capture a quick idea, observation, or thought.",
             icon = FieldMindIcons.Note,
             heroColor = colors.source,
@@ -1197,20 +1316,21 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: SourceEntity? = null) {
+    val isEditing = entity != null
     val colors = FieldMindTheme.colors
     val projects by viewModel.projects.collectAsState()
-    var type by rememberSaveable { mutableStateOf("Article") }
-    var title by rememberSaveable { mutableStateOf("") }; var author by rememberSaveable { mutableStateOf("") }
-    var dateOrYear by rememberSaveable { mutableStateOf("") }; var doiOrIsbn by rememberSaveable { mutableStateOf("") }
-    var publisherOrJournal by rememberSaveable { mutableStateOf("") }; var accessDate by rememberSaveable { mutableStateOf(today()) }
-    var link by rememberSaveable { mutableStateOf("") }; var fileUri by rememberSaveable { mutableStateOf("") }
-    var citationStyleNote by rememberSaveable { mutableStateOf("") }
-    var importance by rememberSaveable { mutableStateOf("Normal") }; var readingStatus by rememberSaveable { mutableStateOf("In progress") }
-    var summary by rememberSaveable { mutableStateOf("") }; var taught by rememberSaveable { mutableStateOf("") }
-    var findings by rememberSaveable { mutableStateOf("") }; var questions by rememberSaveable { mutableStateOf("") }
-    var notes by rememberSaveable { mutableStateOf("") }; var reliability by rememberSaveable { mutableStateOf(3f) }
-    var projectId by rememberSaveable { mutableStateOf<Long?>(null) }
+    var type by rememberSaveable { mutableStateOf(entity?.type ?: "Article") }
+    var title by rememberSaveable { mutableStateOf(entity?.title ?: "") }; var author by rememberSaveable { mutableStateOf(entity?.author ?: "") }
+    var dateOrYear by rememberSaveable { mutableStateOf(entity?.dateOrYear ?: "") }; var doiOrIsbn by rememberSaveable { mutableStateOf(entity?.doiOrIsbn ?: "") }
+    var publisherOrJournal by rememberSaveable { mutableStateOf(entity?.publisherOrJournal ?: "") }; var accessDate by rememberSaveable { mutableStateOf(entity?.accessDate ?: today()) }
+    var link by rememberSaveable { mutableStateOf(entity?.link ?: "") }; var fileUri by rememberSaveable { mutableStateOf(entity?.fileUri ?: "") }
+    var citationStyleNote by rememberSaveable { mutableStateOf(entity?.citationStyleNote ?: "") }
+    var importance by rememberSaveable { mutableStateOf(entity?.importance ?: "Normal") }; var readingStatus by rememberSaveable { mutableStateOf(entity?.readingStatus ?: "In progress") }
+    var summary by rememberSaveable { mutableStateOf(entity?.personalSummary ?: "") }; var taught by rememberSaveable { mutableStateOf(entity?.whatThisSourceTaughtMe ?: "") }
+    var findings by rememberSaveable { mutableStateOf(entity?.keyFindings ?: "") }; var questions by rememberSaveable { mutableStateOf(entity?.questionsGenerated ?: "") }
+    var notes by rememberSaveable { mutableStateOf(entity?.paperNotes ?: "") }; var reliability by rememberSaveable { mutableStateOf((entity?.reliabilityScore ?: 3).toFloat()) }
+    var projectId by rememberSaveable { mutableStateOf(entity?.relatedProjectId) }
     var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || author.isNotBlank() || summary.isNotBlank() || findings.isNotBlank() || taught.isNotBlank() || notes.isNotBlank()
 
@@ -1235,23 +1355,38 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     fun save() {
         if (title.isNotBlank()) {
-            viewModel.addSource(
-                type = type, title = title.trim(), author = author.trim(),
-                link = link.trim(), summary = summary.trim(), taught = taught.trim(),
-                reliability = reliability.toInt(), keyFindings = findings.trim(),
-                questionsGenerated = questions.trim(), paperNotes = notes.trim(),
-                projectId = projectId, dateOrYear = dateOrYear.trim(), doiOrIsbn = doiOrIsbn.trim(),
-                publisherOrJournal = publisherOrJournal.trim(), accessDate = accessDate.trim(),
-                fileUri = fileUri.trim(), citationStyleNote = citationStyleNote.trim(),
-                importance = importance, readingStatus = readingStatus
-            )
+            if (isEditing) {
+                val latest = viewModel.sources.value.firstOrNull { it.id == entity!!.id } ?: entity!!
+                viewModel.updateSourceEntity(latest.copy(
+                    type = type, title = title.trim(), author = author.trim(),
+                    dateOrYear = dateOrYear.trim(), doiOrIsbn = doiOrIsbn.trim(),
+                    publisherOrJournal = publisherOrJournal.trim(), accessDate = accessDate.trim(),
+                    link = link.trim(), fileUri = fileUri.trim(), citationStyleNote = citationStyleNote.trim(),
+                    importance = importance, readingStatus = readingStatus,
+                    personalSummary = summary.trim(), whatThisSourceTaughtMe = taught.trim(),
+                    keyFindings = findings.trim(), questionsGenerated = questions.trim(),
+                    paperNotes = notes.trim(), reliabilityScore = reliability.toInt(),
+                    relatedProjectId = projectId
+                ))
+            } else {
+                viewModel.addSource(
+                    type = type, title = title.trim(), author = author.trim(),
+                    link = link.trim(), summary = summary.trim(), taught = taught.trim(),
+                    reliability = reliability.toInt(), keyFindings = findings.trim(),
+                    questionsGenerated = questions.trim(), paperNotes = notes.trim(),
+                    projectId = projectId, dateOrYear = dateOrYear.trim(), doiOrIsbn = doiOrIsbn.trim(),
+                    publisherOrJournal = publisherOrJournal.trim(), accessDate = accessDate.trim(),
+                    fileUri = fileUri.trim(), citationStyleNote = citationStyleNote.trim(),
+                    importance = importance, readingStatus = readingStatus
+                )
+            }
             onBack()
         }
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
         StandardScreenHeader(
-            title = "New Source",
+            title = if (isEditing) "Edit Source" else "New Source",
             subtitle = "Start with title + type. Fill in what you have.",
             icon = FieldMindIcons.Source,
             heroColor = colors.source,

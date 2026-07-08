@@ -814,6 +814,7 @@ private fun categorizeRoute(route: String): RouteCategory = when (route) {
         route.startsWith("field_settings") -> RouteCategory.SettingsSubPage
         route.startsWith("field_detail/") -> RouteCategory.Detail
         route.startsWith("field_new_") -> RouteCategory.Creation
+        route.startsWith("field_edit/") -> RouteCategory.Creation
         route in listOf(
             FieldMindScreen.CounterTool.route, FieldMindScreen.MeasurementTool.route,
             FieldMindScreen.WeatherLogTool.route, FieldMindScreen.SpeciesTool.route,
@@ -1274,8 +1275,57 @@ private fun FieldMindNavHost(
                         onOpenReader = openReader,
                         onOpenCanvas = { noteId ->
                             navController.navigateToDestination("field_canvas/$noteId")
+                        },
+                        onOpenEdit = { editKind, editId ->
+                            navController.navigateToDestination("field_edit/$editKind/$editId")
                         }
                     )
+                }
+            }
+            // ── Edit entity routes (full-screen, same composable as creation, with entity pre-filled) ──
+            composable("field_edit/{kind}/{id}") { entry ->
+                val kind = entry.arguments?.getString("kind") ?: "observation"
+                val id = entry.arguments?.getString("id")?.toLongOrNull() ?: 0L
+                SwipeBackHost(onBack = { safeBack() }) {
+                    val observations by viewModel.observations.collectAsState()
+                    val notes by viewModel.notes.collectAsState()
+                    val questions by viewModel.questions.collectAsState()
+                    val hypotheses by viewModel.hypotheses.collectAsState()
+                    val projects by viewModel.projects.collectAsState()
+                    val sources by viewModel.sources.collectAsState()
+                    val dataRecords by viewModel.dataRecords.collectAsState()
+                    val reports by viewModel.reports.collectAsState()
+                    val tasks by viewModel.tasks.collectAsState()
+                    when (kind) {
+                        "observation" -> observations.firstOrNull { it.id == id }?.let {
+                            NewObservationScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "note" -> notes.firstOrNull { it.id == id }?.let {
+                            NewNoteScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "project" -> projects.firstOrNull { it.id == id }?.let {
+                            NewProjectScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "question" -> questions.firstOrNull { it.id == id }?.let {
+                            NewQuestionScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "hypothesis" -> hypotheses.firstOrNull { it.id == id }?.let {
+                            NewHypothesisScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "source" -> sources.firstOrNull { it.id == id }?.let {
+                            NewSourceScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "data" -> dataRecords.firstOrNull { it.id == id }?.let {
+                            NewDataRecordScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "report" -> reports.firstOrNull { it.id == id }?.let {
+                            NewReportScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        "task" -> tasks.firstOrNull { it.id == id }?.let {
+                            NewTaskScreen(viewModel = viewModel, onBack = { safeBack() }, entity = it)
+                        }
+                        else -> safeBack()
+                    }
                 }
             }
         } // end NavHost
