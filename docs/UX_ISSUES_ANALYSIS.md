@@ -475,14 +475,14 @@ No changes needed. Settings hub with navigation cards was already implemented.
 | #20 Project context lost on "View all tasks" | 🟡 Confirmed — Acceptable | Medium | Low |
 | #21 Data tools summary counts only 3 types | ✅ FIXED | — | — |
 | #22 Generic edit dialog for data records | 🔴 Confirmed | Medium | High |
-| #23 ObserveScreen BackHandler always fires | 🔴 Confirmed | Medium | Low |
-| #24 Inconsistent `TextField` vs `OutlinedTextField` | 🔴 Confirmed | Low | Low |
-| #25 HomeScreen shows only 4 of 8 data tools | 🔴 Confirmed | Medium | Low |
-| #26 Scroll state not persisted on rotation | 🔴 Confirmed | Low | Medium |
-| #27 Compass tips card is static | 🔴 Confirmed | Low | Low |
-| #28 Past sessions hardcoded to 10 | 🔴 Confirmed | Low | Low |
+| #23 ObserveScreen BackHandler always fires | ✅ FIXED | — | — |
+| #24 Inconsistent `TextField` vs `OutlinedTextField` | ✅ FIXED | — | — |
+| #25 HomeScreen shows only 4 of 8 data tools | 🟡 Confirmed — Accepted design choice | Low | N/A |
+| #26 Scroll state not persisted on rotation | ✅ FIXED — 8 screens added `rememberSaveable` | — | — |
+| #27 Compass tips card is static | 🔴 Not fixed | Low | Low |
+| #28 Past sessions hardcoded to 10 | 🔴 Not fixed | Low | Low |
 | #29 Weather widget text contrast variation | 🟡 Confirmed — Minor | Low | Low |
-| #30 Settings sub-page redundant BackHandler | 🟡 Confirmed — Minor | Very Low | Very Low |
+| #30 Settings sub-page redundant BackHandler | ✅ FIXED — cleanup pass | — | — |
 
 **Legend:**
 - 🔴 = Issue confirmed, fix needed

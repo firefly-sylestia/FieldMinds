@@ -227,9 +227,9 @@ The `FieldMindAutoBackupWorker` calls `archiveJson()` WITHOUT these entity types
 | **Phase A** — Add all missing entity fields to `archiveJson()` | ✅ **Done** | All 37 ObservationEntity fields, 17 ProjectEntity fields, 10 QuestionEntity fields, 10 HypothesisEntity fields, 13 DataRecordEntity fields, 17 ReportEntity fields, 13 FlashcardEntity fields, all SpeciesEntity fields, ResearchSessionEntity lat/lon, TaskEntity linkedEvidenceId/linkedSessionId are all exported |
 | **Phase B** — Add EvidenceAttachmentEntity to archive JSON | ✅ **Done** | `"evidenceAttachments"` array is included in both export and import |
 | **Phase C** — Fix `parseArchiveJson()` to import all missing fields | ✅ **Done** | All entity fields are parsed with proper null handling and defaults |
-| **Phase D** — Fix `restoreArchiveJson()` to import EvidenceAttachmentEntity + cross-refs | ❌ Pending | ViewModel's restore function needs verification |
-| **Phase E** — Add TagEntity + CrossRefs to export/import | ❌ Pending | TagEntity, ObservationTagCrossRef, and other cross-ref tables need dedicated JSON arrays |
-| **Phase F** — Fix auto-backup worker to include all entity types | ❌ Pending | Auto-backup needs to pass species, weatherCatalog, researchSessions, tasks |
+| **Phase D** — Fix `restoreArchiveJson()` to import EvidenceAttachmentEntity + cross-refs | ✅ **Done** | `parseArchiveJson()` returns evidenceAttachments and crossReferences; `restoreArchiveJson()` processes both with ID remapping |
+| **Phase E** — Add TagEntity + CrossRefs to export/import | ✅ **Done** | Tags, evidenceAttachments, crossReferences in `archiveJson()` (lines 1025-1028) and `parseArchiveJson()` (lines 484-500); cross-refs collected via `viewModel.collectAllCrossRefs()` |
+| **Phase F** — Fix auto-backup worker to include all entity types | ✅ **Done** | `FieldMindAutoBackupWorker` includes species, weatherCatalog, researchSessions, tasks, tags, and all cross-refs |
 u
 
 ## Summary of Issues by User Complaint

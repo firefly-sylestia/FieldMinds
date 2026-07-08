@@ -4,37 +4,20 @@ This document audits the codebase for patterns where UI actions, settings toggle
 
 ---
 
-## 1. CollaborationScreen: "Generate portfolio" button — snackbar only
-**Status: ❌ Not fixed**
 
-Button labeled "Generate portfolio" shows a hardcoded snackbar instead of generating anything:
-```kotlin
-Button(onClick = { showFastSnackbar(snackbar, scope, "Portfolio generated!") })
-```
-No portfolio is generated, no file created, no data aggregated.
-
-**Evidence:** `CollaborationScreen.kt:437`
-
-**Prompt:** Wire "Generate portfolio" to the real export/report pipeline — aggregate observations, notes, and projects into a shareable Markdown/PDF portfolio document and share via Intent.
 
 ---
 
-## 2. CollaborationScreen: "Export all" button (Publish section) — navigation only
-**Status: ❌ Not fixed**
+## 2. CollaborationScreen: "Export all" button — now does real complete export
+**Status: ✅ FIXED**
 
-The "Export all" button in the Publish section only calls `onOpenExport()` which navigates to the ExportStudio screen:
-```kotlin
-OutlinedButton(onClick = { onOpenExport() }, shape = RoundedCornerShape(22.dp))
-```
-This is a navigation redirection, not an actual export action. User expects tapping "Export all" to export everything, not go to a different screen.
+Button now generates a complete `.fieldmind` package with ALL entity types (observations, notes, questions, hypotheses, projects, sources, dataRecords, reports, flashcards, species, weatherCatalog, researchSessions, tasks) including media attachments, then shares via Intent.
 
-**Evidence:** `CollaborationScreen.kt:440`
-
-**Prompt:** Replace navigation-only callback with an actual "export all" action that generates a complete FieldMind Archive of all entities and shares it.
+**Evidence:** `CollaborationScreen.kt:647` — Full export pipeline: `archiveJson()` → `MediaPacker.buildPackage()` → `FileProvider.getUriForFile()` → `Intent.ACTION_SEND`
 
 ---
 
-## 3. FestiveOverlay: Halloween and Valentine's effects — TODO placeholders
+## 1. FestiveOverlay: Halloween and Valentine's effects — TODO placeholders
 **Status: ❌ Not fixed**
 
 Four TODO markers in `FestiveOverlay.kt` indicate effects for Halloween and Valentine's Day exist only as empty branches:
@@ -49,6 +32,15 @@ Four TODO markers in `FestiveOverlay.kt` indicate effects for Halloween and Vale
 **Evidence:** `FestiveOverlay.kt:55-60`, `200-205`
 
 **Prompt:** Implement Halloween effects (falling leaves, bats, dark overlay with orange glow) and Valentine's effects (floating hearts, rose petals, pink gradient overlay) matching the existing Christmas/Snowfall pattern.
+
+---
+
+## 1b. CollaborationScreen: "Generate portfolio" button
+**Status: ✅ FIXED**
+
+Button now generates a real Markdown portfolio document with overview stats, projects, observations, questions, notes, active sessions — not just a snackbar. No longer a placeholder.
+
+**Evidence:** `CollaborationScreen.kt:580` — Full Markdown document built with all entity types, shared via `safeShareText()` with clipboard fallback.
 
 ---
 
@@ -367,15 +359,19 @@ The test runner toggles settings but wouldn't restore them if cancelled mid-run.
 
 | Category | Count | Status |
 |----------|-------|--------|
-| ❌ Not fixed (new findings) | 14 items | #1-14 |
+| ❌ Not fixed (remaining) | 11 items | #1, #4-13 |
 | ⚡ Fixed (original QA items) | 18 items | #14-32 |
 
-### Top priority unfixed items
+### Remaining unfixed items
 
-1. **#1** — "Generate portfolio" is a snackbar-only placeholder
+1. **#1** — Halloween and Valentine's effects are empty TODO branches
 2. **#4** — Figure interpretation uses placeholder text instead of AI
-3. **#3** — Halloween and Valentine's effects are empty TODO branches
+3. **#5** — MediaGallery audio/video player is empty placeholder
 4. **#6** — Timer has suppressed unused expression
 5. **#7** — Collaboration invite shares marketing text, not real invite
-6. **#13** — Open-Meteo commercial auth parameter may be wrong
-7. **#8** — Deprecated camera component still in codebase
+6. **#8** — Deprecated FieldMindCameraCapture still referenced
+7. **#9** — Deprecated FieldMindMotion functions kept for binary compat
+8. **#10** — exportProgress LinearProgressIndicator usage
+9. **#11** — Test names in DevFullAppTestRunner
+10. **#12** — Weather database retry UI missing
+11. **#13** — Open-Meteo commercial auth parameter untested
