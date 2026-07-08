@@ -1032,6 +1032,40 @@ fun LevelToolScreen(
         wasHapticLevel = isHapticLevel
     }
 
+    // ── Haptic on degree ring crossings (vertical mode only) ──
+    // The degree rings in VerticalTiltIndicator are drawn at ratios 0.11/0.22/0.44 of outerRadius.
+    // Dot position = tiltXY * maxRadius where maxRadius = outerRadius * 0.55f
+    // So dot crosses a ring when tiltXY * 0.55 = ringRatio → tiltXY = ringRatio / 0.55
+    val ringThresholds = remember { listOf(0.11f / 0.55f, 0.22f / 0.55f, 0.44f / 0.55f) }
+    var prevTiltXY by remember { mutableFloatStateOf(0f) }
+    var ringHapticFired by remember { mutableStateOf(setOf<Float>()) }
+
+    // Reset tracking when switching between flat and vertical mode
+    LaunchedEffect(isFlatMode) {
+        if (!isFlatMode) {
+            prevTiltXY = tiltMagnitudeXY
+            ringHapticFired = emptySet()
+        }
+    }
+
+    LaunchedEffect(tiltMagnitudeXY) {
+        if (!isFlatMode) {
+            ringThresholds.forEach { threshold ->
+                val crossedOutward = prevTiltXY < threshold && tiltMagnitudeXY >= threshold
+                val crossedInward = prevTiltXY > threshold && tiltMagnitudeXY <= threshold
+                if ((crossedOutward || crossedInward) && threshold !in ringHapticFired) {
+                    haptics.light()
+                    ringHapticFired = ringHapticFired + threshold
+                }
+                // Re-arm the flag when the tilt moves far enough away from the threshold
+                if (abs(tiltMagnitudeXY - threshold) > 0.05f) {
+                    ringHapticFired = ringHapticFired - threshold
+                }
+            }
+            prevTiltXY = tiltMagnitudeXY
+        }
+    }
+
     val modeLabel = if (isFlatMode) "Surface level — place device flat"
         else "Plumb — check vertical alignment"
 
