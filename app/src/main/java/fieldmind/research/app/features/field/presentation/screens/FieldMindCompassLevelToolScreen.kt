@@ -403,7 +403,7 @@ fun CompassToolScreen(
                         if (fieldReadings.size >= 2) {
                             MagneticFieldChart(fieldReadings.toList(), fieldStatus.second)
                         } else {
-                            Box(Modifier.fillMaxWidth().height(48.dp), contentAlignment = Alignment.Center) {
+                            Box(Modifier.fillMaxWidth().height(80.dp), contentAlignment = Alignment.Center) {
                                 Text("Collecting data…", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                             }
                         }
@@ -653,55 +653,95 @@ private fun SensorMiniCard(
 }
 
 // ══════════════════════════════════════════════════════════════════════
-//  Magnetic Field Chart (redesigned with gradient fill)
+//  Magnetic Field Chart — glassmorphic with animated axes
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
 private fun MagneticFieldChart(readings: List<Float>, lineColor: Color) {
     if (readings.size < 2) return
     val maxY = 200f
+    val labels = listOf(200f, 150f, 100f, 50f, 0f)
+    val onSurfaceV = MaterialTheme.colorScheme.onSurfaceVariant
+    val surfaceHigh = MaterialTheme.colorScheme.surfaceContainerHigh
 
-    Canvas(modifier = Modifier.fillMaxWidth().height(48.dp)) {
-        val chartW = size.width
+    Canvas(modifier = Modifier.fillMaxWidth().height(80.dp)) {
+        val chartX = 38f  // space for Y-axis labels
+        val chartW = size.width - chartX
         val chartH = size.height
         val stepX = chartW / (readings.size - 1).coerceAtLeast(1)
 
-        // Reference lines
-        val refColor = Color.Gray.copy(alpha = 0.12f)
-        listOf(15f, 100f).forEach { refValue ->
-            val y = chartH - (refValue / maxY * chartH)
-            drawLine(refColor, Offset(0f, y), Offset(chartW, y), strokeWidth = 1f)
+        // ── Glassmorphic background — translucent rounded surface ──
+        drawRoundRect(
+            color = surfaceHigh.copy(alpha = 0.25f),
+            cornerRadius = CornerRadius(12f, 12f),
+            topLeft = Offset(chartX, 0f),
+            size = Size(chartW, chartH)
+        )
+
+        // ── Y-axis labels (rendered via nativeCanvas for pixel alignment) ──
+        val paint = android.graphics.Paint().apply {
+            isAntiAlias = true
+            color = onSurfaceV.copy(alpha = 0.4f).toArgb()
+            textSize = 22f
+            textAlign = android.graphics.Paint.Align.RIGHT
+        }
+        labels.forEach { value ->
+            val y = chartH - (value / maxY * chartH)
+            val text = "%.0f".format(value)
+            drawContext.canvas.nativeCanvas.drawText(text, chartX - 6f, y + paint.textSize / 3f, paint)
         }
 
-        // Gradient fill under the line
+        // ── Horizontal grid lines ──
+        val refColor = Color.Gray.copy(alpha = 0.08f)
+        labels.forEach { refValue ->
+            val y = chartH - (refValue / maxY * chartH)
+            drawLine(refColor, Offset(chartX, y), Offset(size.width, y), strokeWidth = 1f)
+        }
+
+        // ── Gradient fill under the data line ──
         val fillPath = Path().apply {
             readings.forEachIndexed { i, value ->
-                val x = i * stepX
+                val x = chartX + i * stepX
                 val y = chartH - (value.coerceIn(0f, maxY) / maxY * chartH)
                 if (i == 0) { moveTo(x, chartH); lineTo(x, y) } else lineTo(x, y)
             }
-            lineTo((readings.size - 1) * stepX, chartH)
+            lineTo(chartX + (readings.size - 1) * stepX, chartH)
             close()
         }
         drawPath(fillPath, brush = Brush.verticalGradient(
-            listOf(lineColor.copy(alpha = 0.2f), lineColor.copy(alpha = 0.02f))
+            listOf(lineColor.copy(alpha = 0.25f), lineColor.copy(alpha = 0.03f))
         ))
 
-        // Data line
+        // ── Data line (2.5px for better visibility) ──
         val linePath = Path().apply {
             readings.forEachIndexed { i, value ->
-                val x = i * stepX
+                val x = chartX + i * stepX
                 val y = chartH - (value.coerceIn(0f, maxY) / maxY * chartH)
                 if (i == 0) moveTo(x, y) else lineTo(x, y)
             }
         }
-        drawPath(linePath, color = lineColor, style = Stroke(width = 2f, cap = StrokeCap.Round))
+        drawPath(linePath, color = lineColor, style = Stroke(width = 2.5f, cap = StrokeCap.Round))
 
-        // End dot
-        val lastX = (readings.size - 1) * stepX
+        // ── Fading trace dots at sampled positions for depth ──
+        if (readings.size >= 3) {
+            val traceStep = maxOf(1, readings.size / 8)
+            for (i in 0 until readings.size - 1 step traceStep) {
+                val tx = chartX + i * stepX
+                val ty = chartH - (readings[i].coerceIn(0f, maxY) / maxY * chartH)
+                val fade = (i.toFloat() / readings.size) * 0.3f
+                drawCircle(lineColor.copy(alpha = fade * 0.3f), radius = 1.5f, center = Offset(tx, ty))
+            }
+        }
+
+        // ── End dot with layered glow ──
+        val lastX = chartX + (readings.size - 1) * stepX
         val lastY = chartH - (readings.last().coerceIn(0f, maxY) / maxY * chartH)
-        drawCircle(lineColor, radius = 3f, center = Offset(lastX, lastY))
-        drawCircle(lineColor.copy(alpha = 0.2f), radius = 7f, center = Offset(lastX, lastY))
+        drawCircle(lineColor.copy(alpha = 0.3f), radius = 8f, center = Offset(lastX, lastY))
+        drawCircle(lineColor, radius = 3.5f, center = Offset(lastX, lastY))
+        drawCircle(Color.White.copy(alpha = 0.25f), radius = 1.5f, center = Offset(lastX - 1f, lastY - 1f))
+
+        // ── Y-axis border line ──
+        drawLine(onSurfaceV.copy(alpha = 0.12f), Offset(chartX, 0f), Offset(chartX, chartH), strokeWidth = 1f)
     }
 }
 
