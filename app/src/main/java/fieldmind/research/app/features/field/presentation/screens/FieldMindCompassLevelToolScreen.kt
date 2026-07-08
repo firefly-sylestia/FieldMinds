@@ -1770,7 +1770,7 @@ private fun LinearTiltGauge(
         Column(
             Modifier.fillMaxSize().padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.CenterVertically
+            verticalArrangement = Arrangement.Center
         ) {
             // ── Tilt angle display ──
             Text(
