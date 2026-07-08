@@ -77,6 +77,9 @@ fun CompassToolScreen(
     var interferenceLabel by remember { mutableStateOf("") }
     var wasInterference by remember { mutableStateOf(false) }
 
+    // ── Interference dismissed state ──
+    var dismissedInterference by remember { mutableStateOf(false) }
+
     // ── Calibration state ──
     var needsCalibration by remember { mutableStateOf(true) }
     var showCalibrationGuide by remember { mutableStateOf(false) }
@@ -195,10 +198,13 @@ fun CompassToolScreen(
         dirs[index]
     }
 
-    // ── Haptic when magnetic interference is first detected (or cleared) ──
+    // ── Haptic + dismissed reset when interference state changes ──
     LaunchedEffect(isInterference) {
         if (isInterference && !wasInterference) {
             haptics.light()
+        }
+        if (!isInterference) {
+            dismissedInterference = false // reset dismiss so card reappears next time
         }
         wasInterference = isInterference
     }
@@ -461,8 +467,12 @@ fun CompassToolScreen(
                         }
 
                         // ── Magnetic interference warning ──
-                        if (isInterference && interferenceLabel.isNotBlank()) {
-                            MagneticInterferenceCard(interferenceLabel, isStrong = magneticField > 200f)
+                        if (isInterference && interferenceLabel.isNotBlank() && !dismissedInterference) {
+                            MagneticInterferenceCard(
+                                label = interferenceLabel,
+                                isStrong = magneticField > 200f,
+                                onDismiss = { dismissedInterference = true }
+                            )
                         }
 
                         // Tilt info (from rotation matrix — works in any orientation)
@@ -697,7 +707,7 @@ private fun SensorDataItem(label: String, value: String, icon: MaterialSymbolIco
 }
 
 @Composable
-private fun MagneticInterferenceCard(label: String, isStrong: Boolean) {
+private fun MagneticInterferenceCard(label: String, isStrong: Boolean, onDismiss: () -> Unit = {}) {
     val colors = FieldMindTheme.colors
     val bgColor = if (isStrong) MaterialTheme.colorScheme.error.copy(alpha = 0.08f)
                  else colors.warning.copy(alpha = 0.08f)
@@ -716,11 +726,24 @@ private fun MagneticInterferenceCard(label: String, isStrong: Boolean) {
         ) {
             Icon(MaterialSymbolIcon(if (isStrong) "gpp_bad" else "warning"), null,
                 tint = iconColor, size = 20.dp)
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(title, style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold, color = iconColor)
                 Text(label, style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            // ── Dismiss button ──
+            TextButton(
+                onClick = onDismiss,
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+                modifier = Modifier.align(Alignment.Top)
+            ) {
+                Icon(
+                    MaterialSymbolIcon("close"),
+                    contentDescription = "Dismiss",
+                    modifier = Modifier.size(16.dp),
+                    tint = iconColor.copy(alpha = 0.7f)
+                )
             }
         }
     }
