@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fieldmind.research.app.features.field.presentation.components.*
@@ -798,15 +799,15 @@ private fun SensorMiniCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Icon(icon, null, tint = progressColor, size = 22.dp)
-            Text(
-                value,
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold,
-                color = progressColor,
-                textAlign = TextAlign.Center,
-                maxLines = 1
-            )
+            Icon(icon, null, tint = progressColor, size = 22.dp)                Text(
+                    value,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold,
+                    color = progressColor,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             Box(
                 modifier = Modifier.fillMaxWidth().height(4.dp)
                     .clip(RoundedCornerShape(2.dp))
