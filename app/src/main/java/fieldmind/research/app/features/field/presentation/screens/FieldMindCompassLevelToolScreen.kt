@@ -1384,8 +1384,6 @@ fun LevelToolScreen(
     val refApplied by remember(isReferenced, refGravX, refGravY, refGravZ, gx, gy, gz, gravMag) {
         derivedStateOf {
             if (isReferenced) {
-                // The "effective" gravity is the difference from reference
-                // This way 'level' means the phone is at the same orientation as when reference was set
                 val dot = (gx * refGravX + gy * refGravY + gz * refGravZ) / (gravMag * sqrt(refGravX * refGravX + refGravY * refGravY + refGravZ * refGravZ))
                 val angleFromRef = Math.toDegrees(acos(dot.coerceIn(-1f, 1f).toDouble())).toFloat()
                 angleFromRef
@@ -1393,11 +1391,27 @@ fun LevelToolScreen(
         }
     }
 
-    // ── Mode transition: manual override or auto-detect ──
-    var manualMode by remember { mutableStateOf<Boolean?>(null) } // null=auto, true=force flat, false=force vertical
-    val isFlatMode by remember(smoothFlatness, manualMode) {
-        derivedStateOf { manualMode ?: (smoothFlatness > 0.35f) }
+    // ── 3-tier severity helper ──
+    fun tiltSeverityColor(angleDeg: Float, flatMode: Boolean): Triple<Color, Color, String> {
+        val absAngle = abs(angleDeg)
+        return when {
+            absAngle < 2f -> Triple(colors.positive, colors.positive.copy(alpha = 0.12f), "Level")
+            absAngle < 10f -> Triple(colors.warning, colors.warning.copy(alpha = 0.12f), "Moderate")
+            else -> Triple(MaterialTheme.colorScheme.error, MaterialTheme.colorScheme.error.copy(alpha = 0.12f), "Severe")
+        }
     }
+
+    // ── Computed severity for Surface mode ──
+    val flatSeverityAngle = remember(smoothFlatPitch, smoothFlatRoll) {
+        maxOf(abs(smoothFlatPitch), abs(smoothFlatRoll))
+    }
+    val flatColors = remember(flatSeverityAngle) { tiltSeverityColor(flatSeverityAngle, true) }
+    val (flatAccent, flatBgTint, flatLabel) = flatColors
+
+    // ── Computed severity for Plumb mode ──
+    val plumbSeverityAngle = remember(smoothTiltFromVertical) { smoothTiltFromVertical }
+    val plumbColors = remember(plumbSeverityAngle) { tiltSeverityColor(plumbSeverityAngle, false) }
+    val (plumbAccent, plumbBgTint, plumbLabel) = plumbColors
 
     val isLevel by remember(isFlatMode, smoothFlatPitch, smoothFlatRoll, smoothTiltFromVertical, isReferenced, refApplied) {
         derivedStateOf {
@@ -1502,6 +1516,7 @@ fun LevelToolScreen(
             }
 
             // ── Level display card ──
+            val cardBg = if (isFlatMode) flatBgTint else plumbBgTint
             Card(
                 shape = RoundedCornerShape(40.dp),
                 colors = CardDefaults.cardColors(
@@ -1522,26 +1537,42 @@ fun LevelToolScreen(
                             pitch = smoothFlatPitch,
                             roll = smoothFlatRoll,
                             isLevel = isLevel,
+                            accentColor = flatAccent,
+                            severityLabel = flatLabel,
                             colors = colors
                         )
                     } else {
-                        // ── Vertical/plumb mode: 2D tilt dot (works in ALL orientations) ──
-                        VerticalTiltIndicator(
-                            tiltXY = tiltMagnitudeXY.toDouble().coerceIn(0.0, 1.0),
-                            tiltAngleDeg = smoothTiltDirection,
+                        // ── Vertical/plumb mode: linear tilt bar gauge ──
+                        LinearTiltGauge(
+                            tiltAngleDeg = smoothTiltFromVertical,
+                            tiltMagnitude = tiltMagnitudeXY.toDouble().coerceIn(0.0, 1.0),
                             isLevel = isLevel,
+                            accentColor = plumbAccent,
+                            severityLabel = plumbLabel,
                             colors = colors
                         )
                     }
 
-                    if (isLevel) {
-                        Surface(shape = RoundedCornerShape(24.dp), color = colors.positive.copy(alpha = 0.15f)) {
-                            Row(Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Icon(MaterialSymbolIcon("check_circle", filled = true), null, tint = colors.positive, size = 24.dp)
-                                Text("Level!", fontWeight = FontWeight.Bold, color = colors.positive, style = MaterialTheme.typography.titleMedium)
+                    // ── 3-tier status badge ──
+                    val statusAccent = if (isFlatMode) flatAccent else plumbAccent
+                    val statusLabel = if (isFlatMode) flatLabel else plumbLabel
+                    val statusBg = if (isFlatMode) flatBgTint else plumbBgTint
+                    Surface(shape = RoundedCornerShape(24.dp), color = statusBg) {
+                        Row(Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            val statusIcon = when {
+                                isLevel -> MaterialSymbolIcon("check_circle", filled = true)
+                                flatSeverityAngle < 10f && isFlatMode || plumbSeverityAngle < 10f && !isFlatMode -> MaterialSymbolIcon("info")
+                                else -> MaterialSymbolIcon("warning")
                             }
+                            Icon(statusIcon, null, tint = statusAccent, size = 24.dp)
+                            Text(
+                                if (isLevel) "Level!" else statusLabel,
+                                fontWeight = FontWeight.Bold,
+                                color = statusAccent,
+                                style = MaterialTheme.typography.titleMedium
+                            )
                         }
                     }
                 }
@@ -1630,15 +1661,17 @@ fun LevelToolScreen(
  */
 @Composable
 private fun CircularBubbleLevel(
-    pitch: Float, roll: Float, isLevel: Boolean, colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
+    pitch: Float, roll: Float, isLevel: Boolean,
+    accentColor: Color, severityLabel: String,
+    colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
 ) {
     Box(modifier = Modifier.size(260.dp), contentAlignment = Alignment.Center) {
         val sh = MaterialTheme.colorScheme.surfaceContainerHighest
         val ov = MaterialTheme.colorScheme.outlineVariant
         val osv = MaterialTheme.colorScheme.onSurfaceVariant
-        val accent = if (isLevel) colors.positive else colors.info
+        val accent = if (isLevel) colors.positive else accentColor
 
-        // ── Pulsing outer glow ring ──
+        // ── Pulsing outer glow ring matching tier color ──
         val infiniteTransition = rememberInfiniteTransition(label = "levelGlow")
         val glowPulse by infiniteTransition.animateFloat(
             initialValue = 0.6f, targetValue = 1f,
@@ -1666,7 +1699,7 @@ private fun CircularBubbleLevel(
 
             // ── Outer ring ──
             drawCircle(color = sh, radius = outerRadius, center = Offset(cx, cy))
-            drawCircle(color = ov.copy(alpha = 0.25f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = 2f))
+            drawCircle(color = accent.copy(alpha = 0.25f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = if (isLevel) 2f else 2.5f))
 
             // ── Reference circles ──
             drawCircle(color = ov.copy(alpha = 0.10f), radius = outerRadius * 0.6f, center = Offset(cx, cy),
@@ -1697,99 +1730,132 @@ private fun CircularBubbleLevel(
 }
 
 /**
- * 2D tilt indicator for vertical/plumb mode.
- * Shows the direction and magnitude of tilt using a dot on crosshairs.
- * Works in ALL orientations — portrait, landscape, and everything between.
- * The dot moves away from center in the direction of the lean.
+ * Linear tilt bar gauge for vertical/plumb mode.
+ * Shows tilt from vertical as a vertical bar that fills from bottom to top.
+ * 0° tilt = empty bar (perfectly vertical), 90° tilt = full bar (horizontal).
+ * Color transitions: green (<2°) → amber (2-10°) → red (>10°).
  */
 @Composable
-private fun VerticalTiltIndicator(
-    tiltXY: Double,      // 0.0 = no lean, 1.0 = fully horizontal
-    tiltAngleDeg: Float, // degrees, direction of lean in XY plane
+private fun LinearTiltGauge(
+    tiltAngleDeg: Float,
+    tiltMagnitude: Double,  // 0.0 = no lean, 1.0 = fully horizontal
     isLevel: Boolean,
+    accentColor: Color,
+    severityLabel: String,
     colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
 ) {
-    Box(modifier = Modifier.size(260.dp), contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.size(260.dp, 300.dp), contentAlignment = Alignment.Center) {
         val sh = MaterialTheme.colorScheme.surfaceContainerHighest
-        val ov = MaterialTheme.colorScheme.outlineVariant
         val osv = MaterialTheme.colorScheme.onSurfaceVariant
-        val accent = if (isLevel) colors.positive else colors.info
+        val accent = if (isLevel) colors.positive else accentColor
 
-        // ── Pulsing outer glow ring ──
-        val infiniteTransition = rememberInfiniteTransition(label = "tiltGlow")
+        // ── Pulsing glow ──
+        val infiniteTransition = rememberInfiniteTransition(label = "linearGlow")
         val glowPulse by infiniteTransition.animateFloat(
             initialValue = 0.6f, targetValue = 1f,
             animationSpec = infiniteRepeatable(tween(2000, easing = LinearEasing), RepeatMode.Reverse),
-            label = "tiltGlowPulse"
+            label = "linearGlowPulse"
         )
-        val glowColor = accent.copy(alpha = glowPulse * 0.3f)
 
-        Canvas(Modifier.fillMaxSize()) {
-            val cx = size.width / 2f; val cy = size.height / 2f
-            val outerRadius = minOf(cx, cy) * 0.95f
-            val dotRadius = outerRadius * 0.10f
-
-            // ── Animated gradient glow ring ──
-            drawCircle(
-                brush = Brush.sweepGradient(
-                    colors = listOf(
-                        glowColor, glowColor.copy(alpha = 0.05f),
-                        glowColor, glowColor.copy(alpha = 0.05f),
-                        glowColor
-                    )
+        Column(
+            Modifier.fillMaxSize().padding(horizontal = 40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.CenterVertically
+        ) {
+            // ── Tilt angle display ──
+            Text(
+                "%.1f°".format(tiltAngleDeg),
+                style = MaterialTheme.typography.displaySmall.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 42.sp
                 ),
-                radius = outerRadius + 14f, center = Offset(cx, cy)
+                color = accent
+            )
+            Text(
+                "from vertical",
+                style = MaterialTheme.typography.labelSmall,
+                color = osv.copy(alpha = 0.6f)
             )
 
-            // ── Outer ring ──
-            drawCircle(color = sh, radius = outerRadius, center = Offset(cx, cy))
-            drawCircle(color = ov.copy(alpha = 0.25f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = 2f))
+            Spacer(Modifier.height(16.dp))
 
-            // ── Reference circles (dashed at 50% tilt) ──
-            drawCircle(color = ov.copy(alpha = 0.10f), radius = outerRadius * 0.6f, center = Offset(cx, cy),
-                style = Stroke(width = 1f, pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(6f, 6f))))
-
-            // ── Degree rings at 5°, 10°, 20° ──
-            listOf(0.11, 0.22, 0.44).forEach { ratio ->
-                drawCircle(color = ov.copy(alpha = 0.08f), radius = outerRadius * ratio.toFloat(), center = Offset(cx, cy), style = Stroke(width = 1f))
-            }
-
-            // ── Crosshair with glow ──
-            drawLine(osv.copy(alpha = 0.18f), Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 2f)
-            drawLine(osv.copy(alpha = 0.18f), Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 2f)
-
-            // ── Directional tick marks (4-way) ──
-            listOf(0f, 90f, 180f, 270f).forEach { angleDeg ->
-                val rad = Math.toRadians(angleDeg.toDouble())
-                val inner = outerRadius * 0.85f
-                val outer = outerRadius * 0.75f
-                drawLine(
-                    color = osv.copy(alpha = 0.12f),
-                    start = Offset(cx + inner * cos(rad).toFloat(), cy + inner * sin(rad).toFloat()),
-                    end = Offset(cx + outer * cos(rad).toFloat(), cy + outer * sin(rad).toFloat()),
-                    strokeWidth = 1.5f
+            // ── Linear bar gauge ──
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                // Track background
+                Box(
+                    modifier = Modifier
+                        .width(32.dp)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(sh)
                 )
+                // Fill (bottom to top based on tilt magnitude)
+                val fillFraction = tiltMagnitude.coerceIn(0.0, 1.0).toFloat()
+                Box(
+                    modifier = Modifier
+                        .width(32.dp)
+                        .fillMaxHeight(fillFraction.coerceAtLeast(0.01f))
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(accent.copy(alpha = 0.7f), accent)
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    // Animated pulse glow on the fill top
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(4.dp)
+                            .clip(RoundedCornerShape(2.dp))
+                            .background(Color.White.copy(alpha = glowPulse * 0.5f))
+                    )
+                }
+
+                // ── Tiers markers ──
+                // Red zone (top 10°+, shown as the section above 10/90 ≈ 0.11)
+                val warnLine = 1f - (10f / 90f)  // ~0.89 from bottom
+                val amberLine = 1f - (2f / 90f)  // ~0.978 from bottom
+                Canvas(modifier = Modifier.matchParentSize()) {
+                    val barLeft = (size.width - 32.dp.toPx()) / 2f
+                    val barRight = barLeft + 32.dp.toPx()
+                    val barBottom = size.height
+
+                    // Amber tier marker (2°)
+                    drawLine(
+                        colors.warning.copy(alpha = 0.4f),
+                        Offset(barLeft, barBottom * amberLine),
+                        Offset(barRight, barBottom * amberLine),
+                        strokeWidth = 1.5f
+                    )
+                    // Red tier marker (10°)
+                    drawLine(
+                        MaterialTheme.colorScheme.error.copy(alpha = 0.4f),
+                        Offset(barLeft, barBottom * warnLine),
+                        Offset(barRight, barBottom * warnLine),
+                        strokeWidth = 1.5f
+                    )
+                }
             }
 
-            // ── Center reference ──
-            drawCircle(color = osv.copy(alpha = 0.3f), radius = 2.5f, center = Offset(cx, cy))
+            Spacer(Modifier.height(8.dp))
 
-            // ── Tilt dot ──
-            val maxRadius = outerRadius * 0.55f
-            val tiltRad = Math.toRadians(tiltAngleDeg.toDouble())
-            val dotDist = (tiltXY * maxRadius).toFloat()
-            // atan2(gy, gx): 0°=right, 90°=forward/up-in-phone=down-in-canvas
-            val dotX = (cx + dotDist * cos(tiltRad)).toFloat()
-            val dotY = (cy + dotDist * sin(tiltRad)).toFloat()
-
-            val dotColor = accent
-            // Glow aura
-            drawCircle(color = dotColor.copy(alpha = 0.08f), radius = dotRadius * 2.5f, center = Offset(dotX, dotY))
-            // Dot body
-            drawCircle(color = dotColor, radius = dotRadius, center = Offset(dotX, dotY))
-            // Specular highlight
-            drawCircle(color = Color.White.copy(alpha = 0.35f), radius = dotRadius * 0.4f,
-                center = Offset(dotX - dotRadius * 0.2f, dotY - dotRadius * 0.2f))
+            // ── Tilt labels ──
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("0°", style = MaterialTheme.typography.labelSmall, color = osv.copy(alpha = 0.4f), fontSize = 9.sp)
+                Text("2°", style = MaterialTheme.typography.labelSmall, color = colors.warning.copy(alpha = 0.5f), fontSize = 9.sp)
+                Text("10°", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error.copy(alpha = 0.5f), fontSize = 9.sp)
+                Text("90°", style = MaterialTheme.typography.labelSmall, color = osv.copy(alpha = 0.4f), fontSize = 9.sp)
+            }
         }
     }
 }
