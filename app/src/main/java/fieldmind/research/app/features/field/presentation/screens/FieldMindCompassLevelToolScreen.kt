@@ -1392,7 +1392,7 @@ fun LevelToolScreen(
     }
 
     // ── 3-tier severity helper ──
-    fun tiltSeverityColor(angleDeg: Float, flatMode: Boolean): Triple<Color, Color, String> {
+    fun tiltSeverityColor(angleDeg: Float): Triple<Color, Color, String> {
         val absAngle = abs(angleDeg)
         return when {
             absAngle < 2f -> Triple(colors.positive, colors.positive.copy(alpha = 0.12f), "Level")
@@ -1405,12 +1405,12 @@ fun LevelToolScreen(
     val flatSeverityAngle = remember(smoothFlatPitch, smoothFlatRoll) {
         maxOf(abs(smoothFlatPitch), abs(smoothFlatRoll))
     }
-    val flatColors = remember(flatSeverityAngle) { tiltSeverityColor(flatSeverityAngle, true) }
+    val flatColors = remember(flatSeverityAngle) { tiltSeverityColor(flatSeverityAngle) }
     val (flatAccent, flatBgTint, flatLabel) = flatColors
 
     // ── Computed severity for Plumb mode ──
     val plumbSeverityAngle = remember(smoothTiltFromVertical) { smoothTiltFromVertical }
-    val plumbColors = remember(plumbSeverityAngle) { tiltSeverityColor(plumbSeverityAngle, false) }
+    val plumbColors = remember(plumbSeverityAngle) { tiltSeverityColor(plumbSeverityAngle) }
     val (plumbAccent, plumbBgTint, plumbLabel) = plumbColors
 
     val isLevel by remember(isFlatMode, smoothFlatPitch, smoothFlatRoll, smoothTiltFromVertical, isReferenced, refApplied) {
@@ -1516,12 +1516,11 @@ fun LevelToolScreen(
             }
 
             // ── Level display card ──
-            val cardBg = if (isFlatMode) flatBgTint else plumbBgTint
             Card(
                 shape = RoundedCornerShape(40.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = if (isLevel) colors.positive.copy(alpha = 0.08f)
-                    else MaterialTheme.colorScheme.surfaceContainerLow
+                    else (if (isFlatMode) flatBgTint else plumbBgTint)
                 ),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 modifier = Modifier.fillMaxWidth()
