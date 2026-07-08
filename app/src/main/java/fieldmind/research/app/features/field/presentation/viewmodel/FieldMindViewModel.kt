@@ -111,6 +111,24 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                 )
             }
         }
+
+        // Push species widget data whenever observations change
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            observations.collect {
+                fieldmind.research.app.infrastructure.widget.glance.FieldMindSpeciesWidget.updateData(
+                    getApplication()
+                )
+            }
+        }
+
+        // Push quickstats widget data whenever observations or projects change
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            combine(observations, projects) { _, _ -> Unit }.collect {
+                fieldmind.research.app.infrastructure.widget.glance.FieldMindQuickStatsWidget.updateData(
+                    getApplication()
+                )
+            }
+        }
     }
 
     fun addObservation(
