@@ -318,6 +318,7 @@ class TrackRecorder(private val context: Context) {
         locationListener?.let { runCatching { locationManager.removeUpdates(it) } }
     }
 
+    @SuppressLint("MissingPermission")
     private fun showRecordingNotification(recording: TrackRecording) {
         val stopIntent = PendingIntent.getBroadcast(
             context,
@@ -338,6 +339,7 @@ class TrackRecorder(private val context: Context) {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun cancelNotification() {
         runCatching {
             NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
