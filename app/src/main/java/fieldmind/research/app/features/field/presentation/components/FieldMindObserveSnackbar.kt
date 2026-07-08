@@ -135,13 +135,18 @@ fun FieldMindSnackbarOverlay(
     val colors = FieldMindTheme.colors
 
     // ── Accent color derived from message style ──
+    // Extract composable values BEFORE remember (remember's lambda has @DisallowComposableCalls)
+    val themePositive = FieldMindTheme.colors.positive
+    val themeError = MaterialTheme.colorScheme.error
+    val themeWarning = FieldMindTheme.colors.warning
+    val themeInfo = FieldMindTheme.colors.info
     val accentColor = remember(style) {
         when {
             style.isAchievement -> Color(0xFFFFD700) // gold
-            style.isSave -> FieldMindTheme.colors.positive
-            style.isError -> MaterialTheme.colorScheme.error
-            style.isWarning -> FieldMindTheme.colors.warning
-            else -> FieldMindTheme.colors.info
+            style.isSave -> themePositive
+            style.isError -> themeError
+            style.isWarning -> themeWarning
+            else -> themeInfo
         }
     }
 

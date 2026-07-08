@@ -82,9 +82,8 @@ class FieldMindQuickCaptureWidget : GlanceAppWidget() {
                     .fillMaxWidth()
                     .height(3.dp)
                     .background(ColorProvider(Color(0xFF6750A4.toInt())))
-                    .cornerRadius(1.5f.dp),
-                contentAlignment = Alignment.TopCenter
-            )
+                    .cornerRadius(1.5f.dp)
+            ) { }
             Box(
                 modifier = GlanceModifier
                     .fillMaxSize()

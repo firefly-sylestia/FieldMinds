@@ -67,7 +67,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
             val dao = fieldmind.research.app.features.field.data.database.FieldMindDatabase.getInstance(context).fieldMindDao()
             val obsCount = dao.observeObservations().let { flow ->
                 var result = 0
-                kotlinx.coroutines.flow.first { list ->
+                flow.first { list ->
                     result = list.size
                     true
                 }
@@ -75,7 +75,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
             }
             val noteCount = dao.observeNotes().let { flow ->
                 var result = 0
-                kotlinx.coroutines.flow.first { list ->
+                flow.first { list ->
                     result = list.size
                     true
                 }
@@ -83,7 +83,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
             }
             val questionCount = dao.observeQuestions().let { flow ->
                 var result = 0
-                kotlinx.coroutines.flow.first { list ->
+                flow.first { list ->
                     result = list.size
                     true
                 }
@@ -91,7 +91,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
             }
             val projectCount = dao.observeProjects().let { flow ->
                 var result = 0
-                kotlinx.coroutines.flow.first { list ->
+                flow.first { list ->
                     result = list.size
                     true
                 }
@@ -99,7 +99,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
             }
             val sourceCount = dao.observeSources().let { flow ->
                 var result = 0
-                kotlinx.coroutines.flow.first { list ->
+                flow.first { list ->
                     result = list.size
                     true
                 }
@@ -107,7 +107,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
             }
             val reportCount = dao.observeReports().let { flow ->
                 var result = 0
-                kotlinx.coroutines.flow.first { list ->
+                flow.first { list ->
                     result = list.size
                     true
                 }
@@ -125,7 +125,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                 .apply()
 
             // Push update to all instances of this widget
-            GlanceAppWidgetManager(context).updateAll(FieldMindDashboardWidget::class.java)
+            GlanceAppWidgetManager(context).updateAll(FieldMindDashboardWidget::class)
         }
     }
 
