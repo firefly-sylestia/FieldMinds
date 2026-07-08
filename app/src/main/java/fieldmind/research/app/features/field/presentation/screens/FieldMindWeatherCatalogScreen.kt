@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import fieldmind.research.app.features.field.data.database.entity.WeatherCatalogEntity
-import fieldmind.research.app.features.field.data.location.FieldLocationProvider
 import fieldmind.research.app.features.field.data.weather.WeatherSnapshot
 import fieldmind.research.app.features.field.data.weather.WeatherUnitConverter
 import fieldmind.research.app.features.field.presentation.components.*
@@ -29,11 +28,11 @@ import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+
 import kotlin.math.roundToInt
 
 // ══════════════════════════════════════════════════════════════════════
@@ -67,94 +66,30 @@ fun WeatherCatalogScreen(
     val tempUnit by viewModel.fieldSettings.tempUnit.collectAsState()
     val windUnit by viewModel.fieldSettings.windSpeedUnit.collectAsState()
 
-    // ── Live weather ──
-    var currentWeather by remember { mutableStateOf(viewModel.lastWeatherSnapshot) }
+    // ── Live weather (read from ViewModel so background captures show immediately) ──
+    val currentWeather: WeatherSnapshot? get() = viewModel.lastWeatherSnapshot
     var isRefreshing by remember { mutableStateOf(false) }
     var weatherError by remember { mutableStateOf(false) }
 
-    // ── Location provider for scheduled capture ──
-    val locProvider = remember { runCatching { FieldLocationProvider(context) }.getOrNull() }
-
-    // ── Schedule state ──
-    var useIntervalMode by remember { mutableStateOf(false) }
-    var selectedSlots by remember { mutableStateOf(DEFAULT_SCHEDULE_SLOTS.toSet()) }
-    var selectedInterval by remember { mutableIntStateOf(3) }
-    var isAutoCapturing by remember { mutableStateOf(false) }
-
-    // ── Track which hours already captured today (to avoid duplicates within the window) ──
-    var capturedHoursToday by remember { mutableStateOf(setOf<Int>()) }
+    // ── Capture state lives in the ViewModel so it survives screen navigation ──
 
     // ── Fetch weather on open ──
     LaunchedEffect(Unit) {
         isRefreshing = true
         val cached = viewModel.lastWeatherSnapshot
         if (cached != null) {
-            currentWeather = cached
             weatherError = false
         }
         val snapshot = viewModel.refreshWeatherFromLocation()
         if (snapshot != null) {
-            currentWeather = snapshot
             weatherError = false
-        } else if (currentWeather == null) {
+        } else if (viewModel.lastWeatherSnapshot == null) {
             weatherError = true
         }
         isRefreshing = false
     }
 
-    // ── Auto-capture coroutine ──
-    LaunchedEffect(isAutoCapturing, selectedSlots, selectedInterval, useIntervalMode) {
-        if (!isAutoCapturing) return@LaunchedEffect
-        // Reset captured set when starting fresh
-        capturedHoursToday = emptySet()
-
-        while (true) {
-            val now = Calendar.getInstance()
-            val currentHour = now.get(Calendar.HOUR_OF_DAY)
-            val currentMinute = now.get(Calendar.MINUTE)
-
-            val shouldCapture = if (useIntervalMode) {
-                // Capture at the start of each interval
-                currentHour % selectedInterval == 0 && currentMinute < 5 && currentHour !in capturedHoursToday
-            } else {
-                currentHour in selectedSlots && currentMinute < 5 && currentHour !in capturedHoursToday
-            }
-
-            if (shouldCapture) {
-                isRefreshing = true
-                // Use location provider to get current coordinates, then fetch & save to catalog
-                if (locProvider != null && locProvider.hasAnyLocationPermission()) {
-                    locProvider.lastKnownLocation()?.let { loc ->
-                        val snapshot = viewModel.fetchAndSaveWeatherSnapshot(
-                            loc.latitude, loc.longitude,
-                            forceRefresh = true,
-                            placeName = loc.placeName ?: ""
-                        )
-                        if (snapshot != null) {
-                            currentWeather = snapshot
-                            weatherError = false
-                            capturedHoursToday = capturedHoursToday + currentHour
-                            scope.launch {
-                                snackbar.showSnackbar(
-                                    "Weather captured at ${currentHour}:${"%02d".format(currentMinute)}"
-                                )
-                            }
-                        }
-                    }
-                }
-                isRefreshing = false
-            }
-
-            // Check every 60 seconds
-            delay(60_000L)
-
-            // Reset captured set at midnight
-            val hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-            if (hourNow == 0 && currentMinute < 1) {
-                capturedHoursToday = emptySet()
-            }
-        }
-    }
+    // ── Auto-capture loop runs in ViewModel (survives screen navigation) ──
 
     // ── Group catalog by date ──
     val groupedByDate = remember(weatherCatalog) {
@@ -231,17 +166,17 @@ fun WeatherCatalogScreen(
                 // ── Schedule controls ──
                 item {
                     ScheduleControlCard(
-                        useIntervalMode = useIntervalMode,
-                        onToggleMode = { useIntervalMode = it },
-                        selectedSlots = selectedSlots,
+                        useIntervalMode = viewModel.weatherCatalogUseInterval,
+                        onToggleMode = { viewModel.weatherCatalogUseInterval = it },
+                        selectedSlots = viewModel.weatherCatalogSelectedSlots,
                         onToggleSlot = { hour ->
-                            selectedSlots = if (hour in selectedSlots) selectedSlots - hour else selectedSlots + hour
+                            viewModel.weatherCatalogSelectedSlots = if (hour in viewModel.weatherCatalogSelectedSlots) viewModel.weatherCatalogSelectedSlots - hour else viewModel.weatherCatalogSelectedSlots + hour
                         },
-                        selectedInterval = selectedInterval,
-                        onSelectInterval = { selectedInterval = it },
-                        isAutoCapturing = isAutoCapturing,
-                        onStartCapture = { isAutoCapturing = true },
-                        onStopCapture = { isAutoCapturing = false },
+                        selectedInterval = viewModel.weatherCatalogSelectedInterval,
+                        onSelectInterval = { viewModel.weatherCatalogSelectedInterval = it },
+                        isAutoCapturing = viewModel.isWeatherCatalogCapturing,
+                        onStartCapture = { viewModel.startWeatherCatalogCapture() },
+                        onStopCapture = { viewModel.stopWeatherCatalogCapture() },
                         colors = colors
                     )
                 }
