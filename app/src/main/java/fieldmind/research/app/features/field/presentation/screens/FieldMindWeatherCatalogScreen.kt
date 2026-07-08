@@ -2,8 +2,6 @@ package fieldmind.research.app.features.field.presentation.screens
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -727,13 +725,7 @@ private fun WeatherCatalogRecordCard(
                 modifier = Modifier
                     .size(52.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(
-                        Brush.linearGradient(
-                            colors = displayColors,
-                            start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                            end = androidx.compose.ui.geometry.Offset(52f, 52f)
-                        ).let { colors.info.copy(alpha = 0.1f) }
-                    ),
+                    .background(colors.info.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -1077,17 +1069,6 @@ private fun htmlEscape(s: String): String = s
 private fun escapeCsv(s: String): String = if (s.contains(',') || s.contains('"') || s.contains('\n')) {
     "\"${s.replace("\"", "\"\"")}\""
 } else s
-
-private fun iconForWeatherCode(code: Int): MaterialSymbolIcon = when {
-    code <= 1 -> MaterialSymbolIcon("sunny")
-    code in 2..3 -> MaterialSymbolIcon("cloud")
-    code in 45..48 -> MaterialSymbolIcon("foggy")
-    code in 51..57 || code in 80..82 -> MaterialSymbolIcon("rainy")
-    code in 61..67 -> MaterialSymbolIcon("rainy")
-    code in 71..77 || code in 85..86 -> MaterialSymbolIcon("weather_snowy")
-    code >= 95 -> MaterialSymbolIcon("thunderstorm")
-    else -> MaterialSymbolIcon("partly_cloudy_day")
-}
 
 private data class CatalogStats(
     val count: Int = 0,
