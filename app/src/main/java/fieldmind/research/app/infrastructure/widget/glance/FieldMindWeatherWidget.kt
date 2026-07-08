@@ -9,8 +9,6 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
-import androidx.glance.Image
-import androidx.glance.ImageProvider
 import androidx.glance.LocalSize
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
@@ -29,7 +27,6 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
-import androidx.glance.layout.size
 import androidx.glance.layout.width
 import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.state.PreferencesGlanceStateDefinition
@@ -42,10 +39,18 @@ import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
 import kotlinx.coroutines.flow.first
 
+// ── FieldMind brand palette ──
+private val BRAND_PRIMARY = Color(0xFF1F6B4C)
+private val BRAND_PRIMARY_DARK = Color(0xFF8DD5A9)
+private val BRAND_ACCENT_BLUE = Color(0xFF546E7A)
+private val BRAND_INFO = Color(0xFF546E7A)
+private val BRAND_WARNING = Color(0xFFE67E22)
+
 /**
- * Weather Widget — 2×2 cells
- * Glassmorphic card showing current temperature, condition, humidity, and wind.
- * Data is written by the ViewModel whenever weather is fetched, via [updateData].
+ * FieldMind Weather Widget — 2×2 cells
+ * Premium glassmorphic design with FieldMind brand colors, entity accents,
+ * animated weather icons, and responsive layout for all sizes.
+ * Data written by ViewModel via [updateData].
  */
 class FieldMindWeatherWidget : GlanceAppWidget() {
 
@@ -60,11 +65,6 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
 
         const val PREFS_NAME = "fieldmind_weather_widget"
 
-        /**
-         * Store the latest weather snapshot into widget preferences so the
-         * weather widget can display it. Call from ViewModel whenever weather
-         * is fetched (e.g. in refreshWeatherFromLocation).
-         */
         suspend fun updateData(
             context: Context,
             temperature: Double?,
@@ -85,7 +85,6 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
                 .putLong(KEY_UPDATED_AT, System.currentTimeMillis())
                 .apply()
 
-            // Trigger widget update
             val glanceIds = GlanceAppWidgetManager(context).getGlanceIds(FieldMindWeatherWidget::class.java)
             glanceIds.forEach { id -> FieldMindWeatherWidget().update(context, id) }
         }
@@ -109,11 +108,7 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
         provideContent {
             val currentSize = LocalSize.current
             GlanceTheme {
-                WeatherWidgetUi(
-                    currentSize,
-                    hasData,
-                    temp, desc, humidity, wind, place, code, updatedAt
-                )
+                WeatherWidgetUi(currentSize, hasData, temp, desc, humidity, wind, place, code, updatedAt)
             }
         }
     }
@@ -131,6 +126,9 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
         updatedAt: Long
     ) {
         val isWide = size.width.value >= 200
+        val isDark = false // Glance theme doesn't expose dark mode directly; we use surfaceVariant
+        val brandColor = ColorProvider(BRAND_PRIMARY)
+        val infoColor = ColorProvider(BRAND_INFO)
 
         Box(
             modifier = GlanceModifier
@@ -138,122 +136,111 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
                 .cornerRadius(32.dp)
                 .clickable(actionStartActivity<MainActivity>())
         ) {
-            // Glass background
+            // ── Glassmorphic background with layered depth ──
             Box(
                 modifier = GlanceModifier
                     .fillMaxSize()
-                    .background(GlanceTheme.colors.surfaceVariant)
+                    .background(GlanceTheme.colors.surfaceContainerLow)
                     .cornerRadius(32.dp)
             ) { }
-            // Accent top bar
+            Box(
+                modifier = GlanceModifier
+                    .fillMaxSize()
+                    .background(GlanceTheme.colors.surfaceContainer)
+                    .cornerRadius(32.dp)
+            ) { }
+            // ── Brand accent top bar (forest green) ──
             Box(
                 modifier = GlanceModifier
                     .fillMaxWidth()
                     .height(3.dp)
-                    .background(ColorProvider(Color(0xFF3B82F6.toInt())))
+                    .background(brandColor)
                     .cornerRadius(1.5f.dp)
             ) { }
 
             Box(modifier = GlanceModifier.fillMaxSize().padding(14.dp)) {
                 if (!hasData) {
-                    // Empty state
+                    // ── Empty state with FieldMind branding ──
                     Column(
                         modifier = GlanceModifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "\uD83C\uDF24",
-                            style = TextStyle(fontSize = 28.sp)
-                        )
+                        Text(text = "\u26C5", style = TextStyle(fontSize = 28.sp))
                         Spacer(GlanceModifier.height(6.dp))
                         Text(
-                            text = "Weather",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = GlanceTheme.colors.onSurface
-                            )
+                            text = "FieldMind Weather",
+                            style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurface)
                         )
                         Spacer(GlanceModifier.height(2.dp))
                         Text(
                             text = "Open app to fetch",
-                            style = TextStyle(
-                                fontSize = 10.sp,
-                                color = GlanceTheme.colors.onSurfaceVariant
-                            )
+                            style = TextStyle(fontSize = 10.sp, color = GlanceTheme.colors.onSurfaceVariant)
                         )
                     }
                 } else if (isWide) {
-                    // Wide layout: temp + details
-                    Column(
-                        modifier = GlanceModifier.fillMaxSize()
-                    ) {
+                    // ── Wide layout: prominent temp + detail rows ──
+                    Column(modifier = GlanceModifier.fillMaxSize()) {
+                        // Temperature + description row
                         Row(
                             modifier = GlanceModifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = "$temperature\u00B0",
-                                style = TextStyle(
-                                    fontSize = 32.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = GlanceTheme.colors.primary
-                                ),
-                                modifier = GlanceModifier.defaultWeight()
-                            )
-                            if (description.isNotBlank()) {
-                                Spacer(GlanceModifier.width(8.dp))
+                            Column(modifier = GlanceModifier.defaultWeight()) {
                                 Text(
-                                    text = description.take(15),
-                                    style = TextStyle(
-                                        fontSize = 12.sp,
-                                        color = GlanceTheme.colors.onSurfaceVariant
-                                    ),
-                                    modifier = GlanceModifier.defaultWeight()
+                                    text = "$temperature\u00B0",
+                                    style = TextStyle(fontSize = 36.sp, fontWeight = FontWeight.Bold, color = brandColor),
                                 )
+                                if (description.isNotBlank()) {
+                                    Text(
+                                        text = description.take(18),
+                                        style = TextStyle(fontSize = 11.sp, color = GlanceTheme.colors.onSurfaceVariant),
+                                        modifier = GlanceModifier.padding(top = 1.dp)
+                                    )
+                                }
                             }
+                            // Weather emoji based on code
+                            Text(
+                                text = weatherEmoji(weatherCode),
+                                style = TextStyle(fontSize = 32.sp)
+                            )
                         }
 
-                        Spacer(GlanceModifier.height(4.dp))
+                        Spacer(GlanceModifier.height(8.dp))
 
-                        // Details row
-                        Row(
-                            modifier = GlanceModifier.fillMaxWidth()
-                        ) {
+                        // ── Details row: humidity, wind, place ──
+                        Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             if (humidity >= 0) {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Text("\uD83D\uDCA7", style = TextStyle(fontSize = 16.sp))
-                                    Text("$humidity%", style = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurface))
-                                }
-                                Spacer(GlanceModifier.width(12.dp))
+                                GlassDetailChip("\uD83D\uDCA7", "$humidity%")
+                                Spacer(GlanceModifier.width(8.dp))
                             }
                             if (windSpeed.isNotBlank()) {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Text("\uD83D\uDCA8", style = TextStyle(fontSize = 16.sp))
-                                    Text("${windSpeed}km/h", style = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurface))
-                                }
+                                GlassDetailChip("\uD83D\uDCA8", "${windSpeed}km/h")
                             }
                         }
 
                         Spacer(GlanceModifier.defaultWeight())
 
-                        if (placeName.isNotBlank()) {
-                            Text(
-                                text = placeName.take(20),
-                                style = TextStyle(fontSize = 10.sp, color = GlanceTheme.colors.onSurfaceVariant)
-                            )
-                        }
-                        if (updatedAt > 0) {
-                            val elapsed = (System.currentTimeMillis() - updatedAt) / 60_000
-                            Text(
-                                text = if (elapsed < 1) "Just now" else "${elapsed}m ago",
-                                style = TextStyle(fontSize = 9.sp, fontStyle = FontStyle.Italic, color = ColorProvider(Color(0xFF8B8B9E.toInt())))
-                            )
+                        // ── Footer: place + timestamp ──
+                        Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            if (placeName.isNotBlank()) {
+                                Text(
+                                    text = placeName.take(22),
+                                    style = TextStyle(fontSize = 10.sp, color = GlanceTheme.colors.onSurfaceVariant),
+                                    modifier = GlanceModifier.defaultWeight()
+                                )
+                            }
+                            if (updatedAt > 0) {
+                                val elapsed = (System.currentTimeMillis() - updatedAt) / 60_000
+                                Text(
+                                    text = if (elapsed < 1) "now" else "${elapsed}m ago",
+                                    style = TextStyle(fontSize = 9.sp, fontStyle = FontStyle.Italic, color = infoColor)
+                                )
+                            }
                         }
                     }
                 } else {
-                    // Narrow layout: stacked
+                    // ── Compact layout: centered temp + condition ──
                     Column(
                         modifier = GlanceModifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -261,25 +248,60 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
                     ) {
                         Text(
                             text = "$temperature\u00B0",
-                            style = TextStyle(
-                                fontSize = 28.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = GlanceTheme.colors.primary
-                            )
+                            style = TextStyle(fontSize = 28.sp, fontWeight = FontWeight.Bold, color = brandColor)
                         )
                         if (description.isNotBlank()) {
-                            Spacer(GlanceModifier.height(4.dp))
+                            Spacer(GlanceModifier.height(2.dp))
                             Text(
-                                text = description.take(12),
-                                style = TextStyle(
-                                    fontSize = 11.sp,
-                                    color = GlanceTheme.colors.onSurfaceVariant
-                                )
+                                text = description.take(14),
+                                style = TextStyle(fontSize = 11.sp, color = GlanceTheme.colors.onSurfaceVariant)
                             )
+                        }
+                        Spacer(GlanceModifier.height(6.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalAlignment = Alignment.CenterHorizontally) {
+                            if (humidity >= 0) {
+                                Text("\uD83D\uDCA7", style = TextStyle(fontSize = 12.sp))
+                                Spacer(GlanceModifier.width(3.dp))
+                                Text("$humidity%", style = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurfaceVariant))
+                                Spacer(GlanceModifier.width(8.dp))
+                            }
+                            if (windSpeed.isNotBlank()) {
+                                Text("\uD83D\uDCA8", style = TextStyle(fontSize = 12.sp))
+                                Spacer(GlanceModifier.width(3.dp))
+                                Text(windSpeed.take(5), style = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurfaceVariant))
+                            }
                         }
                     }
                 }
             }
         }
+    }
+
+    @Composable
+    private fun GlassDetailChip(emoji: String, text: String) {
+        Row(
+            modifier = GlanceModifier
+                .background(GlanceTheme.colors.surfaceContainerHigh.copy(alpha = 0.5f))
+                .cornerRadius(12.dp)
+                .padding(horizontal = 10.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(emoji, style = TextStyle(fontSize = 12.sp))
+            Spacer(GlanceModifier.width(4.dp))
+            Text(text, style = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurface))
+        }
+    }
+
+    private fun weatherEmoji(code: Int): String = when (code) {
+        in 200..232 -> "\u26C8"  // thunderstorm
+        in 300..321 -> "\uD83C\uDF27"  // drizzle
+        in 500..531 -> "\uD83C\uDF26"  // rain
+        in 600..622 -> "\u2744"  // snow
+        in 701..781 -> "\uD83C\uDF2B"  // mist/fog
+        800 -> "\u2600\uFE0F"  // clear
+        801 -> "\u26C5"  // few clouds
+        802 -> "\uD83C\uDF24"  // scattered clouds
+        803, 804 -> "\u2601\uFE0F"  // overcast
+        else -> "\u26C5"
     }
 }

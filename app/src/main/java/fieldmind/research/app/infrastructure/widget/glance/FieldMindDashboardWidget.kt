@@ -2,6 +2,7 @@ package fieldmind.research.app.infrastructure.widget.glance
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,12 +40,21 @@ import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 import androidx.compose.ui.graphics.Color
 import fieldmind.research.app.R
-import kotlinx.coroutines.flow.first
+
+// ── FieldMind entity accent colors ──
+private val OBSERVATION = Color(0xFF1F6B4C)
+private val QUESTION = Color(0xFF1565C0)
+private val PROJECT = Color(0xFF00695C)
+private val SOURCE = Color(0xFF5E35B1)
+private val NOTE = Color(0xFF8E24AA)
+private val REPORT = Color(0xFFA1531F)
+private val BRAND_PRIMARY = Color(0xFF1F6B4C)
 
 /**
- * Research Dashboard Widget — 4×3 cells
- * Glassmorphic stats dashboard with real data from the database.
- * Shows observation, project, note, source, report counts.
+ * FieldMind Research Dashboard Widget — 4×3 cells
+ * Premium glassmorphic stats dashboard with FieldMind brand colors.
+ * Shows real-time entity counts with entity-specific accent colors.
+ * Responsive: wide grid (3x2) vs. compact list layout.
  */
 class FieldMindDashboardWidget : GlanceAppWidget() {
 
@@ -60,58 +70,36 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
 
         const val PREFS_NAME = "fieldmind_dashboard_widget"
 
-        /**
-         * Immediately queries the database and pushes updated counts to widget state.
-         * Call from any coroutine/IO context (e.g. ViewModel, WorkManager, BroadcastReceiver).
-         */
         suspend fun updateData(context: Context) {
             val dao = fieldmind.research.app.features.field.data.database.FieldMindDatabase.getInstance(context).fieldMindDao()
             val obsCount = dao.observeObservations().let { flow ->
                 var result = 0
-                flow.first { list ->
-                    result = list.size
-                    true
-                }
+                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
                 result
             }
             val noteCount = dao.observeNotes().let { flow ->
                 var result = 0
-                flow.first { list ->
-                    result = list.size
-                    true
-                }
+                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
                 result
             }
             val questionCount = dao.observeQuestions().let { flow ->
                 var result = 0
-                flow.first { list ->
-                    result = list.size
-                    true
-                }
+                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
                 result
             }
             val projectCount = dao.observeProjects().let { flow ->
                 var result = 0
-                flow.first { list ->
-                    result = list.size
-                    true
-                }
+                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
                 result
             }
             val sourceCount = dao.observeSources().let { flow ->
                 var result = 0
-                flow.first { list ->
-                    result = list.size
-                    true
-                }
+                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
                 result
             }
             val reportCount = dao.observeReports().let { flow ->
                 var result = 0
-                flow.first { list ->
-                    result = list.size
-                    true
-                }
+                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
                 result
             }
 
@@ -125,7 +113,6 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                 .putInt(KEY_REPORT_COUNT, reportCount)
                 .apply()
 
-            // Push update to all instances of this widget
             val glanceIds = GlanceAppWidgetManager(context).getGlanceIds(FieldMindDashboardWidget::class.java)
             glanceIds.forEach { id -> FieldMindDashboardWidget().update(context, id) }
         }
@@ -146,11 +133,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
         provideContent {
             val currentSize = LocalSize.current
             GlanceTheme {
-                DashboardUi(
-                    currentSize,
-                    obsCount, noteCount, questionCount,
-                    projectCount, sourceCount, reportCount
-                )
+                DashboardUi(currentSize, obsCount, noteCount, questionCount, projectCount, sourceCount, reportCount)
             }
         }
     }
@@ -161,8 +144,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
         obsCount: String, noteCount: String, questionCount: String,
         projectCount: String, sourceCount: String, reportCount: String
     ) {
-        val minWidth = size.width.value.toInt()
-        val isWide = minWidth >= 250
+        val isWide = size.width.value.toInt() >= 250
 
         Box(
             modifier = GlanceModifier
@@ -170,125 +152,78 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                 .cornerRadius(32.dp)
                 .clickable(actionStartActivity<MainActivity>())
         ) {
-            // Glass background
-            Box(
-                modifier = GlanceModifier
-                    .fillMaxSize()
-                    .background(GlanceTheme.colors.surfaceVariant)
-                    .cornerRadius(32.dp)
-            ) { }
-            // Accent top bar
-            Box(
-                modifier = GlanceModifier
-                    .fillMaxWidth()
-                    .height(3.dp)
-                    .background(ColorProvider(Color(0xFF6750A4.toInt())))
-                    .cornerRadius(1.5f.dp)
-            ) { }
+            // ── Glassmorphic layered background ──
+            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainerLow).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainer).cornerRadius(32.dp)) { }
+            // ── Brand accent top bar ──
+            Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(ColorProvider(BRAND_PRIMARY)).cornerRadius(1.5f.dp)) { }
 
-            Box(modifier = GlanceModifier.fillMaxSize().padding(18.dp)) {
+            Box(modifier = GlanceModifier.fillMaxSize().padding(16.dp)) {
                 if (isWide) {
+                    // ── Wide layout: header + 3x2 stat grid ──
                     Column(modifier = GlanceModifier.fillMaxSize()) {
-                        // Header with logo icon
+                        // Header row
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
-                                modifier = GlanceModifier
-                                    .size(36.dp)
-                                    .background(GlanceTheme.colors.primaryContainer)
+                                modifier = GlanceModifier.size(34.dp)
+                                    .background(ColorProvider(BRAND_PRIMARY.copy(alpha = 0.15f)))
                                     .cornerRadius(10.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Image(
-                                    provider = ImageProvider(R.drawable.ic_notification),
-                                    contentDescription = null,
-                                    modifier = GlanceModifier.size(22.dp)
-                                )
+                                Image(provider = ImageProvider(R.drawable.ic_notification), contentDescription = null, modifier = GlanceModifier.size(20.dp))
                             }
                             Spacer(GlanceModifier.width(10.dp))
-                            Text(
-                                text = "FieldMind",
-                                style = TextStyle(
-                                    fontSize = 17.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = GlanceTheme.colors.onSurface
-                                )
-                            )
+                            Text("FieldMind", style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurface))
                             Spacer(GlanceModifier.defaultWeight())
-                            Text(
-                                text = "Research",
-                                style = TextStyle(
-                                    fontSize = 11.sp,
-                                    color = GlanceTheme.colors.onSurfaceVariant
-                                )
-                            )
+                            Text("Research", style = TextStyle(fontSize = 11.sp, color = GlanceTheme.colors.onSurfaceVariant))
                         }
 
-                        Spacer(GlanceModifier.height(14.dp))
+                        Spacer(GlanceModifier.height(12.dp))
 
-                        // Stats grid — 3 rows × 2 columns
+                        // ── 3 rows × 2 columns stat grid ──
                         Row(modifier = GlanceModifier.fillMaxWidth()) {
-                            GlassStatCard("Observations", obsCount, GlanceTheme.colors.primary, GlanceModifier.defaultWeight())
+                            EntityStatCard("Observations", obsCount, ColorProvider(OBSERVATION), GlanceModifier.defaultWeight())
                             Spacer(GlanceModifier.width(8.dp))
-                            GlassStatCard("Questions", questionCount, ColorProvider(Color(0xFF3B82F6.toInt())), GlanceModifier.defaultWeight())
+                            EntityStatCard("Questions", questionCount, ColorProvider(QUESTION), GlanceModifier.defaultWeight())
                         }
                         Spacer(GlanceModifier.height(8.dp))
                         Row(modifier = GlanceModifier.fillMaxWidth()) {
-                            GlassStatCard("Projects", projectCount, GlanceTheme.colors.tertiary, GlanceModifier.defaultWeight())
+                            EntityStatCard("Projects", projectCount, ColorProvider(PROJECT), GlanceModifier.defaultWeight())
                             Spacer(GlanceModifier.width(8.dp))
-                            GlassStatCard("Sources", sourceCount, GlanceTheme.colors.error, GlanceModifier.defaultWeight())
+                            EntityStatCard("Sources", sourceCount, ColorProvider(SOURCE), GlanceModifier.defaultWeight())
                         }
                         Spacer(GlanceModifier.height(8.dp))
                         Row(modifier = GlanceModifier.fillMaxWidth()) {
-                            GlassStatCard("Notes", noteCount, ColorProvider(Color(0xFF22C55E.toInt())), GlanceModifier.defaultWeight())
+                            EntityStatCard("Notes", noteCount, ColorProvider(NOTE), GlanceModifier.defaultWeight())
                             Spacer(GlanceModifier.width(8.dp))
-                            GlassStatCard("Reports", reportCount, ColorProvider(Color(0xFFF59E0B.toInt())), GlanceModifier.defaultWeight())
+                            EntityStatCard("Reports", reportCount, ColorProvider(REPORT), GlanceModifier.defaultWeight())
                         }
 
                         Spacer(GlanceModifier.defaultWeight())
-
-                        // Footer
-                        Text(
-                            text = "Tap to open FieldMind",
-                            style = TextStyle(
-                                fontSize = 11.sp,
-                                color = GlanceTheme.colors.onSurfaceVariant
-                            )
-                        )
+                        Text("Tap to open FieldMind", style = TextStyle(fontSize = 10.sp, color = GlanceTheme.colors.onSurfaceVariant))
                     }
                 } else {
-                    // Narrow layout: compact vertical list with real data
+                    // ── Compact vertical layout ──
                     Column(modifier = GlanceModifier.fillMaxSize()) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
-                                modifier = GlanceModifier
-                                    .size(28.dp)
-                                    .background(GlanceTheme.colors.primaryContainer)
+                                modifier = GlanceModifier.size(26.dp)
+                                    .background(ColorProvider(BRAND_PRIMARY.copy(alpha = 0.15f)))
                                     .cornerRadius(8.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Image(
-                                    provider = ImageProvider(R.drawable.ic_notification),
-                                    contentDescription = null,
-                                    modifier = GlanceModifier.size(16.dp)
-                                )
+                                Image(provider = ImageProvider(R.drawable.ic_notification), contentDescription = null, modifier = GlanceModifier.size(15.dp))
                             }
                             Spacer(GlanceModifier.width(8.dp))
-                            Text(
-                                text = "FieldMind",
-                                style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurface)
-                            )
+                            Text("FieldMind", style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onSurface))
                         }
                         Spacer(GlanceModifier.height(10.dp))
-                        CompactStatRow("Observations", obsCount, GlanceTheme.colors.primary)
-                        CompactStatRow("Questions", questionCount, ColorProvider(Color(0xFF3B82F6.toInt())))
-                        CompactStatRow("Projects", projectCount, GlanceTheme.colors.tertiary)
-                        CompactStatRow("Notes", noteCount, ColorProvider(Color(0xFF22C55E.toInt())))
-
+                        CompactEntityRow("Observations", obsCount, ColorProvider(OBSERVATION))
+                        CompactEntityRow("Questions", questionCount, ColorProvider(QUESTION))
+                        CompactEntityRow("Projects", projectCount, ColorProvider(PROJECT))
+                        CompactEntityRow("Notes", noteCount, ColorProvider(NOTE))
                         Spacer(GlanceModifier.defaultWeight())
-                        Text(
-                            text = "Tap to open",
-                            style = TextStyle(fontSize = 10.sp, color = GlanceTheme.colors.onSurfaceVariant)
-                        )
+                        Text("Tap", style = TextStyle(fontSize = 10.sp, color = GlanceTheme.colors.onSurfaceVariant))
                     }
                 }
             }
@@ -296,57 +231,30 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun GlassStatCard(label: String, count: String, accent: ColorProvider, modifier: GlanceModifier) {
+    private fun EntityStatCard(label: String, count: String, accent: ColorProvider, modifier: GlanceModifier) {
         Column(
             modifier = modifier
-                .background(GlanceTheme.colors.surface)
+                .background(GlanceTheme.colors.surfaceContainerHigh.copy(alpha = 0.6f))
                 .cornerRadius(14.dp)
-                .padding(12.dp),
+                .padding(horizontal = 10.dp, vertical = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = count,
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = accent
-                )
-            )
+            Text(count, style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold, color = accent))
             Spacer(GlanceModifier.height(2.dp))
-            Text(
-                text = label,
-                style = TextStyle(
-                    fontSize = 11.sp,
-                    color = GlanceTheme.colors.onSurfaceVariant
-                )
-            )
+            Text(label, style = TextStyle(fontSize = 10.sp, color = GlanceTheme.colors.onSurfaceVariant))
         }
     }
 
     @Composable
-    private fun CompactStatRow(label: String, count: String, accent: ColorProvider) {
+    private fun CompactEntityRow(label: String, count: String, accent: ColorProvider) {
         Row(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .padding(vertical = 3.dp),
+            modifier = GlanceModifier.fillMaxWidth().padding(vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = GlanceModifier
-                    .size(6.dp)
-                    .background(accent)
-                    .cornerRadius(3.dp)
-            ) { }
+            Box(modifier = GlanceModifier.size(5.dp).background(accent).cornerRadius(3.dp)) { }
             Spacer(GlanceModifier.width(8.dp))
-            Text(
-                text = label,
-                style = TextStyle(fontSize = 13.sp, color = GlanceTheme.colors.onSurface),
-                modifier = GlanceModifier.defaultWeight()
-            )
-            Text(
-                text = count,
-                style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Bold, color = accent)
-            )
+            Text(label, style = TextStyle(fontSize = 12.sp, color = GlanceTheme.colors.onSurface), modifier = GlanceModifier.defaultWeight())
+            Text(count, style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold, color = accent))
         }
     }
 }

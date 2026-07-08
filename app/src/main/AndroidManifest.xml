@@ -83,6 +83,42 @@
                 android:resource="@xml/widget_info_fieldmind_weather" />
         </receiver>
 
+        <!-- FieldMind Species Widget -->
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindSpeciesWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_species" />
+        </receiver>
+
+        <!-- FieldMind Research Streak Widget -->
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindResearchStreakWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_streak" />
+        </receiver>
+
+        <!-- FieldMind QuickStats Combo Widget -->
+        <receiver
+            android:name="fieldmind.research.app.infrastructure.widget.glance.FieldMindQuickStatsWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_fieldmind_quickstats" />
+        </receiver>
+
         <activity
             android:name="fieldmind.research.app.activities.MainActivity"
             android:exported="true"
@@ -116,6 +152,8 @@
             android:name="fieldmind.research.app.features.field.background.FieldMindTimerService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+
+        <!-- WorkManager notification workers are registered via WorkManager, not manifest entries -->
     </application>
 
 </manifest>
