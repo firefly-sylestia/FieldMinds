@@ -43,7 +43,8 @@ fun HypothesisDetailScreen(
     hypothesisId: Long,
     viewModel: FieldMindViewModel,
     onBack: () -> Unit = {},
-    onOpenDetail: (String, Long) -> Unit = { _, _ -> }
+    onOpenDetail: (String, Long) -> Unit = { _, _ -> },
+    onOpenEdit: (String, Long) -> Unit = { _, _ -> }
 ) {
     val hypotheses by viewModel.hypotheses.collectAsState()
     val questions by viewModel.questions.collectAsState()
@@ -144,7 +145,7 @@ fun HypothesisDetailScreen(
                         DropdownMenu(expanded = showOverflow, onDismissRequest = { showOverflow = false }) {
                             DropdownMenuItem(
                                 text = { Text("Edit hypothesis") },
-                                onClick = { showOverflow = false },
+                                onClick = { showOverflow = false; onOpenEdit("hypothesis", hypothesisId) },
                                 leadingIcon = { Icon(MaterialSymbolIcon("edit"), null, size = 18.dp) }
                             )
                             DropdownMenuItem(

@@ -1188,7 +1188,8 @@ private fun FieldMindNavHost(
                         taskId = taskId,
                         viewModel = viewModel,
                         onBack = { safeBack() },
-                        onOpenDetail = openDetail
+                        onOpenDetail = openDetail,
+                        onOpenEdit = { kind, id -> navController.navigateToDestination("field_edit/$kind/$id") }
                     )
                 }
             }
@@ -1199,7 +1200,20 @@ private fun FieldMindNavHost(
                         questionId = questionId,
                         viewModel = viewModel,
                         onBack = { safeBack() },
-                        onOpenDetail = openDetail
+                        onOpenDetail = openDetail,
+                        onOpenEdit = { kind, id -> navController.navigateToDestination("field_edit/$kind/$id") }
+                    )
+                }
+            }
+            composable("field_hypothesis_detail/{hypothesisId}") { entry ->
+                val hypothesisId = entry.arguments?.getString("hypothesisId")?.toLongOrNull() ?: 0L
+                SwipeBackHost(onBack = { safeBack() }) {
+                    HypothesisDetailScreen(
+                        hypothesisId = hypothesisId,
+                        viewModel = viewModel,
+                        onBack = { safeBack() },
+                        onOpenDetail = openDetail,
+                        onOpenEdit = { kind, id -> navController.navigateToDestination("field_edit/$kind/$id") }
                     )
                 }
             }

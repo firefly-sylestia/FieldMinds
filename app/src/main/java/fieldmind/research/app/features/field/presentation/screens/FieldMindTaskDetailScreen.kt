@@ -48,7 +48,8 @@ fun TaskDetailScreen(
     taskId: Long,
     viewModel: FieldMindViewModel,
     onBack: () -> Unit = {},
-    onOpenDetail: (String, Long) -> Unit = { _, _ -> }
+    onOpenDetail: (String, Long) -> Unit = { _, _ -> },
+    onOpenEdit: (String, Long) -> Unit = { _, _ -> }
 ) {
     val tasks by viewModel.tasks.collectAsState()
     val observations by viewModel.observations.collectAsState()
@@ -125,7 +126,6 @@ fun TaskDetailScreen(
 
     // ── Overflow menu ──
     var showOverflow by remember { mutableStateOf(false) }
-    var showEditTask by remember { mutableStateOf(false) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
 
     val taskScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
@@ -161,7 +161,7 @@ fun TaskDetailScreen(
                             text = { Text("Edit task") },
                             onClick = {
                                 showOverflow = false
-                                showEditTask = true
+                                onOpenEdit("task", taskId)
                             },
                             leadingIcon = { Icon(MaterialSymbolIcon("edit"), null, size = 18.dp) }
                         )
@@ -755,10 +755,7 @@ fun TaskDetailScreen(
             .align(Alignment.BottomCenter)
             .padding(16.dp)
     )
-    // ── Edit task dialog overlay ──
-    if (showEditTask) {
-        EditTaskDialog(entity = task, viewModel = viewModel, onDismiss = { showEditTask = false })
-    }
+
 }
 }
 
