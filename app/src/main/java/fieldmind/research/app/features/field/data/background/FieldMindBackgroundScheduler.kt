@@ -17,12 +17,12 @@ object FieldMindBackgroundScheduler {
     private const val TASK_REMINDER_WORK = "fieldmind_task_reminder"
     private const val SESSION_REMINDER_WORK = "fieldmind_session_reminder"
 
-    fun syncAll(context: Context, autoBackupEnabled: Boolean, autoBackupInterval: String, remindersEnabled: Boolean) {
+    fun syncAll(context: Context, autoBackupEnabled: Boolean, autoBackupInterval: String, remindersEnabled: Boolean, weatherAlertsEnabled: Boolean = true, taskRemindersEnabled: Boolean = true, sessionRemindersEnabled: Boolean = true) {
         scheduleAutoBackup(context, autoBackupEnabled, autoBackupInterval)
         scheduleDailyReminder(context, remindersEnabled)
-        scheduleWeatherAlerts(context, true)
-        scheduleTaskReminders(context, true)
-        scheduleSessionReminders(context, true)
+        scheduleWeatherAlerts(context, weatherAlertsEnabled)
+        scheduleTaskReminders(context, taskRemindersEnabled)
+        scheduleSessionReminders(context, sessionRemindersEnabled)
     }
 
     fun scheduleAutoBackup(context: Context, enabled: Boolean, intervalLabel: String) {

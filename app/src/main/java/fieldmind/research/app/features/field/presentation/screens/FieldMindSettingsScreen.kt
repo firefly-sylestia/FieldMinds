@@ -461,6 +461,9 @@ fun CaptureDefaultsSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Uni
     val audio by settings.audioRecordingEnabled.collectAsState()
     val exportMode by settings.attachmentExportMode.collectAsState()
     val reminders by settings.remindersEnabled.collectAsState()
+    val weatherAlerts by settings.weatherAlertsEnabled.collectAsState()
+    val taskReminders by settings.taskRemindersEnabled.collectAsState()
+    val sessionReminders by settings.sessionRemindersEnabled.collectAsState()
     val streaks by settings.streaksEnabled.collectAsState()
 
     SettingsSubPage("Capture defaults", icon = FieldMindIcons.Capture, onBack = onBack) {
@@ -490,6 +493,12 @@ fun CaptureDefaultsSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Uni
         item {
             SettingsGroupCard {
                 ToggleItem("Daily reminders", "Schedules a daily prompt and skips after logging today's observation.", reminders, settings::setRemindersEnabled, FieldMindIcons.Notifications)
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                ToggleItem("Weather alerts", "Alerts for storms, heavy rain, snow, and extreme heat at your location.", weatherAlerts, settings::setWeatherAlertsEnabled, FieldMindIcons.Weather)
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                ToggleItem("Task reminders", "Reminders for overdue and due-soon observation tasks.", taskReminders, settings::setTaskRemindersEnabled, FieldMindIcons.Check)
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                ToggleItem("Session reminders", "Daily prompts to start a research session based on your schedule.", sessionReminders, settings::setSessionRemindersEnabled, FieldMindIcons.Timer)
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Streaks", "Shows consecutive observation days on the Today dashboard.", streaks, settings::setStreaksEnabled, FieldMindIcons.Streak)
             }
