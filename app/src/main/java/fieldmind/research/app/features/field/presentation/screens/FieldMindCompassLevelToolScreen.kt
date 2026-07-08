@@ -536,9 +536,11 @@ fun LevelToolScreen(
                 OrientationMode.FLAT ->
                     Math.toDegrees(atan2(gravityX.toDouble(), abs(gravityZ).toDouble())).toFloat()
                 OrientationMode.VERTICAL_PORTRAIT ->
-                    Math.toDegrees(atan2(gravityZ.toDouble(), gravityY.toDouble())).toFloat()
+                    // Use -gravityY to normalize: atan2(0, 9.81) = 0 when device is perfectly vertical
+                    Math.toDegrees(atan2(gravityZ.toDouble(), -(gravityY.toDouble()))).toFloat()
                 OrientationMode.VERTICAL_LANDSCAPE ->
-                    Math.toDegrees(atan2(gravityZ.toDouble(), gravityX.toDouble())).toFloat()
+                    // Use -gravityX to normalize: atan2(0, 9.81) = 0 when device is perfectly vertical
+                    Math.toDegrees(atan2(gravityZ.toDouble(), -(gravityX.toDouble()))).toFloat()
             }
         }
     }
@@ -548,9 +550,11 @@ fun LevelToolScreen(
                 OrientationMode.FLAT ->
                     Math.toDegrees(atan2(gravityY.toDouble(), abs(gravityZ).toDouble())).toFloat()
                 OrientationMode.VERTICAL_PORTRAIT ->
-                    Math.toDegrees(atan2(gravityX.toDouble(), gravityY.toDouble())).toFloat()
+                    // Use -gravityY to normalize: atan2(0, 9.81) = 0 when device is perfectly vertical
+                    Math.toDegrees(atan2(gravityX.toDouble(), -(gravityY.toDouble()))).toFloat()
                 OrientationMode.VERTICAL_LANDSCAPE ->
-                    Math.toDegrees(atan2(gravityY.toDouble(), gravityX.toDouble())).toFloat()
+                    // Use -gravityX to normalize: atan2(0, 9.81) = 0 when device is perfectly vertical
+                    Math.toDegrees(atan2(gravityY.toDouble(), -(gravityX.toDouble()))).toFloat()
             }
         }
     }

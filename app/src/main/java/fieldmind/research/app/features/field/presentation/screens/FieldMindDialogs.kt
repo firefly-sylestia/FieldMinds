@@ -1198,7 +1198,9 @@ internal fun EditTaskDialog(entity: TaskEntity, viewModel: FieldMindViewModel, o
 
     fun save() {
         if (title.isNotBlank()) {
-            viewModel.updateTaskEntity(entity.copy(
+            // Use the latest entity from ViewModel state to avoid stale closures
+            val latestEntity = viewModel.tasks.value.firstOrNull { it.id == entity.id } ?: entity
+            viewModel.updateTaskEntity(latestEntity.copy(
                 title = title.trim(),
                 description = description.trim(),
                 taskType = taskType,

@@ -1,0 +1,1 @@
+Bug fix update: compass Level tool vertical orientation formulas corrected for accurate pitch/roll in portrait and landscape modes. Checklist tick now reads latest task state from ViewModel. Edit Task dialog no longer overwrites task data when saving from detail view.

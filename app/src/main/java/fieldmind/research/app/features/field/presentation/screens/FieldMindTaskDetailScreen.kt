@@ -431,19 +431,23 @@ fun TaskDetailScreen(
                                         checkBounce.snapTo(1.3f)
                                         checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
                                     }
-                                    // Toggle item
-                                    val arr = try { JSONArray(task.checklistJson) } catch (_: Exception) { JSONArray() }
-                                    for (i in 0 until arr.length()) {
-                                        val obj = arr.getJSONObject(i)
-                                        if (obj.optString("text", "") == item.text) {
-                                            obj.put("done", !item.done)
+                                    // Toggle item — read latest task data from ViewModel state directly
+                                    checklistScope.launch {
+                                        // Read the LATEST task from the ViewModel's state to avoid stale closures
+                                        val latestTask = viewModel.tasks.value.firstOrNull { it.id == taskId } ?: task
+                                        val arr = try { JSONArray(latestTask.checklistJson) } catch (_: Exception) { JSONArray() }
+                                        for (i in 0 until arr.length()) {
+                                            val obj = arr.getJSONObject(i)
+                                            if (obj.optString("text", "") == item.text) {
+                                                obj.put("done", !obj.optBoolean("done", false))
+                                            }
                                         }
+                                        viewModel.updateTaskEntity(latestTask.copy(checklistJson = arr.toString()))
                                     }
-                                    viewModel.updateTaskEntity(task.copy(checklistJson = arr.toString()))
                                 },
                                 shape = RoundedCornerShape(20.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                modifier = Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f)
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 Row(
                                     Modifier.fillMaxWidth().padding(12.dp),

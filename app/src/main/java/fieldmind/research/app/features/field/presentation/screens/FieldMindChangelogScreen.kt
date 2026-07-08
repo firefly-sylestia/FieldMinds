@@ -44,6 +44,34 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.44.1 — Compass/Level Accuracy, Checklist Tick & Edit Task Fixes ──
+        FieldMindChangelogEntry(
+            version = "0.44.1",
+            date = "2026-07-08",
+            title = "🧭 Compass/Level Accuracy & Bug Fixes",
+            importance = "Patch",
+            tags = listOf("🧭", "📋", "🐛", "🔧"),
+            sections = listOf(
+                "🧭 Compass & Level Tool fixes" to listOf(
+                    "✓ Level tool vertical orientation (portrait/landscape) formulas corrected for accurate pitch and roll",
+                    "✓ Compass now uses direct rotation matrix orientation without remapping — prevents wrong headings in non-flat orientations",
+                    "✓ Pitch and roll display now shows correct values in all device orientations",
+                    "✓ Fixed missing newline causing compilation error in FLAT orientation calculation"
+                ),
+                "📋 Checklist tick now works from detail view" to listOf(
+                    "✓ Tapping a checklist item in TaskDetailScreen now correctly toggles the done state",
+                    "✓ Reads the latest task state directly from ViewModel to avoid stale closure issues",
+                    "✓ No longer relies on potentially-stale JSON cached in the composition closure",
+                    "✓ Removed pressScale modifier from checklist Surface to prevent pointer event conflicts"
+                ),
+                "🔧 Edit Task dialog no longer makes task vanish" to listOf(
+                    "✓ EditTaskDialog.save() now reads the latest entity from ViewModel state before copying",
+                    "✓ Prevents overwriting checklist or progress data with stale entity closure when saving from TaskDetailScreen",
+                    "✓ Changes to checklist items no longer get silently reverted when editing task metadata"
+                )
+            )
+        ),
+
         // ── v0.44.0 — Stability Tester, Navigation, Screenshots & Weather UI ──
         FieldMindChangelogEntry(
             version = "0.44.0",
