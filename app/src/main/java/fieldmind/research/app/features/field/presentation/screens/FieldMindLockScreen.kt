@@ -299,6 +299,91 @@ fun FieldMindAppLock(
                     }
                 }
 
+                // ── Forgot PIN — recovery button ──
+                if (usePinLock && hasPin) {
+                    var showForgotDialog by remember { mutableStateOf(false) }
+                    
+                    TextButton(
+                        onClick = { showForgotDialog = true },
+                        modifier = Modifier.padding(top = 4.dp)
+                    ) {
+                        Icon(MaterialSymbolIcon("help_outline"), null, modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            "Forgot PIN?",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    if (showForgotDialog) {
+                        AlertDialog(
+                            onDismissRequest = { showForgotDialog = false },
+                            icon = { Icon(MaterialSymbolIcon("lock_open"), null, tint = MaterialTheme.colorScheme.primary, size = 28.dp) },
+                            title = { Text("Forgot your PIN?") },
+                            text = {
+                                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    Text(
+                                        "If you've forgotten your app PIN, you can recover access using your device's built-in security.",
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                    if (hasDeviceAuth || hasDeviceCredential) {
+                                        HorizontalDivider()
+                                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                            Icon(MaterialSymbolIcon("fingerprint"), null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
+                                            Column(Modifier.weight(1f)) {
+                                                Text("Use device authentication", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+                                                Text("Verify with your fingerprint, face, or device PIN to regain access without losing data.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                            }
+                                        }
+                                    }
+                                    HorizontalDivider()
+                                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        Icon(MaterialSymbolIcon("settings_backup_restore"), null, tint = MaterialTheme.colorScheme.error, size = 20.dp)
+                                        Column(Modifier.weight(1f)) {
+                                            Text("Emergency reset", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+                                            Text("Disable the app PIN and privacy lock. Your research data will not be affected.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        }
+                                    }
+                                }
+                            },
+                            confirmButton = {
+                                if (hasDeviceAuth || hasDeviceCredential) {
+                                    Button(
+                                        onClick = {
+                                            showForgotDialog = false
+                                            usePinLock = false
+                                            startBiometricAuth()
+                                        },
+                                        shape = RoundedCornerShape(22.dp)
+                                    ) { Text("Use device auth") }
+                                }
+                            },
+                            dismissButton = {
+                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    TextButton(
+                                        onClick = {
+                                            showForgotDialog = false
+                                            // Emergency reset: clear PIN, privacy lock, and all other security settings
+                                            settings.performPanicLockReset()
+                                            settings.setPrivacyLockEnabled(false)
+                                            pin = ""
+                                            pinError = false
+                                            onUnlock()
+                                        },
+                                        shape = RoundedCornerShape(22.dp),
+                                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                                    ) { Text("Emergency reset") }
+                                    TextButton(
+                                        onClick = { showForgotDialog = false },
+                                        shape = RoundedCornerShape(22.dp)
+                                    ) { Text("Cancel") }
+                                }
+                            }
+                        )
+                    }
+                }
+
                 if (usePinLock && isPinLocked) {
                     Text(
                         "Too many attempts. Try again in ${cooldownRemainingSeconds}s.",

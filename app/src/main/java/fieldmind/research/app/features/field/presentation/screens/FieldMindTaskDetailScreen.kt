@@ -125,6 +125,8 @@ fun TaskDetailScreen(
 
     // ── Overflow menu ──
     var showOverflow by remember { mutableStateOf(false) }
+    var showEditTask by remember { mutableStateOf(false) }
+    var showDeleteConfirm by remember { mutableStateOf(false) }
 
     val taskScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
 
@@ -159,36 +161,9 @@ fun TaskDetailScreen(
                             text = { Text("Edit task") },
                             onClick = {
                                 showOverflow = false
-                                taskScope.launch { taskSnackbar.showSnackbar("Coming soon") }
+                                showEditTask = true
                             },
                             leadingIcon = { Icon(MaterialSymbolIcon("edit"), null, size = 18.dp) }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Duplicate") },
-                            onClick = {
-                                showOverflow = false
-                                taskScope.launch { taskSnackbar.showSnackbar("Coming soon") }
-                            },
-                            leadingIcon = { Icon(MaterialSymbolIcon("content_copy"), null, size = 18.dp) }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(if (task.status == "Done") "Reopen" else "Mark done") },
-                            onClick = {
-                                showOverflow = false
-                                haptics.confirm()
-                                viewModel.updateTaskEntity(task.copy(status = if (task.status == "Done") "Pending" else "Done"))
-                            },
-                            leadingIcon = { Icon(MaterialSymbolIcon("check_circle"), null, size = 18.dp) }
-                        )
-                        HorizontalDivider()
-                        DropdownMenuItem(
-                            text = { Text("Delete", color = MaterialTheme.colorScheme.error) },                                onClick = {
-                                    showOverflow = false
-                                    haptics.confirm()
-                                    viewModel.deleteTask(task.id)
-                                    onBack()
-                                },
-                            leadingIcon = { Icon(MaterialSymbolIcon("delete"), null, size = 18.dp, tint = MaterialTheme.colorScheme.error) }
                         )
                     }
                 }
@@ -284,6 +259,93 @@ fun TaskDetailScreen(
                         }
                     }
                 }
+            }
+        }
+
+        // ════════════════════════════════════════════════════════════
+        //  Primary action buttons (promoted from overflow menu)
+        // ════════════════════════════════════════════════════════════
+        item {
+            Card(
+                shape = RoundedCornerShape(30.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+            ) {
+                Row(
+                    Modifier.fillMaxWidth().padding(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Complete / Reopen button
+                    val isDone = task.status == "Done"
+                    Button(
+                        onClick = {
+                            haptics.confirm()
+                            viewModel.updateTaskEntity(task.copy(status = if (isDone) "Pending" else "Done"))
+                        },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(22.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (isDone) FieldMindTheme.colors.warning else FieldMindTheme.colors.positive,
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Icon(
+                            MaterialSymbolIcon(if (isDone) "undo" else "check_circle"),
+                            null,
+                            size = 18.dp
+                        )
+                        Spacer(Modifier.size(6.dp))
+                        Text(
+                            if (isDone) "Reopen" else "Mark Done",
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                    // Delete button
+                    OutlinedButton(
+                        onClick = { showDeleteConfirm = true },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(22.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error
+                        )
+                    ) {
+                        Icon(MaterialSymbolIcon("delete"), null, size = 18.dp, tint = MaterialTheme.colorScheme.error)
+                        Spacer(Modifier.size(6.dp))
+                        Text(
+                            "Delete",
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            }
+
+            // ── Delete confirmation dialog ──
+            if (showDeleteConfirm) {
+                AlertDialog(
+                    onDismissRequest = { showDeleteConfirm = false },
+                    icon = { Icon(MaterialSymbolIcon("delete"), null, size = 28.dp, tint = MaterialTheme.colorScheme.error) },
+                    title = { Text("Delete task?") },
+                    text = { Text("\"${task.title}\" will be permanently deleted.") },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            showDeleteConfirm = false
+                            haptics.confirm()
+                            viewModel.deleteTask(task.id)
+                            onBack()
+                        }) {
+                            Text("Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showDeleteConfirm = false }) {
+                            Text("Cancel")
+                        }
+                    }
+                )
             }
         }
 
@@ -689,6 +751,10 @@ fun TaskDetailScreen(
             .align(Alignment.BottomCenter)
             .padding(16.dp)
     )
+    // ── Edit task dialog overlay ──
+    if (showEditTask) {
+        EditTaskDialog(entity = task, viewModel = viewModel, onDismiss = { showEditTask = false })
+    }
 }
 }
 

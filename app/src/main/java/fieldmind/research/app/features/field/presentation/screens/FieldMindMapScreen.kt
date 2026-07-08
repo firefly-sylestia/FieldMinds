@@ -172,7 +172,7 @@ fun MapFieldScreen(
                             ) { Box(contentAlignment = Alignment.Center) { Icon(icon = MaterialSymbolIcon("fullscreen"), contentDescription = "Fullscreen map", size = 22.dp) } }
                         }
                     }
-                    ScrollableTabRow(
+                    PrimaryScrollableTabRow(
                         selectedTabIndex = activeTab.ordinal,
                         edgePadding = 20.dp,
                         divider = {}

@@ -8,43 +8,46 @@ import android.hardware.SensorManager
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
-import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
-import kotlin.math.roundToInt
-import kotlinx.coroutines.delay
 
 // ══════════════════════════════════════════════════════════════════════
 //  Compass Tool — Real-time compass heading using magnetometer + accelerometer
+//  Features:
+//    - Rotating compass rose with cardinal letters (N, E, S, W)
+//    - Fixed heading indicator shows device direction on the dial
+//    - remapCoordinateSystem for tilt-compensated heading in any orientation
+//    - Low-pass filtered sensor values for smooth readings
+//    - Pitch/roll displayed for orientation awareness
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -55,16 +58,16 @@ fun CompassToolScreen(
     val context = LocalContext.current
     val colors = FieldMindTheme.colors
     val snackbar = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
     // ── Sensor state ──
     var azimuth by remember { mutableFloatStateOf(0f) }        // degrees from north
     var magneticField by remember { mutableFloatStateOf(0f) }  // μT
     var accuracy by remember { mutableStateOf("Unknown") }
+    var compassPitch by remember { mutableFloatStateOf(0f) }   // tilt from orientation (deg)
+    var compassRoll by remember { mutableFloatStateOf(0f) }    // roll from orientation (deg)
 
     // ── Calibration state ──
-    var needsCalibration by remember { mutableStateOf(false) }
-    var calibrationProgress by remember { mutableFloatStateOf(0f) }
+    var needsCalibration by remember { mutableStateOf(true) }
 
     // ── Sensor listener ──
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
@@ -76,39 +79,59 @@ fun CompassToolScreen(
         val geomagnetic = FloatArray(3)
         val rotationMatrix = FloatArray(9)
         val orientation = FloatArray(3)
-        var calibrationSamples = 0
+        var firstGravity = true
+        var firstGeomagnetic = true
+        val alpha = 0.12f  // Low-pass filter coefficient (lower = more smoothing)
 
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
                 when (event.sensor.type) {
                     Sensor.TYPE_ACCELEROMETER -> {
-                        gravity[0] = event.values[0]
-                        gravity[1] = event.values[1]
-                        gravity[2] = event.values[2]
+                        if (firstGravity) {
+                            gravity[0] = event.values[0]
+                            gravity[1] = event.values[1]
+                            gravity[2] = event.values[2]
+                            firstGravity = false
+                        } else {
+                            gravity[0] = gravity[0] * (1 - alpha) + event.values[0] * alpha
+                            gravity[1] = gravity[1] * (1 - alpha) + event.values[1] * alpha
+                            gravity[2] = gravity[2] * (1 - alpha) + event.values[2] * alpha
+                        }
                     }
                     Sensor.TYPE_MAGNETIC_FIELD -> {
-                        geomagnetic[0] = event.values[0]
-                        geomagnetic[1] = event.values[1]
-                        geomagnetic[2] = event.values[2]
-                        magneticField = sqrt(event.values[0] * event.values[0] +
-                            event.values[1] * event.values[1] +
-                            event.values[2] * event.values[2])
+                        if (firstGeomagnetic) {
+                            geomagnetic[0] = event.values[0]
+                            geomagnetic[1] = event.values[1]
+                            geomagnetic[2] = event.values[2]
+                            firstGeomagnetic = false
+                        } else {
+                            geomagnetic[0] = geomagnetic[0] * (1 - alpha) + event.values[0] * alpha
+                            geomagnetic[1] = geomagnetic[1] * (1 - alpha) + event.values[1] * alpha
+                            geomagnetic[2] = geomagnetic[2] * (1 - alpha) + event.values[2] * alpha
+                        }
+                        magneticField = sqrt(
+                            geomagnetic[0] * geomagnetic[0] +
+                            geomagnetic[1] * geomagnetic[1] +
+                            geomagnetic[2] * geomagnetic[2]
+                        )
                     }
                 }
 
-                if (SensorManager.getRotationMatrix(rotationMatrix, null, gravity, geomagnetic)) {
+                if (!firstGravity && !firstGeomagnetic &&
+                    SensorManager.getRotationMatrix(rotationMatrix, null, gravity, geomagnetic)) {
+                    // Pass rotationMatrix directly to getOrientation — no remapping needed
+                    // (remapCoordinateSystem with AXIS_X/AXIS_Z forces AR/vertical orientation
+                    //  and produces wrong headings when the device is held flat)
                     SensorManager.getOrientation(rotationMatrix, orientation)
-                    val azimuthDeg = Math.toDegrees(orientation[0].toDouble()).toFloat()
-                    azimuth = (azimuthDeg + 360) % 360
-
-                    // Calibration quality estimate: accumulating samples
-                    calibrationSamples++
-                    if (calibrationSamples <= 60) {
-                        calibrationProgress = calibrationSamples / 60f
-                    } else {
-                        needsCalibration = false
-                        calibrationProgress = 1f
+                    // orientation[0] = azimuth (tilt-compensated)
+                    val newAzimuth = (Math.toDegrees(orientation[0].toDouble()).toFloat() + 360) % 360
+                    // Dead-zone filter: only update if change exceeds 0.5° (eliminates micro-jitter)
+                    if (abs(newAzimuth - azimuth) > 0.5f) {
+                        azimuth = newAzimuth
                     }
+                    // orientation[1] = pitch, orientation[2] = roll
+                    compassPitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
+                    compassRoll = Math.toDegrees(orientation[2].toDouble()).toFloat()
                 }
             }
 
@@ -124,18 +147,21 @@ fun CompassToolScreen(
             }
         }
 
-        sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
-        sensorManager.registerListener(listener, magnetometer, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_GAME)
+        sensorManager.registerListener(listener, magnetometer, SensorManager.SENSOR_DELAY_GAME)
 
         onDispose {
             sensorManager.unregisterListener(listener)
         }
     }
 
-    // ── Smooth rotation animation ──
+    // ── Short animation for jitter dampening on noisy magnetometers.
+    // 30ms is fast enough to feel instant but smooths out micro-jitter
+    // without causing the 359°→0° wrap-around visual glitch.
+    // ── Smooth animation for jitter dampening without the 359°→0° wrap-around glitch. ──
     val smoothAzimuth by animateFloatAsState(
         targetValue = azimuth,
-        animationSpec = tween(durationMillis = 250),
+        animationSpec = tween(durationMillis = 50),
         label = "azimuth"
     )
 
@@ -194,7 +220,7 @@ fun CompassToolScreen(
                                 val cy = size.height / 2f
                                 val radius = minOf(cx, cy) * 0.85f
 
-                                // Outer ring
+                                // ── Outer ring ──
                                 drawCircle(
                                     color = compassSurfaceHighest,
                                     radius = radius + 12f,
@@ -214,82 +240,101 @@ fun CompassToolScreen(
                                     center = Offset(cx, cy)
                                 )
 
-                                // Degree ticks and cardinal markers
-                                for (deg in 0 until 360 step 2) {
-                                    val rad = Math.toRadians(deg.toDouble() - smoothAzimuth.toDouble())
-                                    val isMajor = deg % 90 == 0
-                                    val isMinor = deg % 10 == 0
-                                    val tickLen = when {
-                                        isMajor -> radius * 0.25f
-                                        isMinor -> radius * 0.12f
-                                        else -> radius * 0.06f
+                                // ── Rotating compass rose (ticks + cardinal labels) ──
+                                // The entire face rotates so the N label always points to magnetic north.
+                                // Rotate by -smoothAzimuth: positive heading means device faces clockwise
+                                // from north, so the face rotates counterclockwise to compensate.
+                                withTransform({
+                                    rotate(degrees = -smoothAzimuth, pivot = Offset(cx, cy))
+                                }) {
+                                    // Degree ticks
+                                    for (deg in 0 until 360 step 2) {
+                                        val rad = Math.toRadians(deg.toDouble())
+                                        val isMajor = deg % 90 == 0
+                                        val isMinor = deg % 10 == 0
+                                        val tickLen = when {
+                                            isMajor -> radius * 0.25f
+                                            isMinor -> radius * 0.12f
+                                            else -> radius * 0.06f
+                                        }
+                                        val tickWidth = when {
+                                            isMajor -> 3f
+                                            isMinor -> 2f
+                                            else -> 1f
+                                        }
+                                        val tickColor = when {
+                                            isMajor -> compassOnSurface
+                                            isMinor -> compassOnSurfaceVariant.copy(alpha = 0.5f)
+                                            else -> compassOutlineVariant
+                                        }
+                                        val innerR = radius - tickLen
+                                        val tx = cx + (innerR * sin(rad)).toFloat()
+                                        val ty = cy - (innerR * cos(rad)).toFloat()
+                                        val ex = cx + (radius * sin(rad)).toFloat()
+                                        val ey = cy - (radius * cos(rad)).toFloat()
+                                        drawLine(
+                                            color = tickColor,
+                                            start = Offset(tx, ty),
+                                            end = Offset(ex, ey),
+                                            strokeWidth = tickWidth,
+                                            cap = StrokeCap.Round
+                                        )
                                     }
-                                    val tickWidth = when {
-                                        isMajor -> 3f
-                                        isMinor -> 2f
-                                        else -> 1f
-                                    }
-                                    val tickColor = when {
-                                        isMajor -> compassOnSurface
-                                        isMinor -> compassOnSurfaceVariant.copy(alpha = 0.5f)
-                                        else -> compassOutlineVariant
-                                    }
-                                    val innerR = radius - tickLen
-                                    drawLine(
-                                        color = tickColor,
-                                        start = Offset(
-                                            cx + (innerR * cos(rad)).toFloat(),
-                                            cy + (innerR * sin(rad)).toFloat()
-                                        ),
-                                        end = Offset(
-                                            cx + (radius * cos(rad)).toFloat(),
-                                            cy + (radius * sin(rad)).toFloat()
-                                        ),
-                                        strokeWidth = tickWidth,
-                                        cap = StrokeCap.Round
+
+                                    // Cardinal letters (N, E, S, W)
+                                    val cardinals = listOf(
+                                        "N" to Color(0xFFE53935), // Red for North
+                                        "E" to compassOnSurface,
+                                        "S" to compassOnSurface,
+                                        "W" to compassOnSurface
                                     )
-                                }
-
-                                // Cardinal letters (N, E, S, W) — always upright
-                                val cardinals = listOf(
-                                    "N" to Color(0xFFE53935), // Red for North
-                                    "E" to compassOnSurface,
-                                    "S" to compassOnSurface,
-                                    "W" to compassOnSurface
-                                )
-                                val paint = android.graphics.Paint().apply {
-                                    textAlign = android.graphics.Paint.Align.CENTER
-                                    isAntiAlias = true
-                                }
-                                cardinals.forEachIndexed { i, (label, color) ->
-                                    val angle = i * 90.0
-                                    val rad = Math.toRadians(angle)
-                                    val labelR = radius * 0.72f
-                                    val x = cx + (labelR * sin(rad)).toFloat()
-                                    val y = cy - (labelR * cos(rad)).toFloat()
-
-                                    paint.color = color.toArgb()
-                                    paint.textSize = when (label) {
-                                        "N" -> 42f
-                                        else -> 32f
+                                    val paint = android.graphics.Paint().apply {
+                                        textAlign = android.graphics.Paint.Align.CENTER
+                                        isAntiAlias = true
                                     }
-                                    paint.setFakeBoldText(label == "N")
-                                    drawContext.canvas.nativeCanvas.drawText(
-                                        label, x, y + paint.textSize / 3f, paint
-                                    )
+                                    cardinals.forEachIndexed { i, (label, color) ->
+                                        val angle = i * 90.0
+                                        val rad = Math.toRadians(angle)
+                                        val labelR = radius * 0.78f
+                                        val x = cx + (labelR * sin(rad)).toFloat()
+                                        val y = cy - (labelR * cos(rad)).toFloat()
+
+                                        paint.color = color.toArgb()
+                                        paint.textSize = when (label) {
+                                            "N" -> 42f
+                                            else -> 32f
+                                        }
+                                        paint.isFakeBoldText = label == "N"
+                                        drawContext.canvas.nativeCanvas.drawText(
+                                            label, x, y + paint.textSize / 3f, paint
+                                        )
+                                    }
                                 }
 
-                                // Center triangle pointer (points toward heading)
-                                val pointerLen = radius * 0.35f
-                                val pointerColor = Color(0xFFE53935)
-                                // Top triangle
-                                val topPath = androidx.compose.ui.graphics.Path().apply {
-                                    moveTo(cx, cy - radius + 8f)
-                                    lineTo(cx - 14f, cy - radius + 44f)
-                                    lineTo(cx + 14f, cy - radius + 44f)
+                                // ── Fixed heading indicator (red triangle at top of compass) ──
+                                // Points to the top of the screen — shows which way the device is facing
+                                val indicatorLen = radius * 0.22f
+                                val indicatorWidth = radius * 0.07f
+                                val headingPath = Path().apply {
+                                    moveTo(cx, cy - radius + 4f)
+                                    lineTo(cx - indicatorWidth, cy - radius + 4f + indicatorLen)
+                                    lineTo(cx + indicatorWidth, cy - radius + 4f + indicatorLen)
                                     close()
                                 }
-                                drawPath(topPath, color = pointerColor)
+                                drawPath(headingPath, color = Color(0xFFE53935))
+
+                                // South indicator (small gray notch at bottom)
+                                val southMarkPath = Path().apply {
+                                    moveTo(cx - indicatorWidth * 0.6f, cy + radius - 4f - indicatorLen * 0.5f)
+                                    lineTo(cx, cy + radius - 4f)
+                                    lineTo(cx + indicatorWidth * 0.6f, cy + radius - 4f - indicatorLen * 0.5f)
+                                    close()
+                                }
+                                drawPath(southMarkPath, color = Color(0xFF9E9E9E))
+
+                                // Center pivot
+                                drawCircle(color = Color.White, radius = 5f, center = Offset(cx, cy))
+                                drawCircle(color = Color(0xFFE53935), radius = 2.5f, center = Offset(cx, cy))
                             }
                         }
 
@@ -303,7 +348,7 @@ fun CompassToolScreen(
                             color = colors.info
                         )
                         Text(
-                            "Heading: $cardinal (${cardinal})",
+                            "Heading: $cardinal",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
@@ -332,6 +377,22 @@ fun CompassToolScreen(
                             })
                         }
 
+                        // Tilt info (from rotation matrix — works in any orientation)
+                        HorizontalDivider(
+                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f),
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        )
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            SensorDataItem(
+                                "Pitch", "%.1f°".format(compassPitch),
+                                MaterialSymbolIcon("tilt_shift")
+                            )
+                            SensorDataItem(
+                                "Roll", "%.1f°".format(compassRoll),
+                                MaterialSymbolIcon("3d_rotation")
+                            )
+                        }
+
                         // Calibration indicator
                         if (needsCalibration) {
                             Spacer(Modifier.height(4.dp))
@@ -354,22 +415,7 @@ fun CompassToolScreen(
                             }
                         }
 
-                        // Calibration progress
-                        if (calibrationProgress < 1f) {
-                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Text(
-                                    "Calibrating... ${(calibrationProgress * 100).roundToInt()}%",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                LinearProgressIndicator(
-                                    progress = { calibrationProgress },
-                                    modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)),
-                                    color = colors.info,
-                                    trackColor = colors.info.copy(alpha = 0.12f)
-                                )
-                            }
-                        }
+
                     }
                 }
 
@@ -381,7 +427,8 @@ fun CompassToolScreen(
                 ) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text("Tips", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = colors.info)
-                        Text("• Hold your device flat and level for best accuracy", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("• The red heading indicator (top) shows the direction your device is pointing", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("• Pitch/Roll show the device's tilt in the current orientation", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("• Keep away from metal objects and magnets", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("• Wave in a figure-8 pattern to re-calibrate", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
@@ -404,8 +451,16 @@ private fun SensorDataItem(label: String, value: String, icon: MaterialSymbolIco
 }
 
 // ══════════════════════════════════════════════════════════════════════
-//  Level Tool — Real-time spirit level using accelerometer
+//  Level Tool — Real-time spirit level using accelerometer gravity vector
+//  Features:
+//    - Auto-detects orientation: flat (surface level) vs vertical (plumb)
+//    - Circular bubble level when phone is flat on a surface
+//    - Vertical tube level when phone is held against a wall
+//    - Raw gravity-based tilt computation (no magnetometer dependency)
+//    - "Set reference" allows zeroing at any angle for checking different positions
 // ══════════════════════════════════════════════════════════════════════
+
+private enum class OrientationMode { FLAT, VERTICAL_PORTRAIT, VERTICAL_LANDSCAPE }
 
 @Composable
 fun LevelToolScreen(
@@ -414,77 +469,136 @@ fun LevelToolScreen(
 ) {
     val context = LocalContext.current
     val colors = FieldMindTheme.colors
+    val snackbar = remember { SnackbarHostState() }
 
-    // ── Sensor state ──
-    var pitch by remember { mutableFloatStateOf(0f) }   // tilt forward/backward (deg)
-    var roll by remember { mutableFloatStateOf(0f) }    // tilt left/right (deg)
-    var isFlat by remember { mutableStateOf(false) }
+    // ── Raw gravity state ──
+    var gravityX by remember { mutableFloatStateOf(0f) }
+    var gravityY by remember { mutableFloatStateOf(-SensorManager.GRAVITY_EARTH) }
+    var gravityZ by remember { mutableFloatStateOf(0f) }
 
-    // ── Sensor listener ──
+    // ── Reference state ──
+    var isReferenced by remember { mutableStateOf(false) }
+    var referencePitch by remember { mutableFloatStateOf(0f) }
+    var referenceRoll by remember { mutableFloatStateOf(0f) }
+
+    // ── Sensor listener (accelerometer only — gravity vector is all we need) ──
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
     val accelerometer = remember { sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
 
     DisposableEffect(Unit) {
+        val gravity = FloatArray(3)
+        var firstGravity = true
+        val alpha = 0.12f
+
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
-                val x = event.values[0]
-                val y = event.values[1]
-                val z = event.values[2]
-
-                // Calculate pitch and roll from accelerometer
-                // When device is flat on its back: x=0, y=0, z=9.8
-                // Pitch: rotation around X axis (tilting forward/backward)
-                // Roll: rotation around Y axis (tilting left/right)
-                pitch = Math.toDegrees(atan2(x.toDouble(), sqrt((y * y + z * z).toDouble()))).toFloat()
-                roll = Math.toDegrees(atan2(y.toDouble(), sqrt((x * x + z * z).toDouble()))).toFloat()
-
-                isFlat = abs(pitch) < 2f && abs(roll) < 2f
+                if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                    if (firstGravity) {
+                        gravity[0] = event.values[0]
+                        gravity[1] = event.values[1]
+                        gravity[2] = event.values[2]
+                        firstGravity = false
+                    } else {
+                        gravity[0] = gravity[0] * (1 - alpha) + event.values[0] * alpha
+                        gravity[1] = gravity[1] * (1 - alpha) + event.values[1] * alpha
+                        gravity[2] = gravity[2] * (1 - alpha) + event.values[2] * alpha
+                    }
+                    gravityX = gravity[0]
+                    gravityY = gravity[1]
+                    gravityZ = gravity[2]
+                }
             }
-
             override fun onAccuracyChanged(sensor: Sensor, acc: Int) {}
         }
 
         sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_GAME)
+        onDispose { sensorManager.unregisterListener(listener) }
+    }
 
-        onDispose {
-            sensorManager.unregisterListener(listener)
+    // ── Orientation detection (threshold = cos(45°) × 9.81 ≈ 6.94) ──
+    val orientationMode: OrientationMode by remember(gravityX, gravityY, gravityZ) {
+        derivedStateOf {
+            when {
+                abs(gravityZ) > 6.94f -> OrientationMode.FLAT
+                abs(gravityY) > abs(gravityX) -> OrientationMode.VERTICAL_PORTRAIT
+                else -> OrientationMode.VERTICAL_LANDSCAPE
+            }
         }
     }
 
-    // ── Smooth animations ──
-    val smoothPitch by animateFloatAsState(
-        targetValue = pitch,
-        animationSpec = tween(durationMillis = 100),
-        label = "pitch"
-    )
-    val smoothRoll by animateFloatAsState(
-        targetValue = roll,
-        animationSpec = tween(durationMillis = 100),
-        label = "roll"
-    )
+    // ── Tilt angles computed from raw gravity (sign-preserving via atan2) ──
+    // FLAT: pitch = tilt forward/back, roll = tilt left/right
+    // VERTICAL_PORTRAIT: pitch = in/out from wall, roll = left/right lean
+    // VERTICAL_LANDSCAPE: pitch = in/out from wall, roll = left/right lean
+    val rawPitch: Float by remember(gravityX, gravityY, gravityZ, orientationMode) {
+        derivedStateOf {
+            when (orientationMode) {
+                OrientationMode.FLAT ->
+                    Math.toDegrees(atan2(gravityX.toDouble(), abs(gravityZ).toDouble())).toFloat()
+                OrientationMode.VERTICAL_PORTRAIT ->
+                    Math.toDegrees(atan2(gravityZ.toDouble(), gravityY.toDouble())).toFloat()
+                OrientationMode.VERTICAL_LANDSCAPE ->
+                    Math.toDegrees(atan2(gravityZ.toDouble(), gravityX.toDouble())).toFloat()
+            }
+        }
+    }
+    val rawRoll: Float by remember(gravityX, gravityY, gravityZ, orientationMode) {
+        derivedStateOf {
+            when (orientationMode) {
+                OrientationMode.FLAT ->
+                    Math.toDegrees(atan2(gravityY.toDouble(), abs(gravityZ).toDouble())).toFloat()
+                OrientationMode.VERTICAL_PORTRAIT ->
+                    Math.toDegrees(atan2(gravityX.toDouble(), gravityY.toDouble())).toFloat()
+                OrientationMode.VERTICAL_LANDSCAPE ->
+                    Math.toDegrees(atan2(gravityY.toDouble(), gravityX.toDouble())).toFloat()
+            }
+        }
+    }
+
+    // ── Smooth animation ──
+    val smoothPitch by animateFloatAsState(rawPitch, animationSpec = tween(100), label = "pitch")
+    val smoothRoll by animateFloatAsState(rawRoll, animationSpec = tween(100), label = "roll")
+
+    // ── Effective tilt (relative to reference if set) ──
+    val effectivePitch by remember(smoothPitch, referencePitch, isReferenced) {
+        derivedStateOf { if (isReferenced) smoothPitch - referencePitch else smoothPitch }
+    }
+    val effectiveRoll by remember(smoothRoll, referenceRoll, isReferenced) {
+        derivedStateOf { if (isReferenced) smoothRoll - referenceRoll else smoothRoll }
+    }
+    val isLevel by remember(effectivePitch, effectiveRoll) {
+        derivedStateOf { abs(effectivePitch) < 2f && abs(effectiveRoll) < 2f }
+    }
+
+    // ── Mode label for header ──
+    val modeLabel by remember(orientationMode) {
+        derivedStateOf {
+            when (orientationMode) {
+                OrientationMode.FLAT -> "Surface level — place device flat"
+                OrientationMode.VERTICAL_PORTRAIT -> "Plumb — hold against wall"
+                OrientationMode.VERTICAL_LANDSCAPE -> "Plumb — hold against wall"
+            }
+        }
+    }
 
     Box(Modifier.fillMaxSize()) {
         Column(
-            Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .padding(20.dp),
+            Modifier.fillMaxSize().statusBarsPadding().padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // ── Header ──
             StandardScreenHeader(
                 title = "Level",
-                subtitle = "Real-time spirit level using accelerometer.",
+                subtitle = modeLabel,
                 icon = MaterialSymbolIcon("straighten"),
                 heroColor = colors.data,
                 trailing = { BackButton(onClick = onBack) }
             )
 
-            // ── Level display ──
+            // ── Level display (mode-aware) ──
             Card(
                 shape = RoundedCornerShape(40.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = if (isFlat) colors.positive.copy(alpha = 0.08f)
+                    containerColor = if (isLevel) colors.positive.copy(alpha = 0.08f)
                     else MaterialTheme.colorScheme.surfaceContainerLow
                 ),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -495,88 +609,18 @@ fun LevelToolScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Bubble level canvas
-                    Box(
-                        modifier = Modifier.size(260.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        val levelSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
-                        val levelOutlineVariant = MaterialTheme.colorScheme.outlineVariant
-                        val levelOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
-                        Canvas(Modifier.fillMaxSize()) {
-                            val cx = size.width / 2f
-                            val cy = size.height / 2f
-                            val outerRadius = minOf(cx, cy) * 0.95f
-                            val bubbleRadius = outerRadius * 0.12f
-
-                            // Outer circle
-                            drawCircle(
-                                color = levelSurfaceHighest,
-                                radius = outerRadius,
-                                center = Offset(cx, cy)
-                            )
-                            drawCircle(
-                                color = levelOutlineVariant.copy(alpha = 0.3f),
-                                radius = outerRadius,
-                                center = Offset(cx, cy),
-                                style = Stroke(width = 2f)
-                            )
-
-                            // Inner ring
-                            drawCircle(
-                                color = levelOutlineVariant.copy(alpha = 0.15f),
-                                radius = outerRadius * 0.6f,
-                                center = Offset(cx, cy),
-                                style = Stroke(width = 1f)
-                            )
-
-                            // Crosshair lines
-                            val crossColor = levelOnSurfaceVariant.copy(alpha = 0.2f)
-                            // Vertical
-                            drawLine(crossColor, Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 1f)
-                            // Horizontal
-                            drawLine(crossColor, Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 1f)
-
-                            // Bubble — offset from center based on pitch and roll
-                            // Map ±15° to ±60% of outerRadius
-                            val maxTilt = 15f
-                            val sensitivity = 0.6f
-                            val bubbleX = cx + (smoothRoll.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
-                            val bubbleY = cy + (smoothPitch.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
-
-                            // Bubble glow
-                            val bubbleColor = if (isFlat) colors.positive else colors.info
-                            drawCircle(
-                                color = bubbleColor.copy(alpha = 0.08f),
-                                radius = bubbleRadius * 2.5f,
-                                center = Offset(bubbleX, bubbleY)
-                            )
-
-                            // Bubble
-                            drawCircle(
-                                color = bubbleColor,
-                                radius = bubbleRadius,
-                                center = Offset(bubbleX, bubbleY)
-                            )
-
-                            // Bubble highlight
-                            drawCircle(
-                                color = Color.White.copy(alpha = 0.3f),
-                                radius = bubbleRadius * 0.4f,
-                                center = Offset(bubbleX - bubbleRadius * 0.2f, bubbleY - bubbleRadius * 0.2f)
-                            )
-
-                            // Center dot
-                            drawCircle(
-                                color = levelOnSurfaceVariant.copy(alpha = 0.3f),
-                                radius = 3f,
-                                center = Offset(cx, cy)
-                            )
-                        }
+                    // ── Mode-specific display ──
+                    when (orientationMode) {
+                        OrientationMode.FLAT -> CircularBubbleLevel(
+                            effectivePitch, effectiveRoll, isLevel, colors
+                        )
+                        OrientationMode.VERTICAL_PORTRAIT,
+                        OrientationMode.VERTICAL_LANDSCAPE -> VerticalTubeLevel(
+                            effectiveRoll, isLevel, colors
+                        )
                     }
 
-                    // ── Flat indicator ──
-                    if (isFlat) {
+                    if (isLevel) {
                         Surface(
                             shape = RoundedCornerShape(24.dp),
                             color = colors.positive.copy(alpha = 0.15f)
@@ -596,7 +640,7 @@ fun LevelToolScreen(
                 }
             }
 
-            // ── Tilt values ──
+            // ── Tilt values + reference controls ──
             Card(
                 shape = RoundedCornerShape(30.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
@@ -607,20 +651,199 @@ fun LevelToolScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text("Tilt angles", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        TiltGauge("Pitch", smoothPitch, "Forward/backward", colors.info, modifier = Modifier.weight(1f))
-                        TiltGauge("Roll", smoothRoll, "Left/right", colors.data, modifier = Modifier.weight(1f))
+                        TiltGauge("Pitch", effectivePitch, "Forward/backward", colors.info, Modifier.weight(1f))
+                        TiltGauge("Roll", effectiveRoll, "Left/right", colors.data, Modifier.weight(1f))
+                    }
+
+                    // Reference controls
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (isReferenced) {
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = colors.info.copy(alpha = 0.08f),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Column(Modifier.padding(10.dp)) {
+                                    Text("Reference set", style = MaterialTheme.typography.labelSmall, color = colors.info)
+                                    Text(
+                                        "Pitch: %.1f°  Roll: %.1f°".format(referencePitch, referenceRoll),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                            Button(
+                                onClick = {
+                                    isReferenced = false
+                                    referencePitch = 0f
+                                    referenceRoll = 0f
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.12f),
+                                    contentColor = MaterialTheme.colorScheme.error
+                                ),
+                                shape = RoundedCornerShape(14.dp),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
+                            ) {
+                                Icon(MaterialSymbolIcon("clear"), null, modifier = Modifier.size(16.dp))
+                                Spacer(Modifier.width(4.dp))
+                                Text("Clear", style = MaterialTheme.typography.labelMedium)
+                            }
+                        } else {
+                            OutlinedButton(
+                                onClick = {
+                                    referencePitch = smoothPitch
+                                    referenceRoll = smoothRoll
+                                    isReferenced = true
+                                },
+                                shape = RoundedCornerShape(14.dp),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.info),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Icon(MaterialSymbolIcon("my_location"), null, modifier = Modifier.size(18.dp))
+                                Spacer(Modifier.width(6.dp))
+                                Text("Set reference", style = MaterialTheme.typography.labelMedium)
+                            }
+                        }
                     }
 
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                     Text(
-                        "Hold device flat to check level surfaces. Pitch and roll should be near 0°.",
+                        if (isReferenced) "Deviations shown relative to set reference."
+                        else "Place device on a surface or against a wall. Use 'Set reference' to zero at any angle.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
+        }
+        FieldMindSnackbarOverlay(hostState = snackbar, modifier = Modifier.align(Alignment.TopCenter).padding(top = 8.dp, start = 16.dp, end = 16.dp))
+    }
+}
+
+// ── Circular bubble level for flat (horizontal) mode ──
+@Composable
+private fun CircularBubbleLevel(
+    pitch: Float, roll: Float, isLevel: Boolean, colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
+) {
+    Box(modifier = Modifier.size(260.dp), contentAlignment = Alignment.Center) {
+        val levelSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
+        val levelOutlineVariant = MaterialTheme.colorScheme.outlineVariant
+        val levelOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+        Canvas(Modifier.fillMaxSize()) {
+            val cx = size.width / 2f
+            val cy = size.height / 2f
+            val outerRadius = minOf(cx, cy) * 0.95f
+            val bubbleRadius = outerRadius * 0.12f
+
+            drawCircle(color = levelSurfaceHighest, radius = outerRadius, center = Offset(cx, cy))
+            drawCircle(color = levelOutlineVariant.copy(alpha = 0.3f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = 2f))
+            drawCircle(color = levelOutlineVariant.copy(alpha = 0.15f), radius = outerRadius * 0.6f, center = Offset(cx, cy), style = Stroke(width = 1f))
+
+            val crossColor = levelOnSurfaceVariant.copy(alpha = 0.2f)
+            drawLine(crossColor, Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 1f)
+            drawLine(crossColor, Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 1f)
+
+            val maxTilt = 45f
+            val sensitivity = 0.88f
+            val bubbleX = cx + (roll.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
+            val bubbleY = cy + (pitch.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
+
+            val bubbleColor = if (isLevel) colors.positive else colors.info
+            drawCircle(color = bubbleColor.copy(alpha = 0.08f), radius = bubbleRadius * 2.5f, center = Offset(bubbleX, bubbleY))
+            drawCircle(color = bubbleColor, radius = bubbleRadius, center = Offset(bubbleX, bubbleY))
+            drawCircle(color = Color.White.copy(alpha = 0.3f), radius = bubbleRadius * 0.4f, center = Offset(bubbleX - bubbleRadius * 0.2f, bubbleY - bubbleRadius * 0.2f))
+            drawCircle(color = levelOnSurfaceVariant.copy(alpha = 0.3f), radius = 3f, center = Offset(cx, cy))
+        }
+    }
+}
+
+// ── Vertical tube level for plumb (vertical) mode ──
+@Composable
+private fun VerticalTubeLevel(
+    tilt: Float, isLevel: Boolean, colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
+) {
+    val paint = remember {
+        android.graphics.Paint().apply {
+            textAlign = android.graphics.Paint.Align.CENTER
+            isAntiAlias = true
+        }
+    }
+    Box(modifier = Modifier.fillMaxWidth().height(280.dp), contentAlignment = Alignment.Center) {
+        val levelSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
+        val levelOutlineVariant = MaterialTheme.colorScheme.outlineVariant
+        val levelOnSurface = MaterialTheme.colorScheme.onSurface
+        val levelOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+        Canvas(Modifier.fillMaxSize()) {
+            val cx = size.width / 2f
+            val tubeWidth = size.width * 0.20f
+            val tubeHeight = size.height * 0.82f
+            val tubeTop = (size.height - tubeHeight) / 2f
+            val tubeCornerR = tubeWidth / 2f
+
+            // Tube body
+            drawRoundRect(
+                color = levelSurfaceHighest,
+                topLeft = Offset(cx - tubeWidth / 2f, tubeTop),
+                size = Size(tubeWidth, tubeHeight),
+                cornerRadius = CornerRadius(tubeCornerR, tubeCornerR)
+            )
+            drawRoundRect(
+                color = levelOutlineVariant.copy(alpha = 0.3f),
+                topLeft = Offset(cx - tubeWidth / 2f, tubeTop),
+                size = Size(tubeWidth, tubeHeight),
+                cornerRadius = CornerRadius(tubeCornerR, tubeCornerR),
+                style = Stroke(width = 2f)
+            )
+
+            // Center line (0° mark)
+            val centerY = size.height / 2f
+            drawLine(
+                color = levelOutlineVariant.copy(alpha = 0.4f),
+                start = Offset(cx - tubeWidth * 0.55f, centerY),
+                end = Offset(cx + tubeWidth * 0.55f, centerY),
+                strokeWidth = 1.5f
+            )
+
+            // Degree markers: draw tick marks at ±5°, ±10°, ±15°, ±30°, ±45°
+            val marks = listOf(-45f, -30f, -15f, -10f, -5f, 5f, 10f, 15f, 30f, 45f)
+            val maxTilt = 45f
+            marks.forEach { deg ->
+                val y = centerY + (deg / maxTilt * tubeHeight * 0.42f)
+                val tickW = if (abs(deg) % 15f == 0f) tubeWidth * 0.65f else if (abs(deg) % 5f == 0f) tubeWidth * 0.5f else tubeWidth * 0.3f
+                drawLine(
+                    color = levelOutlineVariant.copy(alpha = 0.3f),
+                    start = Offset(cx + tubeWidth / 2f, y),
+                    end = Offset(cx + tubeWidth / 2f + tickW, y),
+                    strokeWidth = if (abs(deg) % 15f == 0f) 2.5f else if (abs(deg) % 5f == 0f) 1.5f else 1f
+                )
+                paint.color = levelOnSurfaceVariant.toArgb()
+                paint.textSize = 26f
+                paint.isFakeBoldText = abs(deg) % 15f == 0f
+                drawContext.canvas.nativeCanvas.drawText(
+                    "%.0f°".format(deg), cx + tubeWidth / 2f + tickW + 20f, y + paint.textSize / 3f, paint
+                )
+            }
+
+            // 0° label
+            paint.color = levelOnSurface.toArgb()
+            paint.textSize = 30f
+            paint.isFakeBoldText = true
+            drawContext.canvas.nativeCanvas.drawText(
+                "0°", cx + tubeWidth / 2f + 24f, centerY + paint.textSize / 3f, paint
+            )
+
+            // Bubble
+            val bubbleR = tubeWidth * 0.30f
+            val normalizedTilt = (tilt.coerceIn(-maxTilt, maxTilt) / maxTilt)
+            val bubbleY = centerY + normalizedTilt * tubeHeight * 0.42f
+            val bubbleColor = if (isLevel) colors.positive else colors.info
+
+            drawCircle(color = bubbleColor.copy(alpha = 0.08f), radius = bubbleR * 2f, center = Offset(cx, bubbleY))
+            drawCircle(color = bubbleColor, radius = bubbleR, center = Offset(cx, bubbleY))
+            drawCircle(color = Color.White.copy(alpha = 0.3f), radius = bubbleR * 0.35f,
+                center = Offset(cx - bubbleR * 0.2f, bubbleY - bubbleR * 0.2f))
         }
     }
 }

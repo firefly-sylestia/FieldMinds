@@ -71,6 +71,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.saveable.rememberSaveable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
@@ -107,6 +108,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object MapScreen : FieldMindScreen("field_map", "Map", FieldMindIcons.Map)
     data object ExportStudio : FieldMindScreen("field_export_studio", "Export", FieldMindIcons.Export)
     data object WeatherDatabase : FieldMindScreen("field_weather_database", "Weather", FieldMindIcons.Weather)
+    data object WeatherCatalog : FieldMindScreen("field_weather_catalog", "Weather Catalog", MaterialSymbolIcon("cloud"))
 
     data object Learn : FieldMindScreen("field_learn", "Learn", FieldMindIcons.School)
     data object FieldMode : FieldMindScreen("field_mode", "Field Mode", FieldMindIcons.Bolt)
@@ -167,6 +169,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object TaxonomicBrowser : FieldMindScreen("field_taxonomic_browser", "Taxonomic Browser", FieldMindIcons.Category)
     data object FieldLog : FieldMindScreen("field_log", "Field Log", FieldMindIcons.List)
     data object TimerTool : FieldMindScreen("field_timer", "Timer", FieldMindIcons.Timer)
+    data object ResearchSession : FieldMindScreen("field_research_session", "Research Session", MaterialSymbolIcon("science"))
     data object CompassTool : FieldMindScreen("field_compass_tool", "Compass", MaterialSymbolIcon("explore"))
     data object LevelTool : FieldMindScreen("field_level_tool", "Level", MaterialSymbolIcon("straighten"))
 
@@ -321,7 +324,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
     }
 
     // ── Active tab index — tabs are rendered simultaneously inside TabContentHost ──
-    var activeTabIndex by remember { mutableIntStateOf(0) }
+    var activeTabIndex by rememberSaveable { mutableIntStateOf(0) }
 
     // Observe screen visibility settings so nav bar reflects user customizations
     val screenVisibility by viewModel.fieldSettings.screenVisibility.collectAsState()
@@ -363,9 +366,6 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
         activeTabIndex = index
     }
 
-    BackHandler(enabled = currentRoute == "field_tab_container" && activeTabIndex != 0) {
-        activeTabIndex = 0
-    }
 
     LaunchedEffect(requestedDestination) {
         when (requestedDestination) {
@@ -820,8 +820,10 @@ private fun categorizeRoute(route: String): RouteCategory = when (route) {
             FieldMindScreen.SpeciesBrowser.route, FieldMindScreen.TaxonomicBrowser.route,
             FieldMindScreen.FieldLog.route, FieldMindScreen.TimerTool.route,
             FieldMindScreen.CompassTool.route, FieldMindScreen.LevelTool.route,
+            FieldMindScreen.ResearchSession.route,
             FieldMindScreen.Flashcards.route,
-            FieldMindScreen.WeatherDatabase.route
+            FieldMindScreen.WeatherDatabase.route,
+            FieldMindScreen.WeatherCatalog.route
         ) -> RouteCategory.Tool
         else -> RouteCategory.Other
     }
@@ -832,9 +834,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Smooth sliding using tween — no bounce, feels like swiping between pages
-    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
-    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
+    // Spring-based sliding and fading — smooth, responsive feel
+    val slideSpec = FieldMindMotion.slideOffsetSpring
+    val fadeSpec = FieldMindMotion.expressiveFloat
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -868,8 +870,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
-    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
+    // Spring-based sliding and fading — smooth, responsive feel
+    val slideSpec = FieldMindMotion.slideOffsetSpring
+    val fadeSpec = FieldMindMotion.expressiveFloat
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -905,8 +908,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
-    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
+    // Spring-based sliding and fading — smooth, responsive feel
+    val slideSpec = FieldMindMotion.slideOffsetSpring
+    val fadeSpec = FieldMindMotion.expressiveFloat
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -933,8 +937,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val slideSpec = tween<IntOffset>(durationMillis = 350, easing = FastOutSlowInEasing)
-    val fadeSpec = tween<Float>(durationMillis = 280, easing = androidx.compose.animation.core.LinearEasing)
+    // Spring-based sliding and fading — smooth, responsive feel
+    val slideSpec = FieldMindMotion.slideOffsetSpring
+    val fadeSpec = FieldMindMotion.expressiveFloat
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -1009,7 +1014,7 @@ private fun FieldMindNavHost(
         val isCachable = route != null
         peekHolder.peekKey = if (isCachable) route else null
         peekHolder.peekContent = if (isCachable) {
-            { RouteContent(route!!, viewModel) }
+            { RouteContent(route, viewModel) }
         } else null
     }
 
@@ -1070,7 +1075,8 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.Changelog.route) { SwipeBackHost(onBack = { safeBack() }) { FieldMindChangelogScreen(onBack = { safeBack() }) } }
             composable(FieldMindScreen.Progress.route) { SwipeBackHost(onBack = { safeBack() }) { InsightsScreen(viewModel = viewModel, onBack = { safeBack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Flashcards.route) { SwipeBackHost(onBack = { safeBack() }) { FlashcardSessionScreen(viewModel = viewModel, onBack = { safeBack() }) } }
-            composable(FieldMindScreen.WeatherDatabase.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherDatabaseScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenSettings = { navController.navigateToDestination(FieldMindScreen.SettingsWeather.route) }, onOpenDetail = openDetail) } }
+            composable(FieldMindScreen.WeatherDatabase.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherDatabaseScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenSettings = { navController.navigateToDestination(FieldMindScreen.SettingsWeather.route) }, onOpenDetail = openDetail, onOpenWeatherCatalog = { navController.navigateToDestination(FieldMindScreen.WeatherCatalog.route) }) } }
+            composable(FieldMindScreen.WeatherCatalog.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherCatalogScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenSettings = { navController.navigateToDestination(FieldMindScreen.SettingsWeather.route) }) } }
             composable(FieldMindScreen.Settings.route) {
                 SwipeBackHost(onBack = { safeBack() }) {
                     FieldMindSettingsScreen(
@@ -1160,6 +1166,7 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.SiteLogTool.route) { SwipeBackHost(onBack = { safeBack() }) { SiteLogToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.ComparisonTable.route) { SwipeBackHost(onBack = { safeBack() }) { ComparisonTableScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.TimerTool.route) { SwipeBackHost(onBack = { safeBack() }) { TimerToolScreen(onBack = { safeBack() }) } }
+            composable(FieldMindScreen.ResearchSession.route) { SwipeBackHost(onBack = { safeBack() }) { ResearchSessionScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.CompassTool.route) { SwipeBackHost(onBack = { safeBack() }) { CompassToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.LevelTool.route) { SwipeBackHost(onBack = { safeBack() }) { LevelToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable("field_task_detail/{taskId}") { entry ->
@@ -1286,7 +1293,8 @@ private fun TabContentBox(
     sharedTransitionScope: SharedTransitionScope? = null,
     entranceProgress: Float = 1f, // 0 = just became active (scale up + fade in), 1 = fully entered
     visibleTabs: List<FieldMindScreen> = emptyList(),
-    onTabSelected: ((Int) -> Unit)? = null
+    onTabSelected: ((Int) -> Unit)? = null,
+    slideInFromPx: Float = 0f // horizontal slide offset for directional entrance
 ) {
     val onNav: (FieldMindScreen) -> Unit = { screen ->
         val tabIdx = visibleTabs.indexOf(screen)
@@ -1300,7 +1308,7 @@ private fun TabContentBox(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .offset { IntOffset(offsetX.roundToInt(), 0) }
+            .offset { IntOffset((offsetX + slideInFromPx * (1f - entranceProgress)).roundToInt(), 0) }
             .graphicsLayer {
                 // ── Entrance animation for newly active tab ──
                 // When a tab becomes active via tapping (entranceProgress animates 0→1),
@@ -1437,21 +1445,30 @@ private fun AllTabScreen(
         }
     }
 
-    // ── Tab entrance animation (scale-up + fade-in on tap-switch) ──
-    // When a tab is activated via tapping (not swiping), the content
-    // smoothly scales up from 0.95 and fades in from alpha 0.7 using
-    // spring physics for a polished "pop" entrance.
+    // ── Tab entrance animation (scale+fade+slide on tap-switch) ──
+    // When a tab is activated via tapping, the new content slides in
+    // from the appropriate direction (like the predictive back peek).
+    // Swipe-triggered tab changes don't use the slide since the swipe
+    // gesture already provides the directional reveal.
     val tabEntranceProgress = remember { Animatable(1f) }
     var lastActiveIndex by remember { mutableIntStateOf(activeTabIndex) }
+    var tabSlideDirection by remember { mutableIntStateOf(0) } // +1=from right, -1=from left, 0=none
+    var wasSwipeTriggered by remember { mutableStateOf(false) }
     val animConfig = fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig.current
     LaunchedEffect(activeTabIndex) {
         if (activeTabIndex != lastActiveIndex) {
+            // Determine slide direction: new tab to the right → slides from right (dir=+1)
+            // If swipe-triggered, skip the entrance slide (swipe already shows the reveal)
+            val dir = if (wasSwipeTriggered) 0 else (if (activeTabIndex > lastActiveIndex) 1 else -1)
+            wasSwipeTriggered = false
+            tabSlideDirection = dir
             lastActiveIndex = activeTabIndex
             tabEntranceProgress.snapTo(0f)
             tabEntranceProgress.animateTo(
                 1f,
                 animationSpec = animConfig.tabEntranceSpring()
             )
+            tabSlideDirection = 0
         }
     }
 
@@ -1507,10 +1524,12 @@ private fun AllTabScreen(
                                 val threshold = contentWidth * 0.18f
                                 if (animX.value > threshold && canSwipeRight) {
                                     haptics.confirm()
+                                    wasSwipeTriggered = true
                                     scope.launch { animX.snapTo(0f) }
                                     onTabSelected(activeTabIndex - 1)
                                 } else if (animX.value < -threshold && canSwipeLeft) {
                                     haptics.confirm()
+                                    wasSwipeTriggered = true
                                     scope.launch { animX.snapTo(0f) }
                                     onTabSelected(activeTabIndex + 1)
                                 } else {
@@ -1572,7 +1591,7 @@ private fun AllTabScreen(
             )
         }
 
-        // Phase 2: Active tab (on top) — with entrance animation from tapping
+        // Phase 2: Active tab (on top) — with entrance + directional slide from tapping
         TabContentBox(
             screen = visibleTabs[activeTabIndex],
             offsetX = animX.value,
@@ -1589,7 +1608,8 @@ private fun AllTabScreen(
             sharedTransitionScope = sharedTransitionScope,
             entranceProgress = tabEntranceProgress.value,
             visibleTabs = visibleTabs,
-            onTabSelected = onTabSelected
+            onTabSelected = onTabSelected,
+            slideInFromPx = tabSlideDirection * contentWidth
         )
     }
 }
@@ -1688,7 +1708,9 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         route == FieldMindScreen.Changelog.route -> FieldMindChangelogScreen(onBack = noop)
         route == FieldMindScreen.Progress.route -> InsightsScreen(viewModel = viewModel, onBack = noop, onNavigate = noopNav, onOpenDetail = noopDetail)
         route == FieldMindScreen.Flashcards.route -> FlashcardSessionScreen(viewModel = viewModel, onBack = noop)
-        route == FieldMindScreen.WeatherDatabase.route -> WeatherDatabaseScreen(viewModel = viewModel, onBack = noop, onOpenSettings = noop, onOpenDetail = noopDetail)
+        route == FieldMindScreen.WeatherDatabase.route -> WeatherDatabaseScreen(viewModel = viewModel, onBack = noop, onOpenSettings = noop, onOpenDetail = noopDetail, onOpenWeatherCatalog = noop)
+        route == FieldMindScreen.WeatherCatalog.route -> WeatherCatalogScreen(viewModel = viewModel, onBack = noop, onOpenSettings = noop)
+        route == FieldMindScreen.ResearchSession.route -> ResearchSessionScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
 
         // ── Settings hub (many callbacks) ──
         route == FieldMindScreen.Settings.route -> FieldMindSettingsScreen(

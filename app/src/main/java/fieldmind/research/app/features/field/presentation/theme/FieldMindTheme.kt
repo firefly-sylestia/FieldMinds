@@ -797,6 +797,7 @@ fun FieldMindTheme(
     SideEffect {
         if (!view.isInEditMode) {
             val window = (view.context as? Activity)?.window ?: return@SideEffect
+            @Suppress("DEPRECATION")
             window.navigationBarColor = navBarColor.toArgb()
             val insetsController = WindowCompat.getInsetsController(window, view)
             insetsController.isAppearanceLightNavigationBars = !darkTheme

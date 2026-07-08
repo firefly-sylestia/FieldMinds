@@ -113,12 +113,14 @@ class FieldMindPrivacyManager(private val context: Context) {
 
         val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val intent = km.createConfirmDeviceCredentialIntent(
+            val intent = @Suppress("DEPRECATION")
+            km.createConfirmDeviceCredentialIntent(
                 "FieldMind Privacy Lock",
                 "Authenticate to access your FieldMind data"
             )
             if (intent != null) {
-                activity.startActivityForResult(intent, REQUEST_CODE_CONFIRM_CREDENTIAL)
+                @Suppress("DEPRECATION")
+            activity.startActivityForResult(intent, REQUEST_CODE_CONFIRM_CREDENTIAL)
                 onSuccess()
             } else {
                 onError("Could not launch credential screen")

@@ -128,6 +128,7 @@ class TrackRecorder(private val context: Context) {
     /**
      * Starts a new track recording session.
      */
+    @SuppressLint("MissingPermission")
     fun startRecording(name: String? = null, sessionId: Long? = null) {
         if (!hasLocationPermission()) return
         if (_isRecording.value) return
@@ -181,6 +182,7 @@ class TrackRecorder(private val context: Context) {
     /**
      * Pauses/resumes the current recording.
      */
+    @SuppressLint("MissingPermission")
     fun togglePause() {
         val recording = _currentRecording.value ?: return
         if (recording.isPaused) {
@@ -316,6 +318,7 @@ class TrackRecorder(private val context: Context) {
         locationListener?.let { runCatching { locationManager.removeUpdates(it) } }
     }
 
+    @SuppressLint("MissingPermission")
     private fun showRecordingNotification(recording: TrackRecording) {
         val stopIntent = PendingIntent.getBroadcast(
             context,
@@ -336,6 +339,7 @@ class TrackRecorder(private val context: Context) {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun cancelNotification() {
         runCatching {
             NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)

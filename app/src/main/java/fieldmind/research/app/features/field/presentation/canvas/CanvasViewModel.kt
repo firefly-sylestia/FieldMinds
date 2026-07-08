@@ -7,8 +7,8 @@ import fieldmind.research.app.features.field.data.canvas.CanvasBlockEntity
 import fieldmind.research.app.features.field.data.canvas.CanvasRepository
 import fieldmind.research.app.features.field.data.canvas.FigureMetaEntity
 import fieldmind.research.app.features.field.data.database.FieldMindDatabase
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.FlowPreview    import kotlinx.coroutines.ExperimentalCoroutinesApi
+    import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**

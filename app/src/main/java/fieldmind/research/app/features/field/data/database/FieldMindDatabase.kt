@@ -246,7 +246,7 @@ abstract class FieldMindDatabase : RoomDatabase() {
                     MIGRATION_9_10,
                     MIGRATION_12_13
                 )
-                .fallbackToDestructiveMigration()
+                .fallbackToDestructiveMigration(true)
                 .build()
                 .also { INSTANCE = it }
         }

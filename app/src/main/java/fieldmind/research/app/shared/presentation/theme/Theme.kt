@@ -567,7 +567,9 @@ fun RhythmTheme(
             WindowCompat.setDecorFitsSystemWindows(window, false)
             
             // Set system bar colors to transparent for true edge-to-edge
+            @Suppress("DEPRECATION")
             window.setStatusBarColor(android.graphics.Color.TRANSPARENT)
+            @Suppress("DEPRECATION")
             window.setNavigationBarColor(android.graphics.Color.TRANSPARENT)
             
             // Handle system bar appearance based on theme

@@ -320,7 +320,7 @@ fun TasksScreen(
                 title = "Upcoming",
                 icon = MaterialSymbolIcon("calendar_month"),
                 count = upcomingTasks.size,
-                accentColor = FieldMindTheme.colors.observation,
+                accentColor = FieldMindTheme.colors.task,
                 expanded = expandedUpcoming,
                 onToggle = { expandedUpcoming = !expandedUpcoming }
             )
@@ -335,7 +335,7 @@ fun TasksScreen(
                 items(upcomingTasks, key = { it.id }) { task ->
                     SwipeToCompleteTaskCard(
                         task = task,
-                        accentColor = FieldMindTheme.colors.observation,
+                        accentColor = FieldMindTheme.colors.task,
                         onToggle = {
                             haptics.confirm()
                             completedTaskIds[task.id] = true
@@ -356,7 +356,7 @@ fun TasksScreen(
                 title = "Unscheduled",
                 icon = MaterialSymbolIcon("inbox"),
                 count = unscheduledTasks.size,
-                accentColor = FieldMindTheme.colors.data,
+                accentColor = FieldMindTheme.colors.task,
                 expanded = expandedUnscheduled,
                 onToggle = { expandedUnscheduled = !expandedUnscheduled }
             )
@@ -371,7 +371,7 @@ fun TasksScreen(
                 items(unscheduledTasks, key = { it.id }) { task ->
                     SwipeToCompleteTaskCard(
                         task = task,
-                        accentColor = FieldMindTheme.colors.data,
+                        accentColor = FieldMindTheme.colors.task,
                         onToggle = {
                             haptics.confirm()
                             completedTaskIds[task.id] = true

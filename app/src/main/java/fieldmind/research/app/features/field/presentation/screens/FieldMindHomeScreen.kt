@@ -290,7 +290,7 @@ fun SharedTransitionScope.HomeScreen(
                     lastSessionLabel = if (lastSession != null) "Resume your last session" else null,
                     activeSessionName = activeSession?.name,
                     timerMs = liveTimerMs,
-                    onStartSession = { onNavigate(FieldMindScreen.Observe) }
+                    onStartSession = { onNavigate(FieldMindScreen.ResearchSession) }
                 ) }
 
             // ── Quick Actions Row ──
@@ -1493,7 +1493,7 @@ private fun LiveWeatherDashboardWidget(
                             weatherLoading -> "Loading…"
                             currentWeather != null -> {
                                 // Subtitle shows condition description only (temp shown below in main row)
-                                val desc = currentWeather?.weatherDescription ?: ""
+                                val desc = currentWeather.weatherDescription ?: ""
                                 if (showCondition && desc.isNotBlank()) desc else "Weather data available"
                             }
                             weatherError -> "Enable location for live weather"
@@ -1509,7 +1509,7 @@ private fun LiveWeatherDashboardWidget(
             // ── Time-of-day greeting ──
             if (currentWeather != null) {
                 Text(
-                    "$timeGreeting. ${currentWeather?.weatherDescription?.ifBlank { "Clear skies" }}.",
+                    "$timeGreeting. ${currentWeather.weatherDescription?.ifBlank { "Clear skies" }}.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = textOnScene.copy(alpha = 0.75f),
                     fontWeight = FontWeight.Medium

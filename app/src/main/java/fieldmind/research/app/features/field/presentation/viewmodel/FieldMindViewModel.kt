@@ -277,6 +277,65 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
     fun observeWeatherCatalog(lat: Double, lon: Double) = repository.observeWeatherCatalog(lat, lon)
     fun observeWeatherCatalogAll() = repository.observeWeatherCatalogAll()
 
+    // ── Weather Catalog Auto-Capture (runs in viewModelScope, survives screen navigation) ──
+    var isWeatherCatalogCapturing by mutableStateOf(false)
+        private set
+    var weatherCatalogSelectedSlots by mutableStateOf(setOf(6, 9, 12, 15, 18, 21))
+    var weatherCatalogSelectedInterval by mutableStateOf(3)
+    var weatherCatalogUseInterval by mutableStateOf(false)
+
+    private var weatherCaptureJob: kotlinx.coroutines.Job? = null
+    private var capturedHoursToday = setOf<Int>()
+
+    fun startWeatherCatalogCapture() {
+        if (isWeatherCatalogCapturing) return
+        isWeatherCatalogCapturing = true
+        capturedHoursToday = emptySet()
+        val locProvider = fieldmind.research.app.features.field.data.location.FieldLocationProvider(getApplication())
+
+        weatherCaptureJob = viewModelScope.launch {
+            while (isWeatherCatalogCapturing) {
+                val now = java.util.Calendar.getInstance()
+                val currentHour = now.get(java.util.Calendar.HOUR_OF_DAY)
+                val currentMinute = now.get(java.util.Calendar.MINUTE)
+
+                val shouldCapture = if (weatherCatalogUseInterval) {
+                    currentHour % weatherCatalogSelectedInterval == 0 && currentMinute < 5 && currentHour !in capturedHoursToday
+                } else {
+                    currentHour in weatherCatalogSelectedSlots && currentMinute < 5 && currentHour !in capturedHoursToday
+                }
+
+                if (shouldCapture) {
+                    if (locProvider.hasAnyLocationPermission()) {
+                        runCatching {
+                            locProvider.lastKnownLocation()?.let { loc ->
+                                fetchAndSaveWeatherSnapshot(
+                                    latitude = loc.latitude,
+                                    longitude = loc.longitude,
+                                    forceRefresh = true,
+                                    placeName = loc.placeName ?: ""
+                                )
+                                capturedHoursToday = capturedHoursToday + currentHour
+                            }
+                        }
+                    }
+                }
+
+                kotlinx.coroutines.delay(60_000L)
+
+                // Reset captured set at midnight
+                val hourNow = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
+                if (hourNow == 0) capturedHoursToday = emptySet()
+            }
+        }
+    }
+
+    fun stopWeatherCatalogCapture() {
+        isWeatherCatalogCapturing = false
+        weatherCaptureJob?.cancel()
+        weatherCaptureJob = null
+    }
+
     /**
      * Fetches weather for the given location and saves it to the offline weather catalog
      * so it can be reused in observation sessions without re-fetching.

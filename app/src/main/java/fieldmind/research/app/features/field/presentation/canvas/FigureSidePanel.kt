@@ -166,7 +166,7 @@ fun FigureSidePanel(
             FigureInfoCard(block = block, figureMeta = figureMeta)
 
             // ── Tab row ──
-            ScrollableTabRow(
+            PrimaryScrollableTabRow(
                 selectedTabIndex = selectedTab,
                 edgePadding = 0.dp,
                 containerColor = Color.Transparent,
