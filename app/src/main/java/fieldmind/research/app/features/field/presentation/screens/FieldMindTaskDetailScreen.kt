@@ -125,6 +125,7 @@ fun TaskDetailScreen(
 
     // ── Overflow menu ──
     var showOverflow by remember { mutableStateOf(false) }
+    var showEditTask by remember { mutableStateOf(false) }
 
     val taskScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
 
@@ -159,7 +160,7 @@ fun TaskDetailScreen(
                             text = { Text("Edit task") },
                             onClick = {
                                 showOverflow = false
-                                taskScope.launch { taskSnackbar.showSnackbar("Coming soon") }
+                                showEditTask = true
                             },
                             leadingIcon = { Icon(MaterialSymbolIcon("edit"), null, size = 18.dp) }
                         )
@@ -689,6 +690,10 @@ fun TaskDetailScreen(
             .align(Alignment.BottomCenter)
             .padding(16.dp)
     )
+    // ── Edit task dialog overlay ──
+    if (showEditTask) {
+        EditTaskDialog(entity = task, viewModel = viewModel, onDismiss = { showEditTask = false })
+    }
 }
 }
 

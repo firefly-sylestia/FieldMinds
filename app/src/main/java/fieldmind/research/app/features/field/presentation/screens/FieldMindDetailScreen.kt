@@ -2293,6 +2293,7 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
     // Live task list for this project
     val allTasks by viewModel.tasks.collectAsState()
     val projectTasks = remember(allTasks, projectId) { allTasks.filter { it.projectId == projectId } }
+    var editingTask by remember(projectId) { mutableStateOf<TaskEntity?>(null) }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Button(
@@ -2412,11 +2413,19 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                 }
                 Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                     Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        Icon(
-                            if (task.status == "Done") FieldMindIcons.Check else FieldMindIcons.List,
-                            null,
-                            tint = if (task.status == "Done") colors.positive else colors.project,
-                            size = 20.dp
+                        Checkbox(
+                            modifier = Modifier.size(24.dp),
+                            checked = task.status == "Done",
+                            onCheckedChange = {
+                                haptics.confirm()
+                                viewModel.updateTaskEntity(task.copy(
+                                    status = if (task.status == "Done") "Pending" else "Done"
+                                ))
+                            },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = colors.positive,
+                                uncheckedColor = colors.project.copy(alpha = 0.5f)
+                            )
                         )
                         Column(Modifier.weight(1f)) {
                             Text(task.title, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
@@ -2433,43 +2442,28 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                             if (task.dueDate.isNotBlank()) {
                                 Text(task.dueDate, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                IconButton(
+                                    onClick = { editingTask = task },
+                                    modifier = Modifier.size(28.dp)
+                                ) {
+                                    Icon(MaterialSymbolIcon("edit"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 16.dp)
+                                }
                                 IconButton(
                                     onClick = { viewModel.deleteTask(task.id) },
                                     modifier = Modifier.size(28.dp)
                                 ) {
                                     Icon(FieldMindIcons.Close, null, tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f), size = 16.dp)
                                 }
-                                FilledTonalButton(
-                                    onClick = {
-                                        haptics.confirm()
-                                        viewModel.updateTaskEntity(task.copy(
-                                            status = if (task.status == "Done") "Pending" else "Done"
-                                        ))
-                                    },
-                                    shape = RoundedCornerShape(18.dp),
-                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
-                                    colors = if (task.status != "Done") ButtonDefaults.filledTonalButtonColors(
-                                        containerColor = colors.positive.copy(alpha = 0.15f),
-                                        contentColor = colors.positive
-                                    ) else ButtonDefaults.filledTonalButtonColors()
-                            ) {
-                                Icon(
-                                    if (task.status == "Done") FieldMindIcons.Forward else FieldMindIcons.Check,
-                                    null,
-                                    size = 14.dp
-                                )
-                                Spacer(Modifier.size(4.dp))
-                                Text(
-                                    if (task.status == "Done") "Open" else "Complete",
-                                    style = MaterialTheme.typography.labelSmall
-                                )
                             }
-                        }
                     }
                 }
             }
         }
+    }
+    // ── Edit task dialog overlay ──
+    if (editingTask != null) {
+        EditTaskDialog(entity = editingTask!!, viewModel = viewModel, onDismiss = { editingTask = null })
     }
 }
 }

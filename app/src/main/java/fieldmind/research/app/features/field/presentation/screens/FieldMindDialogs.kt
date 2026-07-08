@@ -1167,7 +1167,58 @@ internal fun EditEntityDialog(kind: String, id: Long, viewModel: FieldMindViewMo
         "data" -> viewModel.dataRecords.collectAsState().value.firstOrNull { it.id == id }?.let { EditDataRecordDialog(it, viewModel, onDismiss) }
         "report" -> viewModel.reports.collectAsState().value.firstOrNull { it.id == id }?.let { EditReportDialog(it, viewModel, onDismiss) }
         "flashcard" -> viewModel.flashcards.collectAsState().value.firstOrNull { it.id == id }?.let { EditFlashcardDialog(it, viewModel, onDismiss) }
+        "task" -> viewModel.tasks.collectAsState().value.firstOrNull { it.id == id }?.let { EditTaskDialog(it, viewModel, onDismiss) }
         else -> onDismiss()
+    }
+}
+
+
+@Composable
+internal fun EditTaskDialog(entity: TaskEntity, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
+    val taskTypes = listOf("Field Survey", "Observation Collection", "Species Count", "Audio Recording", "Photo Collection", "Video Collection", "Habitat Mapping", "Literature Review", "Data Analysis", "Report Writing", "Verification", "Sample Collection", "GPS Tracking", "Custom")
+    val priorityLevels = listOf("Low", "Medium", "High")
+    var title by remember { mutableStateOf(entity.title) }
+    var description by remember { mutableStateOf(entity.description) }
+    var taskType by remember { mutableStateOf(entity.taskType) }
+    var priority by remember { mutableStateOf(entity.priority) }
+    var dueDate by remember { mutableStateOf(entity.dueDate) }
+    var dueTime by remember { mutableStateOf(entity.dueTime) }
+    var assignedTo by remember { mutableStateOf(entity.assignedTo) }
+
+    fun save() {
+        if (title.isNotBlank()) {
+            viewModel.updateTaskEntity(entity.copy(
+                title = title.trim(),
+                description = description.trim(),
+                taskType = taskType,
+                priority = priority,
+                dueDate = dueDate.trim(),
+                dueTime = dueTime.trim(),
+                assignedTo = assignedTo.trim()
+            ))
+            onDismiss()
+        }
+    }
+
+    val original = entity
+    DialogWrapper(onDismiss = onDismiss, fullScreen = true, isDirty = {
+        title != original.title || description != original.description ||
+        taskType != original.taskType || priority != original.priority ||
+        dueDate != original.dueDate || assignedTo != original.assignedTo
+    }) {
+        DialogHeader(FieldMindIcons.List, "Edit Task", "Update title, type, priority, and schedule", accent = FieldMindTheme.colors.task)
+        DialogDividerSection("Task details", FieldMindIcons.Edit, FieldMindTheme.colors.task)
+        FieldTextField(title, { title = it }, "Title", supportingText = "Task name")
+        FieldTextField(description, { description = it }, "Description", minLines = 2)
+        OptionPickerField(label = "Type", selected = taskType, options = taskTypes, onSelected = { taskType = it }, icon = FieldMindIcons.Category)
+        OptionPickerField(label = "Priority", selected = priority, options = priorityLevels, onSelected = { priority = it }, icon = FieldMindIcons.Streak)
+        DialogDividerSection("Schedule & assignment", FieldMindIcons.Calendar, FieldMindTheme.colors.task)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            FieldTextField(dueDate, { dueDate = it }, "Due date", modifier = Modifier.weight(1f), supportingText = "YYYY-MM-DD")
+            FieldTextField(dueTime, { dueTime = it }, "Due time", modifier = Modifier.weight(1f), supportingText = "HH:MM")
+        }
+        FieldTextField(assignedTo, { assignedTo = it }, "Assigned to")
+        DialogActions(onCancel = onDismiss, onSave = { save() }, saveEnabled = title.isNotBlank(), saveLabel = "Save changes")
     }
 }
 
