@@ -6,6 +6,11 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -68,6 +73,7 @@ fun CompassToolScreen(
 
     // ── Calibration state ──
     var needsCalibration by remember { mutableStateOf(true) }
+    val haptics = rememberFieldMindHaptics()
 
     // ── Sensor listener ──
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
@@ -393,28 +399,10 @@ fun CompassToolScreen(
                             )
                         }
 
-                        // Calibration indicator
+                        // ── Calibration guide (animated figure-8 with accuracy progress) ──
                         if (needsCalibration) {
-                            Spacer(Modifier.height(4.dp))
-                            Surface(
-                                shape = RoundedCornerShape(16.dp),
-                                color = MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
-                            ) {
-                                Row(
-                                    Modifier.fillMaxWidth().padding(12.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    Icon(MaterialSymbolIcon("info"), null, tint = MaterialTheme.colorScheme.error, size = 18.dp)
-                                    Text(
-                                        "Move your device in a figure-8 pattern to calibrate",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.error
-                                    )
-                                }
-                            }
+                            CalibrationGuideCard(accuracy, haptics = haptics)
                         }
-
 
                     }
                 }
@@ -430,12 +418,167 @@ fun CompassToolScreen(
                         Text("• The red heading indicator (top) shows the direction your device is pointing", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("• Pitch/Roll show the device's tilt in the current orientation", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("• Keep away from metal objects and magnets", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text("• Wave in a figure-8 pattern to re-calibrate", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
         }
         FieldMindSnackbarOverlay(hostState = snackbar, modifier = Modifier.align(Alignment.TopCenter).padding(top = 8.dp, start = 16.dp, end = 16.dp))
+    }
+}
+
+@Composable
+private fun CalibrationGuideCard(accuracy: String, haptics: FieldMindHaptics) {
+    val colors = FieldMindTheme.colors
+    val surfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
+    val outlineVariant = MaterialTheme.colorScheme.outlineVariant
+    val onSurfaceV = MaterialTheme.colorScheme.onSurfaceVariant
+
+    // ── Accuracy progress: ordered levels ──
+    val accuracyLevels = listOf("Unreliable", "Low", "Medium", "High")
+    val currentLevel = accuracyLevels.indexOf(accuracy).coerceAtLeast(0)
+    val progress = currentLevel.toFloat() / (accuracyLevels.size - 1)
+
+    // ── Haptic on calibration completion (first time reaching Medium or High) ──
+    var wasCalibrated by remember { mutableStateOf(false) }
+    val isCalibrated = currentLevel >= 2 // Medium or better
+    LaunchedEffect(isCalibrated) {
+        if (isCalibrated && !wasCalibrated) {
+            haptics.confirm()
+        }
+        wasCalibrated = isCalibrated
+    }
+
+    // ── Animated figure-8 tracing dot ──
+    val infiniteTransition = rememberInfiniteTransition(label = "figure8")
+    val figure8Progress by infiniteTransition.animateFloat(
+        initialValue = 0f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "figure8Progress"
+    )
+
+    Card(
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = colors.info.copy(alpha = 0.06f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            // ── Header row ──
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(MaterialSymbolIcon("tune"), null, tint = colors.info, size = 20.dp)
+                Text("Calibrate compass", style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+            }
+
+            // ── Animated figure-8 guide ──
+            Box(
+                modifier = Modifier.fillMaxWidth().height(100.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Canvas(Modifier.fillMaxSize()) {
+                    val cxa = size.width / 2f
+                    val cya = size.height / 2f
+                    val radius = minOf(cxa, cya) * 0.38f
+
+                    // Draw the figure-8 path
+                    val path = Path().apply {
+                        // Figure-8 parametric: x = R*sin(t), y = R*sin(2t)/2
+                        val steps = 60
+                        for (i in 0..steps) {
+                            val t = (i.toFloat() / steps) * (2f * kotlin.math.PI.toFloat())
+                            val px = cxa + radius * sin(t)
+                            val py = cya + radius * 0.5f * sin(2f * t)
+                            if (i == 0) moveTo(px, py) else lineTo(px, py)
+                        }
+                        close()
+                    }
+                    drawPath(
+                        path, color = outlineVariant.copy(alpha = 0.3f),
+                        style = Stroke(width = 2f, cap = StrokeCap.Round)
+                    )
+
+                    // Moving dot along the path
+                    val dotT = figure8Progress * 2f * kotlin.math.PI.toFloat()
+                    val dotX = cxa + radius * sin(dotT)
+                    val dotY = cya + radius * 0.5f * sin(2f * dotT)
+                    drawCircle(color = colors.info, radius = 6f, center = Offset(dotX, dotY))
+                    drawCircle(color = colors.info.copy(alpha = 0.2f), radius = 12f, center = Offset(dotX, dotY))
+                }
+            }
+
+            // ── Actionable instruction ──
+            Text(
+                "Rotate your device in a figure-8 pattern until accuracy reaches Medium or High.",
+                style = MaterialTheme.typography.bodySmall,
+                color = onSurfaceV
+            )
+
+            // ── Accuracy progress bar ──
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text("Accuracy", style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold, color = onSurfaceV)
+                    Text(accuracy, style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = when (accuracy) {
+                            "High" -> colors.positive
+                            "Medium" -> colors.warning
+                            else -> MaterialTheme.colorScheme.error
+                        })
+                }
+                LinearProgressIndicator(
+                    progress = { progress },
+                    modifier = Modifier.fillMaxWidth().height(6.dp)
+                        .clip(RoundedCornerShape(6.dp)),
+                    color = when {
+                        progress >= 1f -> colors.positive
+                        progress >= 0.66f -> colors.warning
+                        else -> MaterialTheme.colorScheme.error
+                    },
+                    trackColor = surfaceHighest
+                )
+
+                // Step labels
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    accuracyLevels.forEach { level ->
+                        val idx = accuracyLevels.indexOf(level)
+                        Text(
+                            level,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontSize = 9.sp,
+                            color = if (idx <= currentLevel) MaterialTheme.colorScheme.onSurface
+                                    else onSurfaceV.copy(alpha = 0.4f),
+                            fontWeight = if (idx == currentLevel) FontWeight.Bold else FontWeight.Normal
+                        )
+                    }
+                }
+
+                // Completion message
+                if (accuracy == "High") {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = colors.positive.copy(alpha = 0.1f),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            Modifier.padding(10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Icon(MaterialSymbolIcon("check_circle", filled = true), null,
+                                tint = colors.positive, size = 18.dp)
+                            Text("Calibrated — heading is now accurate.",
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.positive)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
