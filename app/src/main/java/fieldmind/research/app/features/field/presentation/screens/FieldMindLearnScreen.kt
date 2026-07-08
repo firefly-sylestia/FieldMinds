@@ -18,6 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import fieldmind.research.app.features.field.data.learn.AppLesson
+import fieldmind.research.app.features.field.data.learn.FieldSkillsLessons
 import fieldmind.research.app.features.field.data.learn.LearnCategory
 import fieldmind.research.app.features.field.data.learn.LearnLibrary
 import fieldmind.research.app.features.field.data.learn.LearnResource
@@ -49,6 +51,7 @@ fun FieldMindLearnScreen(
     viewModel: FieldMindViewModel,
     onBack: () -> Unit = {},
     onOpenReader: (String, String) -> Unit = { _, _ -> },
+    onOpenLesson: (String) -> Unit = {},
     onNavigateToLibrary: () -> Unit = {}
 ) {
 
@@ -105,7 +108,21 @@ fun FieldMindLearnScreen(
             )
         }
 
-        // ── Section 1: Recommended next step (personalized hero) ──
+        // ── Section 1: Field Research Skills (in-app lessons) ──
+        item {
+            SectionHeader(
+                title = "Field Research Skills",
+                subtitle = "${FieldSkillsLessons.allLessons.size} in-app lessons — no internet needed"
+            )
+        }
+        items(FieldSkillsLessons.allLessons) { lesson ->
+            InAppLessonCard(
+                lesson = lesson,
+                onClick = { onOpenLesson(lesson.slug) }
+            )
+        }
+
+        // ── Section 2: Recommended next step (personalized hero) ──
         item { NextStepHero(milestone = nextMilestone, signals = signals, onOpenReader = onOpenReader) }
 
         // ── Section 2: Based on your activity ──
@@ -144,6 +161,108 @@ fun FieldMindLearnScreen(
 
         // ── Bottom spacer ──
         item { Spacer(Modifier.height(24.dp)) }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  IN-APP LESSON CARD
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun InAppLessonCard(
+    lesson: AppLesson,
+    onClick: () -> Unit
+) {
+    val accent = FieldMindTheme.colors.accentFor(lesson.slug)
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Icon box
+            Box(
+                Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(22.dp))
+                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    icon = MaterialSymbolIcon(lesson.iconName),
+                    contentDescription = null,
+                    tint = accent,
+                    size = 24.dp
+                )
+            }
+
+            // Text content
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(
+                    lesson.title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Level badge
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = accent.copy(alpha = 0.12f)
+                    ) {
+                        Text(
+                            lesson.level,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Medium,
+                            color = accent,
+                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
+                        )
+                    }
+                    // Estimated time
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.6f)
+                    ) {
+                        Text(
+                            lesson.estimatedTime,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
+                        )
+                    }
+                }
+                if (lesson.summary.isNotBlank()) {
+                    Text(
+                        lesson.summary,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+
+            Icon(
+                icon = FieldMindIcons.Forward,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                size = 20.dp
+            )
+        }
     }
 }
 

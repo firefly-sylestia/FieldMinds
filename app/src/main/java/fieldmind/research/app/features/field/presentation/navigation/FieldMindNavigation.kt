@@ -47,6 +47,7 @@ import fieldmind.research.app.features.field.presentation.components.SwipeBackHo
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.LocalSharedTransitionScope
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
+import fieldmind.research.app.features.field.data.learn.FieldSkillsLessons
 import fieldmind.research.app.features.field.presentation.screens.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
@@ -122,6 +123,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object Progress : FieldMindScreen("field_progress", "Progress", FieldMindIcons.Check)
     data object Flashcards : FieldMindScreen("field_flashcards_session", "Review", FieldMindIcons.Flashcard)
     data object Reader : FieldMindScreen("field_reader", "Reader", FieldMindIcons.Book)
+    data object LessonViewer : FieldMindScreen("field_lesson/{lessonSlug}", "Lesson", MaterialSymbolIcon("school"))
     data object Settings : FieldMindScreen("field_settings", "Settings", FieldMindIcons.Settings)
     data object SettingsProfile : FieldMindScreen("field_settings_profile", "Profile", FieldMindIcons.Nature)
     data object SettingsAppearance : FieldMindScreen("field_settings_appearance", "Appearance", FieldMindIcons.Palette)
@@ -1058,8 +1060,17 @@ private fun FieldMindNavHost(
                     onPopBackStack = { navController.popBackStack() }
                 )
             }
-            composable(FieldMindScreen.Learn.route) { SwipeBackHost(onBack = { safeBack() }) { FieldMindLearnScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenReader = openReader) } }
+            composable(FieldMindScreen.Learn.route) { SwipeBackHost(onBack = { safeBack() }) { FieldMindLearnScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenReader = openReader, onOpenLesson = { slug -> navController.navigateToDestination("field_lesson/$slug") }) } }
             composable(FieldMindScreen.Reader.route) { SwipeBackHost(onBack = { safeBack() }) { LearnReaderScreen(url = readerTarget.first, title = readerTarget.second, onBack = { safeBack() }) } }
+            composable("field_lesson/{lessonSlug}") { entry ->
+                val lessonSlug = entry.arguments?.getString("lessonSlug") ?: ""
+                SwipeBackHost(onBack = { safeBack() }) {
+                    val lesson = FieldSkillsLessons.bySlug[lessonSlug]
+                    if (lesson != null) {
+                        LessonViewerScreen(lesson = lesson, onBack = { safeBack() })
+                    }
+                }
+            }
             composable(FieldMindScreen.FieldMode.route) { SwipeBackHost(onBack = { safeBack() }) { ObserveScreen(viewModel = viewModel, compactFieldMode = true, onBack = { safeBack() }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Questions.route) { SwipeBackHost(onBack = { safeBack() }) { QuestionsScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenDetail = openDetail) } }
             // NOTE: Hypotheses currently renders QuestionsScreen — a dedicated hypotheses
@@ -1706,7 +1717,12 @@ private fun RouteContent(route: String, viewModel: FieldMindViewModel) {
         }
 
         // ── Exact-match static routes ──
-        route == FieldMindScreen.Learn.route -> FieldMindLearnScreen(viewModel = viewModel, onBack = noop, onOpenReader = noopReader)
+        route.startsWith("field_lesson/") -> {
+            val slug = route.removePrefix("field_lesson/")
+            val lesson = FieldSkillsLessons.bySlug[slug]
+            if (lesson != null) LessonViewerScreen(lesson = lesson, onBack = noop)
+        }
+        route == FieldMindScreen.Learn.route -> FieldMindLearnScreen(viewModel = viewModel, onBack = noop, onOpenReader = noopReader, onOpenLesson = {})
         route == FieldMindScreen.Reader.route -> LearnReaderScreen(url = "", title = "", onBack = noop)
         route == FieldMindScreen.FieldMode.route -> ObserveScreen(viewModel = viewModel, compactFieldMode = true, onBack = noop, onOpenDetail = noopDetail)
         route == FieldMindScreen.Questions.route -> QuestionsScreen(viewModel = viewModel, onBack = noop, onOpenDetail = noopDetail)
