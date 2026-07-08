@@ -80,6 +80,9 @@ fun CompassToolScreen(
     // ── Interference dismissed state ──
     var dismissedInterference by remember { mutableStateOf(false) }
 
+    // ── Magnetic field chart buffer (rolling window of readings) ──
+    val fieldReadings = remember { mutableStateListOf<Float>() }
+
     // ── Calibration state ──
     var needsCalibration by remember { mutableStateOf(true) }
     var showCalibrationGuide by remember { mutableStateOf(false) }
@@ -98,6 +101,8 @@ fun CompassToolScreen(
         var firstGravity = true
         var firstGeomagnetic = true
         val alpha = 0.12f  // Low-pass filter coefficient (lower = more smoothing)
+
+        var magnetometerCounter = 0
 
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
@@ -131,6 +136,16 @@ fun CompassToolScreen(
                             geomagnetic[2] * geomagnetic[2]
                         )
                         magneticField = newField
+
+                        // ── Throttled sampling for mini chart (~12.5 samples/sec at GAME rate) ──
+                        magnetometerCounter++
+                        if (magnetometerCounter % 4 == 0) {
+                            fieldReadings.add(newField)
+                            if (fieldReadings.size > 60) {
+                                fieldReadings.removeAt(0)
+                            }
+                        }
+
                         // Magnetic interference detection (Earth's field: 25-65 μT)
                         isInterference = newField < 15f || newField > 100f
                         interferenceLabel = when {
@@ -475,6 +490,12 @@ fun CompassToolScreen(
                             )
                         }
 
+                        // ── Magnetic field mini chart ──
+                        if (fieldReadings.size >= 2) {
+                            Spacer(Modifier.height(2.dp))
+                            MagneticFieldChart(fieldReadings.toList())
+                        }
+
                         // Tilt info (from rotation matrix — works in any orientation)
                         HorizontalDivider(
                             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f),
@@ -746,6 +767,54 @@ private fun MagneticInterferenceCard(label: String, isStrong: Boolean, onDismiss
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun MagneticFieldChart(readings: List<Float>) {
+    if (readings.size < 2) return
+
+    val colors = FieldMindTheme.colors
+    val maxY = 200f // μT — Earth's field range is 25-65 μT, so 0-200 covers everything
+
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp)
+    ) {
+        val chartW = size.width
+        val chartH = size.height
+
+        // ── Reference lines: 15 μT (weak boundary) and 100 μT (elevated boundary) ──
+        val refColor = Color.Gray.copy(alpha = 0.15f)
+        listOf(15f, 100f).forEach { refValue ->
+            val y = chartH - (refValue / maxY * chartH)
+            drawLine(refColor, Offset(0f, y), Offset(chartW, y), strokeWidth = 1f)
+        }
+
+        // ── Data line ──
+        val stepX = chartW / (readings.size - 1).coerceAtLeast(1)
+        val latest = readings.last()
+        val lineColor = when {
+            latest > 200f -> MaterialTheme.colorScheme.error
+            latest > 100f -> FieldMindTheme.colors.warning
+            latest < 15f -> MaterialTheme.colorScheme.error
+            else -> FieldMindTheme.colors.positive
+        }
+
+        val path = Path()
+        readings.forEachIndexed { i, value ->
+            val x = i * stepX
+            val y = chartH - (value.coerceIn(0f, maxY) / maxY * chartH)
+            if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
+        }
+        drawPath(path, color = lineColor, style = Stroke(width = 2f, cap = StrokeCap.Round))
+
+        // ── Current value dot at the end of the line ──
+        val lastX = (readings.size - 1) * stepX
+        val lastY = chartH - (readings.last().coerceIn(0f, maxY) / maxY * chartH)
+        drawCircle(lineColor, radius = 3f, center = Offset(lastX, lastY))
+        drawCircle(lineColor.copy(alpha = 0.2f), radius = 7f, center = Offset(lastX, lastY))
     }
 }
 
