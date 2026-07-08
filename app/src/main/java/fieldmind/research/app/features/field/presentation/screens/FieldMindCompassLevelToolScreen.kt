@@ -552,14 +552,17 @@ fun CompassToolScreen(
                 }
             }
 
-            // ── Calibration guide ──
-            if (needsCalibration || showCalibrationGuide) {
+            // ── Calibration guide (always accessible) ──
+            if (showCalibrationGuide || needsCalibration) {
                 CompassCalibrationGuide(
                     accuracy = accuracy,
                     haptics = haptics,
-                    onCalibrated = { showCalibrationGuide = false }
+                    onCalibrated = {
+                        showCalibrationGuide = false
+                        needsCalibration = false
+                    }
                 )
-            } else if (accuracy == "Medium" || accuracy == "High") {
+            } else {
                 OutlinedButton(
                     onClick = { haptics.light(); showCalibrationGuide = true },
                     shape = RoundedCornerShape(22.dp),
@@ -567,7 +570,7 @@ fun CompassToolScreen(
                 ) {
                     Icon(MaterialSymbolIcon("tune"), null, size = 16.dp)
                     Spacer(Modifier.size(6.dp))
-                    Text("Recalibrate", fontWeight = FontWeight.SemiBold)
+                    Text("Calibrate", fontWeight = FontWeight.SemiBold)
                 }
             }
         }
@@ -1304,9 +1307,10 @@ fun LevelToolScreen(
         }
     }
 
-    // ── Mode transition: smoothly blend between flat and vertical display ──
-    val isFlatMode by remember(smoothFlatness) {
-        derivedStateOf { smoothFlatness > 0.35f }
+    // ── Mode transition: manual override or auto-detect ──
+    var manualMode by remember { mutableStateOf<Boolean?>(null) } // null=auto, true=force flat, false=force vertical
+    val isFlatMode by remember(smoothFlatness, manualMode) {
+        derivedStateOf { manualMode ?: (smoothFlatness > 0.35f) }
     }
 
     val isLevel by remember(isFlatMode, smoothFlatPitch, smoothFlatRoll, smoothTiltFromVertical, isReferenced, refApplied) {
@@ -1383,6 +1387,33 @@ fun LevelToolScreen(
                 heroColor = colors.data,
                 trailing = { BackButton(onClick = onBack) }
             )
+
+            // ── Mode toggle pills ──
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                listOf("Auto" to null, "Surface" to true, "Plumb" to false).forEach { (label, mode) ->
+                    FilterChip(
+                        selected = manualMode == mode,
+                        onClick = {
+                            haptics.light()
+                            manualMode = if (manualMode == mode) null else mode
+                        },
+                        label = { Text(label, fontWeight = if (manualMode == mode) FontWeight.Bold else FontWeight.Normal, fontSize = 12.sp) },
+                        leadingIcon = if (manualMode == mode) {
+                            { Icon(MaterialSymbolIcon("check"), null, size = 14.dp) }
+                        } else null
+                    )
+                }
+                Spacer(Modifier.weight(1f))
+                Text(
+                    if (manualMode != null) "Manual" else "Auto",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                )
+            }
 
             // ── Level display card ──
             Card(
