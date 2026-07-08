@@ -1180,26 +1180,65 @@ private fun CircularBubbleLevel(
     pitch: Float, roll: Float, isLevel: Boolean, colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
 ) {
     Box(modifier = Modifier.size(260.dp), contentAlignment = Alignment.Center) {
-        val levelSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
-        val levelOutlineVariant = MaterialTheme.colorScheme.outlineVariant
-        val levelOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+        val sh = MaterialTheme.colorScheme.surfaceContainerHighest
+        val ov = MaterialTheme.colorScheme.outlineVariant
+        val osv = MaterialTheme.colorScheme.onSurfaceVariant
+        val accent = if (isLevel) colors.positive else colors.info
+
+        // ── Pulsing outer glow ring ──
+        val infiniteTransition = rememberInfiniteTransition(label = "levelGlow")
+        val glowPulse by infiniteTransition.animateFloat(
+            initialValue = 0.6f, targetValue = 1f,
+            animationSpec = infiniteRepeatable(tween(2000, easing = LinearEasing), RepeatMode.Reverse),
+            label = "levelGlowPulse"
+        )
+        val glowColor = accent.copy(alpha = glowPulse * 0.3f)
+
         Canvas(Modifier.fillMaxSize()) {
             val cx = size.width / 2f; val cy = size.height / 2f
             val outerRadius = minOf(cx, cy) * 0.95f
             val bubbleRadius = outerRadius * 0.12f
-            drawCircle(color = levelSurfaceHighest, radius = outerRadius, center = Offset(cx, cy))
-            drawCircle(color = levelOutlineVariant.copy(alpha = 0.3f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = 2f))
-            drawCircle(color = levelOutlineVariant.copy(alpha = 0.15f), radius = outerRadius * 0.6f, center = Offset(cx, cy), style = Stroke(width = 1f))
-            drawLine(levelOnSurfaceVariant.copy(alpha = 0.2f), Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 1f)
-            drawLine(levelOnSurfaceVariant.copy(alpha = 0.2f), Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 1f)
+
+            // ── Animated gradient glow ring ──
+            drawCircle(
+                brush = Brush.sweepGradient(
+                    colors = listOf(
+                        glowColor, glowColor.copy(alpha = 0.05f),
+                        glowColor, glowColor.copy(alpha = 0.05f),
+                        glowColor
+                    )
+                ),
+                radius = outerRadius + 14f, center = Offset(cx, cy)
+            )
+
+            // ── Outer ring ──
+            drawCircle(color = sh, radius = outerRadius, center = Offset(cx, cy))
+            drawCircle(color = ov.copy(alpha = 0.25f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = 2f))
+
+            // ── Reference circles ──
+            drawCircle(color = ov.copy(alpha = 0.10f), radius = outerRadius * 0.6f, center = Offset(cx, cy),
+                style = Stroke(width = 1f, pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(6f, 6f))))
+
+            // ── Crosshair with glow ──
+            drawLine(osv.copy(alpha = 0.18f), Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 2f)
+            drawLine(osv.copy(alpha = 0.18f), Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 2f)
+
+            // ── Center reference ──
+            drawCircle(color = osv.copy(alpha = 0.3f), radius = 3f, center = Offset(cx, cy))
+
+            // ── Bubble ──
             val maxTilt = 45f; val sensitivity = 0.88f
             val bubbleX = cx + (roll.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
             val bubbleY = cy + (pitch.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
-            val bubbleColor = if (isLevel) colors.positive else colors.info
+
+            val bubbleColor = accent
+            // Glow aura
             drawCircle(color = bubbleColor.copy(alpha = 0.08f), radius = bubbleRadius * 2.5f, center = Offset(bubbleX, bubbleY))
+            // Bubble body
             drawCircle(color = bubbleColor, radius = bubbleRadius, center = Offset(bubbleX, bubbleY))
-            drawCircle(color = Color.White.copy(alpha = 0.3f), radius = bubbleRadius * 0.4f, center = Offset(bubbleX - bubbleRadius * 0.2f, bubbleY - bubbleRadius * 0.2f))
-            drawCircle(color = levelOnSurfaceVariant.copy(alpha = 0.3f), radius = 3f, center = Offset(cx, cy))
+            // Specular highlight
+            drawCircle(color = Color.White.copy(alpha = 0.35f), radius = bubbleRadius * 0.4f,
+                center = Offset(bubbleX - bubbleRadius * 0.2f, bubbleY - bubbleRadius * 0.2f))
         }
     }
 }
@@ -1218,47 +1257,86 @@ private fun VerticalTiltIndicator(
     colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
 ) {
     Box(modifier = Modifier.size(260.dp), contentAlignment = Alignment.Center) {
-        val levelSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
-        val levelOutlineVariant = MaterialTheme.colorScheme.outlineVariant
-        val levelOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+        val sh = MaterialTheme.colorScheme.surfaceContainerHighest
+        val ov = MaterialTheme.colorScheme.outlineVariant
+        val osv = MaterialTheme.colorScheme.onSurfaceVariant
+        val accent = if (isLevel) colors.positive else colors.info
+
+        // ── Pulsing outer glow ring ──
+        val infiniteTransition = rememberInfiniteTransition(label = "tiltGlow")
+        val glowPulse by infiniteTransition.animateFloat(
+            initialValue = 0.6f, targetValue = 1f,
+            animationSpec = infiniteRepeatable(tween(2000, easing = LinearEasing), RepeatMode.Reverse),
+            label = "tiltGlowPulse"
+        )
+        val glowColor = accent.copy(alpha = glowPulse * 0.3f)
+
         Canvas(Modifier.fillMaxSize()) {
             val cx = size.width / 2f; val cy = size.height / 2f
             val outerRadius = minOf(cx, cy) * 0.95f
             val dotRadius = outerRadius * 0.10f
 
-            // Outer circle
-            drawCircle(color = levelSurfaceHighest, radius = outerRadius, center = Offset(cx, cy))
-            drawCircle(color = levelOutlineVariant.copy(alpha = 0.3f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = 2f))
+            // ── Animated gradient glow ring ──
+            drawCircle(
+                brush = Brush.sweepGradient(
+                    colors = listOf(
+                        glowColor, glowColor.copy(alpha = 0.05f),
+                        glowColor, glowColor.copy(alpha = 0.05f),
+                        glowColor
+                    )
+                ),
+                radius = outerRadius + 14f, center = Offset(cx, cy)
+            )
 
-            // Reference circle at 50% tilt
-            drawCircle(color = levelOutlineVariant.copy(alpha = 0.10f), radius = outerRadius * 0.6f, center = Offset(cx, cy), style = Stroke(width = 1f, pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(6f, 6f))))
+            // ── Outer ring ──
+            drawCircle(color = sh, radius = outerRadius, center = Offset(cx, cy))
+            drawCircle(color = ov.copy(alpha = 0.25f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = 2f))
 
-            // Vertical crosshair
-            drawLine(levelOnSurfaceVariant.copy(alpha = 0.15f), Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 1f)
-            drawLine(levelOnSurfaceVariant.copy(alpha = 0.15f), Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 1f)
+            // ── Reference circles (dashed at 50% tilt) ──
+            drawCircle(color = ov.copy(alpha = 0.10f), radius = outerRadius * 0.6f, center = Offset(cx, cy),
+                style = Stroke(width = 1f, pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(6f, 6f))))
 
-            // Degree rings at 5°, 10°, 20°
+            // ── Degree rings at 5°, 10°, 20° ──
             listOf(0.11, 0.22, 0.44).forEach { ratio ->
-                drawCircle(color = levelOutlineVariant.copy(alpha = 0.08f), radius = outerRadius * ratio.toFloat(), center = Offset(cx, cy), style = Stroke(width = 1f))
+                drawCircle(color = ov.copy(alpha = 0.08f), radius = outerRadius * ratio.toFloat(), center = Offset(cx, cy), style = Stroke(width = 1f))
             }
 
-            // Center dot (reference)
-            drawCircle(color = levelOnSurfaceVariant.copy(alpha = 0.3f), radius = 2.5f, center = Offset(cx, cy))
+            // ── Crosshair with glow ──
+            drawLine(osv.copy(alpha = 0.18f), Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 2f)
+            drawLine(osv.copy(alpha = 0.18f), Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 2f)
+
+            // ── Directional tick marks (4-way) ──
+            listOf(0f, 90f, 180f, 270f).forEach { angleDeg ->
+                val rad = Math.toRadians(angleDeg.toDouble())
+                val inner = outerRadius * 0.85f
+                val outer = outerRadius * 0.75f
+                drawLine(
+                    color = osv.copy(alpha = 0.12f),
+                    start = Offset(cx + inner * cos(rad).toFloat(), cy + inner * sin(rad).toFloat()),
+                    end = Offset(cx + outer * cos(rad).toFloat(), cy + outer * sin(rad).toFloat()),
+                    strokeWidth = 1.5f
+                )
+            }
+
+            // ── Center reference ──
+            drawCircle(color = osv.copy(alpha = 0.3f), radius = 2.5f, center = Offset(cx, cy))
 
             // ── Tilt dot ──
-            // Moves from center in the direction of the lean, proportional to tilt magnitude
             val maxRadius = outerRadius * 0.55f
             val tiltRad = Math.toRadians(tiltAngleDeg.toDouble())
             val dotDist = (tiltXY * maxRadius).toFloat()
             // atan2(gy, gx): 0°=right, 90°=forward/up-in-phone=down-in-canvas
-            // cos for X (right), sin for Y (down in canvas)
             val dotX = (cx + dotDist * cos(tiltRad)).toFloat()
             val dotY = (cy + dotDist * sin(tiltRad)).toFloat()
 
-            val dotColor = if (isLevel) colors.positive else colors.info
+            val dotColor = accent
+            // Glow aura
             drawCircle(color = dotColor.copy(alpha = 0.08f), radius = dotRadius * 2.5f, center = Offset(dotX, dotY))
+            // Dot body
             drawCircle(color = dotColor, radius = dotRadius, center = Offset(dotX, dotY))
-            drawCircle(color = Color.White.copy(alpha = 0.3f), radius = dotRadius * 0.4f, center = Offset(dotX - dotRadius * 0.2f, dotY - dotRadius * 0.2f))
+            // Specular highlight
+            drawCircle(color = Color.White.copy(alpha = 0.35f), radius = dotRadius * 0.4f,
+                center = Offset(dotX - dotRadius * 0.2f, dotY - dotRadius * 0.2f))
         }
     }
 }
