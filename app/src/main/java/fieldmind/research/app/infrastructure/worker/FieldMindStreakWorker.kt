@@ -55,23 +55,32 @@ class FieldMindStreakWorker(
             }
             val todayCount = observations.count { it.date == today }
 
+            val currentStreak = prefs.getInt(KEY_CURRENT_STREAK, 0)
+            val bestStreak = prefs.getInt(KEY_BEST_STREAK, 0)
+
             if (todayCount > 0) {
                 // User has observations today — update streak
-                val currentStreak = prefs.getInt(KEY_CURRENT_STREAK, 0)
                 val newStreak = if (lastDate == today) currentStreak else currentStreak + 1
-                val bestStreak = maxOf(newStreak, prefs.getInt(KEY_BEST_STREAK, 0))
+                val newBestStreak = maxOf(newStreak, bestStreak)
                 prefs.edit()
                     .putString(KEY_LAST_STREAK_DATE, today)
                     .putInt(KEY_CURRENT_STREAK, newStreak)
-                    .putInt(KEY_BEST_STREAK, bestStreak)
+                    .putInt(KEY_BEST_STREAK, newBestStreak)
                     .apply()
-                Log.d(TAG, "Streak updated: $newStreak days (best: $bestStreak)")
+                Log.d(TAG, "Streak updated: $newStreak days (best: $newBestStreak)")
+
+                // Push update to research streak widget
+                pushStreakWidgetData(newStreak, newBestStreak, todayCount > 0, observations.size)
             } else if (lastDate != today) {
                 // No observations today and streak was active — send reminder
-                val currentStreak = prefs.getInt(KEY_CURRENT_STREAK, 0)
                 if (currentStreak > 0) {
                     sendReminderNotification(currentStreak)
                 }
+                // Push update to research streak widget (even if no new streak)
+                pushStreakWidgetData(currentStreak, bestStreak, false, observations.size)
+            } else {
+                // Same day as last check — push current data anyway
+                pushStreakWidgetData(currentStreak, bestStreak, false, observations.size)
             }
 
             Result.success()
@@ -136,5 +145,15 @@ class FieldMindStreakWorker(
 
         notificationManager.notify(NOTIFICATION_ID, notification)
         Log.d(TAG, "Streak reminder sent ($streakDays days)")
+    }
+
+    private suspend fun pushStreakWidgetData(currentStreak: Int, bestStreak: Int, hasTodayEntry: Boolean, totalSightings: Int) {
+        fieldmind.research.app.infrastructure.widget.glance.FieldMindResearchStreakWidget.updateData(
+            applicationContext,
+            currentStreak = currentStreak,
+            bestStreak = bestStreak,
+            hasTodayEntry = hasTodayEntry,
+            totalSightings = totalSightings
+        )
     }
 }

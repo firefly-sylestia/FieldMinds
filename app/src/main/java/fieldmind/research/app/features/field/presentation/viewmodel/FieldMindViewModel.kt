@@ -80,8 +80,7 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
         startAutoGeneration()
 
-        // Push widget data on init and whenever any relevant StateFlow changes
-        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+        // Push widget data on init and whenever any relevant StateFlow changes            viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             // Collect all relevant flows — emits whenever any count changes
             // Nested combines because combine() only supports up to 5 flows
             combine(
@@ -90,6 +89,26 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                 combine(sources, reports) { _, _ -> Unit }
             ) { _, _, _ -> Unit }.collect {
                 fieldmind.research.app.infrastructure.widget.glance.FieldMindDashboardWidget.updateData(getApplication())
+            }
+        }
+
+        // Push research streak widget data whenever observations change
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            observations.collect { obsList ->
+                val today = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
+                val prefs = getApplication<android.app.Application>()
+                    .getSharedPreferences("fieldmind_streak", android.content.Context.MODE_PRIVATE)
+                val currentStreak = prefs.getInt("current_streak", 0)
+                val bestStreak = prefs.getInt("best_streak", 0)
+                val todayCount = obsList.count { it.date == today }
+                val totalSightings = obsList.size
+                fieldmind.research.app.infrastructure.widget.glance.FieldMindResearchStreakWidget.updateData(
+                    getApplication(),
+                    currentStreak = currentStreak,
+                    bestStreak = bestStreak,
+                    hasTodayEntry = todayCount > 0,
+                    totalSightings = totalSightings
+                )
             }
         }
     }
