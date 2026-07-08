@@ -86,8 +86,10 @@ fun CompassToolScreen(
     var wasInterference by remember { mutableStateOf(false) }
     var dismissedInterference by remember { mutableStateOf(false) }
 
-    // ── Magnetic field chart buffer ──
+    // ── Chart buffers ──
     val fieldReadings = remember { mutableStateListOf<Float>() }
+    val pitchReadings = remember { mutableStateListOf<Float>() }
+    val rollReadings = remember { mutableStateListOf<Float>() }
 
     // ── Calibration state ──
     var needsCalibration by remember { mutableStateOf(true) }
@@ -146,6 +148,17 @@ fun CompassToolScreen(
                         if (magnetometerCounter % 4 == 0) {
                             fieldReadings.add(newField)
                             if (fieldReadings.size > 60) fieldReadings.removeAt(0)
+                        }
+
+                        // Buffer pitch/roll at same cadence
+                        if (magnetometerCounter % 4 == 0 && !firstGravity && !firstGeomagnetic) {
+                            SensorManager.getOrientation(rotationMatrix, orientation)
+                            pitchReadings.add(Math.toDegrees(orientation[1].toDouble()).toFloat())
+                            rollReadings.add(Math.toDegrees(orientation[2].toDouble()).toFloat())
+                            if (pitchReadings.size > 40) {
+                                pitchReadings.removeAt(0)
+                                rollReadings.removeAt(0)
+                            }
                         }
 
                         isInterference = newField < 15f || newField > 100f
@@ -410,21 +423,21 @@ fun CompassToolScreen(
                     }
                 }
 
-                // Pitch/Roll compact
+                // Pitch/Roll compact card with glassmorphic sparklines
                 Card(
                     shape = RoundedCornerShape(30.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.weight(1f)
                 ) {
-                    Column(
-                        Modifier.padding(14.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        TiltMiniDisplay("Pitch", compassPitch, colors.info)
+                    Column(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Icon(MaterialSymbolIcon("straighten"), null, tint = colors.data, size = 16.dp)
+                            Text("Tilt", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        TiltWithSparkline("Pitch", compassPitch, colors.info, pitchReadings.toList())
                         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.15f))
-                        TiltMiniDisplay("Roll", compassRoll, colors.data)
+                        TiltWithSparkline("Roll", compassRoll, colors.data, rollReadings.toList())
                     }
                 }
             }
@@ -746,21 +759,93 @@ private fun MagneticFieldChart(readings: List<Float>, lineColor: Color) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-//  Tilt Mini Display
+//  Tilt display with mini glassmorphic sparkline
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun TiltMiniDisplay(label: String, degrees: Float, color: Color) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun TiltWithSparkline(
+    label: String,
+    degrees: Float,
+    color: Color,
+    readings: List<Float>
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
         Text(
             "%.1f°".format(degrees),
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 26.sp
+                fontSize = 24.sp
             ),
             color = if (abs(degrees) < 2f) FieldMindTheme.colors.positive else color
         )
         Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+        if (readings.size >= 2) {
+            MiniSparkline(readings, color)
+        } else {
+            Box(Modifier.fillMaxWidth().height(28.dp), contentAlignment = Alignment.Center) {
+                Text("…", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
+            }
+        }
+    }
+}
+
+/** Mini glassmorphic sparkline chart — zero-centered with gradient fill */
+@Composable
+private fun MiniSparkline(readings: List<Float>, lineColor: Color) {
+    if (readings.size < 2) return
+    val maxY = 60f
+    val surfaceHigh = MaterialTheme.colorScheme.surfaceContainerHigh
+
+    Canvas(modifier = Modifier.fillMaxWidth().height(28.dp)) {
+        val chartH = size.height
+        val chartW = size.width
+        val stepX = chartW / (readings.size - 1).coerceAtLeast(1)
+        val midY = chartH / 2f
+
+        // ── Glassmorphic background ──
+        drawRoundRect(
+            color = surfaceHigh.copy(alpha = 0.15f),
+            cornerRadius = CornerRadius(6f, 6f),
+            size = Size(chartW, chartH)
+        )
+
+        // ── Zero reference line ──
+        drawLine(Color.Gray.copy(alpha = 0.08f), Offset(0f, midY), Offset(chartW, midY), strokeWidth = 1f)
+
+        // ── Gradient fill (zero-centered) ──
+        val fillPath = Path().apply {
+            readings.forEachIndexed { i, value ->
+                val x = i * stepX
+                val y = midY - (value.coerceIn(-maxY, maxY) / maxY * midY)
+                if (i == 0) { moveTo(x, chartH); lineTo(x, y) } else lineTo(x, y)
+            }
+            lineTo((readings.size - 1) * stepX, chartH)
+            close()
+        }
+        drawPath(fillPath, brush = Brush.verticalGradient(
+            listOf(lineColor.copy(alpha = 0.15f), lineColor.copy(alpha = 0.02f))
+        ))
+
+        // ── Data line ──
+        val linePath = Path().apply {
+            readings.forEachIndexed { i, value ->
+                val x = i * stepX
+                val y = midY - (value.coerceIn(-maxY, maxY) / maxY * midY)
+                if (i == 0) moveTo(x, y) else lineTo(x, y)
+            }
+        }
+        drawPath(linePath, color = lineColor, style = Stroke(width = 1.5f, cap = StrokeCap.Round))
+
+        // ── End dot ──
+        val lastX = (readings.size - 1) * stepX
+        val lastY = midY - (readings.last().coerceIn(-maxY, maxY) / maxY * midY)
+        drawCircle(lineColor.copy(alpha = 0.2f), radius = 4f, center = Offset(lastX, lastY))
+        drawCircle(lineColor, radius = 2f, center = Offset(lastX, lastY))
     }
 }
 
