@@ -71,6 +71,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.saveable.rememberSaveable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
@@ -323,7 +324,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
     }
 
     // ── Active tab index — tabs are rendered simultaneously inside TabContentHost ──
-    var activeTabIndex by remember { mutableIntStateOf(0) }
+    var activeTabIndex by rememberSaveable { mutableIntStateOf(0) }
 
     // Observe screen visibility settings so nav bar reflects user customizations
     val screenVisibility by viewModel.fieldSettings.screenVisibility.collectAsState()
@@ -365,9 +366,6 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: Str
         activeTabIndex = index
     }
 
-    BackHandler(enabled = currentRoute == "field_tab_container" && activeTabIndex != 0) {
-        activeTabIndex = 0
-    }
 
     LaunchedEffect(requestedDestination) {
         when (requestedDestination) {

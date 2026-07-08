@@ -73,7 +73,8 @@ fun DataToolsHubScreen(
             ToolCardInfo("Site Log", "Visit conditions", FieldMindIcons.Map, accentColor, FieldMindScreen.SiteLogTool),
             ToolCardInfo("Comparison", "Species/samples", FieldMindIcons.Data, accentColor, FieldMindScreen.ComparisonTable),
             ToolCardInfo("Compass", "Magnetic heading", MaterialSymbolIcon("explore"), colors.info, FieldMindScreen.CompassTool),
-            ToolCardInfo("Level", "Spirit level", MaterialSymbolIcon("straighten"), colors.data, FieldMindScreen.LevelTool)
+            ToolCardInfo("Level", "Spirit level", MaterialSymbolIcon("straighten"), colors.data, FieldMindScreen.LevelTool),
+            ToolCardInfo("Weather Catalog", "Scheduled captures", MaterialSymbolIcon("cloud"), accentColor, FieldMindScreen.WeatherCatalog)
         )
     }
 
