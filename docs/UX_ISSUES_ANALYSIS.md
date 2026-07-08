@@ -37,14 +37,21 @@
 
 ## Issue 3 — Data tools all route to one generic detail screen
 
-**STATUS: ✅ CONFIRMED — UNCHANGED**
+**STATUS: ✅ FIXED**
 
 **Evidence:**
-- `DataToolsHubScreen` still navigates via `onOpenDetail("data", record.id)`
-- `FieldMindDetailScreen.kt` line ~200: `DataRecordDetailContent(d)` renders for all `kind == "data"` — a single generic card
-- No tool-specific detail composables exist yet for Counter, Measurement, Weather Log, Checklist, etc.
+- `FieldMindDetailScreen.kt` lines 2479-2494: `DataRecordDetailContent` dispatches to 7 tool-specific composables based on `DataRecordEntity.toolType`:
+  - `CounterDetailContent` — tally count, notes, provenance
+  - `MeasurementDetailContent` — value + unit, location, notes, provenance
+  - `WeatherLogDetailContent` — parsed temp/humidity/wind in dedicated weather surface
+  - `ChecklistDetailContent` — JSON/legacy parsing, progress bar, item states with strikethrough/colors
+  - `ComparisonDetailContent` — tabular layout from JSON/legacy, row labels with styled items
+  - `EventLogDetailContent` — category, date, description from record value/notes
+  - `SiteLogDetailContent` — purpose, duration, conditions, findings from parsed data
+  - `GenericDataRecordDetailContent` — fallback for any other tool type
+- One minor gap: "Species" tool type falls through to generic fallback (not yet a dedicated composable)
 
-**Fix:** Create tool-specific detail composables dispatched by `DataRecordEntity.toolType`.
+**Fix applied:** Created tool-specific detail composables dispatched by `DataRecordEntity.toolType` (completed in prior work).
 
 ---
 
@@ -218,7 +225,7 @@ No changes needed. Settings hub with navigation cards was already implemented.
 |-------|--------|----------|--------|
 | #1 Weather not saved to observation | ✅ FIXED | — | — |
 | #2 Session state not persisted after death | ✅ FIXED | — | — |
-| #3 Generic data detail screen | 🔴 Confirmed | High | High |
+| #3 Generic data detail screen | ✅ FIXED | — | — |
 | #4 Weather Log lacks auto-fetch | 🔴 Confirmed | Medium | Low |
 | #5 "Completed" vs "Done" mismatch | 🔄 Needs re-verification | High | Low |
 | #6 Project tasks lack delete button | 🔴 Confirmed | Medium | Low |
@@ -250,11 +257,12 @@ No changes needed. Settings hub with navigation cards was already implemented.
 **Fixed since original analysis (July 6, 2026):**
 - #1 — Weather now saved to observation records (1-line fix)
 - #2 — Session state moved into Parcelable CaptureSessionState
+- #3 — Tool-specific detail composables: Counter, Measurement, Weather Log, Checklist, Comparison Table, Event Log, Site Log
 - #10 — Export buttons renamed to "Copy Markdown", "Copy CSV", "Copy JSON"
 - #19 — Unscheduled task section added to TasksScreen
 
 **Remaining priority order (by impact):**
 1. **P0 (Critical flow breaks):** #5, #9 — task completion status mismatch and subtask parentID null
-2. **P1 (Major UX gaps):** #3, #8, #13, #22 — Core flows broken or duplicated
+2. **P1 (Major UX gaps):** #8, #13, #22 — Core flows broken or duplicated
 3. **P2 (Medium UX issues):** #6, #7, #12, #15, #16, #18
 4. **P3 (Minor improvements):** #4, #14, #17, #20, #21
