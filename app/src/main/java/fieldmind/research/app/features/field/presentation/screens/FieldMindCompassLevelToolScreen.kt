@@ -14,7 +14,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -32,6 +34,7 @@ import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindVie
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlin.math.abs
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -444,13 +447,16 @@ private fun SensorDataItem(label: String, value: String, icon: MaterialSymbolIco
 }
 
 // ══════════════════════════════════════════════════════════════════════
-//  Level Tool — Real-time spirit level using accelerometer + magnetometer
+//  Level Tool — Real-time spirit level using accelerometer gravity vector
 //  Features:
-//    - Proper pitch/roll calculation using getRotationMatrix for all orientations
-//    - Bubble level visualization with dynamic bubble offset
+//    - Auto-detects orientation: flat (surface level) vs vertical (plumb)
+//    - Circular bubble level when phone is flat on a surface
+//    - Vertical tube level when phone is held against a wall
+//    - Raw gravity-based tilt computation (no magnetometer dependency)
 //    - "Set reference" allows zeroing at any angle for checking different positions
-//    - Works flat on table, against walls, at any angle
 // ══════════════════════════════════════════════════════════════════════
+
+private enum class OrientationMode { FLAT, VERTICAL_PORTRAIT, VERTICAL_LANDSCAPE }
 
 @Composable
 fun LevelToolScreen(
@@ -461,124 +467,130 @@ fun LevelToolScreen(
     val colors = FieldMindTheme.colors
     val snackbar = remember { SnackbarHostState() }
 
-    // ── Sensor state ──
-    var pitch by remember { mutableFloatStateOf(0f) }   // tilt forward/backward (deg)
-    var roll by remember { mutableFloatStateOf(0f) }    // tilt left/right (deg)
+    // ── Raw gravity state ──
+    var gravityX by remember { mutableFloatStateOf(0f) }
+    var gravityY by remember { mutableFloatStateOf(-SensorManager.GRAVITY_EARTH) }
+    var gravityZ by remember { mutableFloatStateOf(0f) }
 
-    // ── Reference state (for "Set reference" feature) ──
+    // ── Reference state ──
     var isReferenced by remember { mutableStateOf(false) }
     var referencePitch by remember { mutableFloatStateOf(0f) }
     var referenceRoll by remember { mutableFloatStateOf(0f) }
 
-    // ── Sensor listener (uses getRotationMatrix for all-orientation correctness) ──
+    // ── Sensor listener (accelerometer only — gravity vector is all we need) ──
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
     val accelerometer = remember { sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
-    val magnetometer = remember { sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) }
 
     DisposableEffect(Unit) {
         val gravity = FloatArray(3)
-        val geomagnetic = FloatArray(3)
-        val rotationMatrix = FloatArray(9)
-        val orientation = FloatArray(3)
         var firstGravity = true
-        var firstGeomagnetic = true
-        val alpha = 0.12f  // Heavier low-pass filter for stable level readings
+        val alpha = 0.12f
 
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
-                when (event.sensor.type) {
-                    Sensor.TYPE_ACCELEROMETER -> {
-                        if (firstGravity) {
-                            gravity[0] = event.values[0]
-                            gravity[1] = event.values[1]
-                            gravity[2] = event.values[2]
-                            firstGravity = false
-                        } else {
-                            gravity[0] = gravity[0] * (1 - alpha) + event.values[0] * alpha
-                            gravity[1] = gravity[1] * (1 - alpha) + event.values[1] * alpha
-                            gravity[2] = gravity[2] * (1 - alpha) + event.values[2] * alpha
-                        }
+                if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                    if (firstGravity) {
+                        gravity[0] = event.values[0]
+                        gravity[1] = event.values[1]
+                        gravity[2] = event.values[2]
+                        firstGravity = false
+                    } else {
+                        gravity[0] = gravity[0] * (1 - alpha) + event.values[0] * alpha
+                        gravity[1] = gravity[1] * (1 - alpha) + event.values[1] * alpha
+                        gravity[2] = gravity[2] * (1 - alpha) + event.values[2] * alpha
                     }
-                    Sensor.TYPE_MAGNETIC_FIELD -> {
-                        if (firstGeomagnetic) {
-                            geomagnetic[0] = event.values[0]
-                            geomagnetic[1] = event.values[1]
-                            geomagnetic[2] = event.values[2]
-                            firstGeomagnetic = false
-                        } else {
-                            geomagnetic[0] = geomagnetic[0] * (1 - alpha) + event.values[0] * alpha
-                            geomagnetic[1] = geomagnetic[1] * (1 - alpha) + event.values[1] * alpha
-                            geomagnetic[2] = geomagnetic[2] * (1 - alpha) + event.values[2] * alpha
-                        }
-                    }
-                }
-
-                if (!firstGravity && !firstGeomagnetic &&
-                    SensorManager.getRotationMatrix(rotationMatrix, null, gravity, geomagnetic)) {
-                    SensorManager.getOrientation(rotationMatrix, orientation)
-                    // orientation[1] = pitch (rotation around X-axis), range -π to π
-                    // orientation[2] = roll (rotation around Y-axis), range -π/2 to π/2
-                    pitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
-                    roll = Math.toDegrees(orientation[2].toDouble()).toFloat()
+                    gravityX = gravity[0]
+                    gravityY = gravity[1]
+                    gravityZ = gravity[2]
                 }
             }
-
             override fun onAccuracyChanged(sensor: Sensor, acc: Int) {}
         }
 
         sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_GAME)
-        sensorManager.registerListener(listener, magnetometer, SensorManager.SENSOR_DELAY_GAME)
-
-        onDispose {
-            sensorManager.unregisterListener(listener)
-        }
+        onDispose { sensorManager.unregisterListener(listener) }
     }
 
-    // ── Smooth animations for raw values (shown when no reference) ──
-    val smoothPitch by animateFloatAsState(
-        targetValue = pitch,
-        animationSpec = tween(durationMillis = 100),
-        label = "pitch"
-    )
-    val smoothRoll by animateFloatAsState(
-        targetValue = roll,
-        animationSpec = tween(durationMillis = 100),
-        label = "roll"
-    )
-
-    // ── Effective tilt (relative to reference if set) — animated ──
-    val effectivePitch: Float by remember(pitch, referencePitch, isReferenced) {
+    // ── Orientation detection (threshold = cos(45°) × 9.81 ≈ 6.94) ──
+    val orientationMode: OrientationMode by remember(gravityX, gravityY, gravityZ) {
         derivedStateOf {
-            if (isReferenced) smoothPitch - referencePitch else smoothPitch
+            when {
+                abs(gravityZ) > 6.94f -> OrientationMode.FLAT
+                abs(gravityY) > abs(gravityX) -> OrientationMode.VERTICAL_PORTRAIT
+                else -> OrientationMode.VERTICAL_LANDSCAPE
+            }
         }
     }
-    val effectiveRoll: Float by remember(roll, referenceRoll, isReferenced) {
+
+    // ── Tilt angles computed from raw gravity (sign-preserving via atan2) ──
+    // FLAT: pitch = tilt forward/back, roll = tilt left/right
+    // VERTICAL_PORTRAIT: pitch = in/out from wall, roll = left/right lean
+    // VERTICAL_LANDSCAPE: pitch = in/out from wall, roll = left/right lean
+    val rawPitch: Float by remember(gravityX, gravityY, gravityZ, orientationMode) {
         derivedStateOf {
-            if (isReferenced) smoothRoll - referenceRoll else smoothRoll
+            when (orientationMode) {
+                OrientationMode.FLAT ->
+                    Math.toDegrees(atan2(gravityX.toDouble(), abs(gravityZ).toDouble())).toFloat()
+                OrientationMode.VERTICAL_PORTRAIT ->
+                    Math.toDegrees(atan2(gravityZ.toDouble(), gravityY.toDouble())).toFloat()
+                OrientationMode.VERTICAL_LANDSCAPE ->
+                    Math.toDegrees(atan2(gravityZ.toDouble(), gravityX.toDouble())).toFloat()
+            }
         }
     }
-    val isLevel: Boolean by remember(effectivePitch, effectiveRoll) {
+    val rawRoll: Float by remember(gravityX, gravityY, gravityZ, orientationMode) {
+        derivedStateOf {
+            when (orientationMode) {
+                OrientationMode.FLAT ->
+                    Math.toDegrees(atan2(gravityY.toDouble(), abs(gravityZ).toDouble())).toFloat()
+                OrientationMode.VERTICAL_PORTRAIT ->
+                    Math.toDegrees(atan2(gravityX.toDouble(), gravityY.toDouble())).toFloat()
+                OrientationMode.VERTICAL_LANDSCAPE ->
+                    Math.toDegrees(atan2(gravityY.toDouble(), gravityX.toDouble())).toFloat()
+            }
+        }
+    }
+
+    // ── Smooth animation ──
+    val smoothPitch by animateFloatAsState(rawPitch, animationSpec = tween(100), label = "pitch")
+    val smoothRoll by animateFloatAsState(rawRoll, animationSpec = tween(100), label = "roll")
+
+    // ── Effective tilt (relative to reference if set) ──
+    val effectivePitch by remember(smoothPitch, referencePitch, isReferenced) {
+        derivedStateOf { if (isReferenced) smoothPitch - referencePitch else smoothPitch }
+    }
+    val effectiveRoll by remember(smoothRoll, referenceRoll, isReferenced) {
+        derivedStateOf { if (isReferenced) smoothRoll - referenceRoll else smoothRoll }
+    }
+    val isLevel by remember(effectivePitch, effectiveRoll) {
         derivedStateOf { abs(effectivePitch) < 2f && abs(effectiveRoll) < 2f }
+    }
+
+    // ── Mode label for header ──
+    val modeLabel by remember(orientationMode) {
+        derivedStateOf {
+            when (orientationMode) {
+                OrientationMode.FLAT -> "Surface level — place device flat"
+                OrientationMode.VERTICAL_PORTRAIT -> "Plumb — hold against wall"
+                OrientationMode.VERTICAL_LANDSCAPE -> "Plumb — hold against wall"
+            }
+        }
     }
 
     Box(Modifier.fillMaxSize()) {
         Column(
-            Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .padding(20.dp),
+            Modifier.fillMaxSize().statusBarsPadding().padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // ── Header ──
             StandardScreenHeader(
                 title = "Level",
-                subtitle = "Real-time spirit level using accelerometer.",
+                subtitle = modeLabel,
                 icon = MaterialSymbolIcon("straighten"),
                 heroColor = colors.data,
                 trailing = { BackButton(onClick = onBack) }
             )
 
-            // ── Level display ──
+            // ── Level display (mode-aware) ──
             Card(
                 shape = RoundedCornerShape(40.dp),
                 colors = CardDefaults.cardColors(
@@ -593,85 +605,17 @@ fun LevelToolScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Bubble level canvas
-                    Box(
-                        modifier = Modifier.size(260.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        val levelSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
-                        val levelOutlineVariant = MaterialTheme.colorScheme.outlineVariant
-                        val levelOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
-                        Canvas(Modifier.fillMaxSize()) {
-                            val cx = size.width / 2f
-                            val cy = size.height / 2f
-                            val outerRadius = minOf(cx, cy) * 0.95f
-                            val bubbleRadius = outerRadius * 0.12f
-
-                            // Outer circle
-                            drawCircle(
-                                color = levelSurfaceHighest,
-                                radius = outerRadius,
-                                center = Offset(cx, cy)
-                            )
-                            drawCircle(
-                                color = levelOutlineVariant.copy(alpha = 0.3f),
-                                radius = outerRadius,
-                                center = Offset(cx, cy),
-                                style = Stroke(width = 2f)
-                            )
-
-                            // Inner ring
-                            drawCircle(
-                                color = levelOutlineVariant.copy(alpha = 0.15f),
-                                radius = outerRadius * 0.6f,
-                                center = Offset(cx, cy),
-                                style = Stroke(width = 1f)
-                            )
-
-                            // Crosshair lines
-                            val crossColor = levelOnSurfaceVariant.copy(alpha = 0.2f)
-                            drawLine(crossColor, Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 1f)
-                            drawLine(crossColor, Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 1f)
-
-                            // Bubble — offset from center based on effective pitch and roll
-                            // Map ±15° to ±60% of outerRadius
-                            val maxTilt = 15f
-                            val sensitivity = 0.6f
-                            val bubbleX = cx + (effectiveRoll.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
-                            val bubbleY = cy + (effectivePitch.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
-
-                            // Bubble glow
-                            val bubbleColor = if (isLevel) colors.positive else colors.info
-                            drawCircle(
-                                color = bubbleColor.copy(alpha = 0.08f),
-                                radius = bubbleRadius * 2.5f,
-                                center = Offset(bubbleX, bubbleY)
-                            )
-
-                            // Bubble
-                            drawCircle(
-                                color = bubbleColor,
-                                radius = bubbleRadius,
-                                center = Offset(bubbleX, bubbleY)
-                            )
-
-                            // Bubble highlight
-                            drawCircle(
-                                color = Color.White.copy(alpha = 0.3f),
-                                radius = bubbleRadius * 0.4f,
-                                center = Offset(bubbleX - bubbleRadius * 0.2f, bubbleY - bubbleRadius * 0.2f)
-                            )
-
-                            // Center dot
-                            drawCircle(
-                                color = levelOnSurfaceVariant.copy(alpha = 0.3f),
-                                radius = 3f,
-                                center = Offset(cx, cy)
-                            )
-                        }
+                    // ── Mode-specific display ──
+                    when (orientationMode) {
+                        OrientationMode.FLAT -> CircularBubbleLevel(
+                            effectivePitch, effectiveRoll, isLevel, colors
+                        )
+                        OrientationMode.VERTICAL_PORTRAIT,
+                        OrientationMode.VERTICAL_LANDSCAPE -> VerticalTubeLevel(
+                            effectiveRoll, isLevel, colors
+                        )
                     }
 
-                    // ── Level indicator ──
                     if (isLevel) {
                         Surface(
                             shape = RoundedCornerShape(24.dp),
@@ -703,30 +647,21 @@ fun LevelToolScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text("Tilt angles", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         TiltGauge("Pitch", effectivePitch, "Forward/backward", colors.info, Modifier.weight(1f))
                         TiltGauge("Roll", effectiveRoll, "Left/right", colors.data, Modifier.weight(1f))
                     }
 
                     // Reference controls
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         if (isReferenced) {
-                            // Show absolute reference angles
                             Surface(
                                 shape = RoundedCornerShape(12.dp),
                                 color = colors.info.copy(alpha = 0.08f),
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Column(Modifier.padding(10.dp)) {
-                                    Text(
-                                        "Reference set",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = colors.info
-                                    )
+                                    Text("Reference set", style = MaterialTheme.typography.labelSmall, color = colors.info)
                                     Text(
                                         "Pitch: %.1f°  Roll: %.1f°".format(referencePitch, referenceRoll),
                                         style = MaterialTheme.typography.bodySmall,
@@ -734,7 +669,6 @@ fun LevelToolScreen(
                                     )
                                 }
                             }
-
                             Button(
                                 onClick = {
                                     isReferenced = false
@@ -748,32 +682,22 @@ fun LevelToolScreen(
                                 shape = RoundedCornerShape(14.dp),
                                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
                             ) {
-                                Icon(
-                                    MaterialSymbolIcon("clear"),
-                                    null,
-                                    modifier = Modifier.size(16.dp)
-                                )
+                                Icon(MaterialSymbolIcon("clear"), null, modifier = Modifier.size(16.dp))
                                 Spacer(Modifier.width(4.dp))
                                 Text("Clear", style = MaterialTheme.typography.labelMedium)
                             }
                         } else {
                             OutlinedButton(
                                 onClick = {
-                                    referencePitch = pitch
-                                    referenceRoll = roll
+                                    referencePitch = smoothPitch
+                                    referenceRoll = smoothRoll
                                     isReferenced = true
                                 },
                                 shape = RoundedCornerShape(14.dp),
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    contentColor = colors.info
-                                ),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.info),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Icon(
-                                    MaterialSymbolIcon("my_location"),
-                                    null,
-                                    modifier = Modifier.size(18.dp)
-                                )
+                                Icon(MaterialSymbolIcon("my_location"), null, modifier = Modifier.size(18.dp))
                                 Spacer(Modifier.width(6.dp))
                                 Text("Set reference", style = MaterialTheme.typography.labelMedium)
                             }
@@ -782,8 +706,8 @@ fun LevelToolScreen(
 
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
                     Text(
-                        if (isReferenced) "Deviations shown relative to set reference. Use to check any surface angle."
-                        else "Hold device flat to check level surfaces. Use 'Set reference' to check any position.",
+                        if (isReferenced) "Deviations shown relative to set reference."
+                        else "Place device on a surface or against a wall. Use 'Set reference' to zero at any angle.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -791,6 +715,132 @@ fun LevelToolScreen(
             }
         }
         FieldMindSnackbarOverlay(hostState = snackbar, modifier = Modifier.align(Alignment.TopCenter).padding(top = 8.dp, start = 16.dp, end = 16.dp))
+    }
+}
+
+// ── Circular bubble level for flat (horizontal) mode ──
+@Composable
+private fun CircularBubbleLevel(
+    pitch: Float, roll: Float, isLevel: Boolean, colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
+) {
+    Box(modifier = Modifier.size(260.dp), contentAlignment = Alignment.Center) {
+        val levelSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
+        val levelOutlineVariant = MaterialTheme.colorScheme.outlineVariant
+        val levelOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+        Canvas(Modifier.fillMaxSize()) {
+            val cx = size.width / 2f
+            val cy = size.height / 2f
+            val outerRadius = minOf(cx, cy) * 0.95f
+            val bubbleRadius = outerRadius * 0.12f
+
+            drawCircle(color = levelSurfaceHighest, radius = outerRadius, center = Offset(cx, cy))
+            drawCircle(color = levelOutlineVariant.copy(alpha = 0.3f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = 2f))
+            drawCircle(color = levelOutlineVariant.copy(alpha = 0.15f), radius = outerRadius * 0.6f, center = Offset(cx, cy), style = Stroke(width = 1f))
+
+            val crossColor = levelOnSurfaceVariant.copy(alpha = 0.2f)
+            drawLine(crossColor, Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 1f)
+            drawLine(crossColor, Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 1f)
+
+            val maxTilt = 15f
+            val sensitivity = 0.6f
+            val bubbleX = cx + (roll.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
+            val bubbleY = cy + (pitch.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
+
+            val bubbleColor = if (isLevel) colors.positive else colors.info
+            drawCircle(color = bubbleColor.copy(alpha = 0.08f), radius = bubbleRadius * 2.5f, center = Offset(bubbleX, bubbleY))
+            drawCircle(color = bubbleColor, radius = bubbleRadius, center = Offset(bubbleX, bubbleY))
+            drawCircle(color = Color.White.copy(alpha = 0.3f), radius = bubbleRadius * 0.4f, center = Offset(bubbleX - bubbleRadius * 0.2f, bubbleY - bubbleRadius * 0.2f))
+            drawCircle(color = levelOnSurfaceVariant.copy(alpha = 0.3f), radius = 3f, center = Offset(cx, cy))
+        }
+    }
+}
+
+// ── Vertical tube level for plumb (vertical) mode ──
+@Composable
+private fun VerticalTubeLevel(
+    tilt: Float, isLevel: Boolean, colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
+) {
+    val paint = remember {
+        android.graphics.Paint().apply {
+            textAlign = android.graphics.Paint.Align.CENTER
+            isAntiAlias = true
+        }
+    }
+    Box(modifier = Modifier.fillMaxWidth().height(280.dp), contentAlignment = Alignment.Center) {
+        val levelSurfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
+        val levelOutlineVariant = MaterialTheme.colorScheme.outlineVariant
+        val levelOnSurface = MaterialTheme.colorScheme.onSurface
+        val levelOnSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+        Canvas(Modifier.fillMaxSize()) {
+            val cx = size.width / 2f
+            val tubeWidth = size.width * 0.20f
+            val tubeHeight = size.height * 0.82f
+            val tubeTop = (size.height - tubeHeight) / 2f
+            val tubeCornerR = tubeWidth / 2f
+
+            // Tube body
+            drawRoundRect(
+                color = levelSurfaceHighest,
+                topLeft = Offset(cx - tubeWidth / 2f, tubeTop),
+                size = Size(tubeWidth, tubeHeight),
+                cornerRadius = CornerRadius(tubeCornerR, tubeCornerR)
+            )
+            drawRoundRect(
+                color = levelOutlineVariant.copy(alpha = 0.3f),
+                topLeft = Offset(cx - tubeWidth / 2f, tubeTop),
+                size = Size(tubeWidth, tubeHeight),
+                cornerRadius = CornerRadius(tubeCornerR, tubeCornerR),
+                style = Stroke(width = 2f)
+            )
+
+            // Center line (0° mark)
+            val centerY = size.height / 2f
+            drawLine(
+                color = levelOutlineVariant.copy(alpha = 0.4f),
+                start = Offset(cx - tubeWidth * 0.55f, centerY),
+                end = Offset(cx + tubeWidth * 0.55f, centerY),
+                strokeWidth = 1.5f
+            )
+
+            // Degree markers: draw tick marks at ±5°, ±10°, ±15°
+            val marks = listOf(-15f, -10f, -5f, 5f, 10f, 15f)
+            val maxTilt = 15f
+            marks.forEach { deg ->
+                val y = centerY + (deg / maxTilt * tubeHeight * 0.42f)
+                val tickW = if (abs(deg) % 5f == 0f) tubeWidth * 0.5f else tubeWidth * 0.3f
+                drawLine(
+                    color = levelOutlineVariant.copy(alpha = 0.3f),
+                    start = Offset(cx + tubeWidth / 2f, y),
+                    end = Offset(cx + tubeWidth / 2f + tickW, y),
+                    strokeWidth = if (abs(deg) % 5f == 0f) 1.5f else 1f
+                )
+                paint.color = levelOnSurfaceVariant.toArgb()
+                paint.textSize = 28f
+                paint.isFakeBoldText = false
+                drawContext.canvas.nativeCanvas.drawText(
+                    "%.0f°".format(deg), cx + tubeWidth / 2f + tickW + 20f, y + paint.textSize / 3f, paint
+                )
+            }
+
+            // 0° label
+            paint.color = levelOnSurface.toArgb()
+            paint.textSize = 30f
+            paint.isFakeBoldText = true
+            drawContext.canvas.nativeCanvas.drawText(
+                "0°", cx + tubeWidth / 2f + 24f, centerY + paint.textSize / 3f, paint
+            )
+
+            // Bubble
+            val bubbleR = tubeWidth * 0.30f
+            val normalizedTilt = (tilt.coerceIn(-maxTilt, maxTilt) / maxTilt)
+            val bubbleY = centerY + normalizedTilt * tubeHeight * 0.42f
+            val bubbleColor = if (isLevel) colors.positive else colors.info
+
+            drawCircle(color = bubbleColor.copy(alpha = 0.08f), radius = bubbleR * 2f, center = Offset(cx, bubbleY))
+            drawCircle(color = bubbleColor, radius = bubbleR, center = Offset(cx, bubbleY))
+            drawCircle(color = Color.White.copy(alpha = 0.3f), radius = bubbleR * 0.35f,
+                center = Offset(cx - bubbleR * 0.2f, bubbleY - bubbleR * 0.2f))
+        }
     }
 }
 
