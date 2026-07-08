@@ -32,6 +32,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalContext
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.CuteElevations
 import androidx.activity.compose.BackHandler
 
 // ══════════════════════════════════════════════════════════════════════
@@ -123,107 +124,121 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
         }
     }
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
-        // ── Custom header: back button + title/subtitle ──
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(30.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f),
-            tonalElevation = 0.dp
-        ) {
-            Row(
-                Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
+            // ── Custom header: back button + title/subtitle ──
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(30.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f),
+                tonalElevation = 0.dp
             ) {
-                Surface(
-                    onClick = onBack,
-                    shape = RoundedCornerShape(22.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    modifier = Modifier.size(44.dp)
+                Row(
+                    Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(FieldMindIcons.Back, null, tint = MaterialTheme.colorScheme.onSurface, size = 22.dp)
+                    Surface(
+                        onClick = onBack,
+                        shape = RoundedCornerShape(22.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        modifier = Modifier.size(44.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(FieldMindIcons.Back, null, tint = MaterialTheme.colorScheme.onSurface, size = 22.dp)
+                        }
+                    }
+                    Column {
+                        Text(if (isEditing) "Edit Project" else "New Project", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        Text(if (isEditing) "Update your research workspace" else "Create a research workspace", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
-                Column {
-                    Text(if (isEditing) "Edit Project" else "New Project", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                    Text(if (isEditing) "Update your research workspace" else "Create a research workspace", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
             }
-        }
 
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            // ── Project Name ──
-            FieldTextField(
-                title, { title = it },
-                "Project Name",
-                supportingText = "Short, descriptive name for your research"
-            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // ── Basic Info Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                        Text("Basic info", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        FieldTextField(
+                            title, { title = it },
+                            "Project Name",
+                            supportingText = "Short, descriptive name for your research"
+                        )
+                        FieldTextField(
+                            description, { description = it },
+                            "Description (Optional)",
+                            minLines = 3,
+                            supportingText = "What is this project about?"
+                        )
+                    }
+                }
 
-            // ── Description (Optional) ──
-            FieldTextField(
-                description, { description = it },
-                "Description (Optional)",
-                minLines = 3,
-                supportingText = "What is this project about?"
-            )
+                // ── Appearance Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                        Text("Appearance", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
 
-            // ── Project Icon ──
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Project Icon", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    projectIcons.forEach { icon ->
-                        val isSelected = selectedIcon == icon
-                        Surface(
-                            onClick = { haptics.light(); selectedIcon = icon },
-                            shape = RoundedCornerShape(24.dp),
-                            color = if (isSelected) FieldMindTheme.colors.project.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
-                            border = if (isSelected) androidx.compose.foundation.BorderStroke(2.dp, FieldMindTheme.colors.project) else null,
-                            modifier = Modifier.size(60.dp)
-                        ) {
-                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                Text(icon, style = MaterialTheme.typography.headlineMedium)
+                        // ── Project Icon ──
+                        Text("Project Icon", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            projectIcons.forEach { icon ->
+                                val isSelected = selectedIcon == icon
+                                Surface(
+                                    onClick = { haptics.light(); selectedIcon = icon },
+                                    shape = RoundedCornerShape(24.dp),
+                                    color = if (isSelected) FieldMindTheme.colors.project.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                    border = if (isSelected) androidx.compose.foundation.BorderStroke(2.dp, FieldMindTheme.colors.project) else null,
+                                    modifier = Modifier.size(60.dp)
+                                ) {
+                                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        Text(icon, style = MaterialTheme.typography.headlineMedium)
+                                    }
+                                }
+                            }
+                        }
+
+                        // ── Project Color ──
+                        Text("Project Color", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            colorOptions.forEach { (colorLong, color) ->
+                                val isSelected = selectedColor == colorLong
+                                val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(24.dp)) else Modifier
+                                Box(
+                                    modifier = Modifier
+                                        .size(52.dp)
+                                        .clip(RoundedCornerShape(24.dp))
+                                        .background(color)
+                                        .then(borderMod)
+                                        .clickable { haptics.light(); selectedColor = colorLong },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    if (isSelected) {
+                                        Icon(MaterialSymbolIcon("check"), null, tint = Color.White, size = 24.dp)
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            // ── Project Color ──
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Project Color", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    colorOptions.forEach { (colorLong, color) ->
-                        val isSelected = selectedColor == colorLong
-                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(24.dp)) else Modifier
-                        Box(
-                            modifier = Modifier
-                                .size(52.dp)
-                                .clip(RoundedCornerShape(24.dp))
-                                .background(color)
-                                .then(borderMod)
-                                .clickable { haptics.light(); selectedColor = colorLong },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (isSelected) {
-                                Icon(MaterialSymbolIcon("check"), null, tint = Color.White, size = 24.dp)
-                            }
-                        }
-                    }
-                }
-            }
-
-            // ── Template Selector ──
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Template", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Surface(
-                    onClick = { haptics.light(); showTemplatePicker = true },
-                    shape = RoundedCornerShape(24.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh
+                // ── Template Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                    onClick = { haptics.light(); showTemplatePicker = true }
                 ) {
                     Row(
                         Modifier.fillMaxWidth().padding(16.dp),
@@ -246,20 +261,20 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
                         Icon(MaterialSymbolIcon("chevron_right"), null, size = 20.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                     }
                 }
-            }
 
-            Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-            // ── Create Button ──
-            Button(
-                onClick = ::save,
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = RoundedCornerShape(28.dp),
-                enabled = title.isNotBlank()
-            ) {
-                Icon(FieldMindIcons.Project, null, size = 20.dp)
-                Spacer(Modifier.size(8.dp))
-                Text("Create", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                // ── Create Button ──
+                Button(
+                    onClick = ::save,
+                    modifier = Modifier.fillMaxWidth().height(54.dp),
+                    shape = RoundedCornerShape(28.dp),
+                    enabled = title.isNotBlank()
+                ) {
+                    Icon(FieldMindIcons.Project, null, size = 20.dp)
+                    Spacer(Modifier.size(8.dp))
+                    Text("Create", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                }
             }
         }
     }
@@ -369,76 +384,98 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity:
         }
     }
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
-        StandardScreenHeader(
-            title = if (isEditing) "Edit Question" else "New Question",
-            subtitle = "Turn curiosity into something observable, measurable, comparable, or verifiable.",
-            icon = FieldMindIcons.Question,
-            heroColor = colors.question,
-            trailing = { BackButton(onClick = onBack) },
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
-        )
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
-            // ── Research Question ──
-            FieldTextField(question, { question = it }, "Research Question", minLines = 3, supportingText = "Example: Do bird visits increase after rain at this site?")
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
+            StandardScreenHeader(
+                title = if (isEditing) "Edit Question" else "New Question",
+                subtitle = "Turn curiosity into something observable, measurable, comparable, or verifiable.",
+                icon = FieldMindIcons.Question,
+                heroColor = colors.question,
+                trailing = { BackButton(onClick = onBack) },
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // ── Question Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                        Text("Research question", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        FieldTextField(question, { question = it }, "Research Question", minLines = 3, supportingText = "Example: Do bird visits increase after rain at this site?")
+                    }
+                }
 
-            // ── Classification ──
-            DividerSection("Classification", FieldMindIcons.Category, colors.question)
-            ChoiceChipsField("Category", observationCategories, category) { category = it }
-            ChoiceChipsField("Source", sourceTypes, source) { source = it }
-
-            // ── Priority (radio-style cards) ──
-            DividerSection("Priority", FieldMindIcons.Streak, colors.question)
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    listOf("Low", "Medium", "High").forEach { level ->
-                        val isSelected = priority == level
-                        val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
-                        Surface(
-                            onClick = { haptics.light(); priority = level },
-                            shape = RoundedCornerShape(22.dp),
-                            color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
-                            border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Row(
-                                Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                Box(
-                                    modifier = Modifier.size(18.dp)
-                                        .clip(androidx.compose.foundation.shape.CircleShape)
-                                        .background(if (isSelected) accent else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
-                                    contentAlignment = Alignment.Center
+                // ── Classification Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                        DividerSection("Classification", FieldMindIcons.Category, colors.question)
+                        ChoiceChipsField("Category", observationCategories, category) { category = it }
+                        ChoiceChipsField("Source", sourceTypes, source) { source = it }
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                        Text("Priority", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            listOf("Low", "Medium", "High").forEach { level ->
+                                val isSelected = priority == level
+                                val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
+                                Surface(
+                                    onClick = { haptics.light(); priority = level },
+                                    shape = RoundedCornerShape(22.dp),
+                                    color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                    border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
+                                    modifier = Modifier.weight(1f)
                                 ) {
-                                    if (isSelected) {
-                                        Box(Modifier.size(8.dp).clip(androidx.compose.foundation.shape.CircleShape).background(accent))
+                                    Row(
+                                        Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier.size(18.dp)
+                                                .clip(androidx.compose.foundation.shape.CircleShape)
+                                                .background(if (isSelected) accent else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            if (isSelected) {
+                                                Box(Modifier.size(8.dp).clip(androidx.compose.foundation.shape.CircleShape).background(accent))
+                                            }
+                                        }
+                                        Text(level, style = MaterialTheme.typography.labelMedium, fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal, color = if (isSelected) accent else MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                 }
-                                Text(level, style = MaterialTheme.typography.labelMedium, fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal, color = if (isSelected) accent else MaterialTheme.colorScheme.onSurfaceVariant)
                             }
+                        }
+                        DividerSection("Status", FieldMindIcons.Check, colors.question)
+                        ChoiceChipsField("Status", questionStatuses, status) { status = it }
+                    }
+                }
+
+                // ── Advanced Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp)) {
+                        CollapsibleSection("Advanced options", "Answer, cross-links, and metadata", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
+                            FieldTextField(answer, { answer = it }, "Preliminary answer", minLines = 2, supportingText = "Optional — add if you already have a working answer")
                         }
                     }
                 }
-            }
 
-            // ── Status ──
-            DividerSection("Status", FieldMindIcons.Check, colors.question)
-            ChoiceChipsField("Status", questionStatuses, status) { status = it }
+                Spacer(Modifier.height(8.dp))
 
-            // ── Advanced ──
-            CollapsibleSection("Advanced options", "Answer, cross-links, and metadata", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
-                FieldTextField(answer, { answer = it }, "Preliminary answer", minLines = 2, supportingText = "Optional — add if you already have a working answer")
-            }
-
-            Spacer(Modifier.height(8.dp))
-
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = question.isNotBlank()) {
-                Icon(FieldMindIcons.Question, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = question.isNotBlank()) {
+                    Icon(FieldMindIcons.Question, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                }
             }
         }
     }
@@ -506,45 +543,88 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
         }
     }
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
-        StandardScreenHeader(
-            title = if (isEditing) "Edit Hypothesis" else "New Hypothesis",
-            subtitle = "State the prediction, what would support it, and what would weaken it.",
-            icon = FieldMindIcons.Hypothesis,
-            heroColor = FieldMindTheme.colors.hypothesis,
-            trailing = { BackButton(onClick = onBack) },
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
-        )
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            if (questions.isNotEmpty()) {
-                ChoiceChipsField("Linked question", listOf("No question") + questions.take(8).map { it.questionText.take(28) }, questions.firstOrNull { it.id == linkedId }?.questionText?.take(28) ?: "No question") { picked ->
-                    linkedId = questions.firstOrNull { it.questionText.startsWith(picked) }?.id
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
+            StandardScreenHeader(
+                title = if (isEditing) "Edit Hypothesis" else "New Hypothesis",
+                subtitle = "State the prediction, what would support it, and what would weaken it.",
+                icon = FieldMindIcons.Hypothesis,
+                heroColor = FieldMindTheme.colors.hypothesis,
+                trailing = { BackButton(onClick = onBack) },
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // ── Prediction Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        if (questions.isNotEmpty()) {
+                            ChoiceChipsField("Linked question", listOf("No question") + questions.take(8).map { it.questionText.take(28) }, questions.firstOrNull { it.id == linkedId }?.questionText?.take(28) ?: "No question") { picked ->
+                                linkedId = questions.firstOrNull { it.questionText.startsWith(picked) }?.id
+                            }
+                        }
+                        Text("Hypothesis", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        FieldTextField(prediction, { prediction = it }, "Prediction", minLines = 3)
+                        FieldTextField(reasoning, { reasoning = it }, "Why this might happen", minLines = 2)
+                    }
                 }
-            }
-            FieldTextField(prediction, { prediction = it }, "Prediction", minLines = 3)
-            FieldTextField(reasoning, { reasoning = it }, "Why this might happen", minLines = 2)
-            DividerSection("Evidence rules", FieldMindIcons.Done, FieldMindTheme.colors.hypothesis)
-            Text("Decide success/failure before you bias yourself.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            FieldTextField(evidence, { evidence = it }, "Evidence needed", minLines = 2)
-            FieldTextField(support, { support = it }, "Support criteria")
-            FieldTextField(weaken, { weaken = it }, "Weakening criteria")
-            FieldTextField(test, { test = it }, "Test method")
-            DividerSection("Confidence", FieldMindIcons.Streak, FieldMindTheme.colors.hypothesis)
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text("Confidence", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("${confidence.toInt()}%", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-            }
-            Slider(confidence, { confidence = it }, valueRange = 0f..100f)
-            LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = MaterialTheme.colorScheme.primary)
-            CollapsibleSection("Advanced options", "Result status tracking", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
-                ChoiceChipsField("Result status", listOf("Unknown", "Supported", "Weakened", "Inconclusive"), resultStatus) { resultStatus = it }
-            }
-            Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = prediction.isNotBlank()) {
-                Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create hypothesis")
+
+                // ── Evidence Rules Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Evidence rules", FieldMindIcons.Done, FieldMindTheme.colors.hypothesis)
+                        Text("Decide success/failure before you bias yourself.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        FieldTextField(evidence, { evidence = it }, "Evidence needed", minLines = 2)
+                        FieldTextField(support, { support = it }, "Support criteria")
+                        FieldTextField(weaken, { weaken = it }, "Weakening criteria")
+                        FieldTextField(test, { test = it }, "Test method")
+                    }
+                }
+
+                // ── Confidence Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Confidence", FieldMindIcons.Streak, FieldMindTheme.colors.hypothesis)
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            Text("Confidence", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${confidence.toInt()}%", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(confidence, { confidence = it }, valueRange = 0f..100f)
+                        LinearProgressIndicator(progress = { confidence / 100f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = MaterialTheme.colorScheme.primary)
+                    }
+                }
+
+                // ── Advanced Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp)) {
+                        CollapsibleSection("Advanced options", "Result status tracking", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
+                            ChoiceChipsField("Result status", listOf("Unknown", "Supported", "Weakened", "Inconclusive"), resultStatus) { resultStatus = it }
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = prediction.isNotBlank()) {
+                    Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create hypothesis")
+                }
             }
         }
     }
@@ -604,40 +684,72 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
         }
     }
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
-        StandardScreenHeader(
-            title = if (isEditing) "Edit Data Record" else "New Data Record",
-            subtitle = "Choose a preset so units and labels match the kind of thing you measured.",
-            icon = FieldMindIcons.Data,
-            heroColor = FieldMindTheme.colors.data,
-            trailing = { BackButton(onClick = onBack) },
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
-        )
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            DividerSection("Preset", FieldMindIcons.Settings, FieldMindTheme.colors.data)
-            ChoiceChipsField("Tool", dataTools, tool) { tool = it; unit = defaultUnitForTool(it); label = defaultLabelForTool(it) }
-            FieldTextField(label, { label = it }, "Label")
-            if (tool == "Counter" || tool == "Species Tracker") {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    OutlinedButton({ value = ((value.toIntOrNull() ?: 0) - 1).toString() }) { Text("−1") }
-                    Text(value, style = MaterialTheme.typography.headlineSmall)
-                    Button({ value = ((value.toIntOrNull() ?: 0) + 1).toString() }) { Text("+1") }
-                    TextButton({ value = "0" }) { Text("Reset") }
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
+            StandardScreenHeader(
+                title = if (isEditing) "Edit Data Record" else "New Data Record",
+                subtitle = "Choose a preset so units and labels match the kind of thing you measured.",
+                icon = FieldMindIcons.Data,
+                heroColor = FieldMindTheme.colors.data,
+                trailing = { BackButton(onClick = onBack) },
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // ── Preset & Label Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Preset", FieldMindIcons.Settings, FieldMindTheme.colors.data)
+                        ChoiceChipsField("Tool", dataTools, tool) { tool = it; unit = defaultUnitForTool(it); label = defaultLabelForTool(it) }
+                        FieldTextField(label, { label = it }, "Label")
+                        if (tool == "Counter" || tool == "Species Tracker") {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                OutlinedButton({ value = ((value.toIntOrNull() ?: 0) - 1).toString() }) { Text("−1") }
+                                Text(value, style = MaterialTheme.typography.headlineSmall)
+                                Button({ value = ((value.toIntOrNull() ?: 0) + 1).toString() }) { Text("+1") }
+                                TextButton({ value = "0" }) { Text("Reset") }
+                            }
+                        }
+                    }
                 }
-            }
-            DividerSection("Measurement", FieldMindIcons.Line, FieldMindTheme.colors.data)
-            FieldTextField(value, { value = it }, "Value / items / samples", keyboardType = KeyboardType.Number)
-            FieldTextField(unit, { unit = it }, "Unit", supportingText = "Suggested for $tool: ${defaultUnitForTool(tool)}")
-            FieldTextField(location, { location = it }, "Location / site")
-            DividerSection("Context", FieldMindIcons.Note, FieldMindTheme.colors.data)
-            ChoiceChips(contextPresets, notes) { notes = if (notes.isBlank()) it else "$notes, $it" }
-            FieldTextField(notes, { notes = it }, "Notes", minLines = 3)
-            Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = label.isNotBlank()) {
-                Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save record")
+
+                // ── Measurement Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Measurement", FieldMindIcons.Line, FieldMindTheme.colors.data)
+                        FieldTextField(value, { value = it }, "Value / items / samples", keyboardType = KeyboardType.Number)
+                        FieldTextField(unit, { unit = it }, "Unit", supportingText = "Suggested for $tool: ${defaultUnitForTool(tool)}")
+                        FieldTextField(location, { location = it }, "Location / site")
+                    }
+                }
+
+                // ── Context Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Context", FieldMindIcons.Note, FieldMindTheme.colors.data)
+                        ChoiceChips(contextPresets, notes) { notes = if (notes.isBlank()) it else "$notes, $it" }
+                        FieldTextField(notes, { notes = it }, "Notes", minLines = 3)
+                    }
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = label.isNotBlank()) {
+                    Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save record")
+                }
             }
         }
     }
@@ -760,257 +872,280 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
         }
     }
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
-        StandardScreenHeader(
-            title = if (isEditing) "Edit Task" else "New Task",
-            subtitle = "Define a field task, survey, or to-do.",
-            icon = MaterialSymbolIcon("checklist"),
-            heroColor = FieldMindTheme.colors.flashcard,
-            trailing = { BackButton(onClick = onBack) }
-        )
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
-            // ── Task Name ──
-            FieldTextField(title, { title = it }, "Task Name", supportingText = "Short, actionable title")
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
+            StandardScreenHeader(
+                title = if (isEditing) "Edit Task" else "New Task",
+                subtitle = "Define a field task, survey, or to-do.",
+                icon = MaterialSymbolIcon("checklist"),
+                heroColor = FieldMindTheme.colors.flashcard,
+                trailing = { BackButton(onClick = onBack) }
+            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // ── Task Info Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text("Task details", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        FieldTextField(title, { title = it }, "Task Name", supportingText = "Short, actionable title")
+                        FieldTextField(description, { description = it }, "Description", minLines = 3, supportingText = "Details, context, or step-by-step instructions")
+                    }
+                }
 
-            // ── Description ──
-            FieldTextField(description, { description = it }, "Description", minLines = 3, supportingText = "Details, context, or step-by-step instructions")
+                // ── Priority & Project Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text("Priority & project", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text("Priority", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                listOf("Low", "Medium", "High").forEach { level ->
+                                    val isSelected = priority == level
+                                    val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
+                                    Surface(
+                                        onClick = { haptics.light(); priority = level },
+                                        shape = RoundedCornerShape(22.dp),
+                                        color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                        border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Row(
+                                            Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                        ) {
+                                            Box(
+                                                modifier = Modifier.size(18.dp)
+                                                    .clip(androidx.compose.foundation.shape.CircleShape)
+                                                    .background(if (isSelected) accent else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                if (isSelected) {
+                                                    Box(Modifier.size(8.dp).clip(androidx.compose.foundation.shape.CircleShape).background(accent))
+                                                }
+                                            }
+                                            Text(level, style = MaterialTheme.typography.labelMedium, fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal, color = if (isSelected) accent else MaterialTheme.colorScheme.onSurfaceVariant)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text("Project", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            if (projects.isNotEmpty()) {
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    ChoiceChips(listOf("None") + projects.take(6).map { it.title.take(20) }, projects.firstOrNull { it.id == projectId }?.title?.take(20) ?: "None") { selected ->
+                                        projectId = projects.firstOrNull { it.title.startsWith(selected) }?.id
+                                    }
+                                }
+                            } else {
+                                Text("No projects yet. Create a project first.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                            }
+                        }
+                    }
+                }
 
-            // ── Priority (radio-style) ──
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Priority", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    listOf("Low", "Medium", "High").forEach { level ->
-                        val isSelected = priority == level
-                        val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
-                        Surface(
-                            onClick = { haptics.light(); priority = level },
-                            shape = RoundedCornerShape(22.dp),
-                            color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
-                            border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Row(
-                                Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                // Radio circle
-                                Box(
-                                    modifier = Modifier
-                                        .size(18.dp)
-                                        .clip(androidx.compose.foundation.shape.CircleShape)
-                                        .background(if (isSelected) accent else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    if (isSelected) {
-                                        Box(
-                                            Modifier.size(8.dp).clip(androidx.compose.foundation.shape.CircleShape)
-                                                .background(accent)
+                // ── Schedule Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text("Schedule", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            FieldTextField(dueDate, { dueDate = it }, "Due Date", supportingText = "YYYY-MM-DD", modifier = Modifier.weight(1f))
+                            FieldTextField(dueTime, { dueTime = it }, "Due Time", supportingText = "HH:MM", modifier = Modifier.weight(1f))
+                        }
+                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text("Reminder", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                val reminderOptions = listOf("None" to 0, "5 min" to 5, "15 min" to 15, "30 min" to 30, "1 hour" to 60, "1 day" to 1440)
+                                reminderOptions.forEach { (label, mins) ->
+                                    val isSelected = reminder == mins
+                                    Surface(
+                                        onClick = { haptics.light(); reminder = mins },
+                                        shape = RoundedCornerShape(18.dp),
+                                        color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Text(
+                                            label,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                            color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
                                         )
                                     }
                                 }
-                                Text(level, style = MaterialTheme.typography.labelMedium, fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal, color = if (isSelected) accent else MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text("Repeat", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                val repeatOptions = listOf("None" to "" to 0, "Daily" to "day" to 1, "Weekly" to "week" to 1, "Monthly" to "month" to 1, "Yearly" to "year" to 1)
+                                repeatOptions.forEach { (pair, interval) ->
+                                    val (label, unit) = pair
+                                    val isSelected = repeatUnit == unit
+                                    Surface(
+                                        onClick = { haptics.light(); repeatUnit = unit; repeatInterval = interval },
+                                        shape = RoundedCornerShape(18.dp),
+                                        color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Text(
+                                            label,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                            color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp)
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            // ── Project ──
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Project", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                if (projects.isNotEmpty()) {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                        ChoiceChips(listOf("None") + projects.take(6).map { it.title.take(20) }, projects.firstOrNull { it.id == projectId }?.title?.take(20) ?: "None") { selected ->
-                            projectId = projects.firstOrNull { it.title.startsWith(selected) }?.id
-                        }
-                    }
-                } else {
-                    Text("No projects yet. Create a project first.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
-                }
-            }
-
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
-
-            // ── Due Date & Time ──
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                FieldTextField(dueDate, { dueDate = it }, "Due Date", supportingText = "YYYY-MM-DD", modifier = Modifier.weight(1f))
-                FieldTextField(dueTime, { dueTime = it }, "Due Time", supportingText = "HH:MM", modifier = Modifier.weight(1f))
-            }
-
-            // ── Reminder ──
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Reminder", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    val reminderOptions = listOf("None" to 0, "5 min" to 5, "15 min" to 15, "30 min" to 30, "1 hour" to 60, "1 day" to 1440)
-                    reminderOptions.forEach { (label, mins) ->
-                        val isSelected = reminder == mins
-                        Surface(
-                            onClick = { haptics.light(); reminder = mins },
-                            shape = RoundedCornerShape(18.dp),
-                            color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                label,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
-                            )
-                        }
-                    }
-                }
-            }
-
-            // ── Repeat ──
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Repeat", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    val repeatOptions = listOf("None" to "" to 0, "Daily" to "day" to 1, "Weekly" to "week" to 1, "Monthly" to "month" to 1, "Yearly" to "year" to 1)
-                    repeatOptions.forEach { (pair, interval) ->
-                        val (label, unit) = pair
-                        val isSelected = repeatUnit == unit
-                        Surface(
-                            onClick = { haptics.light(); repeatUnit = unit; repeatInterval = interval },
-                            shape = RoundedCornerShape(18.dp),
-                            color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                label,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp)
-                            )
-                        }
-                    }
-                }
-            }
-
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
-
-            // ── Checklist ──
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                // ── Checklist Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
-                    Text("Checklist", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                    TextButton(onClick = { haptics.light(); checklistItems = checklistItems + "" }) {
-                        Icon(MaterialSymbolIcon("add"), null, size = 16.dp)
-                        Spacer(Modifier.size(4.dp))
-                        Text("Add item", style = MaterialTheme.typography.labelSmall)
-                    }
-                }
-                checklistItems.forEachIndexed { index, item ->
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        OutlinedTextField(
-                            value = item,
-                            onValueChange = { newVal ->
-                                checklistItems = checklistItems.toMutableList().also { it[index] = newVal }
-                            },
-                            placeholder = { Text("Checklist item", style = MaterialTheme.typography.bodySmall) },
-                            shape = RoundedCornerShape(20.dp),
-                            modifier = Modifier.weight(1f),
-                            singleLine = true,
-                            textStyle = MaterialTheme.typography.bodySmall
-                        )
-                        if (checklistItems.size > 1) {
-                            IconButton(onClick = { haptics.light(); checklistItems = checklistItems.toMutableList().also { it.removeAt(index) } }, modifier = Modifier.size(32.dp)) {
-                                Icon(MaterialSymbolIcon("close"), "Remove", size = 16.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
-                            }
-                        }
-                    }
-                }
-            }
-
-            // ── Attachments ──
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text("Attachments", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                    Box {
-                        TextButton(onClick = { haptics.light(); showAttachmentMenu = true }) {
-                            Icon(MaterialSymbolIcon("attach_file"), null, size = 16.dp)
-                            Spacer(Modifier.size(4.dp))
-                            Text("Add file", style = MaterialTheme.typography.labelSmall)
-                        }
-                        DropdownMenu(
-                            expanded = showAttachmentMenu,
-                            onDismissRequest = { showAttachmentMenu = false }
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            DropdownMenuItem(
-                                text = { Text("Photo from gallery") },
-                                onClick = {
-                                    showAttachmentMenu = false
-                                    haptics.light()
-                                    imagePicker.launch("image/*")
-                                },
-                                leadingIcon = { Icon(MaterialSymbolIcon("photo_library"), null, size = 18.dp) }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Document / PDF") },
-                                onClick = {
-                                    showAttachmentMenu = false
-                                    haptics.light()
-                                    filePicker.launch(arrayOf(
-                                        "application/pdf",
-                                        "text/*",
-                                        "application/msword",
-                                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                                        "audio/*",
-                                        "image/*"
-                                    ))
-                                },
-                                leadingIcon = { Icon(MaterialSymbolIcon("description"), null, size = 18.dp) }
-                            )
+                            Text("Checklist", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            TextButton(onClick = { haptics.light(); checklistItems = checklistItems + "" }) {
+                                Icon(MaterialSymbolIcon("add"), null, size = 16.dp)
+                                Spacer(Modifier.size(4.dp))
+                                Text("Add item", style = MaterialTheme.typography.labelSmall)
+                            }
                         }
-                    }
-                }
-                if (attachmentUris.isEmpty()) {
-                    Text(
-                        "No attachments yet. Tap \"Add file\" to attach images, PDFs, or audio.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                    )
-                } else {
-                    attachmentUris.forEach { uri ->
-                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Icon(MaterialSymbolIcon("attachment"), null, size = 16.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(uri.substringAfterLast("/").take(30), style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
-                            IconButton(onClick = { haptics.light(); attachmentUris = attachmentUris - uri }, modifier = Modifier.size(24.dp)) {
-                                Icon(MaterialSymbolIcon("close"), "Remove", size = 14.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                        checklistItems.forEachIndexed { index, item ->
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                OutlinedTextField(
+                                    value = item,
+                                    onValueChange = { newVal ->
+                                        checklistItems = checklistItems.toMutableList().also { it[index] = newVal }
+                                    },
+                                    placeholder = { Text("Checklist item", style = MaterialTheme.typography.bodySmall) },
+                                    shape = RoundedCornerShape(20.dp),
+                                    modifier = Modifier.weight(1f),
+                                    singleLine = true,
+                                    textStyle = MaterialTheme.typography.bodySmall
+                                )
+                                if (checklistItems.size > 1) {
+                                    IconButton(onClick = { haptics.light(); checklistItems = checklistItems.toMutableList().also { it.removeAt(index) } }, modifier = Modifier.size(32.dp)) {
+                                        Icon(MaterialSymbolIcon("close"), "Remove", size = 16.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            Spacer(Modifier.height(8.dp))
+                // ── Attachments Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text("Attachments", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Box {
+                                TextButton(onClick = { haptics.light(); showAttachmentMenu = true }) {
+                                    Icon(MaterialSymbolIcon("attach_file"), null, size = 16.dp)
+                                    Spacer(Modifier.size(4.dp))
+                                    Text("Add file", style = MaterialTheme.typography.labelSmall)
+                                }
+                                DropdownMenu(
+                                    expanded = showAttachmentMenu,
+                                    onDismissRequest = { showAttachmentMenu = false }
+                                ) {
+                                    DropdownMenuItem(
+                                        text = { Text("Photo from gallery") },
+                                        onClick = {
+                                            showAttachmentMenu = false
+                                            haptics.light()
+                                            imagePicker.launch("image/*")
+                                        },
+                                        leadingIcon = { Icon(MaterialSymbolIcon("photo_library"), null, size = 18.dp) }
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text("Document / PDF") },
+                                        onClick = {
+                                            showAttachmentMenu = false
+                                            haptics.light()
+                                            filePicker.launch(arrayOf(
+                                                "application/pdf",
+                                                "text/*",
+                                                "application/msword",
+                                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                                "audio/*",
+                                                "image/*"
+                                            ))
+                                        },
+                                        leadingIcon = { Icon(MaterialSymbolIcon("description"), null, size = 18.dp) }
+                                    )
+                                }
+                            }
+                        }
+                        if (attachmentUris.isEmpty()) {
+                            Text(
+                                "No attachments yet. Tap \"Add file\" to attach images, PDFs, or audio.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                            )
+                        } else {
+                            attachmentUris.forEach { uri ->
+                                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Icon(MaterialSymbolIcon("attachment"), null, size = 16.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Text(uri.substringAfterLast("/").take(30), style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+                                    IconButton(onClick = { haptics.light(); attachmentUris = attachmentUris - uri }, modifier = Modifier.size(24.dp)) {
+                                        Icon(MaterialSymbolIcon("close"), "Remove", size = 14.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
-            // ── Save ──
-            Button(
-                onClick = ::save,
-                modifier = Modifier.fillMaxWidth().height(50.dp),
-                shape = RoundedCornerShape(24.dp),
-                enabled = title.isNotBlank()
-            ) {
-                Icon(FieldMindIcons.Check, null, size = 20.dp)
-                Spacer(Modifier.size(8.dp))
-                Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                Spacer(Modifier.height(8.dp))
+
+                Button(
+                    onClick = ::save,
+                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                    shape = RoundedCornerShape(24.dp),
+                    enabled = title.isNotBlank()
+                ) {
+                    Icon(FieldMindIcons.Check, null, size = 20.dp)
+                    Spacer(Modifier.size(8.dp))
+                    Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                }
             }
         }
     }
@@ -1080,37 +1215,79 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: R
         }
     }
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
-        StandardScreenHeader(
-            title = if (isEditing) "Edit Report" else "Report Builder",
-            subtitle = "Create a clean local draft: claim, evidence, reasoning, limitations, and next steps.",
-            icon = FieldMindIcons.Report,
-            heroColor = FieldMindTheme.colors.report,
-            trailing = { BackButton(onClick = onBack) },
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
-        )
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            DividerSection("Type & title", FieldMindIcons.Category, FieldMindTheme.colors.report)
-            ChoiceChipsField("Report type", reportTypes, type) { type = it }
-            FieldTextField(title, { title = it }, "Title")
-            DividerSection("Setup", FieldMindIcons.School, FieldMindTheme.colors.report)
-            FieldTextField(background, { background = it }, "Background", minLines = 2)
-            FieldTextField(question, { question = it }, "Question", minLines = 2)
-            FieldTextField(methods, { methods = it }, "Methods", minLines = 2)
-            DividerSection("Evidence", FieldMindIcons.Data, FieldMindTheme.colors.report)
-            FieldTextField(observations, { observations = it }, "Observations", minLines = 2)
-            FieldTextField(results, { results = it }, "Data / results", minLines = 2)
-            FieldTextField(interpretation, { interpretation = it }, "Interpretation", minLines = 2)
-            DividerSection("Conclusion", FieldMindIcons.Check, FieldMindTheme.colors.report)
-            FieldTextField(conclusion, { conclusion = it }, "Conclusion", minLines = 2)
-            FieldTextField(limitations, { limitations = it }, "Limitations", minLines = 2)
-            FieldTextField(next, { next = it }, "Next steps", minLines = 2)
-            Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
-                Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Build report")
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
+            StandardScreenHeader(
+                title = if (isEditing) "Edit Report" else "Report Builder",
+                subtitle = "Create a clean local draft: claim, evidence, reasoning, limitations, and next steps.",
+                icon = FieldMindIcons.Report,
+                heroColor = FieldMindTheme.colors.report,
+                trailing = { BackButton(onClick = onBack) },
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // ── Type & Title Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Type & title", FieldMindIcons.Category, FieldMindTheme.colors.report)
+                        ChoiceChipsField("Report type", reportTypes, type) { type = it }
+                        FieldTextField(title, { title = it }, "Title")
+                    }
+                }
+
+                // ── Setup Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Setup", FieldMindIcons.School, FieldMindTheme.colors.report)
+                        FieldTextField(background, { background = it }, "Background", minLines = 2)
+                        FieldTextField(question, { question = it }, "Question", minLines = 2)
+                        FieldTextField(methods, { methods = it }, "Methods", minLines = 2)
+                    }
+                }
+
+                // ── Evidence Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Evidence", FieldMindIcons.Data, FieldMindTheme.colors.report)
+                        FieldTextField(observations, { observations = it }, "Observations", minLines = 2)
+                        FieldTextField(results, { results = it }, "Data / results", minLines = 2)
+                        FieldTextField(interpretation, { interpretation = it }, "Interpretation", minLines = 2)
+                    }
+                }
+
+                // ── Conclusion Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Conclusion", FieldMindIcons.Check, FieldMindTheme.colors.report)
+                        FieldTextField(conclusion, { conclusion = it }, "Conclusion", minLines = 2)
+                        FieldTextField(limitations, { limitations = it }, "Limitations", minLines = 2)
+                        FieldTextField(next, { next = it }, "Next steps", minLines = 2)
+                    }
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
+                    Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Build report")
+                }
             }
         }
     }
@@ -1187,38 +1364,81 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, enti
         }
     }
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
-        StandardScreenHeader(
-            title = if (isEditing) "Edit Observation" else "New Observation",
-            subtitle = "Record what you observed — species, conditions, evidence.",
-            icon = FieldMindIcons.Observation,
-            heroColor = FieldMindTheme.colors.observation,
-            trailing = { BackButton(onClick = onBack) }
-        )
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            FieldTextField(subject, { subject = it }, "Species / Subject", supportingText = "Monarch Butterfly, Red-tailed Hawk…")
-            FieldTextField(facts, { facts = it }, "Description", minLines = 3, supportingText = "What exactly did you see, hear, or measure?")
-            DividerSection("Classification", FieldMindIcons.Category, FieldMindTheme.colors.observation)
-            ChoiceChipsField("Category", observationCategories, category) { category = it }
-            ChoiceChipsField("Confidence", confidenceOptions, confidence) { confidence = it }
-            DividerSection("Location", FieldMindIcons.Location, FieldMindTheme.colors.observation)
-            FieldTextField(location, { location = it }, "Location", supportingText = "e.g. Trailhead, Zone A, GPS coordinate")
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                FieldTextField(latitude, { latitude = it }, "Latitude", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
-                FieldTextField(longitude, { longitude = it }, "Longitude", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
-            }
-            DividerSection("Tags", FieldMindIcons.Tag, FieldMindTheme.colors.observation)
-            FieldTextField(tags, { tags = it }, "Tags", supportingText = "Comma-separated keywords — e.g. Butterfly, Pollinator")
-            CollapsibleSection("Advanced", "Evidence summary & field context", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
-                FieldTextField(evidence, { evidence = it }, "Evidence summary", minLines = 2)
-                FieldTextField(fieldContext, { fieldContext = it }, "Field context", minLines = 2)
-            }
-            Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = subject.isNotBlank() || facts.isNotBlank()) {
-                Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save observation")
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
+            StandardScreenHeader(
+                title = if (isEditing) "Edit Observation" else "New Observation",
+                subtitle = "Record what you observed — species, conditions, evidence.",
+                icon = FieldMindIcons.Observation,
+                heroColor = FieldMindTheme.colors.observation,
+                trailing = { BackButton(onClick = onBack) }
+            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // ── Subject Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text("Observation", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        FieldTextField(subject, { subject = it }, "Species / Subject", supportingText = "Monarch Butterfly, Red-tailed Hawk…")
+                        FieldTextField(facts, { facts = it }, "Description", minLines = 3, supportingText = "What exactly did you see, hear, or measure?")
+                    }
+                }
+
+                // ── Classification Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Classification", FieldMindIcons.Category, FieldMindTheme.colors.observation)
+                        ChoiceChipsField("Category", observationCategories, category) { category = it }
+                        ChoiceChipsField("Confidence", confidenceOptions, confidence) { confidence = it }
+                    }
+                }
+
+                // ── Location Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Location", FieldMindIcons.Location, FieldMindTheme.colors.observation)
+                        FieldTextField(location, { location = it }, "Location", supportingText = "e.g. Trailhead, Zone A, GPS coordinate")
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            FieldTextField(latitude, { latitude = it }, "Latitude", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                            FieldTextField(longitude, { longitude = it }, "Longitude", modifier = Modifier.weight(1f), keyboardType = KeyboardType.Decimal)
+                        }
+                    }
+                }
+
+                // ── Tags Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Tags", FieldMindIcons.Tag, FieldMindTheme.colors.observation)
+                        FieldTextField(tags, { tags = it }, "Tags", supportingText = "Comma-separated keywords — e.g. Butterfly, Pollinator")
+                        CollapsibleSection("Advanced", "Evidence summary & field context", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
+                            FieldTextField(evidence, { evidence = it }, "Evidence summary", minLines = 2)
+                            FieldTextField(fieldContext, { fieldContext = it }, "Field context", minLines = 2)
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = subject.isNotBlank() || facts.isNotBlank()) {
+                    Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save observation")
+                }
             }
         }
     }
@@ -1281,31 +1501,54 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Not
         }
     }
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
-        StandardScreenHeader(
-            title = if (isEditing) "Edit Note" else "New Note",
-            subtitle = "Capture a quick idea, observation, or thought.",
-            icon = FieldMindIcons.Note,
-            heroColor = colors.source,
-            trailing = { BackButton(onClick = onBack) },
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
-        )
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            FieldTextField(title, { title = it }, "Title", supportingText = "Auto-filled from body if left blank")
-            FieldTextField(body, { body = it }, "Content", minLines = 6, supportingText = "Start writing…")
-            DividerSection("Classification", FieldMindIcons.Category, colors.source)
-            ChoiceChipsField("Category", observationCategories, category) { category = it }
-            DividerSection("Tags", FieldMindIcons.Tag, colors.source)
-            FieldTextField(tags, { tags = it }, "Tags", supportingText = "Comma-separated keywords")
-            CollapsibleSection("Advanced", "Location & metadata", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
-                FieldTextField(location, { location = it }, "Location", supportingText = "Where was this note taken?")
-            }
-            Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank() || body.isNotBlank()) {
-                Icon(FieldMindIcons.Note, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
+            StandardScreenHeader(
+                title = if (isEditing) "Edit Note" else "New Note",
+                subtitle = "Capture a quick idea, observation, or thought.",
+                icon = FieldMindIcons.Note,
+                heroColor = colors.source,
+                trailing = { BackButton(onClick = onBack) },
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // ── Content Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text("Note content", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        FieldTextField(title, { title = it }, "Title", supportingText = "Auto-filled from body if left blank")
+                        FieldTextField(body, { body = it }, "Content", minLines = 6, supportingText = "Start writing…")
+                    }
+                }
+
+                // ── Classification Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Classification", FieldMindIcons.Category, colors.source)
+                        ChoiceChipsField("Category", observationCategories, category) { category = it }
+                        DividerSection("Tags", FieldMindIcons.Tag, colors.source)
+                        FieldTextField(tags, { tags = it }, "Tags", supportingText = "Comma-separated keywords")
+                        CollapsibleSection("Advanced", "Location & metadata", expanded = showAdvanced, onToggle = { showAdvanced = !showAdvanced }) {
+                            FieldTextField(location, { location = it }, "Location", supportingText = "Where was this note taken?")
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank() || body.isNotBlank()) {
+                    Icon(FieldMindIcons.Note, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                }
             }
         }
     }
@@ -1384,52 +1627,95 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: S
         }
     }
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
-        StandardScreenHeader(
-            title = if (isEditing) "Edit Source" else "New Source",
-            subtitle = "Start with title + type. Fill in what you have.",
-            icon = FieldMindIcons.Source,
-            heroColor = colors.source,
-            trailing = { BackButton(onClick = onBack) },
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
-        )
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            ChoiceChipsField("Source type", sourceLibraryTypes, type) { type = it }
-            DividerSection("Identity", FieldMindIcons.Article, FieldMindTheme.colors.source)
-            FieldTextField(title, { title = it }, "Title")
-            FieldTextField(author, { author = it }, "Author / creator")
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                FieldTextField(dateOrYear, { dateOrYear = it }, "Date / year", modifier = Modifier.weight(1f))
-                FieldTextField(accessDate, { accessDate = it }, "Accessed", modifier = Modifier.weight(1f))
-            }
-            FieldTextField(doiOrIsbn, { doiOrIsbn = it }, "DOI / ISBN")
-            FieldTextField(publisherOrJournal, { publisherOrJournal = it }, "Publisher / journal")
-            DividerSection("Link & notes", FieldMindIcons.Link, colors.source)
-            FieldTextField(link, { link = it }, "Web link")
-            FieldTextField(summary, { summary = it }, "Main idea", minLines = 2)
-            FieldTextField(findings, { findings = it }, "Key findings", minLines = 2)
-            FieldTextField(taught, { taught = it }, "What this taught me", minLines = 2)
-            FieldTextField(questions, { questions = it }, "New questions", minLines = 2)
-            FieldTextField(notes, { notes = it }, "Paper / Cornell notes", minLines = 3)
-            DividerSection("Status", FieldMindIcons.Check, colors.source)
-            ChoiceChipsField("Reading status", readingStatuses, readingStatus) { readingStatus = it }
-            ChoiceChipsField("Importance", sourceImportanceLevels, importance) { importance = it }
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text("Credibility", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("${reliability.toInt()}/5", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-            }
-            Slider(reliability, { reliability = it }, valueRange = 1f..5f, steps = 3)
-            if (projects.isNotEmpty()) {
-                ChoiceChipsField("Link to project", listOf("No project") + projects.map { it.title }, projects.firstOrNull { it.id == projectId }?.title ?: "No project") { selected ->
-                    projectId = projects.firstOrNull { it.title == selected }?.id
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background)) {
+            StandardScreenHeader(
+                title = if (isEditing) "Edit Source" else "New Source",
+                subtitle = "Start with title + type. Fill in what you have.",
+                icon = FieldMindIcons.Source,
+                heroColor = colors.source,
+                trailing = { BackButton(onClick = onBack) },
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 12.dp).padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // ── Source Type Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text("Source type", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        ChoiceChipsField("Source type", sourceLibraryTypes, type) { type = it }
+                    }
                 }
-            }
-            Spacer(Modifier.height(8.dp))
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
-                Icon(FieldMindIcons.Source, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+
+                // ── Identity Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Identity", FieldMindIcons.Article, FieldMindTheme.colors.source)
+                        FieldTextField(title, { title = it }, "Title")
+                        FieldTextField(author, { author = it }, "Author / creator")
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            FieldTextField(dateOrYear, { dateOrYear = it }, "Date / year", modifier = Modifier.weight(1f))
+                            FieldTextField(accessDate, { accessDate = it }, "Accessed", modifier = Modifier.weight(1f))
+                        }
+                        FieldTextField(doiOrIsbn, { doiOrIsbn = it }, "DOI / ISBN")
+                        FieldTextField(publisherOrJournal, { publisherOrJournal = it }, "Publisher / journal")
+                    }
+                }
+
+                // ── Notes Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Link & notes", FieldMindIcons.Link, colors.source)
+                        FieldTextField(link, { link = it }, "Web link")
+                        FieldTextField(summary, { summary = it }, "Main idea", minLines = 2)
+                        FieldTextField(findings, { findings = it }, "Key findings", minLines = 2)
+                        FieldTextField(taught, { taught = it }, "What this taught me", minLines = 2)
+                        FieldTextField(questions, { questions = it }, "New questions", minLines = 2)
+                        FieldTextField(notes, { notes = it }, "Paper / Cornell notes", minLines = 3)
+                    }
+                }
+
+                // ── Status Card ──
+                Card(
+                    shape = RoundedCornerShape(34.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DividerSection("Status", FieldMindIcons.Check, colors.source)
+                        ChoiceChipsField("Reading status", readingStatuses, readingStatus) { readingStatus = it }
+                        ChoiceChipsField("Importance", sourceImportanceLevels, importance) { importance = it }
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            Text("Credibility", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${reliability.toInt()}/5", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(reliability, { reliability = it }, valueRange = 1f..5f, steps = 3)
+                        if (projects.isNotEmpty()) {
+                            ChoiceChipsField("Link to project", listOf("No project") + projects.map { it.title }, projects.firstOrNull { it.id == projectId }?.title ?: "No project") { selected ->
+                                projectId = projects.firstOrNull { it.title == selected }?.id
+                            }
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
+                    Icon(FieldMindIcons.Source, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                }
             }
         }
     }
