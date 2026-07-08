@@ -53,7 +53,7 @@ object AppLifecycleManager {
     private fun parseLockTimeout(seconds: Int) {
         lockTimeoutMs = when {
             seconds < 0 -> -1  // Disabled
-            seconds == 0 -> 0   // Immediate
+            seconds == 0 -> 2_000  // Immediate with 2s grace period
             else -> (seconds * 1000).toLong()
         }
     }
@@ -100,11 +100,11 @@ object AppLifecycleManager {
 
     fun setLockTimeout(timeoutLabel: String) {
         lockTimeoutMs = when (timeoutLabel) {
-            "Immediate" -> 0L
+            "Immediate" -> 2_000L  // 2-second grace period
             "1 minute" -> 60_000L
             "5 minutes" -> 5 * 60_000L
             "15 minutes" -> 15 * 60_000L
-            else -> 0L
+            else -> 2_000L  // default: 2-second grace period
         }
         if (isAppInBackground) scheduleAutoLock()
     }
@@ -133,13 +133,7 @@ object AppLifecycleManager {
         
         cancelScheduledLock()
         
-        if (lockTimeoutMs == 0L) {
-            // Immediate lock: trigger directly instead of posting to Handler,
-            // which could fire before onResume cancels it.
-            triggerLock()
-        } else {
-            handler?.postDelayed(lockTimeoutRunnable, lockTimeoutMs)
-        }
+        handler?.postDelayed(lockTimeoutRunnable, lockTimeoutMs)
     }
     
     private fun cancelScheduledLock() {
@@ -148,8 +142,7 @@ object AppLifecycleManager {
     
     private fun shouldTriggerLock(): Boolean {
         if (lockTimeoutMs < 0) return false  // Disabled
-        if (lockTimeoutMs == 0L) return true  // Immediate lock on background
-        
+
         val timeSinceLastInteraction = System.currentTimeMillis() - lastInteractionTime
         return timeSinceLastInteraction >= lockTimeoutMs
     }
