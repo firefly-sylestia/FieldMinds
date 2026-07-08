@@ -194,7 +194,7 @@ fun SharedTransitionScope.DetailScreen(
                 "project" -> {
                     val p = projects.firstOrNull { it.id == id }
                     if (p != null) {
-                        item { ProjectDetailContent(p, observations, questions, sources, data, reports, viewModel) }
+                        item { ProjectDetailContent(p, viewModel, onOpenDetail, onBack) }
                         item { BacklinksPanel(buildList {
                             observations.filter { it.projectId == p.id }.forEach { add(Triple("observation", it.subject, it.id)) }
                             questions.filter { it.relatedProjectId == p.id }.forEach { add(Triple("question", it.questionText, it.id)) }
@@ -1709,212 +1709,18 @@ fun HypothesisDetailContent(
 @Composable
 fun ProjectDetailContent(
     p: ProjectEntity,
-    observations: List<ObservationEntity>,
-    questions: List<QuestionEntity>,
-    sources: List<SourceEntity>,
-    dataRecords: List<DataRecordEntity>,
-    reports: List<ReportEntity>,
-    viewModel: FieldMindViewModel
+    viewModel: FieldMindViewModel,
+    onOpenDetail: (String, Long) -> Unit = { _, _ -> },
+    onBack: () -> Unit = {}
 ) {
-    val colors = FieldMindTheme.colors
-    val haptics = rememberFieldMindHaptics()
-    var tab by remember { mutableIntStateOf(0) }
-    val projectTabs = listOf("Overview", "Questions", "Observations", "Evidence", "Reports", "Sources", "Species", "Tasks")
-    val obsCount = observations.count { it.projectId == p.id }
-    val qCount = questions.count { it.relatedProjectId == p.id }
-    val srcCount = sources.count { it.relatedProjectId == p.id }
-    val dataCount = dataRecords.count { it.projectId == p.id }
-    val repCount = reports.count { it.projectId == p.id }
-    val projectObs = observations.filter { it.projectId == p.id }
-    val projectQs = questions.filter { it.relatedProjectId == p.id }
-    val projectSrcs = sources.filter { it.relatedProjectId == p.id }
-    val projectReports = reports.filter { it.projectId == p.id }
-    val projectData = dataRecords.filter { it.projectId == p.id }
-
-    // Quick-add dialog state
-    var showNewQuestion by remember { mutableStateOf(false) }
-    var showNewObservation by remember { mutableStateOf(false) }
-    var showNewSource by remember { mutableStateOf(false) }
-    var showNewReport by remember { mutableStateOf(false) }
-
-    Card(
-        shape = RoundedCornerShape(34.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-    ) {
-        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            // Header with action bar
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
-                        .background(colors.project.copy(alpha = 0.14f)),
-                    contentAlignment = Alignment.Center
-                ) { Icon(FieldMindIcons.Project, null, tint = colors.project, size = 24.dp) }
-                Column(Modifier.weight(1f)) {
-                    Text(p.title.ifBlank { "Project" }, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        StatusChip(p.status.ifBlank { "Active" }, colors.project)
-                        InfoChip(p.topicType)
-                    }
-                }
-            }
-
-            // Tab row (now includes Species and Tasks)
-            PrimaryScrollableTabRow(selectedTabIndex = tab, edgePadding = 0.dp, containerColor = androidx.compose.ui.graphics.Color.Transparent) {
-                projectTabs.forEachIndexed { i, label ->
-                    Tab(tab == i, { haptics.light(); tab = i }, text = { 
-                        Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = if (tab == i) FontWeight.Bold else FontWeight.Normal) 
-                    })
-                }
-            }
-
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-
-            // Tab content (existing tabs preserved, new tabs added)
-            when (tab) {
-                0 -> { // Overview — stats + description
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                        ProjectStatTile("${obsCount}", "Observations", colors.observation)
-                        ProjectStatTile("${qCount}", "Questions", colors.question)
-                        ProjectStatTile("${srcCount}", "Sources", colors.source)
-                        ProjectStatTile("${dataCount}", "Data", colors.data)
-                        ProjectStatTile("${repCount}", "Reports", colors.report)
-                    }
-                    if (p.researchQuestion.isNotBlank()) {
-                        Text("Research question", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = colors.project)
-                        Text(p.researchQuestion, style = MaterialTheme.typography.bodyMedium)
-                    }
-                    if (p.objective.isNotBlank()) {
-                        Text("Objective", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(p.objective, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                    if (p.methods.isNotBlank()) {
-                        Text("Methods", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = colors.info)
-                        Text(p.methods, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                    if (p.conclusion.isNotBlank()) {
-                        Text("Conclusion", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = colors.positive)
-                        Text(p.conclusion, style = MaterialTheme.typography.bodyMedium)
-                    }
-                }
-                1 -> { // Questions
-                    if (projectQs.isEmpty()) {
-                        Text("No questions for this project yet.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    } else {
-                        projectQs.forEach { q ->
-                            Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(colors.question.copy(alpha = 0.06f)).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Icon(FieldMindIcons.Question, null, tint = colors.question, size = 18.dp)
-                                Column(Modifier.weight(1f)) {
-                                    Text(q.questionText, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                                    Text("Status: ${q.status}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                }
-                            }
-                        }
-                    }
-                    Spacer(Modifier.height(8.dp))
-                    OutlinedButton(
-                        onClick = { showNewQuestion = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(22.dp)
-                    ) {
-                        Icon(FieldMindIcons.Add, null, size = 18.dp)
-                        Spacer(Modifier.size(6.dp))
-                        Text("Add Question")
-                    }
-                }
-                2 -> { // Observations
-                    if (projectObs.isEmpty()) {
-                        Text("No observations linked to this project.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    } else {
-                        projectObs.take(5).forEachIndexed { i, o ->
-                            EntityCard(o.subject.ifBlank { "Observation" }, "observation",
-                                body = "${o.category} • ${o.date}",
-                                meta = listOf(o.confidenceLevel),
-                                index = i,
-                                animate = true)
-                        }
-                        if (projectObs.size > 5) {
-                            Text("+${projectObs.size - 5} more observations", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                    }
-                    Spacer(Modifier.height(8.dp))
-                    OutlinedButton(
-                        onClick = { showNewObservation = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(22.dp)
-                    ) {
-                        Icon(FieldMindIcons.Add, null, size = 18.dp)
-                        Spacer(Modifier.size(6.dp))
-                        Text("Add Observation")
-                    }
-                }
-                3 -> { // Evidence
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                        ProjectStatTile("${projectObs.count { it.evidenceSummary.isNotBlank() }}", "With evidence", colors.observation)
-                        ProjectStatTile("${projectObs.count { it.weatherTemperature != null }}", "Weather data", colors.info)
-                    }
-                    Text("Collect photos, audio, video, and notes as evidence for each observation.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                4 -> { // Reports
-                    if (projectReports.isEmpty()) {
-                        Text("No reports for this project.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    } else {
-                        projectReports.forEachIndexed { i, r ->
-                            EntityCard(r.title, "report", body = r.conclusion.ifBlank { r.question }, meta = listOf(r.type, r.status), index = i, animate = true)
-                        }
-                    }
-                    Spacer(Modifier.height(8.dp))
-                    OutlinedButton(
-                        onClick = { showNewReport = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(22.dp)
-                    ) {
-                        Icon(FieldMindIcons.Add, null, size = 18.dp)
-                        Spacer(Modifier.size(6.dp))
-                        Text("Add Report")
-                    }
-                }
-                5 -> { // Sources
-                    if (projectSrcs.isEmpty()) {
-                        Text("No sources linked to this project.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    } else {
-                        projectSrcs.forEachIndexed { i, s ->
-                            EntityCard(s.title, "source", body = s.author, meta = listOf(s.type, s.readingStatus), index = i, animate = true)
-                        }
-                    }
-                    Spacer(Modifier.height(8.dp))
-                    OutlinedButton(
-                        onClick = { showNewSource = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(22.dp)
-                    ) {
-                        Icon(FieldMindIcons.Add, null, size = 18.dp)
-                        Spacer(Modifier.size(6.dp))
-                        Text("Add Source")
-                    }
-                }
-                6 -> { // Species Registry Builder
-                    SpeciesRegistryBuilder(p.id, viewModel)
-                }
-                7 -> { // Project Tasks Builder
-                    ProjectTasksBuilder(p.id, viewModel)
-                }
-            }
-        }
-    }
-    
-    // Quick-add dialog invocations
-    ProjectQuickAddDialogs(
+    // Delegate to canonical ProjectDetailScreen — collects its own state from ViewModel
+    // Note: ProjectDetailScreen nests its own LazyColumn inside DetailScreen's LazyColumn item.
+    // This is acceptable for deduplication but may cause slight scroll jank.
+    ProjectDetailScreen(
         projectId = p.id,
-        showQuestion = showNewQuestion,
-        showObservation = showNewObservation,
-        showSource = showNewSource,
-        showReport = showNewReport,
-        onDismissQuestion = { showNewQuestion = false },
-        onDismissObservation = { showNewObservation = false },
-        onDismissSource = { showNewSource = false },
-        onDismissReport = { showNewReport = false },
-        viewModel = viewModel
+        viewModel = viewModel,
+        onOpenDetail = onOpenDetail,
+        onBack = onBack
     )
 }
 
