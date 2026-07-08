@@ -40,9 +40,14 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
+import kotlinx.coroutines.flow.first
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7))
+private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC))
+private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4))
 
 private val BRAND_PRIMARY = Color(0xFF1F6B4C)
 private val SPECIES_GREEN = Color(0xFF2E7D32)
@@ -64,11 +69,7 @@ class FieldMindSpeciesWidget : GlanceAppWidget() {
 
         suspend fun updateData(context: Context) {
             val dao = fieldmind.research.app.features.field.data.database.FieldMindDatabase.getInstance(context).fieldMindDao()
-            val observations = dao.observeObservations().let { flow ->
-                var result = emptyList<fieldmind.research.app.features.field.data.database.entity.ObservationEntity>()
-                kotlinx.coroutines.flow.first(flow) { list -> result = list; true }
-                result
-            }
+            val observations = dao.observeObservations().first()
 
             val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             val totalSightings = observations.size
@@ -116,8 +117,8 @@ class FieldMindSpeciesWidget : GlanceAppWidget() {
             modifier = GlanceModifier.fillMaxSize().cornerRadius(32.dp)
                 .clickable(actionStartActivity<MainActivity>())
         ) {
-            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainerLow).cornerRadius(32.dp)) { }
-            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceVariant.copy(alpha = 0.5f)).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE_LOW).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE).cornerRadius(32.dp)) { }
             Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(ColorProvider(SPECIES_GREEN)).cornerRadius(1.5f.dp)) { }
 
             Box(modifier = GlanceModifier.fillMaxSize().padding(14.dp)) {

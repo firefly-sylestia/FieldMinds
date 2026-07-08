@@ -17,6 +17,7 @@ import androidx.work.WorkerParameters
 import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
 import fieldmind.research.app.features.field.data.database.FieldMindDatabase
+import kotlinx.coroutines.flow.first
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -56,11 +57,7 @@ class FieldMindSessionReminderWorker(
 
         // Check if user already made observations today
         val dao = FieldMindDatabase.getInstance(applicationContext).fieldMindDao()
-        val observations = dao.observeObservations().let { flow ->
-            var result = emptyList<fieldmind.research.app.features.field.data.database.entity.ObservationEntity>()
-            kotlinx.coroutines.flow.first(flow) { list -> result = list; true }
-            result
-        }
+        val observations = dao.observeObservations().first()
         val todayCount = observations.count { it.date == today }
         if (todayCount > 0) return@runCatching Result.success()
 

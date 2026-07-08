@@ -80,7 +80,8 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
         startAutoGeneration()
 
-        // Push widget data on init and whenever any relevant StateFlow changes            viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+        // Push widget data on init and whenever any relevant StateFlow changes
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             // Collect all relevant flows — emits whenever any count changes
             // Nested combines because combine() only supports up to 5 flows
             combine(

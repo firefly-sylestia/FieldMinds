@@ -39,6 +39,10 @@ import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
 
+private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7))
+private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC))
+private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4))
+
 private val BRAND_PRIMARY = Color(0xFF1F6B4C)
 private val BRAND_ACCENT = Color(0xFF1F6B4C)
 
@@ -70,8 +74,8 @@ class FieldMindQuickCaptureWidget : GlanceAppWidget() {
                 .clickable(actionStartActivity<MainActivity>())
         ) {
             // ── Glassmorphic layered background ──
-            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainerLow).cornerRadius(32.dp)) { }
-            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainer).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE_LOW).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE).cornerRadius(32.dp)) { }
             // ── Brand accent top bar ──
             Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(ColorProvider(BRAND_ACCENT)).cornerRadius(1.5f.dp)) { }
 
