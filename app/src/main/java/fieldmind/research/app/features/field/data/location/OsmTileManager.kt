@@ -72,8 +72,10 @@ class OsmTileManager(private val context: Context) {
     /** Check if the device has internet connectivity. */
     fun checkConnectivity() {
         val connectivity = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? android.net.ConnectivityManager
-        val activeNetwork = connectivity?.activeNetworkInfo
-        _isOffline.value = activeNetwork == null || !activeNetwork.isConnectedOrConnecting
+        val activeNetwork = connectivity?.activeNetwork
+        val networkCapabilities = activeNetwork?.let { connectivity.getNetworkCapabilities(it) }
+        _isOffline.value = networkCapabilities == null ||
+            !networkCapabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
     /** Returns true if we have cached tiles (offline-capable). */

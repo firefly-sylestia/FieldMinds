@@ -128,6 +128,7 @@ class TrackRecorder(private val context: Context) {
     /**
      * Starts a new track recording session.
      */
+    @SuppressLint("MissingPermission")
     fun startRecording(name: String? = null, sessionId: Long? = null) {
         if (!hasLocationPermission()) return
         if (_isRecording.value) return
@@ -181,6 +182,7 @@ class TrackRecorder(private val context: Context) {
     /**
      * Pauses/resumes the current recording.
      */
+    @SuppressLint("MissingPermission")
     fun togglePause() {
         val recording = _currentRecording.value ?: return
         if (recording.isPaused) {

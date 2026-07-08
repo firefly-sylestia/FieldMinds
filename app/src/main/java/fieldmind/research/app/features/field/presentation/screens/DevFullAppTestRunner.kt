@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fieldmind.research.app.activities.FieldMindCrashActivity
+import android.annotation.SuppressLint
 import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.data.security.LockSecurityPolicy
 import fieldmind.research.app.features.field.data.weather.OpenMeteoProvider
@@ -724,7 +725,8 @@ private fun assert(condition: Boolean, message: () -> String) {
 //  Test Execution Engine
 // ══════════════════════════════════════════════════════════════════════
 
-private suspend fun runAllTests(
+private suspend @Suppress("SENSELESS_COMPARISON")
+    fun runAllTests(
     viewModel: FieldMindViewModel,
     context: Context,
     results: MutableList<TestResult>,

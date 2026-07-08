@@ -166,6 +166,7 @@ class FieldLocationProvider(private val context: Context) {
      * Returns false when GPS is turned off in system settings, even if location
      * permission has been granted.
      */
+    @SuppressLint("MissingPermission")
     fun isGpsEnabled(): Boolean {
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager ?: return false
         return runCatching { manager.isProviderEnabled(LocationManager.GPS_PROVIDER) }.getOrDefault(false) ||

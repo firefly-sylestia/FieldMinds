@@ -959,7 +959,7 @@ fun MetricTile(
     val displayValue = if (hasNumeric) {
         remember(countUpAnimated.value) {
             val suffix = value.trimStart().dropWhile { it.isDigit() || it == '.' }.trimStart()
-            val isInteger = numericPrefix == numericPrefix?.toInt()?.toFloat()
+            val isInteger = numericPrefix == numericPrefix?.toInt().toFloat()
             val formatted = if (isInteger) {
                 countUpAnimated.value.toInt().toString()
             } else {

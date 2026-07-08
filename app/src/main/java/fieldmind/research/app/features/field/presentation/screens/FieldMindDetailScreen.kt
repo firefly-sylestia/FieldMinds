@@ -1760,7 +1760,7 @@ fun ProjectDetailContent(
             }
 
             // Tab row (now includes Species and Tasks)
-            ScrollableTabRow(selectedTabIndex = tab, edgePadding = 0.dp, containerColor = androidx.compose.ui.graphics.Color.Transparent) {
+            PrimaryScrollableTabRow(selectedTabIndex = tab, edgePadding = 0.dp, containerColor = androidx.compose.ui.graphics.Color.Transparent) {
                 projectTabs.forEachIndexed { i, label ->
                     Tab(tab == i, { haptics.light(); tab = i }, text = { 
                         Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = if (tab == i) FontWeight.Bold else FontWeight.Normal) 
@@ -1988,7 +1988,7 @@ fun ObservationQuickAddDialog(
                         onValueChange = {},
                         label = { Text("Category") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showCategoryMenu) },
-                        modifier = Modifier.fillMaxWidth().menuAnchor(),
+                        modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                         readOnly = true,
                         shape = RoundedCornerShape(22.dp)
                     )

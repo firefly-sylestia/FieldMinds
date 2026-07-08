@@ -472,6 +472,7 @@ fun WeatherDatabaseScreen(
 }
 
 @Composable
+@Suppress("SENSELESS_COMPARISON")
 private fun LiveCurrentWeatherCard(
     weather: WeatherSnapshot?,
     hasError: Boolean,

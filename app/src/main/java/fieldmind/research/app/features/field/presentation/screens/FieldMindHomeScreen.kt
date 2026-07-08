@@ -1316,7 +1316,7 @@ private fun LiveWeatherDashboardWidget(
     val isNight = timeOfDay == "night"
 
     // Override weather code with test value if in developer mode
-    val displayWeatherCode = testWeatherCode ?: currentWeather?.weatherCode ?: 0
+    val displayWeatherCode = testWeatherCode ?: currentWeather.weatherCode ?: 0
     val displayNight = if (developerMode) testIsNight else isNight
     val timeGreeting = when (timeOfDay) {
         "morning" -> "Good morning"
@@ -1493,7 +1493,7 @@ private fun LiveWeatherDashboardWidget(
                             weatherLoading -> "Loading…"
                             currentWeather != null -> {
                                 // Subtitle shows condition description only (temp shown below in main row)
-                                val desc = currentWeather?.weatherDescription ?: ""
+                                val desc = currentWeather.weatherDescription ?: ""
                                 if (showCondition && desc.isNotBlank()) desc else "Weather data available"
                             }
                             weatherError -> "Enable location for live weather"
@@ -1509,7 +1509,7 @@ private fun LiveWeatherDashboardWidget(
             // ── Time-of-day greeting ──
             if (currentWeather != null) {
                 Text(
-                    "$timeGreeting. ${currentWeather?.weatherDescription?.ifBlank { "Clear skies" }}.",
+                    "$timeGreeting. ${currentWeather.weatherDescription?.ifBlank { "Clear skies" }}.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = textOnScene.copy(alpha = 0.75f),
                     fontWeight = FontWeight.Medium

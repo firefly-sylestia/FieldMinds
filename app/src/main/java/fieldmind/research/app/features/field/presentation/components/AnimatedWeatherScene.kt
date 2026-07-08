@@ -2772,7 +2772,7 @@ private fun DrawScope.drawMoonPhase(
     if (moonTextureBitmap != null) {
         clipPath(Path().apply { addOval(androidx.compose.ui.geometry.Rect(cx - radius, cy - radius, cx + radius, cy + radius)) }) {
             drawImage(
-                image = moonTextureBitmap!!,
+                image = moonTextureBitmap,
                 dstOffset = IntOffset((cx - radius).toInt(), (cy - radius).toInt()),
                 dstSize = IntSize((radius * 2).toInt(), (radius * 2).toInt())
             )

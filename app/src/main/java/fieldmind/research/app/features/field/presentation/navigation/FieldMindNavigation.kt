@@ -1014,7 +1014,7 @@ private fun FieldMindNavHost(
         val isCachable = route != null
         peekHolder.peekKey = if (isCachable) route else null
         peekHolder.peekContent = if (isCachable) {
-            { RouteContent(route!!, viewModel) }
+            { RouteContent(route, viewModel) }
         } else null
     }
 

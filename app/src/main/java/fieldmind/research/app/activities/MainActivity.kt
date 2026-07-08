@@ -153,7 +153,8 @@ class MainActivity : FragmentActivity() {
                     ?: intent.getStringExtra(Intent.EXTRA_SUBJECT)
                     ?: text.lineSequence().firstOrNull()?.take(80)
                     ?: "Shared source"
-                val stream = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+                val stream = @Suppress("DEPRECATION")
+        intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
                 stream?.let { runCatching { contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION) } }
                 val mime = intent.type.orEmpty()
                 fieldMindViewModel.addSource(
