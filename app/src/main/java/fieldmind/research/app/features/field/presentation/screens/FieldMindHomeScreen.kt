@@ -1316,7 +1316,7 @@ private fun LiveWeatherDashboardWidget(
     val isNight = timeOfDay == "night"
 
     // Override weather code with test value if in developer mode
-    val displayWeatherCode = testWeatherCode ?: currentWeather.weatherCode ?: 0
+    val displayWeatherCode = testWeatherCode ?: currentWeather?.weatherCode ?: 0
     val displayNight = if (developerMode) testIsNight else isNight
     val timeGreeting = when (timeOfDay) {
         "morning" -> "Good morning"
