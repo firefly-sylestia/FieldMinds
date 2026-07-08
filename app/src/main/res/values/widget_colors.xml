@@ -45,6 +45,12 @@
     <color name="widget_surface_container_high">#E4DDED</color>
     <color name="widget_surface_container_high_dark">#3A3842</color>
 
+    <!-- Glassmorphic glow accents — specular highlights matching compass/level aesthetic -->
+    <color name="widget_specular_glow">#207B5AE2</color>   <!-- Semi-transparent info purple for top-left specular highlight (12.5% opacity) -->
+    <color name="widget_specular_glow_dark">#20D0BCFF</color>
+    <color name="widget_fresnel_glow">#103B82F6</color>    <!-- Semi-transparent data blue for bottom-right Fresnel edge glow (6.25% opacity) -->
+    <color name="widget_fresnel_glow_dark">#1060A5FA</color>
+
     <!-- Outline colors -->
     <color name="widget_outline">#79747E</color>
     <color name="widget_outline_dark">#938F99</color>
