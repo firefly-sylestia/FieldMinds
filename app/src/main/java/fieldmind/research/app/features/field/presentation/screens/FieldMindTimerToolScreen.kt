@@ -11,6 +11,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -208,8 +209,10 @@ fun TimerToolScreen(
     )
 
     Box(Modifier.fillMaxSize().statusBarsPadding()) {
+        val timerScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
         LazyColumn(
-            Modifier.fillMaxSize(),
+            state = timerScrollState,
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(20.dp, 20.dp, 20.dp, 96.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

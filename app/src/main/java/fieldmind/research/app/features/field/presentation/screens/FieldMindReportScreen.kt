@@ -9,6 +9,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -55,6 +56,7 @@ fun FieldMindReportScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
+    val reportScrollState = rememberLazyListState()
     val colors = FieldMindTheme.colors
 
     // Entity collections
@@ -159,7 +161,8 @@ fun FieldMindReportScreen(
 
     Box(Modifier.fillMaxSize().statusBarsPadding()) {
         LazyColumn(
-            Modifier.fillMaxSize(),
+            state = reportScrollState,
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(20.dp, 20.dp, 20.dp, 96.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
