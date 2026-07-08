@@ -1439,7 +1439,10 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                         runCatching {
                             val generated = QuestionGenerator.generateAll(
                                 observations = obs,
+                                species = speciesRegistry.value,
+                                projects = projects.value,
                                 sources = srcs,
+                                patterns = detectedPatterns.value,
                                 existing = existingQuestions
                             )
                             val capped = generated.take(AUTO_GEN_DAILY_CAP - todayGenCount)
