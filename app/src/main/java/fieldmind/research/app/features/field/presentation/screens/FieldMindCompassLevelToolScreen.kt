@@ -1058,7 +1058,9 @@ fun LevelToolScreen(
                     ringHapticFired = ringHapticFired + threshold
                 }
                 // Re-arm the flag when the tilt moves far enough away from the threshold
-                if (abs(tiltMagnitudeXY - threshold) > 0.05f) {
+                // Use prevTiltXY (pre-crossing value) so the distance is measured from the side
+                // the tilt was on before crossing, avoiding a stuck flag on inward re-entry.
+                if (abs(prevTiltXY - threshold) > 0.03f) {
                     ringHapticFired = ringHapticFired - threshold
                 }
             }
