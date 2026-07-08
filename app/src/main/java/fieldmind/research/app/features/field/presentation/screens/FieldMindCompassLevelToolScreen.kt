@@ -16,6 +16,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -95,6 +97,32 @@ fun CompassToolScreen(
     var needsCalibration by remember { mutableStateOf(true) }
     var showCalibrationGuide by remember { mutableStateOf(false) }
     val haptics = rememberFieldMindHaptics()
+
+    // ── True north / declination ──
+    var useTrueNorth by remember { mutableStateOf(false) }
+    var declination by remember { mutableFloatStateOf(0f) }
+    var locationLabel by remember { mutableStateOf("—") }
+
+    // Look up magnetic declination from last known location
+    LaunchedEffect(Unit) {
+        try {
+            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? android.location.LocationManager
+            val location = locationManager?.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER)
+                ?: locationManager?.getLastKnownLocation(android.location.LocationManager.NETWORK_PROVIDER)
+            if (location != null) {
+                val geoField = android.location.GeomagneticField(
+                    location.latitude.toFloat(),
+                    location.longitude.toFloat(),
+                    location.altitude.toFloat(),
+                    System.currentTimeMillis()
+                )
+                declination = geoField.declination
+                locationLabel = "%.1f° %.1f°".format(location.latitude, location.longitude)
+            }
+        } catch (_: SecurityException) {
+            // Location permission not granted — declination stays 0
+        }
+    }
 
     // ── Sensor listener ──
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
@@ -205,11 +233,26 @@ fun CompassToolScreen(
         label = "azimuth"
     )
 
+    // ── Display azimuth: magnetic or true north corrected ──
+    val displayAzimuth by remember(azimuth, declination, useTrueNorth) {
+        derivedStateOf {
+            if (useTrueNorth) (azimuth + declination + 360) % 360 else azimuth
+        }
+    }
+    val headingLabelVersion = if (useTrueNorth) "True" else "Magnetic"
+
+    // ── Smooth animated display azimuth ──
+    val smoothDisplayAzimuth by animateFloatAsState(
+        targetValue = displayAzimuth,
+        animationSpec = spring(dampingRatio = 0.7f, stiffness = 200f),
+        label = "displayAzimuth"
+    )
+
     // ── Cardinal direction ──
-    val cardinal = remember(azimuth) {
+    val cardinal = remember(displayAzimuth) {
         val dirs = arrayOf("N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
             "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW")
-        val index = ((azimuth + 11.25f) / 22.5f).roundToInt() % 16
+        val index = ((displayAzimuth + 11.25f) / 22.5f).roundToInt() % 16
         dirs[index]
     }
 
@@ -241,17 +284,18 @@ fun CompassToolScreen(
     var nearE by remember { mutableStateOf(false) }
     var nearS by remember { mutableStateOf(false) }
     var nearW by remember { mutableStateOf(false) }
-    LaunchedEffect(azimuth) {
-        val enteringN = minOf(azimuth, 360f - azimuth) < 3f
+    LaunchedEffect(displayAzimuth) {
+        val az = displayAzimuth
+        val enteringN = minOf(az, 360f - az) < 3f
         if (enteringN && !nearN) haptics.light()
         nearN = enteringN
-        val enteringE = abs(azimuth - 90f) < 3f
+        val enteringE = abs(az - 90f) < 3f
         if (enteringE && !nearE) haptics.light()
         nearE = enteringE
-        val enteringS = abs(azimuth - 180f) < 3f
+        val enteringS = abs(az - 180f) < 3f
         if (enteringS && !nearS) haptics.light()
         nearS = enteringS
-        val enteringW = abs(azimuth - 270f) < 3f
+        val enteringW = abs(az - 270f) < 3f
         if (enteringW && !nearW) haptics.light()
         nearW = enteringW
     }
@@ -271,7 +315,7 @@ fun CompassToolScreen(
             // ── Header ──
             StandardScreenHeader(
                 title = "Compass",
-                subtitle = "Real-time magnetic heading",
+                subtitle = "Real-time $headingLabelVersion heading" + if (useTrueNorth && abs(declination) > 0.5f) " (δ ${\"%.1f°\".format(abs(declination))})" else "",
                 icon = MaterialSymbolIcon("explore"),
                 heroColor = colors.info,
                 trailing = { BackButton(onClick = onBack) }
@@ -294,7 +338,7 @@ fun CompassToolScreen(
                     ) {
                         // ── Premium compass rose ──
                         CompassRoseCanvas(
-                            azimuth = smoothAzimuth,
+                            azimuth = smoothDisplayAzimuth,
                             isInterference = isInterference,
                             magneticField = magneticField
                         )
@@ -302,10 +346,10 @@ fun CompassToolScreen(
                         // ── Heading display ──
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                "%.1f°".format(azimuth),
+                                "%.1f°".format(displayAzimuth),
                                 style = MaterialTheme.typography.displayLarge.copy(
                                     fontWeight = FontWeight.ExtraBold,
                                     fontSize = 52.sp,
@@ -313,28 +357,63 @@ fun CompassToolScreen(
                                 ),
                                 color = colors.info
                             )
-                            Surface(
-                                shape = RoundedCornerShape(20.dp),
-                                color = colors.info.copy(alpha = 0.12f),
-                                tonalElevation = 0.dp
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Row(
-                                    Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                Surface(
+                                    shape = RoundedCornerShape(20.dp),
+                                    color = colors.info.copy(alpha = 0.12f),
+                                    tonalElevation = 0.dp
                                 ) {
-                                    Icon(
-                                        MaterialSymbolIcon("explore"),
-                                        null,
-                                        tint = colors.info,
-                                        size = 20.dp
+                                    Row(
+                                        Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Icon(
+                                            MaterialSymbolIcon("explore"),
+                                            null,
+                                            tint = colors.info,
+                                            size = 20.dp
+                                        )
+                                        Text(
+                                            "Heading $cardinal",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = colors.info
+                                        )
+                                    }
+                                }
+                                // ── Magnetic / True North toggle ──
+                                Surface(
+                                    shape = RoundedCornerShape(20.dp),
+                                    color = if (useTrueNorth) colors.data.copy(alpha = 0.15f) else colors.info.copy(alpha = 0.08f),
+                                    tonalElevation = 0.dp,
+                                    modifier = Modifier.clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = null,
+                                        onClick = { haptics.light(); useTrueNorth = !useTrueNorth }
                                     )
-                                    Text(
-                                        "Heading $cardinal",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Bold,
-                                        color = colors.info
-                                    )
+                                ) {
+                                    Row(
+                                        Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(5.dp)
+                                    ) {
+                                        Icon(
+                                            MaterialSymbolIcon(if (useTrueNorth) "my_location" else "explore"),
+                                            null,
+                                            tint = if (useTrueNorth) colors.data else colors.info.copy(alpha = 0.6f),
+                                            size = 16.dp
+                                        )
+                                        Text(
+                                            if (useTrueNorth) "True" else "Mag",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = if (useTrueNorth) FontWeight.Bold else FontWeight.Medium,
+                                            color = if (useTrueNorth) colors.data else colors.info.copy(alpha = 0.6f)
+                                        )
+                                    }
                                 }
                             }
                         }
