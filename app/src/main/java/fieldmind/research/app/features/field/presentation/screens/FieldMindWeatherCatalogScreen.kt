@@ -352,12 +352,7 @@ private fun WeatherCatalogCurrentCard(
                             fontWeight = FontWeight.SemiBold,
                             color = textOnScene.copy(alpha = 0.7f)
                         )
-                        if (weather.placeName.isNotBlank()) {
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Icon(MaterialSymbolIcon("location_on"), null, tint = textOnScene.copy(alpha = 0.5f), size = 14.dp)
-                                Text(weather.placeName.take(20), style = MaterialTheme.typography.labelSmall, color = textOnScene.copy(alpha = 0.6f))
-                            }
-                        }
+                        // WeatherSnapshot does not include place name
                     }
 
                     // Gradient temperature
@@ -1109,10 +1104,4 @@ private fun iconNameForWeatherCode(code: Int, isNight: Boolean = false): String 
     else -> if (isNight) "partly_cloudy_night" else "partly_cloudy_day"
 }
 
-private fun formatTimeFromIso(isoTime: String): String {
-    return try {
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
-        val out = SimpleDateFormat("h:mm a", Locale.getDefault())
-        out.format(sdf.parse(isoTime.take(16)) ?: return isoTime)
-    } catch (_: Exception) { isoTime.takeLast(5) }
-}
+// formatTimeFromIso is defined in FieldMindHomeScreen.kt (internal)

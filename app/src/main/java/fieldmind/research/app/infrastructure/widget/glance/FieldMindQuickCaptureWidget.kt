@@ -36,6 +36,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
+import androidx.compose.ui.graphics.Color
 import fieldmind.research.app.R
 
 /**
@@ -74,13 +75,13 @@ class FieldMindQuickCaptureWidget : GlanceAppWidget() {
                     .fillMaxSize()
                     .background(GlanceTheme.colors.surfaceVariant)
                     .cornerRadius(32.dp)
-            )
+            ) { }
             // Accent top bar — primary purple stripe
             Box(
                 modifier = GlanceModifier
                     .fillMaxWidth()
                     .height(3.dp)
-                    .background(ColorProvider(0xFF6750A4))
+                    .background(ColorProvider(Color(0xFF6750A4.toInt())))
                     .cornerRadius(1.5f.dp),
                 contentAlignment = Alignment.TopCenter
             )
@@ -133,7 +134,7 @@ class FieldMindQuickCaptureWidget : GlanceAppWidget() {
                                 .size(8.dp)
                                 .background(GlanceTheme.colors.primary)
                                 .cornerRadius(4.dp)
-                        )
+                        ) { }
                     }
                 } else {
                     Column(

@@ -37,6 +37,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
+import androidx.compose.ui.graphics.Color
 import fieldmind.research.app.R
 
 /**
@@ -173,15 +174,15 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                     .fillMaxSize()
                     .background(GlanceTheme.colors.surfaceVariant)
                     .cornerRadius(32.dp)
-            )
+            ) { }
             // Accent top bar
             Box(
                 modifier = GlanceModifier
                     .fillMaxWidth()
                     .height(3.dp)
-                    .background(ColorProvider(0xFF6750A4))
+                    .background(ColorProvider(Color(0xFF6750A4.toInt())))
                     .cornerRadius(1.5f.dp)
-            )
+            ) { }
 
             Box(modifier = GlanceModifier.fillMaxSize().padding(18.dp)) {
                 if (isWide) {
@@ -226,7 +227,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                         Row(modifier = GlanceModifier.fillMaxWidth()) {
                             GlassStatCard("Observations", obsCount, GlanceTheme.colors.primary, GlanceModifier.defaultWeight())
                             Spacer(GlanceModifier.width(8.dp))
-                            GlassStatCard("Questions", questionCount, ColorProvider(0xFF3B82F6), GlanceModifier.defaultWeight())
+                            GlassStatCard("Questions", questionCount, ColorProvider(Color(0xFF3B82F6.toInt())), GlanceModifier.defaultWeight())
                         }
                         Spacer(GlanceModifier.height(8.dp))
                         Row(modifier = GlanceModifier.fillMaxWidth()) {
@@ -236,9 +237,9 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                         }
                         Spacer(GlanceModifier.height(8.dp))
                         Row(modifier = GlanceModifier.fillMaxWidth()) {
-                            GlassStatCard("Notes", noteCount, ColorProvider(0xFF22C55E), GlanceModifier.defaultWeight())
+                            GlassStatCard("Notes", noteCount, ColorProvider(Color(0xFF22C55E.toInt())), GlanceModifier.defaultWeight())
                             Spacer(GlanceModifier.width(8.dp))
-                            GlassStatCard("Reports", reportCount, ColorProvider(0xFFF59E0B), GlanceModifier.defaultWeight())
+                            GlassStatCard("Reports", reportCount, ColorProvider(Color(0xFFF59E0B.toInt())), GlanceModifier.defaultWeight())
                         }
 
                         Spacer(GlanceModifier.defaultWeight())
@@ -277,9 +278,9 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                         }
                         Spacer(GlanceModifier.height(10.dp))
                         CompactStatRow("Observations", obsCount, GlanceTheme.colors.primary)
-                        CompactStatRow("Questions", questionCount, ColorProvider(0xFF3B82F6))
+                        CompactStatRow("Questions", questionCount, ColorProvider(Color(0xFF3B82F6.toInt())))
                         CompactStatRow("Projects", projectCount, GlanceTheme.colors.tertiary)
-                        CompactStatRow("Notes", noteCount, ColorProvider(0xFF22C55E))
+                        CompactStatRow("Notes", noteCount, ColorProvider(Color(0xFF22C55E.toInt())))
 
                         Spacer(GlanceModifier.defaultWeight())
                         Text(
@@ -333,7 +334,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                     .size(6.dp)
                     .background(accent)
                     .cornerRadius(3.dp)
-            )
+            ) { }
             Spacer(GlanceModifier.width(8.dp))
             Text(
                 text = label,
