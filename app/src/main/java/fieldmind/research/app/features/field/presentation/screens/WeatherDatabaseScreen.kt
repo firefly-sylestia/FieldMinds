@@ -327,48 +327,51 @@ fun WeatherDatabaseScreen(
             // ── Day selector row ──
             if (dailyGroups.isNotEmpty()) {
                 item {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Card(
+                        shape = RoundedCornerShape(24.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Icon(
-                            FieldMindIcons.Calendar,
-                            null,
-                            tint = colors.info,
-                            size = 18.dp
-                        )
-                        Text(
-                            formattedDate,
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.weight(1f)
-                        )
-                        // ← Previous (older) — dailyGroups is sorted newest-first, so index++ goes to older
-                        IconButton(
-                            onClick = { if (selectedDayIndex < dailyGroups.size - 1) selectedDayIndex++ },
-                            enabled = selectedDayIndex < dailyGroups.size - 1,
-                            modifier = Modifier.size(32.dp)
+                        Row(
+                            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                FieldMindIcons.Back,
-                                null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                size = 18.dp
+                            Box(
+                                Modifier.size(32.dp).clip(CircleShape).background(colors.info.copy(alpha = 0.12f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(FieldMindIcons.Calendar, null, tint = colors.info, size = 18.dp)
+                            }
+                            Text(
+                                formattedDate,
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.weight(1f)
                             )
-                        }
-                        // → Next (newer) — index-- goes to newer (index 0 = newest)
-                        IconButton(
-                            onClick = { if (selectedDayIndex > 0) selectedDayIndex-- },
-                            enabled = selectedDayIndex > 0,
-                            modifier = Modifier.size(32.dp)
-                        ) {
-                            Icon(
-                                FieldMindIcons.Forward,
-                                null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                size = 18.dp
-                            )
+                            // ← Previous (older) — dailyGroups is sorted newest-first, so index++ goes to older
+                            Surface(
+                                onClick = { if (selectedDayIndex < dailyGroups.size - 1) selectedDayIndex++ },
+                                shape = RoundedCornerShape(12.dp),
+                                color = if (selectedDayIndex < dailyGroups.size - 1) colors.info.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(FieldMindIcons.Back, null, tint = if (selectedDayIndex < dailyGroups.size - 1) colors.info else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 18.dp)
+                                }
+                            }
+                            // → Next (newer) — index-- goes to newer (index 0 = newest)
+                            Surface(
+                                onClick = { if (selectedDayIndex > 0) selectedDayIndex-- },
+                                shape = RoundedCornerShape(12.dp),
+                                color = if (selectedDayIndex > 0) colors.info.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(FieldMindIcons.Forward, null, tint = if (selectedDayIndex > 0) colors.info else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 18.dp)
+                                }
+                            }
                         }
                     }
                 }
@@ -746,13 +749,6 @@ private fun StatCard(
     color: androidx.compose.ui.graphics.Color,
     modifier: Modifier = Modifier
 ) {
-    val fontSize = remember(value) {
-        when {
-            value.length > 8 -> 14.sp
-            value.length > 5 -> 18.sp
-            else -> 24.sp
-        }
-    }
     InfoCard(
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
@@ -760,15 +756,31 @@ private fun StatCard(
         modifier = modifier
     ) {
         Column(
-            Modifier.fillMaxWidth().padding(12.dp),
+            Modifier.fillMaxWidth().padding(14.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
+            Box(
+                modifier = Modifier.size(32.dp).clip(CircleShape).background(color.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    when (label) {
+                        "Avg Temp" -> MaterialSymbolIcon("thermostat")
+                        "Range" -> MaterialSymbolIcon("tune")
+                        "Avg Humidity" -> MaterialSymbolIcon("water_drop")
+                        "Avg Wind" -> MaterialSymbolIcon("air")
+                        "Records" -> MaterialSymbolIcon("database")
+                        else -> MaterialSymbolIcon("info")
+                    },
+                    null, tint = color, size = 18.dp
+                )
+            }
             Text(
                 value,
-                style = MaterialTheme.typography.headlineSmall.copy(fontSize = fontSize, fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
                 color = color,
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center
             )
@@ -784,7 +796,12 @@ private fun StatCard(
 @Composable
 private fun ExpandMetric(value: String, label: String, icon: MaterialSymbolIcon, color: Color, textColor: Color = Color.White) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Icon(icon, null, tint = color, size = 24.dp)
+        Box(
+            modifier = Modifier.size(36.dp).clip(CircleShape).background(color.copy(alpha = 0.2f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(icon, null, tint = color, size = 20.dp)
+        }
         Text(value, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = textColor)
         Text(label, style = MaterialTheme.typography.labelSmall, color = textColor.copy(alpha = 0.7f))
     }
@@ -978,19 +995,33 @@ private fun WeatherRecordCard(
     colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors,
     onOpenDetail: (String, Long) -> Unit = { _, _ -> }
 ) {
+    // Temperature gradient
+    val tempDisplay = observation.weatherTemperature ?: 20.0
+    val displayColors = when {
+        tempDisplay < 0 -> listOf(Color(0xFF1A237E), Color(0xFF42A5F5))
+        tempDisplay < 10 -> listOf(Color(0xFF1565C0), Color(0xFF64B5F6))
+        tempDisplay < 20 -> listOf(Color(0xFF0D47A1), Color(0xFF66BB6A))
+        tempDisplay < 30 -> listOf(Color(0xFFE65100), Color(0xFFFFB74D))
+        else -> listOf(Color(0xFFBF360C), Color(0xFFE57373))
+    }
+
     ClickableCard(
         onClick = { onOpenDetail("observation", observation.id) },
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Weather icon in colored rounded box
             Box(
-                Modifier.size(48.dp),
+                modifier = Modifier
+                    .size(52.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(colors.info.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -1005,91 +1036,114 @@ private fun WeatherRecordCard(
                 Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                // Observation subject (linked)
-                Text(
-                    observation.subject.ifBlank { "Observation" },
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = colors.info,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                
-                // Temperature and condition
+                // First row: gradient temperature + time
                 Row(
                     Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        WeatherUnitConverter.formatTemp(observation.weatherTemperature, "Celsius"),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.info
+                        observation.weatherTemperature?.let { WeatherUnitConverter.formatTemp(it, "Celsius") } ?: "--",
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            brush = Brush.horizontalGradient(displayColors)
+                        )
                     )
-                    observation.weatherCondition.takeIf { it.isNotBlank() }?.let {
-                        Text(it, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
+                    Text(
+                        SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date(observation.timestamp)),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    )
                 }
-                
-                // All weather data in a compact row — explicitly left-aligned
+
+                // Subject + condition chips
                 Row(
                     Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        observation.subject.ifBlank { "Observation" },
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.info,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    observation.weatherCondition.takeIf { it.isNotBlank() }?.let { cond ->
+                        Surface(shape = RoundedCornerShape(10.dp), color = colors.info.copy(alpha = 0.08f)) {
+                            Text(
+                                cond,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.info,
+                                maxLines = 1
+                            )
+                        }
+                    }
+                }
+
+                // Data row with icons
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     observation.weatherHumidity?.let {
-                        Text("Humidity: $it% ", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Spacer(Modifier.width(12.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Icon(MaterialSymbolIcon("water_drop"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 12.dp)
+                            Text("$it%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                     observation.weatherWindSpeed?.let { ws ->
-                        Text("Wind: ${WeatherUnitConverter.formatWind(ws, "km/h")} ", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Spacer(Modifier.width(12.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Icon(MaterialSymbolIcon("air"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 12.dp)
+                            Text(WeatherUnitConverter.formatWind(ws, "km/h"), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                     observation.weatherCloudCover?.let {
-                        Text("Cloud: $it%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Icon(MaterialSymbolIcon("cloud"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), size = 12.dp)
+                            Text("$it%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                 }
-                
-                // Location + time — always left-aligned, location takes precedence
+
+                // Location + date
                 Row(
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (observation.manualLocation.isNotBlank()) {
-                        Icon(
-                            FieldMindIcons.Location,
-                            null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            size = 12.dp
-                        )
-                        Spacer(Modifier.width(4.dp))
+                        Icon(FieldMindIcons.Location, null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 11.dp)
+                        Spacer(Modifier.width(3.dp))
                         Text(
                             observation.manualLocation,
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f, fill = false)
                         )
-                        Spacer(Modifier.width(8.dp))
+                    } else {
+                        Text(
+                            SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date(observation.timestamp)),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        )
                     }
-                    Text(
-                        SimpleDateFormat("MMM d, h:mm a", Locale.getDefault()).format(Date(observation.timestamp)),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                        modifier = Modifier.weight(1f, fill = false)
-                    )
                 }
             }
-            
-            // Forward arrow indicating tap target
+
+            // Forward arrow
             Icon(
                 FieldMindIcons.Forward,
                 null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                size = 18.dp
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f),
+                size = 16.dp
             )
         }
     }
