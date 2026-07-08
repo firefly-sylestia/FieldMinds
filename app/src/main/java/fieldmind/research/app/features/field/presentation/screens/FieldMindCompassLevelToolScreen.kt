@@ -46,6 +46,7 @@ import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindVie
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlin.math.abs
+import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -1249,8 +1250,10 @@ private fun VerticalTiltIndicator(
             val maxRadius = outerRadius * 0.55f
             val tiltRad = Math.toRadians(tiltAngleDeg.toDouble())
             val dotDist = (tiltXY * maxRadius).toFloat()
-            val dotX = (cx + dotDist * sin(tiltRad)).toFloat()
-            val dotY = (cy - dotDist * cos(tiltRad)).toFloat()
+            // atan2(gy, gx): 0°=right, 90°=forward/up-in-phone=down-in-canvas
+            // cos for X (right), sin for Y (down in canvas)
+            val dotX = (cx + dotDist * cos(tiltRad)).toFloat()
+            val dotY = (cy + dotDist * sin(tiltRad)).toFloat()
 
             val dotColor = if (isLevel) colors.positive else colors.info
             drawCircle(color = dotColor.copy(alpha = 0.08f), radius = dotRadius * 2.5f, center = Offset(dotX, dotY))
