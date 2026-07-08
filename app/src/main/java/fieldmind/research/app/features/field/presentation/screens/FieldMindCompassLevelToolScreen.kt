@@ -81,7 +81,7 @@ fun CompassToolScreen(
         val orientation = FloatArray(3)
         var firstGravity = true
         var firstGeomagnetic = true
-        val alpha = 0.30f  // Low-pass filter coefficient (higher = more responsive)
+        val alpha = 0.12f  // Low-pass filter coefficient (lower = more smoothing)
 
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
@@ -124,8 +124,11 @@ fun CompassToolScreen(
                     //  and produces wrong headings when the device is held flat)
                     SensorManager.getOrientation(rotationMatrix, orientation)
                     // orientation[0] = azimuth (tilt-compensated)
-                    val azimuthDeg = Math.toDegrees(orientation[0].toDouble()).toFloat()
-                    azimuth = (azimuthDeg + 360) % 360
+                    val newAzimuth = (Math.toDegrees(orientation[0].toDouble()).toFloat() + 360) % 360
+                    // Dead-zone filter: only update if change exceeds 0.5° (eliminates micro-jitter)
+                    if (abs(newAzimuth - azimuth) > 0.5f) {
+                        azimuth = newAzimuth
+                    }
                     // orientation[1] = pitch, orientation[2] = roll
                     compassPitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
                     compassRoll = Math.toDegrees(orientation[2].toDouble()).toFloat()
@@ -155,9 +158,10 @@ fun CompassToolScreen(
     // ── Short animation for jitter dampening on noisy magnetometers.
     // 30ms is fast enough to feel instant but smooths out micro-jitter
     // without causing the 359°→0° wrap-around visual glitch.
+    // ── Smooth animation for jitter dampening without the 359°→0° wrap-around glitch. ──
     val smoothAzimuth by animateFloatAsState(
         targetValue = azimuth,
-        animationSpec = tween(durationMillis = 30),
+        animationSpec = tween(durationMillis = 50),
         label = "azimuth"
     )
 
@@ -741,8 +745,8 @@ private fun CircularBubbleLevel(
             drawLine(crossColor, Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 1f)
             drawLine(crossColor, Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 1f)
 
-            val maxTilt = 15f
-            val sensitivity = 0.6f
+            val maxTilt = 45f
+            val sensitivity = 0.88f
             val bubbleX = cx + (roll.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
             val bubbleY = cy + (pitch.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
 
@@ -802,21 +806,21 @@ private fun VerticalTubeLevel(
                 strokeWidth = 1.5f
             )
 
-            // Degree markers: draw tick marks at ±5°, ±10°, ±15°
-            val marks = listOf(-15f, -10f, -5f, 5f, 10f, 15f)
-            val maxTilt = 15f
+            // Degree markers: draw tick marks at ±5°, ±10°, ±15°, ±30°, ±45°
+            val marks = listOf(-45f, -30f, -15f, -10f, -5f, 5f, 10f, 15f, 30f, 45f)
+            val maxTilt = 45f
             marks.forEach { deg ->
                 val y = centerY + (deg / maxTilt * tubeHeight * 0.42f)
-                val tickW = if (abs(deg) % 5f == 0f) tubeWidth * 0.5f else tubeWidth * 0.3f
+                val tickW = if (abs(deg) % 15f == 0f) tubeWidth * 0.65f else if (abs(deg) % 5f == 0f) tubeWidth * 0.5f else tubeWidth * 0.3f
                 drawLine(
                     color = levelOutlineVariant.copy(alpha = 0.3f),
                     start = Offset(cx + tubeWidth / 2f, y),
                     end = Offset(cx + tubeWidth / 2f + tickW, y),
-                    strokeWidth = if (abs(deg) % 5f == 0f) 1.5f else 1f
+                    strokeWidth = if (abs(deg) % 15f == 0f) 2.5f else if (abs(deg) % 5f == 0f) 1.5f else 1f
                 )
                 paint.color = levelOnSurfaceVariant.toArgb()
-                paint.textSize = 28f
-                paint.isFakeBoldText = false
+                paint.textSize = 26f
+                paint.isFakeBoldText = abs(deg) % 15f == 0f
                 drawContext.canvas.nativeCanvas.drawText(
                     "%.0f°".format(deg), cx + tubeWidth / 2f + tickW + 20f, y + paint.textSize / 3f, paint
                 )
