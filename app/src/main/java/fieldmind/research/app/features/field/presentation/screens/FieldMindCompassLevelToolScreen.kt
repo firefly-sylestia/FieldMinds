@@ -72,6 +72,11 @@ fun CompassToolScreen(
     var compassPitch by remember { mutableFloatStateOf(0f) }   // tilt from orientation (deg)
     var compassRoll by remember { mutableFloatStateOf(0f) }    // roll from orientation (deg)
 
+    // ── Interference state ──
+    var isInterference by remember { mutableStateOf(false) }
+    var interferenceLabel by remember { mutableStateOf("") }
+    var wasInterference by remember { mutableStateOf(false) }
+
     // ── Calibration state ──
     var needsCalibration by remember { mutableStateOf(true) }
     var showCalibrationGuide by remember { mutableStateOf(false) }
@@ -117,11 +122,20 @@ fun CompassToolScreen(
                             geomagnetic[1] = geomagnetic[1] * (1 - alpha) + event.values[1] * alpha
                             geomagnetic[2] = geomagnetic[2] * (1 - alpha) + event.values[2] * alpha
                         }
-                        magneticField = sqrt(
+                        val newField = sqrt(
                             geomagnetic[0] * geomagnetic[0] +
                             geomagnetic[1] * geomagnetic[1] +
                             geomagnetic[2] * geomagnetic[2]
                         )
+                        magneticField = newField
+                        // Magnetic interference detection (Earth's field: 25-65 μT)
+                        isInterference = newField < 15f || newField > 100f
+                        interferenceLabel = when {
+                            newField > 200f -> "Strong magnetic source nearby — move away from electronics or metal"
+                            newField > 100f -> "Elevated magnetic field — may affect accuracy"
+                            newField < 15f -> "Weak magnetic field — shielded environment or sensor issue"
+                            else -> ""
+                        }
                     }
                 }
 
@@ -179,6 +193,24 @@ fun CompassToolScreen(
             "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW")
         val index = ((azimuth + 11.25f) / 22.5f).roundToInt() % 16
         dirs[index]
+    }
+
+    // ── Haptic when magnetic interference is first detected (or cleared) ──
+    LaunchedEffect(isInterference) {
+        if (isInterference && !wasInterference) {
+            haptics.light()
+        }
+        wasInterference = isInterference
+    }
+
+    // ── Field status for display ──
+    val fieldStatus = remember(magneticField) {
+        when {
+            magneticField > 200f -> Triple("Strong", MaterialTheme.colorScheme.error, "magnet")
+            magneticField > 100f -> Triple("Elevated", FieldMindTheme.colors.warning, "warning")
+            magneticField < 15f -> Triple("Weak", MaterialTheme.colorScheme.error, "error")
+            else -> Triple("Normal", FieldMindTheme.colors.positive, "check_circle")
+        }
     }
 
     // ── Subtle haptic pulse when passing N/E/S/W cardinals ──
@@ -405,12 +437,32 @@ fun CompassToolScreen(
                         Text("Sensor data", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
 
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            SensorDataItem("Magnetic field", "%.1f μT".format(magneticField), MaterialSymbolIcon("magnet"))
+                            SensorDataItem(
+                                "Magnetic field",
+                                "%.1f μT".format(magneticField),
+                                MaterialSymbolIcon("magnet"),
+                                valueColor = fieldStatus.second
+                            )
+                            SensorDataItem(
+                                "Field",
+                                fieldStatus.first,
+                                when (fieldStatus.first) {
+                                    "Normal" -> MaterialSymbolIcon("check_circle", filled = true)
+                                    "Elevated" -> MaterialSymbolIcon("warning")
+                                    else -> MaterialSymbolIcon("error")
+                                },
+                                valueColor = fieldStatus.second
+                            )
                             SensorDataItem("Accuracy", accuracy, when (accuracy) {
                                 "High" -> MaterialSymbolIcon("check_circle", filled = true)
                                 "Medium" -> MaterialSymbolIcon("radio_button_partial")
                                 else -> MaterialSymbolIcon("warning")
                             })
+                        }
+
+                        // ── Magnetic interference warning ──
+                        if (isInterference && interferenceLabel.isNotBlank()) {
+                            MagneticInterferenceCard(interferenceLabel, isStrong = magneticField > 200f)
                         }
 
                         // Tilt info (from rotation matrix — works in any orientation)
@@ -633,12 +685,43 @@ private fun CalibrationGuideCard(accuracy: String, haptics: FieldMindHaptics, on
 }
 
 @Composable
-private fun SensorDataItem(label: String, value: String, icon: MaterialSymbolIcon) {
+private fun SensorDataItem(label: String, value: String, icon: MaterialSymbolIcon, valueColor: Color? = null) {
+    val displayColor = valueColor ?: MaterialTheme.colorScheme.onSurface
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Icon(icon, null, tint = FieldMindTheme.colors.info, size = 18.dp)
+        Icon(icon, null, tint = displayColor, size = 18.dp)
         Column {
             Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(value, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold)
+            Text(value, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, color = displayColor)
+        }
+    }
+}
+
+@Composable
+private fun MagneticInterferenceCard(label: String, isStrong: Boolean) {
+    val colors = FieldMindTheme.colors
+    val bgColor = if (isStrong) MaterialTheme.colorScheme.error.copy(alpha = 0.08f)
+                 else colors.warning.copy(alpha = 0.08f)
+    val iconColor = if (isStrong) MaterialTheme.colorScheme.error else colors.warning
+    val title = if (isStrong) "Strong interference" else "Magnetic interference"
+
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = bgColor,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            Modifier.padding(12.dp),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Icon(MaterialSymbolIcon(if (isStrong) "gpp_bad" else "warning"), null,
+                tint = iconColor, size = 20.dp)
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(title, style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold, color = iconColor)
+                Text(label, style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
     }
 }
