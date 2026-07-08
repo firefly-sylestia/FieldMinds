@@ -52,7 +52,8 @@ fun WeatherDatabaseScreen(
     viewModel: FieldMindViewModel,
     onBack: () -> Unit,
     onOpenSettings: () -> Unit = {},
-    onOpenDetail: (String, Long) -> Unit = { _, _ -> }
+    onOpenDetail: (String, Long) -> Unit = { _, _ -> },
+    onOpenWeatherCatalog: () -> Unit = {}
 ) {
     val observations by viewModel.observations.collectAsState()
     val colors = FieldMindTheme.colors
@@ -261,6 +262,23 @@ fun WeatherDatabaseScreen(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
+                    }
+
+                    // ── Weather Catalog button ──
+                    Surface(
+                        onClick = onOpenWeatherCatalog,
+                        shape = RoundedCornerShape(22.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                MaterialSymbolIcon("cloud"),
+                                contentDescription = "Weather Catalog",
+                                tint = colors.info,
+                                size = 22.dp
+                            )
+                        }
                     }
 
                     // ── Settings button ──
