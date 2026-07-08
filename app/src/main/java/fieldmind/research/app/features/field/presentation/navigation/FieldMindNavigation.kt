@@ -1422,27 +1422,11 @@ private fun AllTabScreen(
 
     val isFirstTab = activeTabIndex == 0
 
-    // ── Double-tap to exit from Home tab ──
-    val backPressTime = remember { mutableStateOf(0L) }
-    val doubleTapInterval = 2000L
-    val snackbar = LocalFieldMindSnackbar.current
+    // ── Exit confirmation dialog from Home tab ──
+    var showExitConfirm by remember { mutableStateOf(false) }
     val activity = LocalContext.current as? android.app.Activity
     BackHandler(enabled = isFirstTab) {
-        val now = System.currentTimeMillis()
-        if (now - backPressTime.value < doubleTapInterval) {
-            activity?.moveTaskToBack(true)
-        } else {
-            backPressTime.value = now
-            scope.launch {
-                snackbar.currentSnackbarData?.dismiss()
-                snackbar.showSnackbar(
-                    message = "Press back again to exit",
-                    duration = SnackbarDuration.Indefinite
-                )
-                delay(1500L)
-                snackbar.currentSnackbarData?.dismiss()
-            }
-        }
+        showExitConfirm = true
     }
 
     // ── Tab entrance animation (scale+fade+slide on tap-switch) ──
@@ -1610,6 +1594,34 @@ private fun AllTabScreen(
             visibleTabs = visibleTabs,
             onTabSelected = onTabSelected,
             slideInFromPx = tabSlideDirection * contentWidth
+        )
+    }
+
+    // ── Exit confirmation dialog ──
+    if (showExitConfirm) {
+        AlertDialog(
+            onDismissRequest = { showExitConfirm = false },
+            icon = { Icon(MaterialSymbolIcon("exit_to_app"), contentDescription = null, size = 28.dp) },
+            title = { Text("Exit FieldMind?") },
+            text = { Text("Your data is saved automatically. You can pick up where you left off.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        haptics.confirm()
+                        activity?.moveTaskToBack(true)
+                        showExitConfirm = false
+                    },
+                    shape = RoundedCornerShape(22.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+                ) { Text("Exit") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitConfirm = false }) {
+                    Text("Cancel")
+                }
+            }
         )
     }
 }
