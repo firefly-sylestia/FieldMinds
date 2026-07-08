@@ -1503,17 +1503,24 @@ private fun AllTabScreen(
     LaunchedEffect(activeTabIndex) {
         if (activeTabIndex != lastActiveIndex) {
             // Determine slide direction: new tab to the right → slides from right (dir=+1)
-            // If swipe-triggered, skip the entrance slide (swipe already shows the reveal)
-            val dir = if (wasSwipeTriggered) 0 else (if (activeTabIndex > lastActiveIndex) 1 else -1)
-            wasSwipeTriggered = false
-            tabSlideDirection = dir
-            lastActiveIndex = activeTabIndex
-            tabEntranceProgress.snapTo(0f)
-            tabEntranceProgress.animateTo(
-                1f,
-                animationSpec = animConfig.tabEntranceSpring()
-            )
-            tabSlideDirection = 0
+            // If swipe-triggered, skip the entrance animation entirely and keep the tab
+            // at full scale/alpha since the swipe gesture already revealed the content.
+            if (wasSwipeTriggered) {
+                wasSwipeTriggered = false
+                tabSlideDirection = 0
+                lastActiveIndex = activeTabIndex
+                tabEntranceProgress.snapTo(1f)
+            } else {
+                val dir = if (activeTabIndex > lastActiveIndex) 1 else -1
+                tabSlideDirection = dir
+                lastActiveIndex = activeTabIndex
+                tabEntranceProgress.snapTo(0f)
+                tabEntranceProgress.animateTo(
+                    1f,
+                    animationSpec = animConfig.tabEntranceSpring()
+                )
+                tabSlideDirection = 0
+            }
         }
     }
 
