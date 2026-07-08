@@ -1164,7 +1164,18 @@ internal fun EditEntityDialog(kind: String, id: Long, viewModel: FieldMindViewMo
         "hypothesis" -> viewModel.hypotheses.collectAsState().value.firstOrNull { it.id == id }?.let { EditHypothesisDialog(it, viewModel, onDismiss) }
         "project" -> viewModel.projects.collectAsState().value.firstOrNull { it.id == id }?.let { EditProjectDialog(it, viewModel, onDismiss) }
         "source" -> viewModel.sources.collectAsState().value.firstOrNull { it.id == id }?.let { EditSourceDialog(it, viewModel, onDismiss) }
-        "data" -> viewModel.dataRecords.collectAsState().value.firstOrNull { it.id == id }?.let { EditDataRecordDialog(it, viewModel, onDismiss) }
+        "data" -> viewModel.dataRecords.collectAsState().value.firstOrNull { it.id == id }?.let { entity ->
+            when (entity.toolType) {
+                "Counter" -> EditCounterDialog(entity, viewModel, onDismiss)
+                "Measurement Log" -> EditMeasurementDialog(entity, viewModel, onDismiss)
+                "Weather Log" -> EditWeatherLogDialog(entity, viewModel, onDismiss)
+                "Checklist" -> EditChecklistDialog(entity, viewModel, onDismiss)
+                "Event Log" -> EditEventLogDialog(entity, viewModel, onDismiss)
+                "Site Log" -> EditSiteLogDialog(entity, viewModel, onDismiss)
+                "Comparison Table" -> EditComparisonDialog(entity, viewModel, onDismiss)
+                else -> EditDataRecordDialog(entity, viewModel, onDismiss)
+            }
+        }
         "report" -> viewModel.reports.collectAsState().value.firstOrNull { it.id == id }?.let { EditReportDialog(it, viewModel, onDismiss) }
         "flashcard" -> viewModel.flashcards.collectAsState().value.firstOrNull { it.id == id }?.let { EditFlashcardDialog(it, viewModel, onDismiss) }
         "task" -> viewModel.tasks.collectAsState().value.firstOrNull { it.id == id }?.let { EditTaskDialog(it, viewModel, onDismiss) }
@@ -1697,6 +1708,303 @@ private fun EditSourceDialog(entity: SourceEntity, viewModel: FieldMindViewModel
         DialogActions(onCancel = onDismiss, onSave = { save() }, saveEnabled = title.isNotBlank(), saveLabel = "Save changes")
     }
 }
+// ══════════════════════════════════════════════════════════════════════
+//  Tool-Specific Edit Dialogs (UX #22)
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun EditCounterDialog(entity: DataRecordEntity, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
+    var label by remember { mutableStateOf(entity.label) }; var value by remember { mutableStateOf(entity.value) }; var unit by remember { mutableStateOf(entity.unit.ifBlank { "count" }) }; var notes by remember { mutableStateOf(entity.notes) }; var location by remember { mutableStateOf(entity.location) }
+
+    fun save() {
+        if (label.isNotBlank()) {
+            viewModel.updateDataRecordEntity(entity.copy(label = label.trim(), value = value.trim(), unit = unit.trim(), location = location.trim(), notes = notes.trim()))
+            onDismiss()
+        }
+    }
+
+    DialogWrapper(onDismiss = onDismiss) {
+        DialogHeader(FieldMindIcons.Tag, "Edit Counter", "Adjust count, label, and notes", accent = FieldMindTheme.colors.data)
+        DialogDividerSection("Label & count", FieldMindIcons.Tag, FieldMindTheme.colors.data)
+        FieldTextField(label, { label = it }, "Label", supportingText = "What is being counted?")
+        Spacer(Modifier.height(4.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            OutlinedButton({ value = ((value.toIntOrNull() ?: 0) - 10).coerceAtLeast(0).toString() }) { Text("-10") }
+            OutlinedButton({ value = ((value.toIntOrNull() ?: 0) - 1).coerceAtLeast(0).toString() }) { Text("-1") }
+            Text(value, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.width(64.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+            Button({ value = ((value.toIntOrNull() ?: 0) + 1).toString() }) { Text("+1") }
+            Button({ value = ((value.toIntOrNull() ?: 0) + 10).toString() }) { Text("+10") }
+            TextButton({ value = "0" }) { Text("Reset") }
+        }
+        DialogDividerSection("Details", FieldMindIcons.Settings, FieldMindTheme.colors.data)
+        FieldTextField(unit, { unit = it }, "Unit")
+        FieldTextField(location, { location = it }, "Location / site")
+        DialogDividerSection("Notes", FieldMindIcons.Note, FieldMindTheme.colors.data)
+        FieldTextField(notes, { notes = it }, "Notes", minLines = 2)
+        DialogActions(onCancel = onDismiss, onSave = { save() }, saveEnabled = label.isNotBlank(), saveLabel = "Save changes")
+    }
+}
+
+@Composable
+private fun EditMeasurementDialog(entity: DataRecordEntity, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
+    var label by remember { mutableStateOf(entity.label) }; var value by remember { mutableStateOf(entity.value) }; var unit by remember { mutableStateOf(entity.unit.ifBlank { "cm" }) }; var location by remember { mutableStateOf(entity.location) }; var notes by remember { mutableStateOf(entity.notes) }
+
+    fun save() {
+        if (label.isNotBlank()) {
+            viewModel.updateDataRecordEntity(entity.copy(label = label.trim(), value = value.trim(), unit = unit.trim(), location = location.trim(), notes = notes.trim()))
+            onDismiss()
+        }
+    }
+
+    DialogWrapper(onDismiss = onDismiss) {
+        DialogHeader(FieldMindIcons.Line, "Edit Measurement", "Adjust value, unit, location, and notes", accent = FieldMindTheme.colors.data)
+        DialogDividerSection("What was measured", FieldMindIcons.Tag, FieldMindTheme.colors.data)
+        FieldTextField(label, { label = it }, "Label", supportingText = "e.g. Leaf length, Water depth, Wind speed")
+        DialogDividerSection("Measurement", FieldMindIcons.Line, FieldMindTheme.colors.data)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            FieldTextField(value, { value = it }, "Value", modifier = Modifier.weight(2f), keyboardType = KeyboardType.Decimal)
+            FieldTextField(unit, { unit = it }, "Unit", modifier = Modifier.weight(1f), supportingText = "cm, m, °C, km/h…")
+        }
+        DialogDividerSection("Where", FieldMindIcons.Location, FieldMindTheme.colors.data)
+        FieldTextField(location, { location = it }, "Location / site")
+        DialogDividerSection("Notes", FieldMindIcons.Note, FieldMindTheme.colors.data)
+        MultiSelectPickerField(label = "Context presets", selected = if (notes.isBlank()) emptySet() else notes.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet(), options = contextPresets, onSelectionChanged = { notes = it.joinToString(", ") }, subtitle = "Select field conditions", icon = FieldMindIcons.Info, showSearch = false)
+        FieldTextField(notes, { notes = it }, "Method & calibration notes", minLines = 2, supportingText = "Instrument, calibration, observer")
+        DialogActions(onCancel = onDismiss, onSave = { save() }, saveEnabled = label.isNotBlank(), saveLabel = "Save changes")
+    }
+}
+
+@Composable
+private fun EditWeatherLogDialog(entity: DataRecordEntity, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
+    var label by remember { mutableStateOf(entity.label) }; var value by remember { mutableStateOf(entity.value) }; var unit by remember { mutableStateOf(entity.unit.ifBlank { "°C" }) }; var location by remember { mutableStateOf(entity.location) }; var notes by remember { mutableStateOf(entity.notes) }
+    val weatherMeasurements = listOf("Air temperature", "Humidity", "Wind speed", "Wind direction", "Cloud cover", "Pressure", "Precipitation", "Visibility", "UV index")
+    val weatherUnits = mapOf("Air temperature" to "°C", "Humidity" to "%", "Wind speed" to "km/h", "Wind direction" to "°", "Cloud cover" to "%", "Pressure" to "hPa", "Precipitation" to "mm", "Visibility" to "km", "UV index" to "index")
+
+    fun save() {
+        if (label.isNotBlank()) {
+            viewModel.updateDataRecordEntity(entity.copy(label = label.trim(), value = value.trim(), unit = unit.trim(), location = location.trim(), notes = notes.trim()))
+            onDismiss()
+        }
+    }
+
+    DialogWrapper(onDismiss = onDismiss) {
+        DialogHeader(FieldMindIcons.Weather, "Edit Weather Log", "Adjust measurement, conditions, and location", accent = FieldMindTheme.colors.data)
+        DialogDividerSection("Weather measurement", FieldMindIcons.Weather, FieldMindTheme.colors.data)
+        OptionPickerField(label = "Measurement", selected = label, options = weatherMeasurements, onSelected = { lbl -> label = lbl; unit = weatherUnits[lbl] ?: unit }, icon = FieldMindIcons.Category)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            FieldTextField(value, { value = it }, "Value", modifier = Modifier.weight(2f), keyboardType = KeyboardType.Decimal)
+            FieldTextField(unit, { unit = it }, "Unit", modifier = Modifier.weight(1f))
+        }
+        DialogDividerSection("Where & when", FieldMindIcons.Location, FieldMindTheme.colors.data)
+        FieldTextField(location, { location = it }, "Location / site")
+        DialogDividerSection("Conditions", FieldMindIcons.Note, FieldMindTheme.colors.data)
+        MultiSelectPickerField(label = "Sky conditions", selected = if (notes.isBlank()) emptySet() else notes.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet(), options = contextPresets, onSelectionChanged = { notes = it.joinToString(", ") }, subtitle = "Select weather conditions", icon = FieldMindIcons.Info, showSearch = false)
+        FieldTextField(notes, { notes = it }, "Sky, wind, precipitation, pressure notes", minLines = 3)
+        DialogActions(onCancel = onDismiss, onSave = { save() }, saveEnabled = label.isNotBlank(), saveLabel = "Save changes")
+    }
+}
+
+@Composable
+private fun EditChecklistDialog(entity: DataRecordEntity, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
+    var label by remember { mutableStateOf(entity.label) }; var notes by remember { mutableStateOf(entity.notes) }; var location by remember { mutableStateOf(entity.location) }
+    var items by remember {
+        mutableStateOf(run {
+            val raw = entity.value
+            if (raw.startsWith("[")) {
+                try {
+                    val arr = org.json.JSONArray(raw)
+                    (0 until arr.length()).map { i ->
+                        val obj = arr.getJSONObject(i)
+                        Pair(obj.optString("item", ""), obj.optBoolean("done", false))
+                    }
+                } catch (_: Exception) { listOf(Pair(raw, false)) }
+            } else if (raw.isNotBlank()) {
+                raw.split(",").map { Pair(it.trim(), false) }
+            } else emptyList()
+        })
+    }
+
+    fun save() {
+        if (label.isNotBlank()) {
+            val json = org.json.JSONArray().apply {
+                items.forEach { (item, done) -> put(org.json.JSONObject().apply { put("item", item); put("done", done) }) }
+            }.toString()
+            val done = items.count { it.second }
+            val total = items.size
+            viewModel.updateDataRecordEntity(entity.copy(
+                label = label.trim(),
+                value = json,
+                unit = "$done/$total",
+                location = location.trim(),
+                notes = notes.trim()
+            ))
+            onDismiss()
+        }
+    }
+
+    DialogWrapper(onDismiss = onDismiss) {
+        DialogHeader(FieldMindIcons.Check, "Edit Checklist", "Manage checklist items and progress", accent = FieldMindTheme.colors.data)
+        DialogDividerSection("Title", FieldMindIcons.Tag, FieldMindTheme.colors.data)
+        FieldTextField(label, { label = it }, "Checklist title")
+        DialogDividerSection("Items", FieldMindIcons.List, FieldMindTheme.colors.data)
+        items.forEachIndexed { index, (item, done) ->
+            Row(Modifier.fillMaxWidth().padding(vertical = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Checkbox(checked = done, onCheckedChange = { items = items.toMutableList().apply { this[index] = Pair(item, it) } })
+                TextField(
+                    value = item,
+                    onValueChange = { items = items.toMutableList().apply { this[index] = Pair(it, done) } },
+                    modifier = Modifier.weight(1f),
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    colors = OutlinedTextFieldDefaults.colors()
+                )
+                IconButton(onClick = { items = items.toMutableList().apply { removeAt(index) } }) {
+                    Icon(FieldMindIcons.Close, "Remove", tint = MaterialTheme.colorScheme.error, size = 20.dp)
+                }
+            }
+        }
+        TextButton(onClick = { items = items + Pair("", false) }) {
+            Icon(FieldMindIcons.Add, null, size = 18.dp); Spacer(Modifier.size(4.dp)); Text("Add item")
+        }
+        DialogDividerSection("Details", FieldMindIcons.Settings, FieldMindTheme.colors.data)
+        FieldTextField(location, { location = it }, "Location / site")
+        FieldTextField(notes, { notes = it }, "Notes", minLines = 2)
+        DialogActions(onCancel = onDismiss, onSave = { save() }, saveEnabled = label.isNotBlank(), saveLabel = "Save changes")
+    }
+}
+
+@Composable
+private fun EditEventLogDialog(entity: DataRecordEntity, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
+    var label by remember { mutableStateOf(entity.label) }; var value by remember { mutableStateOf(entity.value) }; var location by remember { mutableStateOf(entity.location) }; var notes by remember { mutableStateOf(entity.notes) }
+    val eventCategories = listOf("Sighting", "Behavior", "Weather event", "Geological", "Human activity", "Mark/recapture", "Life cycle", "Disturbance", "Other")
+
+    fun save() {
+        if (label.isNotBlank()) {
+            viewModel.updateDataRecordEntity(entity.copy(label = label.trim(), value = value.trim(), unit = "event", location = location.trim(), notes = notes.trim()))
+            onDismiss()
+        }
+    }
+
+    DialogWrapper(onDismiss = onDismiss) {
+        DialogHeader(FieldMindIcons.Flag, "Edit Event Log", "Update event type, details, and location", accent = FieldMindTheme.colors.data)
+        DialogDividerSection("Event", FieldMindIcons.Tag, FieldMindTheme.colors.data)
+        OptionPickerField(label = "Category", selected = label, options = eventCategories, onSelected = { label = it }, icon = FieldMindIcons.Category)
+        FieldTextField(value, { value = it }, "Event detail / description", minLines = 2)
+        DialogDividerSection("Where", FieldMindIcons.Location, FieldMindTheme.colors.data)
+        FieldTextField(location, { location = it }, "Location / site")
+        DialogDividerSection("Notes", FieldMindIcons.Note, FieldMindTheme.colors.data)
+        MultiSelectPickerField(label = "Context presets", selected = if (notes.isBlank()) emptySet() else notes.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet(), options = contextPresets, onSelectionChanged = { notes = it.joinToString(", ") }, subtitle = "Select field conditions", icon = FieldMindIcons.Info, showSearch = false)
+        FieldTextField(notes, { notes = it }, "Notes", minLines = 3)
+        DialogActions(onCancel = onDismiss, onSave = { save() }, saveEnabled = label.isNotBlank(), saveLabel = "Save changes")
+    }
+}
+
+@Composable
+private fun EditSiteLogDialog(entity: DataRecordEntity, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
+    var label by remember { mutableStateOf(entity.label) }; var value by remember { mutableStateOf(entity.value) }; var location by remember { mutableStateOf(entity.location) }; var notes by remember { mutableStateOf(entity.notes) }
+
+    fun save() {
+        if (label.isNotBlank()) {
+            viewModel.updateDataRecordEntity(entity.copy(label = label.trim(), value = value.trim(), unit = "site", location = location.trim(), notes = notes.trim()))
+            onDismiss()
+        }
+    }
+
+    DialogWrapper(onDismiss = onDismiss) {
+        DialogHeader(FieldMindIcons.Location, "Edit Site Log", "Update site name, conditions, and notes", accent = FieldMindTheme.colors.data)
+        DialogDividerSection("Site identity", FieldMindIcons.Tag, FieldMindTheme.colors.data)
+        FieldTextField(label, { label = it }, "Site name / code")
+        DialogDividerSection("Purpose", FieldMindIcons.School, FieldMindTheme.colors.data)
+        FieldTextField(value, { value = it }, "Visit purpose / objective", minLines = 2)
+        DialogDividerSection("Coordinates", FieldMindIcons.Location, FieldMindTheme.colors.data)
+        FieldTextField(location, { location = it }, "Location / GPS")
+        DialogDividerSection("Conditions & findings", FieldMindIcons.Note, FieldMindTheme.colors.data)
+        MultiSelectPickerField(label = "Context presets", selected = if (notes.isBlank()) emptySet() else notes.split(",").map { it.trim() }.filter { it.isNotBlank() }.toSet(), options = contextPresets, onSelectionChanged = { notes = it.joinToString(", ") }, subtitle = "Select habitat conditions", icon = FieldMindIcons.Info, showSearch = false)
+        FieldTextField(notes, { notes = it }, "Habitat, substrate, disturbance, access notes", minLines = 3)
+        DialogActions(onCancel = onDismiss, onSave = { save() }, saveEnabled = label.isNotBlank(), saveLabel = "Save changes")
+    }
+}
+
+@Composable
+private fun EditComparisonDialog(entity: DataRecordEntity, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
+    var label by remember { mutableStateOf(entity.label) }; var value by remember { mutableStateOf(entity.value) }; var unit by remember { mutableStateOf(entity.unit.ifBlank { "score" }) }; var notes by remember { mutableStateOf(entity.notes) }; var location by remember { mutableStateOf(entity.location) }
+    var rows by remember {
+        mutableStateOf(run {
+            val raw = entity.value
+            if (raw.startsWith("[")) {
+                try {
+                    val arr = org.json.JSONArray(raw)
+                    (0 until arr.length()).map { i ->
+                        val obj = arr.getJSONObject(i)
+                        val key = obj.keys().next(); Pair(key, obj.optString(key, ""))
+                    }
+                } catch (_: Exception) { listOf(Pair("Variable", raw)) }
+            } else {
+                raw.lines().filter { it.isNotBlank() }.map { line ->
+                    val parts = line.split(":", limit = 2)
+                    Pair(parts.getOrElse(0) { "" }.trim(), parts.getOrElse(1) { "" }.trim())
+                }.ifEmpty { listOf(Pair("Variable", "")) }
+            }
+        })
+    }
+
+    fun save() {
+        if (label.isNotBlank()) {
+            val json = org.json.JSONArray().apply {
+                rows.forEach { (variable, score) -> put(org.json.JSONObject().apply { put(variable, score) }) }
+            }.toString()
+            viewModel.updateDataRecordEntity(entity.copy(
+                label = label.trim(),
+                value = json,
+                unit = unit.trim(),
+                location = location.trim(),
+                notes = notes.trim()
+            ))
+            onDismiss()
+        }
+    }
+
+    DialogWrapper(onDismiss = onDismiss) {
+        DialogHeader(FieldMindIcons.Sort, "Edit Comparison", "Update comparison variables and scores", accent = FieldMindTheme.colors.data)
+        DialogDividerSection("Title", FieldMindIcons.Tag, FieldMindTheme.colors.data)
+        FieldTextField(label, { label = it }, "Comparison title")
+        DialogDividerSection("Variables", FieldMindIcons.List, FieldMindTheme.colors.data)
+        rows.forEachIndexed { index, (variable, score) ->
+            Row(Modifier.fillMaxWidth().padding(vertical = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextField(
+                    value = variable,
+                    onValueChange = { rows = rows.toMutableList().apply { this[index] = Pair(it, score) } },
+                    modifier = Modifier.weight(2f),
+                    singleLine = true,
+                    placeholder = { Text("Variable") },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    colors = OutlinedTextFieldDefaults.colors()
+                )
+                TextField(
+                    value = score,
+                    onValueChange = { rows = rows.toMutableList().apply { this[index] = Pair(variable, it) } },
+                    modifier = Modifier.weight(1f),
+                    singleLine = true,
+                    placeholder = { Text("Score") },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    colors = OutlinedTextFieldDefaults.colors()
+                )
+                IconButton(onClick = { rows = rows.toMutableList().apply { removeAt(index) } }) {
+                    Icon(FieldMindIcons.Close, "Remove", tint = MaterialTheme.colorScheme.error, size = 20.dp)
+                }
+            }
+        }
+        TextButton(onClick = { rows = rows + Pair("", "") }) {
+            Icon(FieldMindIcons.Add, null, size = 18.dp); Spacer(Modifier.size(4.dp)); Text("Add variable")
+        }
+        DialogDividerSection("Details", FieldMindIcons.Settings, FieldMindTheme.colors.data)
+        FieldTextField(unit, { unit = it }, "Score unit", supportingText = "e.g. score, rank, yes/no")
+        FieldTextField(location, { location = it }, "Location / site")
+        FieldTextField(notes, { notes = it }, "Notes", minLines = 2)
+        DialogActions(onCancel = onDismiss, onSave = { save() }, saveEnabled = label.isNotBlank(), saveLabel = "Save changes")
+    }
+}
+
 @Composable
 private fun EditDataRecordDialog(entity: DataRecordEntity, viewModel: FieldMindViewModel, onDismiss: () -> Unit) {
     var tool by remember { mutableStateOf(entity.toolType) }; var label by remember { mutableStateOf(entity.label) }; var value by remember { mutableStateOf(entity.value) }; var unit by remember { mutableStateOf(entity.unit ?: defaultUnitForTool(entity.toolType)) }; var location by remember { mutableStateOf(entity.location) }; var notes by remember { mutableStateOf(entity.notes) }
