@@ -42,6 +42,13 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 
 /**
  * Full-screen lock that guards the entire FieldMind app when privacy lock is enabled.
+ *
+ * Unlike the previous implementation, this composable always renders [content] behind
+ * the lock overlay. Pre-composing the app content (NavHost, all tab screens, database
+ * flows) ensures instant transition on unlock — no composition, layout, or initial
+ * database query delay. The only thing that changes on unlock is the visibility of
+ * the [LockGate] overlay.
+ *
  * Supports:
  * - Device credential (PIN/pattern/password via system)
  * - Biometric (fingerprint, face)
@@ -59,23 +66,54 @@ fun FieldMindAppLock(
     val privacyEnabled by settings.privacyLockEnabled.collectAsState()
     val appPinEnabled by settings.appPinEnabled.collectAsState()
     val appPinHash by settings.appPinHash.collectAsState()
+    val hasPin = appPinEnabled && appPinHash.isNotBlank()
+
+    // Decoy mode takes full screen (no real content visible)
+    if (isDecoyMode) {
+        DecoyAppContent(onExitDecoy = { })
+        return
+    }
+
+    val showLock = (privacyEnabled || hasPin) && !isUnlocked
+
+    // ── Pre-compose content behind lock overlay ──
+    // The app content (NavHost, tab screens, database flows) is always rendered,
+    // just hidden behind the lock gate. When the user authenticates, [showLock]
+    // flips to false and the overlay disappears — revealing already-composed
+    // content instantly, with no composition or query delay.
+    Box(Modifier.fillMaxSize()) {
+        content()
+
+        if (showLock) {
+            LockGate(
+                settings = settings,
+                onUnlock = onUnlock,
+                onDecoyUnlock = onDecoyUnlock
+            )
+        }
+    }
+}
+
+/**
+ * Lock screen overlay — biometric/PIN gate rendered on top of the pre-composed
+ * app content. Uses [Box.fillMaxSize] with the app's background color so the
+ * content underneath is completely hidden until the user authenticates.
+ */
+@Composable
+private fun LockGate(
+    settings: FieldMindSettings,
+    onUnlock: () -> Unit,
+    onDecoyUnlock: (() -> Unit)? = null
+) {
+    val privacyEnabled by settings.privacyLockEnabled.collectAsState()
+    val appPinEnabled by settings.appPinEnabled.collectAsState()
+    val appPinHash by settings.appPinHash.collectAsState()
     val appPinLength by settings.appPinLength.collectAsState()
     val pinRequiredLength = LockSecurityPolicy.pinLengthForLabel(appPinLength)
     val decoyEnabled by settings.decoyPinEnabled.collectAsState()
     val decoyPinHash by settings.decoyPinHash.collectAsState()
     val hasPin = appPinEnabled && appPinHash.isNotBlank()
     val hasDecoy = decoyEnabled && decoyPinHash.isNotBlank()
-
-    // If decoy mode is active, show empty app instead of real content
-    if (isDecoyMode) {
-        DecoyAppContent(onExitDecoy = { /* user must restart app to exit decoy */ })
-        return
-    }
-
-    if ((!privacyEnabled && !hasPin) || isUnlocked) {
-        content()
-        return
-    }
 
     val context = LocalContext.current
     val keyguard = remember(context) { context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager }
@@ -174,16 +212,29 @@ fun FieldMindAppLock(
     }
 
     // Try biometric/device auth first, then fall back to PIN.
-    // Key on both privacyEnabled AND isUnlocked so the prompt re-fires
-    // when the lock screen reappears after auto-lock from backgrounding.
-    LaunchedEffect(privacyEnabled, isUnlocked) {
-        if (privacyEnabled && !isUnlocked) {
+    // Uses LaunchedEffect(Unit) so the prompt fires each time LockGate is
+    // composed — covers both initial lock and auto-lock from backgrounding.
+    LaunchedEffect(Unit) {
+        if (privacyEnabled) {
             authAttempted = false
             startBiometricAuth()
         }
     }
 
-    Box(Modifier.fillMaxSize().statusBarsPadding().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
+    // Consume all touches on the lock overlay so the pre-composed content
+    // underneath never receives accidental taps through the background.
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .background(MaterialTheme.colorScheme.background)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {}
+            ),
+        contentAlignment = Alignment.Center
+    ) {
         Card(
             modifier = Modifier.fillMaxWidth(0.88f),
             shape = RoundedCornerShape(40.dp),
@@ -302,7 +353,7 @@ fun FieldMindAppLock(
                 // ── Forgot PIN — recovery button ──
                 if (usePinLock && hasPin) {
                     var showForgotDialog by remember { mutableStateOf(false) }
-                    
+
                     TextButton(
                         onClick = { showForgotDialog = true },
                         modifier = Modifier.padding(top = 4.dp)
