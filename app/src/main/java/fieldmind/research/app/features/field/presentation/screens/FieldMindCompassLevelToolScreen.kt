@@ -817,14 +817,14 @@ private fun MiniSparkline(readings: List<Float>, lineColor: Color) {
         // ── Zero reference line ──
         drawLine(Color.Gray.copy(alpha = 0.08f), Offset(0f, midY), Offset(chartW, midY), strokeWidth = 1f)
 
-        // ── Gradient fill (zero-centered) ──
+        // ── Gradient fill (from data line to zero line for symmetric look) ──
         val fillPath = Path().apply {
             readings.forEachIndexed { i, value ->
                 val x = i * stepX
                 val y = midY - (value.coerceIn(-maxY, maxY) / maxY * midY)
-                if (i == 0) { moveTo(x, chartH); lineTo(x, y) } else lineTo(x, y)
+                if (i == 0) { moveTo(x, midY); lineTo(x, y) } else lineTo(x, y)
             }
-            lineTo((readings.size - 1) * stepX, chartH)
+            lineTo((readings.size - 1) * stepX, midY)
             close()
         }
         drawPath(fillPath, brush = Brush.verticalGradient(
