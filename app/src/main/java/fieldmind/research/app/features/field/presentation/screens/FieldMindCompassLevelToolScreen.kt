@@ -850,7 +850,7 @@ private fun MiniSparkline(readings: List<Float>, lineColor: Color) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-//  Calibration Guide (redesigned)
+//  Calibration Guide — glassmorphic with animated glow ring
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -862,6 +862,7 @@ private fun CompassCalibrationGuide(
     val colors = FieldMindTheme.colors
     val outlineVariant = MaterialTheme.colorScheme.outlineVariant
     val onSurfaceV = MaterialTheme.colorScheme.onSurfaceVariant
+    val surfaceHigh = MaterialTheme.colorScheme.surfaceContainerHigh
 
     val accuracyLevels = listOf("Unreliable", "Low", "Medium", "High")
     val currentLevel = accuracyLevels.indexOf(accuracy).coerceAtLeast(0)
@@ -886,83 +887,146 @@ private fun CompassCalibrationGuide(
         animationSpec = tween(400), label = "calProgress"
     )
 
-    Card(
-        shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            // Header
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Box(
-                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
-                        .background(colors.info.copy(alpha = 0.12f)),
-                    contentAlignment = Alignment.Center
-                ) { Icon(MaterialSymbolIcon("tune"), null, tint = colors.info, size = 20.dp) }
-                Column(Modifier.weight(1f)) {
-                    Text("Calibrate compass", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleSmall)
-                    Text("Figure-8 motion refines heading", style = MaterialTheme.typography.bodySmall, color = onSurfaceV)
-                }
-            }
+    // ── Pulsing glow ring for the card (matching compass rose aesthetic) ──
+    val glowTransition = rememberInfiniteTransition(label = "calGlow")
+    val glowPulse by glowTransition.animateFloat(
+        initialValue = 0.6f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(2000, easing = LinearEasing), RepeatMode.Reverse),
+        label = "calGlowPulse"
+    )
+    val glowColor = colors.info.copy(alpha = glowPulse * 0.25f)
 
-            // ── Figure-8 animation ──
-            Box(modifier = Modifier.fillMaxWidth().height(90.dp), contentAlignment = Alignment.Center) {
-                Canvas(Modifier.fillMaxSize()) {
-                    val cxa = size.width / 2f
-                    val cya = size.height / 2f
-                    val r = minOf(cxa, cya) * 0.35f
+    Box(modifier = Modifier.fillMaxWidth()) {
+        // ── Animated gradient glow ring behind the card ──
+        Canvas(modifier = Modifier.matchParentSize()) {
+            val cx = size.width / 2f; val cy = size.height / 2f
+            val outerR = maxOf(cx, cy) * 0.95f
+            drawCircle(
+                brush = Brush.sweepGradient(
+                    colors = listOf(
+                        glowColor, glowColor.copy(alpha = 0.03f),
+                        glowColor, glowColor.copy(alpha = 0.03f),
+                        glowColor
+                    )
+                ),
+                radius = outerR + 14f, center = Offset(cx, cy)
+            )
+        }
 
-                    val path = Path().apply {
-                        val steps = 60
-                        for (i in 0..steps) {
-                            val t = (i.toFloat() / steps) * (2f * kotlin.math.PI.toFloat())
-                            val px = cxa + r * sin(t)
-                            val py = cya + r * 0.5f * sin(2f * t)
-                            if (i == 0) moveTo(px, py) else lineTo(px, py)
-                        }
-                        close()
+        Card(
+            shape = RoundedCornerShape(32.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                // Header
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Box(
+                        Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                            .background(colors.info.copy(alpha = 0.12f)),
+                        contentAlignment = Alignment.Center
+                    ) { Icon(MaterialSymbolIcon("tune"), null, tint = colors.info, size = 20.dp) }
+                    Column(Modifier.weight(1f)) {
+                        Text("Calibrate compass", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleSmall)
+                        Text("Figure-8 motion refines heading", style = MaterialTheme.typography.bodySmall, color = onSurfaceV)
                     }
-                    drawPath(path, color = outlineVariant.copy(alpha = 0.25f), style = Stroke(width = 2f, cap = StrokeCap.Round))
-
-                    val dotT = figure8Progress * 2f * kotlin.math.PI.toFloat()
-                    val dotX = cxa + r * sin(dotT)
-                    val dotY = cya + r * 0.5f * sin(2f * dotT)
-                    drawCircle(color = colors.info, radius = 5f, center = Offset(dotX, dotY))
-                    drawCircle(color = colors.info.copy(alpha = 0.15f), radius = 11f, center = Offset(dotX, dotY))
                 }
-            }
 
-            Text("Rotate your device in a figure-8 pattern until accuracy reaches Medium or High.", style = MaterialTheme.typography.bodySmall, color = onSurfaceV)
+                // ── Figure-8 animation with glassmorphic canvas ──
+                Box(modifier = Modifier.fillMaxWidth().height(90.dp), contentAlignment = Alignment.Center) {
+                    Canvas(Modifier.fillMaxSize()) {
+                        val cxa = size.width / 2f
+                        val cya = size.height / 2f
+                        val r = minOf(cxa, cya) * 0.35f
 
-            // ── Accuracy progress bar ──
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text("Accuracy", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = onSurfaceV)
-                    Text(accuracy, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = progressColor)
-                }
-                LinearProgressIndicator(
-                    progress = { progress },
-                    modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(6.dp)),
-                    color = progressColor,
-                    trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                )
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    accuracyLevels.forEach { level ->
-                        val idx = accuracyLevels.indexOf(level)
-                        Text(
-                            level,
-                            style = MaterialTheme.typography.labelSmall, fontSize = 9.sp,
-                            color = if (idx <= currentLevel) MaterialTheme.colorScheme.onSurface else onSurfaceV.copy(alpha = 0.4f),
-                            fontWeight = if (idx == currentLevel) FontWeight.Bold else FontWeight.Normal
+                        // Glassmorphic background
+                        drawRoundRect(
+                            color = surfaceHigh.copy(alpha = 0.2f),
+                            cornerRadius = CornerRadius(14f, 14f),
+                            size = size
                         )
+
+                        // Figure-8 path
+                        val path = Path().apply {
+                            val steps = 60
+                            for (i in 0..steps) {
+                                val t = (i.toFloat() / steps) * (2f * kotlin.math.PI.toFloat())
+                                val px = cxa + r * sin(t)
+                                val py = cya + r * 0.5f * sin(2f * t)
+                                if (i == 0) moveTo(px, py) else lineTo(px, py)
+                            }
+                            close()
+                        }
+                        drawPath(path, color = outlineVariant.copy(alpha = 0.25f), style = Stroke(width = 2f, cap = StrokeCap.Round))
+
+                        // Animated dot with glow aura
+                        val dotT = figure8Progress * 2f * kotlin.math.PI.toFloat()
+                        val dotX = cxa + r * sin(dotT)
+                        val dotY = cya + r * 0.5f * sin(2f * dotT)
+                        // Outer glow ring
+                        drawCircle(
+                            brush = Brush.sweepGradient(
+                                colors = listOf(
+                                    colors.info.copy(alpha = 0.1f), colors.info.copy(alpha = 0.02f),
+                                    colors.info.copy(alpha = 0.1f), colors.info.copy(alpha = 0.02f),
+                                    colors.info.copy(alpha = 0.1f)
+                                )
+                            ),
+                            radius = 15f, center = Offset(dotX, dotY)
+                        )
+                        drawCircle(color = colors.info.copy(alpha = 0.12f), radius = 10f, center = Offset(dotX, dotY))
+                        drawCircle(color = colors.info, radius = 5f, center = Offset(dotX, dotY))
+                        drawCircle(color = Color.White.copy(alpha = 0.3f), radius = 2f,
+                            center = Offset(dotX - 1.5f, dotY - 1.5f))
+                    }
+                }
+
+                Text("Rotate your device in a figure-8 pattern until accuracy reaches Medium or High.",
+                    style = MaterialTheme.typography.bodySmall, color = onSurfaceV)
+
+                // ── Accuracy progress bar with gradient styling ──
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(MaterialSymbolIcon("speed"), null, tint = progressColor, size = 14.dp)
+                            Text("Accuracy", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = onSurfaceV)
+                        }
+                        Text(accuracy, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = progressColor)
+                    }
+                    // Custom gradient progress indicator
+                    Box(
+                        modifier = Modifier.fillMaxWidth().height(6.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(progress).fillMaxHeight()
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(
+                                    Brush.horizontalGradient(
+                                        listOf(progressColor.copy(alpha = 0.7f), progressColor)
+                                    )
+                                )
+                        )
+                    }
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        accuracyLevels.forEach { level ->
+                            val idx = accuracyLevels.indexOf(level)
+                            Text(
+                                level,
+                                style = MaterialTheme.typography.labelSmall, fontSize = 9.sp,
+                                color = if (idx <= currentLevel) MaterialTheme.colorScheme.onSurface else onSurfaceV.copy(alpha = 0.35f),
+                                fontWeight = if (idx == currentLevel) FontWeight.Bold else FontWeight.Normal
+                            )
+                        }
                     }
                 }
 
                 if (accuracy == "High") {
-                    Surface(shape = RoundedCornerShape(12.dp), color = colors.positive.copy(alpha = 0.1f), modifier = Modifier.fillMaxWidth()) {
-                        Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Icon(MaterialSymbolIcon("check_circle", filled = true), null, tint = colors.positive, size = 18.dp)
+                    Surface(shape = RoundedCornerShape(14.dp), color = colors.positive.copy(alpha = 0.1f), modifier = Modifier.fillMaxWidth()) {
+                        Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Icon(MaterialSymbolIcon("check_circle", filled = true), null, tint = colors.positive, size = 20.dp)
                             Text("Calibrated — heading is now accurate.", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, color = colors.positive)
                         }
                     }
