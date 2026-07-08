@@ -1391,13 +1391,16 @@ fun LevelToolScreen(
         }
     }
 
-    // ── 3-tier severity helper ──
+    // ── 3-tier severity helper (values extracted to avoid @Composable calls in non-composable context) ──
+    val positiveColor = colors.positive
+    val warningColor = colors.warning
+    val errorColor = MaterialTheme.colorScheme.error
     fun tiltSeverityColor(angleDeg: Float): Triple<Color, Color, String> {
         val absAngle = abs(angleDeg)
         return when {
-            absAngle < 2f -> Triple(colors.positive, colors.positive.copy(alpha = 0.12f), "Level")
-            absAngle < 10f -> Triple(colors.warning, colors.warning.copy(alpha = 0.12f), "Moderate")
-            else -> Triple(MaterialTheme.colorScheme.error, MaterialTheme.colorScheme.error.copy(alpha = 0.12f), "Severe")
+            absAngle < 2f -> Triple(positiveColor, positiveColor.copy(alpha = 0.12f), "Level")
+            absAngle < 10f -> Triple(warningColor, warningColor.copy(alpha = 0.12f), "Moderate")
+            else -> Triple(errorColor, errorColor.copy(alpha = 0.12f), "Severe")
         }
     }
 
@@ -1412,6 +1415,12 @@ fun LevelToolScreen(
     val plumbSeverityAngle = remember(smoothTiltFromVertical) { smoothTiltFromVertical }
     val plumbColors = remember(plumbSeverityAngle) { tiltSeverityColor(plumbSeverityAngle) }
     val (plumbAccent, plumbBgTint, plumbLabel) = plumbColors
+
+    // ── Auto mode selection based on flatness ──
+    var manualMode by remember { mutableStateOf<Boolean?>(null) }
+    val isFlatMode by remember(flatness, manualMode) {
+        derivedStateOf { manualMode ?: (flatness > 0.5f) }
+    }
 
     val isLevel by remember(isFlatMode, smoothFlatPitch, smoothFlatRoll, smoothTiltFromVertical, isReferenced, refApplied) {
         derivedStateOf {
@@ -1779,6 +1788,8 @@ private fun LinearTiltGauge(
             Spacer(Modifier.height(16.dp))
 
             // ── Linear bar gauge ──
+            val warnColor = colors.warning
+            val barErrorColor = MaterialTheme.colorScheme.error
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1818,7 +1829,6 @@ private fun LinearTiltGauge(
                 }
 
                 // ── Tiers markers ──
-                // Red zone (top 10°+, shown as the section above 10/90 ≈ 0.11)
                 val warnLine = 1f - (10f / 90f)  // ~0.89 from bottom
                 val amberLine = 1f - (2f / 90f)  // ~0.978 from bottom
                 Canvas(modifier = Modifier.matchParentSize()) {
@@ -1828,14 +1838,14 @@ private fun LinearTiltGauge(
 
                     // Amber tier marker (2°)
                     drawLine(
-                        colors.warning.copy(alpha = 0.4f),
+                        warnColor.copy(alpha = 0.4f),
                         Offset(barLeft, barBottom * amberLine),
                         Offset(barRight, barBottom * amberLine),
                         strokeWidth = 1.5f
                     )
                     // Red tier marker (10°)
                     drawLine(
-                        MaterialTheme.colorScheme.error.copy(alpha = 0.4f),
+                        barErrorColor.copy(alpha = 0.4f),
                         Offset(barLeft, barBottom * warnLine),
                         Offset(barRight, barBottom * warnLine),
                         strokeWidth = 1.5f
