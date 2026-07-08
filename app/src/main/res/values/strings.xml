@@ -2469,7 +2469,8 @@
     <string name="settings_shape_for">Shape for %1$s</string>
     <string name="no_lyric_found">No lyric found</string>
     <string name="lyric_widget_description">Widget that shows lyrics of currently playing media</string>
-</resources>
+
+
 
 
     <!-- FieldMind Widgets - New (v2.0) -->
@@ -2492,3 +2493,4 @@
     <string name="settings_notifications_weather">Weather Alerts</string>
     <string name="settings_notifications_tasks">Task Reminders</string>
     <string name="settings_notifications_sessions">Session Reminders</string>
+</resources>
