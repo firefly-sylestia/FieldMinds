@@ -574,6 +574,17 @@ fun LevelToolScreen(
         derivedStateOf { abs(effectivePitch) < 2f && abs(effectiveRoll) < 2f }
     }
 
+    // ── Haptic feedback within ±1° (tighter than visual ±2° indicator) ──
+    val haptics = rememberFieldMindHaptics()
+    val isHapticLevel = abs(effectivePitch) < 1f && abs(effectiveRoll) < 1f
+    var wasHapticLevel by remember { mutableStateOf(false) }
+    LaunchedEffect(isHapticLevel) {
+        if (isHapticLevel && !wasHapticLevel) {
+            haptics.confirm()
+        }
+        wasHapticLevel = isHapticLevel
+    }
+
     // ── Mode label for header ──
     val modeLabel by remember(orientationMode) {
         derivedStateOf {
