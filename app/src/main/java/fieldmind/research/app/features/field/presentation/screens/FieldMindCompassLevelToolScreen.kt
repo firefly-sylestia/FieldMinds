@@ -502,7 +502,7 @@ fun CompassToolScreen(
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.weight(1f)
                 ) {
-                    Column(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Icon(MaterialSymbolIcon("straighten"), null, tint = colors.data, size = 16.dp)
                             Text("Tilt", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
