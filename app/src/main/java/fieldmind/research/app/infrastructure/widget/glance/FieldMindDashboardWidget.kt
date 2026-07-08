@@ -39,6 +39,7 @@ import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 import androidx.compose.ui.graphics.Color
 import fieldmind.research.app.R
+import kotlinx.coroutines.flow.first
 
 /**
  * Research Dashboard Widget — 4×3 cells
@@ -125,7 +126,8 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                 .apply()
 
             // Push update to all instances of this widget
-            GlanceAppWidgetManager(context).update(FieldMindDashboardWidget::class.java)
+            val glanceIds = GlanceAppWidgetManager(context).getGlanceIds(FieldMindDashboardWidget::class.java)
+            glanceIds.forEach { id -> FieldMindDashboardWidget().update(context, id) }
         }
     }
 

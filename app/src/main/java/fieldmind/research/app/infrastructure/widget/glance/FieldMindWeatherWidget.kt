@@ -40,6 +40,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
+import kotlinx.coroutines.flow.first
 
 /**
  * Weather Widget — 2×2 cells
@@ -85,7 +86,8 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
                 .apply()
 
             // Trigger widget update
-            GlanceAppWidgetManager(context).update(FieldMindWeatherWidget::class.java)
+            val glanceIds = GlanceAppWidgetManager(context).getGlanceIds(FieldMindWeatherWidget::class.java)
+            glanceIds.forEach { id -> FieldMindWeatherWidget().update(context, id) }
         }
     }
 
