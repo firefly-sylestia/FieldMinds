@@ -225,12 +225,15 @@ fun CompassToolScreen(
     }
 
     // ── Field status for display ──
-    val fieldStatus = remember(magneticField) {
+    val statusErrorColor = MaterialTheme.colorScheme.error
+    val statusWarningColor = FieldMindTheme.colors.warning
+    val statusPositiveColor = FieldMindTheme.colors.positive
+    val fieldStatus = remember(magneticField, statusErrorColor, statusWarningColor, statusPositiveColor) {
         when {
-            magneticField > 200f -> Triple("Strong", MaterialTheme.colorScheme.error, "magnet")
-            magneticField > 100f -> Triple("Elevated", FieldMindTheme.colors.warning, "warning")
-            magneticField < 15f -> Triple("Weak", MaterialTheme.colorScheme.error, "error")
-            else -> Triple("Normal", FieldMindTheme.colors.positive, "check_circle")
+            magneticField > 200f -> Triple("Strong", statusErrorColor, "magnet")
+            magneticField > 100f -> Triple("Elevated", statusWarningColor, "warning")
+            magneticField < 15f -> Triple("Weak", statusErrorColor, "error")
+            else -> Triple("Normal", statusPositiveColor, "check_circle")
         }
     }
 
@@ -777,6 +780,11 @@ private fun MagneticFieldChart(readings: List<Float>) {
     val colors = FieldMindTheme.colors
     val maxY = 200f // μT — Earth's field range is 25-65 μT, so 0-200 covers everything
 
+    // Pre-compute chart colors outside Canvas lambda (not a @Composable context)
+    val chartErrorColor = MaterialTheme.colorScheme.error
+    val chartWarningColor = colors.warning
+    val chartPositiveColor = colors.positive
+
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
@@ -796,10 +804,10 @@ private fun MagneticFieldChart(readings: List<Float>) {
         val stepX = chartW / (readings.size - 1).coerceAtLeast(1)
         val latest = readings.last()
         val lineColor = when {
-            latest > 200f -> MaterialTheme.colorScheme.error
-            latest > 100f -> FieldMindTheme.colors.warning
-            latest < 15f -> MaterialTheme.colorScheme.error
-            else -> FieldMindTheme.colors.positive
+            latest > 200f -> chartErrorColor
+            latest > 100f -> chartWarningColor
+            latest < 15f -> chartErrorColor
+            else -> chartPositiveColor
         }
 
         val path = Path()
