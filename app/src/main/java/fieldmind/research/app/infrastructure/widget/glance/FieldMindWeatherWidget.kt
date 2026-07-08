@@ -20,6 +20,7 @@ import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
+import androidx.glance.layout.Arrangement
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
@@ -243,7 +244,7 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
                             val elapsed = (System.currentTimeMillis() - updatedAt) / 60_000
                             Text(
                                 text = if (elapsed < 1) "Just now" else "${elapsed}m ago",
-                                style = TextStyle(fontSize = 9.sp, fontStyle = FontStyle.Italic, color = GlanceTheme.colors.onSurfaceVariant.copy(alpha = 0.6f))
+                                style = TextStyle(fontSize = 9.sp, fontStyle = FontStyle.Italic, color = ColorProvider(0xFF8B8B9E))
                             )
                         }
                     }
@@ -279,4 +280,3 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
     }
 }
 
-private fun ColorProvider.copy(alpha: Float): ColorProvider = this

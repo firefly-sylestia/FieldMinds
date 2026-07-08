@@ -104,6 +104,14 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                 }
                 result
             }
+            val reportCount = dao.observeReports().let { flow ->
+                var result = 0
+                kotlinx.coroutines.flow.first { list ->
+                    result = list.size
+                    true
+                }
+                result
+            }
 
             val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             prefs.edit()
@@ -112,6 +120,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                 .putInt(KEY_QUESTION_COUNT, questionCount)
                 .putInt(KEY_PROJECT_COUNT, projectCount)
                 .putInt(KEY_SOURCE_COUNT, sourceCount)
+                .putInt(KEY_REPORT_COUNT, reportCount)
                 .apply()
 
             // Push update to all instances of this widget
