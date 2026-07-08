@@ -6,18 +6,6 @@ package fieldmind.research.app.features.field.data.learn
  */
 object FieldSkillsLessons {
 
-    val allLessons: List<AppLesson> = listOf(
-        observationBasics,
-        fieldNoteTaking,
-        identifyingBias,
-        speciesIdentification,
-        dataCollectionMethods,
-        askingResearchQuestions,
-        evidenceAndDocumentation
-    )
-
-    val bySlug: Map<String, AppLesson> = allLessons.associateBy { it.slug }
-
     // ══════════════════════════════════════════════════════════════════
     //  LESSON 1: Observation Basics
     // ══════════════════════════════════════════════════════════════════
@@ -595,4 +583,20 @@ Storage: Sealed ziplock bag, labeled with ID and date
         ),
         practiceChallenge = "Find an object outside (a leaf, a feather, a rock, an insect). Document it using ALL three types of evidence: a photo with scale, a 30-second audio description, and a written FieldMind observation with a detailed facts-only note."
     )
+
+    // ══════════════════════════════════════════════════════════════════
+    //  Aggregators (defined last so all lesson vals are initialized)
+    // ══════════════════════════════════════════════════════════════════
+
+    val allLessons: List<AppLesson> = listOf(
+        observationBasics,
+        fieldNoteTaking,
+        identifyingBias,
+        speciesIdentification,
+        dataCollectionMethods,
+        askingResearchQuestions,
+        evidenceAndDocumentation
+    )
+
+    val bySlug: Map<String, AppLesson> = allLessons.associateBy { it.slug }
 }

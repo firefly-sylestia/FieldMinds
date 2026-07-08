@@ -90,7 +90,7 @@ fun QuestionsScreen(
     // Generated questions from observations
     val suggestedQuestions = remember(observations, sources, questions) {
         if (observations.isNotEmpty()) {
-            QuestionGenerator.generateAll(observations, sources, questions).filter { generated ->
+            QuestionGenerator.generateAll(observations = observations, sources = sources, existing = questions).filter { generated ->
                 !questions.any { q -> q.questionText.lowercase().trim() == generated.questionText.lowercase().trim() }
             }
         } else emptyList()
