@@ -65,15 +65,16 @@
 
 ## Issue 5 — Project task builder uses "Completed" but Tasks screen expects "Done"
 
-**STATUS: 🔄 NEEDS RE-VERIFICATION**
+**STATUS: ✅ NO BUG — FALSE ALARM**
 
-**Evidence from searches:**
-- `TasksScreen.kt` at line 107 uses `t.status != "Done"` for filtering — the canonical value is "Done"
-- `FieldMindTaskDetailScreen.kt` toggles between "Done" and "Pending"
-- The search for `"Completed"` in task context returned no matches
-- `ProjectTasksBuilder` at line 2276 of `FieldMindDetailScreen.kt` — unable to fully verify the status toggle logic
+**Evidence:**
+- `ProjectTasksBuilder` (FieldMindDetailScreen.kt lines 2418, 2422): Uses `"Done"` — `checked = task.status == "Done"` and `status = if (task.status == "Done") "Pending" else "Done"`
+- `TasksScreen.kt` (lines 95, 101, 107, 113, 306, 342, 378): All filter/update using `"Done"`
+- `FieldMindTaskDetailScreen.kt` (lines 176, 180, 236, 272, 294, 587): All toggle/display using `"Done"`
+- The only `"Completed"` references are for research sessions (different entity) or UI display labels
+- Both sides use the same canonical value; no mismatch exists
 
-**Recommendation:** Re-check `ProjectTasksBuilder` for any remaining "Completed" usage vs "Done".
+**Fix:** No fix needed — the original analysis flagged a non-existent issue.
 
 ---
 
@@ -227,7 +228,7 @@ No changes needed. Settings hub with navigation cards was already implemented.
 | #2 Session state not persisted after death | ✅ FIXED | — | — |
 | #3 Generic data detail screen | ✅ FIXED | — | — |
 | #4 Weather Log lacks auto-fetch | 🔴 Confirmed | Medium | Low |
-| #5 "Completed" vs "Done" mismatch | 🔄 Needs re-verification | High | Low |
+| #5 "Completed" vs "Done" mismatch | ✅ NO BUG | N/A | N/A |
 | #6 Project tasks lack delete button | 🔴 Confirmed | Medium | Low |
 | #7 Tasks screen needs tick/delete buttons | 🔴 Confirmed | Medium | Medium |
 | #8 Task detail weak linking/actions | 🔴 Confirmed | Medium | High |
@@ -262,7 +263,7 @@ No changes needed. Settings hub with navigation cards was already implemented.
 - #19 — Unscheduled task section added to TasksScreen
 
 **Remaining priority order (by impact):**
-1. **P0 (Critical flow breaks):** #5, #9 — task completion status mismatch and subtask parentID null
+1. **P0 (Critical flow breaks):** #9 — subtask parentID null
 2. **P1 (Major UX gaps):** #8, #13, #22 — Core flows broken or duplicated
 3. **P2 (Medium UX issues):** #6, #7, #12, #15, #16, #18
 4. **P3 (Minor improvements):** #4, #14, #17, #20, #21
