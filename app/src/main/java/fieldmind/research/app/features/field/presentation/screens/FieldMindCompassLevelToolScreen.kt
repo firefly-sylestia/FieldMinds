@@ -119,12 +119,10 @@ fun CompassToolScreen(
 
                 if (!firstGravity && !firstGeomagnetic &&
                     SensorManager.getRotationMatrix(rotationMatrix, null, gravity, geomagnetic)) {
-                    // Remap for landscape/portrait-agnostic heading (works in any orientation)
-                    val remappedMatrix = FloatArray(9)
-                    SensorManager.remapCoordinateSystem(
-                        rotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, remappedMatrix
-                    )
-                    SensorManager.getOrientation(remappedMatrix, orientation)
+                    // Pass rotationMatrix directly to getOrientation — no remapping needed
+                    // (remapCoordinateSystem with AXIS_X/AXIS_Z forces AR/vertical orientation
+                    //  and produces wrong headings when the device is held flat)
+                    SensorManager.getOrientation(rotationMatrix, orientation)
                     // orientation[0] = azimuth (tilt-compensated)
                     val azimuthDeg = Math.toDegrees(orientation[0].toDouble()).toFloat()
                     azimuth = (azimuthDeg + 360) % 360
@@ -154,10 +152,12 @@ fun CompassToolScreen(
         }
     }
 
-    // ── Smooth rotation animation ──
+    // ── Short animation for jitter dampening on noisy magnetometers.
+    // 30ms is fast enough to feel instant but smooths out micro-jitter
+    // without causing the 359°→0° wrap-around visual glitch.
     val smoothAzimuth by animateFloatAsState(
         targetValue = azimuth,
-        animationSpec = tween(durationMillis = 250),
+        animationSpec = tween(durationMillis = 30),
         label = "azimuth"
     )
 
