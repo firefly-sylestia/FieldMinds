@@ -803,9 +803,9 @@ private fun SensorMiniCard(
             Icon(icon, null, tint = progressColor, size = 22.dp)
             val displayFontSize = remember(value) {
                 when {
-                    value.length > 9 -> 11.sp
-                    value.length > 6 -> 13.sp
-                    else -> 15.sp
+                    value.length > 7 -> 10.sp
+                    value.length > 4 -> 12.sp
+                    else -> 14.sp
                 }
             }
             Text(
