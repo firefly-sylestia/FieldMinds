@@ -1573,7 +1573,7 @@ private fun AllTabScreen(
                                 scope.launch { animX.snapTo(clampedTarget) }
                             },
                             onDragEnd = {
-                                val threshold = contentWidth * 0.18f
+                                val threshold = contentWidth * animConfig.swipeThreshold
                                 if (animX.value > threshold && canSwipeRight) {
                                     haptics.confirm()
                                     wasSwipeTriggered = true
