@@ -73,6 +73,7 @@ fun CompassToolScreen(
 
     // ── Calibration state ──
     var needsCalibration by remember { mutableStateOf(true) }
+    var showCalibrationGuide by remember { mutableStateOf(false) }
     val haptics = rememberFieldMindHaptics()
 
     // ── Sensor listener ──
@@ -428,8 +429,27 @@ fun CompassToolScreen(
                         }
 
                         // ── Calibration guide (animated figure-8 with accuracy progress) ──
-                        if (needsCalibration) {
-                            CalibrationGuideCard(accuracy, haptics = haptics)
+                        if (needsCalibration || showCalibrationGuide) {
+                            CalibrationGuideCard(
+                                accuracy = accuracy,
+                                haptics = haptics,
+                                onCalibrated = { showCalibrationGuide = false }
+                            )
+                        } else if (accuracy == "Medium" || accuracy == "High") {
+                            // ── Recalibrate button (only when already calibrated) ──
+                            Spacer(Modifier.height(4.dp))
+                            OutlinedButton(
+                                onClick = {
+                                    haptics.light()
+                                    showCalibrationGuide = true
+                                },
+                                shape = RoundedCornerShape(20.dp),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Icon(MaterialSymbolIcon("tune"), null, size = 16.dp)
+                                Spacer(Modifier.size(6.dp))
+                                Text("Recalibrate", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
+                            }
                         }
 
                     }
@@ -455,7 +475,7 @@ fun CompassToolScreen(
 }
 
 @Composable
-private fun CalibrationGuideCard(accuracy: String, haptics: FieldMindHaptics) {
+private fun CalibrationGuideCard(accuracy: String, haptics: FieldMindHaptics, onCalibrated: () -> Unit = {}) {
     val colors = FieldMindTheme.colors
     val surfaceHighest = MaterialTheme.colorScheme.surfaceContainerHighest
     val outlineVariant = MaterialTheme.colorScheme.outlineVariant
@@ -472,6 +492,7 @@ private fun CalibrationGuideCard(accuracy: String, haptics: FieldMindHaptics) {
     LaunchedEffect(isCalibrated) {
         if (isCalibrated && !wasCalibrated) {
             haptics.confirm()
+            onCalibrated() // notify parent to dismiss manual override
         }
         wasCalibrated = isCalibrated
     }
