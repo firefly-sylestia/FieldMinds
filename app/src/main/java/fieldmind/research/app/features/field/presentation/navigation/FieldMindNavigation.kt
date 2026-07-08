@@ -1480,6 +1480,7 @@ private fun AllTabScreen(
     var contentWidth by remember { mutableFloatStateOf(1f) }
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
+    var hapticFiredCrossThreshold by remember { mutableStateOf(false) }
 
     val isFirstTab = activeTabIndex == 0
 
@@ -1570,9 +1571,18 @@ private fun AllTabScreen(
                                     rawTarget < 0f && !canSwipeLeft -> 0f
                                     else -> rawTarget.coerceIn(-maxSwipe, maxSwipe)
                                 }
-                                scope.launch { animX.snapTo(clampedTarget) }
+                                scope.launch {
+                                    animX.snapTo(clampedTarget)
+                                    // Fire haptic the moment the swipe crosses the threshold
+                                    val thresholdPx = contentWidth * animConfig.swipeThreshold
+                                    if (abs(clampedTarget) >= thresholdPx && !hapticFiredCrossThreshold) {
+                                        hapticFiredCrossThreshold = true
+                                        haptics.confirm()
+                                    }
+                                }
                             },
                             onDragEnd = {
+                                hapticFiredCrossThreshold = false
                                 val threshold = contentWidth * animConfig.swipeThreshold
                                 if (animX.value > threshold && canSwipeRight) {
                                     haptics.confirm()
@@ -1615,6 +1625,7 @@ private fun AllTabScreen(
                                 }
                             },
                             onDragCancel = {
+                                hapticFiredCrossThreshold = false
                                 scope.launch {
                                     animX.animateTo(
                                         0f,
