@@ -61,20 +61,19 @@ fun DataToolsHubScreen(
     onOpenDetail: (String, Long) -> Unit = { _, _ -> }
 ) {
     val colors = FieldMindTheme.colors
-    val accentColor = colors.data
     val tools = remember {
         listOf(
-            ToolCardInfo("Counter", "Tally with live count", FieldMindIcons.Add, accentColor, FieldMindScreen.CounterTool),
-            ToolCardInfo("Measurement", "Log with units", FieldMindIcons.Graph, accentColor, FieldMindScreen.MeasurementTool),
-            ToolCardInfo("Weather Log", "Conditions record", FieldMindIcons.Weather, accentColor, FieldMindScreen.WeatherLogTool),
-            ToolCardInfo("Species", "Quick observation", FieldMindIcons.Nature, accentColor, FieldMindScreen.SpeciesTool),
-            ToolCardInfo("Checklist", "Track items", FieldMindIcons.Check, accentColor, FieldMindScreen.ChecklistTool),
-            ToolCardInfo("Event Log", "Record events", FieldMindIcons.List, accentColor, FieldMindScreen.EventLogTool),
-            ToolCardInfo("Site Log", "Visit conditions", FieldMindIcons.Map, accentColor, FieldMindScreen.SiteLogTool),
-            ToolCardInfo("Comparison", "Species/samples", FieldMindIcons.Data, accentColor, FieldMindScreen.ComparisonTable),
+            ToolCardInfo("Counter", "Tally with live count", FieldMindIcons.Add, colors.data, FieldMindScreen.CounterTool),
+            ToolCardInfo("Measurement", "Log with units", FieldMindIcons.Graph, colors.observation, FieldMindScreen.MeasurementTool),
+            ToolCardInfo("Weather Log", "Conditions record", FieldMindIcons.Weather, colors.info, FieldMindScreen.WeatherLogTool),
+            ToolCardInfo("Species", "Quick observation", FieldMindIcons.Nature, colors.species, FieldMindScreen.SpeciesTool),
+            ToolCardInfo("Checklist", "Track items", FieldMindIcons.Check, colors.positive, FieldMindScreen.ChecklistTool),
+            ToolCardInfo("Event Log", "Record events", FieldMindIcons.List, colors.report, FieldMindScreen.EventLogTool),
+            ToolCardInfo("Site Log", "Visit conditions", FieldMindIcons.Map, colors.project, FieldMindScreen.SiteLogTool),
+            ToolCardInfo("Comparison", "Species/samples", FieldMindIcons.Data, colors.question, FieldMindScreen.ComparisonTable),
             ToolCardInfo("Compass", "Magnetic heading", MaterialSymbolIcon("explore"), colors.info, FieldMindScreen.CompassTool),
             ToolCardInfo("Level", "Spirit level", MaterialSymbolIcon("straighten"), colors.data, FieldMindScreen.LevelTool),
-            ToolCardInfo("Weather Catalog", "Scheduled captures", MaterialSymbolIcon("cloud"), accentColor, FieldMindScreen.WeatherCatalog)
+            ToolCardInfo("Weather Catalog", "Scheduled captures", MaterialSymbolIcon("cloud"), colors.data, FieldMindScreen.WeatherCatalog)
         )
     }
 

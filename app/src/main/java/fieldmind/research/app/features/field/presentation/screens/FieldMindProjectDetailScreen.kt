@@ -167,7 +167,7 @@ fun ProjectDetailScreen(
         when (selectedTab) {
             ProjectTab.All -> buildList {
                 relatedFolders.forEach { f ->
-                    add(FeedItem("Folder", f.id, f.name, "", "", "", f.createdAt, accentColor = colors.hypothesis))
+                    add(FeedItem("Folder", f.id, f.name, "", "", "", f.createdAt, accentColor = androidx.compose.ui.graphics.Color(f.color.toInt())))
                 }
                 displayObs.forEach { o ->
                     add(FeedItem("Observation", o.id, o.subject.ifBlank { "Observation" }, o.category,
