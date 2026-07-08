@@ -106,12 +106,18 @@ class FieldMindStreakWorker(
 
         val message = "$greeting! You have a $streakDays-day research streak going. Capture one observation today to keep it alive."
 
-        val intent = Intent(applicationContext, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        }
-        val pendingIntent = PendingIntent.getActivity(
-            applicationContext, 303, intent,
+        val openAppIntent = PendingIntent.getActivity(
+            applicationContext, 303, Intent(applicationContext, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val recordIntent = PendingIntent.getActivity(
+            applicationContext, 304, Intent(applicationContext, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra(MainActivity.EXTRA_FIELDMIND_DESTINATION, "field_capture")
+            },
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
@@ -123,7 +129,9 @@ class FieldMindStreakWorker(
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(openAppIntent)
+            .addAction(android.R.drawable.ic_menu_camera, "Record", recordIntent)
+            .addAction(android.R.drawable.ic_menu_compass, "Open App", openAppIntent)
             .build()
 
         notificationManager.notify(NOTIFICATION_ID, notification)

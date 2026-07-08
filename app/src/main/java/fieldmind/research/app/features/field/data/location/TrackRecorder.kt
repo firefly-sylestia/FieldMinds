@@ -5,8 +5,10 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -16,8 +18,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -326,6 +326,21 @@ class TrackRecorder(private val context: Context) {
             Intent(ACTION_STOP_TRACKING),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        val pauseIntent = PendingIntent.getBroadcast(
+            context,
+            1,
+            Intent(ACTION_STOP_TRACKING).setAction("fieldmind.PAUSE_TRACK_RECORDING"),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val openMapIntent = PendingIntent.getActivity(
+            context,
+            2,
+            Intent(context, fieldmind.research.app.activities.MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra(fieldmind.research.app.activities.MainActivity.EXTRA_FIELDMIND_DESTINATION, "field_map")
+            },
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Tracking: ${recording.name}")
             .setContentText("Recording GPS track…")
@@ -334,6 +349,8 @@ class TrackRecorder(private val context: Context) {
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .addAction(android.R.drawable.ic_media_pause, "Stop", stopIntent)
+            .addAction(android.R.drawable.ic_media_play, "Pause", pauseIntent)
+            .addAction(android.R.drawable.ic_dialog_map, "Map", openMapIntent)
             .build()
         runCatching {
             NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
