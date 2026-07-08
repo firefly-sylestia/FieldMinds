@@ -199,8 +199,8 @@ object FieldMindMotion {
     // -- Navigation Springs --
 
     val swipeBackSpring = spring<Float>(
-        dampingRatio = 0.90f,
-        stiffness = 160f
+        dampingRatio = 0.88f,
+        stiffness = 320f
     )
 
     val sharedElementSpring = spring<Float>(
@@ -219,8 +219,8 @@ object FieldMindMotion {
     )
 
     val slideOffsetSpring = spring<IntOffset>(
-        dampingRatio = 0.92f,
-        stiffness = 160f
+        dampingRatio = 0.90f,
+        stiffness = 350f
     )
 
     // -- Duration Tokens (ms) --

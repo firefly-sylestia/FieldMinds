@@ -455,13 +455,12 @@ fun ObserveScreen(
     var showExitConfirm by remember { mutableStateOf(false) }
     var showSessionExitConfirm by remember { mutableStateOf(false) }
 
-    BackHandler(enabled = true) {
+    // Only intercept back when there's actual dirty content or an active session
+    BackHandler(enabled = hasDirtyContent || session.isActive) {
         if (hasDirtyContent) {
             showExitConfirm = true
-        } else if (session.isActive) {
-            showSessionExitConfirm = true
         } else {
-            onBack?.invoke()
+            showSessionExitConfirm = true
         }
     }
 
