@@ -569,7 +569,7 @@ fun MeasurementToolScreen(
 
     var label by remember(entity) { mutableStateOf(entity?.label ?: "") }
     var value by remember(entity) { mutableStateOf(entity?.value ?: "") }
-    var unit by remember(entity) { mutableStateOf(entity?.unit.ifBlank { "cm" }) }
+    var unit by remember(entity) { mutableStateOf(entity?.unit?.ifBlank { "cm" } ?: "cm") }
     var notes by remember(entity) { mutableStateOf(entity?.notes ?: "") }
     var location by remember(entity) { mutableStateOf(entity?.location ?: "") }
 

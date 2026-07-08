@@ -7,6 +7,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.location.GeomagneticField
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -119,7 +120,7 @@ fun CompassToolScreen(
             val location = locationManager?.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER)
                 ?: locationManager?.getLastKnownLocation(android.location.LocationManager.NETWORK_PROVIDER)
             if (location != null) {
-                val geoField = android.location.GeomagneticField(
+                val geoField = GeomagneticField(
                     location.latitude.toFloat(),
                     location.longitude.toFloat(),
                     location.altitude.toFloat(),
