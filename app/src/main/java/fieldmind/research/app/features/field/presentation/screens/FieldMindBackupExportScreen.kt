@@ -110,7 +110,6 @@ fun BackupAndRestoreScreen(
     val defaultExportFormat by settings.defaultExportFormat.collectAsState()
 
     // Export privacy settings
-    val clearClipboardAfterExport by settings.clearClipboardAfterExport.collectAsState()
     val exportGpsPrivacy by settings.exportGpsPrivacy.collectAsState()
     val exportExcludeMedia by settings.exportExcludeMedia.collectAsState()
 
@@ -166,11 +165,7 @@ fun BackupAndRestoreScreen(
     var pendingExportScope by remember { mutableStateOf("") }
 
     // Format state for export
-    var showShareDialog by remember { mutableStateOf(false) }
-    var showSharePreview by remember { mutableStateOf(false) }
-    var shareDialogFormat by remember { mutableStateOf(".fieldmind") }
-    var sharePreviewFileSize by remember { mutableStateOf("0 KB") }
-    var includeMedia by remember { mutableStateOf(false) }
+    // (Share/Save handled directly through onExport callbacks)
 
     // Export history state
     val exportHistoryStore = remember { ExportHistoryStore(context) }
@@ -331,8 +326,7 @@ fun BackupAndRestoreScreen(
                             onGpsPrivacyChange = { settings.setExportGpsPrivacy(it) },
                             excludeMedia = exportExcludeMedia,
                             onExcludeMediaChange = { settings.setExportExcludeMedia(it) },
-                            clearClipboard = false,
-                            onClearClipboardChange = {},
+
                             encrypt = exportEncrypt,
                             onEncryptChange = { exportEncrypt = it },
                             password = exportPassword,
@@ -346,8 +340,6 @@ fun BackupAndRestoreScreen(
                             onChooseFolder = { backupFolderPickerLauncher.launch(null) },
                             destinationUri = exportDestinationUri,
                             onSwitchToImport = { activeTab = BackupTab.IMPORT },
-                            showSharePreview = showSharePreview,
-                            onShowSharePreview = { showSharePreview = it },
                             showConflictDialog = showConflictDialog,
                             onShowConflictDialog = { showConflictDialog = it }
                         )
@@ -1130,214 +1122,6 @@ fun BackupAndRestoreScreen(
         )
     }
 
-    // ── Share Preview Dialog moved to ExportTabContent ──
-    /*if (showSharePreview) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showSharePreview = false },
-            icon = { Icon(icon = FieldMindIcons.Export, contentDescription = null, size = 32.dp, tint = MaterialTheme.colorScheme.primary) },
-            title = { Text("Share Data Export") },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Surface(
-                        shape = RoundedCornerShape(24.dp),
-                        color = MaterialTheme.colorScheme.surfaceContainerLow,
-                        tonalElevation = 0.dp
-                    ) {
-                        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Text("Format:", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
-                                Surface(
-                                    shape = RoundedCornerShape(20.dp),
-                                    color = exportFormats.find { it.name == selectedExportFormat }?.color?.copy(alpha = 0.12f) ?: MaterialTheme.colorScheme.primaryContainer,
-                                    tonalElevation = 0.dp
-                                ) {
-                                    Text(selectedExportFormat, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = exportFormats.find { it.name == selectedExportFormat }?.color ?: MaterialTheme.colorScheme.primary)
-                                }
-                            }
-                            HorizontalDivider()
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Icon(FieldMindIcons.Data, null, size = 20.dp, tint = MaterialTheme.colorScheme.primary)
-                                Column {
-                                    Text("Total Records", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                    Text("$totalEntities items", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                                }
-                            }
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Icon(MaterialSymbolIcon("storage"), null, size = 20.dp, tint = FieldMindTheme.colors.observation)
-                                Column {
-                                    Text("Estimated Size", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                    Text(sharePreviewFileSize, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                                }
-                            }
-                            if (includeMedia) {
-                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Surface(shape = CircleShape, color = FieldMindTheme.colors.positive.copy(alpha = 0.2f), tonalElevation = 0.dp) {
-                                        Icon(MaterialSymbolIcon("check"), null, size = 16.dp, tint = FieldMindTheme.colors.positive, modifier = Modifier.padding(4.dp))
-                                    }
-                                    Text("Media included", style = MaterialTheme.typography.labelSmall)
-                                }
-                            }
-                        }
-                    }
-                    Text(
-                        "This will create a ${selectedExportFormat.lowercase()} file with all your research data ready to share or backup.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            },
-            confirmButton = {
-                Button(onClick = { showSharePreview = false; showShareDialog = true }, shape = RoundedCornerShape(20.dp)) {
-                    Text("Continue to share")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showSharePreview = false }) {
-                    Text("Cancel")
-                }
-            },
-            shape = RoundedCornerShape(36.dp)
-        )
-    }
-
-    // ── Share dialog (bottom sheet) ──
-    if (showShareDialog) {
-        ModalBottomSheet(
-            onDismissRequest = { showShareDialog = false },
-            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 36.dp),
-            containerColor = MaterialTheme.colorScheme.surface,
-            tonalElevation = 2.dp
-        ) {
-            ShareDialogContent(
-                format = shareDialogFormat,
-                onFormatChange = { shareDialogFormat = it },
-                entityCounts = mapOf(
-                    "Observations" to observations.size,
-                    "Notes" to notes.size,
-                    "Questions" to questions.size,
-                    "Hypotheses" to hypotheses.size,
-                    "Projects" to projects.size,
-                    "Sources" to sources.size,
-                    "Data Records" to dataRecords.size,
-                    "Reports" to reports.size,
-                    "Flashcards" to flashcards.size
-                ),
-                formatDescription = exportFormats.find { it.name == shareDialogFormat }?.desc ?: "",
-                formatColor = exportFormats.find { it.name == shareDialogFormat }?.color ?: MaterialTheme.colorScheme.primary,
-                onShare = {
-                    showShareDialog = false
-                    scope.launch {
-                        isExporting = true
-                        try {
-                            val dateStamp = SimpleDateFormat("yyyy-MM-dd_HHmm", Locale.getDefault()).format(Date())
-                            val ext = shareDialogFormat.lowercase().replace("markdown", "md").replace(" ", "")
-                            val fileName = "fieldmind-export-$dateStamp.$ext"
-                            val exportDir = File(context.cacheDir, "exports").apply { mkdirs() }
-                            val exportFile = File(exportDir, fileName)
-
-                            withContext(Dispatchers.IO) {
-                                // Collect evidence attachments for v3 archive JSON
-                                val evidAttachAll = mutableListOf<EvidenceAttachmentEntity>()
-                                observations.forEach { obs ->
-                                    val atts = viewModel.attachmentsForObservation(obs.id).first()
-                                    evidAttachAll.addAll(atts)
-                                }
-                                val crossRefs = viewModel.collectAllCrossRefs()
-                                var settingsJson = viewModel.fieldSettings.toExportJson()
-                                settingsJson = viewModel.mergeExtraBackupData(context, settingsJson)
-                                val json = FieldMindExport.archiveJson(
-                                    observations, notes, questions, hypotheses, projects, sources,
-                                    dataRecords, reports, flashcards, species, weatherCatalog,
-                                    researchSessions, tasks,
-                                    evidenceAttachments = evidAttachAll,
-                                    crossReferences = crossRefs,
-                                    settingsJson = settingsJson
-                                )
-                                when (shareDialogFormat) {
-                                    "JSON" -> exportFile.writeText(json)
-                                    "CSV" -> exportFile.writeText(FieldMindExport.observationsCsv(observations))
-                                    "Markdown" -> exportFile.writeText(observations.joinToString("\n\n---\n\n") { FieldMindExport.singleObservationMarkdown(it) })
-                                    "HTML" -> {
-                                        if (includeMedia) {
-                                            val mediaBundle = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                                                FieldMindExport.ExportMediaBundle.collect(
-                                                    context = context,
-                                                    observations = observations,
-                                                    notes = notes,
-                                                    projects = projects,
-                                                    sources = sources
-                                                )
-                                            }
-                                            exportFile.writeText(FieldMindExport.pdfReadyHtml(projects, observations, sources, reports, notes = notes, media = mediaBundle))
-                                        } else {
-                                            exportFile.writeText(FieldMindExport.pdfReadyHtml(projects, observations, sources, reports, notes = notes))
-                                        }
-                                    }
-                                    "PDF" -> {
-                                        val bodyText = observations.joinToString("\n") { FieldMindExport.singleObservationMarkdown(it) }
-                                        if (includeMedia) {
-                                            val mediaBundle = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                                                FieldMindExport.ExportMediaBundle.collect(
-                                                    context = context,
-                                                    observations = observations,
-                                                    notes = notes,
-                                                    projects = projects,
-                                                    sources = sources
-                                                )
-                                            }
-                                            val imgBytesArray = mediaBundle.observationImages.values.firstOrNull()
-                                                ?.firstOrNull()?.second?.let { decodeBase64FromDataUri(it) }
-                                            exportFile.writeBytes(FieldMindExport.simplePdfBytes("FieldMind Export", bodyText, embeddedImageBytes = imgBytesArray))
-                                        } else {
-                                            exportFile.writeBytes(FieldMindExport.simplePdfBytes("FieldMind Export", bodyText))
-                                        }
-                                    }
-                                    "PNG" -> exportFile.writeBytes(FieldMindExport.dashboardPngBytes(observations, sources, projects, notes))
-                                    "SVG" -> exportFile.writeText(FieldMindExport.dashboardSvg(observations, sources, projects, notes))
-                                    ".fieldmind" -> {
-                                        val result = FieldMindExportMediaPacker.buildPackage(
-                                            context = context, archiveJson = json,
-                                            observations = observations, notes = notes,
-                                            projects = projects, sources = sources,
-                                            attachments = emptyMap(), outputDir = exportDir
-                                        )
-                                        result.packageFile.renameTo(exportFile)
-                                    }
-                                }
-                            }
-
-                            val shareUri = FileProvider.getUriForFile(
-                                context,
-                                "${context.packageName}.provider",
-                                exportFile
-                            )
-                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                type = when (shareDialogFormat) {
-                                    "PDF" -> "application/pdf"
-                                    "PNG" -> "image/png"
-                                    "SVG" -> "image/svg+xml"
-                                    "CSV" -> "text/csv"
-                                    "HTML" -> "text/html"
-                                    "Markdown" -> "text/markdown"
-                                    ".fieldmind" -> "application/octet-stream"
-                                    else -> "application/json"
-                                }
-                                putExtra(Intent.EXTRA_STREAM, shareUri)
-                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share FieldMind Export"))
-                        } catch (e: Exception) {
-                            showFastSnackbar(snackbar, scope, "Share failed: ${e.localizedMessage}")
-                        } finally {
-                            isExporting = false
-                        }
-                    }
-                },
-                onDismiss = { showShareDialog = false }
-            )
-        }
-    }*/
 }
 
 //  Export Tab — redesigned per spec
@@ -1359,14 +1143,11 @@ private fun ExportTabContent(
     onGpsPrivacyChange: (String) -> Unit = {},
     excludeMedia: Boolean = false,
     onExcludeMediaChange: (Boolean) -> Unit = {},
-    clearClipboard: Boolean = false,
-    onClearClipboardChange: (Boolean) -> Unit = {},
+
     encrypt: Boolean = false,
     onEncryptChange: (Boolean) -> Unit = {},
     password: String = "",
     onPasswordChange: (String) -> Unit = {},
-    showSharePreview: Boolean = false,
-    onShowSharePreview: (Boolean) -> Unit = {},
     showConflictDialog: Boolean = false,
     onShowConflictDialog: (Boolean) -> Unit = {}
 ) {
@@ -1616,9 +1397,7 @@ private fun ExportTabContent(
         // ��─ Action buttons ──
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             OutlinedButton(
-                onClick = { 
-                    onShowSharePreview(true)
-                },
+                onClick = { onExport(selectedExportFormat, "share", exportScope) },
                 modifier = Modifier.weight(1f), shape = RoundedCornerShape(24.dp),
                 enabled = !isExporting && totalEntities > 0
             ) { Icon(FieldMindIcons.Export, null, size = 18.dp); Spacer(Modifier.width(6.dp)); Text("Share") }
