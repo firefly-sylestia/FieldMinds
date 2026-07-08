@@ -2,35 +2,37 @@
 
 ## DOX Framework
 
-**DOX chain:** `master.md` ← `AGENTS.md` (root) ← `app/AGENTS.md` ← `app/src/main/java/fieldmind/research/app/features/field/AGENTS.md` ← `app/src/main/java/fieldmind/research/app/features/field/presentation/AGENTS.md` ← `Prompt.md` (this file — work log)
+**DOX chain:** `master.md` ← `AGENTS.md` (root) ← `app/AGENTS.md` ← `app/src/main/java/fieldmind/research/app/infrastructure/AGENTS.md` ← `Prompt.md` (this file — work log)
 
 ## Request Summary
 
-Fix the CI Kotlin compilation failure reported from the GitHub Actions job log URL.
+Fix the next CI Kotlin compilation failures in infrastructure widgets/workers after the previous ViewModel syntax fix.
 
 ## Context Gathered
 
-- Re-read the applicable DOX chain before editing: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, `features/field/AGENTS.md`, and `features/field/presentation/AGENTS.md`.
-- CI reports the first hard syntax errors in `FieldMindViewModel.kt` at lines 96/116/125, plus many cascading unresolved references.
-- Local inspection shows the dashboard widget coroutine launch was accidentally appended to a `//` comment on line 83, so the `viewModelScope.launch(...) {` statement was commented out while its body remained active in `init`.
-- The missing coroutine opening brace causes suspend `collect` calls outside a coroutine and then cascades into parser/member declaration errors and unresolved ViewModel members across screens.
-- Project instructions prohibit Gradle compile/build/lint/test commands in this environment.
+- Re-read the applicable DOX chain before editing: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, and `infrastructure/AGENTS.md`.
+- CI now reaches `:app:compileFdroidDebugKotlin` and fails in Glance widgets and reminder workers.
+- Reported categories: conflicting `Color` imports, missing `kotlinx.coroutines.flow.first` imports, unsupported `surfaceContainer*` color tokens for current Glance Material3 dependency, and `copy` calls on Glance `ColorProvider`.
+- Project instructions prohibit Gradle compile/build/lint/test commands in this environment, so validation must use static checks only.
 
 ## Implementation Plan
 
-1. Restore the commented-out `viewModelScope.launch(Dispatchers.IO) {` onto its own line in `FieldMindViewModel.kt`.
-2. Run static Kotlin brace/parser-oriented checks and diff checks only; do not run Gradle tasks.
-3. Commit and push the targeted CI fix.
-4. Create a PR record.
+1. Inspect affected widget/worker files and imports before editing.
+2. Replace unsupported Glance color tokens/copy calls with supported color providers or explicit day/night color providers.
+3. Add missing Flow `first` imports and resolve `Color` import ambiguity.
+4. Run static import/token checks and `git diff --check`; do not run Gradle tasks.
+5. Commit the CI fix and create a PR record.
 
 ## Completion Summary
 
-Implemented a targeted Kotlin syntax fix in `FieldMindViewModel.kt`:
-- Restored the dashboard widget `viewModelScope.launch(Dispatchers.IO) { ... }` block by moving it off the preceding line comment and onto its own statement line.
-- This resolves the CI parser cascade where `collect` appeared outside a coroutine and later ViewModel members were parsed incorrectly/unresolved.
+Implemented a targeted infrastructure CI fix:
+- Removed the duplicate `Color` import in `FieldMindDashboardWidget.kt`.
+- Replaced invalid static `kotlinx.coroutines.flow.first(flow) { ... }` calls with the supported `flow.first()` extension in dashboard, quick stats, species, and reminder worker update paths.
+- Replaced unsupported Glance Material3 `surfaceContainer*` tokens and `ColorProvider.copy(...)`-style usages with explicit day/night `ColorProvider` widget surface colors.
 
 ## Verification Notes
 
-- Ran a Python static delimiter/comment regression check against `FieldMindViewModel.kt`; it passed.
+- Ran a Python static check confirming no old `surfaceContainer*`, `surfaceVariant.copy`, or static `kotlinx.coroutines.flow.first(...)` CI-error patterns remain in the affected infrastructure files.
+- Ran a Python static check for duplicate imports and file-local widget surface provider definitions.
 - Ran `git diff --check`; no whitespace errors reported.
 - Did not run Gradle compile/build/lint/test commands because repository DOX explicitly prohibits them in this environment.
