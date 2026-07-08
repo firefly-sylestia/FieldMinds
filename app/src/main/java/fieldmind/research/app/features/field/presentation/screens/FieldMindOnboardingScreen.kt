@@ -1382,7 +1382,7 @@ private fun OnboardingAiFeaturesPage(
                             }
                             
                             if (selectedProvider == "Gemini") {
-                                TextField(
+                                OutlinedTextField(
                                     value = geminiKey,
                                     onValueChange = { geminiKey = it },
                                     label = { Text("Gemini API Key") },
@@ -1391,11 +1391,11 @@ private fun OnboardingAiFeaturesPage(
                                     modifier = Modifier.fillMaxWidth(),
                                     shape = RoundedCornerShape(20.dp),
                                     singleLine = true,
-                                    colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh, unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
+                                    colors = OutlinedTextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh, unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                                 )
                             }
                             if (selectedProvider == "OpenAI") {
-                                TextField(
+                                OutlinedTextField(
                                     value = openaiKey,
                                     onValueChange = { openaiKey = it },
                                     label = { Text("OpenAI API Key") },
@@ -1404,7 +1404,7 @@ private fun OnboardingAiFeaturesPage(
                                     modifier = Modifier.fillMaxWidth(),
                                     shape = RoundedCornerShape(20.dp),
                                     singleLine = true,
-                                    colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh, unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
+                                    colors = OutlinedTextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh, unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                                 )
                             }
                             

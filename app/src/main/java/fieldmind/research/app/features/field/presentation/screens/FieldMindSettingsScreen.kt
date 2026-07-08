@@ -135,7 +135,7 @@ fun FieldMindSettingsScreen(
 
         if (isSearchActive) {
             item {
-                TextField(
+                OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     modifier = Modifier.fillMaxWidth(),
@@ -144,7 +144,7 @@ fun FieldMindSettingsScreen(
                     trailingIcon = { if (searchQuery.isNotBlank()) IconButton(onClick = { searchQuery = "" }) { Icon(MaterialSymbolIcon("close"), contentDescription = "Clear", size = 18.dp) } },
                     shape = RoundedCornerShape(20.dp),
                     singleLine = true,
-                    colors = TextFieldDefaults.colors(
+                    colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                     )
