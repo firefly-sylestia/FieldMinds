@@ -440,6 +440,56 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Material You dynamic color", "Use system wallpaper colors that auto-adapt to light/dark. Off keeps the FieldMind brand palette.", dynamicColor, settings::setDynamicColorEnabled, FieldMindIcons.Palette)
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                // ── Seasonal color shift toggle ──
+                val seasonalEnabled by settings.seasonalColorsEnabled.collectAsState()
+                Row(
+                    Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val seasonAccent = when (java.util.Calendar.getInstance().get(java.util.Calendar.MONTH)) {
+                        java.util.Calendar.MARCH, java.util.Calendar.APRIL, java.util.Calendar.MAY -> Color(0xFF4CAF50)
+                        java.util.Calendar.JUNE, java.util.Calendar.JULY, java.util.Calendar.AUGUST -> Color(0xFFFFB300)
+                        java.util.Calendar.SEPTEMBER, java.util.Calendar.OCTOBER, java.util.Calendar.NOVEMBER -> Color(0xFFE65100)
+                        else -> Color(0xFF42A5F5)
+                    }
+                    val seasonName = when (java.util.Calendar.getInstance().get(java.util.Calendar.MONTH)) {
+                        java.util.Calendar.MARCH, java.util.Calendar.APRIL, java.util.Calendar.MAY -> "Spring"
+                        java.util.Calendar.JUNE, java.util.Calendar.JULY, java.util.Calendar.AUGUST -> "Summer"
+                        java.util.Calendar.SEPTEMBER, java.util.Calendar.OCTOBER, java.util.Calendar.NOVEMBER -> "Autumn"
+                        else -> "Winter"
+                    }
+                    Box(
+                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                            .background(seasonAccent.copy(alpha = 0.18f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            when (seasonName) {
+                                "Spring" -> MaterialSymbolIcon("local_florist")
+                                "Summer" -> MaterialSymbolIcon("wb_sunny")
+                                "Autumn" -> MaterialSymbolIcon("park")
+                                else -> MaterialSymbolIcon("ac_unit")
+                            },
+                            null,
+                            tint = seasonAccent,
+                            size = 22.dp
+                        )
+                    }
+                    Column(Modifier.weight(1f)) {
+                        Text("Seasonal color shift", fontWeight = FontWeight.SemiBold)
+                        Text(
+                            "$seasonName accent — colors subtly shift with the seasons",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Switch(
+                        checked = seasonalEnabled,
+                        onCheckedChange = { settings.setSeasonalColorsEnabled(it) }
+                    )
+                }
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Color scheme", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text("Choose a premium color palette. The matching gradient style auto-selects.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

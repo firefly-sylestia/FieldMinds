@@ -463,6 +463,13 @@ class FieldMindSettings private constructor(context: Context) {
 
     fun setGradientOpacity(value: Float) = edit(KEY_GRADIENT_OPACITY, value.coerceIn(0.1f, 1.0f)) { _gradientOpacity.value = value.coerceIn(0.1f, 1.0f) }
 
+    // ── Seasonal color shift ──
+    private val _seasonalColorsEnabled = MutableStateFlow(prefs.getBoolean(KEY_SEASONAL_COLORS, true))
+    /** When true, entity accent colors subtly shift with the current season (spring green → summer gold → autumn orange → winter blue). */
+    val seasonalColorsEnabled: StateFlow<Boolean> = _seasonalColorsEnabled.asStateFlow()
+
+    fun setSeasonalColorsEnabled(value: Boolean) = edit(KEY_SEASONAL_COLORS, value) { _seasonalColorsEnabled.value = value }
+
     // ── Card gradient style (Phase 5) ──
     private val _cardGradientStyle = MutableStateFlow(
         prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
@@ -924,6 +931,7 @@ class FieldMindSettings private constructor(context: Context) {
         _entityColors.value = emptyMap()
         _cardGradientStyle.value = fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = 0.75f
+        _seasonalColorsEnabled.value = true
     }
 
     // ── Species identification setters ──
@@ -1052,6 +1060,7 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_JOURNAL_ENABLED, _journalEnabled.value)
         put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
         put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
+        put(KEY_SEASONAL_COLORS, _seasonalColorsEnabled.value)
     }.toString(2)
 
     /**
@@ -1187,9 +1196,8 @@ class FieldMindSettings private constructor(context: Context) {
         applyString(KEY_JOURNAL_LAST_DATE)
         applyBoolean(KEY_JOURNAL_ENABLED, true)
         applyInt(KEY_DAILY_GOAL)
-        applyString(KEY_CARD_GRADIENT_STYLE)
+        applyString(KEY_CARD_GRADIENT_STYLE)        applyBoolean(KEY_SEASONAL_COLORS)
         applyFloat(KEY_GRADIENT_OPACITY)
-
         edit.apply()
 
         // Refresh StateFlows for all edited keys that have backing StateFlows
@@ -1283,6 +1291,7 @@ class FieldMindSettings private constructor(context: Context) {
         _entityColors.value = parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null))
         _cardGradientStyle.value = prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f)
+        _seasonalColorsEnabled.value = prefs.getBoolean(KEY_SEASONAL_COLORS, true)
     }
 
     private inline fun edit(key: String, value: String, after: () -> Unit) { prefs.edit().putString(key, value).apply(); after() }
@@ -1418,6 +1427,7 @@ class FieldMindSettings private constructor(context: Context) {
         // ── Gradient opacity ──
         private const val KEY_GRADIENT_OPACITY = "gradient_opacity"
 
+        private const val KEY_SEASONAL_COLORS = "seasonal_colors_enabled"
         // ── Per-category entity color overrides ──
         private const val KEY_ENTITY_COLORS = "entity_colors"
         // ── Animation tuning keys ──
