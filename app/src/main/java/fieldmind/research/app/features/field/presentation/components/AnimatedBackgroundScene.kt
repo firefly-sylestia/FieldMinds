@@ -254,19 +254,23 @@ private fun JournalTextureOverlay(
             label = "textureMorph"
         )
 
+        val rng = rememberTextureRng(journalConfig.textureName)
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawJournalTexture(
                 name = journalConfig.textureName,
                 opacity = textureOpacity,
-                morph = morphProgress
+                morph = morphProgress,
+                rng = rng
             )
         }
     } else if (textureOpacity > 0.01f) {
+        val rng = rememberTextureRng(journalConfig.textureName)
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawJournalTexture(
                 name = journalConfig.textureName,
                 opacity = textureOpacity,
-                morph = 0f
+                morph = 0f,
+                rng = rng
             )
         }
     }
@@ -314,13 +318,14 @@ private fun VignetteOverlay(
 private fun DrawScope.drawJournalTexture(
     name: String,
     opacity: Float,
-    morph: Float
+    morph: Float,
+    rng: List<Float>
 ) {
     when (name) {
-        "parchment" -> drawParchmentTexture(opacity, morph)
-        "paper" -> drawPaperTexture(opacity, morph)
-        "dotgrid" -> drawDotGridTexture(opacity, morph)
-        "watercolor" -> drawWatercolorTexture(opacity, morph)
+        "parchment" -> drawParchmentTexture(opacity, morph, rng)
+        "paper" -> drawPaperTexture(opacity, morph, rng)
+        "dotgrid" -> drawDotGridTexture(opacity, morph, rng)
+        "watercolor" -> drawWatercolorTexture(opacity, morph, rng)
     }
 }
 
@@ -328,9 +333,8 @@ private fun DrawScope.drawJournalTexture(
  * Parchment texture: warm mottled organic spots with varying size and opacity.
  * Creates an aged look with subtle dark/light variations across the surface.
  */
-private fun DrawScope.drawParchmentTexture(opacity: Float, morph: Float) {
+private fun DrawScope.drawParchmentTexture(opacity: Float, morph: Float, rng: List<Float>) {
     val warmColor = Color(0xFF8B6914)
-    val rng = rememberTextureRng("parchment")
 
     // Large-scale mottling
     for (i in 0..8) {
@@ -365,8 +369,7 @@ private fun DrawScope.drawParchmentTexture(opacity: Float, morph: Float) {
  * Paper texture: fine, even grain across the surface.
  * Creates a subtle fiber texture reminiscent of quality sketch paper.
  */
-private fun DrawScope.drawPaperTexture(opacity: Float, morph: Float) {
-    val rng = rememberTextureRng("paper")
+private fun DrawScope.drawPaperTexture(opacity: Float, morph: Float, @Suppress("UNUSED_PARAMETER") rng: List<Float>) {
     val fiberColor = Color(0xFF8B7355)
 
     // Short fiber-like strokes
@@ -393,7 +396,7 @@ private fun DrawScope.drawPaperTexture(opacity: Float, morph: Float) {
  * Dot grid texture: subtle grid of small dots.
  * Creates the bullet journal dot-grid feel in the background.
  */
-private fun DrawScope.drawDotGridTexture(opacity: Float, morph: Float) {
+private fun DrawScope.drawDotGridTexture(opacity: Float, morph: Float, @Suppress("UNUSED_PARAMETER") rng: List<Float>) {
     val dotColor = Color(0xFF9E9E9E)
     val spacing = size.minDimension / 28f
     val offset = morph * spacing
@@ -420,8 +423,7 @@ private fun DrawScope.drawDotGridTexture(opacity: Float, morph: Float) {
  * Watercolor texture: soft, overlapping organic washes.
  * Creates the Ghibli watercolor feel with irregular color blotches.
  */
-private fun DrawScope.drawWatercolorTexture(opacity: Float, morph: Float) {
-    val rng = rememberTextureRng("watercolor")
+private fun DrawScope.drawWatercolorTexture(opacity: Float, morph: Float, rng: List<Float>) {
     val washColor = Color(0xFFD4A574)
 
     // Large soft washes

@@ -1873,7 +1873,7 @@ private fun LiveWeatherDashboardWidget(
                 }
             }
         }
-    }
+    }    }
 }
 }
 
@@ -2052,7 +2052,7 @@ private fun ObservationTimelinePreview(
     notes: List<NoteEntity>,
     onOpenDetail: (String, Long) -> Unit
 ) {
-    val events = buildList {
+    val events = buildList<TimelinePreviewEvent> {
         observations.take(8).forEach { add(TimelinePreviewEvent("observation", it.id, it.date, it.time, it.subject.ifBlank { "Observation" }, it.category)) }
         notes.take(4).forEach { note ->
             val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(note.updatedAt))
