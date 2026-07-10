@@ -44,6 +44,47 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.45.0 — Personalized Onboarding & Daily Field Journal ──
+        FieldMindChangelogEntry(
+            version = "0.45.0",
+            date = "2026-07-10",
+            title = "🎯 Personalized Onboarding & Daily Field Journal",
+            importance = "Major",
+            tags = listOf("🎯", "📓", "✨", "🌅"),
+            sections = listOf(
+                "🎯 Fresh 5-step onboarding wizard" to listOf(
+                    "✓ Replaced 11-page onboarding with a focused 5-step wizard",
+                    "✓ Step 1: Name, role picker (7 roles), and frequency (Daily/Weekends/Spontaneously)",
+                    "✓ Step 2: Interest grid with zoology subfields, botany subfields, ecology/astronomy/geology toggles",
+                    "✓ Step 3: Permissions with per-item Grant buttons and status indicators",
+                    "✓ Step 4: Theme, dynamic colors, layout style (Simple/Guided journal/Data-focused), units, daily goal",
+                    "✓ Step 5: Review summary with edit buttons for each section",
+                    "✓ Settings auto-configure screen visibility based on selected interests",
+                    "✓ Extended tour removed — all those settings are discoverable in Settings"
+                ),
+                "📓 Daily Field Journal overlay" to listOf(
+                    "✓ Beautiful half-sheet slides up with spring animation on first app open each day",
+                    "✓ Time-adaptive greeting (Good morning/afternoon/evening) with gradient icon",
+                    "✓ Quick capture text field with 5 category chips (Bird, Plant, Insect, Weather, Animal)",
+                    "✓ Streak flame display with day count badge",
+                    "✓ Random field research tip at the bottom",
+                    "✓ Shows once per day — dismissed until next calendar day",
+                    "✓ Background tap or 'Start exploring' button to dismiss"
+                ),
+                "🌅 Time-of-day adaptation" to listOf(
+                    "✓ Morning: Sunrise icon, warm orange gradient, 'A fresh start to your field day'",
+                    "✓ Afternoon: Weather icon, cool blue gradient, 'Perfect time to log your observations'",
+                    "✓ Evening: Moon icon, purple gradient, 'Time to reflect on today's findings'",
+                    "✓ Greeting icon dynamically matches the time period"
+                ),
+                "✨ New settings added" to listOf(
+                    "✓ `onboardingFrequency`: How often the user goes out — drives reminder schedule",
+                    "✓ `onboardingLayoutStyle`: Simple / Guided journal / Data-focused — configures Home",
+                    "✓ `journalEnabled`: Toggle to enable/disable the daily journal overlay",
+                    "✓ `journalLastShownDate`: Tracks which day the journal was last shown"
+                )
+            )
+        ),
         // ── v0.44.1 — Compass/Level Accuracy, Checklist Tick & Edit Task Fixes ──
         FieldMindChangelogEntry(
             version = "0.44.1",

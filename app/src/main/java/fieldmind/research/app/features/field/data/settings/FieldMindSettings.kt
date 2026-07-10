@@ -764,6 +764,30 @@ class FieldMindSettings private constructor(context: Context) {
         )
     }
 
+    // ── New onboarding + journal settings ──
+    private val _onboardingFrequency = MutableStateFlow(
+        prefs.getString(KEY_ONBOARDING_FREQUENCY, "A few times a week") ?: "A few times a week"
+    )
+    val onboardingFrequency: StateFlow<String> = _onboardingFrequency.asStateFlow()
+
+    private val _onboardingLayoutStyle = MutableStateFlow(
+        prefs.getString(KEY_ONBOARDING_LAYOUT, "Full field journal") ?: "Full field journal"
+    )
+    val onboardingLayoutStyle: StateFlow<String> = _onboardingLayoutStyle.asStateFlow()
+
+    private val _journalLastShownDate = MutableStateFlow(
+        prefs.getString(KEY_JOURNAL_LAST_DATE, "") ?: ""
+    )
+    val journalLastShownDate: StateFlow<String> = _journalLastShownDate.asStateFlow()
+
+    private val _journalEnabled = MutableStateFlow(prefs.getBoolean(KEY_JOURNAL_ENABLED, true))
+    val journalEnabled: StateFlow<Boolean> = _journalEnabled.asStateFlow()
+
+    fun setOnboardingFrequency(value: String) = edit(KEY_ONBOARDING_FREQUENCY, value) { _onboardingFrequency.value = value }
+    fun setOnboardingLayoutStyle(value: String) = edit(KEY_ONBOARDING_LAYOUT, value) { _onboardingLayoutStyle.value = value }
+    fun setJournalLastShownDate(value: String) = edit(KEY_JOURNAL_LAST_DATE, value) { _journalLastShownDate.value = value }
+    fun setJournalEnabled(value: Boolean) = edit(KEY_JOURNAL_ENABLED, value) { _journalEnabled.value = value }
+
     fun setOnboardingExtendedTourCompleted(value: Boolean) = edit(KEY_EXTENDED_TOUR_DONE, value) { _onboardingExtendedTourCompleted.value = value }
 
     /**
@@ -771,6 +795,11 @@ class FieldMindSettings private constructor(context: Context) {
      * Called from developer settings. Resets every StateFlow to default values.
      */
     fun clearAllPreferences() {
+        // Reset new onboarding/journal prefs first
+        _onboardingFrequency.value = "A few times a week"
+        _onboardingLayoutStyle.value = "Full field journal"
+        _journalLastShownDate.value = ""
+        _journalEnabled.value = true
         prefs.edit().clear().apply()
         // Reset all StateFlow backing fields to defaults
         _dailyObservationGoal.value = 1
@@ -1001,6 +1030,10 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_USER_INTERESTS, UserInterests.toJson(_userInterests.value))
         put(KEY_SCREEN_VISIBILITY, ScreenVisibility.toJson(_screenVisibility.value))
         put(KEY_EXTENDED_TOUR_DONE, _onboardingExtendedTourCompleted.value)
+        put(KEY_ONBOARDING_FREQUENCY, _onboardingFrequency.value)
+        put(KEY_ONBOARDING_LAYOUT, _onboardingLayoutStyle.value)
+        put(KEY_JOURNAL_LAST_DATE, _journalLastShownDate.value)
+        put(KEY_JOURNAL_ENABLED, _journalEnabled.value)
         put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
         put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
     }.toString(2)
@@ -1131,6 +1164,10 @@ class FieldMindSettings private constructor(context: Context) {
         }
         applyString(KEY_ENTITY_COLORS)
         applyBoolean(KEY_EXTENDED_TOUR_DONE)
+        applyString(KEY_ONBOARDING_FREQUENCY)
+        applyString(KEY_ONBOARDING_LAYOUT)
+        applyString(KEY_JOURNAL_LAST_DATE)
+        applyBoolean(KEY_JOURNAL_ENABLED, true)
         applyInt(KEY_DAILY_GOAL)
         applyString(KEY_CARD_GRADIENT_STYLE)
         applyFloat(KEY_GRADIENT_OPACITY)
@@ -1313,6 +1350,11 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_DATA_INTEGRITY_CHECK = "data_integrity_check"
         private const val KEY_LOCK_TIMEOUT = "lock_timeout"
         private const val KEY_AUTO_LOCK_BACKGROUND = "auto_lock_background"
+        // ── New onboarding + journal keys ──
+        private const val KEY_ONBOARDING_FREQUENCY = "onboarding_frequency"
+        private const val KEY_ONBOARDING_LAYOUT = "onboarding_layout_style"
+        private const val KEY_JOURNAL_LAST_DATE = "journal_last_shown_date"
+        private const val KEY_JOURNAL_ENABLED = "journal_enabled"
         // ── Species identification keys ──
         private const val KEY_SPECIES_ID_API_KEY = "species_id_api_key"
         private const val KEY_SPECIES_ID_OFFLINE_FIRST = "species_id_offline_first"

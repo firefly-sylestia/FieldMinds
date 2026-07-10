@@ -254,6 +254,7 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val profileName by settings.profileName.collectAsState()
     val profileRole by settings.profileRole.collectAsState()
     val profileFocus by settings.profileFocus.collectAsState()
+    val journalEnabled by settings.journalEnabled.collectAsState()
 
     SettingsSubPage("Research profile", icon = FieldMindIcons.Nature, onBack = onBack) {
         item {
@@ -274,6 +275,18 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 }
             }
         }
+        item { SectionHeader("Daily Journal", "Greeting and quick-capture overlay on open") }
+        item {
+            SettingsGroupCard {
+                ToggleItem(
+                    "Show daily journal",
+                    "A time-adaptive greeting with quick capture, category chips, and streak display on first open each day.",
+                    journalEnabled,
+                    settings::setJournalEnabled,
+                    FieldMindIcons.Article
+                )
+            }
+        }
     }
 }
 
@@ -291,8 +304,55 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
     val sharedAppSettings = SharedAppSettings.getInstance(androidx.compose.ui.platform.LocalContext.current)
     val amoledTheme by sharedAppSettings.amoledTheme.collectAsState()
     val customColorScheme by sharedAppSettings.customColorScheme.collectAsState()
+    val layoutStyle by settings.onboardingLayoutStyle.collectAsState()
 
     SettingsSubPage("Appearance", icon = FieldMindIcons.Palette, onBack = onBack) {
+        // ── Home Layout section ──
+        item { SectionHeader("Home Layout", "Choose how your Home screen looks") }
+        item {
+            SettingsGroupCard {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Layout style", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("How your Home screen is arranged after the daily journal.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(4.dp))
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        listOf("Simple", "Guided journal", "Data-focused").forEach { style ->
+                            val sel = layoutStyle == style
+                            Surface(
+                                onClick = { settings.setOnboardingLayoutStyle(style) },
+                                shape = RoundedCornerShape(22.dp),
+                                color = if (sel) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                border = if (sel) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
+                                modifier = Modifier.weight(1f).height(80.dp)
+                            ) {
+                                Column(
+                                    Modifier.fillMaxSize().padding(8.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(
+                                        when (style) {
+                                            "Simple" -> FieldMindIcons.Check
+                                            "Guided journal" -> FieldMindIcons.Article
+                                            else -> FieldMindIcons.Data
+                                        },
+                                        null,
+                                        tint = if (sel) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        size = 24.dp
+                                    )
+                                    Text(
+                                        style,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         // ── Theme section ──
         item { SectionHeader("Theme", "Control the look and feel of FieldMind") }
         item {

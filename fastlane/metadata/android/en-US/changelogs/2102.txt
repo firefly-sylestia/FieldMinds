@@ -1,0 +1,1 @@
+Major update: Personalized 5-step onboarding wizard with role/frequency/interests/layout selection. New daily field journal overlay with time-of-day adaptive greeting, quick capture input, category chips, and streak display. Settings auto-configure screen visibility based on interests. Replaced extended tour — all settings discoverable in Settings.

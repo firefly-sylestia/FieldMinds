@@ -48,6 +48,7 @@ import fieldmind.research.app.features.field.presentation.components.FieldMindIc
 import fieldmind.research.app.features.field.presentation.components.LocalSharedTransitionScope
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
 import fieldmind.research.app.features.field.data.learn.FieldSkillsLessons
+import fieldmind.research.app.features.field.data.stats.FieldMindStreaks
 import fieldmind.research.app.features.field.presentation.screens.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
@@ -276,6 +277,8 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             onSplashComplete = { showSplash = false }
         )
     } else {
+        var showJournal by rememberSaveable { mutableStateOf(true) }
+        Box(Modifier.fillMaxSize()) {
         FieldMindAppLock(
             settings = viewModel.fieldSettings,
             isUnlocked = appUnlocked,
@@ -291,6 +294,22 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
                     }
                 }
             }
+        }
+        val observations by viewModel.observations.collectAsState()
+        val journalStreakEnabled by viewModel.fieldSettings.streaksEnabled.collectAsState()
+        val journalStreakCount = remember(observations, journalStreakEnabled) {
+            if (journalStreakEnabled) FieldMindStreaks.currentStreakDays(observations.map { it.date }) else 0
+        }
+        if (showJournal && shouldShowJournalToday(viewModel.fieldSettings)) {
+            DailyFieldJournalOverlay(
+                settings = viewModel.fieldSettings,
+                streakCount = journalStreakCount,
+                onDismiss = {
+                    showJournal = false
+                    viewModel.fieldSettings.setJournalLastShownDate(getTodayDateString())
+                }
+            )
+        }
         }
     }
 }
