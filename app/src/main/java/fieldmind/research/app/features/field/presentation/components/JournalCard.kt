@@ -20,10 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import androidx.compose.ui.draw.drawBehind
 import fieldmind.research.app.shared.presentation.theme.CardBorderStyle
 import fieldmind.research.app.shared.presentation.theme.JournalConfig
-import fieldmind.research.app.shared.presentation.theme.JournalPresets
 import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.ui.theme.CuteElevations
 
@@ -66,6 +65,14 @@ fun JournalCard(
     val cardShape = shape ?: RoundedCornerShape(journalConfig.cardCornerRadius)
     val effectiveBorder = border ?: journalBorderStroke(journalConfig)
 
+    val textureModifier = if (journalConfig.showTexture && journalConfig.textureOpacity > 0.01f) {
+        Modifier.drawBehind {
+            drawCardTexture(journalConfig, textureAlpha = (journalConfig.textureOpacity * 0.6f).coerceIn(0f, 0.15f))
+        }
+    } else {
+        Modifier
+    }
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -77,15 +84,12 @@ fun JournalCard(
         shadowElevation = shadowElevation,
         border = effectiveBorder
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            // Optional journal texture overlay for card surface
-            if (journalConfig.showTexture && journalConfig.textureOpacity > 0.01f) {
-                JournalCardTextureOverlay(
-                    journalConfig = journalConfig,
-                    cardShape = cardShape
-                )
-            }
-            Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(textureModifier)
+        ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 content()
             }
         }
@@ -124,6 +128,13 @@ fun JournalClickableCard(
     val journalConfig = LocalJournalStyle.current
     val cardShape = shape ?: RoundedCornerShape(journalConfig.cardCornerRadius)
     val effectiveBorder = border ?: journalBorderStroke(journalConfig)
+    val textureModifier = if (journalConfig.showTexture && journalConfig.textureOpacity > 0.01f) {
+        Modifier.drawBehind {
+            drawCardTexture(journalConfig, textureAlpha = (journalConfig.textureOpacity * 0.6f).coerceIn(0f, 0.15f))
+        }
+    } else {
+        Modifier
+    }
 
     Surface(
         onClick = onClick,
@@ -138,14 +149,12 @@ fun JournalClickableCard(
         shadowElevation = shadowElevation,
         border = effectiveBorder
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            if (journalConfig.showTexture && journalConfig.textureOpacity > 0.01f) {
-                JournalCardTextureOverlay(
-                    journalConfig = journalConfig,
-                    cardShape = cardShape
-                )
-            }
-            Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(textureModifier)
+        ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 content()
             }
         }
@@ -215,112 +224,95 @@ private fun journalShapeModifier(
     }
 }
 
+// ════════════════════════════════════════════════════════════════════════
+//  Card Texture Drawing — DrawScope extension (used via Modifier.drawBehind)
+// ════════════════════════════════════════════════════════════════════════
+
 /**
- * Overlays the journal's paper texture on a card surface.
- * Uses Canvas drawing for the texture pattern matching the active journal style.
+ * Draws the journal's paper texture onto the card surface using [drawBehind].
+ * The pattern matches the active journal style's [JournalConfig.textureName].
  */
-@Composable
-private fun JournalCardTextureOverlay(
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawCardTexture(
     journalConfig: JournalConfig,
-    cardShape: Shape
+    textureAlpha: Float
 ) {
-    val textureAlpha = (journalConfig.textureOpacity * 0.6f).coerceIn(0f, 0.15f)
     if (textureAlpha <= 0.001f) return
+    val textureName = journalConfig.textureName
+    val rng = cardTextureRng(textureName)
 
-    // Use a Box overlay with a clipped Canvas
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(cardShape)
-    ) {
-        // This is rendered as a background texture using the AnimatedBackgroundScene's
-        // texture utilities — but for card surfaces we use a lightweight Canvas approach
-        androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxWidth()) {
-            val textureName = journalConfig.textureName
-            val rng = rememberTextureRng("card_$textureName")
-
-            when (textureName) {
-                "parchment" -> {
-                    // Subtle warm mottling
-                    val warmColor = Color(0xFF8B6914)
-                    for (i in 0..4) {
-                        val cx = size.width * (rng[i * 3])
-                        val cy = size.height * (rng[i * 3 + 1])
-                        val cr = size.maxDimension * (0.03f + rng[i * 3 + 2] * 0.05f)
-                        drawCircle(
-                            color = warmColor.copy(alpha = textureAlpha * 0.3f * rng[i * 3 + 2]),
-                            radius = cr,
-                            center = androidx.compose.ui.geometry.Offset(cx, cy)
-                        )
-                    }
+    when (textureName) {
+        "parchment" -> {
+            val warmColor = Color(0xFF8B6914)
+            for (i in 0..4) {
+                val cx = size.width * (rng[i * 3])
+                val cy = size.height * (rng[i * 3 + 1])
+                val cr = size.maxDimension * (0.03f + rng[i * 3 + 2] * 0.05f)
+                drawCircle(
+                    color = warmColor.copy(alpha = textureAlpha * 0.3f * rng[i * 3 + 2]),
+                    radius = cr,
+                    center = Offset(cx, cy)
+                )
+            }
+        }
+        "paper" -> {
+            val fiberColor = Color(0xFF8B7355)
+            for (i in 0..8) {
+                val cx = size.width * rng[i * 5]
+                val cy = size.height * rng[i * 5 + 1]
+                val length = size.maxDimension * (0.01f + rng[i * 5 + 2] * 0.02f)
+                val angle = rng[i * 5 + 3] * 360f
+                val endX = cx + kotlin.math.cos(angle) * length
+                val endY = cy + kotlin.math.sin(angle) * length
+                drawLine(
+                    color = fiberColor.copy(alpha = textureAlpha * 0.5f * rng[i * 5 + 4]),
+                    start = Offset(cx, cy),
+                    end = Offset(endX, endY),
+                    strokeWidth = 0.5f
+                )
+            }
+        }
+        "dotgrid" -> {
+            val dotColor = Color(0xFF9E9E9E)
+            val spacing = size.minDimension / 32f
+            var x = 0f
+            while (x < size.width) {
+                var y = 0f
+                while (y < size.height) {
+                    drawCircle(
+                        color = dotColor.copy(alpha = textureAlpha * 0.4f),
+                        radius = 0.8f,
+                        center = Offset(x, y)
+                    )
+                    y += spacing
                 }
-                "paper" -> {
-                    // Fine fiber-like lines
-                    val fiberColor = Color(0xFF8B7355)
-                    for (i in 0..8) {
-                        val cx = size.width * rng[i * 5]
-                        val cy = size.height * rng[i * 5 + 1]
-                        val length = size.maxDimension * (0.01f + rng[i * 5 + 2] * 0.02f)
-                        val angle = rng[i * 5 + 3] * 360f
-                        val endX = cx + kotlin.math.cos(angle) * length
-                        val endY = cy + kotlin.math.sin(angle) * length
-                        drawLine(
-                            color = fiberColor.copy(alpha = textureAlpha * 0.5f * rng[i * 5 + 4]),
-                            start = androidx.compose.ui.geometry.Offset(cx, cy),
-                            end = androidx.compose.ui.geometry.Offset(endX, endY),
-                            strokeWidth = 0.5f
-                        )
-                    }
-                }
-                "dotgrid" -> {
-                    // Subtle dot grid
-                    val dotColor = Color(0xFF9E9E9E)
-                    val spacing = size.minDimension / 32f
-                    var x = 0f
-                    while (x < size.width) {
-                        var y = 0f
-                        while (y < size.height) {
-                            drawCircle(
-                                color = dotColor.copy(alpha = textureAlpha * 0.4f),
-                                radius = 0.8f,
-                                center = androidx.compose.ui.geometry.Offset(x, y)
-                            )
-                            y += spacing
-                        }
-                        x += spacing
-                    }
-                }
-                "watercolor" -> {
-                    // Soft color washes
-                    val washColor = Color(0xFFD4A574)
-                    for (i in 0..3) {
-                        val cx = size.width * rng[i * 11]
-                        val cy = size.height * rng[i * 11 + 1]
-                        val cr = size.maxDimension * (0.08f + rng[i * 11 + 2] * 0.12f)
-                        drawCircle(
-                            color = washColor.copy(alpha = textureAlpha * 0.4f * rng[i * 11 + 3]),
-                            radius = cr,
-                            center = androidx.compose.ui.geometry.Offset(cx, cy)
-                        )
-                    }
-                }
+                x += spacing
+            }
+        }
+        "watercolor" -> {
+            val washColor = Color(0xFFD4A574)
+            for (i in 0..3) {
+                val cx = size.width * rng[i * 11]
+                val cy = size.height * rng[i * 11 + 1]
+                val cr = size.maxDimension * (0.08f + rng[i * 11 + 2] * 0.12f)
+                drawCircle(
+                    color = washColor.copy(alpha = textureAlpha * 0.4f * rng[i * 11 + 3]),
+                    radius = cr,
+                    center = Offset(cx, cy)
+                )
             }
         }
     }
 }
 
-// ════════════════════════════════════════════════════════════════════════
-//  Texture RNG Cache (shared with AnimatedBackgroundScene)
-// ════════════════════════════════════════════════════════════════════════
+/**
+ * Returns cached pseudo-random values for card texture drawing.
+ * Values are seeded per texture name so they're stable across recompositions.
+ */
+private val cardTextureRngValues = mutableMapOf<String, List<Float>>()
 
-private val cardTextureRngCache = mutableMapOf<String, List<Float>>()
-
-@Composable
-private fun rememberTextureRng(name: String): List<Float> {
-    return remember(name) {
-        cardTextureRngCache.getOrPut(name) {
-            val rng = kotlin.random.Random(name.hashCode() + 42) // different seed from bg
-            List(100) { rng.nextFloat() }
-        }
+private fun cardTextureRng(name: String): List<Float> {
+    return cardTextureRngValues.getOrPut(name) {
+        val rng = kotlin.random.Random(name.hashCode() + 42) // different seed from bg
+        List(100) { rng.nextFloat() }
     }
 }
