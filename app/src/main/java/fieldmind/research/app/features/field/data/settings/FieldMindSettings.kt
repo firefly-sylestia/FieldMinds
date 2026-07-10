@@ -838,6 +838,8 @@ class FieldMindSettings private constructor(context: Context) {
         _onboardingLayoutStyle.value = "Full field journal"
         _journalLastShownDate.value = ""
         _journalEnabled.value = true
+        _animationsEnabled.value = true
+        _animationSpeedPreset.value = "Normal"
         prefs.edit().clear().apply()
         // Reset all StateFlow backing fields to defaults
         _dailyObservationGoal.value = 1
