@@ -173,3 +173,91 @@ Land the Phase 1 foundation for the WHIMSICAL_REDESIGN_PLAN. Phase 1 was 80% alr
 1. **Phase 2** — Implement 4 time-of-day scenes in `AnimatedBackgroundScene.kt` (Dawn golden+mist, Day dappled sun, Evening amber+fireflies, Night stars+moon) and color-tint each scene by `LocalJournalStyle.current` (Victorian → sepia, Sketchbook → muted, BulletJournal → crisp neons, Ghibli → watercolor wash).
 2. **Phase 3** — Wire `JournalConfig.cardCornerRadius` / `borderStyle` / `borderWidth` / `textureName` into the existing `JournalCard` and Card-of-cards surfaces so users actually SEE the journal style take effect on tap.
 3. **Manual device visual test** — cycle each picker in `Settings → Appearance → Journal aesthetic`, ensure settings persist across app restarts, and (especially) verify the `crown` Material Symbol icon renders correctly — swap to `local_florist` if it falls back to tofu.
+
+---
+
+# Whimsical Redesign — Phase 2 (Atmospheric Skybox) Completion Summary
+
+## Task
+
+Implement Phase 2 of WHIMSICAL_REDESIGN_PLAN: replace the static warmth + texture + vignette feel with a living, breathing skybox that changes with time-of-day (Dawn / Day / Evening / Night) and tints each of the four journal aesthetics onto the result. 4 time-of-day × 4 journal styles = 16 distinct visual moods. User explicitly demanded no 400-line cap and no cheap work — use full potential.
+
+## What landed (commit pushed to `origin/finetune`, ~880 lines added to AnimatedBackgroundScene.kt)
+
+### Time-of-Day System
+- `enum class TimeOfDay { Dawn, Day, Evening, Night }`
+- `data class CelestialBody` (sun/moon position + phase)
+- `data class ScenePalette` (17 color fields)
+- `moonPhase(now)` — 29.5306-day synodic cycle, ref 2000-01-06 18:14 UTC
+- `parseIsoMillisOrNull(iso)` — ISO-8601 → epoch millis
+- `resolveTimeOfDay(sunrise, sunset, now, forceNight)` — dawn (sr-30…sr+90), day (sr+90…ss-60), evening (ss-60…ss+90), night (else); clock-hour fallback
+- `resolveCelestial(tod, now)` — sun position for Dawn/Day/Evening; moon position + phase for Night
+
+### Per-Journal Tint Extensions (4 distinct transformations, NOT one multiply)
+- `Color.sepiaTint()` — luminance + warm bias (Victorian)
+- `Color.pencilDesat()` — 55% original + 40% lum + green bias (Sketchbook)
+- `Color.crispBoost()` — pull channels away from mean (BulletJournal)
+- `Color.watercolorBleed()` — slight desat + warm-cream lift + alpha×0.93 (Ghibli)
+- `ScenePalette.applyStyle(style)` — dispatches all 17 fields through mapper
+
+### Base Palettes (4 hand-tuned color schemes)
+- **Dawn** — peach+blue sky, cream-gold sun, rosy mist bands, dark hill silhouette
+- **Day** — cyan+gold sky, vivid yellow sun, white cloud banks, green hills
+- **Evening** — indigo+plum sky, deep-orange sun, firefly glow, plum horizon
+- **Night** — deep-blue+cream sky, cream moon disc, white stars, charcoal horizon
+
+### AtmosphericSkyboxScene (Layer 1.5 orchestrator)
+- 5 `rememberInfiniteTransition` slots (cloudDrift, twinkle, fireflyPulse, mistDrift, sunDrift) with tier-aware durations
+- 5 stable feature RNG pools (clouds 5, stars 60, fireflies 12, birds 4, celTex 10) — no recomposition flicker
+- Single `Canvas { ... }` block calling 8 DrawScope extensions, gated by tod + animLevel + style
+
+### 8 DrawScope Extensions
+1. `drawSky(palette)` — vertical gradient top→bottom
+2. `drawCelestialBodies(body, palette, style, sunDrift, texRng)` — sun (3 halos + disc) OR moon (halo + disc + phase-offset shadow)
+3. `drawCelestialJournalOverlay(cx, cy, r, style, rng)` — per-journal ornament on celestial body:
+   - Victorian: ornate double-ring + 8 compass tick marks + fleuron dot
+   - Sketchbook: cream outline + graphite smudge + pencil cross-hatch tick
+   - BulletJournal: 5×5 dot grid behind disc
+   - Ghibli: 5 watercolor wash blobs + 4-pointed sparkle
+4. `drawCloudBanks(palette, style, drift, rng, isFull)` — 5 soft-edge cloud banks + per-style ornament (Victorian cross-hatch, Sketchbook stipple, BulletJournal dot-grid) + Full-tier inner highlight ring on top puffs
+5. `drawHorizonAndMist(tod, palette, mistDrift)` — 5-hump mountain `Path` + foreground hills + 4 dawn mist bands (vertical-gradient parallax drift)
+6. `drawStarsAndConstellations(palette, twinkle, rng, shootPhase)` — 60 twinkle stars + Big Dipper (4) + Orion's belt (3) + Cassiopeia W (5) + sporadic shooting star (~25s cycle)
+7. `drawFireflies(tod, palette, style, isStatic, isFull, pulse, rng)` — 12 fireflies (halo + pulse glow); skipped at Static + for BulletJournal
+8. `drawBirds(tod, palette, globalDrift, rng)` — 4 V-formations drifting at Dawn/Evening, Full tier only
+
+### AnimatedBackgroundScene modifications
+- 4 new imports (`java.time.Instant`, `java.util.Calendar`, `kotlin.math.abs/cos`; `sin` already imported)
+- Added `val tod = resolveTimeOfDay(...)` + `val palette = getBasePalette(tod).applyStyle(journalConfig.style)` after the LocalJournalStyle/animLevel/isDark reads
+- Layer 1.5 `AtmosphericSkyboxScene(...)` inserted between AnimatedWeatherScene (Layer 1) and JournalWarmthOverlay (Layer 2) — so the warmth overlay color-grades the whole skybox consistently
+
+## Verification
+
+- **Brace balance**: AnimatedBackgroundScene.kt — 114 OPEN, 114 CLOSE, **Delta 0**. No negative-depth events. Max depth 6.
+- **2 code-reviewer-minimax-m3 passes** (initial implementation + 4-issue polish round). Both PASS, ship-it verdict.
+- **4 reviewer-flagged issues fixed in polish round**:
+  1. (Behavioral) Static-tier fireflies leak → `drawFireflies` gained `isStatic` param with `!isStatic &&` gate.
+  2. (Dead code) `isFull` unused in `drawCloudBanks` → activates top-puff inner highlight radial gradient at Full tier.
+  3. (Code style) Fully-qualified `androidx.compose.ui.graphics.drawscope.Stroke(...)` x3 → single import added, usage bare.
+  4. (Perf) `System.currentTimeMillis()` inside DrawScope for shooting star → hoisted to compose scope as `shootPhase: Long`, threaded through.
+
+## Self-corrections caught during review
+
+- First str_replace referenced helper functions (`previewBackgroundFor`, `previewOverlayFor`) that were never actually defined (residual from thinker's draft sketch). Replaced with inline `when (style.key) { ... }` dispatch.
+- Three `androidx.compose.ui.graphics.drawscope.Stroke` calls were fully-qualified. Polish round added the import for cleaner calls.
+- Initial `drawFireflies` lacked a Static gate — defeated the Static preset's no-moving-things promise. Fixed in polish round.
+
+## What this unlocks
+
+- App users now see a **living skybox**: dawn rose-gold mist, day cyan sky with drifting clouds, evening amber sun with fireflies, night cream moon with twinkling stars + constellations + occasional shooting stars + drifting bird formations. Each journal aesthetic imprints a distinct mood — sepia Victorian sunrise, pencil-desat Sketchbook dusk, crisp BulletJournal noon, watercolor Ghibli evening.
+- The skybox respects all 3 user controls: `BackgroundAnimationLevel = Static` freezes everything (sky + celestial + horizon only), `Gentle` adds slow cloud drift + firefly pulse, `Full` activates the full feature set (twinkles, firefly drift, mist parallax, shooting stars, bird migrations).
+- Existing features untouched: 4 texture draw routines (parchment/paper/dotgrid/watercolor), journal warmth overlay, journal texture overlay, vignette overlay.
+
+## Next-session followups
+
+1. **Manual device visual test** — cycle each picker in `Settings → Appearance → Journal aesthetic`, then verify the skybox changes when:
+   - The clock crosses sunrise/sunset (Dawn → Day → Evening → Night transitions)
+   - The user toggles `Background motion` between Static / Gentle / Full
+   - The user toggles `Journal style` between all 4 options at the same ToD — verify each feels distinct
+   - Watch for performance hiccups on older devices (especially BulletJournal + Full tier — highest draw-op count).
+2. **Phase 3** — Wire `JournalConfig.cardCornerRadius` + `borderStyle` + `borderWidth` into existing `JournalCard` and Card composables so the journal style visibly affects cards (not just the skybox).
+3. **Manual verification of the `crown` MaterialSymbolIcon** in the Victorian journal-style swatch in Phase 1 — confirm it renders correctly on-device; swap to `local_florist` if it falls back to tofu.
