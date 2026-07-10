@@ -741,7 +741,7 @@ private fun LiquidNavRow(
                             scaleY = pressScale * tapBounce.value
                         }
                         .defaultMinSize(minWidth = 60.dp, minHeight = 56.dp),
-                    contentAlignment = Alignment.CenterHorizontally,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Box(
@@ -778,12 +778,13 @@ private fun LiquidNavRow(
 
                 // Reset press state when selection changes
                 LaunchedEffect(selected) {
-                    if (selected) isPressed = false
-                }
+                    if (selected) isPressed = false                }
             }
         }
     }
 }
+}
+
 
 /**
  * Rail nav tab item used in the side rail (tablet layout).
