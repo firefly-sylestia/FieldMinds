@@ -40,6 +40,8 @@ object FieldMindSounds {
     const val THUNDER = 7
     /** Morning bird chorus ambient. */
     const val BIRD_CHORUS = 8
+    /** Gentle rainfall pitter-patter ambient. */
+    const val RAIN = 9
 }
 
 /**
@@ -68,6 +70,8 @@ class FieldMindSoundManager private constructor(private val context: Context) {
     private var windJob: Job? = null
     /** Bird chorus ambient job — looped while active. */
     private var birdChorusJob: Job? = null
+    /** Rain ambient job — looped while active. */
+    private var rainJob: Job? = null
 
     init {
         val attrs = AudioAttributes.Builder()
@@ -93,6 +97,7 @@ class FieldMindSoundManager private constructor(private val context: Context) {
         soundIds[FieldMindSounds.WIND] = soundPool.load(context, R.raw.fx_wind, 1)
         soundIds[FieldMindSounds.THUNDER] = soundPool.load(context, R.raw.fx_thunder, 1)
         soundIds[FieldMindSounds.BIRD_CHORUS] = soundPool.load(context, R.raw.fx_bird_chorus, 1)
+        soundIds[FieldMindSounds.RAIN] = soundPool.load(context, R.raw.fx_rain, 1)
     }
 
     /**
@@ -194,13 +199,36 @@ class FieldMindSoundManager private constructor(private val context: Context) {
         birdChorusJob = null
     }
 
+    // ── Rain ambient ──
+
+    /**
+     * Start gentle rainfall ambient loop. Plays a rain burst periodically.
+     */
+    fun startRain(scope: CoroutineScope) {
+        stopRain()
+        rainJob = scope.launch(Dispatchers.IO) {
+            delay(300)
+            while (isActive) {
+                play(FieldMindSounds.RAIN)
+                delay(6_000L) // rain burst every 6 seconds
+            }
+        }
+    }
+
+    /** Stop rain ambient loop. */
+    fun stopRain() {
+        rainJob?.cancel()
+        rainJob = null
+    }
+
     // ── Combined ambient stop ──
 
-    /** Stop all ambient loops (cricket, wind, bird chorus). */
+    /** Stop all ambient loops (cricket, wind, bird chorus, rain). */
     fun stopAllAmbient() {
         stopCricket()
         stopWind()
         stopBirdChorus()
+        stopRain()
     }
 
     /** Release SoundPool resources. Call when the manager is no longer needed. */

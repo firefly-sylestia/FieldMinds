@@ -372,6 +372,73 @@ function generateBirdChorus() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+//  9. RAIN — Gentle pitter-patter ambient rainfall
+//     Filtered noise with random amplitude peaks for raindrop impacts
+// ═══════════════════════════════════════════════════════════════════
+function generateRain() {
+  const duration = 4.0; // seconds — longer for ambient loop
+  const numSamples = Math.floor(SAMPLE_RATE * duration);
+  const samples = new Array(numSamples);
+
+  // Pre-generate noise for rainfall texture
+  const noise = new Array(numSamples);
+  for (let i = 0; i < numSamples; i++) {
+    noise[i] = Math.random() * 2 - 1;
+  }
+
+  // Pre-compute raindrop impact positions (random sharp spikes)
+  const dropPositions = new Set();
+  const numDrops = 80; // ~20 drops per second
+  for (let d = 0; d < numDrops; d++) {
+    const pos = Math.floor(Math.random() * numSamples);
+    dropPositions.add(pos);
+  }
+
+  for (let i = 0; i < numSamples; i++) {
+    const t = i / SAMPLE_RATE;
+    // Band-pass filtered noise (mid frequencies for rain texture)
+    // Simple FIR: difference of two moving averages
+    let slow = 0;
+    let fast = 0;
+    const slowWindow = 120; // ~2.7ms
+    const fastWindow = 20;  // ~0.45ms
+    let slowCount = 0;
+    let fastCount = 0;
+    for (let j = Math.max(0, i - slowWindow); j <= i; j++) {
+      slow += noise[j];
+      slowCount++;
+    }
+    for (let j = Math.max(0, i - fastWindow); j <= i; j++) {
+      fast += noise[j];
+      fastCount++;
+    }
+    slow /= slowCount;
+    fast /= fastCount;
+    // Band-pass = fast - slow (passes mid frequencies, cuts lows)
+    const bandPass = fast - slow;
+
+    // Rain can have gentle amplitude modulation (surges)
+    const surge = 0.7 + 0.3 * Math.sin(2 * Math.PI * 0.15 * t + Math.sin(2 * Math.PI * 0.07 * t));
+
+    // Base rainfall (continuous)
+    let s = bandPass * 0.35 * surge;
+
+    // Raindrop impacts (sharp spikes at random positions)
+    if (dropPositions.has(i)) {
+      const spikeEnv = Math.exp(-(i % 200) / 30); // quick decay
+      s += bandPass * 0.6 * spikeEnv;
+    }
+
+    // Very subtle low-end warmth
+    s += 0.04 * sine(120, t);
+
+    samples[i] = s;
+  }
+
+  return envelope(samples, 0.3, 0.3);
+}
+
+// ═══════════════════════════════════════════════════════════════════
 //  Main
 // ═══════════════════════════════════════════════════════════════════
 
@@ -394,5 +461,6 @@ writeWav('fx_success.wav', generateSuccess());
 writeWav('fx_wind.wav', generateWind());
 writeWav('fx_thunder.wav', generateThunder());
 writeWav('fx_bird_chorus.wav', generateBirdChorus());
+writeWav('fx_rain.wav', generateRain());
 
 console.log('\n✅ All sounds generated successfully!\n');

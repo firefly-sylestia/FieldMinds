@@ -307,6 +307,8 @@ fun SharedTransitionScope.HomeScreen(
     val soundManager = remember { FieldMindSoundManager.getInstance(context) }
     val ambientWeatherCode = homeCurrentWeather?.weatherCode ?: 0
     val isStormy = ambientWeatherCode >= 95
+    // WMO rain codes: 51-67 (drizzle & rain), 80-82 (rain showers)
+    val isRainy = ambientWeatherCode in 51..67 || ambientWeatherCode in 80..82
 
     // ── Night: Cricket ambience ──
     LaunchedEffect(isNight) {
@@ -326,8 +328,8 @@ fun SharedTransitionScope.HomeScreen(
         }
     }
 
-    // ── Daytime (7 AM – 10 PM): Gentle wind when not stormy ──
-    val shouldPlayWind = isDaytime && !isStormy
+    // ── Daytime: Wind or Rain (mutually exclusive) ──
+    val shouldPlayWind = isDaytime && !isRainy && !isStormy
     LaunchedEffect(shouldPlayWind) {
         if (shouldPlayWind) {
             soundManager.startWind(this)
@@ -336,7 +338,17 @@ fun SharedTransitionScope.HomeScreen(
         }
     }
 
-    // ── Stormy weather: Periodic distant thunder (any time of day) ──
+    // ── Rain: Replaces wind during rainy weather, can overlap with thunder ──
+    val shouldPlayRain = isDaytime && isRainy
+    LaunchedEffect(shouldPlayRain) {
+        if (shouldPlayRain) {
+            soundManager.startRain(this)
+        } else {
+            soundManager.stopRain()
+        }
+    }
+
+    // ── Stormy weather: Periodic distant thunder (any time of day, overlays rain) ──
     LaunchedEffect(ambientWeatherCode) {
         if (isStormy) {
             while (isActive) {
