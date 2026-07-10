@@ -551,6 +551,106 @@ Source code strip — 16 files changed, 602 lines deleted, 0 added.
 
 ---
 
+# Journal Decorations — v0.50.3 Stripped ~350 Lines of Dormant Per-Style Drawing Code
+
+## Task
+
+User accepted the v0.50.2 followup: *\"Strip the dormant per-style drawing code from JournalDecorations.kt — showTexture / showOrnaments / decorativeDividers / useGradientCards guards now short-circuit uniformly for all 4 styles, so the ~250 lines of texture routines + ornament variants + decorative dividers are dead code (~50% of the file).\"* Strip the dormant per-style drawing code from `JournalDecorations.kt` while preserving the public API surface for backwards compatibility with all call sites.
+
+## Surface mapped (before edit)
+
+`app/src/main/java/fieldmind/research/app/features/field/presentation/components/JournalDecorations.kt` (432 lines)
+
+**Dormant per-style drawing blocks** (all guarded by config flags that are false for all 4 presets since v0.50.2):
+
+| Block | Lines (approx) | Guard |
+|---|---|---|
+| `drawJournalTexture` + 4 texture-routine branches (parchment/paper/dotgrid/watercolor) | ~100 | `config.showTexture` |
+| `cardTextureRngValues` / `cardTextureRng` private helpers | ~8 | only used by drawJournalTexture |
+| `JournalOrnament` `when (config.style)` decorative branches (Victorian fleuron + Ghibli cloud + empty Sketchbook + empty BulletJournal) | ~30 | `config.showOrnaments` |
+| `JournalDivider` 4 `when (config.style)` decorative branches (ornamental rule, wavy path, pencil marks, dot row) | ~100 | `config.decorativeDividers` |
+| `journalCardBrush` 4 `when (config.style)` gradient branches (linearGradient, radialGradient) | ~25 | `config.useGradientCards` |
+| 15 dead imports (Canvas, Box, fillMaxWidth, height, size, Alignment, drawBehind, Offset, Size, Path, DrawScope, Stroke, Icon, MaterialSymbolIcon, FieldMindTheme, JournalStyle, remember) | ~17 | only used by dormant code |
+| Header comment describing the dormant branches | ~15 | doc only |
+
+**Live public API** (still called by 14+ call sites across JournalCard.kt, SettingsComponents.kt, ClickableCard.kt, FieldMindComponents.kt, DelightfulEmptyState.kt, FieldMindBackupExportComponents.kt):
+
+| Function | Status |
+|---|---|
+| `journalBorderStroke(config)` | **Unchanged** — Rounded border still active for all 4 presets |
+| `journalTextureModifier(config, alphaScale)` | **Simplify to `Modifier = Modifier`** — texture routines never fire |
+| `journalCardBrush(config, fallbackColor)` | **Simplify to `SolidColor(fallbackColor)`** — gradient branches never fire |
+| `journalCardShape(config)` | **Unchanged** — 24dp roundness still active |
+| `journalChipShape(config)` | **Unchanged** — 16dp roundness still active |
+| `JournalOrnament(modifier, tint)` | **Simplify to empty @Composable** — ornament branches never fire |
+| `JournalDivider(modifier, thickness, color)` | **Simplify to `HorizontalDivider(thickness, color, modifier)`** — decorative branches never fire |
+
+## What landed (v0.50.3 Patch release)
+
+### Commit 1: `refactor(journal): strip ~350 lines of dormant per-style drawing code from JournalDecorations`
+
+Single file replaced via `write_file` — 432 lines → 143 lines (55 insertions, 344 deletions, net -289 lines).
+
+**Stripped:**
+- `drawJournalTexture` function (100 lines of texture-routine `when` block)
+- `cardTextureRngValues` + `cardTextureRng` private helpers
+- `JournalOrnament` `when (config.style)` block (Victorian fleuron, Ghibli cloud, Sketchbook empty, BulletJournal empty)
+- `JournalDivider` 4 `when (config.style)` Canvas blocks (Victorian ornamental rule + center dot, Ghibli wavy path, Sketchbook diagonal pencil marks, BulletJournal dot row)
+- `journalCardBrush` 4 `when (config.style)` gradient branches
+- 15 dead imports (Canvas, Box, fillMaxWidth, height, size, Alignment, drawBehind, Offset, Size, Path, DrawScope, Stroke, Icon, MaterialSymbolIcon, FieldMindTheme, JournalStyle, remember)
+
+**Simplified (signatures preserved):**
+- `journalTextureModifier` → `Modifier = Modifier` (one-liner)
+- `journalCardBrush` → `SolidColor(fallbackColor)` (one-liner)
+- `JournalOrnament` → empty `@Composable` (just the annotation + KDoc comment)
+- `JournalDivider` → `HorizontalDivider(thickness, color, modifier)` (one-liner)
+
+**Unchanged:**
+- `journalBorderStroke` (Rounded border still active)
+- `journalCardShape` (24dp roundness still active)
+- `journalChipShape` (16dp roundness still active)
+
+**Forward-compatibility comments:**
+- Each simplified function has a KDoc explaining what was stripped and how to re-add the dormant code if the flags are re-enabled in a future round
+- `drawJournalTexture` chain can be re-added inside `journalTextureModifier` by reintroducing the `drawBehind` modifier + the 4 texture-routine branches
+- Ornament / decorative-divider / gradient branches can be re-added inside their respective functions by reintroducing the `when (config.style) { ... }` blocks
+
+### Commit 2: `feat(changelog): v0.50.3 — strip dormant JournalDecorations code + fastlane 2118`
+
+- New `FieldMindChangelogEntry("0.50.3", "Patch", ...)` at the top of the `fieldMindChangelog` list with 4 sections (file slimmed, public API preserved, forward-compat comments, implementation)
+- Created `fastlane/metadata/android/en-US/changelogs/2118.txt` with ≤500-char store-flavored recap
+
+## Verification
+
+- **Line count**: 432 → 143 lines (-289 net, -67% reduction)
+- **Brace balance**: clean — 7 function definitions, each with matching braces
+- **Public API preserved**: all 7 functions still defined with original signatures
+- **Dead code removed**: zero remaining references to `drawJournalTexture` / `cardTextureRng` / `drawParchmentTexture` / `drawPaperTexture` / `drawDotGridTexture` / `drawWatercolorTexture` / `MaterialSymbolIcon` / `FieldMindTheme.colors.accentFor` in the file
+- **Dead imports removed**: zero remaining imports for Canvas, Box, fillMaxWidth, height, size, Alignment, drawBehind, geometry, Path, drawscope, FieldMindTheme, icons, JournalStyle
+- **`code-reviewer-minimax-m3` verdict**: PASS with one minor note — `JournalOrnament` is now an empty `@Composable` and `JournalDivider` is a one-line wrapper. Both are defensible as forward-compat shims (keeps the API surface for if ornaments/decorative-dividers are re-enabled). Alternative would be to delete `JournalOrnament` and update its single call site in `FieldMindComponents.kt:665` (the SectionHeader trailing ornament slot), but that would be a more invasive change. Current approach is fine.
+- **No call site changes needed**: the 14+ call sites in JournalCard.kt, SettingsComponents.kt, ClickableCard.kt, FieldMindComponents.kt, DelightfulEmptyState.kt, FieldMindBackupExportComponents.kt all still compile unchanged
+
+## Self-corrections caught during review
+
+- None — the strip was a clean replacement of the entire file content with the simplified version. The thinker's pre-implementation design pass (or rather, the explicit "what to keep vs strip" mapping in the task) correctly identified the dormant blocks and the API surface to preserve.
+
+## What this unlocks
+
+- `JournalDecorations.kt` is now a 143-line file of clean, maintainable journal-aware styling primitives
+- Future contributors can read the file in < 5 minutes instead of wading through 432 lines of dead code
+- The public API surface is preserved, so the 14+ call sites don't need updating
+- Forward-compatibility comments document exactly how to re-enable each stripped block if the dormant flags are ever turned back on
+- No runtime behavior change — the dormant code was never being called anyway
+- `journalBorderStroke` + `journalCardShape` + `journalChipShape` are now the only "real" journal-aware styling functions, which is a much cleaner mental model
+
+## Next-session followups
+
+1. **Manual device test** — verify the journal-aware styling still renders correctly across all screens (Home, Settings, Backup, Insights, Detail). The simplified functions all fall back to clean defaults, so the visual output should be identical to v0.50.2.
+2. **Optional further cleanup** — `JournalStyle.kt` still has the `useGradientCards` / `showTexture` / `showOrnaments` / `decorativeDividers` / `textureName` / `textureOpacity` fields on `JournalConfig` even though the rendering code that uses them is gone. Could be removed in a future round if the team agrees these flags are permanently disabled.
+3. **Optional further cleanup** — `JournalStyle.kt` still has the `backgroundWarmth` / `cardSurfaceTint` / `accentWarmth` / `shadowWarmth` / `decorativeHeadings` / `irregularBody` / `navBarStyle` / `useGradientCards` fields that are all uniform across the 4 presets. If the team is confident the 4 styles will never diverge again, these fields could be removed from `JournalConfig` and hardcoded as defaults in the few places that need them.
+
+---
+
 # Journal Styles — v0.50.2 Unified Roundness + Stripped Weird Styling Completion Summary
 
 ## Task

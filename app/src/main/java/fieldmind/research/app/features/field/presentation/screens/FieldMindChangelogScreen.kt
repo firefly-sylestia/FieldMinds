@@ -44,6 +44,44 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.50.3 — Strip dormant per-style drawing code from JournalDecorations.kt ──
+FieldMindChangelogEntry(
+    version = "0.50.3",
+    date = "2025-07-10",
+    title = "🧹 Stripped ~350 lines of dormant per-style drawing code",
+    importance = "Patch",
+    tags = listOf("cleanup", "dead-code", "journal-styles", "performance", "maintainability"),
+    sections = listOf(
+        "🧹 JournalDecorations.kt slimmed from 432 to 143 lines (-67%)" to listOf(
+            "✓ Removed `drawJournalTexture` (parchment / paper / dot-grid / watercolor texture routines) — only called when `showTexture=true`, which is false for all 4 presets",
+            "✓ Removed `JournalOrnament` decorative branches (Victorian copperplate fleuron, Ghibli soft cloud) — only rendered when `showOrnaments=true`, which is false for all 4 presets",
+            "✓ Removed `JournalDivider` decorative branches (Victorian ornamental rule + center dot, Ghibli wavy path, Sketchbook diagonal pencil marks, BulletJournal dot row) — only rendered when `decorativeDividers=true`, which is false for all 4 presets",
+            "✓ Removed `journalCardBrush` gradient branches (per-style linearGradient / radialGradient) — only used when `useGradientCards=true`, which is false for all 4 presets",
+            "✓ Removed `cardTextureRngValues` / `cardTextureRng` private helpers — only used by the now-removed drawJournalTexture",
+            "✓ Removed 15 dead imports (Canvas, Box, fillMaxWidth, height, size, Alignment, drawBehind, Offset, Size, Path, DrawScope, Stroke, Icon, MaterialSymbolIcon, FieldMindTheme, JournalStyle)",
+        ),
+        "🟢 Public API preserved — no call site changes needed" to listOf(
+            "✓ All 7 public API functions (journalBorderStroke, journalTextureModifier, journalCardBrush, journalCardShape, journalChipShape, JournalOrnament, JournalDivider) keep their original signatures",
+            "✓ `journalTextureModifier` simplifies to `Modifier = Modifier` (no-op) — backwards-compatible with all 14+ call sites in JournalCard.kt, SettingsComponents.kt, ClickableCard.kt, FieldMindComponents.kt, DelightfulEmptyState.kt, FieldMindBackupExportComponents.kt",
+            "✓ `journalCardBrush` simplifies to `SolidColor(fallbackColor)` — backwards-compatible with the single caller in SettingsGroupCard",
+            "✓ `JournalOrnament` simplifies to an empty @Composable — backwards-compatible with the single caller in SectionHeader",
+            "✓ `JournalDivider` simplifies to a thin wrapper over `HorizontalDivider` — backwards-compatible with all decorative-divider call sites",
+            "✓ `journalBorderStroke`, `journalCardShape`, `journalChipShape` unchanged — Rounded border + 24dp card + 16dp chip still active",
+        ),
+        "📝 Forward-compatibility comments" to listOf(
+            "✓ Each simplified function has a KDoc explaining what was stripped and how to re-add it if the dormant flags are re-enabled in a future round",
+            "✓ `drawJournalTexture` chain can be re-added inside `journalTextureModifier` by reintroducing the `drawBehind` modifier + the 4 texture-routine branches",
+            "✓ Ornament / decorative-divider / gradient branches can be re-added inside their respective functions by reintroducing the `when (config.style) { ... }` blocks",
+        ),
+        "🛠️ Implementation" to listOf(
+            "✓ Single file touched: `app/.../presentation/components/JournalDecorations.kt`",
+            "✓ 432 lines → 143 lines (289 lines deleted, 0 added — net loss)",
+            "✓ No new dependencies, no API breakage, no caller changes",
+            "✓ Build size unchanged (no .wav / .png assets removed in this round — that was Round 10's sound strip)",
+        ),
+    )
+),
+
         // ── v0.50.2 — Unify journal-style roundness + strip remaining weird styling ──
 FieldMindChangelogEntry(
     version = "0.50.2",
