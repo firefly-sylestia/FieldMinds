@@ -76,6 +76,11 @@ import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.ui.theme.CuteElevations
 
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.platform.LocalUriHandler
+import fieldmind.research.app.infrastructure.updates.UpdateChecker
+import fieldmind.research.app.infrastructure.updates.UpdateInfo
+
 // ══════════════════════════════════════════════════════════════════════
 //  Data Classes
 // ══════════════════════════════════════════════════════════════════════
@@ -3876,7 +3881,6 @@ fun CheckForUpdatesScreen(
     val updateChecker = remember { fieldmind.research.app.infrastructure.updates.UpdateChecker(appSettings) }
     val updateInfo by updateChecker.updateInfo.collectAsState()
     val updateEnabled by appSettings.updateCheckEnabled.collectAsState()
-    val lastCheckedAtMs by appSettings.updateLastCheckedAt.collectAsState()
     val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
 
@@ -4016,11 +4020,6 @@ fun CheckForUpdatesScreen(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                 Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                     Column {
-                        Text(
-                            if (lastCheckedAtMs > 0L) "Last checked: ${java.text.SimpleDateFormat("MMM d, HH:mm", java.util.Locale.getDefault()).format(java.util.Date(lastCheckedAtMs))}" else "Not checked yet",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
                         Text(
                             if (updateEnabled) "Auto-check on launch is enabled" else "Auto-check on launch is disabled — toggle in Settings → Updates",
                             style = MaterialTheme.typography.labelSmall,
