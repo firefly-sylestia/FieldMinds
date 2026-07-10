@@ -87,6 +87,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import fieldmind.research.app.features.field.presentation.components.GlassCard
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.infrastructure.FieldMindSoundManager
 import fieldmind.research.app.infrastructure.FieldMindSounds
 import kotlinx.coroutines.isActive
@@ -1351,7 +1352,12 @@ private fun HeroActionChip(
 ) {
     val haptics = rememberFieldMindHaptics()
     Surface(
-        modifier = modifier.pressScale(scaleDown = 0.95f),
+        modifier = modifier
+            .pressScale(scaleDown = 0.95f)
+            .cuteShadow(
+                elevation = CuteElevations.clickableTier,
+                shape = RoundedCornerShape(24.dp)
+            ),
         onClick = { haptics.light(); onClick() },
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -1979,7 +1985,11 @@ private fun QuickActionChip(
             .heightIn(min = 96.dp)
             .wrapContentWidth()
             .expressivePress(scaleDown = 0.94f)
-            .clickable { haptics.light(); onNavigate(screen) },
+            .clickable { haptics.light(); onNavigate(screen) }
+            .cuteShadow(
+                elevation = CuteElevations.clickableTier,
+                shape = RoundedCornerShape(24.dp)
+            ),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
@@ -2037,7 +2047,7 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
 
 @Composable
 private fun MiniActionTile(title: String, value: String, subtitle: String, icon: MaterialSymbolIcon, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(modifier = modifier.expressivePress(scaleDown = 0.96f).clickable(onClick = onClick), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+    Card(modifier = modifier.expressivePress(scaleDown = 0.96f).clickable(onClick = onClick).cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(28.dp)), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
             Text(title, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
@@ -2876,7 +2886,10 @@ private fun DataToolMiniCard(
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
     Card(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.cuteShadow(
+            elevation = CuteElevations.nonClickableTier,
+            shape = RoundedCornerShape(24.dp)
+        ),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
