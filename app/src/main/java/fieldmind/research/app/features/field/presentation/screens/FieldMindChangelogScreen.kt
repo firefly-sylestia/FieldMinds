@@ -44,6 +44,34 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.47.3 — Card Roundness + Settings Polish Pass ──
+        FieldMindChangelogEntry(
+            version = "0.47.3",
+            date = "2026-07-10",
+            title = "\u{1F4F0} Card Roundness Pass + Settings Inline Polish",
+            importance = "Patch",
+            tags = listOf("design-language", "settings", "home", "roundness", "journal"),
+            sections = listOf(
+                "\u{1F4F0} Home cards now match the journal aesthetic" to listOf(
+                    "\u2713 Data Tools + Media & Sharing tiles: 24.dp \u2192 28.dp, clickable elevation tier, press feedback",
+                    "\u2713 Observation Timeline 'Open' + Data Tools 'All tools' buttons: 22.dp \u2192 28.dp",
+                    "\u2713 Current Project card: shadow lifted via cuteShadow, no more flat-looking card",
+                    "\u2713 Data tool mini-tile icons: 36/18.dp \u2192 40/20.dp with theme-aware alpha"
+                ),
+                "\u{1F527} Settings inline pills feel page-mounted" to listOf(
+                    "\u2713 Sound preview tiles: 16.dp \u2192 24.dp with light/dark-aware icon background",
+                    "\u2713 Profile frequency pills, Theme layout pills, Security PIN pills: 18\u201322.dp \u2192 22\u201326.dp",
+                    "\u2713 PIN length selector, Preview mode chips, View Security Score surface: 20.dp \u2192 24.dp",
+                    "\u2713 Security page error-container Surface: 20.dp \u2192 24.dp",
+                    "\u2713 All press surfaces now press-back on tap"
+                ),
+                "\u{1F3A8} Visual rhythm matches the rest of the UI" to listOf(
+                    "\u2713 No more sub-22.dp shapes on Card/Surface/FilledTonalButton anywhere in Home or Settings",
+                    "\u2713 Clickable vs non-clickable surfaces clearly differentiated via elevation tier",
+                    "\u2713 Container color regression fixed (Data Tools keeps surfaceContainerHigh + gradient)"
+                )
+            )
+        ),
         // ── v0.47.0 — Daily Journal Quick-Capture ──
         FieldMindChangelogEntry(
             version = "0.47.0",

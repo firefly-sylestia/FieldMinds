@@ -431,7 +431,7 @@ private fun SoundPreviewButton(
                 soundManager.play(soundId)
             }
         },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         color = if (isPlaying)
             MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
         else
@@ -440,19 +440,24 @@ private fun SoundPreviewButton(
             androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary)
         else
             null,
-        modifier = modifier.pressScale(scaleDown = 0.92f)
+        modifier = modifier
+            .pressScale(scaleDown = 0.92f)
+            .cuteShadow(
+                elevation = CuteElevations.clickableTier,
+                shape = RoundedCornerShape(24.dp)
+            )
     ) {
         Column(
-            Modifier.padding(vertical = 10.dp),
+            Modifier.padding(vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Box(
                 Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(18.dp))
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(20.dp))
                     .background(
-                        if (isPlaying) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                        if (isPlaying) MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
                         else MaterialTheme.colorScheme.surfaceContainerLow
                     ),
                 contentAlignment = Alignment.Center
@@ -461,7 +466,7 @@ private fun SoundPreviewButton(
                     icon,
                     contentDescription = name,
                     tint = if (isPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                    size = 20.dp
+                    size = 22.dp
                 )
             }
             Text(
@@ -552,14 +557,16 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                             val isSelected = onboardingFrequency == freq
                             Surface(
                                 onClick = { settings.setOnboardingFrequency(freq) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                 border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .pressScale(scaleDown = 0.96f)
                             ) {
                                 Text(
                                     freq,
-                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    modifier = Modifier.padding(vertical = 12.dp),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                     textAlign = TextAlign.Center
@@ -641,10 +648,13 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                             val sel = layoutStyle == style
                             Surface(
                                 onClick = { settings.setOnboardingLayoutStyle(style) },
-                                shape = RoundedCornerShape(22.dp),
+                                shape = RoundedCornerShape(26.dp),
                                 color = if (sel) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
                                 border = if (sel) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
-                                modifier = Modifier.weight(1f).height(80.dp)
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(84.dp)
+                                    .pressScale(scaleDown = 0.96f)
                             ) {
                                 Column(
                                     Modifier.fillMaxSize().padding(8.dp),
@@ -1424,7 +1434,14 @@ fun SecuritySettingsPage(
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { listOf(appLockActive, backupEncryption, clipboardCleanup, privacyTyping, screenCapture).forEach { active -> Box(Modifier.size(10.dp).clip(CircleShape).background(if (active) FieldMindTheme.colors.positive else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))) } }
                     }
                     LinearProgressIndicator(progress = { enabledCount / 5f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = FieldMindTheme.colors.positive, trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                    Surface(onClick = { onOpenSecurityScore?.invoke() }, shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), modifier = Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f)) {
+                    Surface(onClick = { onOpenSecurityScore?.invoke() }, shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), modifier = Modifier
+                        .fillMaxWidth()
+                        .pressScale(scaleDown = 0.97f)
+                        .cuteShadow(
+                            elevation = CuteElevations.nonClickableTier,
+                            shape = RoundedCornerShape(24.dp)
+                        )
+                    ) {
                         Row(Modifier.padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                             Icon(MaterialSymbolIcon("security"), null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
                             Text("View full security score", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
@@ -1458,11 +1475,13 @@ fun SecuritySettingsPage(
                                 val selected = appPinLen == option
                                 Surface(
                                     onClick = { settings.setAppPinLength(option) },
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .pressScale(scaleDown = 0.95f)
                                 ) {
-                                    Row(Modifier.padding(10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Row(Modifier.padding(vertical = 12.dp, horizontal = 10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                                         Text(option.take(1), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
                                         Text(option.split(" ")[1], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
@@ -1485,11 +1504,13 @@ fun SecuritySettingsPage(
                                 val selected = appPinLen == option
                                 Surface(
                                     onClick = { settings.setAppPinLength(option) },
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .pressScale(scaleDown = 0.95f)
                                 ) {
-                                    Row(Modifier.padding(10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Row(Modifier.padding(vertical = 12.dp, horizontal = 10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                                         Text(option.take(1), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
                                         Text(option.split(" ")[1], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
@@ -2363,7 +2384,7 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
                     }
                     if (orphanedObs > 0) {
                         Spacer(Modifier.height(8.dp))
-                        Surface(shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)) {
+                        Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)) {
                             Row(Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Icon(FieldMindIcons.Info, null, tint = MaterialTheme.colorScheme.error, size = 18.dp)
                                 Text("$orphanedObs observation${if (orphanedObs != 1) "s" else ""} reference missing or deleted projects", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onErrorContainer)

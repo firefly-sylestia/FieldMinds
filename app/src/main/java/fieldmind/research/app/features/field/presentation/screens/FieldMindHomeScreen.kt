@@ -482,7 +482,7 @@ fun SharedTransitionScope.HomeScreen(
                         }
                         FilledTonalButton(
                             onClick = { onNavigate(FieldMindScreen.FieldLog) },
-                            shape = RoundedCornerShape(22.dp),
+                            shape = RoundedCornerShape(28.dp),
                             colors = ButtonDefaults.filledTonalButtonColors(
                                 containerColor = colors.project.copy(alpha = 0.12f)
                             )
@@ -558,7 +558,7 @@ fun SharedTransitionScope.HomeScreen(
                             }
                             FilledTonalButton(
                                 onClick = { onNavigate(FieldMindScreen.DataTools) },
-                                shape = RoundedCornerShape(22.dp),
+                                shape = RoundedCornerShape(28.dp),
                                 colors = ButtonDefaults.filledTonalButtonColors(containerColor = FieldMindTheme.colors.data.copy(alpha = 0.12f))
                             ) {
                                 Text("All tools", fontWeight = FontWeight.SemiBold)
@@ -2150,7 +2150,19 @@ private fun CurrentProjectResearchCard(
     val connectedSources = sources.count { it.relatedProjectId == project.id }
     val connectedReports = reports.count { it.projectId == project.id }
 
-    ClickableCard(onClick = onOpen, shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier, modifier = Modifier.fillMaxWidth()) {
+    ClickableCard(
+        onClick = onOpen,
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        tonalElevation = CuteElevations.clickableTier,
+        shadowElevation = 0.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .cuteShadow(
+                elevation = CuteElevations.clickableTier,
+                shape = RoundedCornerShape(34.dp)
+            )
+    ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Project, null, tint = FieldMindTheme.colors.project, size = 24.dp)
@@ -2911,18 +2923,20 @@ private fun DataToolMiniCard(
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
     Card(
         onClick = onClick,
-        modifier = modifier.cuteShadow(
-            elevation = CuteElevations.nonClickableTier,
-            shape = RoundedCornerShape(24.dp)
-        ),
-        shape = RoundedCornerShape(24.dp),
+        modifier = modifier
+            .cuteShadow(
+                elevation = CuteElevations.clickableTier,
+                shape = RoundedCornerShape(28.dp)
+            )
+            .pressScale(scaleDown = 0.96f),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(brush = gradient, shape = RoundedCornerShape(24.dp))
+                .background(brush = gradient, shape = RoundedCornerShape(28.dp))
         ) {
             Column(
                 Modifier.fillMaxWidth().padding(12.dp),
@@ -2930,11 +2944,11 @@ private fun DataToolMiniCard(
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Box(
-                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
-                        .background(color.copy(alpha = 0.14f)),
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                        .background(color.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(icon, null, tint = color, size = 20.dp)
+                    Icon(icon, null, tint = color, size = 22.dp)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(title, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
