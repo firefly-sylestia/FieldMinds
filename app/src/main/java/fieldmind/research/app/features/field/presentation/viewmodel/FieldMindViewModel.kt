@@ -530,9 +530,10 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         fileUri: String = "",
         citationStyleNote: String = "",
         importance: String = "Normal",
-        readingStatus: String = "In progress"
+        readingStatus: String = "In progress",
+        onSaved: ((Long) -> Unit)? = null
     ) = viewModelScope.launch {
-        repository.addSource(
+        val id = repository.addSource(
             SourceEntity(
                 type = type,
                 title = title.trim(),
@@ -555,6 +556,7 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                 relatedProjectId = projectId
             )
         )
+        onSaved?.invoke(id)
     }
 
     fun toggleSourceImportant(source: SourceEntity) = viewModelScope.launch {
@@ -982,8 +984,9 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         return Pair(media.uri, android.net.Uri.parse(media.uri).path ?: "")
     }
 
-    fun addHypothesis(questionId: Long?, prediction: String, evidenceNeeded: String, confidence: Int, reasoning: String = "", supportCriteria: String = "", weakeningCriteria: String = "", testMethod: String = "", resultStatus: String = "Unknown") = viewModelScope.launch {
-        repository.addHypothesis(HypothesisEntity(linkedQuestionId = questionId, prediction = prediction.trim(), reasoning = reasoning.trim(), evidenceNeeded = evidenceNeeded.trim(), supportCriteria = supportCriteria.trim(), weakeningCriteria = weakeningCriteria.trim(), testMethod = testMethod.trim(), confidencePercent = confidence, resultStatus = resultStatus))
+    fun addHypothesis(questionId: Long?, prediction: String, evidenceNeeded: String, confidence: Int, reasoning: String = "", supportCriteria: String = "", weakeningCriteria: String = "", testMethod: String = "", resultStatus: String = "Unknown", onSaved: ((Long) -> Unit)? = null) = viewModelScope.launch {
+        val id = repository.addHypothesis(HypothesisEntity(linkedQuestionId = questionId, prediction = prediction.trim(), reasoning = reasoning.trim(), evidenceNeeded = evidenceNeeded.trim(), supportCriteria = supportCriteria.trim(), weakeningCriteria = weakeningCriteria.trim(), testMethod = testMethod.trim(), confidencePercent = confidence, resultStatus = resultStatus))
+        onSaved?.invoke(id)
     }
 
     fun addDataRecord(toolType: String, label: String, value: String, unit: String = "", notes: String = "", location: String = "", projectId: Long? = null, observationId: Long? = null, datasetKind: String = "Manual", chartPreference: String = "Line", onResult: ((Boolean) -> Unit)? = null, onSaved: ((Long) -> Unit)? = null) = viewModelScope.launch {

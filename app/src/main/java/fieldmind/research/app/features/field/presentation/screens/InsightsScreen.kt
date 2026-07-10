@@ -470,7 +470,7 @@ fun InsightsScreen(
 
             // ═══════════ SECTION 8: Achievements ═══════════
             item { SectionHeader("Achievements", "${achievements.count { it.unlocked }}/${achievements.size} unlocked") }
-            item { CollapsibleAchievements(achievements = achievements, snackbarState = snackbarState, scope = scope, celebrationState = celebrationState) }
+            item { CollapsibleAchievements(items = achievements, snackbarState = snackbarState, scope = scope, celebrationState = celebrationState) }
 
             // ═══════════ SECTION 9: Open Questions & Active Projects ═══════════
             if (questions.isNotEmpty()) {

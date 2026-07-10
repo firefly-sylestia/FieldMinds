@@ -33,7 +33,7 @@ import org.json.JSONObject
  * draftHelper.ClearDraft()
  * ```
  */
-class DraftAutoSave private constructor(
+class DraftAutoSave internal constructor(
     private val prefs: SharedPreferences,
     private val draftKey: String,
     private val saveIntervalMs: Long
