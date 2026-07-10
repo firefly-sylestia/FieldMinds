@@ -29,7 +29,9 @@ import fieldmind.research.app.shared.presentation.theme.JournalStyle
 import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.shared.presentation.theme.LocalMicroDelightIntensity
 import fieldmind.research.app.shared.presentation.theme.LocalBackgroundAnimation
+import fieldmind.research.app.shared.presentation.theme.LocalNavBarStyle
 import fieldmind.research.app.shared.presentation.theme.MicroDelightIntensity
+import fieldmind.research.app.shared.presentation.theme.NavBarStyle
 import fieldmind.research.app.shared.presentation.theme.BackgroundAnimationLevel
 import fieldmind.research.app.ui.theme.getCustomColorScheme
 import fieldmind.research.app.ui.theme.getTypographyForFont
@@ -831,6 +833,10 @@ fun FieldMindTheme(
         .getInstance(context)
         .backgroundAnimation
         .collectAsState()
+    val navStyleKey by FieldMindSettings
+        .getInstance(context)
+        .navBarStyle
+        .collectAsState()
 
     val journalConfig = remember(journalStyleKey) {
         JournalPresets.forStyle(JournalStyle.fromKey(journalStyleKey))
@@ -841,12 +847,16 @@ fun FieldMindTheme(
     val animLevel = remember(backgroundAnimKey) {
         BackgroundAnimationLevel.fromKey(backgroundAnimKey)
     }
+    val navBarConfig = remember(navStyleKey) {
+        NavBarStyle.fromKey(navStyleKey)
+    }
 
     CompositionLocalProvider(
         LocalFieldMindColors provides semantic,
         LocalJournalStyle provides journalConfig,
         LocalMicroDelightIntensity provides delightIntensity,
-        LocalBackgroundAnimation provides animLevel
+        LocalBackgroundAnimation provides animLevel,
+        LocalNavBarStyle provides navBarConfig
     ) {
         MaterialTheme(
             colorScheme = fullAnimatedColorScheme,

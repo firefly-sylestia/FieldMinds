@@ -4,12 +4,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -378,3 +373,8 @@ val LocalMicroDelightIntensity = staticCompositionLocalOf { MicroDelightIntensit
  * CompositionLocal providing the active [BackgroundAnimationLevel].
  */
 val LocalBackgroundAnimation = staticCompositionLocalOf { BackgroundAnimationLevel.Gentle }
+
+/**
+ * CompositionLocal providing the active [NavBarStyle].
+ */
+val LocalNavBarStyle = staticCompositionLocalOf { NavBarStyle.Modern }
