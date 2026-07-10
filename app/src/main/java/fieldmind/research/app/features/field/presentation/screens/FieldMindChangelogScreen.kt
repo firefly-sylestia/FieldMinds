@@ -44,7 +44,40 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
-        // ── v0.48.1 — Round 8 — Journal styles fully propagate across Home / Insights / Export ──
+        // ── v0.49.0 — Round 9 — Strip atmospheric skybox (perf / heat) ──
+FieldMindChangelogEntry(
+    version = "0.49.0",
+    date = "2025-07-10",
+    title = "🎨 Striped atmospheric skybox for device perf and heat",
+    importance = "Major",
+    tags = listOf("performance", "battery", "ui-strip", "fix"),
+    sections = listOf(
+        "✨ Background animation system removed" to listOf(
+            "✓ Stops 5 `rememberInfiniteTransition` slots that were running perpetually on the device",
+            "✓ Removes 8 heavy `DrawScope` extensions (dawn/day/evening/night sky, clouds, stars, fireflies, birds, horizon)",
+            "✓ Removes atmospheric color tint extensions (sepia / pencil / crisp / watercolor) and ScenePalette resolver",
+            "✓ Removes `BackgroundAnimationLevel` enum + `LocalBackgroundAnimation` CompositionLocal from the theme system",
+            "✓ Removes the 'Background motion' picker from Settings → Appearance",
+        ),
+        "🌿 Per-journal aesthetic preserved" to listOf(
+            "✓ Journal warmth tint, paper / parchment / dot-grid / watercolor texture, and vignette overlay still color-grade every screen per the chosen style",
+            "✓ `AnimatedWeatherScene` (Layer 1, independent feature) still runs under its own toggle; weather rain/snow/wind/thunder/clear day rendering is unchanged",
+            "✓ All 4 journal styles (Victorian / Sketchbook / BulletJournal / Ghibli) still differ in warmth, texture, ornaments, dividers — only the moving skybox layers were removed",
+        ),
+        "🛠️ Cleanup & migration" to listOf(
+            "✓ Removed `KEY_BACKGROUND_ANIMATION = "background_animation"` from persisted settings — Android SharedPreferences safely ignores the orphaned key on next load",
+            "✓ `AnimatedBackgroundScene.kt` shrunk from ~1426 lines to ~250 (was the largest file in the app)",
+            "✓ 1170 lines deleted across 5 files; 243 added (mostly comments + the smaller static overlays)",
+            "✓ `JournalStyle` enum sharply trims from 4 phase-1 enums to 3; `KeyedEnum` interface doc updated",
+        ),
+        "🔧 Fixed" to listOf(
+            "✓ Users on older or low-end devices reported noticeable device heat and battery drain from the skybox running 5 perpetual infinite transitions",
+            "✓ Sketchbook and Ghibli in particular showed lag on AMOLED displays because the per-journal tint extension was re-evaluating on each transition loop frame",
+        )
+    )
+),
+
+// ── v0.48.1 — Round 8 — Journal styles fully propagate across Home / Insights / Export ──
 FieldMindChangelogEntry(
     version = "0.48.1",
     date = "2025-07-10",
