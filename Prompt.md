@@ -106,3 +106,70 @@ Fix `:compileFdroidDebugKotlin` failure with ~100+ Kotlin compile errors spannin
 
 - `:compileFdroidDebugKotlin` should pass; downstream `:compileGithubDebugKotlin` and `:lint` cascade should also pass since they share the same Kotlin sources.
 - CI re-runs on push to `origin/finetune` will surface any remaining non-build issues (lint, instrumentation test compile, etc.) without the build-noise from broken Kotlin compile.
+
+---
+
+# Whimsical Redesign — Phase 1 (Journal Aesthetic Picker) Completion Summary
+
+## Task
+
+Land the Phase 1 foundation for the WHIMSICAL_REDESIGN_PLAN. Phase 1 was 80% already in place — `JournalStyle.kt` defined all 4 enums + 4 JournalConfig presets + 4 CompositionLocals, `FieldMindSettings.kt` exposed 4 StateFlows + setters, `FieldMindTheme.kt` provided all 4 CompositionLocals app-wide. **The only missing piece was the picker UI in `Settings → Appearance`.**
+
+## What landed (commit `3cfa6542`)
+
+### 1 file added new code: `app/.../presentation/screens/FieldMindSettingsScreen.kt`
+
+- New `"Journal aesthetic"` `SectionHeader` + `SettingsGroupCard` inserted between the existing `Card Style` and `Entity Colors` sections in `AppearanceSettingsPage`.
+- Four sub-pickers stacked with `HorizontalDivider`s, all wired to `fieldSettings.journalStyle / backgroundAnimation / microDelightIntensity / navBarStyle` via `setJournalStyle(style.key)` etc.
+- New top-level helper `private fun <T> PillRadioGroup(...) where T : Enum<T>, T : KeyedEnum` between `ThemeToggle` and the `// Capture Defaults Settings Page` divider.
+
+### 4 sub-pickers
+
+| Sub-picker | UI | Storage key |
+|---|---|---|
+| Journal Style | Horizontally-scrolling Row of 4 large swatches with distinct visual previews (parchment + sepia book + crown ornament, cream + edit pencil-rule, dot-grid 4×5, watercolor radial + cloud + sparkles) | `journalStyle` ∈ {`victorian`, `sketchbook`, `bullet_journal`, `ghibli`} |
+| Background motion | 3-pill radio with `LocalBackgroundAnimation.where` | `backgroundAnimation` ∈ {`static`, `gentle`, `full`} |
+| Micro-delights | 3-pill radio | `microDelightIntensity` ∈ {`minimal`, `normal`, `maximum`} |
+| Nav bar style | 3-pill radio | `navBarStyle` ∈ {`modern`, `nature`, `journal`} |
+
+### 1 file refactored: `app/.../shared.presentation/theme/JournalStyle.kt`
+
+- New interface `KeyedEnum { val key: String; val displayName: String }`.
+- All 4 phase-1 enums (`JournalStyle`, `MicroDelightIntensity`, `BackgroundAnimationLevel`, `NavBarStyle`) now declare `: KeyedEnum` with the first two constructor params marked `override val`.
+- Existing callers of `.key` / `.displayName` / `.description` continue to compile unchanged (third `description` param stays a plain `val`).
+
+### 5 imports added to `FieldMindSettingsScreen.kt`
+
+`KeyedEnum`, `JournalStyle`, `BackgroundAnimationLevel`, `MicroDelightIntensity`, `NavBarStyle` — all from `fieldmind.research.app.shared.presentation.theme`. Eliminates 6 fully-qualified `fieldmind.research.app.shared.presentation.theme.X.foo(...)` calls.
+
+## Verification
+
+- **Brace balance (Python regex stripping strings + comments):**
+  - `FieldMindSettingsScreen.kt`: OPEN 660, CLOSE 660, DELTA 0. No negative-depth events. Final depth 0.
+  - `JournalStyle.kt`: OPEN 36, CLOSE 36, DELTA 0. No negative-depth events.
+- **Top-level symbol exports:** `PillRadioGroup` defined and exported at top-level scope in `FieldMindSettingsScreen.kt`. `KeyedEnum` defined at top-level scope in `JournalStyle.kt`.
+- **`code-reviewer-minimax-m3` post-implementation review:** PASS. One minor followup note — if Material Symbols font lacks the `crown` glyph, swap to `local_florist` for the Victorian swatch's top-left ornament.
+
+## Self-corrections caught during review
+
+1. **First draft referenced helper functions that didn't exist.** `previewBackgroundFor(style.key)` and `previewOverlayFor(style.key)` were called but never defined (residual from the thinker's draft sketch). Replaced with an inline `when (style.key) { ... }` dispatch directly inside the swatch composable.
+2. **`(option as dynamic)` is not valid Kotlin.** The thinker returned a sketch using JavaScript-style `dynamic` casts. Replaced with a proper Kotlin generic `private fun <T> PillRadioGroup(...) where T : Enum<T>, T : KeyedEnum` after adding the `KeyedEnum` interface to `JournalStyle.kt`.
+3. **`@Suppress("UNCHECKED_CAST")` was misleading.** The original dispatch used `val previewBrush: Any = when(...) { ... is Color ... is Brush ... }` which needed suppression to compile. After consolidating to a uniform `Brush` type (wrapping solid colors as `Brush.linearGradient(listOf(color, color))` and Ghibli as `Brush.radialGradient(colors, radius)`), the modifier is just `Modifier.background(previewBrush)` with no cast and no `@Suppress`.
+4. **`❦ (U+2766 FLORAL HEART)` glyph was unsafe.** Not in Android's default sans-serif — would fall back to `?` or a tofu box on most devices. Replaced with `MaterialSymbolIcon("crown")` (and the reviewer noted `local_florist` as a safer fallback if `crown` is missing).
+5. **Stray `_ = style // keep qualified access in case import order shifts` line.** Leftover from a confused earlier str_replace. Removed before final commit.
+
+## What this unlocks
+
+- `Settings → Appearance → Journal aesthetic` is fully usable. Users can:
+  - Pick Victorian / Sketchbook / BulletJournal / Ghibli — affects every card via `LocalJournalStyle.current` (Phase 3 wires visible card aesthetics).
+  - Pick Static / Gentle / Full background motion.
+  - Pick Minimal / Normal / Maximum micro-delights.
+  - Pick Modern / Nature / Journal nav-bar style.
+- Phase 2 (AnimatedBackgroundScene per journal style) can now dispatch on `LocalBackgroundAnimation.current`.
+- Phase 4 (whimsical micro-delights) can branch on `LocalMicroDelightIntensity.current`.
+
+## Next-session followups
+
+1. **Phase 2** — Implement 4 time-of-day scenes in `AnimatedBackgroundScene.kt` (Dawn golden+mist, Day dappled sun, Evening amber+fireflies, Night stars+moon) and color-tint each scene by `LocalJournalStyle.current` (Victorian → sepia, Sketchbook → muted, BulletJournal → crisp neons, Ghibli → watercolor wash).
+2. **Phase 3** — Wire `JournalConfig.cardCornerRadius` / `borderStyle` / `borderWidth` / `textureName` into the existing `JournalCard` and Card-of-cards surfaces so users actually SEE the journal style take effect on tap.
+3. **Manual device visual test** — cycle each picker in `Settings → Appearance → Journal aesthetic`, ensure settings persist across app restarts, and (especially) verify the `crown` Material Symbol icon renders correctly — swap to `local_florist` if it falls back to tofu.
