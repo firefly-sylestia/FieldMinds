@@ -1422,6 +1422,9 @@ private fun LiveWeatherDashboardWidget(
     val colors = FieldMindTheme.colors
     var testWeatherCode by remember { mutableStateOf<Int?>(null) }
     var testIsNight by remember { mutableStateOf(false) }
+    var testTemperature by remember { mutableStateOf<Int?>(null) }
+    var testHumidity by remember { mutableStateOf<Int?>(null) }
+    var testPanelExpanded by remember { mutableStateOf(false) }
 
     // Time of day awareness
     val currentHour = remember { java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY) }
@@ -1447,8 +1450,8 @@ private fun LiveWeatherDashboardWidget(
     // loading spinner ONLY if there's no data yet (first load)
     val showLoadingSpinner = weatherLoading && currentWeather == null
 
-    // Temperature-based palette for display
-    val tempDisplay = currentWeather?.temperature ?: 20.0
+    // Temperature-based palette for display (honours dev override)
+    val tempDisplay = testTemperature?.toDouble() ?: currentWeather?.temperature ?: 20.0
     val displayColors = when {
         tempDisplay < 0 -> listOf(Color(0xFF1A237E), Color(0xFF42A5F5))
         tempDisplay < 10 -> listOf(Color(0xFF1565C0), Color(0xFF64B5F6))
@@ -1517,7 +1520,7 @@ private fun LiveWeatherDashboardWidget(
                         )
                 ) {AnimatedWeatherScene(
         weatherCode = displayWeatherCode,
-        temperature = currentWeather?.temperature ?: 0.0,
+        temperature = testTemperature?.toDouble() ?: currentWeather?.temperature ?: 0.0,
         sunrise = currentWeather?.sunrise,
         sunset = currentWeather?.sunset,
         compact = false,
@@ -1645,9 +1648,10 @@ private fun LiveWeatherDashboardWidget(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (showTemp) {
+                        val displayTempLabel = testTemperature?.toDouble() ?: w.temperature ?: 20.0
                         Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                WeatherUnitConverter.formatTemp(w.temperature, tempUnit),
+                                WeatherUnitConverter.formatTemp(displayTempLabel, tempUnit),
                                 style = MaterialTheme.typography.displaySmall.copy(
                                     fontWeight = FontWeight.Bold,
                                     color = textOnScene
@@ -1675,8 +1679,9 @@ private fun LiveWeatherDashboardWidget(
                             )
                         }
                     }
+                    val displayHumidity = testHumidity ?: w.humidity
                     if (showHumidity) {
-                        w.humidity?.let { hum ->
+                        displayHumidity?.let { hum ->
                             Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
                                     "$hum%",
@@ -1747,10 +1752,6 @@ private fun LiveWeatherDashboardWidget(
                             }
                         }
 
-                        // ── Developer: Test weather conditions ──
-                        if (developerMode && showWeatherTestPanel) {
-                            DevWeatherTestPanel(testWeatherCode, testIsNight, null, null, { testWeatherCode = it }, { testIsNight = it }, {}, {})
-                        }
                     }
                     // Pressure
                     if (showPressure) {
@@ -1879,6 +1880,28 @@ private fun LiveWeatherDashboardWidget(
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                         )
                     }
+                }
+            }
+
+            // ── Developer: Test weather conditions (collapsed by default) ──
+            if (developerMode && showWeatherTestPanel) {
+                CollapsibleSection(
+                    title = "Test weather conditions",
+                    subtitle = "Developer override (collapsed by default)",
+                    icon = MaterialSymbolIcon("test_tube"),
+                    expanded = testPanelExpanded,
+                    onToggle = { testPanelExpanded = !testPanelExpanded }
+                ) {
+                    DevWeatherTestPanel(
+                        testCode = testWeatherCode,
+                        testNight = testIsNight,
+                        testTemperature = testTemperature,
+                        testHumidity = testHumidity,
+                        onCodeChange = { testWeatherCode = it },
+                        onNightChange = { testIsNight = it },
+                        onTemperatureChange = { testTemperature = it },
+                        onHumidityChange = { testHumidity = it }
+                    )
                 }
             }
         }

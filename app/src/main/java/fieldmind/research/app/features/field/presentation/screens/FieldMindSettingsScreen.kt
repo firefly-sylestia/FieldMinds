@@ -2562,6 +2562,9 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
     val showWeatherTest by settings.showWeatherTestPanel.collectAsState()
     var testWeatherCode by remember { mutableStateOf<Int?>(null) }
     var testIsNight by remember { mutableStateOf(false) }
+    var testTemperature by remember { mutableStateOf(null) }
+    var testHumidity by remember { mutableStateOf(null) }
+    var testWeatherPanelExpanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var showSchemaDialog by remember { mutableStateOf(false) }
@@ -2712,16 +2715,23 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
                 }
             }
             item {
-                DevWeatherTestPanel(
-                    testCode = testWeatherCode,
-                    testNight = testIsNight,
-                    testTemperature = null,
-                    testHumidity = null,
-                    onCodeChange = { testWeatherCode = it },
-                    onNightChange = { testIsNight = it },
-                    onTemperatureChange = {},
-                    onHumidityChange = {}
-                )
+                CollapsibleSection(
+                    title = "Test weather conditions",
+                    subtitle = "Override live weather for debugging",
+                    expanded = testWeatherPanelExpanded,
+                    onToggle = { testWeatherPanelExpanded = !testWeatherPanelExpanded }
+                ) {
+                    DevWeatherTestPanel(
+                        testCode = testWeatherCode,
+                        testNight = testIsNight,
+                        testTemperature = testTemperature,
+                        testHumidity = testHumidity,
+                        onCodeChange = { testWeatherCode = it },
+                        onNightChange = { testIsNight = it },
+                        onTemperatureChange = { testTemperature = it },
+                        onHumidityChange = { testHumidity = it }
+                    )
+                }
             }
             item {
                 Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
