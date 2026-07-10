@@ -57,7 +57,6 @@ import fieldmind.research.app.features.field.data.stats.FieldMindStreaks
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.ui.theme.CuteGradients
-import fieldmind.research.app.ui.theme.screenBackground
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenceAttachment
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
@@ -361,8 +360,19 @@ fun SharedTransitionScope.HomeScreen(
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
     val homeScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     var isRefreshing by remember { mutableStateOf(false) }
-    Box(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {
-        Box(Modifier.fillMaxSize()) { // Wrapper for overlay
+    Box(Modifier.fillMaxSize()) {
+        // Layer 1: Animated immersive background (replaces static screenBackground)
+        AnimatedBackgroundScene(
+            weatherCode = homeCurrentWeather?.weatherCode ?: 0,
+            temperature = homeCurrentWeather?.temperature,
+            sunrise = homeCurrentWeather?.sunrise,
+            sunset = homeCurrentWeather?.sunset,
+            showCloudAnimation = weatherShowCloudAnimation
+        )
+        
+        // Layer 2: Screen content (status bar padding preserved, screenBackground removed)
+        Box(Modifier.fillMaxSize().statusBarsPadding()) {
+            Box(Modifier.fillMaxSize()) { // Wrapper for overlay
             PullToRefreshBox(
                 isRefreshing = isRefreshing,
                 onRefresh = {
