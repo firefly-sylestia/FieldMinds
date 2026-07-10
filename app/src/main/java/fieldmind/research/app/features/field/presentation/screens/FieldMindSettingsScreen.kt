@@ -2457,6 +2457,100 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
                     }
                 }
             }
+            // ── Animation Speed Preset (quick access for testing) ──
+            item {
+                val animationsEnabled by settings.animationsEnabled.collectAsState()
+                val speedPreset by settings.animationSpeedPreset.collectAsState()
+                SettingsGroupCard {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
+                                        .background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(MaterialSymbolIcon("motion_photos_on"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
+                                }
+                                Text("Animation speed", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                            }
+                            Text(
+                                speedPreset,
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            listOf("Reduced", "Normal", "Enhanced").forEach { preset ->
+                                val selected = speedPreset == preset
+                                val mIcon = when (preset) {
+                                    "Reduced" -> MaterialSymbolIcon("slow_motion_video")
+                                    "Normal" -> MaterialSymbolIcon("speed")
+                                    else -> MaterialSymbolIcon("fast_forward")
+                                }
+                                Surface(
+                                    onClick = { settings.setAnimationSpeedPreset(preset) },
+                                    shape = RoundedCornerShape(22.dp),
+                                    color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                    border = if (selected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Column(
+                                        Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                                    ) {
+                                        Icon(
+                                            mIcon,
+                                            null,
+                                            tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                            size = 22.dp
+                                        )
+                                        Text(
+                                            preset,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                                            color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    MaterialSymbolIcon("motion_photos_paused"),
+                                    null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    size = 18.dp
+                                )
+                                Text(
+                                    "Enable animations",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                            Switch(
+                                checked = animationsEnabled,
+                                onCheckedChange = { settings.setAnimationsEnabled(it) }
+                            )
+                        }
+                    }
+                }
+            }
             item {
                 SettingsGroupCard {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
