@@ -44,7 +44,42 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
-        // ── v0.49.0 — Round 9 — Strip atmospheric skybox (perf / heat) ──
+        // ── v0.50.0 — Round 10 — Strip sound effects system ──
+FieldMindChangelogEntry(
+    version = "0.50.0",
+    date = "2025-07-10",
+    title = "🔇 Removed the sound effects system — battery, focus, and simplicity",
+    importance = "Major",
+    tags = listOf("performance", "battery", "ui-strip", "focus", "fix"),
+    sections = listOf(
+        "🔇 Sound effects system removed" to listOf(
+            "✓ Deletes the entire `FieldMindSoundManager` singleton (~230 lines) and the 9 raw audio assets (~700 KB of .wav files)",
+            "✓ No more chime on app open, shutter on camera, water drop on save, success arpeggio, or night cricket / dawn bird / day wind / rain / storm thunder ambience",
+            "✓ Removes the Settings → Sound section (master toggle + volume slider + preview buttons) entirely",
+            "✓ Removes `soundEffectsEnabled` / `soundVolume` StateFlow, their setters, persistence keys, and the `SoundPreviewSection` / `SoundPreviewButton` composables",
+            "✓ Removes 5 `LaunchedEffect` ambient-sound blocks from HomeScreen and the shutter/water-drop one-shot calls from the camera and observation save flows",
+        ),
+        "⚡ Performance & battery benefits" to listOf(
+            "✓ No more SoundPool holding 9 audio streams in memory across the app's lifetime",
+            "✓ No more 4 ambient-loop coroutines (`cricketJob`, `windJob`, `birdChorusJob`, `rainJob`) spinning on the home screen",
+            "✓ Stops the periodic `playThunder()` loop that fired every 12-20 s during stormy weather",
+            "✓ Frees the SoundPool thread + AudioManager focus that some devices hold even when no sound is playing",
+        ),
+        "🎯 Focus benefits" to listOf(
+            "✓ Camera shutter, observation save, and storm weather no longer make unexpected sounds during quiet fieldwork",
+            "✓ Field researchers can keep their phone in silent mode and still get the full app experience without any silent-mode overrides",
+            "✓ Less competing for the audio focus channel — voice-note recording (still intact) is now the only audio event the app produces",
+        ),
+        "🛠️ Code quality & architecture" to listOf(
+            "✓ 602 lines deleted across 6 source files + 9 raw assets removed from the APK",
+            "✓ `KEY_SOUND_EFFECTS_ENABLED` and `KEY_SOUND_VOLUME` SharedPreferences keys are dropped from the persistence layer — Android safely ignores orphaned keys on next load",
+            "✓ `clearAllPreferences()` no longer resets the dropped settings",
+            "✓ v0.46.0 changelog entry's 'SoundManager singleton' bullet removed since the system it documented no longer exists",
+        ),
+    )
+),
+
+// ── v0.49.0 — Round 9 — Strip atmospheric skybox (perf / heat) ──
 FieldMindChangelogEntry(
     version = "0.49.0",
     date = "2025-07-10",
