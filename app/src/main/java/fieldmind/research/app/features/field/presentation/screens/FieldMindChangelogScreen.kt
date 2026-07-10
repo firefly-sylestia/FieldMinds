@@ -44,6 +44,34 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.47.6 — Crash UI Redesign + Lock Recovery (journal aesthetic) ──
+        FieldMindChangelogEntry(
+            version = "0.47.6",
+            date = "2026-07-10",
+            title = "\u{1F6DF} Crash UI Redesign + Lock Recovery",
+            importance = "Patch",
+            tags = listOf("crash", "ui", "recovery", "design-language", "lock", "self-contained"),
+            sections = listOf(
+                "\u{1F3A8} Crash screen redesigned to match the journal aesthetic" to listOf(
+                    "\u2713 three rounded cards (28\u201332 dp) instead of one flat list: header (sage primaryContainer with circular error icon), crash log (white card with monospace read-only field), recovery (white card with action buttons)",
+                    "\u2713 expanded SafeColors: warm cream surface (0xFFFAF7F2), forest-green primary (0xFF2E7D32), terracotta secondary (0xFFE65100), soft sage primaryContainer (0xFFD7E8D8), warm amber tertiary (0xFFB8651A) \u2014 echoes the FieldMind brand without depending on theme resources",
+                    "\u2713 Material symbols throughout: error_outline, description, content_copy, share, healing, lock_open, restart_alt",
+                    "\u2713 footer note reassures the user their research data is safe and the lock can be re-enabled in Settings after restart",
+                    "\u2713 still self-contained: no FieldMindTheme import, no R.* refs, no dynamic color \u2014 the screen renders even if the crash was theme-related"
+                ),
+                "\u{1F513} New \u201CDisable lock & PIN, then restart\u201D recovery button" to listOf(
+                    "\u2713 one-tap recovery for the most common startup-crash loop (corrupt privacy lock / app PIN / decoy PIN / panic lock / failed-unlock biometrics / export password)",
+                    "\u2713 goes through an AlertDialog confirmation so a stray tap on the crash screen does not silently wipe security settings",
+                    "\u2713 SharedPreferences writes are direct (NOT via FieldMindSettings class) so the recovery works even when the settings class itself is the source of the crash",
+                    "\u2713 uses .commit() (sync), not .apply() (async), so the prefs flush before exitProcess(0) kills the process \u2014 the next launch sees the cleared settings",
+                    "\u2713 native fallback (used if Compose itself crashes) also gets the new button"
+                ),
+                "\u{1F4E6} Build environment" to listOf(
+                    "\u2713 no new compile-time dependencies \u2014 only existing Material 3 + Compose + MaterialSymbolIcon imports",
+                    "\u2713 no behavioral changes outside the crash flow"
+                )
+            )
+        ),
         // ── v0.47.5 — Device-Reported Bug Fixes (3 fixes from real testing) ──
         FieldMindChangelogEntry(
             version = "0.47.5",
