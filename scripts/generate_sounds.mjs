@@ -218,6 +218,160 @@ function generateSuccess() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+//  6. WIND — Gentle whooshing ambient wind
+//     Filtered noise with slow amplitude modulation
+// ═══════════════════════════════════════════════════════════════════
+function generateWind() {
+  const duration = 3.0; // seconds — longer for ambient loop
+  const numSamples = Math.floor(SAMPLE_RATE * duration);
+  const samples = new Array(numSamples);
+
+  // Pre-generate noise for consistency
+  const noise = new Array(numSamples);
+  for (let i = 0; i < numSamples; i++) {
+    noise[i] = Math.random() * 2 - 1;
+  }
+
+  for (let i = 0; i < numSamples; i++) {
+    const t = i / SAMPLE_RATE;
+    // Low-pass filter via simple moving average (smoothing)
+    let filtered = 0;
+    const windowSize = 80; // ~1.8ms window for low-pass
+    let count = 0;
+    for (let j = Math.max(0, i - windowSize); j <= i; j++) {
+      filtered += noise[j];
+      count++;
+    }
+    filtered /= count;
+
+    // Slow amplitude modulation (0.3Hz) for gentle whoosh
+    const mod = 0.5 + 0.5 * Math.sin(2 * Math.PI * 0.3 * t);
+    // Sub-bass rumble for depth
+    const sub = 0.08 * sine(60, t);
+    samples[i] = (filtered * 0.4 * mod) + sub;
+  }
+
+  return envelope(samples, 0.8, 0.8);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  7. THUNDER — Distant low rumble
+//     Sharp attack followed by slow decaying low-frequency boom
+// ═══════════════════════════════════════════════════════════════════
+function generateThunder() {
+  const duration = 3.0; // seconds — long rumble
+  const numSamples = Math.floor(SAMPLE_RATE * duration);
+  const samples = new Array(numSamples);
+
+  // Pre-generate noise for rumble texture
+  const noise = new Array(numSamples);
+  for (let i = 0; i < numSamples; i++) {
+    noise[i] = Math.random() * 2 - 1;
+  }
+
+  for (let i = 0; i < numSamples; i++) {
+    const t = i / SAMPLE_RATE;
+    // Low frequency rumble ~40-80Hz
+    const lowRumble1 = 0.3 * sine(45 + 15 * (t / duration), t);
+    const lowRumble2 = 0.2 * sine(65 - 10 * (t / duration), t);
+    // Filtered noise (heavy low-pass) for texture
+    let filtered = 0;
+    const windowSize = 200; // ~4.5ms window — very low pass
+    let count = 0;
+    for (let j = Math.max(0, i - windowSize); j <= i; j++) {
+      filtered += noise[j];
+      count++;
+    }
+    filtered /= count;
+    const noiseComponent = filtered * 0.15;
+
+    // Envelope: sharp attack, long decay
+    let env;
+    if (t < 0.02) {
+      env = t / 0.02; // fast attack
+    } else if (t < 0.2) {
+      env = 1.0; // sustain
+    } else {
+      env = Math.exp(-(t - 0.2) * 1.2); // slow decay
+    }
+
+    samples[i] = (lowRumble1 + lowRumble2 + noiseComponent) * env;
+  }
+
+  return envelope(samples, 0.005, 0.3);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  8. BIRD CHORUS — Gentle dawn birdsong
+//     Overlapping chirps and trills at morning bird frequencies
+// ═══════════════════════════════════════════════════════════════════
+function generateBirdChorus() {
+  const duration = 4.0; // seconds — longer ambient loop
+  const numSamples = Math.floor(SAMPLE_RATE * duration);
+  const samples = new Array(numSamples).fill(0);
+
+  // Bird call definitions: [frequency, duration_sec, start_time_sec, amplitude]
+  const birds = [
+    // Robin-like song: clear fluty notes
+    [1800, 0.6, 0.1, 0.25],
+    [2200, 0.5, 0.3, 0.20],
+    [1600, 0.4, 0.5, 0.22],
+    [2400, 0.7, 0.8, 0.18],
+    // Sparrow-like chirps: faster, higher
+    [3800, 0.15, 0.2, 0.12],
+    [4200, 0.12, 0.6, 0.10],
+    [3500, 0.18, 1.0, 0.11],
+    [4000, 0.14, 1.4, 0.09],
+    [3600, 0.16, 1.8, 0.10],
+    // Thrush-like phrases: melodic
+    [2800, 0.8, 1.5, 0.15],
+    [2600, 0.6, 2.0, 0.13],
+    [3000, 0.5, 2.5, 0.11],
+    // Finishing with a few light twitters
+    [5000, 0.08, 2.2, 0.06],
+    [5500, 0.06, 2.5, 0.05],
+    [4800, 0.1, 3.0, 0.06],
+    // Background ambient bird texture
+    [1500, 3.5, 0.0, 0.04],
+    [2000, 3.5, 0.0, 0.03],
+  ];
+
+  birds.forEach(([freq, dur, start, amp]) => {
+    const startSample = Math.floor(start * SAMPLE_RATE);
+    const birdSamples = Math.floor(dur * SAMPLE_RATE);
+    for (let i = 0; i < birdSamples; i++) {
+      const idx = startSample + i;
+      if (idx >= numSamples) break;
+      const t = i / SAMPLE_RATE;
+      // Each bird note has a smooth envelope
+      const noteEnv = Math.sin(Math.PI * t / dur);
+      // Slight frequency wobble for natural feel
+      const wobble = 1 + 0.02 * Math.sin(2 * Math.PI * 6 * t);
+      // Multiple overtones for richness
+      let s = 0;
+      s += noteEnv * sine(freq * wobble, t);
+      s += 0.3 * noteEnv * sine(freq * 2 * wobble, t); // first harmonic
+      // Different birds have different timbres
+      samples[idx] += s * amp;
+    }
+  });
+
+  // Normalize to prevent clipping
+  let maxAmp = 0;
+  for (let i = 0; i < numSamples; i++) {
+    maxAmp = Math.max(maxAmp, Math.abs(samples[i]));
+  }
+  if (maxAmp > 0.9) {
+    const scale = 0.85 / maxAmp;
+    for (let i = 0; i < numSamples; i++) {
+      samples[i] *= scale;
+    }
+  }
+
+  return envelope(samples, 0.2, 0.4);
+}
+
+// ═══════════════════════════════════════════════════════════════════
 //  Main
 // ═══════════════════════════════════════════════════════════════════
 
@@ -237,5 +391,8 @@ writeWav('fx_shutter.wav', generateShutter());
 writeWav('fx_water_drop.wav', generateWaterDrop());
 writeWav('fx_cricket.wav', generateCricket());
 writeWav('fx_success.wav', generateSuccess());
+writeWav('fx_wind.wav', generateWind());
+writeWav('fx_thunder.wav', generateThunder());
+writeWav('fx_bird_chorus.wav', generateBirdChorus());
 
 console.log('\n✅ All sounds generated successfully!\n');

@@ -299,15 +299,50 @@ fun SharedTransitionScope.HomeScreen(
         previousStreak = currentStreak
     }
 
-    // ── Night cricket ambient sound ──
+    // ── Ambient sound system (time & weather-aware) ──
     val currentHour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
     val isNight = currentHour in 22..23 || currentHour in 0..4
+    val isDawn = currentHour in 5..6
+    val isDaytime = currentHour in 7..21
     val soundManager = remember { FieldMindSoundManager.getInstance(context) }
+    val ambientWeatherCode = homeCurrentWeather?.weatherCode ?: 0
+    val isStormy = ambientWeatherCode >= 95
+
+    // ── Night: Cricket ambience ──
     LaunchedEffect(isNight) {
         if (isNight) {
             soundManager.startCricket(this, durationMs = 60_000L)
         } else {
             soundManager.stopCricket()
+        }
+    }
+
+    // ── Dawn (5-7 AM): Bird chorus ──
+    LaunchedEffect(isDawn) {
+        if (isDawn) {
+            soundManager.startBirdChorus(this, durationMs = 60_000L)
+        } else {
+            soundManager.stopBirdChorus()
+        }
+    }
+
+    // ── Daytime (7 AM – 10 PM): Gentle wind when not stormy ──
+    val shouldPlayWind = isDaytime && !isStormy
+    LaunchedEffect(shouldPlayWind) {
+        if (shouldPlayWind) {
+            soundManager.startWind(this)
+        } else {
+            soundManager.stopWind()
+        }
+    }
+
+    // ── Stormy weather: Periodic distant thunder (any time of day) ──
+    LaunchedEffect(ambientWeatherCode) {
+        if (isStormy) {
+            while (isActive) {
+                soundManager.playThunder()
+                delay(12_000L + (2_000L..8_000L).random())
+            }
         }
     }
 

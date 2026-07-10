@@ -34,6 +34,12 @@ object FieldMindSounds {
     const val CRICKET = 4
     /** Ascending arpeggio for achievements/goals. */
     const val SUCCESS = 5
+    /** Gentle whooshing wind ambient. */
+    const val WIND = 6
+    /** Distant low thunder rumble for storms. */
+    const val THUNDER = 7
+    /** Morning bird chorus ambient. */
+    const val BIRD_CHORUS = 8
 }
 
 /**
@@ -58,6 +64,10 @@ class FieldMindSoundManager private constructor(private val context: Context) {
 
     /** Night cricket ambient job — looped while active. */
     private var cricketJob: Job? = null
+    /** Wind ambient job — looped while active. */
+    private var windJob: Job? = null
+    /** Bird chorus ambient job — looped while active. */
+    private var birdChorusJob: Job? = null
 
     init {
         val attrs = AudioAttributes.Builder()
@@ -66,7 +76,7 @@ class FieldMindSoundManager private constructor(private val context: Context) {
             .build()
 
         soundPool = SoundPool.Builder()
-            .setMaxStreams(4)
+            .setMaxStreams(6)
             .setAudioAttributes(attrs)
             .build()
 
@@ -80,6 +90,9 @@ class FieldMindSoundManager private constructor(private val context: Context) {
         soundIds[FieldMindSounds.WATER_DROP] = soundPool.load(context, R.raw.fx_water_drop, 1)
         soundIds[FieldMindSounds.CRICKET] = soundPool.load(context, R.raw.fx_cricket, 1)
         soundIds[FieldMindSounds.SUCCESS] = soundPool.load(context, R.raw.fx_success, 1)
+        soundIds[FieldMindSounds.WIND] = soundPool.load(context, R.raw.fx_wind, 1)
+        soundIds[FieldMindSounds.THUNDER] = soundPool.load(context, R.raw.fx_thunder, 1)
+        soundIds[FieldMindSounds.BIRD_CHORUS] = soundPool.load(context, R.raw.fx_bird_chorus, 1)
     }
 
     /**
@@ -122,9 +135,77 @@ class FieldMindSoundManager private constructor(private val context: Context) {
         cricketJob = null
     }
 
+    // ── Wind ambient ──
+
+    /**
+     * Start gentle wind ambient loop. Plays a soft whoosh periodically.
+     */
+    fun startWind(scope: CoroutineScope) {
+        stopWind()
+        windJob = scope.launch(Dispatchers.IO) {
+            delay(300)
+            while (isActive) {
+                play(FieldMindSounds.WIND)
+                delay(6_000L) // whoosh every 6 seconds with 3s overlap
+            }
+        }
+    }
+
+    /** Stop wind ambient loop. */
+    fun stopWind() {
+        windJob?.cancel()
+        windJob = null
+    }
+
+    // ── Thunder (one-shot, weather-triggered) ──
+
+    /**
+     * Play a single distant thunder rumble. Call when weather detects a storm.
+     * Returns immediately — sound plays asynchronously through SoundPool.
+     */
+    fun playThunder() {
+        play(FieldMindSounds.THUNDER)
+    }
+
+    // ── Bird chorus ambient ──
+
+    /**
+     * Start dawn bird chorus ambient loop. Plays a birdsong burst periodically.
+     */
+    fun startBirdChorus(scope: CoroutineScope, durationMs: Long = 60_000L) {
+        stopBirdChorus()
+        birdChorusJob = scope.launch(Dispatchers.IO) {
+            delay(500)
+            while (isActive) {
+                play(FieldMindSounds.BIRD_CHORUS)
+                delay(8_000L) // chorus every 8 seconds
+            }
+        }
+        // Auto-stop after duration
+        scope.launch {
+            delay(durationMs)
+            stopBirdChorus()
+        }
+    }
+
+    /** Stop bird chorus ambient loop. */
+    fun stopBirdChorus() {
+        birdChorusJob?.cancel()
+        birdChorusJob = null
+    }
+
+    // ── Combined ambient stop ──
+
+    /** Stop all ambient loops (cricket, wind, bird chorus). */
+    fun stopAllAmbient() {
+        stopCricket()
+        stopWind()
+        stopBirdChorus()
+    }
+
     /** Release SoundPool resources. Call when the manager is no longer needed. */
     fun release() {
-        stopCricket()
+        stopAllAmbient()
         soundPool.release()
     }
 
