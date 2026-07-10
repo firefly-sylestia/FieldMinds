@@ -280,7 +280,8 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
         )
     } else {
         // Play gentle chime on app open
-        val soundManager = remember { FieldMindSoundManager.getInstance(LocalContext.current) }
+        val context = LocalContext.current
+        val soundManager = remember { FieldMindSoundManager.getInstance(context) }
         LaunchedEffect(Unit) {
             soundManager.play(FieldMindSounds.CHIME)
         }

@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
+import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.shared.presentation.components.icons.Icon
-import fieldmind.research.app.shared.presentation.components.icons.FieldMindIcons
 
 /**
  * Reusable guard that intercepts back navigation when the form has unsaved changes.

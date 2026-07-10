@@ -164,8 +164,8 @@ fun ObserveScreen(
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
     val celebrationState = rememberCelebrationState()
-    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
     val context = LocalContext.current
+    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
 
     // GPS location & accuracy
     val locationProvider = remember { FieldLocationProvider(context) }
