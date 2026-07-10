@@ -3336,6 +3336,7 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             val showCloudAnimation by settings.weatherShowCloudAnimation.collectAsState()
             val weatherBackgroundAnimation by settings.weatherBackgroundAnimationEnabled.collectAsState()
+            val microDelightKey by settings.microDelightIntensity.collectAsState()
             SettingsGroupCard {
                 Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     PillRadioGroup(

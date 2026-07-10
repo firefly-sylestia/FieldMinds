@@ -129,7 +129,7 @@ FieldMindChangelogEntry(
             "✓ All 4 journal styles (Victorian / Sketchbook / BulletJournal / Ghibli) still differ in warmth, texture, ornaments, dividers — only the moving skybox layers were removed",
         ),
         "🛠️ Cleanup & migration" to listOf(
-            "✓ Removed `KEY_BACKGROUND_ANIMATION = "background_animation"` from persisted settings — Android SharedPreferences safely ignores the orphaned key on next load",
+            "✓ Removed `KEY_BACKGROUND_ANIMATION = (background_animation)` from persisted settings — Android SharedPreferences safely ignores the orphaned key on next load",
             "✓ `AnimatedBackgroundScene.kt` shrunk from ~1426 lines to ~250 (was the largest file in the app)",
             "✓ 1170 lines deleted across 5 files; 243 added (mostly comments + the smaller static overlays)",
             "✓ `JournalStyle` enum sharply trims from 4 phase-1 enums to 3; `KeyedEnum` interface doc updated",
