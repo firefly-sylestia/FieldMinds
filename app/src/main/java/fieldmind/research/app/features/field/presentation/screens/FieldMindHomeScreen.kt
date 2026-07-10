@@ -366,9 +366,12 @@ fun SharedTransitionScope.HomeScreen(
             PullToRefreshBox(
                 isRefreshing = isRefreshing,
                 onRefresh = {
-                    isRefreshing = true
-                    viewModel.refreshWeatherFromLocation(forceRefresh = true)
-                    isRefreshing = false
+                    scope.launch {
+                        isRefreshing = true
+                        viewModel.refreshWeatherFromLocation(forceRefresh = true)
+                        kotlinx.coroutines.delay(600)
+                        isRefreshing = false
+                    }
                 },
                 modifier = Modifier.fillMaxSize()
             ) {
