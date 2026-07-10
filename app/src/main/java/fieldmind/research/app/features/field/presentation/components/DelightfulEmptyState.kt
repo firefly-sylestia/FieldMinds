@@ -42,6 +42,7 @@ import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.cuteShadow
+import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 
 /**
  * A delightful empty state card with an animated nature scene, warm personality-filled
@@ -98,13 +99,18 @@ fun DelightfulEmptyState(
         label = "actionPulseGlow"
     )
 
+    val journal = LocalJournalStyle.current
+    val cardShape = journalCardShape(journal)
+    val chipShape = journalChipShape(journal)
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
-        shape = RoundedCornerShape(34.dp),
+            .then(journalTextureModifier(journal))
+            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = cardShape),
+        shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = journalBorderStroke(journal)
     ) {
         Column(
             modifier = Modifier
@@ -117,7 +123,7 @@ fun DelightfulEmptyState(
                             MaterialTheme.colorScheme.surface
                         )
                     ),
-                    shape = RoundedCornerShape(34.dp)
+                    shape = cardShape
                 )
         ) {
             // ── Animated scene ──
@@ -163,7 +169,7 @@ fun DelightfulEmptyState(
                             .fillMaxWidth()
                             .background(
                                 accentColor.copy(alpha = 0.06f),
-                                RoundedCornerShape(20.dp)
+                                chipShape
                             )
                             .padding(horizontal = 14.dp, vertical = 8.dp)
                     ) {
@@ -195,7 +201,7 @@ fun DelightfulEmptyState(
                     ) {
                         Button(
                             onClick = onAction,
-                            shape = RoundedCornerShape(24.dp),
+                            shape = chipShape,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = accentColor
                             ),
@@ -219,11 +225,10 @@ fun DelightfulEmptyState(
 
                 // ── Dismiss hint ──
                 if (onDismiss != null) {
-                    Spacer(Modifier.height(2.dp))
-                    Row(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(16.dp))
-                            .clickable(
+                    Spacer(Modifier.height(2.dp))                        Row(
+                            modifier = Modifier
+                                .clip(chipShape)
+                                .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
                                 onClick = onDismiss

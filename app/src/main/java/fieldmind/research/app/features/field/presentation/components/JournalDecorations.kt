@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -115,6 +117,40 @@ fun journalCardBrush(
         JournalStyle.BulletJournal -> SolidColor(fallbackColor)
     }
 }
+
+/**
+ * Returns the [Shape] to use for the journal's primary card surface. Single
+ * source of truth that replaces every site that previously hardcoded
+ * `RoundedCornerShape(28.dp / 32.dp / 34.dp / 38.dp)` directly inside
+ * private screen composables. Pair this with [journalTextureModifier] and
+ * [journalCardBrush] for a fully journal-correct card surface.
+ *
+ * Round 8 of the Phase 3 Whimsical Redesign. Used by the screen-local
+ * card composables in FieldMindHomeScreen.kt, InsightsScreen.kt, and
+ * FieldMindBackupExportComponents.kt — the composables that previously
+ * drifted to 28/32/34/38.dp and visually read as "rectangular" under all
+ * journals except Ghibli (which incidentally matched 24dp).
+ */
+@Composable
+fun journalCardShape(config: JournalConfig = LocalJournalStyle.current): Shape =
+    RoundedCornerShape(config.cardCornerRadius)
+
+/**
+ * Returns the [Shape] to use for small chips, badges, and pill-style
+ * controls (HeroActionChip, Export / Import / Backup tab pills, InfoChip).
+ *
+ * Slightly smaller radius than the card so the chip-to-card proportion
+ * reads correctly per style:
+ *  - Victorian:    12dp card / 8dp chip
+ *  - Sketchbook:   16dp card / 12dp chip
+ *  - BulletJournal: 8dp card / 6dp chip
+ *  - Ghibli:       24dp card / 16dp chip
+ *
+ * Round 8 of the Phase 3 Whimsical Redesign.
+ */
+@Composable
+fun journalChipShape(config: JournalConfig = LocalJournalStyle.current): Shape =
+    RoundedCornerShape(config.chipCornerRadius)
 
 // ════════════════════════════════════════════════════════════════════════
 //  Texture drawing (move from JournalCard.kt so all cards can use it)

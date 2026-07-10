@@ -56,6 +56,7 @@ import fieldmind.research.app.features.field.data.learn.LearnLibrary
 import fieldmind.research.app.features.field.data.stats.FieldMindStreaks
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
+import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenceAttachment
@@ -482,7 +483,7 @@ fun SharedTransitionScope.HomeScreen(
                         }
                         FilledTonalButton(
                             onClick = { onNavigate(FieldMindScreen.FieldLog) },
-                            shape = RoundedCornerShape(28.dp),
+                            shape = journalCardShape(LocalJournalStyle.current),
                             colors = ButtonDefaults.filledTonalButtonColors(
                                 containerColor = colors.project.copy(alpha = 0.12f)
                             )
@@ -558,7 +559,7 @@ fun SharedTransitionScope.HomeScreen(
                             }
                             FilledTonalButton(
                                 onClick = { onNavigate(FieldMindScreen.DataTools) },
-                                shape = RoundedCornerShape(28.dp),
+                                shape = journalCardShape(LocalJournalStyle.current),
                                 colors = ButtonDefaults.filledTonalButtonColors(containerColor = FieldMindTheme.colors.data.copy(alpha = 0.12f))
                             ) {
                                 Text("All tools", fontWeight = FontWeight.SemiBold)
@@ -823,7 +824,7 @@ fun SharedTransitionScope.HomeScreen(
                                             modifier = Modifier.weight(1f).clickable {
                                                 selectedCaptureCategory = name
                                             },
-                                            shape = RoundedCornerShape(28.dp),
+                                            shape = journalCardShape(LocalJournalStyle.current),
                                             colors = CardDefaults.cardColors(
                                                 containerColor = if (isSelected) accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest
                                             ),
@@ -870,7 +871,7 @@ fun SharedTransitionScope.HomeScreen(
                                     label = { Text("Specify category") },
                                     placeholder = { Text("e.g. Reptile, Amphibian, Fungus…") },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(24.dp),
+                                    shape = journalChipShape(LocalJournalStyle.current),
                                     singleLine = true,
                                     colors = OutlinedTextFieldDefaults.colors(
                                         focusedBorderColor = colors.accentFor("Other"),
@@ -912,7 +913,7 @@ fun SharedTransitionScope.HomeScreen(
                                 capturedPhotoMime = null
                             },
                             modifier = Modifier.fillMaxWidth().height(52.dp),
-                            shape = RoundedCornerShape(28.dp)
+                            shape = journalCardShape(LocalJournalStyle.current)
                         ) {
                             Icon(FieldMindIcons.Observation, null, size = 18.dp)
                             Spacer(Modifier.size(8.dp))
@@ -1012,7 +1013,7 @@ private fun CompactHomeHeader(
             ) {
                 FieldMindLogo(
                     size = 52.dp,
-                    modifier = Modifier.clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f))
+                    modifier = Modifier.clip(journalChipShape(LocalJournalStyle.current)).background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f))
                 )
                 Column(Modifier.weight(1f)) {
                     Text(
@@ -1030,7 +1031,7 @@ private fun CompactHomeHeader(
                 }
                 Surface(
                     onClick = onOpenSettings,
-                    shape = RoundedCornerShape(24.dp),
+                    shape = journalChipShape(LocalJournalStyle.current),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     tonalElevation = 0.dp,
                     modifier = Modifier.size(44.dp)
@@ -1258,7 +1259,7 @@ private fun HomeNoteCaptureDialog(
                     label = { Text("Title") },
                     placeholder = { Text("Optional — auto-generated from content") },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = journalCardShape(LocalJournalStyle.current),
                     singleLine = true
                 )
 
@@ -1269,7 +1270,7 @@ private fun HomeNoteCaptureDialog(
                     label = { Text("Note body") },
                     placeholder = { Text("What would you like to note?…") },
                     modifier = Modifier.fillMaxWidth().heightIn(min = 140.dp),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = journalCardShape(LocalJournalStyle.current),
                     minLines = 5
                 )
 
@@ -1280,7 +1281,7 @@ private fun HomeNoteCaptureDialog(
                     label = { Text("Tags") },
                     placeholder = { Text("Comma-separated, optional") },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = journalCardShape(LocalJournalStyle.current),
                     singleLine = true
                 )
 
@@ -1292,7 +1293,7 @@ private fun HomeNoteCaptureDialog(
                         label = { Text("Attachments") },
                         placeholder = { Text("One per line: type|caption|uri") },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(28.dp),
+                        shape = journalCardShape(LocalJournalStyle.current),
                         minLines = 2
                     )
                 }
@@ -1335,7 +1336,7 @@ private fun HomeNoteCaptureDialog(
                                 )
                             }
                         },
-                        shape = RoundedCornerShape(24.dp),
+                        shape = journalChipShape(LocalJournalStyle.current),
                         enabled = body.isNotBlank() || title.isNotBlank()
                     ) { Text("Save Note") }
                 }
@@ -1353,17 +1354,19 @@ private fun HeroActionChip(
     onClick: () -> Unit
 ) {
     val haptics = rememberFieldMindHaptics()
+    val chipShape = journalChipShape(LocalJournalStyle.current)
     Surface(
         modifier = modifier
             .pressScale(scaleDown = 0.95f)
             .cuteShadow(
                 elevation = CuteElevations.clickableTier,
-                shape = RoundedCornerShape(24.dp)
+                shape = chipShape
             ),
         onClick = { haptics.light(); onClick() },
-        shape = RoundedCornerShape(24.dp),
+        shape = chipShape,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        tonalElevation = 0.dp
+        tonalElevation = 0.dp,
+        border = journalBorderStroke(LocalJournalStyle.current)
     ) {
         Row(
             Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp),
@@ -2013,9 +2016,9 @@ private fun QuickActionChip(
             .clickable { haptics.light(); onNavigate(screen) }
             .cuteShadow(
                 elevation = CuteElevations.clickableTier,
-                shape = RoundedCornerShape(24.dp)
+                shape = journalChipShape(LocalJournalStyle.current)
             ),
-        shape = RoundedCornerShape(24.dp),
+        shape = journalChipShape(LocalJournalStyle.current),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {

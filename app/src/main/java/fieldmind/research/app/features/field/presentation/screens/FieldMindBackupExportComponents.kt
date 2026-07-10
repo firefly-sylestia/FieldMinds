@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
@@ -40,11 +41,18 @@ fun HeroStatusCard(
 ) {
     val colors = FieldMindTheme.colors
     val totalRecords = entityCounts.values.sum()
+    val journal = LocalJournalStyle.current
+    val cardShape = journalCardShape(journal)
+    val chipShape = journalChipShape(journal)
 
     Card(
-        shape = RoundedCornerShape(36.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(journalTextureModifier(journal)),
+        shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+        border = journalBorderStroke(journal)
     ) {
         Column(
             Modifier
@@ -60,7 +68,7 @@ fun HeroStatusCard(
                 Box(
                     Modifier
                         .size(52.dp)
-                        .clip(RoundedCornerShape(28.dp))
+                        .clip(chipShape)
                         .background(colors.positive.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -135,7 +143,7 @@ fun HeroStatusCard(
                     Column(
                         Modifier
                             .weight(1f)
-                            .clip(RoundedCornerShape(22.dp))
+                            .clip(chipShape)
                             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                             .padding(vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -173,11 +181,15 @@ fun TabPillSelector(
         Triple(BackupTab.IMPORT, FieldMindIcons.Download, "Import"),
         Triple(BackupTab.BACKUP, FieldMindIcons.Archive, "Backup")
     )
+    val journal = LocalJournalStyle.current
+    val cardShape = journalCardShape(journal)
+    val chipShape = journalChipShape(journal)
 
     Surface(
-        shape = RoundedCornerShape(30.dp),
+        shape = cardShape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 0.dp
+        tonalElevation = 0.dp,
+        border = journalBorderStroke(journal)
     ) {
         Row(
             Modifier.fillMaxWidth().padding(4.dp),
@@ -187,7 +199,7 @@ fun TabPillSelector(
                 val selected = activeTab == tab
                 Surface(
                     onClick = { onTabChange(tab) },
-                    shape = RoundedCornerShape(24.dp),
+                    shape = chipShape,
                     color = if (selected) MaterialTheme.colorScheme.primaryContainer
                     else Color.Transparent,
                     tonalElevation = 0.dp
@@ -249,11 +261,14 @@ fun ExportHistoryItemCard(
         else -> FieldMindIcons.File
     }
 
+    val journal = LocalJournalStyle.current
+    val cardShape = journalCardShape(journal)
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier.clickable { onShare() }
+        border = journalBorderStroke(journal),
+        modifier = Modifier.fillMaxWidth().then(journalTextureModifier(journal)).clickable { onShare() }
     ) {
         Row(
             Modifier.fillMaxWidth().padding(14.dp),
@@ -261,7 +276,7 @@ fun ExportHistoryItemCard(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Box(
-                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                Modifier.size(40.dp).clip(CircleShape)
                     .background(formatColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -323,7 +338,7 @@ fun BackupConfirmationDialog(
             confirmButton = {
                 Button(
                     onClick = onConfirm,
-                    shape = RoundedCornerShape(20.dp),
+                    shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     )
@@ -332,7 +347,7 @@ fun BackupConfirmationDialog(
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(36.dp)
+            shape = journalCardShape(LocalJournalStyle.current)
         )
     }
 }
@@ -360,13 +375,13 @@ fun ExportConfirmationDialog(
             confirmButton = {
                 Button(
                     onClick = onConfirm,
-                    shape = RoundedCornerShape(20.dp)
+                    shape = CircleShape
                 ) { Text("Export") }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(36.dp)
+            shape = journalCardShape(LocalJournalStyle.current)
         )
     }
 }
