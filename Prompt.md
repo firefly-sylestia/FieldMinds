@@ -61,3 +61,48 @@ Also caught + fixed: `FieldMindBugReportScreen.kt` originally rendered the back 
 1. Stage + commit + push to `origin/finetune` once CI rules on the working tree.
 2. Sign in to Cloudflare + deploy the Worker following `infrastructure/workers/bug-reporter/README.md`; run step-5 curl smoke test against the deployed URL; fill in `BUG_REPORTER_URL` per flavor in `app/build.gradle.kts` (or via `gradle.properties` if preferred).
 3. Manual e2e: open the app on a device, observe the overlay (forced by toggling `update_check_enabled` off→on), then verify the bug-report flow end-to-end against the deployed Worker.
+
+---
+
+# Round-4 CI Compile Fix — Completion Summary
+
+## Task
+
+Fix `:compileFdroidDebugKotlin` failure with ~100+ Kotlin compile errors spanning 7 files. Errors cascaded from a brace mismatch in `FieldMindHomeScreen.kt` and a `@Composable` leak in `AnimatedBackgroundScene.kt`.
+
+## Root causes
+
+1. **`LiveWeatherDashboardWidget` (HomeScreen.kt 1388-end) had 7 nested block opens but only 6 closing braces at function end.** The unclosed scope swallowed every subsequent function (`ForecastDetailItem`, `weatherConditionIcon`, `WeatherConditionImage`, `QuickActionsRow`, `QuickActionChip`, `ReadingReviewCard`, `MiniActionTile`, `ObservationTimelinePreview`, `TimelinePreviewEvent`, `CurrentProjectResearchCard`, `ProjectAssetChip`, `RecentActivityGroupCard`, `LearnRecommendation`, `recommendedResources`, `ResearchSessionCtaCard`, `SessionObservationsCard`, `DevWeatherTestPanel`, `getMoonPhase`, `formatTimeFromIso`, `computeFieldworkNudge`, `RecentCapturesCard`, `ExpandMetric`, `ExpandInfoChip`, `DataToolMiniCard`, `QuickCaptureSheet`, `QuickCaptureOption`, `VoiceNoteCaptureDialog`) as `local function` inside it, generating ~30 `Modifier 'private' is not applicable to 'local function'` errors and ~15 `Unresolved reference` errors. Forward calls at lines 391–957 in `HomeScreen()` also failed to resolve those swallowed names.
+
+2. **`buildList` in `ObservationTimelinePreview` (HomeScreen.kt 2055) lacked explicit type parameter** for the chained `.sortedWith(compareByDescending<TimelinePreviewEvent> { it.date }.thenByDescending { it.time })`, causing ~25 type-inference cascade errors (lines 2055–2097).
+
+3. **`AnimatedBackgroundScene.kt` `DrawScope` extensions (`drawParchmentTexture`, `drawPaperTexture`, `drawWatercolorTexture`) called `rememberTextureRng(...)` (a `@Composable`) from non-`@Composable` context** — flagged at lines 331, 368, 423.
+
+## What landed (commit `836baf2c`)
+
+### `app/src/main/java/fieldmind/research/app/features/field/presentation/screens/FieldMindHomeScreen.kt`
+- Added the missing closing `}` at end of `LiveWeatherDashboardWidget`, swapping the trailing `}` chain followed by `@Composable` to add the 7th close before `ForecastDetailItem`. Str_replace anchored on the unique `private fun ForecastDetailItem(...) {` line.
+- Changed `val events = buildList {` → `val events = buildList<TimelinePreviewEvent> {` at line 2055 in `ObservationTimelinePreview`.
+
+### `app/src/main/java/fieldmind/research/app/features/field/presentation/components/AnimatedBackgroundScene.kt`
+- In `JournalTextureOverlay` (a `@Composable`), allocated the rng once via `val rng = rememberTextureRng(journalConfig.textureName)` in each of the two branches that call `drawJournalTexture`. Passed `rng` into the Canvas lambda → `drawJournalTexture(...)`.
+- Added `rng: List<Float>` parameter to `drawJournalTexture`, `drawParchmentTexture`, `drawPaperTexture`, `drawDotGridTexture`, `drawWatercolorTexture`. The two non-using textures (`drawDotGridTexture`, `drawPaperTexture`) carry `@Suppress("UNUSED_PARAMETER")` for cleanliness.
+- Removed the internal `val rng = rememberTextureRng("<name>")` lines from `drawParchmentTexture`, `drawPaperTexture`, `drawWatercolorTexture`.
+
+## Verification
+
+- Brace balance (Python regex stripping strings + comments):
+  - `HomeScreen.kt`: 660 `{` vs 660 `}` → Delta 0 ✅
+  - `AnimatedBackgroundScene.kt`: 39 `{` vs 39 `}` → Delta 0 ✅
+- `code-reviewer-minimax-m3` post-implementation review flagged only `@Suppress("UNUSED_PARAMETER")` on `drawPaperTexture`/`drawDotGridTexture` as decorative (Kotlin doesn't warn on unused `fun` parameters); kept as-is for granularity (all 4 texture extension signatures uniform).
+- Cross-file errors (LearnScreen, LibraryScreen, SettingsScreen, WeatherCatalogScreen, WeatherDatabaseScreen referencing `recommendedResources`, `formatTimeFromIso`, `DevWeatherTestPanel`, `WeatherConditionImage`, `rec.resource.*`) are CASCADE — they should all resolve once `HomeScreen.kt` compiles, since they were caused by `HomeScreen.kt` failing to export its top-level symbols.
+
+## Self-corrections caught during review
+
+- First skim: read wrong line ranges in `LiveWeatherDashboardWidget` and missed the `}` shortfall. The `thinker-with-files-gemini` agent precisely counted 7 nested-opens (function + Surface + Box + Column + conditionColor/textOnScene/pulseAlpha/glassColor region blocks + else-if + Row + Column) vs 6 visible close braces and identified line 1878 as the location needing the extra close.
+- `AnimatedBackgroundScene.kt` fix: chose to allocate rng separately in each branch (Full + else-if) rather than pulling rng allocation outside the `if` chain. Cleaner because `rememberTextureRng` is only invoked when one of the branches actually runs (avoids calling it on null/empty textures).
+
+## What this unlocks
+
+- `:compileFdroidDebugKotlin` should pass; downstream `:compileGithubDebugKotlin` and `:lint` cascade should also pass since they share the same Kotlin sources.
+- CI re-runs on push to `origin/finetune` will surface any remaining non-build issues (lint, instrumentation test compile, etc.) without the build-noise from broken Kotlin compile.

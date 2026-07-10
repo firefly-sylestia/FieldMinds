@@ -960,7 +960,8 @@ fun SharedTransitionScope.HomeScreen(
             showSnackbar = { msg -> showFastSnackbar(captureSnackbarHostState, scope, msg) }
         )
     }
-}
+}                  // close wrapping Box A
+}                  // end fun SharedTransitionScope.HomeScreen
 
 // ══════════════════════════════════════════════════════════════════════
 //  Compact Header — Merged branding + daily goal progress + actions
@@ -1873,8 +1874,8 @@ private fun LiveWeatherDashboardWidget(
                 }
             }
         }
-    }    }
-}
+    }
+    }
 }
 
 @Composable
