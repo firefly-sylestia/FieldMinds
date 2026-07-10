@@ -538,7 +538,7 @@ private fun TaskCard(
     onDelete: () -> Unit = {},
     onTap: () -> Unit,
     index: Int = 0,
-    animate: Boolean = true = {}
+    animate: Boolean = true
 ) {
     val priorityColor = when (task.priority) {
         "High" -> MaterialTheme.colorScheme.error
