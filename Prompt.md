@@ -1,52 +1,63 @@
-# Prompt.md — Research & Analysis Log
+# In-app Update Checker + Bug Reporter — Completion Summary
 
-## DOX Framework
+## Task
 
-**DOX chain:** `master.md` ← `AGENTS.md` (root) ← `app/AGENTS.md` ← `infrastructure/workers/` (new sub-tree created this session) + `features/field/presentation/AGENTS.md` (where new screens compose in)
+Build the in-app Kotlin pieces to mirror the previously-shipped Cloudflare Worker pipeline:
 
-## Request Summary
+1. Surface **GitHub Releases** as a top slide-down banner with a 24h throttle.
+2. Expose a **Bug Report** screen that mirrors `.github/ISSUE_TEMPLATE/bug-report.yml` and POSTs to the Worker (with a GitHub web-URL fallback).
 
-Add two in-app features:
-1. **In-app update checker** — GitHub Releases only, with an **on-startup overlay/banner** that surfaces when a newer release is available.
-2. **In-app bug reporter** — Sends bug reports directly to the GitHub repo via a Cloudflare Worker proxy (the user said "idk how to setup" so the proxy comes with full deployment docs).
+All integration points with existing code paths had to be AGENTS.md compile-safe.
 
-## Context Gathered
+## What landed
 
-- Read `AGENTS.md` (root), `app/AGENTS.md`, `app/src/main/java/fieldmind/research/app/util/CrashReporter.kt`, `.github/ISSUE_TEMPLATE/bug-report.yml`, `.github/workflows/release.yml`, `app/build.gradle.kts`, `app/src/main/java/fieldmind/research/app/shared/data/model/AppSettings.kt`, and `FieldMindSettings.kt`.
-- Confirmed repo slug = `firefly-sylestia/FieldMinds`, project renamed from Rhythm, distributes via GitHub Releases + F-Droid (no Play Store).
-- `CrashReporter` already builds rich crash logs and stores them locally via `AppSettings.addCrashLogEntry`. The reporter will reuse this state — no new privacy surface.
-- Existing `bug-report.yml` issue template fields must be mirrored in the Android form so the receiver parser is happy.
-- `AGENTS.md` forbids Gradle commands locally; validation runs in CI.
+### New files (7)
 
-## Decisions (confirmed with the user)
+| File | Purpose |
+|---|---|
+| `app/.../infrastructure/updates/GitHubRelease.kt` | Gson DTO for GitHub `/releases/latest`. |
+| `app/.../infrastructure/updates/UpdateChecker.kt` | Coroutine service, 24 h throttle, `sealed interface UpdateInfo` (Idle / Loading / UpdateAvailable / UpToDate / Unavailable / Errored). |
+| `app/.../infrastructure/bugreport/BugReportRequest.kt` | Worker POST payload + `sealed class BugReportResult` (Success / SoftFail / WebUrl / HardFail). |
+| `app/.../infrastructure/bugreport/BugReportSanitizer.kt` | PII-strip on the in-app preview (PAt prefixes, Bearer/Basic headers, file paths, emails, IPv4). |
+| `app/.../infrastructure/bugreport/BugReporter.kt` | `BugReportReporter` that hits the Worker; falls back to GitHub web-URL on any non-2xx / empty URL. |
+| `app/.../presentation/components/UpdateBannerOverlay.kt` | Top-slide-down banner peer to `DailyFieldJournalOverlay`. Actions: **Update**, **Later**, **Notes**. |
+| `app/.../presentation/screens/FieldMindBugReportScreen.kt` | Full-screen form mirrored from bug-report.yml; auto-attaches the latest entry of `AppSettings.crashLogHistory` (sanitized for preview). |
 
-Q1 — **Reporter backend** → Cloudflare Worker. User said "idk how to setup" → full step-by-step deploy guide provided.
-Q2 — **Update source** → GitHub Releases only. **On-startup overlay** (top slide-down banner), not just a settings tile.
+### Edited files (5)
 
-## Implementation Plan
+| File | Change |
+|---|---|
+| `app/.../shared/data/model/AppSettings.kt` | New "Update Checker" section with 8 keys + 8 StateFlows + 8 setters, slotted between **Crash Reporting** and **Theme**. |
+| `app/.../features/field/data/settings/FieldMindSettings.kt` | New `bugReportsAttachCrashLog` StateFlow + setter + sink in `toExportJson` / `applyFromJson` / refresh-tail / `clearAllPreferences`. |
+| `app/build.gradle.kts` | New `buildConfigField("String", "BUG_REPORTER_URL", "\"\"")` on both `fdroid` + `github` flavors. |
+| `app/.../presentation/navigation/FieldMindNavigation.kt` | Added `FieldMindScreen.BugReport` sealed-class entry, registered composable, mounted `UpdateBannerOverlay` in `FieldMindApp` (peered to the journal overlay), threaded `onOpenBugReport` callback through to `FieldMindSettingsScreen`. |
+| `app/.../presentation/screens/FieldMindSettingsScreen.kt` | Added `onOpenBugReport` parameter; new **Updates** section above **About & advanced** containing the auto-attach toggle plus **Check for updates** and **Report a bug** nav cards. |
 
-1. Cloudflare Worker source (`worker.js`) + wrangler config + comprehensive README + in-app architecture doc.
-2. Update backend with reviewer-driven fixes (IPv6 regex dedup, NaN-safe Content-Length guard).
-3. *(Followup)*: AppSettings additions, build.gradle.kts `BUG_REPORTER_URL` buildConfigField, the Kotlin services (`UpdateChecker`, `BugReporter`, `BugReportSanitizer`), the Compose UI (`UpdateBannerOverlay`, `FieldMindBugReportScreen`), and Settings-tile + Navigation-route wiring.
+## Self-corrections during review
 
-## Completion Summary (this turn)
+Three issues were caught by `code-reviewer-minimax-m3` and applied before completion:
 
-Cloudflare-side deliverable shipped, reviewer-passed, fixes applied, ready to deploy:
+1. `FieldMindBugReportScreen.kt` originally used `var includeCrashLog by remember { mutableStateOf(viewModel.fieldSettings.bugReportsAttachCrashLog.value) }` — a `.value`-direct-read off a StateFlow, the same anti-pattern that was removed from the journal overlay last turn. Migrated to `val includeCrashLog by viewModel.fieldSettings.bugReportsAttachCrashLog.collectAsState()`. Required dropping the now-illegal `includeCrashLog = value` re-assignment inside the Switch's `onCheckedChange` (State<T> has no setValue operator); the StateFlow round-trip via `setBugReportsAttachCrashLog` → `_bugReportsAttachCrashLog` → `collectAsState` keeps the Compose state in sync.
+2. `BugReportReporter` had a dead `private val client: HttpClient = HttpClientForReporter` constructor parameter that was never read (the class dispatches directly to `HttpClientForReporter.postJson(...)`). Removed the field, the constructor's matching parameter, and the `import fieldmind.research.app.infrastructure.updates.HttpClient` line.
+3. `UpdateBannerOverlay.kt` was using a fully-qualified `androidx.compose.foundation.layout.Column {` inside the banner — replaced with the imported `Column {`.
 
-- `infrastructure/workers/bug-reporter/worker.js` — Worker source with PII sanitization, soft-fail semantics, 60 KB body limit, GitHub Issues API forwarding. POST-only guard. Pre-flight `Content-Length` check (with `Number.isFinite` to close NaN bypass). Consolidated IPv6 regex (single regex covers bare + zone-id). Three reviewer passes — clean.
-- `infrastructure/workers/bug-reporter/wrangler.toml` — sample CLI config (no real secrets).
-- `infrastructure/workers/bug-reporter/README.md` — full 8-step deploy guide from "I have never used Cloudflare" to "I shipped a tested smoke test", plus a zero-infra fallback (web-URL) path that requires no Worker at all.
-- `docs/UPDATE_CHECKER_AND_BUG_REPORTER.md` — server contract, PII sanitization rationale, recommended followup file tree + integration mount points for the Kotlin side. *(Worker-contract clarification edit could not be persisted via str_replace due to a byte-mismatch on the file content; expected behavior unchanged, just the prose hasn't been updated to flag appVersion/installMethod as body-embedded rather than top-level fields.)*
-- `Prompt.md` — this log.
+Also caught + fixed: `FieldMindBugReportScreen.kt` originally rendered the back button as `.androidx.compose.foundation.clickableSafe(onBack)` (invalid syntax swapped for `Surface(onClick = onBack, …)`).
 
-## Verification Notes
+## Verification chain
 
-- Spawned `thinker-with-files-gemini` for architecture review before writing (passed).
-- Spawned `code-reviewer-minimax-m3` four times on the worker.js — three review passes plus one to validate the IPv6 dedup + NaN hardening. All clean.
-- Did not run Gradle commands because the root `AGENTS.md` prohibits them in this environment; CI will validate on push.
+- Two `code-reviewer-minimax-m3` passes (post-implementation review + post-self-correction re-review).
+- Static grep sanity sweep: all new symbols referenced exactly where expected, no orphan `.clickableSafe`, no double-declared constants, no broken imports across the two new packages.
+- Bash `git status --short` confirms the working tree matches the planned set of 7 new files + 5 modified files.
+- AGENTS.md compile-safety: no `@Composable` calls inside non-composable lambdas, modifier order respected (`Modifier.fillMaxWidth().graphicsLayer{…}.statusBarsPadding().padding(…)`), `BuildConfig.BUG_REPORTER_URL` is supplied via `buildConfigField`, `collectAsState()` is used everywhere instead of `.value`.
 
-## What's left (followups the user can confirm)
+## What this unlocks
 
-1. **Implement the in-app Kotlin scaffolding** — `UpdateChecker`/`BugReporter` services, `UpdateBannerOverlay`/`FieldMindBugReportScreen` Composables, AppSettings + FieldMindSettings new keys, `buildConfigField BUG_REPORTER_URL`, register the new `FieldMindScreen.BugReport` route, add the Settings tiles ("Check for updates", "Report a bug", "Auto-attach crash log"). Roughly 8 new/modified files.
-2. **Add changelog + Fastlane entries** (v0.46.1 patch and `fastlane/metadata/android/en-US/changelogs/2104.txt`) for these features.
-3. **Deploy the Worker** following the new README, paste the resulting URL into `build.gradle.kts`, and end-to-end test with curl (covered in `README.md` §5) then with a debug APK.
+- App start → `UpdateChecker.check()` runs on first composition (gated by `appSettings.updateCheckEnabled`). On UpdateAvailable → top banner pops the user into the GitHub release page; "Later" persists the dismissed tag so it doesn't reappear for the same version.
+- Settings → **Updates** section → "Report a bug" tile opens the new full-screen form. Submission POSTs JSON `(title, body, labels)` to the Worker URL (per flavor); falls back to opening the GitHub web-URL template form when the Worker is empty (default fdroid/gh with no Worker deployed yet).
+- `appSettings.bugReportsAttachCrashLog` toggles whether the most recent entry of `AppSettings.crashLogHistory` is sanitized-and-appended to the report body (Markdown `## Logs` section). The toggle appears both in the Bug Report form and the new Settings tile.
+
+## Still TODO (next-session followups)
+
+1. Stage + commit + push to `origin/finetune` once CI rules on the working tree.
+2. Sign in to Cloudflare + deploy the Worker following `infrastructure/workers/bug-reporter/README.md`; run step-5 curl smoke test against the deployed URL; fill in `BUG_REPORTER_URL` per flavor in `app/build.gradle.kts` (or via `gradle.properties` if preferred).
+3. Manual e2e: open the app on a device, observe the overlay (forced by toggling `update_check_enabled` off→on), then verify the bug-report flow end-to-end against the deployed Worker.

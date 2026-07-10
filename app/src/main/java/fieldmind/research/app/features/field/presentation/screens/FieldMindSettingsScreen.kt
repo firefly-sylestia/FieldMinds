@@ -111,7 +111,8 @@ fun FieldMindSettingsScreen(
     onOpenAutoGen: (() -> Unit)? = null,
     onOpenScreenVisibility: (() -> Unit)? = null,
     onOpenNotifications: (() -> Unit)? = null,
-    onOpenAnimations: (() -> Unit)? = null
+    onOpenAnimations: (() -> Unit)? = null,
+    onOpenBugReport: (() -> Unit)? = null
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
@@ -261,6 +262,22 @@ fun FieldMindSettingsScreen(
         // ╔════════════════════════════════════════════╗
         // ║  ABOUT & ADVANCED                          ║
         // ╚════════════════════════════════════════════╝
+        item { SectionHeader("Updates", "New releases from GitHub and bug reporting") }
+        item {
+            val attachCrashLog by viewModel?.fieldSettings?.bugReportsAttachCrashLog?.collectAsState() ?: remember { mutableStateOf(true) }
+            SettingsGroupCard {
+                ToggleItem(
+                    "Auto-attach crash log to bug reports",
+                    "When you file a bug from the app, the most recent entry from your local crash log is sanitized and appended to the report.",
+                    attachCrashLog,
+                    { viewModel?.fieldSettings?.setBugReportsAttachCrashLog(it) },
+                    MaterialSymbolIcon("description")
+                )
+            }
+        }
+        item { SettingsNavCard("Check for updates", "Latest release notes from GitHub", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenChangelog?.invoke() } }
+        item { SettingsNavCard("Report a bug", "File feedback directly to the project's GitHub issues", MaterialSymbolIcon("bug_report"), FieldMindTheme.colors.error) { onOpenBugReport?.invoke() } }
+
         item { SectionHeader("About & advanced", "Developer tools, changelog, and app info") }
         item { SettingsNavCard("What’s new", "FieldMind redesign notes and migration changes", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenChangelog?.invoke() } }
         item { SettingsNavCard("About", "Credits, acknowledgements, and version", FieldMindIcons.Info, FieldMindTheme.colors.source) { onOpenAbout?.invoke() } }

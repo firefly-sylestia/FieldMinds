@@ -122,6 +122,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object Reports : FieldMindScreen("field_reports", "Reports", FieldMindIcons.Report)
     data object Search : FieldMindScreen("field_search", "Search", FieldMindIcons.Search)
     data object Changelog : FieldMindScreen("field_changelog", "What's new", FieldMindIcons.Info)
+    data object BugReport : FieldMindScreen("field_bug_report", "Report a bug", MaterialSymbolIcon("bug_report"))
     data object Progress : FieldMindScreen("field_progress", "Progress", FieldMindIcons.Check)
     data object Flashcards : FieldMindScreen("field_flashcards_session", "Review", FieldMindIcons.Flashcard)
     data object Reader : FieldMindScreen("field_reader", "Reader", FieldMindIcons.Book)
@@ -217,6 +218,8 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
 
 
 enum class FieldMindBackAction { ReturnToHomeTab, PopSubPage, NavigateHomeFallback, AllowSystemExit }
+private const val FIELDJOURNAL_DISMISS_ANIM_MS: Long = 450L
+
 
 fun fieldMindBackAction(currentRoute: String?, activeTabIndex: Int, canPopSubPage: Boolean = true): FieldMindBackAction = when {
     currentRoute == "field_tab_container" && activeTabIndex != 0 -> FieldMindBackAction.ReturnToHomeTab
@@ -278,8 +281,8 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             durationMs = 600,
             onSplashComplete = { showSplash = false }
         )
-    } else {
-        var showJournal by rememberSaveable { mutableStateOf(true) }
+    } else {            val scope = rememberCoroutineScope()
+            var showJournal by rememberSaveable { mutableStateOf(true) }
         Box(Modifier.fillMaxSize()) {
         FieldMindAppLock(
             settings = viewModel.fieldSettings,
@@ -303,17 +306,72 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             val journalStreakEnabled by viewModel.fieldSettings.streaksEnabled.collectAsState()
             val journalStreakCount = remember(observations, journalStreakEnabled) {
                 if (journalStreakEnabled) FieldMindStreaks.currentStreakDays(observations.map { it.date }) else 0
-            }
-            if (showJournal && shouldShowJournalToday(viewModel.fieldSettings)) {
-                DailyFieldJournalOverlay(
-                    settings = viewModel.fieldSettings,
-                    streakCount = journalStreakCount,
-                    onDismiss = {
-                        showJournal = false
-                        viewModel.fieldSettings.setJournalLastShownDate(getTodayDateString())
-                    }
-                )
-            }
+            }                // Compose-collected journal state (replaces the old shouldShowJournalToday()
+                // helper, which read .value directly off StateFlows — an anti-pattern).
+                val journalEnabled by viewModel.fieldSettings.journalEnabled.collectAsState()
+                val journalLastShownDate by viewModel.fieldSettings.journalLastShownDate.collectAsState()
+                val showJournalToday = remember(journalEnabled, journalLastShownDate) {
+                    val today = getTodayDateString()
+                    journalEnabled && journalLastShownDate != today
+                }
+                if (showJournal && showJournalToday) {
+                    DailyFieldJournalOverlay(
+                        settings = viewModel.fieldSettings,
+                        streakCount = journalStreakCount,
+                        onDismiss = {
+                            // Mark dismissed immediately (idempotent for the day)…
+                            viewModel.fieldSettings.setJournalLastShownDate(getTodayDateString())
+                            // …then defer the parent unmount so the composable's slide-down +
+                            // fade-out animation gets to play instead of being interrupted
+                            // by an immediate teardown. The spring spec in DailyFieldJournalOverlay
+                            // (MediumBouncy + Low stiffness) finishes well within this budget.
+                            scope.launch {
+                                delay(FIELDJOURNAL_DISMISS_ANIM_MS)
+                                showJournal = false
+                            }
+                        }
+                    )
+                }
+                // Mount UpdateBannerOverlay as a peer to the journal overlay (both live
+                // inside the privacy lock so they never float over the lock screen).
+                // It only renders when a newer release exists AND the user hasn't tapped
+                // "Later" for this tag yet. Both Update and Notes route to the GitHub release
+                // page (which itself contains release notes + download link).
+                val context = LocalContext.current
+                val updateChecker = remember { UpdateChecker(appSettings) }
+                val updateInfo by updateChecker.updateInfo.collectAsState()
+                val updateDismissedTag by appSettings.updateLastDismissedTag.collectAsState()
+                val updateEnabled by appSettings.updateCheckEnabled.collectAsState()
+                LaunchedEffect(updateEnabled) {
+                    if (updateEnabled) updateChecker.check(force = false)
+                }
+                val currentUpdate = updateInfo as? UpdateInfo.UpdateAvailable
+                if (currentUpdate != null && currentUpdate.tag != updateDismissedTag) {
+                    UpdateBannerOverlay(
+                        info = currentUpdate,
+                        onUpdate = {
+                            runCatching {
+                                context.startActivity(
+                                    android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(currentUpdate.releaseUrl))
+                                        .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                )
+                            }
+                        },
+                        onLater = {
+                            appSettings.setUpdateLastDismissedTag(currentUpdate.tag)
+                        },
+                        onOpenChangelog = {
+                            // GitHub release page contains both the changelog and the
+                            // download link — open the same URL the Update button uses.
+                            runCatching {
+                                context.startActivity(
+                                    android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(currentUpdate.releaseUrl))
+                                        .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                )
+                            }
+                        }
+                    )
+                }
         }
         }
     }
@@ -1123,6 +1181,17 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.MapScreen.route) { SwipeBackHost(onBack = { safeBack() }) { MapFieldScreen(viewModel = viewModel, onBack = { safeBack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.ExportStudio.route) { SwipeBackHost(onBack = { safeBack() }) { BackupAndRestoreScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.Changelog.route) { SwipeBackHost(onBack = { safeBack() }) { FieldMindChangelogScreen(onBack = { safeBack() }) } }
+            composable(FieldMindScreen.BugReport.route) {
+                val crashHistory by appSettings.crashLogHistory.collectAsState()
+                val latestCrashLog = remember(crashHistory) { crashHistory.lastOrNull()?.log }
+                SwipeBackHost(onBack = { safeBack() }) {
+                    FieldMindBugReportScreen(
+                        viewModel = viewModel,
+                        latestCrashLog = latestCrashLog,
+                        onBack = { safeBack() }
+                    )
+                }
+            }
             composable(FieldMindScreen.Progress.route) { SwipeBackHost(onBack = { safeBack() }) { InsightsScreen(viewModel = viewModel, onBack = { safeBack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Flashcards.route) { SwipeBackHost(onBack = { safeBack() }) { FlashcardSessionScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.WeatherDatabase.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherDatabaseScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenSettings = { navController.navigateToDestination(FieldMindScreen.SettingsWeather.route) }, onOpenDetail = openDetail, onOpenWeatherCatalog = { navController.navigateToDestination(FieldMindScreen.WeatherCatalog.route) }) } }
@@ -1144,6 +1213,7 @@ private fun FieldMindNavHost(
                         onOpenBackup = { navController.navigateToDestination(FieldMindScreen.ExportStudio.route) },
                         onOpenSecurity = { navController.navigateToDestination(FieldMindScreen.SettingsSecurity.route) },
                         onOpenChangelog = { navController.navigateToDestination(FieldMindScreen.Changelog.route) },
+                        onOpenBugReport = { navController.navigateToDestination(FieldMindScreen.BugReport.route) },
                         onOpenUnits = { navController.navigateToDestination(FieldMindScreen.SettingsUnits.route) },
                         onOpenScreenVisibility = { navController.navigateToDestination(FieldMindScreen.SettingsScreenVisibility.route) },
                         onOpenMap = { navController.navigateToDestination(FieldMindScreen.SettingsMap.route) },

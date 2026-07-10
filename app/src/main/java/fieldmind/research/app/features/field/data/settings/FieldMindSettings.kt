@@ -852,10 +852,17 @@ class FieldMindSettings private constructor(context: Context) {
     private val _journalEnabled = MutableStateFlow(prefs.getBoolean(KEY_JOURNAL_ENABLED, true))
     val journalEnabled: StateFlow<Boolean> = _journalEnabled.asStateFlow()
 
+    // ── Bug reports ──
+    /** When true, the in-app bug-report form auto-attaches the most recent crash log entry. */
+    private val _bugReportsAttachCrashLog = MutableStateFlow(prefs.getBoolean(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, true))
+    val bugReportsAttachCrashLog: StateFlow<Boolean> = _bugReportsAttachCrashLog.asStateFlow()
+
     fun setOnboardingFrequency(value: String) = edit(KEY_ONBOARDING_FREQUENCY, value) { _onboardingFrequency.value = value }
     fun setOnboardingLayoutStyle(value: String) = edit(KEY_ONBOARDING_LAYOUT, value) { _onboardingLayoutStyle.value = value }
     fun setJournalLastShownDate(value: String) = edit(KEY_JOURNAL_LAST_DATE, value) { _journalLastShownDate.value = value }
     fun setJournalEnabled(value: Boolean) = edit(KEY_JOURNAL_ENABLED, value) { _journalEnabled.value = value }
+
+    fun setBugReportsAttachCrashLog(value: Boolean) = edit(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, value) { _bugReportsAttachCrashLog.value = value }
 
     fun setOnboardingExtendedTourCompleted(value: Boolean) = edit(KEY_EXTENDED_TOUR_DONE, value) { _onboardingExtendedTourCompleted.value = value }
 
@@ -869,6 +876,7 @@ class FieldMindSettings private constructor(context: Context) {
         _onboardingLayoutStyle.value = "Full field journal"
         _journalLastShownDate.value = ""
         _journalEnabled.value = true
+        _bugReportsAttachCrashLog.value = true
         _animationsEnabled.value = true
         _animationSpeedPreset.value = "Normal"
         prefs.edit().clear().apply()
@@ -1114,6 +1122,7 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_ONBOARDING_LAYOUT, _onboardingLayoutStyle.value)
         put(KEY_JOURNAL_LAST_DATE, _journalLastShownDate.value)
         put(KEY_JOURNAL_ENABLED, _journalEnabled.value)
+        put(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, _bugReportsAttachCrashLog.value)
         put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
         put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
         put(KEY_SEASONAL_COLORS, _seasonalColorsEnabled.value)
@@ -1257,6 +1266,7 @@ class FieldMindSettings private constructor(context: Context) {
         applyString(KEY_ONBOARDING_LAYOUT)
         applyString(KEY_JOURNAL_LAST_DATE)
         applyBoolean(KEY_JOURNAL_ENABLED, true)
+        applyBoolean(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, true)
         applyInt(KEY_DAILY_GOAL)
         applyString(KEY_CARD_GRADIENT_STYLE)
         applyBoolean(KEY_SEASONAL_COLORS)
@@ -1367,6 +1377,7 @@ class FieldMindSettings private constructor(context: Context) {
         _navBarStyle.value = prefs.getString(KEY_NAV_BAR_STYLE, "modern") ?: "modern"
         _animationsEnabled.value = prefs.getBoolean(KEY_ANIMATIONS_ENABLED, true)
         _animationSpeedPreset.value = prefs.getString(KEY_ANIMATION_SPEED_PRESET, "Normal") ?: "Normal"
+        _bugReportsAttachCrashLog.value = prefs.getBoolean(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, true)
     }
 
     private inline fun edit(key: String, value: String, after: () -> Unit) { prefs.edit().putString(key, value).apply(); after() }
@@ -1457,6 +1468,8 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_ONBOARDING_LAYOUT = "onboarding_layout_style"
         private const val KEY_JOURNAL_LAST_DATE = "journal_last_shown_date"
         private const val KEY_JOURNAL_ENABLED = "journal_enabled"
+        // ── Bug reports ──
+        private const val KEY_BUG_REPORTS_ATTACH_CRASH_LOG = "bug_reports_attach_crash_log"
         // ── Species identification keys ──
         private const val KEY_SPECIES_ID_API_KEY = "species_id_api_key"
         private const val KEY_SPECIES_ID_OFFLINE_FIRST = "species_id_offline_first"

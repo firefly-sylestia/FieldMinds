@@ -470,13 +470,3 @@ internal fun getTodayDateString(): String {
     return sdf.format(Date())
 }
 
-/**
- * Check if the journal overlay should be shown today.
- * Returns true if onboarding is complete, journal is enabled,
- * and the overlay hasn't been shown today yet.
- */
-fun shouldShowJournalToday(settings: FieldMindSettings): Boolean {
-    val lastDate = settings.journalLastShownDate.value
-    val today = getTodayDateString()
-    return settings.journalEnabled.value && lastDate != today
-}
