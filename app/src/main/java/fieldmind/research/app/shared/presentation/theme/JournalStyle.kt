@@ -34,13 +34,27 @@ import androidx.compose.ui.unit.dp
  * ════════════════════════════════════════════════════════════════════════
  */
 
+// ── Common Keyed Enum Interface ──────────────────────────────────────
+
+/**
+ * Shared contract for the four phase-1 select enums (JournalStyle,
+ * MicroDelightIntensity, BackgroundAnimationLevel, NavBarStyle). Enables a
+ * single generic pill-radio picker in the Appearance settings page.
+ */
+interface KeyedEnum {
+    /** Stable lowercase-snake_case key persisted in user settings. */
+    val key: String
+    /** Human-readable display name shown in UI. */
+    val displayName: String
+}
+
 // ── Journal Style Enum ──────────────────────────────────────────────
 
 enum class JournalStyle(
-    val key: String,
-    val displayName: String,
+    override val key: String,
+    override val displayName: String,
     val description: String
-) {
+) : KeyedEnum {
     Victorian(
         key = "victorian",
         displayName = "Victorian Naturalist",
@@ -73,10 +87,10 @@ enum class JournalStyle(
 // ── Micro-Delight Intensity ─────────────────────────────────────────
 
 enum class MicroDelightIntensity(
-    val key: String,
-    val displayName: String,
+    override val key: String,
+    override val displayName: String,
     val description: String
-) {
+) : KeyedEnum {
     Minimal(
         key = "minimal",
         displayName = "Minimal",
@@ -104,10 +118,10 @@ enum class MicroDelightIntensity(
 // ── Background Animation Level ──────────────────────────────────────
 
 enum class BackgroundAnimationLevel(
-    val key: String,
-    val displayName: String,
+    override val key: String,
+    override val displayName: String,
     val description: String
-) {
+) : KeyedEnum {
     Static(
         key = "static",
         displayName = "Static",
@@ -135,10 +149,10 @@ enum class BackgroundAnimationLevel(
 // ── Nav Bar Style ───────────────────────────────────────────────────
 
 enum class NavBarStyle(
-    val key: String,
-    val displayName: String,
+    override val key: String,
+    override val displayName: String,
     val description: String
-) {
+) : KeyedEnum {
     Modern(
         key = "modern",
         displayName = "Modern",
