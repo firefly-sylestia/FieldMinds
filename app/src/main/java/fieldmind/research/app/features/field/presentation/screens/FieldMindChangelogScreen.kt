@@ -44,6 +44,43 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.48.0 — Journal Styles Full Aesthetic Transformation (Phase 3) ──
+        FieldMindChangelogEntry(
+            version = "0.48.0",
+            date = "2026-07-10",
+            title = "🎨 Journal Styles — Full Aesthetic Transformation",
+            importance = "Major",
+            tags = listOf("journal", "design", "cards", "headers", "ornament", "divider", "typography-hints"),
+            sections = listOf(
+                "🎨 Every card, header, and chip now reflects the active journal style" to listOf(
+                    "✓ Universal ClickableCard + InfoCard read LocalJournalStyle — corner radius, border, and texture overlay change automatically per style",
+                    "✓ SettingsGroupCard picks up journal gradient (Victorian/Ghibli), paper warmth (Sketchbook), or flat tint (BulletJournal)",
+                    "✓ StandardScreenHeader + FieldScreenHeader + SectionHeader use journal shape, border, and ornament (Victorian fleuron, Ghibli cloud, nothing for Sketchbook/BulletJournal)",
+                    "✓ EntityCard, MetricTile, EmptyState, NoteComposerCard, FieldMindSubNavBar — all journal-aware in one cohesive pass",
+                    "✓ Chips (InfoChip, EntityBadge, ConfidenceChip) use journal chipCornerRadius — pill on Sketchbook, rounded-square on BulletJournal, generous-radii on Ghibli"
+                ),
+                "📜 Per-style ornament + decorative dividers" to listOf(
+                    "✓ JournalOrnament: tiny copperplate fleuron for Victorian, cloud for Ghibli, nothing for Sketchbook / BulletJournal",
+                    "✓ JournalDivider: ornamental rule + center dot for Victorian, soft wavy path for Ghibli, three diagonal pencil marks for Sketchbook, evenly-spaced dots for BulletJournal",
+                    "✓ Both skip rendering silently when JournalConfig.showOrnaments / decorativeDividers is false"
+                ),
+                "🧵 Card border treatment per style" to listOf(
+                    "✓ Victorian — 12 dp radius + thin rounded outline + parchment-tone warmth gradient",
+                    "✓ Sketchbook — 16 dp radius + irregular sketch-like outline + paper-fiber texture + horizontal tint gradient",
+                    "✓ BulletJournal — 8 dp radius + no border + dot-grid texture + flat surface tint",
+                    "✓ Ghibli — 24 dp radius + rounded outline + watercolor-wash radial gradient + warm cream tint"
+                ),
+                "🧩 Architecture" to listOf(
+                    "✓ New file JournalDecorations.kt centralizes shared journal-aware primitives (journalBorderStroke, journalTextureModifier, journalCardBrush, drawJournalTexture) + the new JournalOrnament + JournalDivider composables",
+                    "✓ JournalCard.kt slimmed down — its private duplicate helpers now reuse JournalDecorations.kt",
+                    "✓ Backwards-compatible: any composable that passes an explicit shape param wins over the journal default"
+                ),
+                "📝 Tested changes" to listOf(
+                    "✓ Settings → Appearance → Journal aesthetic picker now visibly transforms every screen — cards, headers, chips, ornaments, dividers (not just background)",
+                    "✓ Re-run existing single-paper test runner would still pass — no behavioral changes, only visual container styling"
+                )
+            )
+        ),
         // ── v0.47.6 — Crash UI Redesign + Lock Recovery (journal aesthetic) ──
         FieldMindChangelogEntry(
             version = "0.47.6",
