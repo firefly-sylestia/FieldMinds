@@ -38,8 +38,12 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
-import androidx.compose.ui.graphics.Color
 import fieldmind.research.app.R
+import kotlinx.coroutines.flow.first
+
+private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7))
+private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC))
+private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4))
 
 // ── FieldMind entity accent colors ──
 private val OBSERVATION = Color(0xFF1F6B4C)
@@ -72,36 +76,12 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
 
         suspend fun updateData(context: Context) {
             val dao = fieldmind.research.app.features.field.data.database.FieldMindDatabase.getInstance(context).fieldMindDao()
-            val obsCount = dao.observeObservations().let { flow ->
-                var result = 0
-                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
-                result
-            }
-            val noteCount = dao.observeNotes().let { flow ->
-                var result = 0
-                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
-                result
-            }
-            val questionCount = dao.observeQuestions().let { flow ->
-                var result = 0
-                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
-                result
-            }
-            val projectCount = dao.observeProjects().let { flow ->
-                var result = 0
-                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
-                result
-            }
-            val sourceCount = dao.observeSources().let { flow ->
-                var result = 0
-                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
-                result
-            }
-            val reportCount = dao.observeReports().let { flow ->
-                var result = 0
-                kotlinx.coroutines.flow.first(flow) { list -> result = list.size; true }
-                result
-            }
+            val obsCount = dao.observeObservations().first().size
+            val noteCount = dao.observeNotes().first().size
+            val questionCount = dao.observeQuestions().first().size
+            val projectCount = dao.observeProjects().first().size
+            val sourceCount = dao.observeSources().first().size
+            val reportCount = dao.observeReports().first().size
 
             val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             prefs.edit()
@@ -153,8 +133,8 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
                 .clickable(actionStartActivity<MainActivity>())
         ) {
             // ── Glassmorphic layered background ──
-            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainerLow).cornerRadius(32.dp)) { }
-            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainer).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE_LOW).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE).cornerRadius(32.dp)) { }
             // ── Brand accent top bar ──
             Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(ColorProvider(BRAND_PRIMARY)).cornerRadius(1.5f.dp)) { }
 
@@ -234,7 +214,7 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
     private fun EntityStatCard(label: String, count: String, accent: ColorProvider, modifier: GlanceModifier) {
         Column(
             modifier = modifier
-                .background(GlanceTheme.colors.surfaceContainerHigh.copy(alpha = 0.6f))
+                .background(WIDGET_SURFACE_HIGH)
                 .cornerRadius(14.dp)
                 .padding(horizontal = 10.dp, vertical = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally

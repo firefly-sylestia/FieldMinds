@@ -2,38 +2,35 @@
 
 ## DOX Framework
 
-**DOX chain:** `master.md` ← `AGENTS.md` (root) ← `Prompt.md` (this file — work log)
+**DOX chain:** `master.md` ← `AGENTS.md` (root) ← `app/AGENTS.md` ← `app/src/main/java/fieldmind/research/app/infrastructure/AGENTS.md` ← `Prompt.md` (this file — work log)
 
 ## Request Summary
 
-Fix the CI Kotlin compilation failure in `FieldMindDetailScreen.kt` reported for `:app:compileFdroidDebugKotlin`, centered on `ComparisonDetailContent` unresolved `second` / row type inference / non-composable lambda errors.
+Fix the next CI Kotlin compilation failure in Glance widget surface color providers.
 
 ## Context Gathered
 
-- Re-read the applicable DOX chain before editing: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, `features/field/AGENTS.md`, and `features/field/presentation/AGENTS.md`.
-- Inspected `ComparisonDetailContent` around the reported CI lines 2858–2896.
-- Found `remember(d.value)` assigned the JSON/legacy `try` expression to an unused local `jsonResult`; because that assignment was the lambda body, `remember` returned `Unit` instead of `Pair<Int, List<ComparisonRow>>`.
-- The `Unit` return explains the cascade: `parsedData.second` unresolved, `rows` type unavailable, `row`/`items` inference failures, and misleading Compose invocation diagnostics in nested lambdas.
-- Gradle compile/build/lint/test commands remain prohibited by project instructions in this environment, so validation is limited to static checks.
+- Re-read the applicable DOX chain before editing: `master.md`, root `AGENTS.md`, `app/AGENTS.md`, and `infrastructure/AGENTS.md`.
+- CI now reports that this project's Glance version only supports `ColorProvider(color: Color)` and `ColorProvider(resId: Int)`.
+- The previous explicit day/night `ColorProvider(day, night)` declarations are invalid for the pinned Glance dependency.
+- Project instructions prohibit Gradle compile/build/lint/test commands in this environment, so validation is limited to static checks.
 
 ## Implementation Plan
 
-1. Change `ComparisonDetailContent` so the `remember` lambda directly returns the `try/catch` `Pair`.
-2. Add an explicit `Pair<Int, List<ComparisonRow>>` type to `parsedData` to keep row inference stable.
-3. Use the existing `org.json.JSONObject` import instead of a fully qualified reference.
-4. Run static whitespace and brace-balance checks only.
-5. Commit the targeted fix and create a PR record.
+1. Replace every two-argument widget surface `ColorProvider(Color(...), Color(...))` declaration with a single-color provider supported by the current Glance API.
+2. Run static checks to ensure no two-argument `ColorProvider` patterns remain in infrastructure widgets.
+3. Run `git diff --check`; do not run Gradle tasks.
+4. Commit the targeted CI fix and create a PR record.
 
 ## Completion Summary
 
-Implemented the targeted compile fix in `app/src/main/java/fieldmind/research/app/features/field/presentation/screens/FieldMindDetailScreen.kt`:
-- `parsedData` now has an explicit `Pair<Int, List<ComparisonRow>>` type.
-- The `remember(d.value)` lambda now returns the `try/catch` result directly instead of assigning it to unused `jsonResult` and returning `Unit`.
-- JSON parsing now uses the imported `JSONObject` symbol.
+Implemented a targeted Glance API compatibility fix:
+- Converted all widget surface providers from unsupported two-argument `ColorProvider(Color(...), Color(...))` calls to supported single-color `ColorProvider(Color(...))` calls.
+- Kept the previously restored widget surface constants and usages, but aligned them with the actual Glance API reported by CI.
 
 ## Verification Notes
 
+- Ran a Python static check confirming no two-argument `ColorProvider(Color(...), ...)` constructors remain in infrastructure widgets.
+- Ran a Python duplicate-import check for the affected widget files.
 - Ran `git diff --check`; no whitespace errors reported.
-- Ran a static Python brace-balance check for `FieldMindDetailScreen.kt`; final brace balance is zero.
-- Ran a static text check confirming the bad `val jsonResult = try` pattern is gone and the typed `parsedData` declaration is present.
 - Did not run Gradle compile/build/lint/test commands because repository DOX explicitly prohibits them in this environment.

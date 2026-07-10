@@ -37,7 +37,10 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
-import kotlinx.coroutines.flow.first
+
+private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7))
+private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC))
+private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4))
 
 // ── FieldMind brand palette ──
 private val BRAND_PRIMARY = Color(0xFF1F6B4C)
@@ -140,13 +143,13 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
             Box(
                 modifier = GlanceModifier
                     .fillMaxSize()
-                    .background(GlanceTheme.colors.surfaceContainerLow)
+                    .background(WIDGET_SURFACE_LOW)
                     .cornerRadius(32.dp)
             ) { }
             Box(
                 modifier = GlanceModifier
                     .fillMaxSize()
-                    .background(GlanceTheme.colors.surfaceContainer)
+                    .background(WIDGET_SURFACE)
                     .cornerRadius(32.dp)
             ) { }
             // ── Brand accent top bar (forest green) ──
@@ -281,7 +284,7 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
     private fun GlassDetailChip(emoji: String, text: String) {
         Row(
             modifier = GlanceModifier
-                .background(GlanceTheme.colors.surfaceContainerHigh.copy(alpha = 0.5f))
+                .background(WIDGET_SURFACE_HIGH)
                 .cornerRadius(12.dp)
                 .padding(horizontal = 10.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically

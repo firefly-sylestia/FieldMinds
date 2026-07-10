@@ -17,6 +17,7 @@ import androidx.work.WorkerParameters
 import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
 import fieldmind.research.app.features.field.data.database.FieldMindDatabase
+import kotlinx.coroutines.flow.first
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -45,11 +46,7 @@ class FieldMindTaskReminderWorker(
         ensureChannel()
 
         val dao = FieldMindDatabase.getInstance(applicationContext).fieldMindDao()
-        val tasks = dao.observeTasks().let { flow ->
-            var result = emptyList<fieldmind.research.app.features.field.data.database.entity.TaskEntity>()
-            kotlinx.coroutines.flow.first(flow) { list -> result = list; true }
-            result
-        }
+        val tasks = dao.observeTasks().first()
 
         val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val overdueTasks = tasks.filter { it.dueDate != null && it.dueDate < today && it.status != "complete" }

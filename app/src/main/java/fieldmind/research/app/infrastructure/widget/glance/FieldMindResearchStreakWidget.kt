@@ -36,6 +36,10 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 
+private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7))
+private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC))
+private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4))
+
 private val BRAND_POSITIVE = Color(0xFF1F6B4C)
 private val BRAND_WARNING = Color(0xFFE67E22)
 private val BRAND_INFO = Color(0xFF546E7A)
@@ -93,8 +97,8 @@ class FieldMindResearchStreakWidget : GlanceAppWidget() {
             modifier = GlanceModifier.fillMaxSize().cornerRadius(32.dp)
                 .clickable(actionStartActivity<MainActivity>())
         ) {
-            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceContainerLow).cornerRadius(32.dp)) { }
-            Box(modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.surfaceVariant.copy(alpha = 0.5f)).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE_LOW).cornerRadius(32.dp)) { }
+            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE).cornerRadius(32.dp)) { }
             Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(accentColor).cornerRadius(1.5f.dp)) { }
 
             Box(modifier = GlanceModifier.fillMaxSize().padding(14.dp)) {
