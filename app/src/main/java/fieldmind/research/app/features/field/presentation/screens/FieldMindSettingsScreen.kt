@@ -3470,6 +3470,15 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
 
+        // ── Interactive Animation Preview ──
+        item { SectionHeader("Live preview", "See how each speed preset affects animation feel") }
+        item {
+            SpeedPresetAnimationPreview(
+                speedPreset = speedPreset,
+                animationsEnabled = animationsEnabled
+            )
+        }
+
         item {
             Card(
                 shape = RoundedCornerShape(32.dp),
@@ -3489,6 +3498,192 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+            }
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Interactive Animation Preview — Demonstrates speed preset effect live
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun SpeedPresetAnimationPreview(
+    speedPreset: String,
+    animationsEnabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val animConfig = LocalAnimationConfig.current
+    val scope = rememberCoroutineScope()
+    val colors = FieldMindTheme.colors
+
+    val scaleAnim = remember { Animatable(0f) }
+    val offsetXAnim = remember { Animatable(0f) }
+    val offsetYAnim = remember { Animatable(0f) }
+    val rotationAnim = remember { Animatable(0f) }
+
+    var lastAction by remember { mutableStateOf("Tap to preview") }
+
+    // Auto-play entrance when speed preset changes
+    LaunchedEffect(speedPreset, animationsEnabled) {
+        if (!animationsEnabled) return@LaunchedEffect
+        lastAction = "Speed: " + speedPreset
+        scaleAnim.snapTo(0f)
+        offsetXAnim.snapTo(0f)
+        offsetYAnim.snapTo(0f)
+        rotationAnim.snapTo(0f)
+        delay(150)
+        scaleAnim.animateTo(1f, animConfig.entranceSpring())
+        delay(400)
+        scaleAnim.animateTo(0.95f, animConfig.entranceSpring())
+        scaleAnim.animateTo(1f, animConfig.entranceSpring())
+        delay(200)
+        scaleAnim.animateTo(0f, animConfig.swipeBackSpring())
+        lastAction = "Ready"
+    }
+
+    val speedLabel = when (speedPreset) {
+        "Reduced" -> "40% speed — gentle, minimal motion"
+        "Enhanced" -> "2× speed — fast, lively animations"
+        else -> "Default speed — balanced spring physics"
+    }
+    val speedIcon = when (speedPreset) {
+        "Reduced" -> MaterialSymbolIcon("slow_motion_video")
+        "Normal" -> MaterialSymbolIcon("speed")
+        else -> MaterialSymbolIcon("fast_forward")
+    }
+
+    Card(
+        modifier = modifier.fillMaxWidth()
+            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(32.dp)),
+        shape = RoundedCornerShape(32.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                            .background(colors.flashcard.copy(alpha = 0.14f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(speedIcon, null, tint = colors.flashcard, size = 20.dp)
+                    }
+                    Column {
+                        Text(speedPreset, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                        Text(speedLabel, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+
+            Box(
+                modifier = Modifier.fillMaxWidth().height(140.dp).clip(RoundedCornerShape(24.dp))
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.surfaceContainerHigh,
+                                MaterialTheme.colorScheme.surfaceContainerLow
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier.size(72.dp).graphicsLayer {
+                        scaleX = if (animationsEnabled) scaleAnim.value else 1f
+                        scaleY = if (animationsEnabled) scaleAnim.value else 1f
+                        translationX = if (animationsEnabled) offsetXAnim.value else 0f
+                        translationY = if (animationsEnabled) offsetYAnim.value else 0f
+                        rotationZ = if (animationsEnabled) rotationAnim.value else 0f
+                    }.clip(RoundedCornerShape(32.dp))
+                        .background(
+                            Brush.sweepGradient(
+                                colors = listOf(colors.positive, colors.observation, colors.data, colors.positive)
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(speedIcon, null, tint = Color.White, size = 34.dp)
+                }
+
+                if (!animationsEnabled) {
+                    Box(
+                        modifier = Modifier.matchParentSize()
+                            .background(Color.Black.copy(alpha = 0.4f), RoundedCornerShape(24.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Icon(MaterialSymbolIcon("motion_photos_paused"), null, tint = Color.White, size = 24.dp)
+                            Text("Animations disabled", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                        }
+                    }
+                }
+            }
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(lastAction, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    val dartCount = when (speedPreset) { "Reduced" -> 1; "Normal" -> 2; else -> 3 }
+                    repeat(dartCount) {
+                        Icon(MaterialSymbolIcon("chevron_right"), null, tint = colors.flashcard, size = 16.dp)
+                    }
+                }
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(
+                    onClick = {
+                        lastAction = "Entrance — scale spring"
+                        scope.launch {
+                            scaleAnim.snapTo(0f); offsetXAnim.snapTo(0f); offsetYAnim.snapTo(0f); rotationAnim.snapTo(0f)
+                            scaleAnim.animateTo(1f, animConfig.entranceSpring())
+                        }
+                    },
+                    enabled = animationsEnabled,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(20.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
+                ) { Text("Entrance", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold) }
+
+                OutlinedButton(
+                    onClick = {
+                        lastAction = "Swipe-back — snap spring"
+                        scope.launch {
+                            offsetXAnim.snapTo(0f); scaleAnim.snapTo(1f)
+                            offsetXAnim.animateTo(160f, animConfig.swipeBackSpring())
+                            offsetXAnim.animateTo(0f, animConfig.swipeBackSpring())
+                        }
+                    },
+                    enabled = animationsEnabled,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(20.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
+                ) { Text("Swipe-back", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold) }
+
+                OutlinedButton(
+                    onClick = {
+                        lastAction = "Rotation — spinner"
+                        scope.launch {
+                            rotationAnim.snapTo(0f); scaleAnim.snapTo(1f); offsetXAnim.snapTo(0f); offsetYAnim.snapTo(0f)
+                            rotationAnim.animateTo(360f, animConfig.entranceSpring())
+                            rotationAnim.snapTo(0f)
+                        }
+                    },
+                    enabled = animationsEnabled,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(20.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
+                ) { Text("Spin", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold) }
             }
         }
     }
