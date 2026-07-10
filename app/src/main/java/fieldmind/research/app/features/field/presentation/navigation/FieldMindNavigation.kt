@@ -319,6 +319,7 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
                     journalEnabled && journalLastShownDate != today
                 }
                 if (showJournal && showJournalToday) {
+                    val journalDefaultConfidence by viewModel.fieldSettings.defaultConfidence.collectAsState()
                     DailyFieldJournalOverlay(
                         settings = viewModel.fieldSettings,
                         streakCount = journalStreakCount,
@@ -333,6 +334,21 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
                                 delay(FIELDJOURNAL_DISMISS_ANIM_MS)
                                 showJournal = false
                             }
+                        },
+                        onSave = { subject, category ->
+                            // Persist the quick-capture text from the journal overlay as a real
+                            // Observation. Tags it with "daily-journal" so the user can spot /
+                            // filter these quick entries elsewhere in the app.
+                            viewModel.addObservation(
+                                subject = subject,
+                                category = category,
+                                facts = "",
+                                confidence = journalDefaultConfidence,
+                                manualLocation = "",
+                                tags = "daily-journal",
+                                evidence = "",
+                                context = "Saved from daily journal overlay"
+                            )
                         }
                     )
                 }

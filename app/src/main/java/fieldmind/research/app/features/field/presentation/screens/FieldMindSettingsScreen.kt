@@ -572,6 +572,8 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         }
         item { SectionHeader("Daily Journal", "Greeting and quick-capture overlay on open") }
         item {
+            val showJournalChips by settings.journalShowCategoryChips.collectAsState()
+            val journalQuickCategory by settings.journalQuickCategory.collectAsState()
             SettingsGroupCard {
                 ToggleItem(
                     "Show daily journal",
@@ -580,6 +582,30 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     settings::setJournalEnabled,
                     FieldMindIcons.Article
                 )
+                HorizontalDivider(
+                    Modifier.padding(start = 16.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                )
+                ToggleItem(
+                    "Show category chips in overlay",
+                    "Tap a chip (Bird, Plant, etc.) to pre-tag your observation before saving. The chosen chip is remembered for the next day's overlay.",
+                    showJournalChips,
+                    settings::setJournalShowCategoryChips,
+                    FieldMindIcons.Category
+                )
+                if (showJournalChips) {
+                    HorizontalDivider(
+                        Modifier.padding(start = 16.dp),
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                    )
+                    ChoiceItemForm(
+                        "Quick-capture category",
+                        observationCategories,
+                        journalQuickCategory,
+                        FieldMindIcons.Observation,
+                        settings::setJournalQuickCategory
+                    )
+                }
             }
         }
     }
@@ -3896,7 +3922,7 @@ fun CheckForUpdatesScreen(
     // Helper to run a check
     fun refreshNow(force: Boolean = true) {
         if (!updateEnabled) {
-            context.startActivity(android.content.Intent(android.content.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(android.net.Uri.parse("package:${context.packageName}")))
+            context.startActivity(android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(android.net.Uri.parse("package:${context.packageName}")))
             return
         }
         scope.launch {

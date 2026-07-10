@@ -44,6 +44,26 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.47.0 — Daily Journal Quick-Capture ──
+        FieldMindChangelogEntry(
+            version = "0.47.0",
+            date = "2026-07-10",
+            title = "📓 Daily Journal Quick-Capture",
+            importance = "Patch",
+            tags = listOf("daily-journal", "quick-capture", "settings"),
+            sections = listOf(
+                "📓 Working journal overlay" to listOf(
+                    "✓ Tap a category chip (Bird, Plant, Insect, Weather, Animal) to pre-tag your observation",
+                    "✓ The bottom button and the keyboard Done key now persist the typed text as a real Observation",
+                    "✓ Chosen chip state is remembered and pre-selected on tomorrow's overlay",
+                    "✓ Toast confirms save and the overlay slides down cleanly"
+                ),
+                "⚙️ New Settings → Profile → Daily Journal controls" to listOf(
+                    "✓ Show category chips in overlay (default on)",
+                    "✓ Quick-capture category picker (defaults to your global default category)"
+                )
+            )
+        ),
         // ── v0.46.0 — Sound Design System & Seasonal Color Shift ──
         FieldMindChangelogEntry(
             version = "0.46.0",
