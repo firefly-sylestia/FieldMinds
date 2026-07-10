@@ -89,8 +89,6 @@ import fieldmind.research.app.features.field.presentation.components.GlassCard
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.cuteShadow
-import fieldmind.research.app.infrastructure.FieldMindSoundManager
-import fieldmind.research.app.infrastructure.FieldMindSounds
 import kotlinx.coroutines.isActive
 
 /**
@@ -299,65 +297,6 @@ fun SharedTransitionScope.HomeScreen(
             celebrationState.trigger(variant)
         }
         previousStreak = currentStreak
-    }
-
-    // ── Ambient sound system (time & weather-aware) ──
-    val currentHour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-    val isNight = currentHour in 22..23 || currentHour in 0..4
-    val isDawn = currentHour in 5..6
-    val isDaytime = currentHour in 7..21
-    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
-    val ambientWeatherCode = homeCurrentWeather?.weatherCode ?: 0
-    val isStormy = ambientWeatherCode >= 95
-    // WMO rain codes: 51-67 (drizzle & rain), 80-82 (rain showers)
-    val isRainy = ambientWeatherCode in 51..67 || ambientWeatherCode in 80..82
-
-    // ── Night: Cricket ambience ──
-    LaunchedEffect(isNight) {
-        if (isNight) {
-            soundManager.startCricket(this, durationMs = 60_000L)
-        } else {
-            soundManager.stopCricket()
-        }
-    }
-
-    // ── Dawn (5-7 AM): Bird chorus ──
-    LaunchedEffect(isDawn) {
-        if (isDawn) {
-            soundManager.startBirdChorus(this, durationMs = 60_000L)
-        } else {
-            soundManager.stopBirdChorus()
-        }
-    }
-
-    // ── Daytime: Wind or Rain (mutually exclusive) ──
-    val shouldPlayWind = isDaytime && !isRainy && !isStormy
-    LaunchedEffect(shouldPlayWind) {
-        if (shouldPlayWind) {
-            soundManager.startWind(this)
-        } else {
-            soundManager.stopWind()
-        }
-    }
-
-    // ── Rain: Replaces wind during rainy weather, can overlap with thunder ──
-    val shouldPlayRain = isDaytime && isRainy
-    LaunchedEffect(shouldPlayRain) {
-        if (shouldPlayRain) {
-            soundManager.startRain(this)
-        } else {
-            soundManager.stopRain()
-        }
-    }
-
-    // ── Stormy weather: Periodic distant thunder (any time of day, overlays rain) ──
-    LaunchedEffect(ambientWeatherCode) {
-        if (isStormy) {
-            while (isActive) {
-                soundManager.playThunder()
-                delay(12_000L + (2_000L..8_000L).random())
-            }
-        }
     }
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()

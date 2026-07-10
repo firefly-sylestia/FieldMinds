@@ -301,7 +301,6 @@ FieldMindChangelogEntry(
                     "✓ Toggle in Settings → Appearance to enable/disable seasonal shifts"
                 ),
                 "🔄 Code quality & architecture" to listOf(
-                    "✓ SoundManager singleton with proper synchronized lazy initialization",
                     "✓ SeasonalColor.kt — clean month-to-season mapping with smooth blend function",
                     "✓ Both systems respect the Compose-reactive settings architecture",
                     "✓ Settings export/import and clear-all-reset fully support both new features"

@@ -56,8 +56,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import coil.compose.AsyncImage
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
-import fieldmind.research.app.infrastructure.FieldMindSoundManager
-import fieldmind.research.app.infrastructure.FieldMindSounds
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.delay
@@ -251,7 +249,6 @@ fun FieldMindCameraV2(
     LaunchedEffect(flashMode) { imageCapture?.flashMode = flashMode }
 
     // ── Capture function ──
-    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
     val doCapture = remember(imageCapture, onPhotoCaptured) {
         {
             val capture = imageCapture ?: return@remember
@@ -261,8 +258,6 @@ fun FieldMindCameraV2(
                 "FieldMind_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}.jpg"
             )
             val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-            // Play shutter sound
-            soundManager.play(FieldMindSounds.SHUTTER)
             capture.takePicture(outputOptions, cameraExecutor, object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     runCatching {
