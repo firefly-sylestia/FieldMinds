@@ -44,6 +44,29 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.47.4 — CI Bug Fixes (companion to v0.47.3) ──
+        FieldMindChangelogEntry(
+            version = "0.47.4",
+            date = "2026-07-10",
+            title = "\u{1F41B} CI Bug Fixes — roundness pass companion build fix",
+            importance = "Patch",
+            tags = listOf("ci", "bugfix", "build", "type-safety", "runtime"),
+            sections = listOf(
+                "\u{1F527} Developer weather test panel compiles again" to listOf(
+                    "\u2713 fix: var testTemperature / testHumidity in DeveloperSettingsPage: bare \u201CmutableStateOf(null)\u201D was inferred as MutableState<Nothing?> because Kotlin types null as Nothing?",
+                    "\u2713 fix: typed them as mutableStateOf<Int?>(null) — matches testWeatherCode above and the Int?-returning slider onValueChange lambdas that were previously failing \u201CAssignment type mismatch: Int? vs Nothing?\u201D",
+                    "\u2713 Root cause: pre-existing latent bug (not from v0.47.3 semantics) but the rebuild flagged both sites at once"
+                ),
+                "\u{1F3A8} Watercolor journal texture no longer crashes" to listOf(
+                    "\u2713 fix: AnimatedBackgroundScene.kt drawWatercolorTexture\u2019s \u201Cfor (i in 0..12) rng[i * 13 + 5..8]\u201D reads up to rng[164]; i=8 was hitting rng[109] on the live crash report",
+                    "\u2713 fix: bumped rememberTextureRng pool from List(100) to List(200); deterministic Random(name.hashCode()) seed keeps the first 100 floats bit-identical, so parchment/paper/dotgrid visuals stay unchanged on first paint"
+                ),
+                "\u{1F4E6} Build environment" to listOf(
+                    "\u2713 F-Droid debug build once again green on CI",
+                    "\u2713 No behavioral changes — only type-annotations and a list-size constant"
+                )
+            )
+        ),
         // ── v0.47.3 — Card Roundness + Settings Polish Pass ──
         FieldMindChangelogEntry(
             version = "0.47.3",

@@ -2583,8 +2583,8 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
     val showWeatherTest by settings.showWeatherTestPanel.collectAsState()
     var testWeatherCode by remember { mutableStateOf<Int?>(null) }
     var testIsNight by remember { mutableStateOf(false) }
-    var testTemperature by remember { mutableStateOf(null) }
-    var testHumidity by remember { mutableStateOf(null) }
+    var testTemperature by remember { mutableStateOf<Int?>(null) }
+    var testHumidity by remember { mutableStateOf<Int?>(null) }
     var testWeatherPanelExpanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()

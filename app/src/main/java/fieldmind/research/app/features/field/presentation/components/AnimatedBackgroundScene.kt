@@ -517,7 +517,12 @@ private fun rememberTextureRng(name: String): List<Float> {
     return remember(name) {
         textureRngCache.getOrPut(name) {
             val rng = Random(name.hashCode())
-            List(100) { rng.nextFloat() }
+            // 100-floor safe for all current textures; bumped to 200 because
+            // drawWatercolorTexture's `for (i in 0..12) rng[i * 13 + 5..8]`
+            // accesses up to index 161, and `for (i in 0..8) rng[i * 5]` accesses 45.
+            // First 100 floats are bit-identical to before (deterministic seed),
+            // so existing parchment/paper/dotgrid visuals are unchanged.
+            List(200) { rng.nextFloat() }
         }
     }
 }
