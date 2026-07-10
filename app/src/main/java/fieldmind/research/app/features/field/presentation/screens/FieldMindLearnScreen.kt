@@ -392,7 +392,6 @@ private fun ActivityRecommendationCard(
 
     Card(
         modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
-        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
