@@ -52,7 +52,7 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.features.field.presentation.components.ColorSchemeSwatchPicker
 import fieldmind.research.app.features.field.presentation.components.pressScale
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
-import fieldmind.research.app.shared.presentation.theme.BackgroundAnimationLevel
+
 import fieldmind.research.app.shared.presentation.theme.JournalStyle
 import fieldmind.research.app.shared.presentation.theme.KeyedEnum
 import fieldmind.research.app.shared.presentation.theme.MicroDelightIntensity
@@ -3578,21 +3578,10 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         // ── Visual Motion ─ Atmospheric scene liveness + whimsical touches ──
         item { SectionHeader("Visual motion", "Atmospheric scene liveness and whimsical touches") }
         item {
-            val backgroundAnimKey by settings.backgroundAnimation.collectAsState()
-            val microDelightKey by settings.microDelightIntensity.collectAsState()
             val showCloudAnimation by settings.weatherShowCloudAnimation.collectAsState()
             val weatherBackgroundAnimation by settings.weatherBackgroundAnimationEnabled.collectAsState()
             SettingsGroupCard {
                 Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    PillRadioGroup(
-                        title = "Background motion",
-                        description = "How lively the background scene animates. 'Static' saves battery.",
-                        icon = MaterialSymbolIcon("animation"),
-                        options = BackgroundAnimationLevel.entries.toList(),
-                        selectedKey = backgroundAnimKey,
-                        onSelect = { settings.setBackgroundAnimation(it.key) }
-                    )
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
                     PillRadioGroup(
                         title = "Micro-delights",
                         description = "Whimsical touches on captures, streaks, button presses, and celebrations.",

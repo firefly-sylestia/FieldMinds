@@ -37,9 +37,10 @@ import androidx.compose.ui.unit.dp
 // ── Common Keyed Enum Interface ──────────────────────────────────────
 
 /**
- * Shared contract for the four phase-1 select enums (JournalStyle,
- * MicroDelightIntensity, BackgroundAnimationLevel, NavBarStyle). Enables a
- * single generic pill-radio picker in the Appearance settings page.
+ * Shared contract for the three phase-1 select enums (JournalStyle,
+ * MicroDelightIntensity, NavBarStyle). Enables a single generic pill-radio
+ * picker in the Appearance settings page.
+ *   - BackgroundAnimationLevel was removed in v0.49.0 (skybox lag/heat).
  */
 interface KeyedEnum {
     /** Stable lowercase-snake_case key persisted in user settings. */
@@ -112,37 +113,6 @@ enum class MicroDelightIntensity(
             entries.find { it.key == key } ?: Normal
 
         val default: MicroDelightIntensity = Normal
-    }
-}
-
-// ── Background Animation Level ──────────────────────────────────────
-
-enum class BackgroundAnimationLevel(
-    override val key: String,
-    override val displayName: String,
-    val description: String
-) : KeyedEnum {
-    Static(
-        key = "static",
-        displayName = "Static",
-        description = "Flat color or gradient background"
-    ),
-    Gentle(
-        key = "gentle",
-        displayName = "Gentle",
-        description = "Subtle parallax, slow cloud drift"
-    ),
-    Full(
-        key = "full",
-        displayName = "Full",
-        description = "Time-of-day scenes, animated weather, fireflies"
-    );
-
-    companion object {
-        fun fromKey(key: String): BackgroundAnimationLevel =
-            entries.find { it.key == key } ?: Gentle
-
-        val default: BackgroundAnimationLevel = Gentle
     }
 }
 
@@ -382,11 +352,6 @@ val LocalJournalStyle = staticCompositionLocalOf { JournalPresets.Sketchbook }
  * CompositionLocal providing the active [MicroDelightIntensity].
  */
 val LocalMicroDelightIntensity = staticCompositionLocalOf { MicroDelightIntensity.Normal }
-
-/**
- * CompositionLocal providing the active [BackgroundAnimationLevel].
- */
-val LocalBackgroundAnimation = staticCompositionLocalOf { BackgroundAnimationLevel.Gentle }
 
 /**
  * CompositionLocal providing the active [NavBarStyle].
