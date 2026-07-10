@@ -1,0 +1,8 @@
+Stripped ~350 lines of dormant per-style drawing code from JournalDecorations.kt.
+
+• File shrunk from 432 to 143 lines (-67%) — drawJournalTexture + 4 texture routines + ornament branches + 4 decorative-divider Canvas blocks + per-style gradient brushes all removed
+• Dormant because showTexture / showOrnaments / decorativeDividers / useGradientCards are false for all 4 journal presets (v0.50.2)
+• All 7 public API functions preserved with original signatures — no call site changes needed
+• journalTextureModifier / journalCardBrush / JournalOrnament / JournalDivider simplify to clean fallbacks (Modifier no-op, SolidColor, empty composable, HorizontalDivider wrapper)
+• journalBorderStroke / journalCardShape / journalChipShape unchanged — Rounded border + 24dp card + 16dp chip still active
+• 15 dead imports removed cleanly

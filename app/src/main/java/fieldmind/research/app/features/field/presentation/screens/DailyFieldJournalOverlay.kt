@@ -14,17 +14,20 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.widget.Toast
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
@@ -39,29 +42,48 @@ import java.util.Locale
  * A beautiful half-sheet journal overlay that greets the user with
  * a time-adaptive message, quick capture input, category chips,
  * and a streak display. Shows once per day after onboarding.
+ *
+ * The category chip row is fully interactive: each tap updates the
+ * selected category, the selected chip animates its background + tint,
+ * and pressing the bottom button or the keyboard "Done" key persists
+ * the typed text as a real Observation via [onSave].
  */
 @Composable
 fun DailyFieldJournalOverlay(
     settings: FieldMindSettings,
     streakCount: Int = 0,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onSave: (subject: String, category: String) -> Unit = { _, _ -> }
 ) {
     var visible by remember { mutableStateOf(false) }
     var quickText by remember { mutableStateOf("") }
+    var isSaving by remember { mutableStateOf(false) }
     val profileName by settings.profileName.collectAsState()
+    val defaultCategorySetting by settings.defaultCategory.collectAsState()
+    val journalQuickCategory by settings.journalQuickCategory.collectAsState()
+    val showChips by settings.journalShowCategoryChips.collectAsState()
+    val context = LocalContext.current
     val celebrationState = rememberCelebrationState()
+
+    // Initial chip pre-selection follows the persisted preference;
+    // falls back to the global default category when no preference is stored.
+    val initialCategory = journalQuickCategory.takeIf { it.isNotBlank() } ?: defaultCategorySetting
+    var selectedCategory by rememberSaveable(initialCategory) { mutableStateOf(initialCategory) }
 
     LaunchedEffect(Unit) {
         visible = true
     }
 
     // Spring animation for the overlay
+    // Semantics: 1f = fully visible at correct bottom position (alpha 1, no translationY offset),
+    //            0f = hidden (alpha 0, slightly translated down). visible/true → 1f, visible/false → 0f.
     val offsetAnim by animateFloatAsState(
-        targetValue = if (visible) 0f else 1f,
+        targetValue = if (visible) 1f else 0f,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
-        ), label = "journalOffset"
+        ),
+        label = "journalOffset"
     )
 
     // ── Streak milestone celebration ──
@@ -76,6 +98,22 @@ fun DailyFieldJournalOverlay(
 
     val greeting = getTimeBasedGreeting()
     val icon = getTimeBasedIcon()
+
+    fun performSave() {
+        val text = quickText.trim()
+        if (text.isBlank() || isSaving) return
+        isSaving = true
+        onSave(text, selectedCategory)
+        // Remember the chip choice so the same chip pre-selects on the next day's overlay
+        settings.setJournalQuickCategory(selectedCategory)
+        quickText = ""
+        Toast.makeText(context, "Saved observation", Toast.LENGTH_SHORT).show()
+        visible = false
+        onDismiss()
+        // Re-enable last so a double-tap during the dismiss slide-down can't enqueue
+        // a second insertion. Compose batches these synchronous writes in a single frame.
+        isSaving = false
+    }
 
     Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.3f * offsetAnim))) {
         // Tap background to dismiss
@@ -209,87 +247,100 @@ fun DailyFieldJournalOverlay(
                                     unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                                 ),
                                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                keyboardActions = KeyboardActions(onDone = {
-                                    if (quickText.isNotBlank()) {
-                                        // TODO: Save quick observation
-                                        quickText = ""
-                                    }
-                                })
+                                keyboardActions = KeyboardActions(onDone = { performSave() })
                             )
 
-                            // Category chips
-                            Text(
-                                "Category",
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            // Category chips — hidden when user has disabled them in settings
+                            if (showChips) {
+                                Text(
+                                    "Category",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
 
-                            val categories = listOf(
-                                Triple("Bird", FieldMindIcons.Bird, FieldMindTheme.colors.observation),
-                                Triple("Plant", FieldMindIcons.Plant, FieldMindTheme.colors.data),
-                                Triple("Insect", FieldMindIcons.Insect, FieldMindTheme.colors.categorical[2]),
-                                Triple("Weather", FieldMindIcons.Weather, FieldMindTheme.colors.categorical[3]),
-                                Triple("Animal", FieldMindIcons.Animal, FieldMindTheme.colors.categorical[1])
-                            )
+                                val categories = listOf(
+                                    Triple("Bird", FieldMindIcons.Bird, FieldMindTheme.colors.observation),
+                                    Triple("Plant", FieldMindIcons.Plant, FieldMindTheme.colors.data),
+                                    Triple("Insect", FieldMindIcons.Insect, FieldMindTheme.colors.categorical[2]),
+                                    Triple("Weather", FieldMindIcons.Weather, FieldMindTheme.colors.categorical[3]),
+                                    Triple("Animal", FieldMindIcons.Animal, FieldMindTheme.colors.categorical[1])
+                                )
 
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                categories.take(3).forEach { (label, catIcon, accent) ->
-                                    Surface(
-                                        onClick = { /* TODO: quick-capture category */ },
-                                        shape = RoundedCornerShape(22.dp),
-                                        color = accent.copy(alpha = 0.12f),
-                                        border = BorderStroke(1.dp, accent.copy(alpha = 0.3f)),
-                                        modifier = Modifier.weight(1f)
-                                    ) {
-                                        Row(
-                                            Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    categories.take(3).forEach { (label, catIcon, accent) ->
+                                        val isSelected = selectedCategory == label
+                                        Surface(
+                                            onClick = { selectedCategory = label },
+                                            shape = RoundedCornerShape(22.dp),
+                                            color = if (isSelected) accent.copy(alpha = 0.28f) else accent.copy(alpha = 0.12f),
+                                            border = BorderStroke(
+                                                width = if (isSelected) 1.5.dp else 1.dp,
+                                                color = if (isSelected) accent else accent.copy(alpha = 0.3f)
+                                            ),
+                                            modifier = Modifier.weight(1f)
                                         ) {
-                                            Icon(catIcon, null, tint = accent, size = 16.dp)
-                                            Text(
-                                                label,
-                                                style = MaterialTheme.typography.labelSmall,
-                                                fontWeight = FontWeight.SemiBold,
-                                                color = accent
-                                            )
+                                            Row(
+                                                Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                            ) {
+                                                Icon(
+                                                    catIcon, null,
+                                                    tint = if (isSelected) accent else accent.copy(alpha = 0.7f),
+                                                    size = 16.dp
+                                                )
+                                                Text(
+                                                    label,
+                                                    style = MaterialTheme.typography.labelSmall,
+                                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold,
+                                                    color = accent
+                                                )
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                categories.drop(3).forEach { (label, catIcon, accent) ->
-                                    Surface(
-                                        onClick = { /* TODO: quick-capture category */ },
-                                        shape = RoundedCornerShape(22.dp),
-                                        color = accent.copy(alpha = 0.12f),
-                                        border = BorderStroke(1.dp, accent.copy(alpha = 0.3f)),
-                                        modifier = Modifier.weight(1f)
-                                    ) {
-                                        Row(
-                                            Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    categories.drop(3).forEach { (label, catIcon, accent) ->
+                                        val isSelected = selectedCategory == label
+                                        Surface(
+                                            onClick = { selectedCategory = label },
+                                            shape = RoundedCornerShape(22.dp),
+                                            color = if (isSelected) accent.copy(alpha = 0.28f) else accent.copy(alpha = 0.12f),
+                                            border = BorderStroke(
+                                                width = if (isSelected) 1.5.dp else 1.dp,
+                                                color = if (isSelected) accent else accent.copy(alpha = 0.3f)
+                                            ),
+                                            modifier = Modifier.weight(1f)
                                         ) {
-                                            Icon(catIcon, null, tint = accent, size = 16.dp)
-                                            Text(
-                                                label,
-                                                style = MaterialTheme.typography.labelSmall,
-                                                fontWeight = FontWeight.SemiBold,
-                                                color = accent
-                                            )
+                                            Row(
+                                                Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                            ) {
+                                                Icon(
+                                                    catIcon, null,
+                                                    tint = if (isSelected) accent else accent.copy(alpha = 0.7f),
+                                                    size = 16.dp
+                                                )
+                                                Text(
+                                                    label,
+                                                    style = MaterialTheme.typography.labelSmall,
+                                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold,
+                                                    color = accent
+                                                )
+                                            }
                                         }
                                     }
+                                    Spacer(Modifier.weight(1f))
                                 }
-                                Spacer(Modifier.weight(1f))
                             }
                         }
                     }
@@ -382,12 +433,16 @@ fun DailyFieldJournalOverlay(
                     Spacer(Modifier.height(8.dp))
                 }
 
-                // Dismiss button
+                // Dismiss / Save button — saves if there's text, otherwise dismisses
                 Surface(
                     onClick = {
-                        visible = false
-                        onDismiss()
+                        if (quickText.isNotBlank()) performSave()
+                        else {
+                            visible = false
+                            onDismiss()
+                        }
                     },
+                    enabled = !isSaving,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 12.dp)
@@ -399,8 +454,11 @@ fun DailyFieldJournalOverlay(
                 ) {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(
-                            if (quickText.isNotBlank()) "Save & start exploring"
-                            else "Start exploring",
+                            when {
+                                isSaving -> "Saving…"
+                                quickText.isNotBlank() -> "Save & start exploring"
+                                else -> "Start exploring"
+                            },
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimary
@@ -466,15 +524,4 @@ private fun getRandomTip(): String {
 internal fun getTodayDateString(): String {
     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     return sdf.format(Date())
-}
-
-/**
- * Check if the journal overlay should be shown today.
- * Returns true if onboarding is complete, journal is enabled,
- * and the overlay hasn't been shown today yet.
- */
-fun shouldShowJournalToday(settings: FieldMindSettings): Boolean {
-    val lastDate = settings.journalLastShownDate.value
-    val today = getTodayDateString()
-    return settings.journalEnabled.value && lastDate != today
 }

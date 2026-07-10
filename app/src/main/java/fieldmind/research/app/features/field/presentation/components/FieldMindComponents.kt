@@ -77,6 +77,10 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.features.field.presentation.components.LocalPrivacyTypingEnabled
 import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
 import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
+// JournalDecorations.kt lives in the same package: journalBorderStroke, journalTextureModifier,
+// journalCardBrush, JournalOrnament, JournalDivider, and drawJournalTexture are all reachable
+// without an import. LocalJournalStyle is in shared.presentation.theme (above).
 // FieldMindIcons is in the same package (components.FieldMindIcons)
 
 /**
@@ -127,6 +131,8 @@ fun FieldMindSubNavBar(
 ) {
     val haptics = rememberFieldMindHaptics()
     val scrollState = rememberScrollState()
+    val journal = LocalJournalStyle.current
+    val containerShape = RoundedCornerShape(journal.cardCornerRadius)
 
     Box(
         modifier = modifier
@@ -135,10 +141,11 @@ fun FieldMindSubNavBar(
     ) {
         // Pill container — elevated with soft shadow for a plush, pill-like feel
         Surface(
-            shape = RoundedCornerShape(34.dp),
+            shape = containerShape,
             color = MaterialTheme.colorScheme.surfaceContainerLow,
             tonalElevation = 2.dp,
-            shadowElevation = 2.dp
+            shadowElevation = 2.dp,
+            border = journalBorderStroke(journal)
         ) {
             Row(
                 modifier = Modifier
@@ -161,7 +168,7 @@ fun FieldMindSubNavBar(
                                 onTabSelected(index)
                             }
                         },
-                        shape = RoundedCornerShape(28.dp),
+                        shape = RoundedCornerShape(journal.chipCornerRadius),
                         color = if (selected)
                             MaterialTheme.colorScheme.primaryContainer
                         else
@@ -561,12 +568,15 @@ fun FieldScreenHeader(
     onAction: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    val journal = LocalJournalStyle.current
+    val shape = RoundedCornerShape(journal.cardCornerRadius)
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(30.dp),
+        shape = shape,
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
         tonalElevation = 2.dp,
-        shadowElevation = 2.dp
+        shadowElevation = 2.dp,
+        border = journalBorderStroke(journal)
     ) {
         Row(
             Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
@@ -615,34 +625,44 @@ fun SectionHeader(
     animate: Boolean = true
 ) {
     val accent = accentColor ?: FieldMindTheme.colors.accentFor(title)
+    val journal = LocalJournalStyle.current
+    val shape = RoundedCornerShape(journal.cardCornerRadius)
+    val effectiveBorder = journalBorderStroke(journal)
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .staggeredEntrance(index = index, animate = animate)
-            .cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(28.dp)),
-        shape = RoundedCornerShape(28.dp),
+            .then(journalTextureModifier(journal))
+            .cuteShadow(elevation = 2.dp, shape = shape),
+        shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 2.dp
+        tonalElevation = 2.dp,
+        border = effectiveBorder
     ) {
-        Row(
+        Column(
             Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            // Cute accent color strip on the left
-            Box(
-                Modifier
-                    .width(4.dp)
-                    .height(if (subtitle != null) 36.dp else 28.dp)
-                    .background(accent.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
-            )
-            Spacer(Modifier.width(12.dp))
-            Column(Modifier.weight(1f)) {
-                Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                if (!subtitle.isNullOrBlank()) {
-                    Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // Cute accent color strip on the left
+                Box(
+                    Modifier
+                        .width(4.dp)
+                        .height(if (subtitle != null) 36.dp else 28.dp)
+                        .background(accent.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
+                )
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    if (!subtitle.isNullOrBlank()) {
+                        Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
+                    }
                 }
+                if (trailing != null) trailing()
             }
-            if (trailing != null) trailing()
+            // Phase 3: per-style ornament below section title (fleuron for Victorian,
+            // cloud for Ghibli, nothing for Sketchbook/BulletJournal).
+            JournalOrnament(modifier = Modifier.padding(top = 6.dp), tint = accent)
         }
     }
 }
@@ -669,13 +689,17 @@ fun StandardScreenHeader(
     trailing: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    val journal = LocalJournalStyle.current
+    val shape = RoundedCornerShape(journal.cardCornerRadius)
     Surface(
         modifier = modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(34.dp),
+            .fillMaxWidth()
+            .then(journalTextureModifier(journal)),
+        shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 3.dp,
-        shadowElevation = 3.dp
+        shadowElevation = 3.dp,
+        border = journalBorderStroke(journal)
     ) {
         Row(
             Modifier.padding(18.dp),
@@ -752,9 +776,10 @@ fun BackButton(
 @Composable
 fun EntityBadge(kind: String, modifier: Modifier = Modifier) {
     val accent = FieldMindTheme.colors.accentFor(kind)
+    val shape = RoundedCornerShape(LocalJournalStyle.current.chipCornerRadius)
     Surface(
-        modifier = modifier.cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(999.dp)),
-        shape = RoundedCornerShape(999.dp),
+        modifier = modifier.cuteShadow(elevation = 2.dp, shape = shape),
+        shape = shape,
         color = accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f),
         contentColor = accent
     ) {
@@ -773,9 +798,10 @@ fun EntityBadge(kind: String, modifier: Modifier = Modifier) {
 @Composable
 fun InfoChip(text: String, modifier: Modifier = Modifier, icon: MaterialSymbolIcon? = null, color: Color? = null) {
     val content = color ?: MaterialTheme.colorScheme.onSurfaceVariant
+    val shape = RoundedCornerShape(LocalJournalStyle.current.chipCornerRadius)
     Surface(
-        modifier = modifier.cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(999.dp)),
-        shape = RoundedCornerShape(999.dp),
+        modifier = modifier.cuteShadow(elevation = 2.dp, shape = shape),
+        shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 1.dp,
         contentColor = content
@@ -794,9 +820,10 @@ fun InfoChip(text: String, modifier: Modifier = Modifier, icon: MaterialSymbolIc
 @Composable
 fun ConfidenceChip(level: String, modifier: Modifier = Modifier) {
     val color = FieldMindTheme.colors.confidenceColor(level)
+    val shape = RoundedCornerShape(LocalJournalStyle.current.chipCornerRadius)
     Surface(
-        modifier = modifier.cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(999.dp)),
-        shape = RoundedCornerShape(999.dp),
+        modifier = modifier.cuteShadow(elevation = 2.dp, shape = shape),
+        shape = shape,
         color = color.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f),
         contentColor = color
     ) {
@@ -860,11 +887,16 @@ fun EntityCard(
     animate: Boolean = false
 ) {
     val accent = FieldMindTheme.colors.accentFor(kind)
+    val journal = LocalJournalStyle.current
+    val shape = RoundedCornerShape(journal.cardCornerRadius)
+    val effectiveBorder = journalBorderStroke(journal)
+    val textureModifier = journalTextureModifier(journal)
 
     Card(
         modifier = modifier
             .fillMaxWidth()
             .staggeredEntrance(index = index, animate = animate)
+            .then(textureModifier)
             .then(
                 if (onClick != null) Modifier.expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 else Modifier
@@ -872,13 +904,14 @@ fun EntityCard(
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .then(
                 if (selected) Modifier
-                    .border(1.5.dp, accent.copy(alpha = 0.6f), RoundedCornerShape(34.dp))
-                    .background(accent.copy(alpha = 0.06f), RoundedCornerShape(34.dp))
+                    .border(1.5.dp, accent.copy(alpha = 0.6f), shape)
+                    .background(accent.copy(alpha = 0.06f), shape)
                 else Modifier
             ),
-        shape = RoundedCornerShape(34.dp),
+        shape = shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+        border = if (!selected) effectiveBorder else null
     ) {
         Row(Modifier.padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             Box(
@@ -925,6 +958,10 @@ fun MetricTile(
     animate: Boolean = false
 ) {
     val tint = accent ?: MaterialTheme.colorScheme.primary
+    val journal = LocalJournalStyle.current
+    val shape = RoundedCornerShape(journal.cardCornerRadius)
+    val effectiveBorder = journalBorderStroke(journal)
+    val textureModifier = journalTextureModifier(journal)
 
     // ── Count-up animation for numeric values ──
     // Parse the leading number from the value string (e.g., "42" or "5/10" or "12 observations")
@@ -974,11 +1011,13 @@ fun MetricTile(
     Card(
         modifier = modifier
             .staggeredEntrance(index = index, animate = animate)
+            .then(textureModifier)
             .then(if (onClick != null) Modifier.expressivePress(scaleDown = 0.96f) else Modifier)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
-        shape = RoundedCornerShape(32.dp),
+        shape = shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+        border = effectiveBorder
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon = icon, contentDescription = null, tint = tint, size = 22.dp)
@@ -1005,13 +1044,19 @@ fun EmptyState(
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null
 ) {
+    val journal = LocalJournalStyle.current
+    val shape = RoundedCornerShape(journal.cardCornerRadius)
+    val effectiveBorder = journalBorderStroke(journal)
+    val textureModifier = journalTextureModifier(journal)
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .cuteShadow(elevation = 2.dp, shape = RoundedCornerShape(34.dp)),
-        shape = RoundedCornerShape(34.dp),
+            .cuteShadow(elevation = 2.dp, shape = shape)
+            .then(textureModifier),
+        shape = shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = effectiveBorder
     ) {
         Column(
             modifier = Modifier
@@ -1023,7 +1068,7 @@ fun EmptyState(
                             MaterialTheme.colorScheme.surface
                         )
                     ),
-                    shape = RoundedCornerShape(34.dp)
+                    shape = shape
                 )
                 .padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -1567,12 +1612,17 @@ fun NoteComposerCard(
     var showTemplates by remember { mutableStateOf(false) }
     var selectedTemplate by remember { mutableStateOf(noteTemplates.first()) }
     val haptics = rememberFieldMindHaptics()
+    val journal = LocalJournalStyle.current
+    val shape = RoundedCornerShape(journal.cardCornerRadius)
+    val effectiveBorder = journalBorderStroke(journal)
+    val textureModifier = journalTextureModifier(journal)
 
     Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(36.dp),
+        modifier = modifier.fillMaxWidth().then(textureModifier),
+        shape = shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = effectiveBorder
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             // Header

@@ -1,0 +1,7 @@
+Removed the entire sound effects system for better battery, focus, and simplicity.
+
+• Deletes FieldMindSoundManager + 9 sound assets (chime, shutter, water drop, success, cricket, bird chorus, wind, rain, thunder) — ~700 KB smaller APK
+• Removes the Settings → Sound toggle + volume slider + preview buttons
+• Stops 4 ambient-sound coroutines that ran on the home screen (night cricket / dawn bird / day wind / rain) and the periodic storm-thunder loop
+• No more chime on app open, shutter on camera, or water drop on save
+• Voice-note recording is still intact — only the sound effects layer was removed

@@ -56,8 +56,8 @@ import fieldmind.research.app.features.field.data.learn.LearnLibrary
 import fieldmind.research.app.features.field.data.stats.FieldMindStreaks
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
+import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.ui.theme.CuteGradients
-import fieldmind.research.app.ui.theme.screenBackground
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenceAttachment
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
@@ -88,8 +88,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import fieldmind.research.app.features.field.presentation.components.GlassCard
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.ui.theme.CuteElevations
-import fieldmind.research.app.infrastructure.FieldMindSoundManager
-import fieldmind.research.app.infrastructure.FieldMindSounds
+import fieldmind.research.app.ui.theme.cuteShadow
 import kotlinx.coroutines.isActive
 
 /**
@@ -185,6 +184,7 @@ fun SharedTransitionScope.HomeScreen(
     val weatherShowCloud by viewModel.fieldSettings.weatherShowCloudCover.collectAsState()
     val weatherShowPressure by viewModel.fieldSettings.weatherShowPressure.collectAsState()
     val weatherShowCloudAnimation by viewModel.fieldSettings.weatherShowCloudAnimation.collectAsState()
+    val weatherBackgroundAnimation by viewModel.fieldSettings.weatherBackgroundAnimationEnabled.collectAsState()
     val tempUnit by viewModel.fieldSettings.tempUnit.collectAsState()
     val windSpeedUnit by viewModel.fieldSettings.windSpeedUnit.collectAsState()
     val developerMode by viewModel.fieldSettings.developerMode.collectAsState()
@@ -299,70 +299,23 @@ fun SharedTransitionScope.HomeScreen(
         previousStreak = currentStreak
     }
 
-    // ── Ambient sound system (time & weather-aware) ──
-    val currentHour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-    val isNight = currentHour in 22..23 || currentHour in 0..4
-    val isDawn = currentHour in 5..6
-    val isDaytime = currentHour in 7..21
-    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
-    val ambientWeatherCode = homeCurrentWeather?.weatherCode ?: 0
-    val isStormy = ambientWeatherCode >= 95
-    // WMO rain codes: 51-67 (drizzle & rain), 80-82 (rain showers)
-    val isRainy = ambientWeatherCode in 51..67 || ambientWeatherCode in 80..82
-
-    // ── Night: Cricket ambience ──
-    LaunchedEffect(isNight) {
-        if (isNight) {
-            soundManager.startCricket(this, durationMs = 60_000L)
-        } else {
-            soundManager.stopCricket()
-        }
-    }
-
-    // ── Dawn (5-7 AM): Bird chorus ──
-    LaunchedEffect(isDawn) {
-        if (isDawn) {
-            soundManager.startBirdChorus(this, durationMs = 60_000L)
-        } else {
-            soundManager.stopBirdChorus()
-        }
-    }
-
-    // ── Daytime: Wind or Rain (mutually exclusive) ──
-    val shouldPlayWind = isDaytime && !isRainy && !isStormy
-    LaunchedEffect(shouldPlayWind) {
-        if (shouldPlayWind) {
-            soundManager.startWind(this)
-        } else {
-            soundManager.stopWind()
-        }
-    }
-
-    // ── Rain: Replaces wind during rainy weather, can overlap with thunder ──
-    val shouldPlayRain = isDaytime && isRainy
-    LaunchedEffect(shouldPlayRain) {
-        if (shouldPlayRain) {
-            soundManager.startRain(this)
-        } else {
-            soundManager.stopRain()
-        }
-    }
-
-    // ── Stormy weather: Periodic distant thunder (any time of day, overlays rain) ──
-    LaunchedEffect(ambientWeatherCode) {
-        if (isStormy) {
-            while (isActive) {
-                soundManager.playThunder()
-                delay(12_000L + (2_000L..8_000L).random())
-            }
-        }
-    }
-
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
     val homeScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
     var isRefreshing by remember { mutableStateOf(false) }
-    Box(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {
-        Box(Modifier.fillMaxSize()) { // Wrapper for overlay
+    Box(Modifier.fillMaxSize()) {
+        // Layer 1: Animated immersive background (replaces static screenBackground)
+        AnimatedBackgroundScene(
+            weatherCode = homeCurrentWeather?.weatherCode ?: 0,
+            temperature = homeCurrentWeather?.temperature,
+            sunrise = homeCurrentWeather?.sunrise,
+            sunset = homeCurrentWeather?.sunset,
+            showCloudAnimation = weatherShowCloudAnimation,
+            weatherBackgroundAnimation = weatherBackgroundAnimation
+        )
+        
+        // Layer 2: Screen content (status bar padding preserved, screenBackground removed)
+        Box(Modifier.fillMaxSize().statusBarsPadding()) {
+            Box(Modifier.fillMaxSize()) { // Wrapper for overlay
             PullToRefreshBox(
                 isRefreshing = isRefreshing,
                 onRefresh = {
@@ -443,10 +396,7 @@ fun SharedTransitionScope.HomeScreen(
             // ── Observations Timeline — Compact card, opens full page ──
             item {
                 val colors = FieldMindTheme.colors
-                Card(
-                    shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                JournalCard( // Journal-aware card styling
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -472,7 +422,7 @@ fun SharedTransitionScope.HomeScreen(
                         }
                         FilledTonalButton(
                             onClick = { onNavigate(FieldMindScreen.FieldLog) },
-                            shape = RoundedCornerShape(22.dp),
+                            shape = journalCardShape(LocalJournalStyle.current),
                             colors = ButtonDefaults.filledTonalButtonColors(
                                 containerColor = colors.project.copy(alpha = 0.12f)
                             )
@@ -527,10 +477,7 @@ fun SharedTransitionScope.HomeScreen(
                     Triple("Weather Log", "Conditions record", FieldMindIcons.Weather) to FieldMindScreen.WeatherLogTool,
                     Triple("Species", "Quick observation", FieldMindIcons.Nature) to FieldMindScreen.SpeciesTool
                 )
-                Card(
-                    shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                JournalCard( // Journal-aware card styling
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -551,7 +498,7 @@ fun SharedTransitionScope.HomeScreen(
                             }
                             FilledTonalButton(
                                 onClick = { onNavigate(FieldMindScreen.DataTools) },
-                                shape = RoundedCornerShape(22.dp),
+                                shape = journalCardShape(LocalJournalStyle.current),
                                 colors = ButtonDefaults.filledTonalButtonColors(containerColor = FieldMindTheme.colors.data.copy(alpha = 0.12f))
                             ) {
                                 Text("All tools", fontWeight = FontWeight.SemiBold)
@@ -575,13 +522,9 @@ fun SharedTransitionScope.HomeScreen(
 
             // ── Field Map Card ──
             item {
-                Card(
-                    shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                JournalClickableCard(
+                    onClick = { onNavigate(FieldMindScreen.MapScreen) },
                     modifier = Modifier.fillMaxWidth()
-                        .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
-                        .clickable { onNavigate(FieldMindScreen.MapScreen) }
                 ) {
                     Row(
                         Modifier.fillMaxWidth().padding(16.dp),
@@ -611,10 +554,7 @@ fun SharedTransitionScope.HomeScreen(
                     Triple("Bibliography", "Manage citations", MaterialSymbolIcon("book")) to FieldMindScreen.CitationManager,
                     Triple("Collaborate", "Share with others", MaterialSymbolIcon("share")) to FieldMindScreen.Collaboration
                 )
-                Card(
-                    shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                JournalCard(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -823,7 +763,7 @@ fun SharedTransitionScope.HomeScreen(
                                             modifier = Modifier.weight(1f).clickable {
                                                 selectedCaptureCategory = name
                                             },
-                                            shape = RoundedCornerShape(28.dp),
+                                            shape = journalCardShape(LocalJournalStyle.current),
                                             colors = CardDefaults.cardColors(
                                                 containerColor = if (isSelected) accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest
                                             ),
@@ -870,7 +810,7 @@ fun SharedTransitionScope.HomeScreen(
                                     label = { Text("Specify category") },
                                     placeholder = { Text("e.g. Reptile, Amphibian, Fungus…") },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(24.dp),
+                                    shape = journalChipShape(LocalJournalStyle.current),
                                     singleLine = true,
                                     colors = OutlinedTextFieldDefaults.colors(
                                         focusedBorderColor = colors.accentFor("Other"),
@@ -912,7 +852,7 @@ fun SharedTransitionScope.HomeScreen(
                                 capturedPhotoMime = null
                             },
                             modifier = Modifier.fillMaxWidth().height(52.dp),
-                            shape = RoundedCornerShape(28.dp)
+                            shape = journalCardShape(LocalJournalStyle.current)
                         ) {
                             Icon(FieldMindIcons.Observation, null, size = 18.dp)
                             Spacer(Modifier.size(8.dp))
@@ -963,7 +903,8 @@ fun SharedTransitionScope.HomeScreen(
             showSnackbar = { msg -> showFastSnackbar(captureSnackbarHostState, scope, msg) }
         )
     }
-}
+}                  // close wrapping Box A
+}                  // end fun SharedTransitionScope.HomeScreen
 
 // ══════════════════════════════════════════════════════════════════════
 //  Compact Header — Merged branding + daily goal progress + actions
@@ -1011,7 +952,7 @@ private fun CompactHomeHeader(
             ) {
                 FieldMindLogo(
                     size = 52.dp,
-                    modifier = Modifier.clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f))
+                    modifier = Modifier.clip(journalChipShape(LocalJournalStyle.current)).background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f))
                 )
                 Column(Modifier.weight(1f)) {
                     Text(
@@ -1029,7 +970,7 @@ private fun CompactHomeHeader(
                 }
                 Surface(
                     onClick = onOpenSettings,
-                    shape = RoundedCornerShape(24.dp),
+                    shape = journalChipShape(LocalJournalStyle.current),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     tonalElevation = 0.dp,
                     modifier = Modifier.size(44.dp)
@@ -1257,7 +1198,7 @@ private fun HomeNoteCaptureDialog(
                     label = { Text("Title") },
                     placeholder = { Text("Optional — auto-generated from content") },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = journalCardShape(LocalJournalStyle.current),
                     singleLine = true
                 )
 
@@ -1268,7 +1209,7 @@ private fun HomeNoteCaptureDialog(
                     label = { Text("Note body") },
                     placeholder = { Text("What would you like to note?…") },
                     modifier = Modifier.fillMaxWidth().heightIn(min = 140.dp),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = journalCardShape(LocalJournalStyle.current),
                     minLines = 5
                 )
 
@@ -1279,7 +1220,7 @@ private fun HomeNoteCaptureDialog(
                     label = { Text("Tags") },
                     placeholder = { Text("Comma-separated, optional") },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = journalCardShape(LocalJournalStyle.current),
                     singleLine = true
                 )
 
@@ -1291,7 +1232,7 @@ private fun HomeNoteCaptureDialog(
                         label = { Text("Attachments") },
                         placeholder = { Text("One per line: type|caption|uri") },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(28.dp),
+                        shape = journalCardShape(LocalJournalStyle.current),
                         minLines = 2
                     )
                 }
@@ -1334,7 +1275,7 @@ private fun HomeNoteCaptureDialog(
                                 )
                             }
                         },
-                        shape = RoundedCornerShape(24.dp),
+                        shape = journalChipShape(LocalJournalStyle.current),
                         enabled = body.isNotBlank() || title.isNotBlank()
                     ) { Text("Save Note") }
                 }
@@ -1352,12 +1293,19 @@ private fun HeroActionChip(
     onClick: () -> Unit
 ) {
     val haptics = rememberFieldMindHaptics()
+    val chipShape = journalChipShape(LocalJournalStyle.current)
     Surface(
-        modifier = modifier.pressScale(scaleDown = 0.95f),
+        modifier = modifier
+            .pressScale(scaleDown = 0.95f)
+            .cuteShadow(
+                elevation = CuteElevations.clickableTier,
+                shape = chipShape
+            ),
         onClick = { haptics.light(); onClick() },
-        shape = RoundedCornerShape(24.dp),
+        shape = chipShape,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        tonalElevation = 0.dp
+        tonalElevation = 0.dp,
+        border = journalBorderStroke(LocalJournalStyle.current)
     ) {
         Row(
             Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp),
@@ -1416,6 +1364,9 @@ private fun LiveWeatherDashboardWidget(
     val colors = FieldMindTheme.colors
     var testWeatherCode by remember { mutableStateOf<Int?>(null) }
     var testIsNight by remember { mutableStateOf(false) }
+    var testTemperature by remember { mutableStateOf<Int?>(null) }
+    var testHumidity by remember { mutableStateOf<Int?>(null) }
+    var testPanelExpanded by remember { mutableStateOf(false) }
 
     // Time of day awareness
     val currentHour = remember { java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY) }
@@ -1441,8 +1392,8 @@ private fun LiveWeatherDashboardWidget(
     // loading spinner ONLY if there's no data yet (first load)
     val showLoadingSpinner = weatherLoading && currentWeather == null
 
-    // Temperature-based palette for display
-    val tempDisplay = currentWeather?.temperature ?: 20.0
+    // Temperature-based palette for display (honours dev override)
+    val tempDisplay = testTemperature?.toDouble() ?: currentWeather?.temperature ?: 20.0
     val displayColors = when {
         tempDisplay < 0 -> listOf(Color(0xFF1A237E), Color(0xFF42A5F5))
         tempDisplay < 10 -> listOf(Color(0xFF1565C0), Color(0xFF64B5F6))
@@ -1511,7 +1462,7 @@ private fun LiveWeatherDashboardWidget(
                         )
                 ) {AnimatedWeatherScene(
         weatherCode = displayWeatherCode,
-        temperature = currentWeather?.temperature ?: 0.0,
+        temperature = testTemperature?.toDouble() ?: currentWeather?.temperature ?: 0.0,
         sunrise = currentWeather?.sunrise,
         sunset = currentWeather?.sunset,
         compact = false,
@@ -1639,9 +1590,10 @@ private fun LiveWeatherDashboardWidget(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (showTemp) {
+                        val displayTempLabel = testTemperature?.toDouble() ?: w.temperature ?: 20.0
                         Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                WeatherUnitConverter.formatTemp(w.temperature, tempUnit),
+                                WeatherUnitConverter.formatTemp(displayTempLabel, tempUnit),
                                 style = MaterialTheme.typography.displaySmall.copy(
                                     fontWeight = FontWeight.Bold,
                                     color = textOnScene
@@ -1669,8 +1621,9 @@ private fun LiveWeatherDashboardWidget(
                             )
                         }
                     }
+                    val displayHumidity = testHumidity ?: w.humidity
                     if (showHumidity) {
-                        w.humidity?.let { hum ->
+                        displayHumidity?.let { hum ->
                             Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
                                     "$hum%",
@@ -1741,10 +1694,6 @@ private fun LiveWeatherDashboardWidget(
                             }
                         }
 
-                        // ── Developer: Test weather conditions ──
-                        if (developerMode && showWeatherTestPanel) {
-                            DevWeatherTestPanel(testWeatherCode, testIsNight, null, null, { testWeatherCode = it }, { testIsNight = it }, {}, {})
-                        }
                     }
                     // Pressure
                     if (showPressure) {
@@ -1875,9 +1824,31 @@ private fun LiveWeatherDashboardWidget(
                     }
                 }
             }
+
+            // ── Developer: Test weather conditions (collapsed by default) ──
+            if (developerMode && showWeatherTestPanel) {
+                CollapsibleSection(
+                    title = "Test weather conditions",
+                    subtitle = "Developer override (collapsed by default)",
+                    icon = MaterialSymbolIcon("test_tube"),
+                    expanded = testPanelExpanded,
+                    onToggle = { testPanelExpanded = !testPanelExpanded }
+                ) {
+                    DevWeatherTestPanel(
+                        testCode = testWeatherCode,
+                        testNight = testIsNight,
+                        testTemperature = testTemperature,
+                        testHumidity = testHumidity,
+                        onCodeChange = { testWeatherCode = it },
+                        onNightChange = { testIsNight = it },
+                        onTemperatureChange = { testTemperature = it },
+                        onHumidityChange = { testHumidity = it }
+                    )
+                }
+            }
         }
     }
-}
+    }
 }
 
 @Composable
@@ -1981,8 +1952,12 @@ private fun QuickActionChip(
             .heightIn(min = 96.dp)
             .wrapContentWidth()
             .expressivePress(scaleDown = 0.94f)
-            .clickable { haptics.light(); onNavigate(screen) },
-        shape = RoundedCornerShape(24.dp),
+            .clickable { haptics.light(); onNavigate(screen) }
+            .cuteShadow(
+                elevation = CuteElevations.clickableTier,
+                shape = journalChipShape(LocalJournalStyle.current)
+            ),
+        shape = journalChipShape(LocalJournalStyle.current),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {
@@ -2039,7 +2014,7 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
 
 @Composable
 private fun MiniActionTile(title: String, value: String, subtitle: String, icon: MaterialSymbolIcon, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(modifier = modifier.expressivePress(scaleDown = 0.96f).clickable(onClick = onClick), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+    Card(modifier = modifier.expressivePress(scaleDown = 0.96f).clickable(onClick = onClick).cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(28.dp)), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
             Text(title, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
@@ -2055,7 +2030,7 @@ private fun ObservationTimelinePreview(
     notes: List<NoteEntity>,
     onOpenDetail: (String, Long) -> Unit
 ) {
-    val events = buildList {
+    val events = buildList<TimelinePreviewEvent> {
         observations.take(8).forEach { add(TimelinePreviewEvent("observation", it.id, it.date, it.time, it.subject.ifBlank { "Observation" }, it.category)) }
         notes.take(4).forEach { note ->
             val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(note.updatedAt))
@@ -2117,7 +2092,19 @@ private fun CurrentProjectResearchCard(
     val connectedSources = sources.count { it.relatedProjectId == project.id }
     val connectedReports = reports.count { it.projectId == project.id }
 
-    ClickableCard(onClick = onOpen, shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier, modifier = Modifier.fillMaxWidth()) {
+    ClickableCard(
+        onClick = onOpen,
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        tonalElevation = CuteElevations.clickableTier,
+        shadowElevation = 0.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .cuteShadow(
+                elevation = CuteElevations.clickableTier,
+                shape = RoundedCornerShape(34.dp)
+            )
+    ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(FieldMindIcons.Project, null, tint = FieldMindTheme.colors.project, size = 24.dp)
@@ -2878,15 +2865,20 @@ private fun DataToolMiniCard(
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle)
     Card(
         onClick = onClick,
-        modifier = modifier,
-        shape = RoundedCornerShape(24.dp),
+        modifier = modifier
+            .cuteShadow(
+                elevation = CuteElevations.clickableTier,
+                shape = RoundedCornerShape(28.dp)
+            )
+            .pressScale(scaleDown = 0.96f),
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(brush = gradient, shape = RoundedCornerShape(24.dp))
+                .background(brush = gradient, shape = RoundedCornerShape(28.dp))
         ) {
             Column(
                 Modifier.fillMaxWidth().padding(12.dp),
@@ -2894,11 +2886,11 @@ private fun DataToolMiniCard(
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Box(
-                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
-                        .background(color.copy(alpha = 0.14f)),
+                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                        .background(color.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(icon, null, tint = color, size = 20.dp)
+                    Icon(icon, null, tint = color, size = 22.dp)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(title, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)

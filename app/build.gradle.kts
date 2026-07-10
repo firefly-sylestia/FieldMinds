@@ -50,7 +50,10 @@ android {
             buildConfigField("boolean", "ENABLE_LRCLIB", "true")
             buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
             buildConfigField("String", "FLAVOR", "\"fdroid\"")
-            
+            // URL of the deployed Cloudflare Worker bug-reporter. Empty by default —
+            // when unset, the app falls back to opening the GitHub web-URL issue form.
+            buildConfigField("String", "BUG_REPORTER_URL", "\"\"")
+
             versionNameSuffix = "-fdroid"
         }
         
@@ -65,7 +68,10 @@ android {
             buildConfigField("boolean", "ENABLE_LRCLIB", "true")
             buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
             buildConfigField("String", "FLAVOR", "\"github\"")
-            
+            // URL of the deployed Cloudflare Worker bug-reporter. Empty by default —
+            // when unset, the app falls back to opening the GitHub web-URL issue form.
+            buildConfigField("String", "BUG_REPORTER_URL", "\"\"")
+
             versionNameSuffix = "-gh"
         }
     }

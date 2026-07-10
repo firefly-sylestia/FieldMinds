@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,8 +52,11 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.features.field.presentation.components.ColorSchemeSwatchPicker
 import fieldmind.research.app.features.field.presentation.components.pressScale
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
-import fieldmind.research.app.infrastructure.FieldMindSoundManager
-import fieldmind.research.app.infrastructure.FieldMindSounds
+
+import fieldmind.research.app.shared.presentation.theme.JournalStyle
+import fieldmind.research.app.shared.presentation.theme.KeyedEnum
+import fieldmind.research.app.shared.presentation.theme.MicroDelightIntensity
+import fieldmind.research.app.shared.presentation.theme.NavBarStyle
 import fieldmind.research.app.features.field.presentation.screens.DevWeatherTestPanel
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.foundation.text.KeyboardOptions
@@ -69,6 +73,11 @@ import kotlinx.coroutines.withContext
 import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.ui.theme.CuteElevations
+
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.platform.LocalUriHandler
+import fieldmind.research.app.infrastructure.updates.UpdateChecker
+import fieldmind.research.app.infrastructure.updates.UpdateInfo
 
 // ══════════════════════════════════════════════════════════════════════
 //  Data Classes
@@ -111,7 +120,9 @@ fun FieldMindSettingsScreen(
     onOpenAutoGen: (() -> Unit)? = null,
     onOpenScreenVisibility: (() -> Unit)? = null,
     onOpenNotifications: (() -> Unit)? = null,
-    onOpenAnimations: (() -> Unit)? = null
+    onOpenAnimations: (() -> Unit)? = null,
+    onOpenBugReport: (() -> Unit)? = null,
+    onOpenCheckForUpdates: (() -> Unit)? = null
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
@@ -185,64 +196,6 @@ fun FieldMindSettingsScreen(
         item { SettingsNavCard("Notifications", "Weather alerts, task reminders, and session prompts", FieldMindIcons.Notifications, FieldMindTheme.colors.info) { onOpenNotifications?.invoke() } }
 
         // ╔════════════════════════════════════════════╗
-        // ║  SOUND                                     ║
-        // ╚════════════════════════════════════════════╝
-        item { SectionHeader("Sound", "Sound effects, master volume") }
-        item {
-            val soundEnabled by viewModel?.fieldSettings?.soundEffectsEnabled?.collectAsState() ?: remember { mutableStateOf(true) }
-            val soundVolume by viewModel?.fieldSettings?.soundVolume?.collectAsState() ?: remember { mutableStateOf(0.7f) }
-            SettingsGroupCard {
-                ToggleItem(
-                    "Sound effects",
-                    "Gentle chimes on app open, shutter on camera, water drop on save, and night crickets.",
-                    soundEnabled,
-                    { viewModel?.fieldSettings?.setSoundEffectsEnabled(it) },
-                    MaterialSymbolIcon("volume_up")
-                )
-                if (soundEnabled) {
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(
-                                MaterialSymbolIcon("volume_up"),
-                                null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                size = 20.dp
-                            )
-                            Text(
-                                "Volume",
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Spacer(Modifier.weight(1f))
-                            Text(
-                                "${(soundVolume * 100).toInt()}%",
-                                style = MaterialTheme.typography.labelMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        Slider(
-                            value = soundVolume,
-                            onValueChange = { viewModel?.fieldSettings?.setSoundVolume(it) },
-                            valueRange = 0f..1f,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-                    // ── Sound preview buttons ──
-                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                    SoundPreviewSection()
-                }
-            }
-        }
-
-        // ╔════════════════════════════════════════════╗
         // ║  AI ASSISTANCE                             ║
         // ╚════════════════════════════════════════════╝
         item { SectionHeader("AI & intelligence", "AI assistant, local model, and auto-generation") }
@@ -261,6 +214,22 @@ fun FieldMindSettingsScreen(
         // ╔════════════════════════════════════════════╗
         // ║  ABOUT & ADVANCED                          ║
         // ╚════════════════════════════════════════════╝
+        item { SectionHeader("Updates", "New releases from GitHub and bug reporting") }
+        item {
+            val attachCrashLog by viewModel?.fieldSettings?.bugReportsAttachCrashLog?.collectAsState() ?: remember { mutableStateOf(true) }
+            SettingsGroupCard {
+                ToggleItem(
+                    "Auto-attach crash log to bug reports",
+                    "When you file a bug from the app, the most recent entry from your local crash log is sanitized and appended to the report.",
+                    attachCrashLog,
+                    { viewModel?.fieldSettings?.setBugReportsAttachCrashLog(it) },
+                    MaterialSymbolIcon("description")
+                )
+            }
+        }
+        item { SettingsNavCard("Check for updates", "Manually check for the latest release on GitHub", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenCheckForUpdates?.invoke() } }
+        item { SettingsNavCard("Report a bug", "File feedback directly to the project's GitHub issues", MaterialSymbolIcon("bug_report"), MaterialTheme.colorScheme.error) { onOpenBugReport?.invoke() } }
+
         item { SectionHeader("About & advanced", "Developer tools, changelog, and app info") }
         item { SettingsNavCard("What’s new", "FieldMind redesign notes and migration changes", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenChangelog?.invoke() } }
         item { SettingsNavCard("About", "Credits, acknowledgements, and version", FieldMindIcons.Info, FieldMindTheme.colors.source) { onOpenAbout?.invoke() } }
@@ -271,185 +240,6 @@ fun FieldMindSettingsScreen(
                 Text("Reset onboarding")
             }
             Spacer(Modifier.height(40.dp))
-        }
-    }
-}
-
-/**
- * A grid of sound preview buttons inside the Sound settings section.
- * Each button plays its corresponding ambient sound on tap.
- */
-@Composable
-private fun SoundPreviewSection() {
-    val context = LocalContext.current
-    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
-
-    // Categorized sounds: [name, icon, soundId]
-    data class PreviewSound(val name: String, val icon: MaterialSymbolIcon, val soundId: Int, val description: String)
-
-    val interactionSounds = listOf(
-        PreviewSound("Chime", MaterialSymbolIcon("music_note"), FieldMindSounds.CHIME, "App open"),
-        PreviewSound("Shutter", MaterialSymbolIcon("photo_camera"), FieldMindSounds.SHUTTER, "Photo capture"),
-        PreviewSound("Water drop", MaterialSymbolIcon("water_drop"), FieldMindSounds.WATER_DROP, "Save observation"),
-        PreviewSound("Success", MaterialSymbolIcon("celebration"), FieldMindSounds.SUCCESS, "Achievement"),
-    )
-
-    val ambientSounds = listOf(
-        PreviewSound("Cricket", MaterialSymbolIcon("bug_report"), FieldMindSounds.CRICKET, "Night"),
-        PreviewSound("Bird chorus", MaterialSymbolIcon("nest_early_hatching"), FieldMindSounds.BIRD_CHORUS, "Dawn"),
-        PreviewSound("Wind", MaterialSymbolIcon("air"), FieldMindSounds.WIND, "Daytime"),
-        PreviewSound("Rain", MaterialSymbolIcon("rainy"), FieldMindSounds.RAIN, "Rainy weather"),
-        PreviewSound("Thunder", MaterialSymbolIcon("thunderstorm"), FieldMindSounds.THUNDER, "Storm"),
-    )
-
-    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(
-            "Preview sounds",
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        // Interactions
-        Text(
-            "Interactions",
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-        )
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            interactionSounds.forEach { sound ->
-                SoundPreviewButton(
-                    name = sound.name,
-                    icon = sound.icon,
-                    description = sound.description,
-                    soundId = sound.soundId,
-                    soundManager = soundManager,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-        // Ambient environments
-        Text(
-            "Ambient environments",
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-        )
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            ambientSounds.take(3).forEach { sound ->
-                SoundPreviewButton(
-                    name = sound.name,
-                    icon = sound.icon,
-                    description = sound.description,
-                    soundId = sound.soundId,
-                    soundManager = soundManager,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            ambientSounds.drop(3).forEach { sound ->
-                SoundPreviewButton(
-                    name = sound.name,
-                    icon = sound.icon,
-                    description = sound.description,
-                    soundId = sound.soundId,
-                    soundManager = soundManager,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SoundPreviewButton(
-    name: String,
-    icon: MaterialSymbolIcon,
-    description: String,
-    soundId: Int,
-    soundManager: FieldMindSoundManager,
-    modifier: Modifier = Modifier
-) {
-    val haptics = rememberFieldMindHaptics()
-    val scope = rememberCoroutineScope()
-    var isPlaying by remember { mutableStateOf(false) }
-
-    // Auto-reset highlight state after sound finishes
-    if (isPlaying) {
-        LaunchedEffect(Unit) {
-            delay(1500L)
-            isPlaying = false
-        }
-    }
-
-    Surface(
-        onClick = {
-            haptics.light()
-            scope.launch {
-                isPlaying = true
-                soundManager.play(soundId)
-            }
-        },
-        shape = RoundedCornerShape(16.dp),
-        color = if (isPlaying)
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
-        else
-            MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = if (isPlaying)
-            androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary)
-        else
-            null,
-        modifier = modifier.pressScale(scaleDown = 0.92f)
-    ) {
-        Column(
-            Modifier.padding(vertical = 10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Box(
-                Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(18.dp))
-                    .background(
-                        if (isPlaying) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                        else MaterialTheme.colorScheme.surfaceContainerLow
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    icon,
-                    contentDescription = name,
-                    tint = if (isPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                    size = 20.dp
-                )
-            }
-            Text(
-                name,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = if (isPlaying) FontWeight.Bold else FontWeight.Medium,
-                color = if (isPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                description,
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                maxLines = 1,
-                textAlign = TextAlign.Center
-            )
         }
     }
 }
@@ -523,14 +313,16 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                             val isSelected = onboardingFrequency == freq
                             Surface(
                                 onClick = { settings.setOnboardingFrequency(freq) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = RoundedCornerShape(24.dp),
                                 color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                 border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .pressScale(scaleDown = 0.96f)
                             ) {
                                 Text(
                                     freq,
-                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    modifier = Modifier.padding(vertical = 12.dp),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                     textAlign = TextAlign.Center
@@ -543,6 +335,8 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         }
         item { SectionHeader("Daily Journal", "Greeting and quick-capture overlay on open") }
         item {
+            val showJournalChips by settings.journalShowCategoryChips.collectAsState()
+            val journalQuickCategory by settings.journalQuickCategory.collectAsState()
             SettingsGroupCard {
                 ToggleItem(
                     "Show daily journal",
@@ -551,6 +345,30 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     settings::setJournalEnabled,
                     FieldMindIcons.Article
                 )
+                HorizontalDivider(
+                    Modifier.padding(start = 16.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                )
+                ToggleItem(
+                    "Show category chips in overlay",
+                    "Tap a chip (Bird, Plant, etc.) to pre-tag your observation before saving. The chosen chip is remembered for the next day's overlay.",
+                    showJournalChips,
+                    settings::setJournalShowCategoryChips,
+                    FieldMindIcons.Category
+                )
+                if (showJournalChips) {
+                    HorizontalDivider(
+                        Modifier.padding(start = 16.dp),
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                    )
+                    ChoiceItemForm(
+                        "Quick-capture category",
+                        observationCategories,
+                        journalQuickCategory,
+                        FieldMindIcons.Observation,
+                        settings::setJournalQuickCategory
+                    )
+                }
             }
         }
     }
@@ -586,10 +404,13 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                             val sel = layoutStyle == style
                             Surface(
                                 onClick = { settings.setOnboardingLayoutStyle(style) },
-                                shape = RoundedCornerShape(22.dp),
+                                shape = RoundedCornerShape(26.dp),
                                 color = if (sel) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
                                 border = if (sel) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
-                                modifier = Modifier.weight(1f).height(80.dp)
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(84.dp)
+                                    .pressScale(scaleDown = 0.96f)
                             ) {
                                 Column(
                                     Modifier.fillMaxSize().padding(8.dp),
@@ -777,6 +598,130 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                 }
             }
         }
+
+        // ╔══════════════════════════════════════════════════════════════╗
+        // ║  JOURNAL AESTHETIC                                          ║
+        // ╚══════════════════════════════════════════════════════════════╝
+        item { SectionHeader("Journal aesthetic", "Whimsical journal personality and bottom-nav animation style") }
+        item {
+            val journalStyleKey by settings.journalStyle.collectAsState()
+            val navBarStyleKey by settings.navBarStyle.collectAsState()
+
+            SettingsGroupCard {
+                Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+
+                    // ── 1. Journal Style (4 large swatches in a horizontal scroll) ──
+                    Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Box(
+                                Modifier.size(28.dp).clip(RoundedCornerShape(14.dp))
+                                    .background(fieldmind.research.app.shared.presentation.theme.JournalPresets.Sketchbook.accentWarmth),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(MaterialSymbolIcon("auto_stories"), contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
+                            }
+                            Text("Journal style", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Text("Choose your journal's visual personality. Affects cards, background, and ornaments.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(
+                            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            JournalStyle.entries.forEach { style ->
+                                val isSelected = journalStyleKey == style.key
+                                // Preview brush — single uniform Brush type so the swatch background
+                                // can be applied with one Modifier.background() and no smart-cast.
+                                val previewBrush: Brush = when (style.key) {
+                                    "victorian" -> Brush.linearGradient(
+                                        colors = listOf(Color(0xFFF5E8D8), Color(0xFFE8D6B8))
+                                    )
+                                    "sketchbook" -> Brush.linearGradient(
+                                        colors = listOf(Color(0xFFFBF7F0), Color(0xFFF5EBD9))
+                                    )
+                                    "bullet_journal" -> Brush.linearGradient(
+                                        colors = listOf(Color(0xFFF8F8FA), Color(0xFFEDEDF0))
+                                    )
+                                    else /* ghibli */ -> Brush.radialGradient(
+                                        colors = listOf(Color(0xFFFFF1E6), Color(0xFFE8B4B4).copy(alpha = 0.5f), Color(0xFFF0ECE4)),
+                                        radius = 220f
+                                    )
+                                }
+                                Surface(
+                                    onClick = { settings.setJournalStyle(style.key) },
+                                    shape = RoundedCornerShape(18.dp),
+                                    color = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                    border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                                    modifier = Modifier.width(150.dp).pressScale(scaleDown = 0.96f)
+                                ) {
+                                    Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        // Mini visual preview of the journal style
+                                        Box(
+                                            modifier = Modifier.fillMaxWidth().height(56.dp).clip(RoundedCornerShape(10.dp))
+                                                .background(previewBrush)
+                                        ) {
+                                            // Style-specific overlay motif
+                                            when (style.key) {
+                                                "victorian" -> {
+                                                    // Sepia book icon bottom-right
+                                                    Icon(MaterialSymbolIcon("auto_stories"), contentDescription = null, tint = Color(0xFF8B4513).copy(alpha = 0.75f), modifier = Modifier.align(Alignment.BottomEnd).padding(4.dp).size(26.dp))
+                                                    // Ornamental crown icon top-left (replaces unreliable ❦ glyph)
+                                                    Icon(MaterialSymbolIcon("crown"), contentDescription = null, tint = Color(0xFF8B4513).copy(alpha = 0.65f), modifier = Modifier.align(Alignment.TopStart).padding(4.dp).size(14.dp))
+                                                }
+                                                "sketchbook" -> {
+                                                    Icon(MaterialSymbolIcon("edit"), contentDescription = null, tint = Color(0xFF5D4037).copy(alpha = 0.6f), modifier = Modifier.align(Alignment.Center).size(22.dp))
+                                                    // Pencil-line sketch detail (subtle horizontal rule)
+                                                    Box(
+                                                        Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(horizontal = 8.dp).height(1.dp)
+                                                            .background(Color(0xFF5D4037).copy(alpha = 0.35f))
+                                                    )
+                                                }
+                                                "bullet_journal" -> {
+                                                    // 4x5 dot grid
+                                                    Column(Modifier.fillMaxSize().padding(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                                        repeat(4) {
+                                                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                                                repeat(5) {
+                                                                    Box(Modifier.size(3.dp).clip(CircleShape).background(Color(0xFF37474F).copy(alpha = 0.35f)))
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                "ghibli" -> {
+                                                    Icon(MaterialSymbolIcon("cloud"), contentDescription = null, tint = Color.White.copy(alpha = 0.9f), modifier = Modifier.align(Alignment.TopEnd).padding(4.dp).size(28.dp))
+                                                    Icon(MaterialSymbolIcon("auto_awesome"), contentDescription = null, tint = Color.White.copy(alpha = 0.9f), modifier = Modifier.align(Alignment.BottomStart).padding(4.dp).size(16.dp))
+                                                }
+                                            }
+                                        }
+                                        Text(style.displayName, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, maxLines = 1)
+                                        Text(style.description, style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                                        if (isSelected) {
+                                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                                Icon(FieldMindIcons.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 14.dp)
+                                                Text("Selected", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
+
+                    // ── 2. Nav Bar Style (3-pill radio) ──
+                    PillRadioGroup(
+                        title = "Nav bar style",
+                        description = "How the active tab indicator animates across the bottom bar.",
+                        icon = MaterialSymbolIcon("dock_to_bottom"),
+                        options = NavBarStyle.entries.toList(),
+                        selectedKey = navBarStyleKey,
+                        onSelect = { settings.setNavBarStyle(it.key) }
+                    )
+                }
+            }
+        }
+
         // ── Map settings ──
         // ── Entity accent colors ──
         item { SectionHeader("Entity Colors", "Per-category accent color customization") }
@@ -815,6 +760,68 @@ private fun ThemeToggle(current: String, onSet: (String) -> Unit) {
         Column(Modifier.weight(1f)) {
             Text("Theme", fontWeight = FontWeight.SemiBold)
             OptionPickerField(label = "Theme", selected = current, options = listOf("System", "Light", "Dark"), onSelected = { onSet(it) }, icon = FieldMindIcons.Image)
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  PillRadioGroup — generic three-option radio row
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Three-option horizontal radio row used by the Journal Aesthetic section.
+ * Renders any [Enum] subtype of [KeyedEnum].
+ *
+ * @param title       short section title (labelLarge, semi-bold)
+ * @param description subtitle describing the trade-off
+ * @param icon        leading icon shown next to title
+ * @param options     3 keyed enum entries to render as pills
+ * @param selectedKey currently-active enum.key
+ * @param onSelect    invoked with the chosen enum value
+ */
+@Composable
+private fun <T> PillRadioGroup(
+    title: String,
+    description: String,
+    icon: MaterialSymbolIcon,
+    options: List<T>,
+    selectedKey: String,
+    onSelect: (T) -> Unit
+) where T : Enum<T>, T : KeyedEnum {
+    Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Box(
+                Modifier.size(28.dp).clip(RoundedCornerShape(14.dp))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
+            }
+            Text(title, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Text(description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Spacer(Modifier.height(2.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            options.forEach { option ->
+                val isSelected = option.key == selectedKey
+                Surface(
+                    onClick = { onSelect(option) },
+                    shape = RoundedCornerShape(20.dp),
+                    color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                    border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                    modifier = Modifier.weight(1f).pressScale(scaleDown = 0.95f)
+                ) {
+                    Text(
+                        text = option.displayName,
+                        modifier = Modifier.padding(vertical = 10.dp, horizontal = 4.dp).fillMaxWidth(),
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                        textAlign = TextAlign.Center,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
         }
     }
 }
@@ -1183,7 +1190,14 @@ fun SecuritySettingsPage(
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { listOf(appLockActive, backupEncryption, clipboardCleanup, privacyTyping, screenCapture).forEach { active -> Box(Modifier.size(10.dp).clip(CircleShape).background(if (active) FieldMindTheme.colors.positive else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))) } }
                     }
                     LinearProgressIndicator(progress = { enabledCount / 5f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = FieldMindTheme.colors.positive, trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                    Surface(onClick = { onOpenSecurityScore?.invoke() }, shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), modifier = Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f)) {
+                    Surface(onClick = { onOpenSecurityScore?.invoke() }, shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), modifier = Modifier
+                        .fillMaxWidth()
+                        .pressScale(scaleDown = 0.97f)
+                        .cuteShadow(
+                            elevation = CuteElevations.nonClickableTier,
+                            shape = RoundedCornerShape(24.dp)
+                        )
+                    ) {
                         Row(Modifier.padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                             Icon(MaterialSymbolIcon("security"), null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
                             Text("View full security score", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
@@ -1217,11 +1231,13 @@ fun SecuritySettingsPage(
                                 val selected = appPinLen == option
                                 Surface(
                                     onClick = { settings.setAppPinLength(option) },
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .pressScale(scaleDown = 0.95f)
                                 ) {
-                                    Row(Modifier.padding(10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Row(Modifier.padding(vertical = 12.dp, horizontal = 10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                                         Text(option.take(1), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
                                         Text(option.split(" ")[1], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
@@ -1244,11 +1260,13 @@ fun SecuritySettingsPage(
                                 val selected = appPinLen == option
                                 Surface(
                                     onClick = { settings.setAppPinLength(option) },
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = RoundedCornerShape(22.dp),
                                     color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .pressScale(scaleDown = 0.95f)
                                 ) {
-                                    Row(Modifier.padding(10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Row(Modifier.padding(vertical = 12.dp, horizontal = 10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                                         Text(option.take(1), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
                                         Text(option.split(" ")[1], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
@@ -1960,7 +1978,7 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
             ToggleItem("Show pressure", "Atmospheric pressure in hPa.", showPressure, settings::setWeatherShowPressure, FieldMindIcons.Compress)
                     HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                    ToggleItem("Cloud animations", "Animated clouds and partly-cloudy sky effects.", showCloudAnimation, settings::setWeatherShowCloudAnimation, FieldMindIcons.Cloud)
+
         }
         }
     }
@@ -2122,7 +2140,7 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
                     }
                     if (orphanedObs > 0) {
                         Spacer(Modifier.height(8.dp))
-                        Surface(shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)) {
+                        Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)) {
                             Row(Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Icon(FieldMindIcons.Info, null, tint = MaterialTheme.colorScheme.error, size = 18.dp)
                                 Text("$orphanedObs observation${if (orphanedObs != 1) "s" else ""} reference missing or deleted projects", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onErrorContainer)
@@ -2321,6 +2339,9 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
     val showWeatherTest by settings.showWeatherTestPanel.collectAsState()
     var testWeatherCode by remember { mutableStateOf<Int?>(null) }
     var testIsNight by remember { mutableStateOf(false) }
+    var testTemperature by remember { mutableStateOf<Int?>(null) }
+    var testHumidity by remember { mutableStateOf<Int?>(null) }
+    var testWeatherPanelExpanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var showSchemaDialog by remember { mutableStateOf(false) }
@@ -2458,106 +2479,12 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
                     }
                 }
             }
-            // ── Animation Speed Preset (quick access for testing) ──
-            item {
-                val animationsEnabled by settings.animationsEnabled.collectAsState()
-                val speedPreset by settings.animationSpeedPreset.collectAsState()
-                SettingsGroupCard {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
-                                        .background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(MaterialSymbolIcon("motion_photos_on"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
-                                }
-                                Text("Animation speed", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
-                            }
-                            Text(
-                                speedPreset,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            listOf("Reduced", "Normal", "Enhanced").forEach { preset ->
-                                val selected = speedPreset == preset
-                                val mIcon = when (preset) {
-                                    "Reduced" -> MaterialSymbolIcon("slow_motion_video")
-                                    "Normal" -> MaterialSymbolIcon("speed")
-                                    else -> MaterialSymbolIcon("fast_forward")
-                                }
-                                Surface(
-                                    onClick = { settings.setAnimationSpeedPreset(preset) },
-                                    shape = RoundedCornerShape(22.dp),
-                                    color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                    border = if (selected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Column(
-                                        Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        Icon(
-                                            mIcon,
-                                            null,
-                                            tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                            size = 22.dp
-                                        )
-                                        Text(
-                                            preset,
-                                            style = MaterialTheme.typography.labelSmall,
-                                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                                            color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    MaterialSymbolIcon("motion_photos_paused"),
-                                    null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    size = 18.dp
-                                )
-                                Text(
-                                    "Enable animations",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            }
-                            Switch(
-                                checked = animationsEnabled,
-                                onCheckedChange = { settings.setAnimationsEnabled(it) }
-                            )
-                        }
-                    }
-                }
-            }
+            // ── Animation Speed Preset, Enable animations, Cloud animations moved to Settings → Animations page ──
             item {
                 SettingsGroupCard {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Debug options", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                         ToggleItem("Debug logging", "Enable verbose logging for troubleshooting.", debugLogging, settings::setDebugLogging, FieldMindIcons.Sparkle)
-                        HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                         HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                         ToggleItem("Show weather test panel", "Show weather condition test controls on the Home screen weather widget.", showWeatherTest, settings::setShowWeatherTestPanel, MaterialSymbolIcon("test_tube"))
                         ToggleItem("Data integrity check on launch", "Run database health checks on app startup.", dataIntegrityCheck, settings::setDataIntegrityCheckOnLaunch, FieldMindIcons.Archive)
@@ -2565,16 +2492,23 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
                 }
             }
             item {
-                DevWeatherTestPanel(
-                    testCode = testWeatherCode,
-                    testNight = testIsNight,
-                    testTemperature = null,
-                    testHumidity = null,
-                    onCodeChange = { testWeatherCode = it },
-                    onNightChange = { testIsNight = it },
-                    onTemperatureChange = {},
-                    onHumidityChange = {}
-                )
+                CollapsibleSection(
+                    title = "Test weather conditions",
+                    subtitle = "Override live weather for debugging",
+                    expanded = testWeatherPanelExpanded,
+                    onToggle = { testWeatherPanelExpanded = !testWeatherPanelExpanded }
+                ) {
+                    DevWeatherTestPanel(
+                        testCode = testWeatherCode,
+                        testNight = testIsNight,
+                        testTemperature = testTemperature,
+                        testHumidity = testHumidity,
+                        onCodeChange = { testWeatherCode = it },
+                        onNightChange = { testIsNight = it },
+                        onTemperatureChange = { testTemperature = it },
+                        onHumidityChange = { testHumidity = it }
+                    )
+                }
             }
             item {
                 Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
@@ -3397,6 +3331,60 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
 
+        // ── Visual Motion ─ Atmospheric scene liveness + whimsical touches ──
+        item { SectionHeader("Visual motion", "Atmospheric scene liveness and whimsical touches") }
+        item {
+            val showCloudAnimation by settings.weatherShowCloudAnimation.collectAsState()
+            val weatherBackgroundAnimation by settings.weatherBackgroundAnimationEnabled.collectAsState()
+            val microDelightKey by settings.microDelightIntensity.collectAsState()
+            SettingsGroupCard {
+                Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    PillRadioGroup(
+                        title = "Micro-delights",
+                        description = "Whimsical touches on captures, streaks, button presses, and celebrations.",
+                        icon = MaterialSymbolIcon("auto_awesome"),
+                        options = MicroDelightIntensity.entries.toList(),
+                        selectedKey = microDelightKey,
+                        onSelect = { settings.setMicroDelightIntensity(it.key) }
+                    )
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
+                    ToggleItem(
+                        "Background weather animation",
+                        "Animated skybox, drifting clouds, fireflies, and atmospheric motion behind the weather widget. Turn off to render a static journal-themed gradient.",
+                        weatherBackgroundAnimation,
+                        settings::setWeatherBackgroundAnimationEnabled,
+                        MaterialSymbolIcon("blur_on")
+                    )
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
+                    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Box(
+                                Modifier.size(28.dp).clip(RoundedCornerShape(14.dp))
+                                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(MaterialSymbolIcon("cloud"), contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
+                            }
+                            Text("Cloud animations", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Text("Animated cloud effects in the weather widget. Turn off to render flat cloud icons.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Spacer(Modifier.height(4.dp))
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Icon(FieldMindIcons.Cloud, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
+                                Text("Enable cloud animations", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                            }
+                            Switch(checked = showCloudAnimation, onCheckedChange = { settings.setWeatherShowCloudAnimation(it) })
+                        }
+                    }
+                }
+            }
+        }
+
         item { SectionHeader("Animation speed", "Controls how fast entrance animations play") }
         item {
             SettingsGroupCard {
@@ -3685,6 +3673,173 @@ private fun SpeedPresetAnimationPreview(
                     shape = RoundedCornerShape(20.dp),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
                 ) { Text("Spin", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold) }
+            }
+        }
+    }
+}
+
+
+// ══════════════════════════════════════════════════════════════════════
+//  Check for Updates Page — Manually run UpdateChecker.check + show result
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+fun CheckForUpdatesScreen(
+    appSettings: fieldmind.research.app.shared.data.model.AppSettings,
+    onBack: () -> Unit,
+    onOpenChangelog: () -> Unit
+) {
+    val context = LocalContext.current
+    val updateChecker = remember { fieldmind.research.app.infrastructure.updates.UpdateChecker(appSettings) }
+    val updateInfo by updateChecker.updateInfo.collectAsState()
+    val updateEnabled by appSettings.updateCheckEnabled.collectAsState()
+    val scope = rememberCoroutineScope()
+    val uriHandler = LocalUriHandler.current
+
+    // Helper to run a check
+    fun refreshNow(force: Boolean = true) {
+        if (!updateEnabled) {
+            context.startActivity(android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(android.net.Uri.parse("package:${context.packageName}")))
+            return
+        }
+        scope.launch {
+            updateChecker.check(force = force)
+        }
+    }
+
+    SettingsSubPage("Check for updates", icon = MaterialSymbolIcon("system_update"), onBack = onBack) {
+        item { SectionHeader("Update status", "Run a manual check against the latest GitHub release") }
+
+        item {
+            val cardShape = RoundedCornerShape(32.dp)
+            val cardColors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+            Card(shape = cardShape, colors = cardColors, elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = cardShape)) {
+                Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                // ── Status icon + title + body + action per UpdateInfo state ──
+                when (val info = updateInfo) {
+                    fieldmind.research.app.infrastructure.updates.UpdateInfo.Idle -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(MaterialSymbolIcon("system_update"), contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 24.dp)
+                            }
+                            Column(Modifier.weight(1f)) {
+                                Text("Ready to check", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                                Text("Tap below to fetch the latest release from GitHub.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                    fieldmind.research.app.infrastructure.updates.UpdateInfo.Loading -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            CircularProgressIndicator(modifier = Modifier.size(36.dp), strokeWidth = 3.dp, color = MaterialTheme.colorScheme.primary)
+                            Column(Modifier.weight(1f)) {
+                                Text("Checking for updates…", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                                Text("Reaching out to api.github.com", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                    is fieldmind.research.app.infrastructure.updates.UpdateInfo.UpdateAvailable -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(FieldMindTheme.colors.positive.copy(alpha = 0.18f)), contentAlignment = Alignment.Center) {
+                                Icon(FieldMindIcons.Sparkle, contentDescription = null, tint = FieldMindTheme.colors.positive, size = 24.dp)
+                            }
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                Text("New release available", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium, color = FieldMindTheme.colors.positive)
+                                Text(info.versionName, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyLarge)
+                                if (info.publishedAt.isNotBlank()) {
+                                    Text("Published ${info.publishedAt}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
+                                if (info.notes.isNotBlank()) {
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(info.notes.take(400) + if (info.notes.length > 400) "…" else "", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface)
+                                }
+                            }
+                        }
+                    }
+                    fieldmind.research.app.infrastructure.updates.UpdateInfo.UpToDate -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(FieldMindIcons.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
+                            }
+                            Column(Modifier.weight(1f)) {
+                                Text("You're on the latest version", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                                Text("Your installation matches the newest release on GitHub.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                    is fieldmind.research.app.infrastructure.updates.UpdateInfo.Unavailable -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(MaterialSymbolIcon("info"), contentDescription = null, tint = MaterialTheme.colorScheme.tertiary, size = 22.dp)
+                            }
+                            Column(Modifier.weight(1f)) {
+                                Text("Update checker unavailable", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                                Text(info.reason, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                    is fieldmind.research.app.infrastructure.updates.UpdateInfo.Errored -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.errorContainer), contentAlignment = Alignment.Center) {
+                                Icon(MaterialSymbolIcon("error"), contentDescription = null, tint = MaterialTheme.colorScheme.error, size = 22.dp)
+                            }
+                            Column(Modifier.weight(1f)) {
+                                Text("Couldn't reach GitHub", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.error)
+                                Text(info.message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                }
+                // ── Action button row: Check now / Open release / View changelog ──
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                    val isUpToDate = updateInfo is fieldmind.research.app.infrastructure.updates.UpdateInfo.UpToDate
+                    val isAvailable = updateInfo is fieldmind.research.app.infrastructure.updates.UpdateInfo.UpdateAvailable
+                    val isLoading = updateInfo is fieldmind.research.app.infrastructure.updates.UpdateInfo.Loading
+                    Button(
+                        onClick = { refreshNow(force = true) },
+                        enabled = !isLoading,
+                        shape = RoundedCornerShape(22.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(MaterialSymbolIcon("refresh"), contentDescription = null, size = 18.dp)
+                        Spacer(Modifier.width(6.dp))
+                        Text(if (isUpToDate) "Check again" else "Check now")
+                    }
+                    if (isAvailable) {
+                        val releaseUrl = (updateInfo as fieldmind.research.app.infrastructure.updates.UpdateInfo.UpdateAvailable).releaseUrl
+                        OutlinedButton(
+                            onClick = { runCatching { uriHandler.openUri(releaseUrl) } },
+                            shape = RoundedCornerShape(22.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(MaterialSymbolIcon("open_in_new"), contentDescription = null, size = 18.dp)
+                            Spacer(Modifier.width(6.dp))
+                            Text("Open release")
+                        }
+                    }
+                }
+                if (updateInfo is fieldmind.research.app.infrastructure.updates.UpdateInfo.UpdateAvailable) {
+                    OutlinedButton(
+                        onClick = onOpenChangelog,
+                        shape = RoundedCornerShape(22.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(FieldMindIcons.Info, contentDescription = null, size = 18.dp)
+                        Spacer(Modifier.width(6.dp))
+                        Text("View full changelog")
+                    }
+                }
+                // ── Last-checked timestamp + auto-check toggle info ──
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                    Column {
+                        Text(
+                            if (updateEnabled) "Auto-check on launch is enabled" else "Auto-check on launch is disabled — toggle in Settings → Updates",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+            }
             }
         }
     }

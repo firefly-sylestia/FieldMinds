@@ -1,0 +1,7 @@
+🎨 Round 8 — Journal styles now reach every screen-local card
+
+✨ Cards on Home (data tools, observation timeline, media & sharing, field-map box), Insights (Research Profile, Data Record, Achievement, Research Journey), and the Export tab (Hero Status, Import / Export / Backup pill selector, history items) all follow the active journal's corner radius.
+
+🛠️ Inner icon pills, action buttons, and dismiss chips now use journal-aware chip shapes. Paper / parchment / dot-grid / watercolor textures reach every screen-local card.
+
+🔧 Fixed the rectangular mismatch that only Ghibli's 24dp accidentally hid — Victorian, Sketchbook, and BulletJournal now look correct too.

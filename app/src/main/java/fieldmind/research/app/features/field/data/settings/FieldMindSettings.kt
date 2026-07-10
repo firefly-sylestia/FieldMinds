@@ -200,18 +200,6 @@ class FieldMindSettings private constructor(context: Context) {
     private val _backupFolderUri = MutableStateFlow(prefs.getString(KEY_BACKUP_FOLDER_URI, "") ?: "")
     val backupFolderUri: StateFlow<String> = _backupFolderUri.asStateFlow()
 
-    // ── Sound effects settings ──
-    private val _soundEffectsEnabled = MutableStateFlow(prefs.getBoolean(KEY_SOUND_EFFECTS_ENABLED, true))
-    /** Master toggle for all FieldMind sound effects. */
-    val soundEffectsEnabled: StateFlow<Boolean> = _soundEffectsEnabled.asStateFlow()
-
-    private val _soundVolume = MutableStateFlow(prefs.getFloat(KEY_SOUND_VOLUME, 0.7f))
-    /** Sound effects volume (0.0 – 1.0). */
-    val soundVolume: StateFlow<Float> = _soundVolume.asStateFlow()
-
-    fun setSoundEffectsEnabled(value: Boolean) = edit(KEY_SOUND_EFFECTS_ENABLED, value) { _soundEffectsEnabled.value = value }
-    fun setSoundVolume(value: Float) = edit(KEY_SOUND_VOLUME, value.coerceIn(0f, 1f)) { _soundVolume.value = value.coerceIn(0f, 1f) }
-
     // ── Weather & GPS settings ──
     private val _autoWeatherEnabled = MutableStateFlow(prefs.getBoolean(KEY_AUTO_WEATHER, false))
     val autoWeatherEnabled: StateFlow<Boolean> = _autoWeatherEnabled.asStateFlow()
@@ -246,6 +234,11 @@ class FieldMindSettings private constructor(context: Context) {
     val weatherShowPressure: StateFlow<Boolean> = _weatherShowPressure.asStateFlow()
     private val _weatherShowCloudAnimation = MutableStateFlow(prefs.getBoolean(KEY_WEATHER_SHOW_CLOUD_ANIMATION, true))
     val weatherShowCloudAnimation: StateFlow<Boolean> = _weatherShowCloudAnimation.asStateFlow()
+
+    // ── Background weather animation toggle (master for full skybox + clouds) ──
+    private val _weatherBackgroundAnimationEnabled = MutableStateFlow(prefs.getBoolean(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, true))
+    /** Master toggle for the animated weather skybox (sun/moon drift, drifting clouds, fireflies, birds). When false, holds a static journal-themed gradient while still honoring the chosen journal aesthetic. */
+    val weatherBackgroundAnimationEnabled: StateFlow<Boolean> = _weatherBackgroundAnimationEnabled.asStateFlow()
 
     // ── Weather provider selection ──
     private val _weatherProvider = MutableStateFlow(prefs.getString(KEY_WEATHER_PROVIDER, "met-norway") ?: "met-norway")
@@ -482,6 +475,26 @@ class FieldMindSettings private constructor(context: Context) {
 
     fun setSeasonalColorsEnabled(value: Boolean) = edit(KEY_SEASONAL_COLORS, value) { _seasonalColorsEnabled.value = value }
 
+    // ── Journal Style settings ──
+    private val _journalStyle = MutableStateFlow(
+        prefs.getString(KEY_JOURNAL_STYLE, "sketchbook") ?: "sketchbook"
+    )
+    /** The user's selected journal aesthetic (victorian, sketchbook, bullet_journal, ghibli). */
+    val journalStyle: StateFlow<String> = _journalStyle.asStateFlow()
+
+    private val _microDelightIntensity = MutableStateFlow(
+        prefs.getString(KEY_MICRO_DELIGHT_INTENSITY, "normal") ?: "normal"
+    )
+    /** Micro-delight intensity: minimal, normal, or maximum. */
+    val microDelightIntensity: StateFlow<String> = _microDelightIntensity.asStateFlow()
+
+
+    private val _navBarStyle = MutableStateFlow(
+        prefs.getString(KEY_NAV_BAR_STYLE, "modern") ?: "modern"
+    )
+    /** Navigation bar style: modern, nature, or journal. */
+    val navBarStyle: StateFlow<String> = _navBarStyle.asStateFlow()
+
     // ── Card gradient style (Phase 5) ──
     private val _cardGradientStyle = MutableStateFlow(
         prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
@@ -490,6 +503,11 @@ class FieldMindSettings private constructor(context: Context) {
     val cardGradientStyle: StateFlow<String> = _cardGradientStyle.asStateFlow()
 
     fun setCardGradientStyle(value: String) = edit(KEY_CARD_GRADIENT_STYLE, value) { _cardGradientStyle.value = value }
+
+    // ── Journal Style setters ──
+    fun setJournalStyle(value: String) = edit(KEY_JOURNAL_STYLE, value) { _journalStyle.value = value }
+    fun setMicroDelightIntensity(value: String) = edit(KEY_MICRO_DELIGHT_INTENSITY, value) { _microDelightIntensity.value = value }
+    fun setNavBarStyle(value: String) = edit(KEY_NAV_BAR_STYLE, value) { _navBarStyle.value = value }
 
     private val _entityColors = MutableStateFlow(parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null)))
     /** Map of entity type → hex color Long (e.g. "observation" → 0xFF2E7D32). Empty = use defaults. */
@@ -676,6 +694,7 @@ class FieldMindSettings private constructor(context: Context) {
     }
 
     fun setWeatherShowCloudAnimation(value: Boolean) = edit(KEY_WEATHER_SHOW_CLOUD_ANIMATION, value) { _weatherShowCloudAnimation.value = value }
+    fun setWeatherBackgroundAnimationEnabled(value: Boolean) = edit(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, value) { _weatherBackgroundAnimationEnabled.value = value }
     fun setWeatherProvider(value: String) = edit(KEY_WEATHER_PROVIDER, value) {
         _weatherProvider.value = value
         _weatherProviders.value = value
@@ -821,10 +840,28 @@ class FieldMindSettings private constructor(context: Context) {
     private val _journalEnabled = MutableStateFlow(prefs.getBoolean(KEY_JOURNAL_ENABLED, true))
     val journalEnabled: StateFlow<Boolean> = _journalEnabled.asStateFlow()
 
+    // ── Journal overlay quick-capture controls ──
+    /** Default category chip pre-selected in the daily journal overlay. Empty → falls back to [defaultCategory]. */
+    private val _journalQuickCategory = MutableStateFlow(prefs.getString(KEY_JOURNAL_QUICK_CATEGORY, "") ?: "")
+    val journalQuickCategory: StateFlow<String> = _journalQuickCategory.asStateFlow()
+
+    /** When false, the daily journal overlay hides the category chip row. */
+    private val _journalShowCategoryChips = MutableStateFlow(prefs.getBoolean(KEY_JOURNAL_SHOW_CATEGORY_CHIPS, true))
+    val journalShowCategoryChips: StateFlow<Boolean> = _journalShowCategoryChips.asStateFlow()
+
+    // ── Bug reports ──
+    /** When true, the in-app bug-report form auto-attaches the most recent crash log entry. */
+    private val _bugReportsAttachCrashLog = MutableStateFlow(prefs.getBoolean(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, true))
+    val bugReportsAttachCrashLog: StateFlow<Boolean> = _bugReportsAttachCrashLog.asStateFlow()
+
     fun setOnboardingFrequency(value: String) = edit(KEY_ONBOARDING_FREQUENCY, value) { _onboardingFrequency.value = value }
     fun setOnboardingLayoutStyle(value: String) = edit(KEY_ONBOARDING_LAYOUT, value) { _onboardingLayoutStyle.value = value }
     fun setJournalLastShownDate(value: String) = edit(KEY_JOURNAL_LAST_DATE, value) { _journalLastShownDate.value = value }
     fun setJournalEnabled(value: Boolean) = edit(KEY_JOURNAL_ENABLED, value) { _journalEnabled.value = value }
+    fun setJournalQuickCategory(value: String) = edit(KEY_JOURNAL_QUICK_CATEGORY, value) { _journalQuickCategory.value = value }
+    fun setJournalShowCategoryChips(value: Boolean) = edit(KEY_JOURNAL_SHOW_CATEGORY_CHIPS, value) { _journalShowCategoryChips.value = value }
+
+    fun setBugReportsAttachCrashLog(value: Boolean) = edit(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, value) { _bugReportsAttachCrashLog.value = value }
 
     fun setOnboardingExtendedTourCompleted(value: Boolean) = edit(KEY_EXTENDED_TOUR_DONE, value) { _onboardingExtendedTourCompleted.value = value }
 
@@ -838,6 +875,9 @@ class FieldMindSettings private constructor(context: Context) {
         _onboardingLayoutStyle.value = "Full field journal"
         _journalLastShownDate.value = ""
         _journalEnabled.value = true
+        _journalQuickCategory.value = ""
+        _journalShowCategoryChips.value = true
+        _bugReportsAttachCrashLog.value = true
         _animationsEnabled.value = true
         _animationSpeedPreset.value = "Normal"
         prefs.edit().clear().apply()
@@ -891,6 +931,7 @@ class FieldMindSettings private constructor(context: Context) {
         _weatherShowCloudCover.value = true
         _weatherShowPressure.value = false
         _weatherShowCloudAnimation.value = true
+        _weatherBackgroundAnimationEnabled.value = true
         _weatherProvider.value = "met-norway"
         _weatherProviders.value = "met-norway"
         _weatherApiKey.value = ""
@@ -944,8 +985,6 @@ class FieldMindSettings private constructor(context: Context) {
         _metadataRemoveCamera.value = false
         _metadataRemoveDevice.value = false
         _metadataRemoveExif.value = false
-        _soundEffectsEnabled.value = true
-        _soundVolume.value = 0.7f
         _userInterests.value = UserInterests()
         _screenVisibility.value = ScreenVisibility()
         _onboardingExtendedTourCompleted.value = false
@@ -953,6 +992,9 @@ class FieldMindSettings private constructor(context: Context) {
         _cardGradientStyle.value = fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = 0.75f
         _seasonalColorsEnabled.value = true
+        _journalStyle.value = "sketchbook"
+        _microDelightIntensity.value = "normal"
+        _navBarStyle.value = "modern"
     }
 
     // ── Species identification setters ──
@@ -1016,6 +1058,7 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_WEATHER_SHOW_CLOUD, _weatherShowCloudCover.value)
         put(KEY_WEATHER_SHOW_PRESSURE, _weatherShowPressure.value)
         put(KEY_WEATHER_SHOW_CLOUD_ANIMATION, _weatherShowCloudAnimation.value)
+        put(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, _weatherBackgroundAnimationEnabled.value)
         put(KEY_WEATHER_PROVIDER, _weatherProvider.value)
         put(KEY_WEATHER_PROVIDERS, _weatherProviders.value)
         put(KEY_WEATHER_API_KEY, _weatherApiKey.value)
@@ -1070,8 +1113,6 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_METADATA_REMOVE_CAMERA, _metadataRemoveCamera.value)
         put(KEY_METADATA_REMOVE_DEVICE, _metadataRemoveDevice.value)
         put(KEY_METADATA_REMOVE_EXIF, _metadataRemoveExif.value)
-        put(KEY_SOUND_EFFECTS_ENABLED, _soundEffectsEnabled.value)
-        put(KEY_SOUND_VOLUME, _soundVolume.value)
         put(KEY_USER_INTERESTS, UserInterests.toJson(_userInterests.value))
         put(KEY_SCREEN_VISIBILITY, ScreenVisibility.toJson(_screenVisibility.value))
         put(KEY_EXTENDED_TOUR_DONE, _onboardingExtendedTourCompleted.value)
@@ -1079,9 +1120,15 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_ONBOARDING_LAYOUT, _onboardingLayoutStyle.value)
         put(KEY_JOURNAL_LAST_DATE, _journalLastShownDate.value)
         put(KEY_JOURNAL_ENABLED, _journalEnabled.value)
+        put(KEY_JOURNAL_QUICK_CATEGORY, _journalQuickCategory.value)
+        put(KEY_JOURNAL_SHOW_CATEGORY_CHIPS, _journalShowCategoryChips.value)
+        put(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, _bugReportsAttachCrashLog.value)
         put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
         put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
         put(KEY_SEASONAL_COLORS, _seasonalColorsEnabled.value)
+        put(KEY_JOURNAL_STYLE, _journalStyle.value)
+        put(KEY_MICRO_DELIGHT_INTENSITY, _microDelightIntensity.value)
+        put(KEY_NAV_BAR_STYLE, _navBarStyle.value)
         put(KEY_ANIMATIONS_ENABLED, _animationsEnabled.value)
         put(KEY_ANIMATION_SPEED_PRESET, _animationSpeedPreset.value)
     }.toString(2)
@@ -1145,6 +1192,7 @@ class FieldMindSettings private constructor(context: Context) {
         applyBoolean(KEY_WEATHER_SHOW_CLOUD, true)
         applyBoolean(KEY_WEATHER_SHOW_PRESSURE)
         applyBoolean(KEY_WEATHER_SHOW_CLOUD_ANIMATION, true)
+        applyBoolean(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, true)
         applyString(KEY_WEATHER_PROVIDER)
         applyString(KEY_WEATHER_PROVIDERS)
         applyString(KEY_WEATHER_API_KEY)
@@ -1198,8 +1246,6 @@ class FieldMindSettings private constructor(context: Context) {
         applyBoolean(KEY_METADATA_REMOVE_CAMERA)
         applyBoolean(KEY_METADATA_REMOVE_DEVICE)
         applyBoolean(KEY_METADATA_REMOVE_EXIF)
-        applyBoolean(KEY_SOUND_EFFECTS_ENABLED)
-        applyFloat(KEY_SOUND_VOLUME, 0.7f)
         if (json.has(KEY_USER_INTERESTS)) {
             val jsonStr = json.optString(KEY_USER_INTERESTS, "")
             val interests = UserInterests.fromJson(jsonStr)
@@ -1218,9 +1264,15 @@ class FieldMindSettings private constructor(context: Context) {
         applyString(KEY_ONBOARDING_LAYOUT)
         applyString(KEY_JOURNAL_LAST_DATE)
         applyBoolean(KEY_JOURNAL_ENABLED, true)
+        applyString(KEY_JOURNAL_QUICK_CATEGORY)
+        applyBoolean(KEY_JOURNAL_SHOW_CATEGORY_CHIPS, true)
+        applyBoolean(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, true)
         applyInt(KEY_DAILY_GOAL)
         applyString(KEY_CARD_GRADIENT_STYLE)
         applyBoolean(KEY_SEASONAL_COLORS)
+        applyString(KEY_JOURNAL_STYLE)
+        applyString(KEY_MICRO_DELIGHT_INTENSITY)
+        applyString(KEY_NAV_BAR_STYLE)
         applyFloat(KEY_GRADIENT_OPACITY)
         applyBoolean(KEY_ANIMATIONS_ENABLED, true)
         applyString(KEY_ANIMATION_SPEED_PRESET)
@@ -1276,6 +1328,7 @@ class FieldMindSettings private constructor(context: Context) {
         _weatherShowCloudCover.value = prefs.getBoolean(KEY_WEATHER_SHOW_CLOUD, true)
         _weatherShowPressure.value = prefs.getBoolean(KEY_WEATHER_SHOW_PRESSURE, false)
         _weatherShowCloudAnimation.value = prefs.getBoolean(KEY_WEATHER_SHOW_CLOUD_ANIMATION, true)
+        _weatherBackgroundAnimationEnabled.value = prefs.getBoolean(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, true)
         _weatherProvider.value = prefs.getString(KEY_WEATHER_PROVIDER, "met-norway") ?: "met-norway"
         _weatherProviders.value = prefs.getString(KEY_WEATHER_PROVIDERS, "met-norway") ?: "met-norway"
         _weatherApiKey.value = prefs.getString(KEY_WEATHER_API_KEY, "") ?: ""
@@ -1318,8 +1371,14 @@ class FieldMindSettings private constructor(context: Context) {
         _cardGradientStyle.value = prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f)
         _seasonalColorsEnabled.value = prefs.getBoolean(KEY_SEASONAL_COLORS, true)
+        _journalStyle.value = prefs.getString(KEY_JOURNAL_STYLE, "sketchbook") ?: "sketchbook"
+        _microDelightIntensity.value = prefs.getString(KEY_MICRO_DELIGHT_INTENSITY, "normal") ?: "normal"
+        _navBarStyle.value = prefs.getString(KEY_NAV_BAR_STYLE, "modern") ?: "modern"
         _animationsEnabled.value = prefs.getBoolean(KEY_ANIMATIONS_ENABLED, true)
         _animationSpeedPreset.value = prefs.getString(KEY_ANIMATION_SPEED_PRESET, "Normal") ?: "Normal"
+        _journalQuickCategory.value = prefs.getString(KEY_JOURNAL_QUICK_CATEGORY, "") ?: ""
+        _journalShowCategoryChips.value = prefs.getBoolean(KEY_JOURNAL_SHOW_CATEGORY_CHIPS, true)
+        _bugReportsAttachCrashLog.value = prefs.getBoolean(KEY_BUG_REPORTS_ATTACH_CRASH_LOG, true)
     }
 
     private inline fun edit(key: String, value: String, after: () -> Unit) { prefs.edit().putString(key, value).apply(); after() }
@@ -1382,6 +1441,7 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_WEATHER_SHOW_CLOUD = "weather_show_cloud"
         private const val KEY_WEATHER_SHOW_PRESSURE = "weather_show_pressure"
         private const val KEY_WEATHER_SHOW_CLOUD_ANIMATION = "weather_show_cloud_animation"
+        private const val KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED = "weather_background_animation_enabled"
         private const val KEY_WEATHER_PROVIDER = "weather_provider"
         private const val KEY_WEATHER_PROVIDERS = "weather_providers"
         private const val KEY_WEATHER_API_KEY = "weather_api_key"
@@ -1410,6 +1470,10 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_ONBOARDING_LAYOUT = "onboarding_layout_style"
         private const val KEY_JOURNAL_LAST_DATE = "journal_last_shown_date"
         private const val KEY_JOURNAL_ENABLED = "journal_enabled"
+        private const val KEY_JOURNAL_QUICK_CATEGORY = "journal_quick_category"
+        private const val KEY_JOURNAL_SHOW_CATEGORY_CHIPS = "journal_show_category_chips"
+        // ── Bug reports ──
+        private const val KEY_BUG_REPORTS_ATTACH_CRASH_LOG = "bug_reports_attach_crash_log"
         // ── Species identification keys ──
         private const val KEY_SPECIES_ID_API_KEY = "species_id_api_key"
         private const val KEY_SPECIES_ID_OFFLINE_FIRST = "species_id_offline_first"
@@ -1444,8 +1508,6 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_METADATA_REMOVE_CAMERA = "metadata_remove_camera"
         private const val KEY_METADATA_REMOVE_DEVICE = "metadata_remove_device"
         private const val KEY_METADATA_REMOVE_EXIF = "metadata_remove_exif"
-        private const val KEY_SOUND_EFFECTS_ENABLED = "sound_effects_enabled"
-        private const val KEY_SOUND_VOLUME = "sound_volume"
         private const val KEY_APP_PIN_LENGTH = "app_pin_length"
         private const val KEY_DECOY_PIN_ENABLED = "decoy_pin_enabled"
         private const val KEY_DECOY_PIN_HASH = "decoy_pin_hash"
@@ -1456,6 +1518,10 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_GRADIENT_OPACITY = "gradient_opacity"
 
         private const val KEY_SEASONAL_COLORS = "seasonal_colors_enabled"
+        // ── Journal style keys ──
+        private const val KEY_JOURNAL_STYLE = "journal_style"
+        private const val KEY_MICRO_DELIGHT_INTENSITY = "micro_delight_intensity"
+        private const val KEY_NAV_BAR_STYLE = "nav_bar_style"
         // ── Per-category entity color overrides ──
         private const val KEY_ENTITY_COLORS = "entity_colors"
         // ── Animation tuning keys ──

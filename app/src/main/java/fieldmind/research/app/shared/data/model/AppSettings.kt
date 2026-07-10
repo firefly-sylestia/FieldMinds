@@ -45,6 +45,16 @@ class AppSettings private constructor(context: Context) {
         private const val KEY_DEV_TEST_REPORT_HISTORY = "dev_test_report_history"
         private const val KEY_LATEST_DEVELOPER_TEST_REPORT = "latest_developer_test_report"
 
+        // ── Update Checker (GitHub Releases) ──
+        private const val KEY_UPDATE_CHECK_ENABLED = "update_check_enabled"
+        private const val KEY_UPDATE_LAST_CHECK_TIME = "update_last_check_time"
+        private const val KEY_UPDATE_LAST_DISMISSED_TAG = "update_last_dismissed_tag"
+        private const val KEY_UPDATE_LATEST_TAG = "update_latest_tag"
+        private const val KEY_UPDATE_LATEST_VERSION_NAME = "update_latest_version_name"
+        private const val KEY_UPDATE_LATEST_VERSION_URL = "update_latest_version_url"
+        private const val KEY_UPDATE_LATEST_RELEASE_NOTES = "update_latest_release_notes"
+        private const val KEY_UPDATE_LATEST_PUBLISHED_AT = "update_latest_published_at"
+
         // ── Theme ──
         private const val KEY_USE_SYSTEM_THEME = "use_system_theme"
         private const val KEY_DARK_MODE = "dark_mode"
@@ -183,6 +193,82 @@ class AppSettings private constructor(context: Context) {
     fun clearDevTestReports() {
         _devTestReportHistory.value = emptyList()
         prefs.edit().remove(KEY_DEV_TEST_REPORT_HISTORY).apply()
+    }
+
+    // ═══════════════════════════════════════
+    //  Update Checker (GitHub Releases)
+    // ═══════════════════════════════════════
+
+    private val _updateCheckEnabled =
+        MutableStateFlow(prefs.getBoolean(KEY_UPDATE_CHECK_ENABLED, true))
+    val updateCheckEnabled: StateFlow<Boolean> = _updateCheckEnabled.asStateFlow()
+
+    private val _updateLastCheckTime =
+        MutableStateFlow(prefs.getLong(KEY_UPDATE_LAST_CHECK_TIME, 0L))
+    val updateLastCheckTime: StateFlow<Long> = _updateLastCheckTime.asStateFlow()
+
+    private val _updateLastDismissedTag =
+        MutableStateFlow(prefs.getString(KEY_UPDATE_LAST_DISMISSED_TAG, "") ?: "")
+    val updateLastDismissedTag: StateFlow<String> = _updateLastDismissedTag.asStateFlow()
+
+    private val _updateLatestTag =
+        MutableStateFlow(prefs.getString(KEY_UPDATE_LATEST_TAG, "") ?: "")
+    val updateLatestTag: StateFlow<String> = _updateLatestTag.asStateFlow()
+
+    private val _updateLatestVersionName =
+        MutableStateFlow(prefs.getString(KEY_UPDATE_LATEST_VERSION_NAME, "") ?: "")
+    val updateLatestVersionName: StateFlow<String> = _updateLatestVersionName.asStateFlow()
+
+    private val _updateLatestVersionUrl =
+        MutableStateFlow(prefs.getString(KEY_UPDATE_LATEST_VERSION_URL, "") ?: "")
+    val updateLatestVersionUrl: StateFlow<String> = _updateLatestVersionUrl.asStateFlow()
+
+    private val _updateLatestReleaseNotes =
+        MutableStateFlow(prefs.getString(KEY_UPDATE_LATEST_RELEASE_NOTES, "") ?: "")
+    val updateLatestReleaseNotes: StateFlow<String> = _updateLatestReleaseNotes.asStateFlow()
+
+    private val _updateLatestPublishedAt =
+        MutableStateFlow(prefs.getString(KEY_UPDATE_LATEST_PUBLISHED_AT, "") ?: "")
+    val updateLatestPublishedAt: StateFlow<String> = _updateLatestPublishedAt.asStateFlow()
+
+    fun setUpdateCheckEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_UPDATE_CHECK_ENABLED, enabled).apply()
+        _updateCheckEnabled.value = enabled
+    }
+
+    fun setUpdateLastCheckTime(timeMs: Long) {
+        prefs.edit().putLong(KEY_UPDATE_LAST_CHECK_TIME, timeMs).apply()
+        _updateLastCheckTime.value = timeMs
+    }
+
+    fun setUpdateLastDismissedTag(tag: String) {
+        prefs.edit().putString(KEY_UPDATE_LAST_DISMISSED_TAG, tag).apply()
+        _updateLastDismissedTag.value = tag
+    }
+
+    fun setUpdateLatestTag(tag: String) {
+        prefs.edit().putString(KEY_UPDATE_LATEST_TAG, tag).apply()
+        _updateLatestTag.value = tag
+    }
+
+    fun setUpdateLatestVersionName(name: String) {
+        prefs.edit().putString(KEY_UPDATE_LATEST_VERSION_NAME, name).apply()
+        _updateLatestVersionName.value = name
+    }
+
+    fun setUpdateLatestVersionUrl(url: String) {
+        prefs.edit().putString(KEY_UPDATE_LATEST_VERSION_URL, url).apply()
+        _updateLatestVersionUrl.value = url
+    }
+
+    fun setUpdateLatestReleaseNotes(notes: String) {
+        prefs.edit().putString(KEY_UPDATE_LATEST_RELEASE_NOTES, notes).apply()
+        _updateLatestReleaseNotes.value = notes
+    }
+
+    fun setUpdateLatestPublishedAt(publishedAt: String) {
+        prefs.edit().putString(KEY_UPDATE_LATEST_PUBLISHED_AT, publishedAt).apply()
+        _updateLatestPublishedAt.value = publishedAt
     }
 
     // ═══════════════════════════════════════

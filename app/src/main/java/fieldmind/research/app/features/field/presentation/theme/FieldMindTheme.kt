@@ -13,6 +13,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,6 +25,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
+import fieldmind.research.app.shared.presentation.theme.JournalPresets
+import fieldmind.research.app.shared.presentation.theme.JournalStyle
+import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
+import fieldmind.research.app.shared.presentation.theme.LocalMicroDelightIntensity
+import fieldmind.research.app.shared.presentation.theme.LocalNavBarStyle
+import fieldmind.research.app.shared.presentation.theme.MicroDelightIntensity
+import fieldmind.research.app.shared.presentation.theme.NavBarStyle
 import fieldmind.research.app.ui.theme.getCustomColorScheme
 import fieldmind.research.app.ui.theme.getTypographyForFont
 
@@ -812,7 +820,35 @@ fun FieldMindTheme(
         }
     }
 
-    CompositionLocalProvider(LocalFieldMindColors provides semantic) {
+    val journalStyleKey by FieldMindSettings
+        .getInstance(context)
+        .journalStyle
+        .collectAsState()
+    val microDelightKey by FieldMindSettings
+        .getInstance(context)
+        .microDelightIntensity
+        .collectAsState()
+    val navStyleKey by FieldMindSettings
+        .getInstance(context)
+        .navBarStyle
+        .collectAsState()
+
+    val journalConfig = remember(journalStyleKey) {
+        JournalPresets.forStyle(JournalStyle.fromKey(journalStyleKey))
+    }
+    val delightIntensity = remember(microDelightKey) {
+        MicroDelightIntensity.fromKey(microDelightKey)
+    }
+    val navBarConfig = remember(navStyleKey) {
+        NavBarStyle.fromKey(navStyleKey)
+    }
+
+    CompositionLocalProvider(
+        LocalFieldMindColors provides semantic,
+        LocalJournalStyle provides journalConfig,
+        LocalMicroDelightIntensity provides delightIntensity,
+        LocalNavBarStyle provides navBarConfig
+    ) {
         MaterialTheme(
             colorScheme = fullAnimatedColorScheme,
             typography = geomTypography,

@@ -1,0 +1,7 @@
+Unified journal styles — Ghibli's roundness for all 4 styles.
+
+• All 4 journal styles (Victorian / Sketchbook / BulletJournal / Ghibli) now share 24dp cardCornerRadius + 16dp chipCornerRadius + Rounded 0.5dp borders
+• Stripped remaining "weird" styling: no more per-style textures, ornaments, decorative dividers, decorative headings, irregular body, or nav-bar style differences
+• Shadow warmth normalized to 1.0f for all 4 styles — no more warm/cool tinted shadows
+• Per-style color identity preserved via backgroundWarmth / cardSurfaceTint / accentWarmth
+• JournalStyles now feel cohesive and consistent across the app — one design language, four distinct color moods

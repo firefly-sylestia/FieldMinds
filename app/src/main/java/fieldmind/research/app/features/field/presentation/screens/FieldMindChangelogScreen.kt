@@ -44,6 +44,367 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.50.3 — Strip dormant per-style drawing code from JournalDecorations.kt ──
+FieldMindChangelogEntry(
+    version = "0.50.3",
+    date = "2025-07-10",
+    title = "🧹 Stripped ~350 lines of dormant per-style drawing code",
+    importance = "Patch",
+    tags = listOf("cleanup", "dead-code", "journal-styles", "performance", "maintainability"),
+    sections = listOf(
+        "🧹 JournalDecorations.kt slimmed from 432 to 143 lines (-67%)" to listOf(
+            "✓ Removed `drawJournalTexture` (parchment / paper / dot-grid / watercolor texture routines) — only called when `showTexture=true`, which is false for all 4 presets",
+            "✓ Removed `JournalOrnament` decorative branches (Victorian copperplate fleuron, Ghibli soft cloud) — only rendered when `showOrnaments=true`, which is false for all 4 presets",
+            "✓ Removed `JournalDivider` decorative branches (Victorian ornamental rule + center dot, Ghibli wavy path, Sketchbook diagonal pencil marks, BulletJournal dot row) — only rendered when `decorativeDividers=true`, which is false for all 4 presets",
+            "✓ Removed `journalCardBrush` gradient branches (per-style linearGradient / radialGradient) — only used when `useGradientCards=true`, which is false for all 4 presets",
+            "✓ Removed `cardTextureRngValues` / `cardTextureRng` private helpers — only used by the now-removed drawJournalTexture",
+            "✓ Removed 15 dead imports (Canvas, Box, fillMaxWidth, height, size, Alignment, drawBehind, Offset, Size, Path, DrawScope, Stroke, Icon, MaterialSymbolIcon, FieldMindTheme, JournalStyle)",
+        ),
+        "🟢 Public API preserved — no call site changes needed" to listOf(
+            "✓ All 7 public API functions (journalBorderStroke, journalTextureModifier, journalCardBrush, journalCardShape, journalChipShape, JournalOrnament, JournalDivider) keep their original signatures",
+            "✓ `journalTextureModifier` simplifies to `Modifier = Modifier` (no-op) — backwards-compatible with all 14+ call sites in JournalCard.kt, SettingsComponents.kt, ClickableCard.kt, FieldMindComponents.kt, DelightfulEmptyState.kt, FieldMindBackupExportComponents.kt",
+            "✓ `journalCardBrush` simplifies to `SolidColor(fallbackColor)` — backwards-compatible with the single caller in SettingsGroupCard",
+            "✓ `JournalOrnament` simplifies to an empty @Composable — backwards-compatible with the single caller in SectionHeader",
+            "✓ `JournalDivider` simplifies to a thin wrapper over `HorizontalDivider` — backwards-compatible with all decorative-divider call sites",
+            "✓ `journalBorderStroke`, `journalCardShape`, `journalChipShape` unchanged — Rounded border + 24dp card + 16dp chip still active",
+        ),
+        "📝 Forward-compatibility comments" to listOf(
+            "✓ Each simplified function has a KDoc explaining what was stripped and how to re-add it if the dormant flags are re-enabled in a future round",
+            "✓ `drawJournalTexture` chain can be re-added inside `journalTextureModifier` by reintroducing the `drawBehind` modifier + the 4 texture-routine branches",
+            "✓ Ornament / decorative-divider / gradient branches can be re-added inside their respective functions by reintroducing the `when (config.style) { ... }` blocks",
+        ),
+        "🛠️ Implementation" to listOf(
+            "✓ Single file touched: `app/.../presentation/components/JournalDecorations.kt`",
+            "✓ 432 lines → 143 lines (289 lines deleted, 0 added — net loss)",
+            "✓ No new dependencies, no API breakage, no caller changes",
+            "✓ Build size unchanged (no .wav / .png assets removed in this round — that was Round 10's sound strip)",
+        ),
+    )
+),
+
+        // ── v0.50.2 — Unify journal-style roundness + strip remaining weird styling ──
+FieldMindChangelogEntry(
+    version = "0.50.2",
+    date = "2025-07-10",
+    title = "🎨 Unified journal styles — Ghibli's roundness, all 4 styles",
+    importance = "Patch",
+    tags = listOf("journal-styles", "ui-polish", "roundness", "consistency", "fix"),
+    sections = listOf(
+        "🟢 Keep the roundness, drop the weird stuff" to listOf(
+            "✓ All 4 journal styles (Victorian, Sketchbook, BulletJournal, Ghibli) now share the same 24dp cardCornerRadius + 16dp chipCornerRadius — Ghibli's signature roundness is now the default across the board",
+            "✓ All 4 styles use CardBorderStyle.Rounded with 0.5dp outline — no more sketch-like irregular borders on Sketchbook, no more no-border BulletJournal",
+            "✓ No more weird paper / parchment / dot-grid / watercolor texture overlays — showTexture is false everywhere, surface is clean and consistent",
+            "✓ No more decorative ornaments on Victorian or Ghibli (decorativeHeadings=false across the board) — headings are uniform",
+        ),
+        "🟡 Normalized per-style differences that were making the UI feel 'off'" to listOf(
+            "✓ navBarStyle: all 4 styles now use NavBarStyle.Modern — no more Nature 'blooming firefly' glow or Journal 'hand-drawn page tab' indicator",
+            "✓ shadowWarmth: 1.3 / 1.1 / 0.9 / 1.2 → all 1.0f — no more warm-tinted or cool-tinted shadows; the card lift is neutral across all 4 styles",
+            "✓ irregularBody: all 4 styles now false — body text no longer jitters on Sketchbook",
+            "✓ useGradientCards: all 4 styles now false — no more per-style gradient brush on cards (SolidColor fallback everywhere)",
+        ),
+        "🌈 Per-style color identity preserved" to listOf(
+            "✓ backgroundWarmth, cardSurfaceTint, and accentWarmth are still per-style — the 4 journal styles still look visually distinct via their cream / parchment / dot-grid / watercolor color palettes",
+            "✓ textureName still per-style (parchment / paper / dotgrid / watercolor) — held for future 'show texture' re-toggle in settings",
+            "✓ microDelightsEnabled is still per-style (Victorian + Sketchbook + Ghibli = true, BulletJournal = false) — user can still control this via Settings → Micro-delights",
+        ),
+        "🛠️ Implementation" to listOf(
+            "✓ Single file touched: `app/.../shared/presentation/theme/JournalStyle.kt`",
+            "✓ All 4 `JournalConfig` presets in `JournalPresets.{Victorian, Sketchbook, BulletJournal, Ghibli}` now use the same 11 design flags (cardCornerRadius, chipCornerRadius, borderStyle, borderWidth, useGradientCards, showTexture, showOrnaments, decorativeDividers, decorativeHeadings, irregularBody, navBarStyle, shadowWarmth)",
+            "✓ Only `backgroundWarmth` / `cardSurfaceTint` / `accentWarmth` colors and `textureName` differ between styles — the visual identity, not the visual weirdness",
+            "✓ `JournalDecorations.kt` is unchanged — its `showTexture` / `showOrnaments` / `decorativeDividers` / `useGradientCards` guards now short-circuit to the clean fallback paths uniformly for all 4 styles",
+        ),
+    )
+),
+
+        // ── v0.50.1 — Add discoverable Restore from backup card ──
+FieldMindChangelogEntry(
+    version = "0.50.1",
+    date = "2025-07-10",
+    title = "📥 Discoverable Restore from backup card on Backup & Restore",
+    importance = "Patch",
+    tags = listOf("backup", "import", "discoverability", "ui", "fix"),
+    sections = listOf(
+        "📥 Restore from backup, now always visible" to listOf(
+            "✓ New prominent primary-tinted card on the Backup & Restore screen, sitting right below the hero status card",
+            "✓ Card stays visible on the Export, Import, and Backup tabs — no more hunting for the hidden Import tab pill",
+            "✓ Tapping the card switches the active tab to Import AND auto-launches the system file picker (one-tap restore)",
+            "✓ Card explains what it does: 'Import a .fieldmind, .zip, or .json archive — observations, notes, projects, media, and settings'",
+        ),
+        "🎨 Card design follows the journal aesthetic" to listOf(
+            "✓ Card shape, border, and texture overlay read from the active journal style (Victorian / Sketchbook / BulletJournal / Ghibli) — consistent with the other cards on the screen",
+            "✓ Primary-tinted background (`primaryContainer.copy(alpha = 0.35f)`) makes it stand out from the regular export/backup cards",
+            "✓ 48dp icon box with download icon + bold 'Choose file' CTA pill with arrow_forward on the right",
+            "✓ Press scale (0.97f) + cuteShadow give it the same tactile feedback as other clickable cards",
+        ),
+        "🛠️ Implementation" to listOf(
+            "✓ New `QuickRestoreCard(onClick: () -> Unit)` composable in `FieldMindBackupExportComponents.kt`",
+            "✓ Wired into `BackupAndRestoreScreen` between the Hero Status Card and the tab pill selector",
+            "✓ Reuses the existing `filePickerLauncher` declared in the screen scope — no new launcher needed",
+            "✓ Same MIME-type allowlist as the existing Import tab: application/json, application/octet-stream, application/zip, */*",
+        ),
+    )
+),
+
+// ── v0.50.0 — Round 10 — Strip sound effects system ──
+FieldMindChangelogEntry(
+    version = "0.50.0",
+    date = "2025-07-10",
+    title = "🔇 Removed the sound effects system — battery, focus, and simplicity",
+    importance = "Major",
+    tags = listOf("performance", "battery", "ui-strip", "focus", "fix"),
+    sections = listOf(
+        "🔇 Sound effects system removed" to listOf(
+            "✓ Deletes the entire `FieldMindSoundManager` singleton (~230 lines) and the 9 raw audio assets (~700 KB of .wav files)",
+            "✓ No more chime on app open, shutter on camera, water drop on save, success arpeggio, or night cricket / dawn bird / day wind / rain / storm thunder ambience",
+            "✓ Removes the Settings → Sound section (master toggle + volume slider + preview buttons) entirely",
+            "✓ Removes `soundEffectsEnabled` / `soundVolume` StateFlow, their setters, persistence keys, and the `SoundPreviewSection` / `SoundPreviewButton` composables",
+            "✓ Removes 5 `LaunchedEffect` ambient-sound blocks from HomeScreen and the shutter/water-drop one-shot calls from the camera and observation save flows",
+        ),
+        "⚡ Performance & battery benefits" to listOf(
+            "✓ No more SoundPool holding 9 audio streams in memory across the app's lifetime",
+            "✓ No more 4 ambient-loop coroutines (`cricketJob`, `windJob`, `birdChorusJob`, `rainJob`) spinning on the home screen",
+            "✓ Stops the periodic `playThunder()` loop that fired every 12-20 s during stormy weather",
+            "✓ Frees the SoundPool thread + AudioManager focus that some devices hold even when no sound is playing",
+        ),
+        "🎯 Focus benefits" to listOf(
+            "✓ Camera shutter, observation save, and storm weather no longer make unexpected sounds during quiet fieldwork",
+            "✓ Field researchers can keep their phone in silent mode and still get the full app experience without any silent-mode overrides",
+            "✓ Less competing for the audio focus channel — voice-note recording (still intact) is now the only audio event the app produces",
+        ),
+        "🛠️ Code quality & architecture" to listOf(
+            "✓ 602 lines deleted across 6 source files + 9 raw assets removed from the APK",
+            "✓ `KEY_SOUND_EFFECTS_ENABLED` and `KEY_SOUND_VOLUME` SharedPreferences keys are dropped from the persistence layer — Android safely ignores orphaned keys on next load",
+            "✓ `clearAllPreferences()` no longer resets the dropped settings",
+            "✓ v0.46.0 changelog entry's 'SoundManager singleton' bullet removed since the system it documented no longer exists",
+        ),
+    )
+),
+
+// ── v0.49.0 — Round 9 — Strip atmospheric skybox (perf / heat) ──
+FieldMindChangelogEntry(
+    version = "0.49.0",
+    date = "2025-07-10",
+    title = "🎨 Striped atmospheric skybox for device perf and heat",
+    importance = "Major",
+    tags = listOf("performance", "battery", "ui-strip", "fix"),
+    sections = listOf(
+        "✨ Background animation system removed" to listOf(
+            "✓ Stops 5 `rememberInfiniteTransition` slots that were running perpetually on the device",
+            "✓ Removes 8 heavy `DrawScope` extensions (dawn/day/evening/night sky, clouds, stars, fireflies, birds, horizon)",
+            "✓ Removes atmospheric color tint extensions (sepia / pencil / crisp / watercolor) and ScenePalette resolver",
+            "✓ Removes `BackgroundAnimationLevel` enum + `LocalBackgroundAnimation` CompositionLocal from the theme system",
+            "✓ Removes the 'Background motion' picker from Settings → Appearance",
+        ),
+        "🌿 Per-journal aesthetic preserved" to listOf(
+            "✓ Journal warmth tint, paper / parchment / dot-grid / watercolor texture, and vignette overlay still color-grade every screen per the chosen style",
+            "✓ `AnimatedWeatherScene` (Layer 1, independent feature) still runs under its own toggle; weather rain/snow/wind/thunder/clear day rendering is unchanged",
+            "✓ All 4 journal styles (Victorian / Sketchbook / BulletJournal / Ghibli) still differ in warmth, texture, ornaments, dividers — only the moving skybox layers were removed",
+        ),
+        "🛠️ Cleanup & migration" to listOf(
+            "✓ Removed `KEY_BACKGROUND_ANIMATION = (background_animation)` from persisted settings — Android SharedPreferences safely ignores the orphaned key on next load",
+            "✓ `AnimatedBackgroundScene.kt` shrunk from ~1426 lines to ~250 (was the largest file in the app)",
+            "✓ 1170 lines deleted across 5 files; 243 added (mostly comments + the smaller static overlays)",
+            "✓ `JournalStyle` enum sharply trims from 4 phase-1 enums to 3; `KeyedEnum` interface doc updated",
+        ),
+        "🔧 Fixed" to listOf(
+            "✓ Users on older or low-end devices reported noticeable device heat and battery drain from the skybox running 5 perpetual infinite transitions",
+            "✓ Sketchbook and Ghibli in particular showed lag on AMOLED displays because the per-journal tint extension was re-evaluating on each transition loop frame",
+        )
+    )
+),
+
+// ── v0.48.1 — Round 8 — Journal styles fully propagate across Home / Insights / Export ──
+FieldMindChangelogEntry(
+    version = "0.48.1",
+    date = "2025-07-10",
+    title = "🎨 Journal styles now reach every screen-local card",
+    importance = "Patch",
+    tags = listOf("journal-styles", "ui-polish", "roundness", "fix"),
+    sections = listOf(
+        "✨ Cards follow your journal" to listOf(
+            "✓ Home data tools, observation timeline, media & sharing, field-map box all reflect the active journal",
+            "✓ Insights Research Profile, Data Record, Achievement, Research Journey flex with the chosen style",
+            "✓ Export tab Hero Status, Import / Export / Backup pill selector, and history items all match",
+            "✓ The 'Capture first observation' empty state wears the same journal character as the rest of the app",
+        ),
+        "🛠️ Chips & pills aligned" to listOf(
+            "✓ Inner icon pills, action buttons, and dismiss chips use journalChipShape (varies per style)",
+            "✓ Paper / parchment / dot-grid / watercolor textures reach every screen-local card",
+            "✓ Parent card and inner clickable never drift to two different rounded values",
+        ),
+        "🔧 Roundness fix" to listOf(
+            "✓ Ghibli's 24 dp corner radius accidentally masked these mismatches; Victorian / Sketchbook / BulletJournal bodies now look correct too",
+        )
+    )
+),
+
+// ── v0.48.0 — Journal Styles Full Aesthetic Transformation (Phase 3) ──
+        FieldMindChangelogEntry(
+            version = "0.48.0",
+            date = "2026-07-10",
+            title = "🎨 Journal Styles — Full Aesthetic Transformation",
+            importance = "Major",
+            tags = listOf("journal", "design", "cards", "headers", "ornament", "divider", "typography-hints"),
+            sections = listOf(
+                "🎨 Every card, header, and chip now reflects the active journal style" to listOf(
+                    "✓ Universal ClickableCard + InfoCard read LocalJournalStyle — corner radius, border, and texture overlay change automatically per style",
+                    "✓ SettingsGroupCard picks up journal gradient (Victorian/Ghibli), paper warmth (Sketchbook), or flat tint (BulletJournal)",
+                    "✓ StandardScreenHeader + FieldScreenHeader + SectionHeader use journal shape, border, and ornament (Victorian fleuron, Ghibli cloud, nothing for Sketchbook/BulletJournal)",
+                    "✓ EntityCard, MetricTile, EmptyState, NoteComposerCard, FieldMindSubNavBar — all journal-aware in one cohesive pass",
+                    "✓ Chips (InfoChip, EntityBadge, ConfidenceChip) use journal chipCornerRadius — pill on Sketchbook, rounded-square on BulletJournal, generous-radii on Ghibli"
+                ),
+                "📜 Per-style ornament + decorative dividers" to listOf(
+                    "✓ JournalOrnament: tiny copperplate fleuron for Victorian, cloud for Ghibli, nothing for Sketchbook / BulletJournal",
+                    "✓ JournalDivider: ornamental rule + center dot for Victorian, soft wavy path for Ghibli, three diagonal pencil marks for Sketchbook, evenly-spaced dots for BulletJournal",
+                    "✓ Both skip rendering silently when JournalConfig.showOrnaments / decorativeDividers is false"
+                ),
+                "🧵 Card border treatment per style" to listOf(
+                    "✓ Victorian — 12 dp radius + thin rounded outline + parchment-tone warmth gradient",
+                    "✓ Sketchbook — 16 dp radius + irregular sketch-like outline + paper-fiber texture + horizontal tint gradient",
+                    "✓ BulletJournal — 8 dp radius + no border + dot-grid texture + flat surface tint",
+                    "✓ Ghibli — 24 dp radius + rounded outline + watercolor-wash radial gradient + warm cream tint"
+                ),
+                "🧩 Architecture" to listOf(
+                    "✓ New file JournalDecorations.kt centralizes shared journal-aware primitives (journalBorderStroke, journalTextureModifier, journalCardBrush, drawJournalTexture) + the new JournalOrnament + JournalDivider composables",
+                    "✓ JournalCard.kt slimmed down — its private duplicate helpers now reuse JournalDecorations.kt",
+                    "✓ Backwards-compatible: any composable that passes an explicit shape param wins over the journal default"
+                ),
+                "📝 Tested changes" to listOf(
+                    "✓ Settings → Appearance → Journal aesthetic picker now visibly transforms every screen — cards, headers, chips, ornaments, dividers (not just background)",
+                    "✓ Re-run existing single-paper test runner would still pass — no behavioral changes, only visual container styling"
+                )
+            )
+        ),
+        // ── v0.47.6 — Crash UI Redesign + Lock Recovery (journal aesthetic) ──
+        FieldMindChangelogEntry(
+            version = "0.47.6",
+            date = "2026-07-10",
+            title = "🛟 Crash UI Redesign + Lock Recovery",
+            importance = "Patch",
+            tags = listOf("crash", "ui", "recovery", "design-language", "lock", "self-contained"),
+            sections = listOf(
+                "🎨 Crash screen redesigned to match the journal aesthetic" to listOf(
+                    "✓ three rounded cards (28–32 dp) instead of one flat list: header (sage primaryContainer with circular error icon), crash log (white card with monospace read-only field), recovery (white card with action buttons)",
+                    "✓ expanded SafeColors: warm cream surface (0xFFFAF7F2), forest-green primary (0xFF2E7D32), terracotta secondary (0xFFE65100), soft sage primaryContainer (0xFFD7E8D8), warm amber tertiary (0xFFB8651A) — echoes the FieldMind brand without depending on theme resources",
+                    "✓ Material symbols throughout: error_outline, description, content_copy, share, healing, lock_open, restart_alt",
+                    "✓ footer note reassures the user their research data is safe and the lock can be re-enabled in Settings after restart",
+                    "✓ still self-contained: no FieldMindTheme import, no R.* refs, no dynamic color — the screen renders even if the crash was theme-related"
+                ),
+                "🔓 New “Disable lock & PIN, then restart” recovery button" to listOf(
+                    "✓ one-tap recovery for the most common startup-crash loop (corrupt privacy lock / app PIN / decoy PIN / panic lock / failed-unlock biometrics / export password)",
+                    "✓ goes through an AlertDialog confirmation so a stray tap on the crash screen does not silently wipe security settings",
+                    "✓ SharedPreferences writes are direct (NOT via FieldMindSettings class) so the recovery works even when the settings class itself is the source of the crash",
+                    "✓ uses .commit() (sync), not .apply() (async), so the prefs flush before exitProcess(0) kills the process — the next launch sees the cleared settings",
+                    "✓ native fallback (used if Compose itself crashes) also gets the new button"
+                ),
+                "📦 Build environment" to listOf(
+                    "✓ no new compile-time dependencies — only existing Material 3 + Compose + MaterialSymbolIcon imports",
+                    "✓ no behavioral changes outside the crash flow"
+                )
+            )
+        ),
+        // ── v0.47.5 — Device-Reported Bug Fixes (3 fixes from real testing) ──
+        FieldMindChangelogEntry(
+            version = "0.47.5",
+            date = "2026-07-10",
+            title = "🛠️ Device-Reported Fixes — biometric retry, fast-scan, discard nav",
+            importance = "Patch",
+            tags = listOf("biometric", "navigation", "discard", "session", "lock", "device-testing"),
+            sections = listOf(
+                "🧿 Biometric retry no longer deadlocks" to listOf(
+                    "✓ fix: removed the “isAuthenticating” re-entrancy guard from startBiometricAuth() in FieldMindLockScreen.kt",
+                    "✓ fix: the flag could stay true forever if BiometricPrompt dropped a callback (fast finger lift, system-back cancel, OEM quirks), blocking all subsequent “Retry biometric” taps",
+                    "✓ fix: BiometricPrompt serializes overlapping authenticate() calls internally via cancelAuthentication(); no flag is needed",
+                    "✓ UX: tapping “Retry biometric” now reliably re-prompts every time"
+                ),
+                "🏃 Fast biometric scan no longer freezes the prompt" to listOf(
+                    "✓ fix: same root cause as the retry bug — the flag was reset only inside the 3 callbacks, but rapid lift+place of the finger can leave the sensor with no reading and no callback fires",
+                    "✓ fix: removing the guard means the user can immediately re-attempt; cancelAuthentication() on the prior instance is harmless",
+                    "✓ UX: prompt now reliably responds to each retry, no “frozen” state after a fast scan"
+                ),
+                "🗺️ Discard session no longer freezes subsequent nav" to listOf(
+                    "✓ fix: removed onBack?.invoke() from both Discard buttons in FieldMindObserveScreen.kt (the active-session exit and the unsaved-observation exit)",
+                    "✓ Root cause: the Capture tab lives inside the root field_tab_container start destination — calling safeBack → navController.popBackStack() popped the root itself, emptying the back stack and leaving the UI frozen (next back press and bottom-nav buttons unresponsive)",
+                    "✓ fix: clearing the session/observation state now stays on the Capture tab; the user can navigate away via the bottom-nav themselves",
+                    "✓ UX: matches the button label — “Discard” and “Discard session” never promised an exit, only a clear of the in-progress work"
+                ),
+                "📦 Build environment" to listOf(
+                    "✓ No new compile-time errors — the fix removes state and call sites, no types or signatures change",
+                    "✓ No behavioral changes outside the 3 reported flows"
+                )
+            )
+        ),
+        // ── v0.47.4 — CI Bug Fixes (companion to v0.47.3) ──
+        FieldMindChangelogEntry(
+            version = "0.47.4",
+            date = "2026-07-10",
+            title = "🐛 CI Bug Fixes — roundness pass companion build fix",
+            importance = "Patch",
+            tags = listOf("ci", "bugfix", "build", "type-safety", "runtime"),
+            sections = listOf(
+                "🔧 Developer weather test panel compiles again" to listOf(
+                    "✓ fix: var testTemperature / testHumidity in DeveloperSettingsPage: bare “mutableStateOf(null)” was inferred as MutableState<Nothing?> because Kotlin types null as Nothing?",
+                    "✓ fix: typed them as mutableStateOf<Int?>(null) — matches testWeatherCode above and the Int?-returning slider onValueChange lambdas that were previously failing “Assignment type mismatch: Int? vs Nothing?”",
+                    "✓ Root cause: pre-existing latent bug (not from v0.47.3 semantics) but the rebuild flagged both sites at once"
+                ),
+                "🎨 Watercolor journal texture no longer crashes" to listOf(
+                    "✓ fix: AnimatedBackgroundScene.kt drawWatercolorTexture’s “for (i in 0..12) rng[i * 13 + 5..8]” reads up to rng[164]; i=8 was hitting rng[109] on the live crash report",
+                    "✓ fix: bumped rememberTextureRng pool from List(100) to List(200); deterministic Random(name.hashCode()) seed keeps the first 100 floats bit-identical, so parchment/paper/dotgrid visuals stay unchanged on first paint"
+                ),
+                "📦 Build environment" to listOf(
+                    "✓ F-Droid debug build once again green on CI",
+                    "✓ No behavioral changes — only type-annotations and a list-size constant"
+                )
+            )
+        ),
+        // ── v0.47.3 — Card Roundness + Settings Polish Pass ──
+        FieldMindChangelogEntry(
+            version = "0.47.3",
+            date = "2026-07-10",
+            title = "📰 Card Roundness Pass + Settings Inline Polish",
+            importance = "Patch",
+            tags = listOf("design-language", "settings", "home", "roundness", "journal"),
+            sections = listOf(
+                "📰 Home cards now match the journal aesthetic" to listOf(
+                    "✓ Data Tools + Media & Sharing tiles: 24.dp → 28.dp, clickable elevation tier, press feedback",
+                    "✓ Observation Timeline 'Open' + Data Tools 'All tools' buttons: 22.dp → 28.dp",
+                    "✓ Current Project card: shadow lifted via cuteShadow, no more flat-looking card",
+                    "✓ Data tool mini-tile icons: 36/18.dp → 40/20.dp with theme-aware alpha"
+                ),
+                "🔧 Settings inline pills feel page-mounted" to listOf(
+                    "✓ Sound preview tiles: 16.dp → 24.dp with light/dark-aware icon background",
+                    "✓ Profile frequency pills, Theme layout pills, Security PIN pills: 18–22.dp → 22–26.dp",
+                    "✓ PIN length selector, Preview mode chips, View Security Score surface: 20.dp → 24.dp",
+                    "✓ Security page error-container Surface: 20.dp → 24.dp",
+                    "✓ All press surfaces now press-back on tap"
+                ),
+                "🎨 Visual rhythm matches the rest of the UI" to listOf(
+                    "✓ No more sub-22.dp shapes on Card/Surface/FilledTonalButton anywhere in Home or Settings",
+                    "✓ Clickable vs non-clickable surfaces clearly differentiated via elevation tier",
+                    "✓ Container color regression fixed (Data Tools keeps surfaceContainerHigh + gradient)"
+                )
+            )
+        ),
+        // ── v0.47.0 — Daily Journal Quick-Capture ──
+        FieldMindChangelogEntry(
+            version = "0.47.0",
+            date = "2026-07-10",
+            title = "📓 Daily Journal Quick-Capture",
+            importance = "Patch",
+            tags = listOf("daily-journal", "quick-capture", "settings"),
+            sections = listOf(
+                "📓 Working journal overlay" to listOf(
+                    "✓ Tap a category chip (Bird, Plant, Insect, Weather, Animal) to pre-tag your observation",
+                    "✓ The bottom button and the keyboard Done key now persist the typed text as a real Observation",
+                    "✓ Chosen chip state is remembered and pre-selected on tomorrow's overlay",
+                    "✓ Toast confirms save and the overlay slides down cleanly"
+                ),
+                "⚙️ New Settings → Profile → Daily Journal controls" to listOf(
+                    "✓ Show category chips in overlay (default on)",
+                    "✓ Quick-capture category picker (defaults to your global default category)"
+                )
+            )
+        ),
         // ── v0.46.0 — Sound Design System & Seasonal Color Shift ──
         FieldMindChangelogEntry(
             version = "0.46.0",
@@ -76,7 +437,6 @@ internal data class FieldMindChangelogEntry(
                     "✓ Toggle in Settings → Appearance to enable/disable seasonal shifts"
                 ),
                 "🔄 Code quality & architecture" to listOf(
-                    "✓ SoundManager singleton with proper synchronized lazy initialization",
                     "✓ SeasonalColor.kt — clean month-to-season mapping with smooth blend function",
                     "✓ Both systems respect the Compose-reactive settings architecture",
                     "✓ Settings export/import and clear-all-reset fully support both new features"
@@ -84,6 +444,22 @@ internal data class FieldMindChangelogEntry(
             )
         ),
 
+        // ── v0.45.1 — Daily Field Journal Overlay First-Launch Flicker Fix ──
+        FieldMindChangelogEntry(
+            version = "0.45.1",
+            date = "2026-07-10",
+            title = "📓 Daily Field Journal — First-Launch Flicker Fix",
+            importance = "Patch",
+            tags = listOf("📓", "🐛", "🎬"),
+            sections = listOf(
+                "🐛 Overlay flash-and-disappear on first open" to listOf(
+                    "✓ Fixed inverted spring animation in DailyFieldJournalOverlay — was animating visible=true → 0f instead of 1f",
+                    "✓ Previously the sheet flashed visible for one frame, then slid down and faded out the moment `LaunchedEffect` set visible=true",
+                    "✓ Now correctly slides up + fades in on first open, and slides down + fades out on dismiss",
+                    "✓ No more brief invisible-but-touch-blocking state where the full-screen `Box.clickable` stayed mounted and intercepted all taps"
+                )
+            )
+        ),
         // ── v0.45.0 — Personalized Onboarding & Daily Field Journal ──
         FieldMindChangelogEntry(
             version = "0.45.0",

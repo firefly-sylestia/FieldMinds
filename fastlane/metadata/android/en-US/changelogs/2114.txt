@@ -1,0 +1,9 @@
+🎨 Round 9 — Stripped atmospheric skybox for device perf and heat
+
+✨ Removed the Background animation system entirely. 5 rememberInfiniteTransition slots + 8 heavy DrawScope extensions (sky, clouds, stars, fireflies, birds) + 4 color tint extensions (sepia / pencil / crisp / watercolor) + ScenePalette resolver + BackgroundAnimationLevel enum + LocalBackgroundAnimation CompositionLocal gone.
+
+🌿 Per-journal aesthetic preserved. Journal warmth tint + paper / parchment / dot-grid / watercolor texture + vignette overlay still color-grade every screen. AnimatedWeatherScene (weather feature, independent) still runs under its own toggle.
+
+🛠️ Cleanup. AnimatedBackgroundScene.kt shrunk from 1426 → 250 lines. 1170 lines deleted across 5 files. Settings → Appearance no longer has a 'Background motion' picker.
+
+🔧 Fixed. Users on older or AMOLED devices reported heat and battery drain from 5 perpetual infinite transitions re-running every frame.

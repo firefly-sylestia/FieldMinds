@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import fieldmind.research.app.shared.presentation.theme.JournalConfig
+import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.ui.theme.CuteElevations
 
 /**
@@ -38,7 +41,7 @@ fun ClickableCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     minHeight: Dp = 68.dp,
-    shape: Shape = RoundedCornerShape(34.dp),
+    shape: Shape? = null,
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
@@ -46,25 +49,33 @@ fun ClickableCard(
     shadowElevation: Dp = CuteElevations.clickableTier,
     liftDp: Float = 1.5f,
     scaleDown: Float = 0.985f,
-    border: androidx.compose.foundation.BorderStroke? = null,
+    border: BorderStroke? = null,
     index: Int = 0,
     animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
-) = Surface(
-    onClick = onClick,
-    modifier = modifier
-        .fillMaxWidth()
-        .heightIn(min = minHeight)
-        .staggeredEntrance(index = index, animate = animate)
-        .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
-    shape = shape,
-    color = colors.containerColor,
-    contentColor = colors.contentColor,
-    tonalElevation = tonalElevation,
-    shadowElevation = shadowElevation,
-    border = border
 ) {
-    Column(modifier = Modifier.fillMaxWidth(), content = content)
+    val journal = LocalJournalStyle.current
+    val effectiveShape = shape ?: RoundedCornerShape(journal.cardCornerRadius)
+    val effectiveBorder = border ?: journalBorderStroke(journal)
+    val textureModifier = journalTextureModifier(journal)
+
+    Surface(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = minHeight)
+            .staggeredEntrance(index = index, animate = animate)
+            .then(textureModifier)
+            .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
+        shape = effectiveShape,
+        color = colors.containerColor,
+        contentColor = colors.contentColor,
+        tonalElevation = tonalElevation,
+        shadowElevation = shadowElevation,
+        border = effectiveBorder
+    ) {
+        Column(modifier = Modifier.fillMaxWidth(), content = content)
+    }
 }
 
 /**
@@ -75,29 +86,37 @@ fun ClickableCard(
 fun InfoCard(
     modifier: Modifier = Modifier,
     minHeight: Dp = 64.dp,
-    shape: Shape = RoundedCornerShape(34.dp),
+    shape: Shape? = null,
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
     tonalElevation: Dp = CuteElevations.nonClickableTier,
     shadowElevation: Dp = CuteElevations.nonClickableTier,
-    border: androidx.compose.foundation.BorderStroke? = null,
+    border: BorderStroke? = null,
     index: Int = 0,
     animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
-) = Surface(
-    modifier = modifier
-        .fillMaxWidth()
-        .heightIn(min = minHeight)
-        .staggeredEntrance(index = index, animate = animate),
-    shape = shape,
-    color = colors.containerColor,
-    contentColor = colors.contentColor,
-    tonalElevation = tonalElevation,
-    shadowElevation = shadowElevation,
-    border = border
 ) {
-    Column(modifier = Modifier.fillMaxWidth(), content = content)
+    val journal = LocalJournalStyle.current
+    val effectiveShape = shape ?: RoundedCornerShape(journal.cardCornerRadius)
+    val effectiveBorder = border ?: journalBorderStroke(journal)
+    val textureModifier = journalTextureModifier(journal)
+
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = minHeight)
+            .staggeredEntrance(index = index, animate = animate)
+            .then(textureModifier),
+        shape = effectiveShape,
+        color = colors.containerColor,
+        contentColor = colors.contentColor,
+        tonalElevation = tonalElevation,
+        shadowElevation = shadowElevation,
+        border = effectiveBorder
+    ) {
+        Column(modifier = Modifier.fillMaxWidth(), content = content)
+    }
 }
 
 /**

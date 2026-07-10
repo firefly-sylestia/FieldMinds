@@ -252,6 +252,15 @@ fun BackupAndRestoreScreen(
     ) { padding ->
         val backupScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
 
+        // 📘 Tab-aware header subtitle — generated so the title reflects the user's current tab + data
+        val headerSubtitle = run {
+            val tabLabel = activeTab.name.lowercase().replaceFirstChar { it.uppercase() }
+            val total = observations.size + notes.size + questions.size + hypotheses.size +
+                projects.size + sources.size + dataRecords.size + reports.size +
+                flashcards.size + species.size + weatherCatalog.size +
+                researchSessions.size + tasks.size
+            "$tabLabel tab · $total records ready · Last backup: $lastBackupLabel"
+        }
         LazyColumn(
             state = backupScrollState,
             modifier = Modifier
@@ -264,7 +273,7 @@ fun BackupAndRestoreScreen(
             item {
                 StandardScreenHeader(
                     title = "Backup & Restore",
-                    subtitle = "Export, import, and manage your research data.",
+                    subtitle = headerSubtitle,
                     icon = FieldMindIcons.Export,
                     trailing = { BackButton(onClick = onBack) }
                 )
@@ -284,6 +293,16 @@ fun BackupAndRestoreScreen(
                         "sources" to sources.size
                     ),
                     onAutoBackupToggle = { settings.setAutoBackupEnabled(it) }
+                )
+            }
+
+            // ── Quick restore CTA — always visible, switches to Import tab + auto-launches file picker ──
+            item {
+                QuickRestoreCard(
+                    onClick = {
+                        activeTab = BackupTab.IMPORT
+                        filePickerLauncher.launch(arrayOf("application/json", "application/octet-stream", "application/zip", "*/*"))
+                    }
                 )
             }
 
@@ -339,7 +358,6 @@ fun BackupAndRestoreScreen(
                             },
                             onChooseFolder = { backupFolderPickerLauncher.launch(null) },
                             destinationUri = exportDestinationUri,
-                            onSwitchToImport = { activeTab = BackupTab.IMPORT },
                             showConflictDialog = showConflictDialog,
                             onShowConflictDialog = { showConflictDialog = it }
                         )
@@ -1138,7 +1156,6 @@ private fun ExportTabContent(
     onExport: (format: String, action: String, scope: String) -> Unit,
     onChooseFolder: () -> Unit,
     destinationUri: Uri?,
-    onSwitchToImport: (() -> Unit)? = null,
     gpsPrivacy: String = "Exact",
     onGpsPrivacyChange: (String) -> Unit = {},
     excludeMedia: Boolean = false,
@@ -1156,6 +1173,8 @@ private fun ExportTabContent(
     var selectedExportFormat by remember { mutableStateOf(".fieldmind") }
     var exportScope by remember { mutableStateOf("All") }
     val scopeOptions = listOf("All", "Projects", "Observations", "Sources", "Reports")
+    // 🔓 Collapsed by default — design language pass: privacy + encryption tucked behind an expandable card
+    var privacyExpanded by rememberSaveable { mutableStateOf(false) }
 
     // Entity icon mapping
     fun entityIcon(key: String): MaterialSymbolIcon = when (key) {
@@ -1369,17 +1388,24 @@ private fun ExportTabContent(
             }
         }
 
-        // ── Privacy & encryption ──
-        ExportPrivacyOptionsCard(
-            gpsPrivacy = gpsPrivacy,
-            onGpsPrivacyChange = onGpsPrivacyChange,
-            excludeMedia = excludeMedia,
-            onExcludeMediaChange = onExcludeMediaChange,
-            encrypt = encrypt,
-            onEncryptChange = onEncryptChange,
-            password = password,
-            onPasswordChange = onPasswordChange
-        )
+        CollapsibleSection(
+            title = "Privacy & encryption",
+            subtitle = "GPS blurring, media inclusion, password protection",
+            icon = FieldMindIcons.Lock,
+            expanded = privacyExpanded,
+            onToggle = { privacyExpanded = !privacyExpanded }
+        ) {
+            ExportPrivacyOptionsCard(
+                gpsPrivacy = gpsPrivacy,
+                onGpsPrivacyChange = onGpsPrivacyChange,
+                excludeMedia = excludeMedia,
+                onExcludeMediaChange = onExcludeMediaChange,
+                encrypt = encrypt,
+                onEncryptChange = onEncryptChange,
+                password = password,
+                onPasswordChange = onPasswordChange
+            )
+        }
 
         // ── Export progress ──
         AnimatedVisibility(visible = isExporting) {
@@ -1408,12 +1434,8 @@ private fun ExportTabContent(
             ) { Icon(FieldMindIcons.Save, null, size = 18.dp); Spacer(Modifier.width(6.dp)); Text("Save") }
         }
 
-        // ── Import hint button ──
-        OutlinedButton(
-            onClick = { onSwitchToImport?.invoke() },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp)
-        ) { Icon(FieldMindIcons.Download, null, size = 18.dp); Spacer(Modifier.width(6.dp)); Text("Import backup") }
+        // NOTE: Design-language pass — the Export tab no longer carries an inline Import shortcut.
+        // Users switch between Export / Import / Backup via the TabPillSelector at the top of the hero.
     }
 }
 
