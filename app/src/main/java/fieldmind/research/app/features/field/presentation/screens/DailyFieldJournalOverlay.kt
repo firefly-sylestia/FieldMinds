@@ -56,8 +56,10 @@ fun DailyFieldJournalOverlay(
     }
 
     // Spring animation for the overlay
+    // Semantics: 1f = fully visible at correct bottom position (alpha 1, no translationY offset),
+    //            0f = hidden (alpha 0, slightly translated down). visible/true → 1f, visible/false → 0f.
     val offsetAnim by animateFloatAsState(
-        targetValue = if (visible) 0f else 1f,
+        targetValue = if (visible) 1f else 0f,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow

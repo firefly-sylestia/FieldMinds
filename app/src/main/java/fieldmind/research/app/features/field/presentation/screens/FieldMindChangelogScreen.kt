@@ -84,6 +84,22 @@ internal data class FieldMindChangelogEntry(
             )
         ),
 
+        // ── v0.45.1 — Daily Field Journal Overlay First-Launch Flicker Fix ──
+        FieldMindChangelogEntry(
+            version = "0.45.1",
+            date = "2026-07-10",
+            title = "📓 Daily Field Journal — First-Launch Flicker Fix",
+            importance = "Patch",
+            tags = listOf("📓", "🐛", "🎬"),
+            sections = listOf(
+                "🐛 Overlay flash-and-disappear on first open" to listOf(
+                    "✓ Fixed inverted spring animation in DailyFieldJournalOverlay — was animating visible=true → 0f instead of 1f",
+                    "✓ Previously the sheet flashed visible for one frame, then slid down and faded out the moment `LaunchedEffect` set visible=true",
+                    "✓ Now correctly slides up + fades in on first open, and slides down + fades out on dismiss",
+                    "✓ No more brief invisible-but-touch-blocking state where the full-screen `Box.clickable` stayed mounted and intercepted all taps"
+                )
+            )
+        ),
         // ── v0.45.0 — Personalized Onboarding & Daily Field Journal ──
         FieldMindChangelogEntry(
             version = "0.45.0",
