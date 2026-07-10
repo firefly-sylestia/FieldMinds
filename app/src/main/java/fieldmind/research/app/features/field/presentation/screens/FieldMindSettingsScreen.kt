@@ -50,6 +50,8 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.features.field.presentation.components.ColorSchemeSwatchPicker
 import fieldmind.research.app.features.field.presentation.components.pressScale
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
+import fieldmind.research.app.infrastructure.FieldMindSoundManager
+import fieldmind.research.app.infrastructure.FieldMindSounds
 import fieldmind.research.app.features.field.presentation.screens.DevWeatherTestPanel
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.foundation.text.KeyboardOptions
@@ -228,6 +230,10 @@ fun FieldMindSettingsScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
+
+                    // ── Sound preview buttons ──
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    SoundPreviewSection()
                 }
             }
         }
@@ -261,6 +267,180 @@ fun FieldMindSettingsScreen(
                 Text("Reset onboarding")
             }
             Spacer(Modifier.height(40.dp))
+        }
+    }
+}
+
+/**
+ * A grid of sound preview buttons inside the Sound settings section.
+ * Each button plays its corresponding ambient sound on tap.
+ */
+@Composable
+private fun SoundPreviewSection() {
+    val context = LocalContext.current
+    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
+
+    // Categorized sounds: [name, icon, soundId]
+    data class PreviewSound(val name: String, val icon: MaterialSymbolIcon, val soundId: Int, val description: String)
+
+    val interactionSounds = listOf(
+        PreviewSound("Chime", MaterialSymbolIcon("music_note"), FieldMindSounds.CHIME, "App open"),
+        PreviewSound("Shutter", MaterialSymbolIcon("photo_camera"), FieldMindSounds.SHUTTER, "Photo capture"),
+        PreviewSound("Water drop", MaterialSymbolIcon("water_drop"), FieldMindSounds.WATER_DROP, "Save
+observation"),
+        PreviewSound("Success", MaterialSymbolIcon("celebration"), FieldMindSounds.SUCCESS, "Achievement"),
+    )
+
+    val ambientSounds = listOf(
+        PreviewSound("Cricket", MaterialSymbolIcon("bug_report"), FieldMindSounds.CRICKET, "Night"),
+        PreviewSound("Bird chorus", MaterialSymbolIcon("nest_early_hatching"), FieldMindSounds.BIRD_CHORUS, "Dawn"),
+        PreviewSound("Wind", MaterialSymbolIcon("air"), FieldMindSounds.WIND, "Daytime"),
+        PreviewSound("Rain", MaterialSymbolIcon("rainy"), FieldMindSounds.RAIN, "Rainy weather"),
+        PreviewSound("Thunder", MaterialSymbolIcon("thunderstorm"), FieldMindSounds.THUNDER, "Storm"),
+    )
+
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(
+            "Preview sounds",
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        // Interactions
+        Text(
+            "Interactions",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+        )
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            interactionSounds.forEach { sound ->
+                SoundPreviewButton(
+                    name = sound.name,
+                    icon = sound.icon,
+                    description = sound.description,
+                    soundId = sound.soundId,
+                    soundManager = soundManager,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        // Ambient environments
+        Text(
+            "Ambient environments",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+        )
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ambientSounds.take(3).forEach { sound ->
+                SoundPreviewButton(
+                    name = sound.name,
+                    icon = sound.icon,
+                    description = sound.description,
+                    soundId = sound.soundId,
+                    soundManager = soundManager,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ambientSounds.drop(3).forEach { sound ->
+                SoundPreviewButton(
+                    name = sound.name,
+                    icon = sound.icon,
+                    description = sound.description,
+                    soundId = sound.soundId,
+                    soundManager = soundManager,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SoundPreviewButton(
+    name: String,
+    icon: MaterialSymbolIcon,
+    description: String,
+    soundId: Int,
+    soundManager: FieldMindSoundManager,
+    modifier: Modifier = Modifier
+) {
+    val haptics = rememberFieldMindHaptics()
+    var isPlaying by remember { mutableStateOf(false) }
+
+    Surface(
+        onClick = {
+            haptics.light()
+            isPlaying = true
+            soundManager.play(soundId)
+            // Auto-reset after sound duration
+            kotlinx.coroutines.MainScope().launch {
+                kotlinx.coroutines.delay(1500L)
+                isPlaying = false
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
+        color = if (isPlaying)
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+        else
+            MaterialTheme.colorScheme.surfaceContainerHigh,
+        border = if (isPlaying)
+            androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary)
+        else
+            null,
+        modifier = modifier.pressScale(scaleDown = 0.92f)
+    ) {
+        Column(
+            Modifier.padding(vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Box(
+                Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(
+                        if (isPlaying) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                        else MaterialTheme.colorScheme.surfaceContainerLow
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    icon,
+                    contentDescription = name,
+                    tint = if (isPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 20.dp
+                )
+            }
+            Text(
+                name,
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = if (isPlaying) FontWeight.Bold else FontWeight.Medium,
+                color = if (isPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                description,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                maxLines = 1,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
