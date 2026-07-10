@@ -295,21 +295,24 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
                     }
                 }
             }
-        }
-        val observations by viewModel.observations.collectAsState()
-        val journalStreakEnabled by viewModel.fieldSettings.streaksEnabled.collectAsState()
-        val journalStreakCount = remember(observations, journalStreakEnabled) {
-            if (journalStreakEnabled) FieldMindStreaks.currentStreakDays(observations.map { it.date }) else 0
-        }
-        if (showJournal && shouldShowJournalToday(viewModel.fieldSettings)) {
-            DailyFieldJournalOverlay(
-                settings = viewModel.fieldSettings,
-                streakCount = journalStreakCount,
-                onDismiss = {
-                    showJournal = false
-                    viewModel.fieldSettings.setJournalLastShownDate(getTodayDateString())
-                }
-            )
+            // Journal overlay inside app lock so it doesn't compete with
+            // the lock's gesture handling. Fixes: overlay vanishing early
+            // and touch being broken after dismiss.
+            val observations by viewModel.observations.collectAsState()
+            val journalStreakEnabled by viewModel.fieldSettings.streaksEnabled.collectAsState()
+            val journalStreakCount = remember(observations, journalStreakEnabled) {
+                if (journalStreakEnabled) FieldMindStreaks.currentStreakDays(observations.map { it.date }) else 0
+            }
+            if (showJournal && shouldShowJournalToday(viewModel.fieldSettings)) {
+                DailyFieldJournalOverlay(
+                    settings = viewModel.fieldSettings,
+                    streakCount = journalStreakCount,
+                    onDismiss = {
+                        showJournal = false
+                        viewModel.fieldSettings.setJournalLastShownDate(getTodayDateString())
+                    }
+                )
+            }
         }
         }
     }
