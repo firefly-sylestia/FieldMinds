@@ -44,7 +44,32 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
-        // ── v0.48.0 — Journal Styles Full Aesthetic Transformation (Phase 3) ──
+        // ── v0.48.1 — Round 8 — Journal styles fully propagate across Home / Insights / Export ──
+FieldMindChangelogEntry(
+    version = "0.48.1",
+    date = "2025-07-10",
+    title = "🎨 Journal styles now reach every screen-local card",
+    importance = "Patch",
+    tags = listOf("journal-styles", "ui-polish", "roundness", "fix"),
+    sections = listOf(
+        "✨ Cards follow your journal" to listOf(
+            "✓ Home data tools, observation timeline, media & sharing, field-map box all reflect the active journal",
+            "✓ Insights Research Profile, Data Record, Achievement, Research Journey flex with the chosen style",
+            "✓ Export tab Hero Status, Import / Export / Backup pill selector, and history items all match",
+            "✓ The 'Capture first observation' empty state wears the same journal character as the rest of the app",
+        ),
+        "🛠️ Chips & pills aligned" to listOf(
+            "✓ Inner icon pills, action buttons, and dismiss chips use journalChipShape (varies per style)",
+            "✓ Paper / parchment / dot-grid / watercolor textures reach every screen-local card",
+            "✓ Parent card and inner clickable never drift to two different rounded values",
+        ),
+        "🔧 Roundness fix" to listOf(
+            "✓ Ghibli's 24 dp corner radius accidentally masked these mismatches; Victorian / Sketchbook / BulletJournal bodies now look correct too",
+        )
+    )
+),
+
+// ── v0.48.0 — Journal Styles Full Aesthetic Transformation (Phase 3) ──
         FieldMindChangelogEntry(
             version = "0.48.0",
             date = "2026-07-10",
