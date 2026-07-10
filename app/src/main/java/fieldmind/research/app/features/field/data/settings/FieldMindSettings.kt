@@ -1196,7 +1196,8 @@ class FieldMindSettings private constructor(context: Context) {
         applyString(KEY_JOURNAL_LAST_DATE)
         applyBoolean(KEY_JOURNAL_ENABLED, true)
         applyInt(KEY_DAILY_GOAL)
-        applyString(KEY_CARD_GRADIENT_STYLE)        applyBoolean(KEY_SEASONAL_COLORS)
+        applyString(KEY_CARD_GRADIENT_STYLE)
+        applyBoolean(KEY_SEASONAL_COLORS)
         applyFloat(KEY_GRADIENT_OPACITY)
         edit.apply()
 
