@@ -301,7 +301,7 @@ fun TasksScreen(
                     EmptyTaskHint("No tasks due today. Tap + to add one.")
                 }
             } else {
-                itemsIndexed(todayTasks.values.toList()) { i, task ->
+                itemsIndexed(todayTasks) { i, task ->
                     SwipeToCompleteTaskCard(
                         task = task,
                         accentColor = FieldMindTheme.colors.task,
@@ -338,7 +338,7 @@ fun TasksScreen(
                     EmptyTaskHint("No upcoming tasks.")
                 }
             } else {
-                itemsIndexed(upcomingTasks.values.toList()) { i, task ->
+                itemsIndexed(upcomingTasks) { i, task ->
                     SwipeToCompleteTaskCard(
                         task = task,
                         accentColor = FieldMindTheme.colors.task,
@@ -375,7 +375,7 @@ fun TasksScreen(
                     EmptyTaskHint("All tasks have due dates.")
                 }
             } else {
-                itemsIndexed(unscheduledTasks.values.toList()) { i, task ->
+                itemsIndexed(unscheduledTasks) { i, task ->
                     SwipeToCompleteTaskCard(
                         task = task,
                         accentColor = FieldMindTheme.colors.task,
@@ -412,7 +412,7 @@ fun TasksScreen(
                     EmptyTaskHint("No completed tasks yet.")
                 }
             } else {
-                itemsIndexed(doneTasks.values.toList()) { i, task ->
+                itemsIndexed(doneTasks) { i, task ->
                     TaskCard(
                         index = i,
                         task = task,

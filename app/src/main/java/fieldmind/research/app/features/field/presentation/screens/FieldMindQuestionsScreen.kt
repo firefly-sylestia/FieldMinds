@@ -365,7 +365,7 @@ fun QuestionsScreen(
         // ════════════════════════════════════════════════════════
         //  QUESTION CARDS with nested hypotheses
         // ════════════════════════════════════════════════════════
-        itemsIndexed(filtered, key = { it.id }) { i, q ->
+        itemsIndexed(filtered) { i, q ->
             val questionHypotheses = remember(hypotheses, q.id) {
                 hypotheses.filter { it.linkedQuestionId == q.id }
             }
