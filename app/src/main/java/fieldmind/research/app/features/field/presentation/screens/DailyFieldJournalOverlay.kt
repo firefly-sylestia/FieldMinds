@@ -26,9 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
-import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
-import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
-import fieldmind.research.app.features.field.presentation.components.expressivePress
+import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import java.text.SimpleDateFormat
@@ -50,6 +48,7 @@ fun DailyFieldJournalOverlay(
     var visible by remember { mutableStateOf(false) }
     var quickText by remember { mutableStateOf("") }
     val profileName by settings.profileName.collectAsState()
+    val celebrationState = rememberCelebrationState()
 
     LaunchedEffect(Unit) {
         visible = true
@@ -64,12 +63,25 @@ fun DailyFieldJournalOverlay(
         ), label = "journalOffset"
     )
 
+    // ── Streak milestone celebration ──
+    val isStreakMilestone = streakCount in setOf(1, 7, 14, 30, 60, 100, 365)
+    LaunchedEffect(streakCount) {
+        if (isStreakMilestone) {
+            // Small delay so the overlay animation plays first, then sparkles
+            kotlinx.coroutines.delay(400)
+            celebrationState.trigger(CelebrationVariant.GENTLE_SPARKLE)
+        }
+    }
+
     val greeting = getTimeBasedGreeting()
     val icon = getTimeBasedIcon()
 
     Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.3f * offsetAnim))) {
         // Tap background to dismiss
         Box(Modifier.fillMaxSize().clickable { visible = false; onDismiss() })
+
+        // Celebration overlay for streak milestones
+        CelebrationOverlay(celebrationState = celebrationState)
 
         // Journal sheet slides up from bottom
         Box(

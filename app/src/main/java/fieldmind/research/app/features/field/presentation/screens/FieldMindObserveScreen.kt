@@ -161,6 +161,7 @@ fun ObserveScreen(
     val haptics = rememberFieldMindHaptics()
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
+    val celebrationState = rememberCelebrationState()
     val context = LocalContext.current
 
     // GPS location & accuracy
@@ -443,6 +444,10 @@ fun ObserveScreen(
                 fieldContext = "", manualLocation = "", attachments = emptyList(),
                 sessionObservationCount = session.sessionObservationCount + 1
             )
+            // Celebrate first observation ever saved
+            if (observations.isEmpty()) {
+                celebrationState.trigger(CelebrationVariant.CONFETTI_BURST)
+            }
             showFastSnackbar(snackbar, scope, "Observation saved! Session: ${session.sessionObservationCount + 1}")
         }
     }
@@ -976,6 +981,9 @@ fun ObserveScreen(
                     .align(Alignment.TopCenter)
                     .padding(top = 8.dp, start = 16.dp, end = 16.dp)
             )
+
+            // ── Celebration overlay ──
+            CelebrationOverlay(celebrationState = celebrationState)
         }
     }
 

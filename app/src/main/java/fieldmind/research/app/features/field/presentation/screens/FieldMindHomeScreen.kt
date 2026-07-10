@@ -266,7 +266,7 @@ fun SharedTransitionScope.HomeScreen(
         }
     }
 
-    // ── Celebration state for daily goal completion ──
+    // ── Celebration state for daily goal completion & streak milestones ──
     val goalReached = todayCount >= goal && goal > 0
     val celebrationState = rememberCelebrationState()
     // Initialize with current state to avoid celebrating on app start if goal already met
@@ -276,6 +276,24 @@ fun SharedTransitionScope.HomeScreen(
             celebrationState.trigger(CelebrationVariant.GENTLE_SPARKLE)
         }
         previousGoalReached = goalReached
+    }
+
+    // ── Streak milestone celebration ──
+    val streakMilestoneDays = setOf(1, 7, 14, 30, 60, 100, 365)
+    var previousStreak by remember { mutableIntStateOf(currentStreak) }
+    LaunchedEffect(currentStreak) {
+        val isMilestone = currentStreak in streakMilestoneDays
+        val wasNotMilestone = previousStreak !in streakMilestoneDays || previousStreak < currentStreak
+        if (isMilestone && (wasNotMilestone || currentStreak > previousStreak)) {
+            val variant = when {
+                currentStreak >= 100 -> CelebrationVariant.MIXED
+                currentStreak >= 30 -> CelebrationVariant.CONFETTI_BURST
+                currentStreak >= 7 -> CelebrationVariant.STAR_BURST
+                else -> CelebrationVariant.GENTLE_SPARKLE
+            }
+            celebrationState.trigger(variant)
+        }
+        previousStreak = currentStreak
     }
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
