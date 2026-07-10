@@ -28,6 +28,7 @@ import fieldmind.research.app.features.field.presentation.components.SectionHead
 import fieldmind.research.app.features.field.presentation.components.BackButton
 import fieldmind.research.app.features.field.presentation.components.StandardScreenHeader
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
+import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
@@ -171,12 +172,14 @@ fun FieldMindLearnScreen(
 @Composable
 private fun InAppLessonCard(
     lesson: AppLesson,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    index: Int = 0,
+    animate: Boolean = true
 ) {
     val accent = FieldMindTheme.colors.accentFor(lesson.slug)
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -381,11 +384,14 @@ private fun ActivityRecommendationCard(
     kind: String,
     description: String,
     url: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    index: Int = 0,
+    animate: Boolean = true
 ) {
     val accent = FieldMindTheme.colors.accentFor("learn")
 
     Card(
+        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
@@ -469,7 +475,9 @@ private fun ActivityRecommendationCard(
 @Composable
 private fun LearnCategoryCardCompact(
     category: LearnCategory,
-    onOpenResource: (LearnResource) -> Unit
+    onOpenResource: (LearnResource) -> Unit,
+    index: Int = 0,
+    animate: Boolean = true
 ) {
     var expanded by rememberSaveable(category.name) { mutableStateOf(false) }
     val accent = FieldMindTheme.colors.accentFor(category.name)
@@ -477,7 +485,7 @@ private fun LearnCategoryCardCompact(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            ,
+            .staggeredEntrance(index = index, animate = animate),
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)

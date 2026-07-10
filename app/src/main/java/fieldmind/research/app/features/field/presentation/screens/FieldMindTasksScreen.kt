@@ -300,10 +300,11 @@ fun TasksScreen(
                     EmptyTaskHint("No tasks due today. Tap + to add one.")
                 }
             } else {
-                items(todayTasks, key = { it.id }) { task ->
+                itemsIndexed(todayTasks, key = { it.id }) { i, task ->
                     SwipeToCompleteTaskCard(
                         task = task,
                         accentColor = FieldMindTheme.colors.task,
+                        index = i,
                         onToggle = {
                             haptics.confirm()
                             completedTaskIds[task.id] = true
@@ -336,10 +337,11 @@ fun TasksScreen(
                     EmptyTaskHint("No upcoming tasks.")
                 }
             } else {
-                items(upcomingTasks, key = { it.id }) { task ->
+                itemsIndexed(upcomingTasks, key = { it.id }) { i, task ->
                     SwipeToCompleteTaskCard(
                         task = task,
                         accentColor = FieldMindTheme.colors.task,
+                        index = i,
                         onToggle = {
                             haptics.confirm()
                             completedTaskIds[task.id] = true
@@ -372,10 +374,11 @@ fun TasksScreen(
                     EmptyTaskHint("All tasks have due dates.")
                 }
             } else {
-                items(unscheduledTasks, key = { it.id }) { task ->
+                itemsIndexed(unscheduledTasks, key = { it.id }) { i, task ->
                     SwipeToCompleteTaskCard(
                         task = task,
                         accentColor = FieldMindTheme.colors.task,
+                        index = i,
                         onToggle = {
                             haptics.confirm()
                             completedTaskIds[task.id] = true
@@ -408,8 +411,9 @@ fun TasksScreen(
                     EmptyTaskHint("No completed tasks yet.")
                 }
             } else {
-                items(doneTasks, key = { it.id }) { task ->
+                itemsIndexed(doneTasks, key = { it.id }) { i, task ->
                     TaskCard(
+                        index = i,
                         task = task,
                         isChecked = true,
                         accentColor = FieldMindTheme.colors.positive,
@@ -531,7 +535,9 @@ private fun TaskCard(
     accentColor: Color,
     onToggle: () -> Unit,
     onDelete: () -> Unit = {},
-    onTap: () -> Unit = {}
+    onTap: () -> Unit,
+    index: Int = 0,
+    animate: Boolean = true = {}
 ) {
     val priorityColor = when (task.priority) {
         "High" -> MaterialTheme.colorScheme.error
@@ -548,7 +554,7 @@ private fun TaskCard(
 
     Card(
         onClick = onTap,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isChecked)
@@ -780,7 +786,9 @@ private fun SwipeToCompleteTaskCard(
     accentColor: Color,
     onToggle: () -> Unit,
     onDelete: () -> Unit = {},
-    onTap: () -> Unit
+    onTap: () -> Unit,
+    index: Int = 0,
+    animate: Boolean = true
 ) {
     val scope = rememberCoroutineScope()
     val haptics = rememberFieldMindHaptics()
@@ -806,6 +814,7 @@ private fun SwipeToCompleteTaskCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .staggeredEntrance(index = index, animate = animate)
             .clip(RoundedCornerShape(30.dp))
             .onGloballyPositioned { coords ->
                 contentWidthPx = coords.size.width.toFloat().coerceAtLeast(1f)

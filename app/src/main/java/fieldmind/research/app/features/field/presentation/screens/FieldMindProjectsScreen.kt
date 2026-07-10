@@ -441,7 +441,9 @@ private fun ProjectCard(
     relativeTime: String,
     viewModel: FieldMindViewModel,
     showSnackbar: (String) -> Unit = {},
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    index: Int = 0,
+    animate: Boolean = true
 ) {
     val colors = FieldMindTheme.colors
     val context = LocalContext.current
@@ -454,7 +456,7 @@ private fun ProjectCard(
     val animatedVisibilityScope = LocalAnimatedVisibilityScope.current
 
     Card(
-        modifier = Modifier.fillMaxWidth().expressivePress(scaleDown = 0.98f).clickable(onClick = onClick),
+        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate).expressivePress(scaleDown = 0.98f).clickable(onClick = onClick),
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
