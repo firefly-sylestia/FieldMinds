@@ -44,6 +44,46 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.46.0 — Sound Design System & Seasonal Color Shift ──
+        FieldMindChangelogEntry(
+            version = "0.46.0",
+            date = "2026-07-10",
+            title = "🔊 Ambient Sound Design & Seasonal Color Shift",
+            importance = "Major",
+            tags = listOf("🔊", "🎨", "🌸", "🌙"),
+            sections = listOf(
+                "🔊 Immersive sound design system" to listOf(
+                    "✓ Gentle chime on app open — soft welcome as you launch FieldMind",
+                    "✓ Camera shutter click when capturing photos — satisfying tactile-audio feedback",
+                    "✓ Water droplet on saving observations — rewarding confirmation sound",
+                    "✓ Night cricket ambience — time-aware loop plays during evening hours (8 PM – 6 AM)",
+                    "✓ Sound effects generated algorithmically — no external audio assets required",
+                    "✓ SoundPool-based singleton manager with async loading and automatic cleanup"
+                ),
+                "🎚️ Master volume control in Settings" to listOf(
+                    "✓ Master toggle to enable/disable all sound effects from Settings → Notifications & sound",
+                    "✓ Adjustable volume slider (0% – 100%) for fine-grained control",
+                    "✓ Volume defaults to 70% — audible but not intrusive out of the box",
+                    "✓ Sound effects off by default respects system silent mode preferences"
+                ),
+                "🌸 Seasonal color shift" to listOf(
+                    "✓ Entity accent colors subtly shift ~25% toward the current season's accent",
+                    "✓ 🌸 Spring (Mar–May): Fresh green #4CAF50 — new growth and renewal",
+                    "✓ ☀️ Summer (Jun–Aug): Golden sun #FFB300 — warm, vibrant energy",
+                    "✓ 🍂 Autumn (Sep–Nov): Warm orange #E65100 — harvest and change",
+                    "✓ ❄️ Winter (Dec–Feb): Cool blue #42A5F5 — calm, crisp clarity",
+                    "✓ Blend is applied as the final transform — never overrides dynamic color or custom schemes",
+                    "✓ Toggle in Settings → Appearance to enable/disable seasonal shifts"
+                ),
+                "🔄 Code quality & architecture" to listOf(
+                    "✓ SoundManager singleton with proper synchronized lazy initialization",
+                    "✓ SeasonalColor.kt — clean month-to-season mapping with smooth blend function",
+                    "✓ Both systems respect the Compose-reactive settings architecture",
+                    "✓ Settings export/import and clear-all-reset fully support both new features"
+                )
+            )
+        ),
+
         // ── v0.45.0 — Personalized Onboarding & Daily Field Journal ──
         FieldMindChangelogEntry(
             version = "0.45.0",
