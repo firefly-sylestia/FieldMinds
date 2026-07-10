@@ -475,6 +475,7 @@ private fun DrawScope.drawWatercolorTexture(opacity: Float, morph: Float) {
  */
 private val textureRngCache = mutableMapOf<String, List<Float>>()
 
+@Composable
 private fun rememberTextureRng(name: String): List<Float> {
     return remember(name) {
         textureRngCache.getOrPut(name) {

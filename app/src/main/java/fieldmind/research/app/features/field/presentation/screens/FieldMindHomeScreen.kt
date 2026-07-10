@@ -454,6 +454,8 @@ fun SharedTransitionScope.HomeScreen(
             item {
                 val colors = FieldMindTheme.colors
                 JournalCard( // Journal-aware card styling
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Row(
                         Modifier.fillMaxWidth().padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically,

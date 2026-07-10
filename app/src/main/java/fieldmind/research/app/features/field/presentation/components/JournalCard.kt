@@ -196,6 +196,7 @@ fun JournalTintedCard(
  * - [CardBorderStyle.Rounded]: subtle rounded border
  * - [CardBorderStyle.Minimal]: no border
  */
+@Composable
 private fun journalBorderStroke(config: JournalConfig): BorderStroke? {
     if (config.borderWidth <= 0.dp) return null
     val borderColor = when (config.borderStyle) {
