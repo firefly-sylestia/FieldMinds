@@ -360,8 +360,18 @@ fun SharedTransitionScope.HomeScreen(
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
     val homeScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
+    var isRefreshing by remember { mutableStateOf(false) }
     Box(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {
         Box(Modifier.fillMaxSize()) { // Wrapper for overlay
+            PullToRefreshBox(
+                isRefreshing = isRefreshing,
+                onRefresh = {
+                    isRefreshing = true
+                    viewModel.refreshWeatherFromLocation(forceRefresh = true)
+                    isRefreshing = false
+                },
+                modifier = Modifier.fillMaxSize()
+            ) {
             LazyColumn(state = homeScrollState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 0.dp, 20.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             // ── Merged Header + Goal ──
             item {
@@ -636,6 +646,7 @@ fun SharedTransitionScope.HomeScreen(
             }
 
             item { Spacer(Modifier.height(24.dp)) }
+        }
         }
 
         // ── Top snackbar overlay for capture confirmation

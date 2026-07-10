@@ -57,6 +57,9 @@ import fieldmind.research.app.features.field.data.location.FieldLocationProvider
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.spring
 // ══════════════════════════════════════════════════════════════════════
 //  Shared dialog helpers — consistent containers for all edit/create dialogs
 // ══════════════════════════════════════════════════════════════════════

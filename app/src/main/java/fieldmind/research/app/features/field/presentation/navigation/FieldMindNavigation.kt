@@ -693,6 +693,7 @@ private fun LiquidNavRow(
                 var isPressed by remember { mutableStateOf(false) }
                 // Spring bounce pulse on tap — briefly scales up, then springs back
                 val tapBounce = remember { Animatable(1f) }
+                val iconBounce = remember { Animatable(1f) }
 
                 val pressScale by animateFloatAsState(
                     targetValue = if (isPressed && !selected) 0.92f else 1f,
@@ -723,8 +724,13 @@ private fun LiquidNavRow(
                                 isPressed = true
                                 // Spring bounce: snap to 1.08, spring back to 1.0
                                 scope.launch {
-                                    tapBounce.snapTo(1.08f)
-                                    tapBounce.animateTo(1f, spring(dampingRatio = 0.65f, stiffness = 300f))
+                                    tapBounce.snapTo(1.15f)
+                                    tapBounce.animateTo(1f, spring(dampingRatio = 0.5f, stiffness = 250f))
+                                }
+                                scope.launch {
+                                    delay(50)
+                                    iconBounce.snapTo(1.25f)
+                                    iconBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
                                 }
                                 onTabClick(screen)
                             }
@@ -734,11 +740,15 @@ private fun LiquidNavRow(
                             scaleY = pressScale * tapBounce.value
                         }
                         .defaultMinSize(minWidth = 60.dp, minHeight = 56.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Box(
-                        modifier = Modifier.size(width = 48.dp, height = 36.dp),
+                        modifier = Modifier.size(width = 48.dp, height = 36.dp)
+                            .graphicsLayer {
+                                scaleX = iconBounce.value
+                                scaleY = iconBounce.value
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -763,7 +773,7 @@ private fun LiquidNavRow(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                }
+
 
                 // Reset press state when selection changes
                 LaunchedEffect(selected) {
