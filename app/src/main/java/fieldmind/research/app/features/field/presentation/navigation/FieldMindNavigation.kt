@@ -86,6 +86,9 @@ import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.hazeEffect
+import fieldmind.research.app.features.field.presentation.components.UpdateBannerOverlay
+import fieldmind.research.app.infrastructure.updates.UpdateChecker
+import fieldmind.research.app.infrastructure.updates.UpdateInfo
 
 private fun formatElapsed(startedAt: Long): String {
     val ms = System.currentTimeMillis() - startedAt
@@ -295,7 +298,7 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             CompositionLocalProvider(LocalPrivacyTypingEnabled provides privacyTyping) {
                 PrivacyTextInputWrapper {
                     FieldMindSnackbarProvider { _ ->
-                        FieldMindNavigation(viewModel = viewModel, requestedDestination = requestedDestination, onResetOnboarding = { appSettings.setOnboardingCompleted(false); appUnlocked = false })
+                        FieldMindNavigation(viewModel = viewModel, appSettings = appSettings, requestedDestination = requestedDestination, onResetOnboarding = { appSettings.setOnboardingCompleted(false); appUnlocked = false })
                     }
                 }
             }
@@ -389,7 +392,7 @@ private fun NavHostController.navigateToDestination(route: String) {
 }
 
 @Composable
-fun FieldMindNavigation(viewModel: FieldMindViewModel, requestedDestination: String? = null, onResetOnboarding: () -> Unit) {
+fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings, requestedDestination: String? = null, onResetOnboarding: () -> Unit) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination

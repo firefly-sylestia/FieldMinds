@@ -276,7 +276,7 @@ fun FieldMindSettingsScreen(
             }
         }
         item { SettingsNavCard("Check for updates", "Latest release notes from GitHub", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenChangelog?.invoke() } }
-        item { SettingsNavCard("Report a bug", "File feedback directly to the project's GitHub issues", MaterialSymbolIcon("bug_report"), FieldMindTheme.colors.error) { onOpenBugReport?.invoke() } }
+        item { SettingsNavCard("Report a bug", "File feedback directly to the project's GitHub issues", MaterialSymbolIcon("bug_report"), MaterialTheme.colorScheme.error) { onOpenBugReport?.invoke() } }
 
         item { SectionHeader("About & advanced", "Developer tools, changelog, and app info") }
         item { SettingsNavCard("What’s new", "FieldMind redesign notes and migration changes", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenChangelog?.invoke() } }

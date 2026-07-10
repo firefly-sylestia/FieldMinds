@@ -3,6 +3,7 @@ package fieldmind.research.app.infrastructure.bugreport
 import android.util.Log
 import com.google.gson.Gson
 import fieldmind.research.app.BuildConfig
+import fieldmind.research.app.infrastructure.updates.HttpClient
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
