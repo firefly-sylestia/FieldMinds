@@ -44,6 +44,40 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.50.2 — Unify journal-style roundness + strip remaining weird styling ──
+FieldMindChangelogEntry(
+    version = "0.50.2",
+    date = "2025-07-10",
+    title = "🎨 Unified journal styles — Ghibli's roundness, all 4 styles",
+    importance = "Patch",
+    tags = listOf("journal-styles", "ui-polish", "roundness", "consistency", "fix"),
+    sections = listOf(
+        "🟢 Keep the roundness, drop the weird stuff" to listOf(
+            "✓ All 4 journal styles (Victorian, Sketchbook, BulletJournal, Ghibli) now share the same 24dp cardCornerRadius + 16dp chipCornerRadius — Ghibli's signature roundness is now the default across the board",
+            "✓ All 4 styles use CardBorderStyle.Rounded with 0.5dp outline — no more sketch-like irregular borders on Sketchbook, no more no-border BulletJournal",
+            "✓ No more weird paper / parchment / dot-grid / watercolor texture overlays — showTexture is false everywhere, surface is clean and consistent",
+            "✓ No more decorative ornaments on Victorian or Ghibli (decorativeHeadings=false across the board) — headings are uniform",
+        ),
+        "🟡 Normalized per-style differences that were making the UI feel 'off'" to listOf(
+            "✓ navBarStyle: all 4 styles now use NavBarStyle.Modern — no more Nature 'blooming firefly' glow or Journal 'hand-drawn page tab' indicator",
+            "✓ shadowWarmth: 1.3 / 1.1 / 0.9 / 1.2 → all 1.0f — no more warm-tinted or cool-tinted shadows; the card lift is neutral across all 4 styles",
+            "✓ irregularBody: all 4 styles now false — body text no longer jitters on Sketchbook",
+            "✓ useGradientCards: all 4 styles now false — no more per-style gradient brush on cards (SolidColor fallback everywhere)",
+        ),
+        "🌈 Per-style color identity preserved" to listOf(
+            "✓ backgroundWarmth, cardSurfaceTint, and accentWarmth are still per-style — the 4 journal styles still look visually distinct via their cream / parchment / dot-grid / watercolor color palettes",
+            "✓ textureName still per-style (parchment / paper / dotgrid / watercolor) — held for future 'show texture' re-toggle in settings",
+            "✓ microDelightsEnabled is still per-style (Victorian + Sketchbook + Ghibli = true, BulletJournal = false) — user can still control this via Settings → Micro-delights",
+        ),
+        "🛠️ Implementation" to listOf(
+            "✓ Single file touched: `app/.../shared/presentation/theme/JournalStyle.kt`",
+            "✓ All 4 `JournalConfig` presets in `JournalPresets.{Victorian, Sketchbook, BulletJournal, Ghibli}` now use the same 11 design flags (cardCornerRadius, chipCornerRadius, borderStyle, borderWidth, useGradientCards, showTexture, showOrnaments, decorativeDividers, decorativeHeadings, irregularBody, navBarStyle, shadowWarmth)",
+            "✓ Only `backgroundWarmth` / `cardSurfaceTint` / `accentWarmth` colors and `textureName` differ between styles — the visual identity, not the visual weirdness",
+            "✓ `JournalDecorations.kt` is unchanged — its `showTexture` / `showOrnaments` / `decorativeDividers` / `useGradientCards` guards now short-circuit to the clean fallback paths uniformly for all 4 styles",
+        ),
+    )
+),
+
         // ── v0.50.1 — Add discoverable Restore from backup card ──
 FieldMindChangelogEntry(
     version = "0.50.1",

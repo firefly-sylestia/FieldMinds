@@ -551,6 +551,69 @@ Source code strip — 16 files changed, 602 lines deleted, 0 added.
 
 ---
 
+# Journal Styles — v0.50.2 Unified Roundness + Stripped Weird Styling Completion Summary
+
+## Task
+
+User complaint: *"those styles have weird style and background and glows they make the ui so weird can u kee the roundnness same as it is in ghibli the roundy and just chnage other things"*. The journal style roundness (24dp) was already unified from the prior rounds, but 3 remaining per-style flags were still creating a "weird" look: `decorativeHeadings` (Victorian + Ghibli had true → serif headings), `navBarStyle` (Sketchbook=Journal, Ghibli=Nature → Nature "glows like a firefly"), and `shadowWarmth` (0.9–1.3 → warm/cool tinted shadows).
+
+## What landed (v0.50.2 Patch release)
+
+### Commit 1: `fix(styles): normalize decorativeHeadings + navBarStyle + shadowWarmth across all 4 journal presets`
+
+Source code change — 1 file modified, 12 lines changed.
+
+### `app/src/main/java/fieldmind/research/app/shared/presentation/theme/JournalStyle.kt`
+
+All 4 `JournalConfig` presets in `JournalPresets.{Victorian, Sketchbook, BulletJournal, Ghibli}` normalized:
+
+| Flag | Before | After |
+|---|---|---|
+| `decorativeHeadings` | `true` (Victorian, Ghibli) / `false` (others) | `false` (all 4) |
+| `navBarStyle` | `Modern` / `Journal` (Sketchbook) / `Modern` / `Nature` (Ghibli) | `NavBarStyle.Modern` (all 4) |
+| `shadowWarmth` | `1.3f` / `1.1f` / `0.9f` / `1.2f` | `1.0f` (all 4) |
+
+### Preserved (intentionally NOT changed)
+
+- `cardCornerRadius = 24.dp` + `chipCornerRadius = 16.dp` (Ghibli's roundness — the user's "keep" request)
+- `borderStyle = CardBorderStyle.Rounded` + `borderWidth = 0.5.dp`
+- `useGradientCards = false` + `showTexture = false` + `showOrnaments = false` + `decorativeDividers = false` + `irregularBody = false` (already normalized in prior rounds)
+- `backgroundWarmth` / `cardSurfaceTint` / `accentWarmth` colors (per-style color identity)
+- `textureName` (per-style, held for future toggle)
+- `microDelightsEnabled` (per-style, user-controlled via Settings)
+
+### Commit 2: `feat(changelog): v0.50.2 — unify journal styles changelog + fastlane 2117`
+
+- New `FieldMindChangelogEntry("0.50.2", "Patch", ...)` at the top of the `fieldMindChangelog` list with 4 sections (roundness kept, weird stuff dropped, color identity preserved, implementation)
+- Created `fastlane/metadata/android/en-US/changelogs/2117.txt` with ≤500-char store-flavored recap
+
+## Verification
+
+- **Direct file read** of JournalStyle.kt after edits: all 4 presets verified to have `decorativeHeadings = false`, `navBarStyle = NavBarStyle.Modern`, `shadowWarmth = 1.0f`, while keeping 24dp / 16dp / Rounded / 0.5dp roundness
+- **`code-reviewer-minimax-m3` verdict**: PASS. The normalization cleanly addresses the "weird style, background, and glows" complaint: all 4 presets now share the same 24dp/16dp/Rounded/0.5dp roundness + Modern nav bar + neutral 1.0f shadows + non-decorative headings, while preserving the per-style color identity. `forStyle()` is intact, brace balance is clean, no orphan imports or dead code introduced.
+- **Two-commit release pattern** matches Rounds 9 / 10 / v0.50.1 — source code first, changelog + fastlane second
+
+## Self-corrections caught during review
+
+- None — the normalization was a clean str_replace across 4 well-anchored preset blocks. The thinker's pre-implementation design pass correctly identified the 3 flags to change and the 11 to preserve.
+
+## What this unlocks
+
+- The 4 journal styles now feel like one cohesive design language with 4 distinct color moods, instead of 4 visually-divergent themes
+- No more "weird serif headings" on Victorian / Ghibli
+- No more "firefly glow" nav bar on Ghibli or "hand-drawn page tab" on Sketchbook
+- No more warm-tinted (Victorian 1.3) or cool-tinted (BulletJournal 0.9) shadows
+- The `showTexture` / `showOrnaments` / `decorativeDividers` / `useGradientCards` guards in `JournalDecorations.kt` now short-circuit to clean fallback paths uniformly for all 4 styles — the file's per-style drawing code is dormant but not yet removed
+- Users can still pick any of the 4 styles and the UI feels consistent — switching styles now only changes colors, not the entire visual treatment
+
+## Next-session followups
+
+1. **Manual device visual test** — pick each journal in Settings → Appearance, confirm UI feels cohesive and consistent (no serif headings, no weird glows, no tinted shadows), and that the color identity per style is still distinct.
+2. **Optional cleanup** — `JournalDecorations.kt` still contains ~250 lines of dormant per-style drawing code (texture routines, ornament variants, decorative dividers) that all short-circuit via the config flags. If the team is confident textures/ornaments/decorative-dividers are not coming back, delete the dormant branches and trim the file.
+3. **Optional cleanup** — `textureName` field on `JournalConfig` is now dead (no caller passes a name to anything that renders). Could be removed in a future round if the team agrees the per-style texture is permanently disabled.
+
+---
+
 # Backup & Restore — v0.50.1 Discoverable Import Button Completion Summary
 
 ## Task
