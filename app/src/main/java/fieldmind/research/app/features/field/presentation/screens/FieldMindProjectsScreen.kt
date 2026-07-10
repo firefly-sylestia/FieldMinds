@@ -19,6 +19,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.data.database.entity.*
 import fieldmind.research.app.features.field.presentation.components.*
+import fieldmind.research.app.features.field.presentation.components.LocalSharedTransitionScope
+import fieldmind.research.app.features.field.presentation.components.LocalAnimatedVisibilityScope
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.ui.theme.CuteElevations
@@ -448,6 +450,9 @@ private fun ProjectCard(
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var renameText by remember(project.id) { mutableStateOf(project.title) }
 
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val animatedVisibilityScope = LocalAnimatedVisibilityScope.current
+
     Card(
         modifier = Modifier.fillMaxWidth().expressivePress(scaleDown = 0.98f).clickable(onClick = onClick),
         shape = RoundedCornerShape(34.dp),
@@ -459,10 +464,22 @@ private fun ProjectCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            // Project icon
-            Box(
+            // Project icon with shared element transition
+            val projectIconModifier = if (sharedTransitionScope != null && animatedVisibilityScope != null) {
+                with(sharedTransitionScope) {
+                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        .background(colors.project.copy(alpha = 0.14f))
+                        .sharedElement(
+                            rememberSharedContentState(key = "project_icon_${project.id}"),
+                            animatedVisibilityScope
+                        )
+                }
+            } else {
                 Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
-                    .background(colors.project.copy(alpha = 0.14f)),
+                    .background(colors.project.copy(alpha = 0.14f))
+            }
+            Box(
+                projectIconModifier,
                 contentAlignment = Alignment.Center
             ) {
                 Icon(FieldMindIcons.Project, null, tint = colors.project, size = 24.dp)

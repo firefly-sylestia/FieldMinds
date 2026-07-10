@@ -80,8 +80,7 @@ import kotlin.math.roundToInt
 import kotlin.math.abs
 
 import fieldmind.research.app.features.field.presentation.utils.AppLifecycleManager
-import fieldmind.research.app.infrastructure.FieldMindSoundManager
-import fieldmind.research.app.infrastructure.FieldMindSounds
+import fieldmind.research.app.features.field.presentation.components.LocalAnimatedVisibilityScope
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
@@ -279,12 +278,6 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             onSplashComplete = { showSplash = false }
         )
     } else {
-        // Play gentle chime on app open
-        val context = LocalContext.current
-        val soundManager = remember { FieldMindSoundManager.getInstance(context) }
-        LaunchedEffect(Unit) {
-            soundManager.play(FieldMindSounds.CHIME)
-        }
         var showJournal by rememberSaveable { mutableStateOf(true) }
         Box(Modifier.fillMaxSize()) {
         FieldMindAppLock(
@@ -1075,19 +1068,21 @@ private fun FieldMindNavHost(
             // Swipe gestures reveal the real adjacent tab content behind the current one.
             // No placeholder mock UI — the actual adjacent tab composable is visible through peek.
             composable("field_tab_container") {
-                AllTabScreen(
-                    sharedTransitionScope = composableScope,
-                    activeTabIndex = activeTabIndex,
-                    onTabSelected = { index -> onActiveTabChange?.invoke(index) },
-                    viewModel = viewModel,
-                    visibleTabs = visibleTabs,
-                    openDetail = openDetail,
-                    openReader = openReader,
-                    onOpenSettings = { navController.navigateToDestination(FieldMindScreen.Settings.route) },
-                    onOpenCanvas = { viewModel.addNote(title = "Canvas", body = "", category = "Other", tags = "canvas") { noteId -> navController.navigateToDestination("field_canvas/$noteId") } },
-                    onNavigateToDestination = { route -> navController.navigateToDestination(route) },
-                    onPopBackStack = { navController.popBackStack() }
-                )
+                CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+                    AllTabScreen(
+                        sharedTransitionScope = composableScope,
+                        activeTabIndex = activeTabIndex,
+                        onTabSelected = { index -> onActiveTabChange?.invoke(index) },
+                        viewModel = viewModel,
+                        visibleTabs = visibleTabs,
+                        openDetail = openDetail,
+                        openReader = openReader,
+                        onOpenSettings = { navController.navigateToDestination(FieldMindScreen.Settings.route) },
+                        onOpenCanvas = { viewModel.addNote(title = "Canvas", body = "", category = "Other", tags = "canvas") { noteId -> navController.navigateToDestination("field_canvas/$noteId") } },
+                        onNavigateToDestination = { route -> navController.navigateToDestination(route) },
+                        onPopBackStack = { navController.popBackStack() }
+                    )
+                }
             }
             composable(FieldMindScreen.Learn.route) { SwipeBackHost(onBack = { safeBack() }) { FieldMindLearnScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenReader = openReader, onOpenLesson = { slug -> navController.navigateToDestination("field_lesson/$slug") }) } }
             composable(FieldMindScreen.Reader.route) { SwipeBackHost(onBack = { safeBack() }) { LearnReaderScreen(url = readerTarget.first, title = readerTarget.second, onBack = { safeBack() }) } }
@@ -1248,6 +1243,7 @@ private fun FieldMindNavHost(
                 }
             }
             composable("field_project_detail/{projectId}") { entry ->
+                CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
                 val projectId = entry.arguments?.getString("projectId")?.toLongOrNull() ?: 0L
                 SwipeBackHost(onBack = { safeBack() }) {
                     ProjectDetailScreen(
@@ -1259,6 +1255,7 @@ private fun FieldMindNavHost(
                         onOpenRelations = { navController.navigateToDestination("field_project_relations/$projectId") },
                         onOpenSettings = { id -> navController.navigateToDestination("field_project_settings/$id") }
                     )
+                }
                 }
             }
             composable("field_project_relations/{projectId}") { entry ->

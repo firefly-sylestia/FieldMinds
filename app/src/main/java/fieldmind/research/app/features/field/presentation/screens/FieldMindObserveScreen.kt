@@ -626,6 +626,13 @@ fun ObserveScreen(
                                         (if (session.timerRunning && timerStartedAtLocal != null) System.currentTimeMillis() - timerStartedAtLocal else 0L)
                                     viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
                                 }
+                                // Reset session synchronously to avoid race with
+                                // LaunchedEffect(viewModel.captureSessionActive) clearing it
+                                // asynchronously. This ensures session.isActive = false and
+                                // showEvidenceForm = false before the next composition frame,
+                                // preventing the navigation guard from getting stuck.
+                                session = CaptureSessionState()
+                                session = session.copy(showEvidenceForm = false)
                                 session = session.copy(activeSessionId = null)
                                 showSessionSummary = true
                             }
