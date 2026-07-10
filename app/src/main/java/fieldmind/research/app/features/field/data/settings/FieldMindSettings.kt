@@ -482,6 +482,31 @@ class FieldMindSettings private constructor(context: Context) {
 
     fun setSeasonalColorsEnabled(value: Boolean) = edit(KEY_SEASONAL_COLORS, value) { _seasonalColorsEnabled.value = value }
 
+    // ── Journal Style settings ──
+    private val _journalStyle = MutableStateFlow(
+        prefs.getString(KEY_JOURNAL_STYLE, "sketchbook") ?: "sketchbook"
+    )
+    /** The user's selected journal aesthetic (victorian, sketchbook, bullet_journal, ghibli). */
+    val journalStyle: StateFlow<String> = _journalStyle.asStateFlow()
+
+    private val _microDelightIntensity = MutableStateFlow(
+        prefs.getString(KEY_MICRO_DELIGHT_INTENSITY, "normal") ?: "normal"
+    )
+    /** Micro-delight intensity: minimal, normal, or maximum. */
+    val microDelightIntensity: StateFlow<String> = _microDelightIntensity.asStateFlow()
+
+    private val _backgroundAnimation = MutableStateFlow(
+        prefs.getString(KEY_BACKGROUND_ANIMATION, "gentle") ?: "gentle"
+    )
+    /** Background animation level: static, gentle, or full. */
+    val backgroundAnimation: StateFlow<String> = _backgroundAnimation.asStateFlow()
+
+    private val _navBarStyle = MutableStateFlow(
+        prefs.getString(KEY_NAV_BAR_STYLE, "modern") ?: "modern"
+    )
+    /** Navigation bar style: modern, nature, or journal. */
+    val navBarStyle: StateFlow<String> = _navBarStyle.asStateFlow()
+
     // ── Card gradient style (Phase 5) ──
     private val _cardGradientStyle = MutableStateFlow(
         prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
@@ -490,6 +515,12 @@ class FieldMindSettings private constructor(context: Context) {
     val cardGradientStyle: StateFlow<String> = _cardGradientStyle.asStateFlow()
 
     fun setCardGradientStyle(value: String) = edit(KEY_CARD_GRADIENT_STYLE, value) { _cardGradientStyle.value = value }
+
+    // ── Journal Style setters ──
+    fun setJournalStyle(value: String) = edit(KEY_JOURNAL_STYLE, value) { _journalStyle.value = value }
+    fun setMicroDelightIntensity(value: String) = edit(KEY_MICRO_DELIGHT_INTENSITY, value) { _microDelightIntensity.value = value }
+    fun setBackgroundAnimation(value: String) = edit(KEY_BACKGROUND_ANIMATION, value) { _backgroundAnimation.value = value }
+    fun setNavBarStyle(value: String) = edit(KEY_NAV_BAR_STYLE, value) { _navBarStyle.value = value }
 
     private val _entityColors = MutableStateFlow(parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null)))
     /** Map of entity type → hex color Long (e.g. "observation" → 0xFF2E7D32). Empty = use defaults. */
@@ -953,6 +984,10 @@ class FieldMindSettings private constructor(context: Context) {
         _cardGradientStyle.value = fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = 0.75f
         _seasonalColorsEnabled.value = true
+        _journalStyle.value = "sketchbook"
+        _microDelightIntensity.value = "normal"
+        _backgroundAnimation.value = "gentle"
+        _navBarStyle.value = "modern"
     }
 
     // ── Species identification setters ──
@@ -1082,6 +1117,10 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
         put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
         put(KEY_SEASONAL_COLORS, _seasonalColorsEnabled.value)
+        put(KEY_JOURNAL_STYLE, _journalStyle.value)
+        put(KEY_MICRO_DELIGHT_INTENSITY, _microDelightIntensity.value)
+        put(KEY_BACKGROUND_ANIMATION, _backgroundAnimation.value)
+        put(KEY_NAV_BAR_STYLE, _navBarStyle.value)
         put(KEY_ANIMATIONS_ENABLED, _animationsEnabled.value)
         put(KEY_ANIMATION_SPEED_PRESET, _animationSpeedPreset.value)
     }.toString(2)
@@ -1221,6 +1260,10 @@ class FieldMindSettings private constructor(context: Context) {
         applyInt(KEY_DAILY_GOAL)
         applyString(KEY_CARD_GRADIENT_STYLE)
         applyBoolean(KEY_SEASONAL_COLORS)
+        applyString(KEY_JOURNAL_STYLE)
+        applyString(KEY_MICRO_DELIGHT_INTENSITY)
+        applyString(KEY_BACKGROUND_ANIMATION)
+        applyString(KEY_NAV_BAR_STYLE)
         applyFloat(KEY_GRADIENT_OPACITY)
         applyBoolean(KEY_ANIMATIONS_ENABLED, true)
         applyString(KEY_ANIMATION_SPEED_PRESET)
@@ -1318,6 +1361,10 @@ class FieldMindSettings private constructor(context: Context) {
         _cardGradientStyle.value = prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f)
         _seasonalColorsEnabled.value = prefs.getBoolean(KEY_SEASONAL_COLORS, true)
+        _journalStyle.value = prefs.getString(KEY_JOURNAL_STYLE, "sketchbook") ?: "sketchbook"
+        _microDelightIntensity.value = prefs.getString(KEY_MICRO_DELIGHT_INTENSITY, "normal") ?: "normal"
+        _backgroundAnimation.value = prefs.getString(KEY_BACKGROUND_ANIMATION, "gentle") ?: "gentle"
+        _navBarStyle.value = prefs.getString(KEY_NAV_BAR_STYLE, "modern") ?: "modern"
         _animationsEnabled.value = prefs.getBoolean(KEY_ANIMATIONS_ENABLED, true)
         _animationSpeedPreset.value = prefs.getString(KEY_ANIMATION_SPEED_PRESET, "Normal") ?: "Normal"
     }
@@ -1456,6 +1503,11 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_GRADIENT_OPACITY = "gradient_opacity"
 
         private const val KEY_SEASONAL_COLORS = "seasonal_colors_enabled"
+        // ── Journal style keys ──
+        private const val KEY_JOURNAL_STYLE = "journal_style"
+        private const val KEY_MICRO_DELIGHT_INTENSITY = "micro_delight_intensity"
+        private const val KEY_BACKGROUND_ANIMATION = "background_animation"
+        private const val KEY_NAV_BAR_STYLE = "nav_bar_style"
         // ── Per-category entity color overrides ──
         private const val KEY_ENTITY_COLORS = "entity_colors"
         // ── Animation tuning keys ──
