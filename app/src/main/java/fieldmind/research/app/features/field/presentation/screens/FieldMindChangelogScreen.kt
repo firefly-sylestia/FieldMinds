@@ -76,30 +76,30 @@ internal data class FieldMindChangelogEntry(
         FieldMindChangelogEntry(
             version = "0.47.5",
             date = "2026-07-10",
-            title = "\u{1F6E0}\u{FE0F} Device-Reported Fixes — biometric retry, fast-scan, discard nav",
+            title = "🛠️ Device-Reported Fixes — biometric retry, fast-scan, discard nav",
             importance = "Patch",
             tags = listOf("biometric", "navigation", "discard", "session", "lock", "device-testing"),
             sections = listOf(
-                "\u{1F9FF} Biometric retry no longer deadlocks" to listOf(
-                    "\u2713 fix: removed the \u201CisAuthenticating\u201D re-entrancy guard from startBiometricAuth() in FieldMindLockScreen.kt",
-                    "\u2713 fix: the flag could stay true forever if BiometricPrompt dropped a callback (fast finger lift, system-back cancel, OEM quirks), blocking all subsequent \u201CRetry biometric\u201D taps",
-                    "\u2713 fix: BiometricPrompt serializes overlapping authenticate() calls internally via cancelAuthentication(); no flag is needed",
-                    "\u2713 UX: tapping \u201CRetry biometric\u201D now reliably re-prompts every time"
+                "🧿 Biometric retry no longer deadlocks" to listOf(
+                    "✓ fix: removed the “isAuthenticating” re-entrancy guard from startBiometricAuth() in FieldMindLockScreen.kt",
+                    "✓ fix: the flag could stay true forever if BiometricPrompt dropped a callback (fast finger lift, system-back cancel, OEM quirks), blocking all subsequent “Retry biometric” taps",
+                    "✓ fix: BiometricPrompt serializes overlapping authenticate() calls internally via cancelAuthentication(); no flag is needed",
+                    "✓ UX: tapping “Retry biometric” now reliably re-prompts every time"
                 ),
-                "\u{1F3C3} Fast biometric scan no longer freezes the prompt" to listOf(
-                    "\u2713 fix: same root cause as the retry bug \u2014 the flag was reset only inside the 3 callbacks, but rapid lift+place of the finger can leave the sensor with no reading and no callback fires",
-                    "\u2713 fix: removing the guard means the user can immediately re-attempt; cancelAuthentication() on the prior instance is harmless",
-                    "\u2713 UX: prompt now reliably responds to each retry, no \u201Cfrozen\u201D state after a fast scan"
+                "🏃 Fast biometric scan no longer freezes the prompt" to listOf(
+                    "✓ fix: same root cause as the retry bug — the flag was reset only inside the 3 callbacks, but rapid lift+place of the finger can leave the sensor with no reading and no callback fires",
+                    "✓ fix: removing the guard means the user can immediately re-attempt; cancelAuthentication() on the prior instance is harmless",
+                    "✓ UX: prompt now reliably responds to each retry, no “frozen” state after a fast scan"
                 ),
-                "\u{1F5FA}\u{FE0F} Discard session no longer freezes subsequent nav" to listOf(
-                    "\u2713 fix: removed onBack?.invoke() from both Discard buttons in FieldMindObserveScreen.kt (the active-session exit and the unsaved-observation exit)",
-                    "\u2713 Root cause: the Capture tab lives inside the root field_tab_container start destination \u2014 calling safeBack \u2192 navController.popBackStack() popped the root itself, emptying the back stack and leaving the UI frozen (next back press and bottom-nav buttons unresponsive)",
-                    "\u2713 fix: clearing the session/observation state now stays on the Capture tab; the user can navigate away via the bottom-nav themselves",
-                    "\u2713 UX: matches the button label \u2014 \u201CDiscard\u201D and \u201CDiscard session\u201D never promised an exit, only a clear of the in-progress work"
+                "🗺️ Discard session no longer freezes subsequent nav" to listOf(
+                    "✓ fix: removed onBack?.invoke() from both Discard buttons in FieldMindObserveScreen.kt (the active-session exit and the unsaved-observation exit)",
+                    "✓ Root cause: the Capture tab lives inside the root field_tab_container start destination — calling safeBack → navController.popBackStack() popped the root itself, emptying the back stack and leaving the UI frozen (next back press and bottom-nav buttons unresponsive)",
+                    "✓ fix: clearing the session/observation state now stays on the Capture tab; the user can navigate away via the bottom-nav themselves",
+                    "✓ UX: matches the button label — “Discard” and “Discard session” never promised an exit, only a clear of the in-progress work"
                 ),
-                "\u{1F4E6} Build environment" to listOf(
-                    "\u2713 No new compile-time errors \u2014 the fix removes state and call sites, no types or signatures change",
-                    "\u2713 No behavioral changes outside the 3 reported flows"
+                "📦 Build environment" to listOf(
+                    "✓ No new compile-time errors — the fix removes state and call sites, no types or signatures change",
+                    "✓ No behavioral changes outside the 3 reported flows"
                 )
             )
         ),
@@ -107,22 +107,22 @@ internal data class FieldMindChangelogEntry(
         FieldMindChangelogEntry(
             version = "0.47.4",
             date = "2026-07-10",
-            title = "\u{1F41B} CI Bug Fixes — roundness pass companion build fix",
+            title = "🐛 CI Bug Fixes — roundness pass companion build fix",
             importance = "Patch",
             tags = listOf("ci", "bugfix", "build", "type-safety", "runtime"),
             sections = listOf(
-                "\u{1F527} Developer weather test panel compiles again" to listOf(
-                    "\u2713 fix: var testTemperature / testHumidity in DeveloperSettingsPage: bare \u201CmutableStateOf(null)\u201D was inferred as MutableState<Nothing?> because Kotlin types null as Nothing?",
-                    "\u2713 fix: typed them as mutableStateOf<Int?>(null) — matches testWeatherCode above and the Int?-returning slider onValueChange lambdas that were previously failing \u201CAssignment type mismatch: Int? vs Nothing?\u201D",
-                    "\u2713 Root cause: pre-existing latent bug (not from v0.47.3 semantics) but the rebuild flagged both sites at once"
+                "🔧 Developer weather test panel compiles again" to listOf(
+                    "✓ fix: var testTemperature / testHumidity in DeveloperSettingsPage: bare “mutableStateOf(null)” was inferred as MutableState<Nothing?> because Kotlin types null as Nothing?",
+                    "✓ fix: typed them as mutableStateOf<Int?>(null) — matches testWeatherCode above and the Int?-returning slider onValueChange lambdas that were previously failing “Assignment type mismatch: Int? vs Nothing?”",
+                    "✓ Root cause: pre-existing latent bug (not from v0.47.3 semantics) but the rebuild flagged both sites at once"
                 ),
-                "\u{1F3A8} Watercolor journal texture no longer crashes" to listOf(
-                    "\u2713 fix: AnimatedBackgroundScene.kt drawWatercolorTexture\u2019s \u201Cfor (i in 0..12) rng[i * 13 + 5..8]\u201D reads up to rng[164]; i=8 was hitting rng[109] on the live crash report",
-                    "\u2713 fix: bumped rememberTextureRng pool from List(100) to List(200); deterministic Random(name.hashCode()) seed keeps the first 100 floats bit-identical, so parchment/paper/dotgrid visuals stay unchanged on first paint"
+                "🎨 Watercolor journal texture no longer crashes" to listOf(
+                    "✓ fix: AnimatedBackgroundScene.kt drawWatercolorTexture’s “for (i in 0..12) rng[i * 13 + 5..8]” reads up to rng[164]; i=8 was hitting rng[109] on the live crash report",
+                    "✓ fix: bumped rememberTextureRng pool from List(100) to List(200); deterministic Random(name.hashCode()) seed keeps the first 100 floats bit-identical, so parchment/paper/dotgrid visuals stay unchanged on first paint"
                 ),
-                "\u{1F4E6} Build environment" to listOf(
-                    "\u2713 F-Droid debug build once again green on CI",
-                    "\u2713 No behavioral changes — only type-annotations and a list-size constant"
+                "📦 Build environment" to listOf(
+                    "✓ F-Droid debug build once again green on CI",
+                    "✓ No behavioral changes — only type-annotations and a list-size constant"
                 )
             )
         ),
@@ -130,27 +130,27 @@ internal data class FieldMindChangelogEntry(
         FieldMindChangelogEntry(
             version = "0.47.3",
             date = "2026-07-10",
-            title = "\u{1F4F0} Card Roundness Pass + Settings Inline Polish",
+            title = "📰 Card Roundness Pass + Settings Inline Polish",
             importance = "Patch",
             tags = listOf("design-language", "settings", "home", "roundness", "journal"),
             sections = listOf(
-                "\u{1F4F0} Home cards now match the journal aesthetic" to listOf(
-                    "\u2713 Data Tools + Media & Sharing tiles: 24.dp \u2192 28.dp, clickable elevation tier, press feedback",
-                    "\u2713 Observation Timeline 'Open' + Data Tools 'All tools' buttons: 22.dp \u2192 28.dp",
-                    "\u2713 Current Project card: shadow lifted via cuteShadow, no more flat-looking card",
-                    "\u2713 Data tool mini-tile icons: 36/18.dp \u2192 40/20.dp with theme-aware alpha"
+                "📰 Home cards now match the journal aesthetic" to listOf(
+                    "✓ Data Tools + Media & Sharing tiles: 24.dp → 28.dp, clickable elevation tier, press feedback",
+                    "✓ Observation Timeline 'Open' + Data Tools 'All tools' buttons: 22.dp → 28.dp",
+                    "✓ Current Project card: shadow lifted via cuteShadow, no more flat-looking card",
+                    "✓ Data tool mini-tile icons: 36/18.dp → 40/20.dp with theme-aware alpha"
                 ),
-                "\u{1F527} Settings inline pills feel page-mounted" to listOf(
-                    "\u2713 Sound preview tiles: 16.dp \u2192 24.dp with light/dark-aware icon background",
-                    "\u2713 Profile frequency pills, Theme layout pills, Security PIN pills: 18\u201322.dp \u2192 22\u201326.dp",
-                    "\u2713 PIN length selector, Preview mode chips, View Security Score surface: 20.dp \u2192 24.dp",
-                    "\u2713 Security page error-container Surface: 20.dp \u2192 24.dp",
-                    "\u2713 All press surfaces now press-back on tap"
+                "🔧 Settings inline pills feel page-mounted" to listOf(
+                    "✓ Sound preview tiles: 16.dp → 24.dp with light/dark-aware icon background",
+                    "✓ Profile frequency pills, Theme layout pills, Security PIN pills: 18–22.dp → 22–26.dp",
+                    "✓ PIN length selector, Preview mode chips, View Security Score surface: 20.dp → 24.dp",
+                    "✓ Security page error-container Surface: 20.dp → 24.dp",
+                    "✓ All press surfaces now press-back on tap"
                 ),
-                "\u{1F3A8} Visual rhythm matches the rest of the UI" to listOf(
-                    "\u2713 No more sub-22.dp shapes on Card/Surface/FilledTonalButton anywhere in Home or Settings",
-                    "\u2713 Clickable vs non-clickable surfaces clearly differentiated via elevation tier",
-                    "\u2713 Container color regression fixed (Data Tools keeps surfaceContainerHigh + gradient)"
+                "🎨 Visual rhythm matches the rest of the UI" to listOf(
+                    "✓ No more sub-22.dp shapes on Card/Surface/FilledTonalButton anywhere in Home or Settings",
+                    "✓ Clickable vs non-clickable surfaces clearly differentiated via elevation tier",
+                    "✓ Container color regression fixed (Data Tools keeps surfaceContainerHigh + gradient)"
                 )
             )
         ),
