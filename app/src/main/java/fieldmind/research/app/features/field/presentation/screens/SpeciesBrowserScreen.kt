@@ -463,6 +463,7 @@ internal fun SpeciesCard(
     val colors = FieldMindTheme.colors
 
     ClickableCard(
+                        animate = true,
         onClick = onClick,
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
@@ -891,6 +892,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 similarSpecies.forEach { similar ->
                                     ClickableCard(
+                                        animate = true,
                                         onClick = { internalSpeciesId = similar.id },
                                         shape = RoundedCornerShape(24.dp),
                                         colors = CardDefaults.cardColors(

@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +51,8 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.features.field.presentation.components.ColorSchemeSwatchPicker
 import fieldmind.research.app.features.field.presentation.components.pressScale
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
+import fieldmind.research.app.infrastructure.FieldMindSoundManager
+import fieldmind.research.app.infrastructure.FieldMindSounds
 import fieldmind.research.app.features.field.presentation.screens.DevWeatherTestPanel
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.foundation.text.KeyboardOptions
@@ -60,6 +63,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import fieldmind.research.app.ui.theme.CuteGradients
@@ -106,7 +110,8 @@ fun FieldMindSettingsScreen(
     onOpenSpeciesId: (() -> Unit)? = null,
     onOpenAutoGen: (() -> Unit)? = null,
     onOpenScreenVisibility: (() -> Unit)? = null,
-    onOpenNotifications: (() -> Unit)? = null
+    onOpenNotifications: (() -> Unit)? = null,
+    onOpenAnimations: (() -> Unit)? = null
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
@@ -168,6 +173,7 @@ fun FieldMindSettingsScreen(
         item { SectionHeader("Display & format", "Appearance, units, and display preferences") }
         item { SettingsNavCard("Appearance", "Theme, dynamic color, map, and layout", FieldMindIcons.Palette, FieldMindTheme.colors.info) { onOpenAppearance?.invoke() } }
         item { SettingsNavCard("Units & format", "Temperature, distance, date/time display", FieldMindIcons.Settings, FieldMindTheme.colors.info) { onOpenUnits?.invoke() } }
+        item { SettingsNavCard("Animations", "Entrance effects, speed preset, disable animations", MaterialSymbolIcon("motion_photos_on"), FieldMindTheme.colors.flashcard) { onOpenAnimations?.invoke() } }
 
         // ╔════════════════════════════════════════════╗
         // ║  DATA ENTRY                                ║
@@ -177,6 +183,64 @@ fun FieldMindSettingsScreen(
         item { SettingsNavCard("Weather", "Auto-weather, temperature unit, refresh, widget display", FieldMindIcons.Weather, FieldMindTheme.colors.info) { onOpenWeather?.invoke() } }
         item { SettingsNavCard("Species tools", "Image ID, API keys, model packs, and regional catalogs", FieldMindIcons.Nature, FieldMindTheme.colors.observation) { onOpenSpeciesId?.invoke() } }
         item { SettingsNavCard("Notifications", "Weather alerts, task reminders, and session prompts", FieldMindIcons.Notifications, FieldMindTheme.colors.info) { onOpenNotifications?.invoke() } }
+
+        // ╔════════════════════════════════════════════╗
+        // ║  SOUND                                     ║
+        // ╚════════════════════════════════════════════╝
+        item { SectionHeader("Sound", "Sound effects, master volume") }
+        item {
+            val soundEnabled by viewModel?.fieldSettings?.soundEffectsEnabled?.collectAsState() ?: remember { mutableStateOf(true) }
+            val soundVolume by viewModel?.fieldSettings?.soundVolume?.collectAsState() ?: remember { mutableStateOf(0.7f) }
+            SettingsGroupCard {
+                ToggleItem(
+                    "Sound effects",
+                    "Gentle chimes on app open, shutter on camera, water drop on save, and night crickets.",
+                    soundEnabled,
+                    { viewModel?.fieldSettings?.setSoundEffectsEnabled(it) },
+                    MaterialSymbolIcon("volume_up")
+                )
+                if (soundEnabled) {
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                MaterialSymbolIcon("volume_up"),
+                                null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                size = 20.dp
+                            )
+                            Text(
+                                "Volume",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(Modifier.weight(1f))
+                            Text(
+                                "${(soundVolume * 100).toInt()}%",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Slider(
+                            value = soundVolume,
+                            onValueChange = { viewModel?.fieldSettings?.setSoundVolume(it) },
+                            valueRange = 0f..1f,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
+                    // ── Sound preview buttons ──
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    SoundPreviewSection()
+                }
+            }
+        }
 
         // ╔════════════════════════════════════════════╗
         // ║  AI ASSISTANCE                             ║
@@ -207,6 +271,185 @@ fun FieldMindSettingsScreen(
                 Text("Reset onboarding")
             }
             Spacer(Modifier.height(40.dp))
+        }
+    }
+}
+
+/**
+ * A grid of sound preview buttons inside the Sound settings section.
+ * Each button plays its corresponding ambient sound on tap.
+ */
+@Composable
+private fun SoundPreviewSection() {
+    val context = LocalContext.current
+    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
+
+    // Categorized sounds: [name, icon, soundId]
+    data class PreviewSound(val name: String, val icon: MaterialSymbolIcon, val soundId: Int, val description: String)
+
+    val interactionSounds = listOf(
+        PreviewSound("Chime", MaterialSymbolIcon("music_note"), FieldMindSounds.CHIME, "App open"),
+        PreviewSound("Shutter", MaterialSymbolIcon("photo_camera"), FieldMindSounds.SHUTTER, "Photo capture"),
+        PreviewSound("Water drop", MaterialSymbolIcon("water_drop"), FieldMindSounds.WATER_DROP, "Save observation"),
+        PreviewSound("Success", MaterialSymbolIcon("celebration"), FieldMindSounds.SUCCESS, "Achievement"),
+    )
+
+    val ambientSounds = listOf(
+        PreviewSound("Cricket", MaterialSymbolIcon("bug_report"), FieldMindSounds.CRICKET, "Night"),
+        PreviewSound("Bird chorus", MaterialSymbolIcon("nest_early_hatching"), FieldMindSounds.BIRD_CHORUS, "Dawn"),
+        PreviewSound("Wind", MaterialSymbolIcon("air"), FieldMindSounds.WIND, "Daytime"),
+        PreviewSound("Rain", MaterialSymbolIcon("rainy"), FieldMindSounds.RAIN, "Rainy weather"),
+        PreviewSound("Thunder", MaterialSymbolIcon("thunderstorm"), FieldMindSounds.THUNDER, "Storm"),
+    )
+
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(
+            "Preview sounds",
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        // Interactions
+        Text(
+            "Interactions",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+        )
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            interactionSounds.forEach { sound ->
+                SoundPreviewButton(
+                    name = sound.name,
+                    icon = sound.icon,
+                    description = sound.description,
+                    soundId = sound.soundId,
+                    soundManager = soundManager,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        // Ambient environments
+        Text(
+            "Ambient environments",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+        )
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ambientSounds.take(3).forEach { sound ->
+                SoundPreviewButton(
+                    name = sound.name,
+                    icon = sound.icon,
+                    description = sound.description,
+                    soundId = sound.soundId,
+                    soundManager = soundManager,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ambientSounds.drop(3).forEach { sound ->
+                SoundPreviewButton(
+                    name = sound.name,
+                    icon = sound.icon,
+                    description = sound.description,
+                    soundId = sound.soundId,
+                    soundManager = soundManager,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SoundPreviewButton(
+    name: String,
+    icon: MaterialSymbolIcon,
+    description: String,
+    soundId: Int,
+    soundManager: FieldMindSoundManager,
+    modifier: Modifier = Modifier
+) {
+    val haptics = rememberFieldMindHaptics()
+    val scope = rememberCoroutineScope()
+    var isPlaying by remember { mutableStateOf(false) }
+
+    // Auto-reset highlight state after sound finishes
+    if (isPlaying) {
+        LaunchedEffect(Unit) {
+            delay(1500L)
+            isPlaying = false
+        }
+    }
+
+    Surface(
+        onClick = {
+            haptics.light()
+            scope.launch {
+                isPlaying = true
+                soundManager.play(soundId)
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
+        color = if (isPlaying)
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+        else
+            MaterialTheme.colorScheme.surfaceContainerHigh,
+        border = if (isPlaying)
+            androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary)
+        else
+            null,
+        modifier = modifier.pressScale(scaleDown = 0.92f)
+    ) {
+        Column(
+            Modifier.padding(vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Box(
+                Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(
+                        if (isPlaying) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                        else MaterialTheme.colorScheme.surfaceContainerLow
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    icon,
+                    contentDescription = name,
+                    tint = if (isPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 20.dp
+                )
+            }
+            Text(
+                name,
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = if (isPlaying) FontWeight.Bold else FontWeight.Medium,
+                color = if (isPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                description,
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                maxLines = 1,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -254,6 +497,8 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val profileName by settings.profileName.collectAsState()
     val profileRole by settings.profileRole.collectAsState()
     val profileFocus by settings.profileFocus.collectAsState()
+    val journalEnabled by settings.journalEnabled.collectAsState()
+    val onboardingFrequency by settings.onboardingFrequency.collectAsState()
 
     SettingsSubPage("Research profile", icon = FieldMindIcons.Nature, onBack = onBack) {
         item {
@@ -271,7 +516,41 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     OptionPickerField(label = "Role", selected = profileRole, options = listOf("Field learner", "Student", "Naturalist", "Researcher"), onSelected = { settings.setProfileRole(it) }, icon = FieldMindIcons.User)
                     Text("Focus", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     OptionPickerField(label = "Focus", selected = profileFocus, options = listOf("Wildlife & ecology", "Plants & botany", "Weather", "Water", "Geology", "General science"), onSelected = { settings.setProfileFocus(it) }, icon = FieldMindIcons.Category)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    Text("How often do you go out?", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        listOf("Daily", "A few times a week", "Weekends", "Spontaneously").forEach { freq ->
+                            val isSelected = onboardingFrequency == freq
+                            Surface(
+                                onClick = { settings.setOnboardingFrequency(freq) },
+                                shape = RoundedCornerShape(20.dp),
+                                color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    freq,
+                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    }
                 }
+            }
+        }
+        item { SectionHeader("Daily Journal", "Greeting and quick-capture overlay on open") }
+        item {
+            SettingsGroupCard {
+                ToggleItem(
+                    "Show daily journal",
+                    "A time-adaptive greeting with quick capture, category chips, and streak display on first open each day.",
+                    journalEnabled,
+                    settings::setJournalEnabled,
+                    FieldMindIcons.Article
+                )
             }
         }
     }
@@ -291,8 +570,55 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
     val sharedAppSettings = SharedAppSettings.getInstance(androidx.compose.ui.platform.LocalContext.current)
     val amoledTheme by sharedAppSettings.amoledTheme.collectAsState()
     val customColorScheme by sharedAppSettings.customColorScheme.collectAsState()
+    val layoutStyle by settings.onboardingLayoutStyle.collectAsState()
 
     SettingsSubPage("Appearance", icon = FieldMindIcons.Palette, onBack = onBack) {
+        // ── Home Layout section ──
+        item { SectionHeader("Home Layout", "Choose how your Home screen looks") }
+        item {
+            SettingsGroupCard {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Layout style", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("How your Home screen is arranged after the daily journal.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(4.dp))
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        listOf("Simple", "Guided journal", "Data-focused").forEach { style ->
+                            val sel = layoutStyle == style
+                            Surface(
+                                onClick = { settings.setOnboardingLayoutStyle(style) },
+                                shape = RoundedCornerShape(22.dp),
+                                color = if (sel) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                border = if (sel) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
+                                modifier = Modifier.weight(1f).height(80.dp)
+                            ) {
+                                Column(
+                                    Modifier.fillMaxSize().padding(8.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(
+                                        when (style) {
+                                            "Simple" -> FieldMindIcons.Check
+                                            "Guided journal" -> FieldMindIcons.Article
+                                            else -> FieldMindIcons.Data
+                                        },
+                                        null,
+                                        tint = if (sel) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        size = 24.dp
+                                    )
+                                    Text(
+                                        style,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         // ── Theme section ──
         item { SectionHeader("Theme", "Control the look and feel of FieldMind") }
         item {
@@ -302,6 +628,56 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                 ToggleItem("AMOLED dark mode", "Pure black backgrounds in dark mode for OLED screens. Deeper blacks save battery on OLED displays.", amoledTheme, sharedAppSettings::setAmoledTheme, MaterialSymbolIcon("dark_mode"))
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Material You dynamic color", "Use system wallpaper colors that auto-adapt to light/dark. Off keeps the FieldMind brand palette.", dynamicColor, settings::setDynamicColorEnabled, FieldMindIcons.Palette)
+                HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                // ── Seasonal color shift toggle ──
+                val seasonalEnabled by settings.seasonalColorsEnabled.collectAsState()
+                Row(
+                    Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val seasonAccent = when (java.util.Calendar.getInstance().get(java.util.Calendar.MONTH)) {
+                        java.util.Calendar.MARCH, java.util.Calendar.APRIL, java.util.Calendar.MAY -> Color(0xFF4CAF50)
+                        java.util.Calendar.JUNE, java.util.Calendar.JULY, java.util.Calendar.AUGUST -> Color(0xFFFFB300)
+                        java.util.Calendar.SEPTEMBER, java.util.Calendar.OCTOBER, java.util.Calendar.NOVEMBER -> Color(0xFFE65100)
+                        else -> Color(0xFF42A5F5)
+                    }
+                    val seasonName = when (java.util.Calendar.getInstance().get(java.util.Calendar.MONTH)) {
+                        java.util.Calendar.MARCH, java.util.Calendar.APRIL, java.util.Calendar.MAY -> "Spring"
+                        java.util.Calendar.JUNE, java.util.Calendar.JULY, java.util.Calendar.AUGUST -> "Summer"
+                        java.util.Calendar.SEPTEMBER, java.util.Calendar.OCTOBER, java.util.Calendar.NOVEMBER -> "Autumn"
+                        else -> "Winter"
+                    }
+                    Box(
+                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                            .background(seasonAccent.copy(alpha = 0.18f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            when (seasonName) {
+                                "Spring" -> MaterialSymbolIcon("local_florist")
+                                "Summer" -> MaterialSymbolIcon("wb_sunny")
+                                "Autumn" -> MaterialSymbolIcon("park")
+                                else -> MaterialSymbolIcon("ac_unit")
+                            },
+                            null,
+                            tint = seasonAccent,
+                            size = 22.dp
+                        )
+                    }
+                    Column(Modifier.weight(1f)) {
+                        Text("Seasonal color shift", fontWeight = FontWeight.SemiBold)
+                        Text(
+                            "$seasonName accent — colors subtly shift with the seasons",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Switch(
+                        checked = seasonalEnabled,
+                        onCheckedChange = { settings.setSeasonalColorsEnabled(it) }
+                    )
+                }
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Color scheme", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -2082,6 +2458,100 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
                     }
                 }
             }
+            // ── Animation Speed Preset (quick access for testing) ──
+            item {
+                val animationsEnabled by settings.animationsEnabled.collectAsState()
+                val speedPreset by settings.animationSpeedPreset.collectAsState()
+                SettingsGroupCard {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
+                                        .background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(MaterialSymbolIcon("motion_photos_on"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
+                                }
+                                Text("Animation speed", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                            }
+                            Text(
+                                speedPreset,
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            listOf("Reduced", "Normal", "Enhanced").forEach { preset ->
+                                val selected = speedPreset == preset
+                                val mIcon = when (preset) {
+                                    "Reduced" -> MaterialSymbolIcon("slow_motion_video")
+                                    "Normal" -> MaterialSymbolIcon("speed")
+                                    else -> MaterialSymbolIcon("fast_forward")
+                                }
+                                Surface(
+                                    onClick = { settings.setAnimationSpeedPreset(preset) },
+                                    shape = RoundedCornerShape(22.dp),
+                                    color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                    border = if (selected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Column(
+                                        Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                                    ) {
+                                        Icon(
+                                            mIcon,
+                                            null,
+                                            tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                            size = 22.dp
+                                        )
+                                        Text(
+                                            preset,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                                            color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    MaterialSymbolIcon("motion_photos_paused"),
+                                    null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    size = 18.dp
+                                )
+                                Text(
+                                    "Enable animations",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                            Switch(
+                                checked = animationsEnabled,
+                                onCheckedChange = { settings.setAnimationsEnabled(it) }
+                            )
+                        }
+                    }
+                }
+            }
             item {
                 SettingsGroupCard {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2899,6 +3369,322 @@ fun AutoGenerationSettingsPage(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+            }
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Animation Settings Page — Speed preset, disable toggle
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+    val settings = viewModel.fieldSettings
+    val animationsEnabled by settings.animationsEnabled.collectAsState()
+    val speedPreset by settings.animationSpeedPreset.collectAsState()
+
+    SettingsSubPage("Animations", icon = MaterialSymbolIcon("motion_photos_on"), onBack = onBack) {
+        item {
+            SettingsGroupCard {
+                ToggleItem(
+                    "Enable animations",
+                    "Disable to stop all entrance transitions, swipe-back gestures, and spring effects. Provides a static, instant-response experience.",
+                    animationsEnabled,
+                    settings::setAnimationsEnabled,
+                    MaterialSymbolIcon("motion_photos_on")
+                )
+            }
+        }
+
+        item { SectionHeader("Animation speed", "Controls how fast entrance animations play") }
+        item {
+            SettingsGroupCard {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Choose how quickly animations complete. Changes take effect immediately.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    listOf("Reduced", "Normal", "Enhanced").forEach { preset ->
+                        val selected = speedPreset == preset
+                        val icon = when (preset) {
+                            "Reduced" -> MaterialSymbolIcon("slow_motion_video")
+                            "Normal" -> MaterialSymbolIcon("speed")
+                            else -> MaterialSymbolIcon("fast_forward")
+                        }
+                        Surface(
+                            onClick = { settings.setAnimationSpeedPreset(preset) },
+                            shape = RoundedCornerShape(22.dp),
+                            color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                            border = if (selected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                Modifier.fillMaxWidth().padding(14.dp),
+                                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Box(
+                                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                                        .background(
+                                            if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                                            else MaterialTheme.colorScheme.surfaceContainerLow
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        icon,
+                                        null,
+                                        tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        size = 22.dp
+                                    )
+                                }
+                                Column(Modifier.weight(1f)) {
+                                    Text(
+                                        preset,
+                                        fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
+                                        style = MaterialTheme.typography.titleSmall
+                                    )
+                                    Text(
+                                        when (preset) {
+                                            "Reduced" -> "Gentle, minimal motion — 40% speed"
+                                            "Normal" -> "Balanced spring physics — default speed"
+                                            else -> "Fast, lively animations — 2x speed"
+                                        },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                if (selected) {
+                                    Icon(
+                                        FieldMindIcons.Check,
+                                        null,
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        size = 20.dp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // ── Interactive Animation Preview ──
+        item { SectionHeader("Live preview", "See how each speed preset affects animation feel") }
+        item {
+            SpeedPresetAnimationPreview(
+                speedPreset = speedPreset,
+                animationsEnabled = animationsEnabled
+            )
+        }
+
+        item {
+            Card(
+                shape = RoundedCornerShape(32.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+            ) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "Fine-tuning",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        "For granular control over damping, stiffness, and swipe thresholds for each animation type, open Developer Options → Animation Tuning.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Interactive Animation Preview — Demonstrates speed preset effect live
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun SpeedPresetAnimationPreview(
+    speedPreset: String,
+    animationsEnabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val animConfig = LocalAnimationConfig.current
+    val scope = rememberCoroutineScope()
+    val colors = FieldMindTheme.colors
+
+    val scaleAnim = remember { Animatable(0f) }
+    val offsetXAnim = remember { Animatable(0f) }
+    val offsetYAnim = remember { Animatable(0f) }
+    val rotationAnim = remember { Animatable(0f) }
+
+    var lastAction by remember { mutableStateOf("Tap to preview") }
+
+    // Auto-play entrance when speed preset changes
+    LaunchedEffect(speedPreset, animationsEnabled) {
+        if (!animationsEnabled) return@LaunchedEffect
+        lastAction = "Speed: " + speedPreset
+        scaleAnim.snapTo(0f)
+        offsetXAnim.snapTo(0f)
+        offsetYAnim.snapTo(0f)
+        rotationAnim.snapTo(0f)
+        delay(150)
+        scaleAnim.animateTo(1f, animConfig.entranceSpring())
+        delay(400)
+        scaleAnim.animateTo(0.95f, animConfig.entranceSpring())
+        scaleAnim.animateTo(1f, animConfig.entranceSpring())
+        delay(200)
+        scaleAnim.animateTo(0f, animConfig.swipeBackSpring())
+        lastAction = "Ready"
+    }
+
+    val speedLabel = when (speedPreset) {
+        "Reduced" -> "40% speed — gentle, minimal motion"
+        "Enhanced" -> "2× speed — fast, lively animations"
+        else -> "Default speed — balanced spring physics"
+    }
+    val speedIcon = when (speedPreset) {
+        "Reduced" -> MaterialSymbolIcon("slow_motion_video")
+        "Normal" -> MaterialSymbolIcon("speed")
+        else -> MaterialSymbolIcon("fast_forward")
+    }
+
+    Card(
+        modifier = modifier.fillMaxWidth()
+            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(32.dp)),
+        shape = RoundedCornerShape(32.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                            .background(colors.flashcard.copy(alpha = 0.14f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(speedIcon, null, tint = colors.flashcard, size = 20.dp)
+                    }
+                    Column {
+                        Text(speedPreset, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                        Text(speedLabel, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+
+            Box(
+                modifier = Modifier.fillMaxWidth().height(140.dp).clip(RoundedCornerShape(24.dp))
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.surfaceContainerHigh,
+                                MaterialTheme.colorScheme.surfaceContainerLow
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier.size(72.dp).graphicsLayer {
+                        scaleX = if (animationsEnabled) scaleAnim.value else 1f
+                        scaleY = if (animationsEnabled) scaleAnim.value else 1f
+                        translationX = if (animationsEnabled) offsetXAnim.value else 0f
+                        translationY = if (animationsEnabled) offsetYAnim.value else 0f
+                        rotationZ = if (animationsEnabled) rotationAnim.value else 0f
+                    }.clip(RoundedCornerShape(32.dp))
+                        .background(
+                            Brush.sweepGradient(
+                                colors = listOf(colors.positive, colors.observation, colors.data, colors.positive)
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(speedIcon, null, tint = Color.White, size = 34.dp)
+                }
+
+                if (!animationsEnabled) {
+                    Box(
+                        modifier = Modifier.matchParentSize()
+                            .background(Color.Black.copy(alpha = 0.4f), RoundedCornerShape(24.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Icon(MaterialSymbolIcon("motion_photos_paused"), null, tint = Color.White, size = 24.dp)
+                            Text("Animations disabled", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                        }
+                    }
+                }
+            }
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(lastAction, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    val dartCount = when (speedPreset) { "Reduced" -> 1; "Normal" -> 2; else -> 3 }
+                    repeat(dartCount) {
+                        Icon(MaterialSymbolIcon("chevron_right"), null, tint = colors.flashcard, size = 16.dp)
+                    }
+                }
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(
+                    onClick = {
+                        lastAction = "Entrance — scale spring"
+                        scope.launch {
+                            scaleAnim.snapTo(0f); offsetXAnim.snapTo(0f); offsetYAnim.snapTo(0f); rotationAnim.snapTo(0f)
+                            scaleAnim.animateTo(1f, animConfig.entranceSpring())
+                        }
+                    },
+                    enabled = animationsEnabled,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(20.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
+                ) { Text("Entrance", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold) }
+
+                OutlinedButton(
+                    onClick = {
+                        lastAction = "Swipe-back — snap spring"
+                        scope.launch {
+                            offsetXAnim.snapTo(0f); scaleAnim.snapTo(1f)
+                            offsetXAnim.animateTo(160f, animConfig.swipeBackSpring())
+                            offsetXAnim.animateTo(0f, animConfig.swipeBackSpring())
+                        }
+                    },
+                    enabled = animationsEnabled,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(20.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
+                ) { Text("Swipe-back", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold) }
+
+                OutlinedButton(
+                    onClick = {
+                        lastAction = "Rotation — spinner"
+                        scope.launch {
+                            rotationAnim.snapTo(0f); scaleAnim.snapTo(1f); offsetXAnim.snapTo(0f); offsetYAnim.snapTo(0f)
+                            rotationAnim.animateTo(360f, animConfig.entranceSpring())
+                            rotationAnim.snapTo(0f)
+                        }
+                    },
+                    enabled = animationsEnabled,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(20.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
+                ) { Text("Spin", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold) }
             }
         }
     }

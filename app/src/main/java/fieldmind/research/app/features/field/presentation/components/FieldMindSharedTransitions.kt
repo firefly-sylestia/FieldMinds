@@ -1,6 +1,7 @@
 package fieldmind.research.app.features.field.presentation.components
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -32,6 +33,18 @@ import androidx.compose.ui.unit.IntOffset
  * composable hierarchy.
  */
 val LocalSharedTransitionScope: ProvidableCompositionLocal<SharedTransitionScope?> =
+    compositionLocalOf { null }
+
+/**
+ * CompositionLocal that provides the [AnimatedVisibilityScope] from the nearest
+ * [NavHost] composable route. Screens that need [Modifier.sharedElement] or
+ * [Modifier.sharedBounds] should read this scope alongside [LocalSharedTransitionScope].
+ *
+ * Each [composable] route in NavHost has its own AnimatedVisibilityScope (the `this`
+ * receiver of the content lambda). The scope is provided via this CompositionLocal
+ * so screens can access it without explicit parameter threading.
+ */
+val LocalAnimatedVisibilityScope: ProvidableCompositionLocal<AnimatedVisibilityScope?> =
     compositionLocalOf { null }
 
 // ────────────────────────────────────────────────────────────────────────────

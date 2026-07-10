@@ -34,6 +34,7 @@ import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.CuteElevations
 import androidx.activity.compose.BackHandler
+import fieldmind.research.app.features.field.presentation.components.LocalFieldMindSnackbar
 
 // ══════════════════════════════════════════════════════════════════════
 //  NEW PROJECT SCREEN — Redesigned: name, description, icon, color, template
@@ -49,27 +50,43 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
     var selectedColor by rememberSaveable { mutableStateOf(0xFF1F6B4CL) }
     var selectedTemplate by rememberSaveable { mutableStateOf(entity?.topicType ?: entity?.projectType ?: "Empty Project") }
     var showTemplatePicker by rememberSaveable { mutableStateOf(false) }
-    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || description.isNotBlank()
+    var savedEntityId by rememberSaveable { mutableStateOf(0L) }
 
-    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+    // Auto-save draft every 30 seconds when dirty
+    val draftHelper = rememberDraftAutoSave(
+        key = "new_project",
+        isDirty = isDirty && !isEditing,
+        onSaveToJson = {
+            org.json.JSONObject().apply {
+                put("title", title)
+                put("description", description)
+                put("icon", selectedIcon)
+                put("color", selectedColor)
+                put("template", selectedTemplate)
+            }.toString()
+        },
+        onRestoreFromJson = { json ->
+            val obj = org.json.JSONObject(json)
+            title = obj.optString("title", "")
+            description = obj.optString("description", "")
+            selectedIcon = obj.optString("icon", "🌿")
+            selectedColor = obj.optLong("color", 0xFF1F6B4CL)
+            selectedTemplate = obj.optString("template", "Empty Project")
+        }
+    )
 
-    if (showExitConfirmation) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showExitConfirmation = false },
-            title = { Text("Discard changes?") },
-            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
-            confirmButton = {
-                Button(
-                    onClick = { showExitConfirmation = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Discard") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
-            }
-        )
-    }
+    UnsavedChangesGuard(
+        isDirty = isDirty && savedEntityId == 0L,
+        onDiscard = onBack
+    )
+
+    UndoSnackbar(
+        hostState = LocalFieldMindSnackbar.current,
+        entityName = "Project",
+        entityId = savedEntityId,
+        onUndo = { id -> viewModel.deleteProject(id); onBack() }
+    )
 
     val projectIcons = listOf("🌿", "🦋", "🐦", "🌲", "📷")
     val colorOptions = listOf(
@@ -117,10 +134,10 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
                     conclusion = "",
                     projectType = selectedTemplate,
                     selectedMethods = selectedIcon,
-                    connectionMap = colorHex
+                    connectionMap = colorHex,
+                    onSaved = { id -> savedEntityId = id; draftHelper.ClearDraft() }
                 )
             }
-            onBack()
         }
     }
 
@@ -336,27 +353,20 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity:
     var priority by rememberSaveable { mutableStateOf(entity?.priority ?: "Medium") }
     var answer by rememberSaveable { mutableStateOf(entity?.answer ?: "") }
     var showAdvanced by rememberSaveable { mutableStateOf(false) }
-    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = question.isNotBlank() || answer.isNotBlank()
+    var savedEntityId by rememberSaveable { mutableStateOf(0L) }
 
-    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+    UnsavedChangesGuard(
+        isDirty = isDirty && savedEntityId == 0L,
+        onDiscard = onBack
+    )
 
-    if (showExitConfirmation) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showExitConfirmation = false },
-            title = { Text("Discard changes?") },
-            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
-            confirmButton = {
-                Button(
-                    onClick = { showExitConfirmation = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Discard") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
-            }
-        )
-    }
+    UndoSnackbar(
+        hostState = LocalFieldMindSnackbar.current,
+        entityName = "Question",
+        entityId = savedEntityId,
+        onUndo = { id -> viewModel.deleteQuestion(id); onBack() }
+    )
 
     val colors = FieldMindTheme.colors
     val priorityColor = mapOf(
@@ -377,10 +387,10 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity:
                     priority = priority,
                     answer = answer.trim()
                 ))
+                onBack()
             } else {
-                viewModel.addQuestion(question, category, source, status, priority, answer = answer)
+                viewModel.addQuestion(question, category, source, status, priority, answer = answer, onSaved = { id -> savedEntityId = id })
             }
-            onBack()
         }
     }
 
@@ -499,27 +509,20 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
     var linkedId by rememberSaveable { mutableStateOf(entity?.linkedQuestionId) }
     var resultStatus by rememberSaveable { mutableStateOf(entity?.resultStatus ?: "Unknown") }
     var showAdvanced by rememberSaveable { mutableStateOf(false) }
-    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = prediction.isNotBlank() || reasoning.isNotBlank() || evidence.isNotBlank()
+    var savedEntityId by rememberSaveable { mutableStateOf(0L) }
 
-    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+    UnsavedChangesGuard(
+        isDirty = isDirty && savedEntityId == 0L,
+        onDiscard = onBack
+    )
 
-    if (showExitConfirmation) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showExitConfirmation = false },
-            title = { Text("Discard changes?") },
-            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
-            confirmButton = {
-                Button(
-                    onClick = { showExitConfirmation = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Discard") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
-            }
-        )
-    }
+    UndoSnackbar(
+        hostState = LocalFieldMindSnackbar.current,
+        entityName = "Hypothesis",
+        entityId = savedEntityId,
+        onUndo = { id -> viewModel.deleteHypothesis(id); onBack() }
+    )
 
     fun save() {
         if (prediction.isNotBlank()) {
@@ -536,10 +539,10 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
                     linkedQuestionId = linkedId,
                     resultStatus = resultStatus
                 ))
+                onBack()
             } else {
-                viewModel.addHypothesis(linkedId, prediction, evidence, confidence.toInt(), reasoning, support, weaken, test, resultStatus = resultStatus)
+                viewModel.addHypothesis(linkedId, prediction, evidence, confidence.toInt(), reasoning, support, weaken, test, resultStatus = resultStatus, onSaved = { id -> savedEntityId = id })
             }
-            onBack()
         }
     }
 
@@ -643,27 +646,20 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
     var unit by rememberSaveable { mutableStateOf(entity?.unit ?: defaultUnitForTool(entity?.toolType ?: "Counter")) }
     var location by rememberSaveable { mutableStateOf(entity?.location ?: "") }
     var notes by rememberSaveable { mutableStateOf(entity?.notes ?: "") }
-    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = label.isNotBlank() || notes.isNotBlank() || location.isNotBlank()
+    var savedEntityId by rememberSaveable { mutableStateOf(0L) }
 
-    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+    UnsavedChangesGuard(
+        isDirty = isDirty && savedEntityId == 0L,
+        onDiscard = onBack
+    )
 
-    if (showExitConfirmation) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showExitConfirmation = false },
-            title = { Text("Discard changes?") },
-            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
-            confirmButton = {
-                Button(
-                    onClick = { showExitConfirmation = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Discard") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
-            }
-        )
-    }
+    UndoSnackbar(
+        hostState = LocalFieldMindSnackbar.current,
+        entityName = "Data Record",
+        entityId = savedEntityId,
+        onUndo = { id -> viewModel.deleteDataRecord(id); onBack() }
+    )
 
     fun save() {
         if (label.isNotBlank()) {
@@ -678,7 +674,7 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
                     location = location.trim()
                 ))
             } else {
-                viewModel.addDataRecord(tool, label, value, unit, notes, location)
+                viewModel.addDataRecord(tool, label, value, unit, notes, location, onSaved = { id -> savedEntityId = id })
             }
             onBack()
         }
@@ -775,27 +771,20 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
     var repeatUnit by rememberSaveable { mutableStateOf(entity?.repeatUnit ?: "") }
     var checklistItems by rememberSaveable { mutableStateOf(listOf("")) }
     var attachmentUris by rememberSaveable { mutableStateOf(entity?.attachmentUris?.split(",")?.filter { it.isNotBlank() } ?: emptyList()) }
-    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || description.isNotBlank() || checklistItems.any { it.isNotBlank() }
+    var savedEntityId by rememberSaveable { mutableStateOf(0L) }
 
-    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+    UnsavedChangesGuard(
+        isDirty = isDirty && savedEntityId == 0L,
+        onDiscard = onBack
+    )
 
-    if (showExitConfirmation) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showExitConfirmation = false },
-            title = { Text("Discard changes?") },
-            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
-            confirmButton = {
-                Button(
-                    onClick = { showExitConfirmation = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Discard") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
-            }
-        )
-    }
+    UndoSnackbar(
+        hostState = LocalFieldMindSnackbar.current,
+        entityName = "Task",
+        entityId = savedEntityId,
+        onUndo = { id -> viewModel.deleteTask(id); onBack() }
+    )
 
     val projects by viewModel.projects.collectAsState()
     val haptics = rememberFieldMindHaptics()
@@ -865,7 +854,8 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
                     reminder = reminder,
                     reminderUnit = "minute",
                     repeatInterval = repeatInterval,
-                    repeatUnit = repeatUnit
+                    repeatUnit = repeatUnit,
+                    onSaved = { id -> savedEntityId = id }
                 )
             }
             onBack()
@@ -1169,27 +1159,20 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: R
     var conclusion by rememberSaveable { mutableStateOf(entity?.conclusion ?: "") }
     var limitations by rememberSaveable { mutableStateOf(entity?.limitations ?: "") }
     var next by rememberSaveable { mutableStateOf(entity?.nextSteps ?: "") }
-    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || background.isNotBlank() || question.isNotBlank() || observations.isNotBlank() || results.isNotBlank() || conclusion.isNotBlank()
+    var savedEntityId by rememberSaveable { mutableStateOf(0L) }
 
-    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+    UnsavedChangesGuard(
+        isDirty = isDirty && savedEntityId == 0L,
+        onDiscard = onBack
+    )
 
-    if (showExitConfirmation) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showExitConfirmation = false },
-            title = { Text("Discard changes?") },
-            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
-            confirmButton = {
-                Button(
-                    onClick = { showExitConfirmation = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Discard") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
-            }
-        )
-    }
+    UndoSnackbar(
+        hostState = LocalFieldMindSnackbar.current,
+        entityName = "Report",
+        entityId = savedEntityId,
+        onUndo = { id -> viewModel.deleteReport(id); onBack() }
+    )
 
     fun save() {
         if (title.isNotBlank()) {
@@ -1209,7 +1192,7 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: R
                     nextSteps = next.trim()
                 ))
             } else {
-                viewModel.addReport(type, title, background, question, methods, observations, results, interpretation, conclusion, limitations, next)
+                viewModel.addReport(type, title, background, question, methods, observations, results, interpretation, conclusion, limitations, next, onSaved = { id -> savedEntityId = id })
             }
             onBack()
         }
@@ -1307,27 +1290,20 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, enti
     var location by rememberSaveable { mutableStateOf(entity?.manualLocation ?: "") }; var latitude by rememberSaveable { mutableStateOf(entity?.latitude?.toString() ?: "") }; var longitude by rememberSaveable { mutableStateOf(entity?.longitude?.toString() ?: "") }
     var tags by rememberSaveable { mutableStateOf(entity?.tags ?: "") }; var evidence by rememberSaveable { mutableStateOf(entity?.evidenceSummary ?: "") }; var fieldContext by rememberSaveable { mutableStateOf(entity?.moodOrContext ?: "") }
     var showAdvanced by rememberSaveable { mutableStateOf(false) }
-    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = subject.isNotBlank() || facts.isNotBlank() || tags.isNotBlank() || evidence.isNotBlank() || fieldContext.isNotBlank() || location.isNotBlank()
+    var savedEntityId by rememberSaveable { mutableStateOf(0L) }
 
-    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+    UnsavedChangesGuard(
+        isDirty = isDirty && savedEntityId == 0L,
+        onDiscard = onBack
+    )
 
-    if (showExitConfirmation) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showExitConfirmation = false },
-            title = { Text("Discard changes?") },
-            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
-            confirmButton = {
-                Button(
-                    onClick = { showExitConfirmation = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Discard") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
-            }
-        )
-    }
+    UndoSnackbar(
+        hostState = LocalFieldMindSnackbar.current,
+        entityName = "Observation",
+        entityId = savedEntityId,
+        onUndo = { id -> viewModel.deleteObservation(id); onBack() }
+    )
 
     fun save() {
         if (subject.isNotBlank() || facts.isNotBlank()) {
@@ -1346,6 +1322,7 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, enti
                     evidenceSummary = evidence,
                     moodOrContext = fieldContext
                 ))
+                onBack()
             } else {
                 viewModel.addObservation(
                     subject = effectiveSubject,
@@ -1357,10 +1334,10 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, enti
                     longitude = longitude.toDoubleOrNull(),
                     tags = if (tags.isNotBlank()) "$tags, $category" else category,
                     evidence = evidence,
-                    context = fieldContext
+                    context = fieldContext,
+                    onSaved = { id -> savedEntityId = id }
                 )
             }
-            onBack()
         }
     }
 
@@ -1455,27 +1432,20 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Not
     var title by rememberSaveable { mutableStateOf(entity?.title ?: "") }; var body by rememberSaveable { mutableStateOf(entity?.body ?: "") }
     var category by rememberSaveable { mutableStateOf(entity?.category ?: "Other") }; var tags by rememberSaveable { mutableStateOf(entity?.tags ?: "") }
     var location by rememberSaveable { mutableStateOf("") }; var showAdvanced by rememberSaveable { mutableStateOf(false) }
-    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || body.isNotBlank() || tags.isNotBlank() || location.isNotBlank()
+    var savedEntityId by rememberSaveable { mutableStateOf(0L) }
 
-    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+    UnsavedChangesGuard(
+        isDirty = isDirty && savedEntityId == 0L,
+        onDiscard = onBack
+    )
 
-    if (showExitConfirmation) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showExitConfirmation = false },
-            title = { Text("Discard changes?") },
-            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
-            confirmButton = {
-                Button(
-                    onClick = { showExitConfirmation = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Discard") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
-            }
-        )
-    }
+    UndoSnackbar(
+        hostState = LocalFieldMindSnackbar.current,
+        entityName = "Note",
+        entityId = savedEntityId,
+        onUndo = { id -> viewModel.deleteNote(id); onBack() }
+    )
 
     fun save() {
         if (title.isNotBlank() || body.isNotBlank()) {
@@ -1488,16 +1458,16 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Not
                     category = category,
                     tags = tags
                 ))
+                onBack()
             } else {
                 viewModel.addNote(
                     title = title.ifBlank { fallbackTitle },
                     body = body,
                     category = category,
                     tags = tags,
-                    onSaved = { onBack() }
+                    onSaved = { id -> savedEntityId = id }
                 )
             }
-            onBack()
         }
     }
 
@@ -1574,27 +1544,20 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: S
     var findings by rememberSaveable { mutableStateOf(entity?.keyFindings ?: "") }; var questions by rememberSaveable { mutableStateOf(entity?.questionsGenerated ?: "") }
     var notes by rememberSaveable { mutableStateOf(entity?.paperNotes ?: "") }; var reliability by rememberSaveable { mutableStateOf((entity?.reliabilityScore ?: 3).toFloat()) }
     var projectId by rememberSaveable { mutableStateOf(entity?.relatedProjectId) }
-    var showExitConfirmation by rememberSaveable { mutableStateOf(false) }
     val isDirty = title.isNotBlank() || author.isNotBlank() || summary.isNotBlank() || findings.isNotBlank() || taught.isNotBlank() || notes.isNotBlank()
+    var savedEntityId by rememberSaveable { mutableStateOf(0L) }
 
-    BackHandler(enabled = isDirty) { showExitConfirmation = true }
+    UnsavedChangesGuard(
+        isDirty = isDirty && savedEntityId == 0L,
+        onDiscard = onBack
+    )
 
-    if (showExitConfirmation) {
-        SwipeableAlertDialog(
-            onDismissRequest = { showExitConfirmation = false },
-            title = { Text("Discard changes?") },
-            text = { Text("You have unsaved changes. Are you sure you want to go back?") },
-            confirmButton = {
-                Button(
-                    onClick = { showExitConfirmation = false; onBack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Discard") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showExitConfirmation = false }) { Text("Keep editing") }
-            }
-        )
-    }
+    UndoSnackbar(
+        hostState = LocalFieldMindSnackbar.current,
+        entityName = "Source",
+        entityId = savedEntityId,
+        onUndo = { id -> viewModel.deleteSource(id); onBack() }
+    )
 
     fun save() {
         if (title.isNotBlank()) {
@@ -1620,7 +1583,8 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: S
                     projectId = projectId, dateOrYear = dateOrYear.trim(), doiOrIsbn = doiOrIsbn.trim(),
                     publisherOrJournal = publisherOrJournal.trim(), accessDate = accessDate.trim(),
                     fileUri = fileUri.trim(), citationStyleNote = citationStyleNote.trim(),
-                    importance = importance, readingStatus = readingStatus
+                    importance = importance, readingStatus = readingStatus,
+                    onSaved = { id -> savedEntityId = id }
                 )
             }
             onBack()

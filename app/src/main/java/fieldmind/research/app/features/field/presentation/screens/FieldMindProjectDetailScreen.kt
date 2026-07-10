@@ -31,6 +31,8 @@ import fieldmind.research.app.features.field.presentation.components.FieldMindIc
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
 import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
 import fieldmind.research.app.features.field.presentation.components.pressScale
+import fieldmind.research.app.features.field.presentation.components.LocalSharedTransitionScope
+import fieldmind.research.app.features.field.presentation.components.LocalAnimatedVisibilityScope
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.shared.presentation.components.icons.Icon
@@ -302,9 +304,23 @@ fun ProjectDetailScreen(
 
                     // Project identity — refined with Geom font
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                        Box(
+                        val detailScope = LocalSharedTransitionScope.current
+                        val detailAnimScope = LocalAnimatedVisibilityScope.current
+                        val projectIconDetailModifier = if (detailScope != null && detailAnimScope != null) {
+                            with(detailScope) {
+                                Modifier.size(52.dp).clip(RoundedCornerShape(24.dp))
+                                    .background(colors.project.copy(alpha = 0.16f))
+                                    .sharedElement(
+                                        rememberSharedContentState(key = "project_icon_${project.id}"),
+                                        detailAnimScope
+                                    )
+                            }
+                        } else {
                             Modifier.size(52.dp).clip(RoundedCornerShape(24.dp))
-                                .background(colors.project.copy(alpha = 0.16f)),
+                                .background(colors.project.copy(alpha = 0.16f))
+                        }
+                        Box(
+                            projectIconDetailModifier,
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(MaterialSymbolIcon("science"), null, tint = colors.project, size = 28.dp)

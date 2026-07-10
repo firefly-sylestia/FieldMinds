@@ -57,6 +57,9 @@ import fieldmind.research.app.features.field.data.location.FieldLocationProvider
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.spring
 // ══════════════════════════════════════════════════════════════════════
 //  Shared dialog helpers — consistent containers for all edit/create dialogs
 // ══════════════════════════════════════════════════════════════════════
@@ -2038,7 +2041,31 @@ private fun EditChecklistDialog(entity: DataRecordEntity, viewModel: FieldMindVi
         DialogDividerSection("Items", FieldMindIcons.List, FieldMindTheme.colors.data)
         items.forEachIndexed { index, (item, done) ->
             Row(Modifier.fillMaxWidth().padding(vertical = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Checkbox(checked = done, onCheckedChange = { items = items.toMutableList().apply { this[index] = Pair(item, it) } })
+                val cb_bounce = remember { Animatable(1f) }
+                val cb_scope = rememberCoroutineScope()
+                Surface(
+                    onClick = {
+                        val wasDone = items[index].second; items = items.toMutableList().apply { this[index] = Pair(item, !wasDone) }
+                        cb_scope.launch {
+                            cb_bounce.snapTo(1.3f)
+                            cb_bounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                        }
+                    },
+                    shape = CircleShape,
+                    color = if (done) FieldMindTheme.colors.positive.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                    modifier = Modifier.size(28.dp).graphicsLayer {
+                        scaleX = cb_bounce.value
+                        scaleY = cb_bounce.value
+                    }
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        if (done) {
+                            Icon(MaterialSymbolIcon("check_circle", filled = true), null, size = 18.dp, tint = FieldMindTheme.colors.positive)
+                        } else {
+                            Box(Modifier.size(16.dp).clip(CircleShape).background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)))
+                        }
+                    }
+                }
                 TextField(
                     value = item,
                     onValueChange = { items = items.toMutableList().apply { this[index] = Pair(it, done) } },

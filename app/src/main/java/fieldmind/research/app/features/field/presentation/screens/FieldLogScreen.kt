@@ -217,6 +217,7 @@ fun FieldLogScreen(
                 items(completedSessions.take(5), key = { it.id }) { session ->
                     ClickableCard(
                         onClick = { onOpenDetail("research_session", session.id) },
+                        animate = true,
                         shape = RoundedCornerShape(30.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         tonalElevation = 0.dp, shadowElevation = 0.dp

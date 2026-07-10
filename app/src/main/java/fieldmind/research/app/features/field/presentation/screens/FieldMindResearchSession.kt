@@ -506,7 +506,7 @@ fun ResearchSessionScreen(
                         Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             Text("Session Complete", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                                MetricTile("Duration", formatTime(sessionElapsedMs), FieldMindIcons.Calendar, Modifier.weight(1f))
+                                MetricTile("Duration", formatTime(sessionElapsedMs), FieldMindIcons.Calendar, Modifier.weight(1f), animate = true)
                                 MetricTile("Observations", "$observationCount", FieldMindIcons.Observation, Modifier.weight(1f))
                             }
                             if (sessionName.isNotBlank()) {

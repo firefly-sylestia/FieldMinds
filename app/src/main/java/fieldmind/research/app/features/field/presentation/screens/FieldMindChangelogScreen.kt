@@ -44,6 +44,87 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.46.0 — Sound Design System & Seasonal Color Shift ──
+        FieldMindChangelogEntry(
+            version = "0.46.0",
+            date = "2026-07-10",
+            title = "🔊 Ambient Sound Design & Seasonal Color Shift",
+            importance = "Major",
+            tags = listOf("🔊", "🎨", "🌸", "🌙"),
+            sections = listOf(
+                "🔊 Immersive sound design system" to listOf(
+                    "✓ Gentle chime on app open — soft welcome as you launch FieldMind",
+                    "✓ Camera shutter click when capturing photos — satisfying tactile-audio feedback",
+                    "✓ Water droplet on saving observations — rewarding confirmation sound",
+                    "✓ Night cricket ambience — time-aware loop plays during evening hours (8 PM – 6 AM)",
+                    "✓ Sound effects generated algorithmically — no external audio assets required",
+                    "✓ SoundPool-based singleton manager with async loading and automatic cleanup"
+                ),
+                "🎚️ Master volume control in Settings" to listOf(
+                    "✓ Master toggle to enable/disable all sound effects from Settings → Notifications & sound",
+                    "✓ Adjustable volume slider (0% – 100%) for fine-grained control",
+                    "✓ Volume defaults to 70% — audible but not intrusive out of the box",
+                    "✓ Sound effects off by default respects system silent mode preferences"
+                ),
+                "🌸 Seasonal color shift" to listOf(
+                    "✓ Entity accent colors subtly shift ~25% toward the current season's accent",
+                    "✓ 🌸 Spring (Mar–May): Fresh green #4CAF50 — new growth and renewal",
+                    "✓ ☀️ Summer (Jun–Aug): Golden sun #FFB300 — warm, vibrant energy",
+                    "✓ 🍂 Autumn (Sep–Nov): Warm orange #E65100 — harvest and change",
+                    "✓ ❄️ Winter (Dec–Feb): Cool blue #42A5F5 — calm, crisp clarity",
+                    "✓ Blend is applied as the final transform — never overrides dynamic color or custom schemes",
+                    "✓ Toggle in Settings → Appearance to enable/disable seasonal shifts"
+                ),
+                "🔄 Code quality & architecture" to listOf(
+                    "✓ SoundManager singleton with proper synchronized lazy initialization",
+                    "✓ SeasonalColor.kt — clean month-to-season mapping with smooth blend function",
+                    "✓ Both systems respect the Compose-reactive settings architecture",
+                    "✓ Settings export/import and clear-all-reset fully support both new features"
+                )
+            )
+        ),
+
+        // ── v0.45.0 — Personalized Onboarding & Daily Field Journal ──
+        FieldMindChangelogEntry(
+            version = "0.45.0",
+            date = "2026-07-10",
+            title = "🎯 Personalized Onboarding & Daily Field Journal",
+            importance = "Major",
+            tags = listOf("🎯", "📓", "✨", "🌅"),
+            sections = listOf(
+                "🎯 Fresh 5-step onboarding wizard" to listOf(
+                    "✓ Replaced 11-page onboarding with a focused 5-step wizard",
+                    "✓ Step 1: Name, role picker (7 roles), and frequency (Daily/Weekends/Spontaneously)",
+                    "✓ Step 2: Interest grid with zoology subfields, botany subfields, ecology/astronomy/geology toggles",
+                    "✓ Step 3: Permissions with per-item Grant buttons and status indicators",
+                    "✓ Step 4: Theme, dynamic colors, layout style (Simple/Guided journal/Data-focused), units, daily goal",
+                    "✓ Step 5: Review summary with edit buttons for each section",
+                    "✓ Settings auto-configure screen visibility based on selected interests",
+                    "✓ Extended tour removed — all those settings are discoverable in Settings"
+                ),
+                "📓 Daily Field Journal overlay" to listOf(
+                    "✓ Beautiful half-sheet slides up with spring animation on first app open each day",
+                    "✓ Time-adaptive greeting (Good morning/afternoon/evening) with gradient icon",
+                    "✓ Quick capture text field with 5 category chips (Bird, Plant, Insect, Weather, Animal)",
+                    "✓ Streak flame display with day count badge",
+                    "✓ Random field research tip at the bottom",
+                    "✓ Shows once per day — dismissed until next calendar day",
+                    "✓ Background tap or 'Start exploring' button to dismiss"
+                ),
+                "🌅 Time-of-day adaptation" to listOf(
+                    "✓ Morning: Sunrise icon, warm orange gradient, 'A fresh start to your field day'",
+                    "✓ Afternoon: Weather icon, cool blue gradient, 'Perfect time to log your observations'",
+                    "✓ Evening: Moon icon, purple gradient, 'Time to reflect on today's findings'",
+                    "✓ Greeting icon dynamically matches the time period"
+                ),
+                "✨ New settings added" to listOf(
+                    "✓ `onboardingFrequency`: How often the user goes out — drives reminder schedule",
+                    "✓ `onboardingLayoutStyle`: Simple / Guided journal / Data-focused — configures Home",
+                    "✓ `journalEnabled`: Toggle to enable/disable the daily journal overlay",
+                    "✓ `journalLastShownDate`: Tracks which day the journal was last shown"
+                )
+            )
+        ),
         // ── v0.44.1 — Compass/Level Accuracy, Checklist Tick & Edit Task Fixes ──
         FieldMindChangelogEntry(
             version = "0.44.1",

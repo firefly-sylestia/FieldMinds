@@ -1036,6 +1036,7 @@ private fun ReadingTimerDialog(onDismiss: () -> Unit) {
             val readMin = elapsedSeconds / 60
             InfoCard(
                 shape = RoundedCornerShape(24.dp),
+                animate = true,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                 tonalElevation = 0.dp, shadowElevation = 0.dp
             ) {
@@ -1131,6 +1132,7 @@ private fun PaperReadingPanel(items: List<SourceEntity>, onOpenDetail: (String, 
             item {
                 InfoCard(
                     shape = RoundedCornerShape(30.dp),
+                    animate = true,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
@@ -1426,6 +1428,7 @@ private fun LibraryFlashcard(
                 else onClick()
             },
         shape = RoundedCornerShape(30.dp),
+        animate = true,
         colors = CardDefaults.cardColors(
             containerColor = if (selected) FieldMindTheme.colors.flashcard.copy(alpha = 0.12f)
                            else MaterialTheme.colorScheme.surfaceContainerLow

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -645,8 +646,12 @@ private fun OfflineTilesTab(
         }
         if (cachedRegions.isNotEmpty()) {
             item { Text("Cached regions", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold) }
-            items(cachedRegions) { region ->
-                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+        itemsIndexed(cachedRegions) { i, region ->
+            Card(
+                modifier = Modifier.fillMaxWidth().staggeredEntrance(index = i, animate = true),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+            ) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                             Text(region.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
@@ -1134,9 +1139,11 @@ private fun DrawingsTab(
                 }
             }
         }
-        items(overlays) { overlay ->
+        itemsIndexed(overlays) { i, overlay ->
             ClickableCard(
                 onClick = { onEditOverlay(overlay) },
+                index = i,
+                animate = true,
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
@@ -1210,8 +1217,12 @@ private fun TracksTab(
                 }
             }
         }
-        items(savedTracks.sortedByDescending { it.startedAt }) { track ->
-            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+        itemsIndexed(savedTracks.sortedByDescending { it.startedAt }) { i, track ->
+            Card(
+                modifier = Modifier.fillMaxWidth().staggeredEntrance(index = i, animate = true),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+            ) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
@@ -1276,8 +1287,9 @@ private fun GeofencesTab(
                 }
             }
         }
-        items(geofenceRegions) { region ->
+        itemsIndexed(geofenceRegions) { i, region ->
             Card(
+                modifier = Modifier.fillMaxWidth().staggeredEntrance(index = i, animate = true),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {

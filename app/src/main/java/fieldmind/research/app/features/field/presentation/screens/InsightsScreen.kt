@@ -226,6 +226,7 @@ fun InsightsScreen(
 
     val scope = rememberCoroutineScope()
     val snackbarState = remember { SnackbarHostState() }
+    val celebrationState = rememberCelebrationState()
 
     // ── Calculate today's daily calendar map ──
     val calendarData = remember(observations) {
@@ -268,12 +269,13 @@ fun InsightsScreen(
 
             if (observations.isEmpty()) {
                 item {
-                    EmptyState(
-                        "No data yet",
-                        "Insights, charts, and your offline map appear as you log observations. Start capturing to build your research dashboard.",
-                        icon = FieldMindIcons.Insights,
-                        actionLabel = "Capture first observation"
-                    ) { onNavigate(FieldMindScreen.Observe) }
+                    DelightfulEmptyState(
+                        context = "observations",
+                        customTitle = "Your research dashboard is empty 📊",
+                        customBody = "Insights, charts, and your offline map appear as you log observations. Start capturing to build your research dashboard.",
+                        actionLabel = "Capture first observation",
+                        onAction = { onNavigate(FieldMindScreen.Observe) }
+                    )
                 }
                 return@LazyColumn
             }
@@ -468,7 +470,7 @@ fun InsightsScreen(
 
             // ═══════════ SECTION 8: Achievements ═══════════
             item { SectionHeader("Achievements", "${achievements.count { it.unlocked }}/${achievements.size} unlocked") }
-            item { CollapsibleAchievements(achievements, snackbarState, scope) }
+            item { CollapsibleAchievements(items = achievements, snackbarState = snackbarState, scope = scope, celebrationState = celebrationState) }
 
             // ═══════════ SECTION 9: Open Questions & Active Projects ═══════════
             if (questions.isNotEmpty()) {
@@ -500,6 +502,9 @@ fun InsightsScreen(
                     .align(Alignment.TopCenter)
                     .padding(top = 8.dp, start = 16.dp, end = 16.dp)
             )
+
+            // ── Celebration overlay for achievement unlocks ──
+            CelebrationOverlay(celebrationState = celebrationState)
         }
     }
 }
@@ -665,7 +670,8 @@ data class ResearchAchievement(
 private fun CollapsibleAchievements(
     items: List<ResearchAchievement>,
     snackbarState: SnackbarHostState,
-    scope: kotlinx.coroutines.CoroutineScope
+    scope: kotlinx.coroutines.CoroutineScope,
+    celebrationState: CelebrationState? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
     val unlockedCount = items.count { it.unlocked }
@@ -675,9 +681,17 @@ private fun CollapsibleAchievements(
     LaunchedEffect(unlockedCount) {
         if (unlockedCount > 0) {
             val prefs = context.getSharedPreferences("fieldmind_achievements_v2", 0)
-            items.filter { it.unlocked && !prefs.getBoolean(it.title, false) }.forEach { a ->
-                showFastSnackbar(snackbarState, scope, "🏆 ${a.title} unlocked!")
-                prefs.edit().putBoolean(a.title, true).apply()
+            val newlyUnlocked = items.filter { it.unlocked && !prefs.getBoolean(it.title, false) }
+            if (newlyUnlocked.isNotEmpty()) {
+                // Trigger celebration for newly unlocked achievements
+                val isMajor = newlyUnlocked.any { it.target >= 10 }
+                celebrationState?.trigger(
+                    if (isMajor) CelebrationVariant.MIXED else CelebrationVariant.CONFETTI_BURST
+                )
+                newlyUnlocked.forEach { a ->
+                    showFastSnackbar(snackbarState, scope, "🏆 ${a.title} unlocked!")
+                    prefs.edit().putBoolean(a.title, true).apply()
+                }
             }
         }
     }

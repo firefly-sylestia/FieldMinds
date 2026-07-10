@@ -61,6 +61,8 @@ import fieldmind.research.app.features.field.presentation.screens.species.Specie
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenceAttachment
 import fieldmind.research.app.features.field.presentation.components.*
+import fieldmind.research.app.infrastructure.FieldMindSoundManager
+import fieldmind.research.app.infrastructure.FieldMindSounds
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
@@ -161,7 +163,9 @@ fun ObserveScreen(
     val haptics = rememberFieldMindHaptics()
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
+    val celebrationState = rememberCelebrationState()
     val context = LocalContext.current
+    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
 
     // GPS location & accuracy
     val locationProvider = remember { FieldLocationProvider(context) }
@@ -443,6 +447,12 @@ fun ObserveScreen(
                 fieldContext = "", manualLocation = "", attachments = emptyList(),
                 sessionObservationCount = session.sessionObservationCount + 1
             )
+            // Celebrate first observation ever saved
+            if (observations.isEmpty()) {
+                celebrationState.trigger(CelebrationVariant.CONFETTI_BURST)
+            }
+            // Play water drop sound on save
+            soundManager.play(FieldMindSounds.WATER_DROP)
             showFastSnackbar(snackbar, scope, "Observation saved! Session: ${session.sessionObservationCount + 1}")
         }
     }
@@ -616,6 +626,13 @@ fun ObserveScreen(
                                         (if (session.timerRunning && timerStartedAtLocal != null) System.currentTimeMillis() - timerStartedAtLocal else 0L)
                                     viewModel.endResearchSession(id, session.sessionObservationCount, durationMs)
                                 }
+                                // Reset session synchronously to avoid race with
+                                // LaunchedEffect(viewModel.captureSessionActive) clearing it
+                                // asynchronously. This ensures session.isActive = false and
+                                // showEvidenceForm = false before the next composition frame,
+                                // preventing the navigation guard from getting stuck.
+                                session = CaptureSessionState()
+                                session = session.copy(showEvidenceForm = false)
                                 session = session.copy(activeSessionId = null)
                                 showSessionSummary = true
                             }
@@ -921,21 +938,24 @@ fun ObserveScreen(
                         ) {
                             Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                                 Text("Session Complete", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {                                        val finalStartedAt = session.timerStartedAt
-                                        MetricTile(
-                                            "Duration",
-                                            formatDurationCompact(
-                                                session.timerAccumulatedMs +
-                                                    (if (session.timerRunning && finalStartedAt != null) System.currentTimeMillis() - finalStartedAt else 0L)
-                                            ),
-                                            FieldMindIcons.Calendar,
-                                            Modifier.weight(1f)
-                                        )
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    val finalStartedAt = session.timerStartedAt
+                                    MetricTile(
+                                        "Duration",
+                                        formatDurationCompact(
+                                            session.timerAccumulatedMs +
+                                                (if (session.timerRunning && finalStartedAt != null) System.currentTimeMillis() - finalStartedAt else 0L)
+                                        ),
+                                        FieldMindIcons.Calendar,
+                                        Modifier.weight(1f),
+                                        animate = true
+                                    )
                                     MetricTile(
                                         "Observations",
                                         "${session.sessionObservationCount}",
                                         FieldMindIcons.Observation,
-                                        Modifier.weight(1f)
+                                        Modifier.weight(1f),
+                                        animate = true
                                     )
                                 }
                                 if (session.sessionName.isNotBlank()) {
@@ -960,10 +980,10 @@ fun ObserveScreen(
                 // ── Empty state (only when no form is open AND no saved observations) ──
                 if (!session.showEvidenceForm && !session.isActive && observations.isEmpty() && !showSessionSummary) {
                     item {
-                        EmptyState(
-                            "No observations yet",
-                            "Start a session below to capture evidence and log observations.",
-                            icon = FieldMindIcons.Observation
+                        DelightfulEmptyState(
+                            context = "observations",
+                            customTitle = "Your field notebook is waiting 📓",
+                            customBody = "No observations yet — but every discovery starts with a single step outside. Start a session below to begin!"
                         )
                     }
                 }
@@ -976,6 +996,9 @@ fun ObserveScreen(
                     .align(Alignment.TopCenter)
                     .padding(top = 8.dp, start = 16.dp, end = 16.dp)
             )
+
+            // ── Celebration overlay ──
+            CelebrationOverlay(celebrationState = celebrationState)
         }
     }
 

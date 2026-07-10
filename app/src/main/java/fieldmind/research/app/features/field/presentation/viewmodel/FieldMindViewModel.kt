@@ -465,11 +465,12 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         return captured to weather
     }
 
-    fun addQuestion(question: String, category: String, sourceType: String, status: String, priority: String, observationId: Long? = null, sourceId: Long? = null, projectId: Long? = null, answer: String = "") = viewModelScope.launch {
+    fun addQuestion(question: String, category: String, sourceType: String, status: String, priority: String, observationId: Long? = null, sourceId: Long? = null, projectId: Long? = null, answer: String = "", onSaved: ((Long) -> Unit)? = null) = viewModelScope.launch {
         val trimmedAnswer = answer.trim()
         val id = repository.addQuestion(QuestionEntity(questionText = question.trim(), category = category, sourceType = sourceType, status = status, priority = priority, relatedProjectId = projectId, answer = trimmedAnswer))
         observationId?.let { repository.linkQuestionObservation(id, it) }
         sourceId?.let { repository.linkQuestionSource(id, it) }
+        onSaved?.invoke(id)
     }
 
     fun addProject(
@@ -486,9 +487,10 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         conclusion: String = "",
         projectType: String = "Observation",
         selectedMethods: String = "",
-        connectionMap: String = ""
+        connectionMap: String = "",
+        onSaved: ((Long) -> Unit)? = null
     ) = viewModelScope.launch {
-        repository.addProject(
+        val id = repository.addProject(
             ProjectEntity(
                 title = title.trim(),
                 topicType = topicType.trim().ifBlank { "General" },
@@ -506,6 +508,7 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                 connectionMap = connectionMap.trim()
             )
         )
+        onSaved?.invoke(id)
     }
 
     fun addSource(
@@ -527,9 +530,10 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         fileUri: String = "",
         citationStyleNote: String = "",
         importance: String = "Normal",
-        readingStatus: String = "In progress"
+        readingStatus: String = "In progress",
+        onSaved: ((Long) -> Unit)? = null
     ) = viewModelScope.launch {
-        repository.addSource(
+        val id = repository.addSource(
             SourceEntity(
                 type = type,
                 title = title.trim(),
@@ -552,6 +556,7 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                 relatedProjectId = projectId
             )
         )
+        onSaved?.invoke(id)
     }
 
     fun toggleSourceImportant(source: SourceEntity) = viewModelScope.launch {
@@ -979,14 +984,16 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         return Pair(media.uri, android.net.Uri.parse(media.uri).path ?: "")
     }
 
-    fun addHypothesis(questionId: Long?, prediction: String, evidenceNeeded: String, confidence: Int, reasoning: String = "", supportCriteria: String = "", weakeningCriteria: String = "", testMethod: String = "", resultStatus: String = "Unknown") = viewModelScope.launch {
-        repository.addHypothesis(HypothesisEntity(linkedQuestionId = questionId, prediction = prediction.trim(), reasoning = reasoning.trim(), evidenceNeeded = evidenceNeeded.trim(), supportCriteria = supportCriteria.trim(), weakeningCriteria = weakeningCriteria.trim(), testMethod = testMethod.trim(), confidencePercent = confidence, resultStatus = resultStatus))
+    fun addHypothesis(questionId: Long?, prediction: String, evidenceNeeded: String, confidence: Int, reasoning: String = "", supportCriteria: String = "", weakeningCriteria: String = "", testMethod: String = "", resultStatus: String = "Unknown", onSaved: ((Long) -> Unit)? = null) = viewModelScope.launch {
+        val id = repository.addHypothesis(HypothesisEntity(linkedQuestionId = questionId, prediction = prediction.trim(), reasoning = reasoning.trim(), evidenceNeeded = evidenceNeeded.trim(), supportCriteria = supportCriteria.trim(), weakeningCriteria = weakeningCriteria.trim(), testMethod = testMethod.trim(), confidencePercent = confidence, resultStatus = resultStatus))
+        onSaved?.invoke(id)
     }
 
-    fun addDataRecord(toolType: String, label: String, value: String, unit: String = "", notes: String = "", location: String = "", projectId: Long? = null, observationId: Long? = null, datasetKind: String = "Manual", chartPreference: String = "Line", onResult: ((Boolean) -> Unit)? = null) = viewModelScope.launch {
+    fun addDataRecord(toolType: String, label: String, value: String, unit: String = "", notes: String = "", location: String = "", projectId: Long? = null, observationId: Long? = null, datasetKind: String = "Manual", chartPreference: String = "Line", onResult: ((Boolean) -> Unit)? = null, onSaved: ((Long) -> Unit)? = null) = viewModelScope.launch {
         try {
-            repository.addDataRecord(DataRecordEntity(toolType = toolType, label = label.trim(), value = value.trim(), unit = unit.trim(), notes = notes.trim(), location = location.trim(), projectId = projectId, observationId = observationId, datasetKind = datasetKind, chartPreference = chartPreference))
+            val id = repository.addDataRecord(DataRecordEntity(toolType = toolType, label = label.trim(), value = value.trim(), unit = unit.trim(), notes = notes.trim(), location = location.trim(), projectId = projectId, observationId = observationId, datasetKind = datasetKind, chartPreference = chartPreference))
             onResult?.invoke(true)
+            onSaved?.invoke(id)
         } catch (e: Exception) {
             android.util.Log.e("FieldMindVM", "Failed to save data record", e)
             onResult?.invoke(false)
@@ -995,9 +1002,10 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun addCounter(label: String, count: Int, notes: String, onResult: ((Boolean) -> Unit)? = null) = addDataRecord("Counter", label, count.toString(), "count", notes, onResult = onResult)
 
-    fun addReport(type: String, title: String, background: String, question: String, methods: String, observations: String, results: String, interpretation: String, conclusion: String, limitations: String, nextSteps: String, projectId: Long? = null) = viewModelScope.launch {
+    fun addReport(type: String, title: String, background: String, question: String, methods: String, observations: String, results: String, interpretation: String, conclusion: String, limitations: String, nextSteps: String, projectId: Long? = null, onSaved: ((Long) -> Unit)? = null) = viewModelScope.launch {
         val markdown = buildMarkdown(type, title, background, question, methods, observations, results, interpretation, conclusion, limitations, nextSteps)
-        repository.addReport(ReportEntity(type = type, title = title.trim(), background = background.trim(), question = question.trim(), methods = methods.trim(), observations = observations.trim(), results = results.trim(), interpretation = interpretation.trim(), conclusion = conclusion.trim(), limitations = limitations.trim(), nextSteps = nextSteps.trim(), markdownDraft = markdown, projectId = projectId))
+        val id = repository.addReport(ReportEntity(type = type, title = title.trim(), background = background.trim(), question = question.trim(), methods = methods.trim(), observations = observations.trim(), results = results.trim(), interpretation = interpretation.trim(), conclusion = conclusion.trim(), limitations = limitations.trim(), nextSteps = nextSteps.trim(), markdownDraft = markdown, projectId = projectId))
+        onSaved?.invoke(id)
     }
 
     fun addReport(title: String, question: String, methods: String, conclusion: String) = addReport("Field Report", title, "", question, methods, "", "", "", conclusion, "", "")

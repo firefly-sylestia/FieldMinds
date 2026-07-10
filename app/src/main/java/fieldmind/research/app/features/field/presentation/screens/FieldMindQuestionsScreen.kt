@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -364,7 +365,7 @@ fun QuestionsScreen(
         // ════════════════════════════════════════════════════════
         //  QUESTION CARDS with nested hypotheses
         // ════════════════════════════════════════════════════════
-        items(filtered, key = { it.id }) { q ->
+        itemsIndexed(filtered) { i, q ->
             val questionHypotheses = remember(hypotheses, q.id) {
                 hypotheses.filter { it.linkedQuestionId == q.id }
             }
@@ -484,7 +485,9 @@ private fun QuestionCardWithHypotheses(
     onToggleEvidence: (HypothesisEntity, Long, Boolean) -> Unit,
     onDeleteHypothesis: (HypothesisEntity) -> Unit,
     viewModel: FieldMindViewModel,
-    onOpenDetail: (String, Long) -> Unit
+    onOpenDetail: (String, Long) -> Unit,
+    index: Int = 0,
+    animate: Boolean = true
 ) {
     var expanded by remember(question.id) { mutableStateOf(false) }
     val accent = when (question.status) {
@@ -496,7 +499,7 @@ private fun QuestionCardWithHypotheses(
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
         shape = RoundedCornerShape(34.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)

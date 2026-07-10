@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.ui.theme.getCustomColorScheme
 import fieldmind.research.app.ui.theme.getTypographyForFont
 
@@ -691,6 +693,11 @@ fun FieldMindTheme(
             )
         } else scheme
     }
+    val seasonalEnabled by FieldMindSettings
+        .getInstance(context)
+        .seasonalColorsEnabled
+        .collectAsState()
+
     val semantic = when {
             // Hand-tuned entity colors for Default scheme without dynamic color
             !dynamicColor && customColorScheme == "Default" ->
@@ -708,6 +715,7 @@ fun FieldMindTheme(
             else -> deriveFieldMindColors(colorScheme, darkTheme)
         }
         .applyOverrides(entityColorOverrides)
+        .let { SeasonalTheme.blend(it, seasonalEnabled) }
 
     val geomTypography = getTypographyForFont("Geom")
 

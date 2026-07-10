@@ -440,6 +440,7 @@ fun WeatherDatabaseScreen(
                 item {
                     InfoCard(
                         shape = RoundedCornerShape(30.dp),
+                        animate = true,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         tonalElevation = 0.dp, shadowElevation = 0.dp,
                         modifier = Modifier.fillMaxWidth()
@@ -523,6 +524,7 @@ private fun LiveCurrentWeatherCard(
     val weatherGradient = Brush.horizontalGradient(displayColors)
 
     InfoCard(
+        animate = true,
         shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         tonalElevation = 0.dp, shadowElevation = 0.dp,
@@ -747,7 +749,7 @@ private fun StatCard(
     label: String,
     value: String,
     color: androidx.compose.ui.graphics.Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     InfoCard(
         shape = RoundedCornerShape(24.dp),

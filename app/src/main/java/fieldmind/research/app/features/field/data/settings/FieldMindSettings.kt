@@ -200,6 +200,18 @@ class FieldMindSettings private constructor(context: Context) {
     private val _backupFolderUri = MutableStateFlow(prefs.getString(KEY_BACKUP_FOLDER_URI, "") ?: "")
     val backupFolderUri: StateFlow<String> = _backupFolderUri.asStateFlow()
 
+    // ── Sound effects settings ──
+    private val _soundEffectsEnabled = MutableStateFlow(prefs.getBoolean(KEY_SOUND_EFFECTS_ENABLED, true))
+    /** Master toggle for all FieldMind sound effects. */
+    val soundEffectsEnabled: StateFlow<Boolean> = _soundEffectsEnabled.asStateFlow()
+
+    private val _soundVolume = MutableStateFlow(prefs.getFloat(KEY_SOUND_VOLUME, 0.7f))
+    /** Sound effects volume (0.0 – 1.0). */
+    val soundVolume: StateFlow<Float> = _soundVolume.asStateFlow()
+
+    fun setSoundEffectsEnabled(value: Boolean) = edit(KEY_SOUND_EFFECTS_ENABLED, value) { _soundEffectsEnabled.value = value }
+    fun setSoundVolume(value: Float) = edit(KEY_SOUND_VOLUME, value.coerceIn(0f, 1f)) { _soundVolume.value = value.coerceIn(0f, 1f) }
+
     // ── Weather & GPS settings ──
     private val _autoWeatherEnabled = MutableStateFlow(prefs.getBoolean(KEY_AUTO_WEATHER, false))
     val autoWeatherEnabled: StateFlow<Boolean> = _autoWeatherEnabled.asStateFlow()
@@ -296,6 +308,18 @@ class FieldMindSettings private constructor(context: Context) {
     val debugLogging: StateFlow<Boolean> = _debugLogging.asStateFlow()
     private val _dataIntegrityCheckOnLaunch = MutableStateFlow(prefs.getBoolean(KEY_DATA_INTEGRITY_CHECK, false))
     val dataIntegrityCheckOnLaunch: StateFlow<Boolean> = _dataIntegrityCheckOnLaunch.asStateFlow()
+
+    // ── Animation master toggle & speed preset ──
+    private val _animationsEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIMATIONS_ENABLED, true))
+    val animationsEnabled: StateFlow<Boolean> = _animationsEnabled.asStateFlow()
+
+    private val _animationSpeedPreset = MutableStateFlow(
+        prefs.getString(KEY_ANIMATION_SPEED_PRESET, "Normal") ?: "Normal"
+    )
+    val animationSpeedPreset: StateFlow<String> = _animationSpeedPreset.asStateFlow()
+
+    fun setAnimationsEnabled(value: Boolean) = edit(KEY_ANIMATIONS_ENABLED, value) { _animationsEnabled.value = value; refreshAnimationConfig() }
+    fun setAnimationSpeedPreset(value: String) = edit(KEY_ANIMATION_SPEED_PRESET, value) { _animationSpeedPreset.value = value; refreshAnimationConfig() }
 
     // ── Animation tuning settings (elegant, slow defaults) ──
     private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.95f))
@@ -450,6 +474,13 @@ class FieldMindSettings private constructor(context: Context) {
     val gradientOpacity: StateFlow<Float> = _gradientOpacity.asStateFlow()
 
     fun setGradientOpacity(value: Float) = edit(KEY_GRADIENT_OPACITY, value.coerceIn(0.1f, 1.0f)) { _gradientOpacity.value = value.coerceIn(0.1f, 1.0f) }
+
+    // ── Seasonal color shift ──
+    private val _seasonalColorsEnabled = MutableStateFlow(prefs.getBoolean(KEY_SEASONAL_COLORS, true))
+    /** When true, entity accent colors subtly shift with the current season (spring green → summer gold → autumn orange → winter blue). */
+    val seasonalColorsEnabled: StateFlow<Boolean> = _seasonalColorsEnabled.asStateFlow()
+
+    fun setSeasonalColorsEnabled(value: Boolean) = edit(KEY_SEASONAL_COLORS, value) { _seasonalColorsEnabled.value = value }
 
     // ── Card gradient style (Phase 5) ──
     private val _cardGradientStyle = MutableStateFlow(
@@ -724,16 +755,23 @@ class FieldMindSettings private constructor(context: Context) {
 
     fun setAppPinHash(value: String) = edit(KEY_APP_PIN_HASH, value) { _appPinHash.value = value }
 
+    private fun speedMultiplier(): Float = when (_animationSpeedPreset.value) {
+        "Reduced" -> 0.40f
+        "Enhanced" -> 2.0f
+        else -> 1.0f
+    }
+
     fun currentAnimationConfig(): AnimationConfig {
+        val mult = if (_animationsEnabled.value) speedMultiplier() else 100_000f
         return AnimationConfig(
             entranceDampingRatio = _animEntranceDamping.value,
-            entranceStiffness = _animEntranceStiffness.value,
+            entranceStiffness = (_animEntranceStiffness.value * mult).coerceAtLeast(1f),
             swipeBackDampingRatio = _animSwipeBackDamping.value,
-            swipeBackStiffness = _animSwipeBackStiffness.value,
+            swipeBackStiffness = (_animSwipeBackStiffness.value * mult).coerceAtLeast(1f),
             swipeThreshold = _animSwipeThreshold.value,
             swipeScaleFactor = _animSwipeScaleFactor.value,
             tabEntranceDampingRatio = _animTabEntranceDamping.value,
-            tabEntranceStiffness = _animTabEntranceStiffness.value
+            tabEntranceStiffness = (_animTabEntranceStiffness.value * mult).coerceAtLeast(1f)
         )
     }
 
@@ -764,6 +802,30 @@ class FieldMindSettings private constructor(context: Context) {
         )
     }
 
+    // ── New onboarding + journal settings ──
+    private val _onboardingFrequency = MutableStateFlow(
+        prefs.getString(KEY_ONBOARDING_FREQUENCY, "A few times a week") ?: "A few times a week"
+    )
+    val onboardingFrequency: StateFlow<String> = _onboardingFrequency.asStateFlow()
+
+    private val _onboardingLayoutStyle = MutableStateFlow(
+        prefs.getString(KEY_ONBOARDING_LAYOUT, "Full field journal") ?: "Full field journal"
+    )
+    val onboardingLayoutStyle: StateFlow<String> = _onboardingLayoutStyle.asStateFlow()
+
+    private val _journalLastShownDate = MutableStateFlow(
+        prefs.getString(KEY_JOURNAL_LAST_DATE, "") ?: ""
+    )
+    val journalLastShownDate: StateFlow<String> = _journalLastShownDate.asStateFlow()
+
+    private val _journalEnabled = MutableStateFlow(prefs.getBoolean(KEY_JOURNAL_ENABLED, true))
+    val journalEnabled: StateFlow<Boolean> = _journalEnabled.asStateFlow()
+
+    fun setOnboardingFrequency(value: String) = edit(KEY_ONBOARDING_FREQUENCY, value) { _onboardingFrequency.value = value }
+    fun setOnboardingLayoutStyle(value: String) = edit(KEY_ONBOARDING_LAYOUT, value) { _onboardingLayoutStyle.value = value }
+    fun setJournalLastShownDate(value: String) = edit(KEY_JOURNAL_LAST_DATE, value) { _journalLastShownDate.value = value }
+    fun setJournalEnabled(value: Boolean) = edit(KEY_JOURNAL_ENABLED, value) { _journalEnabled.value = value }
+
     fun setOnboardingExtendedTourCompleted(value: Boolean) = edit(KEY_EXTENDED_TOUR_DONE, value) { _onboardingExtendedTourCompleted.value = value }
 
     /**
@@ -771,6 +833,13 @@ class FieldMindSettings private constructor(context: Context) {
      * Called from developer settings. Resets every StateFlow to default values.
      */
     fun clearAllPreferences() {
+        // Reset new onboarding/journal prefs first
+        _onboardingFrequency.value = "A few times a week"
+        _onboardingLayoutStyle.value = "Full field journal"
+        _journalLastShownDate.value = ""
+        _journalEnabled.value = true
+        _animationsEnabled.value = true
+        _animationSpeedPreset.value = "Normal"
         prefs.edit().clear().apply()
         // Reset all StateFlow backing fields to defaults
         _dailyObservationGoal.value = 1
@@ -875,12 +944,15 @@ class FieldMindSettings private constructor(context: Context) {
         _metadataRemoveCamera.value = false
         _metadataRemoveDevice.value = false
         _metadataRemoveExif.value = false
+        _soundEffectsEnabled.value = true
+        _soundVolume.value = 0.7f
         _userInterests.value = UserInterests()
         _screenVisibility.value = ScreenVisibility()
         _onboardingExtendedTourCompleted.value = false
         _entityColors.value = emptyMap()
         _cardGradientStyle.value = fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = 0.75f
+        _seasonalColorsEnabled.value = true
     }
 
     // ── Species identification setters ──
@@ -998,11 +1070,20 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_METADATA_REMOVE_CAMERA, _metadataRemoveCamera.value)
         put(KEY_METADATA_REMOVE_DEVICE, _metadataRemoveDevice.value)
         put(KEY_METADATA_REMOVE_EXIF, _metadataRemoveExif.value)
+        put(KEY_SOUND_EFFECTS_ENABLED, _soundEffectsEnabled.value)
+        put(KEY_SOUND_VOLUME, _soundVolume.value)
         put(KEY_USER_INTERESTS, UserInterests.toJson(_userInterests.value))
         put(KEY_SCREEN_VISIBILITY, ScreenVisibility.toJson(_screenVisibility.value))
         put(KEY_EXTENDED_TOUR_DONE, _onboardingExtendedTourCompleted.value)
+        put(KEY_ONBOARDING_FREQUENCY, _onboardingFrequency.value)
+        put(KEY_ONBOARDING_LAYOUT, _onboardingLayoutStyle.value)
+        put(KEY_JOURNAL_LAST_DATE, _journalLastShownDate.value)
+        put(KEY_JOURNAL_ENABLED, _journalEnabled.value)
         put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
         put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
+        put(KEY_SEASONAL_COLORS, _seasonalColorsEnabled.value)
+        put(KEY_ANIMATIONS_ENABLED, _animationsEnabled.value)
+        put(KEY_ANIMATION_SPEED_PRESET, _animationSpeedPreset.value)
     }.toString(2)
 
     /**
@@ -1117,6 +1198,8 @@ class FieldMindSettings private constructor(context: Context) {
         applyBoolean(KEY_METADATA_REMOVE_CAMERA)
         applyBoolean(KEY_METADATA_REMOVE_DEVICE)
         applyBoolean(KEY_METADATA_REMOVE_EXIF)
+        applyBoolean(KEY_SOUND_EFFECTS_ENABLED)
+        applyFloat(KEY_SOUND_VOLUME, 0.7f)
         if (json.has(KEY_USER_INTERESTS)) {
             val jsonStr = json.optString(KEY_USER_INTERESTS, "")
             val interests = UserInterests.fromJson(jsonStr)
@@ -1131,10 +1214,16 @@ class FieldMindSettings private constructor(context: Context) {
         }
         applyString(KEY_ENTITY_COLORS)
         applyBoolean(KEY_EXTENDED_TOUR_DONE)
+        applyString(KEY_ONBOARDING_FREQUENCY)
+        applyString(KEY_ONBOARDING_LAYOUT)
+        applyString(KEY_JOURNAL_LAST_DATE)
+        applyBoolean(KEY_JOURNAL_ENABLED, true)
         applyInt(KEY_DAILY_GOAL)
         applyString(KEY_CARD_GRADIENT_STYLE)
+        applyBoolean(KEY_SEASONAL_COLORS)
         applyFloat(KEY_GRADIENT_OPACITY)
-
+        applyBoolean(KEY_ANIMATIONS_ENABLED, true)
+        applyString(KEY_ANIMATION_SPEED_PRESET)
         edit.apply()
 
         // Refresh StateFlows for all edited keys that have backing StateFlows
@@ -1228,6 +1317,9 @@ class FieldMindSettings private constructor(context: Context) {
         _entityColors.value = parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null))
         _cardGradientStyle.value = prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f)
+        _seasonalColorsEnabled.value = prefs.getBoolean(KEY_SEASONAL_COLORS, true)
+        _animationsEnabled.value = prefs.getBoolean(KEY_ANIMATIONS_ENABLED, true)
+        _animationSpeedPreset.value = prefs.getString(KEY_ANIMATION_SPEED_PRESET, "Normal") ?: "Normal"
     }
 
     private inline fun edit(key: String, value: String, after: () -> Unit) { prefs.edit().putString(key, value).apply(); after() }
@@ -1313,6 +1405,11 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_DATA_INTEGRITY_CHECK = "data_integrity_check"
         private const val KEY_LOCK_TIMEOUT = "lock_timeout"
         private const val KEY_AUTO_LOCK_BACKGROUND = "auto_lock_background"
+        // ── New onboarding + journal keys ──
+        private const val KEY_ONBOARDING_FREQUENCY = "onboarding_frequency"
+        private const val KEY_ONBOARDING_LAYOUT = "onboarding_layout_style"
+        private const val KEY_JOURNAL_LAST_DATE = "journal_last_shown_date"
+        private const val KEY_JOURNAL_ENABLED = "journal_enabled"
         // ── Species identification keys ──
         private const val KEY_SPECIES_ID_API_KEY = "species_id_api_key"
         private const val KEY_SPECIES_ID_OFFLINE_FIRST = "species_id_offline_first"
@@ -1347,6 +1444,8 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_METADATA_REMOVE_CAMERA = "metadata_remove_camera"
         private const val KEY_METADATA_REMOVE_DEVICE = "metadata_remove_device"
         private const val KEY_METADATA_REMOVE_EXIF = "metadata_remove_exif"
+        private const val KEY_SOUND_EFFECTS_ENABLED = "sound_effects_enabled"
+        private const val KEY_SOUND_VOLUME = "sound_volume"
         private const val KEY_APP_PIN_LENGTH = "app_pin_length"
         private const val KEY_DECOY_PIN_ENABLED = "decoy_pin_enabled"
         private const val KEY_DECOY_PIN_HASH = "decoy_pin_hash"
@@ -1356,6 +1455,7 @@ class FieldMindSettings private constructor(context: Context) {
         // ── Gradient opacity ──
         private const val KEY_GRADIENT_OPACITY = "gradient_opacity"
 
+        private const val KEY_SEASONAL_COLORS = "seasonal_colors_enabled"
         // ── Per-category entity color overrides ──
         private const val KEY_ENTITY_COLORS = "entity_colors"
         // ── Animation tuning keys ──
@@ -1367,5 +1467,8 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_ANIM_SWIPE_SCALE = "anim_swipe_scale"
         private const val KEY_ANIM_TAB_ENTRANCE_DAMPING = "anim_tab_entrance_damping"
         private const val KEY_ANIM_TAB_ENTRANCE_STIFFNESS = "anim_tab_entrance_stiffness"
+        // ── Animation master toggle & speed preset ──
+        private const val KEY_ANIMATIONS_ENABLED = "animations_enabled"
+        private const val KEY_ANIMATION_SPEED_PRESET = "animation_speed_preset"
     }
 }

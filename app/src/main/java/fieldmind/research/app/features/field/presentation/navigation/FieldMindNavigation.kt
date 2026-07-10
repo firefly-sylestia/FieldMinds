@@ -48,6 +48,7 @@ import fieldmind.research.app.features.field.presentation.components.FieldMindIc
 import fieldmind.research.app.features.field.presentation.components.LocalSharedTransitionScope
 import fieldmind.research.app.features.field.presentation.components.rememberFieldMindHaptics
 import fieldmind.research.app.features.field.data.learn.FieldSkillsLessons
+import fieldmind.research.app.features.field.data.stats.FieldMindStreaks
 import fieldmind.research.app.features.field.presentation.screens.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
@@ -79,6 +80,7 @@ import kotlin.math.roundToInt
 import kotlin.math.abs
 
 import fieldmind.research.app.features.field.presentation.utils.AppLifecycleManager
+import fieldmind.research.app.features.field.presentation.components.LocalAnimatedVisibilityScope
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
@@ -146,6 +148,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object SettingsSecurityScore : FieldMindScreen("field_settings_security_score", "Security Score", MaterialSymbolIcon("security"))
     data object SettingsAnimationTuning : FieldMindScreen("field_settings_animation_tuning", "Animation Tuning", MaterialSymbolIcon("tune"))
     data object SettingsNotifications : FieldMindScreen("field_settings_notifications", "Notifications", FieldMindIcons.Notifications)
+    data object SettingsAnimation : FieldMindScreen("field_settings_animation", "Animations", MaterialSymbolIcon("motion_photos_on"))
 
 
     // ── Tasks screen ──
@@ -276,6 +279,8 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             onSplashComplete = { showSplash = false }
         )
     } else {
+        var showJournal by rememberSaveable { mutableStateOf(true) }
+        Box(Modifier.fillMaxSize()) {
         FieldMindAppLock(
             settings = viewModel.fieldSettings,
             isUnlocked = appUnlocked,
@@ -291,6 +296,25 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
                     }
                 }
             }
+            // Journal overlay inside app lock so it doesn't compete with
+            // the lock's gesture handling. Fixes: overlay vanishing early
+            // and touch being broken after dismiss.
+            val observations by viewModel.observations.collectAsState()
+            val journalStreakEnabled by viewModel.fieldSettings.streaksEnabled.collectAsState()
+            val journalStreakCount = remember(observations, journalStreakEnabled) {
+                if (journalStreakEnabled) FieldMindStreaks.currentStreakDays(observations.map { it.date }) else 0
+            }
+            if (showJournal && shouldShowJournalToday(viewModel.fieldSettings)) {
+                DailyFieldJournalOverlay(
+                    settings = viewModel.fieldSettings,
+                    streakCount = journalStreakCount,
+                    onDismiss = {
+                        showJournal = false
+                        viewModel.fieldSettings.setJournalLastShownDate(getTodayDateString())
+                    }
+                )
+            }
+        }
         }
     }
 }
@@ -670,6 +694,7 @@ private fun LiquidNavRow(
                 var isPressed by remember { mutableStateOf(false) }
                 // Spring bounce pulse on tap — briefly scales up, then springs back
                 val tapBounce = remember { Animatable(1f) }
+                val iconBounce = remember { Animatable(1f) }
 
                 val pressScale by animateFloatAsState(
                     targetValue = if (isPressed && !selected) 0.92f else 1f,
@@ -700,8 +725,13 @@ private fun LiquidNavRow(
                                 isPressed = true
                                 // Spring bounce: snap to 1.08, spring back to 1.0
                                 scope.launch {
-                                    tapBounce.snapTo(1.08f)
-                                    tapBounce.animateTo(1f, spring(dampingRatio = 0.65f, stiffness = 300f))
+                                    tapBounce.snapTo(1.15f)
+                                    tapBounce.animateTo(1f, spring(dampingRatio = 0.5f, stiffness = 250f))
+                                }
+                                scope.launch {
+                                    delay(50)
+                                    iconBounce.snapTo(1.25f)
+                                    iconBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
                                 }
                                 onTabClick(screen)
                             }
@@ -715,7 +745,11 @@ private fun LiquidNavRow(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Box(
-                        modifier = Modifier.size(width = 48.dp, height = 36.dp),
+                        modifier = Modifier.size(width = 48.dp, height = 36.dp)
+                            .graphicsLayer {
+                                scaleX = iconBounce.value
+                                scaleY = iconBounce.value
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -740,16 +774,17 @@ private fun LiquidNavRow(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                }
+
 
                 // Reset press state when selection changes
                 LaunchedEffect(selected) {
-                    if (selected) isPressed = false
-                }
+                    if (selected) isPressed = false                }
             }
         }
     }
 }
+}
+
 
 /**
  * Rail nav tab item used in the side rail (tablet layout).
@@ -1048,19 +1083,21 @@ private fun FieldMindNavHost(
             // Swipe gestures reveal the real adjacent tab content behind the current one.
             // No placeholder mock UI — the actual adjacent tab composable is visible through peek.
             composable("field_tab_container") {
-                AllTabScreen(
-                    sharedTransitionScope = composableScope,
-                    activeTabIndex = activeTabIndex,
-                    onTabSelected = { index -> onActiveTabChange?.invoke(index) },
-                    viewModel = viewModel,
-                    visibleTabs = visibleTabs,
-                    openDetail = openDetail,
-                    openReader = openReader,
-                    onOpenSettings = { navController.navigateToDestination(FieldMindScreen.Settings.route) },
-                    onOpenCanvas = { viewModel.addNote(title = "Canvas", body = "", category = "Other", tags = "canvas") { noteId -> navController.navigateToDestination("field_canvas/$noteId") } },
-                    onNavigateToDestination = { route -> navController.navigateToDestination(route) },
-                    onPopBackStack = { navController.popBackStack() }
-                )
+                CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+                    AllTabScreen(
+                        sharedTransitionScope = composableScope,
+                        activeTabIndex = activeTabIndex,
+                        onTabSelected = { index -> onActiveTabChange?.invoke(index) },
+                        viewModel = viewModel,
+                        visibleTabs = visibleTabs,
+                        openDetail = openDetail,
+                        openReader = openReader,
+                        onOpenSettings = { navController.navigateToDestination(FieldMindScreen.Settings.route) },
+                        onOpenCanvas = { viewModel.addNote(title = "Canvas", body = "", category = "Other", tags = "canvas") { noteId -> navController.navigateToDestination("field_canvas/$noteId") } },
+                        onNavigateToDestination = { route -> navController.navigateToDestination(route) },
+                        onPopBackStack = { navController.popBackStack() }
+                    )
+                }
             }
             composable(FieldMindScreen.Learn.route) { SwipeBackHost(onBack = { safeBack() }) { FieldMindLearnScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenReader = openReader, onOpenLesson = { slug -> navController.navigateToDestination("field_lesson/$slug") }) } }
             composable(FieldMindScreen.Reader.route) { SwipeBackHost(onBack = { safeBack() }) { LearnReaderScreen(url = readerTarget.first, title = readerTarget.second, onBack = { safeBack() }) } }
@@ -1115,7 +1152,8 @@ private fun FieldMindNavHost(
                         onOpenSpeciesPacks = { navController.navigateToDestination(FieldMindScreen.SettingsSpeciesPacks.route) },
                         onOpenSpeciesId = { navController.navigateToDestination(FieldMindScreen.SettingsSpeciesId.route) },
                         onOpenAutoGen = { navController.navigateToDestination(FieldMindScreen.SettingsAutoGen.route) },
-                        onOpenNotifications = { navController.navigateToDestination(FieldMindScreen.SettingsNotifications.route) }
+                        onOpenNotifications = { navController.navigateToDestination(FieldMindScreen.SettingsNotifications.route) },
+                        onOpenAnimations = { navController.navigateToDestination(FieldMindScreen.SettingsAnimation.route) },
                     )
                 }
             }
@@ -1160,6 +1198,7 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.SettingsSpeciesId.route) { SwipeBackHost(onBack = { safeBack() }) { SpeciesIdentificationSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.SettingsAutoGen.route) { SwipeBackHost(onBack = { safeBack() }) { AutoGenerationSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.SettingsNotifications.route) { SwipeBackHost(onBack = { safeBack() }) { NotificationsSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
+            composable(FieldMindScreen.SettingsAnimation.route) { SwipeBackHost(onBack = { safeBack() }) { AnimationSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.CounterTool.route) { SwipeBackHost(onBack = { safeBack() }) { CounterToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.MeasurementTool.route) { SwipeBackHost(onBack = { safeBack() }) { MeasurementToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.WeatherLogTool.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherLogToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
@@ -1221,6 +1260,7 @@ private fun FieldMindNavHost(
                 }
             }
             composable("field_project_detail/{projectId}") { entry ->
+                CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
                 val projectId = entry.arguments?.getString("projectId")?.toLongOrNull() ?: 0L
                 SwipeBackHost(onBack = { safeBack() }) {
                     ProjectDetailScreen(
@@ -1232,6 +1272,7 @@ private fun FieldMindNavHost(
                         onOpenRelations = { navController.navigateToDestination("field_project_relations/$projectId") },
                         onOpenSettings = { id -> navController.navigateToDestination("field_project_settings/$id") }
                     )
+                }
                 }
             }
             composable("field_project_relations/{projectId}") { entry ->
