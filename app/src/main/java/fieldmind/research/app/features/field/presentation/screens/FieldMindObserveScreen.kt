@@ -499,11 +499,14 @@ fun ObserveScreen(
             dismissButton = {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     TextButton(onClick = {
+                        // Clear state and STAY on the Capture tab. onBack?.invoke() was
+                        // removed because the Capture tab lives inside the root
+                        // field_tab_container start destination — popBackStack() would
+                        // pop the root itself and freeze subsequent nav.
                         viewModel.setCaptureSessionActive(false)
                         session = CaptureSessionState()
                         session = session.copy(showEvidenceForm = false)
                         showExitConfirm = false
-                        onBack?.invoke()
                     }) {
                         Text("Discard", color = MaterialTheme.colorScheme.error)
                     }
@@ -540,6 +543,11 @@ fun ObserveScreen(
                 }
             },
             dismissButton = {                    TextButton(onClick = {
+                                    // End the session and STAY on the Capture tab.
+                                    // onBack?.invoke() was removed because the Capture tab
+                                    // lives inside the root field_tab_container start
+                                    // destination — popBackStack() would pop the root
+                                    // itself and freeze subsequent back / nav buttons.
                                     viewModel.setCaptureSessionActive(false)
                                 session.activeSessionId?.let { id ->
                                     val finalStartedAt = session.timerStartedAt
@@ -551,7 +559,6 @@ fun ObserveScreen(
                                     session = CaptureSessionState()
                                     session = session.copy(showEvidenceForm = false)
                                     showSessionExitConfirm = false
-                                    onBack?.invoke()
                                 }) {
                     Text("Discard session", color = MaterialTheme.colorScheme.error)
                 }

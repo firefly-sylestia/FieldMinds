@@ -44,6 +44,37 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v0.47.5 — Device-Reported Bug Fixes (3 fixes from real testing) ──
+        FieldMindChangelogEntry(
+            version = "0.47.5",
+            date = "2026-07-10",
+            title = "\u{1F6E0}\u{FE0F} Device-Reported Fixes — biometric retry, fast-scan, discard nav",
+            importance = "Patch",
+            tags = listOf("biometric", "navigation", "discard", "session", "lock", "device-testing"),
+            sections = listOf(
+                "\u{1F9FF} Biometric retry no longer deadlocks" to listOf(
+                    "\u2713 fix: removed the \u201CisAuthenticating\u201D re-entrancy guard from startBiometricAuth() in FieldMindLockScreen.kt",
+                    "\u2713 fix: the flag could stay true forever if BiometricPrompt dropped a callback (fast finger lift, system-back cancel, OEM quirks), blocking all subsequent \u201CRetry biometric\u201D taps",
+                    "\u2713 fix: BiometricPrompt serializes overlapping authenticate() calls internally via cancelAuthentication(); no flag is needed",
+                    "\u2713 UX: tapping \u201CRetry biometric\u201D now reliably re-prompts every time"
+                ),
+                "\u{1F3C3} Fast biometric scan no longer freezes the prompt" to listOf(
+                    "\u2713 fix: same root cause as the retry bug \u2014 the flag was reset only inside the 3 callbacks, but rapid lift+place of the finger can leave the sensor with no reading and no callback fires",
+                    "\u2713 fix: removing the guard means the user can immediately re-attempt; cancelAuthentication() on the prior instance is harmless",
+                    "\u2713 UX: prompt now reliably responds to each retry, no \u201Cfrozen\u201D state after a fast scan"
+                ),
+                "\u{1F5FA}\u{FE0F} Discard session no longer freezes subsequent nav" to listOf(
+                    "\u2713 fix: removed onBack?.invoke() from both Discard buttons in FieldMindObserveScreen.kt (the active-session exit and the unsaved-observation exit)",
+                    "\u2713 Root cause: the Capture tab lives inside the root field_tab_container start destination \u2014 calling safeBack \u2192 navController.popBackStack() popped the root itself, emptying the back stack and leaving the UI frozen (next back press and bottom-nav buttons unresponsive)",
+                    "\u2713 fix: clearing the session/observation state now stays on the Capture tab; the user can navigate away via the bottom-nav themselves",
+                    "\u2713 UX: matches the button label \u2014 \u201CDiscard\u201D and \u201CDiscard session\u201D never promised an exit, only a clear of the in-progress work"
+                ),
+                "\u{1F4E6} Build environment" to listOf(
+                    "\u2713 No new compile-time errors \u2014 the fix removes state and call sites, no types or signatures change",
+                    "\u2713 No behavioral changes outside the 3 reported flows"
+                )
+            )
+        ),
         // ── v0.47.4 — CI Bug Fixes (companion to v0.47.3) ──
         FieldMindChangelogEntry(
             version = "0.47.4",

@@ -149,37 +149,32 @@ private fun LockGate(
         }
     }
 
-    // Keep a ref to the current BiometricPrompt so we can cancel it before retrying
+    // Keep a ref to the current BiometricPrompt so we can cancel it before retrying.
+    // No re-entrancy flag: BiometricPrompt cancels the prior session internally and
+    // a flag-based guard could deadlock if a callback was dropped
+    // (rapid finger lift, system-back cancel, or OEM prompt dismissal).
     var currentBiometricPrompt by remember { mutableStateOf<BiometricPrompt?>(null) }
-    var isAuthenticating by remember { mutableStateOf(false) }
 
     fun startBiometricAuth() {
-        // Guard: prevent concurrent or rapid re-authentication attempts
-        if (isAuthenticating) return
-        isAuthenticating = true
+        // Cancel any prior prompt; BiometricPrompt serializes overlapping authenticate() calls.
+        currentBiometricPrompt?.cancelAuthentication()
 
         authAttempted = true
         if (!biometricRequiredAfterFailure) usePinLock = false
         val activity = context as? FragmentActivity
         if (hasDeviceAuth && activity != null) {
-            // Cancel any previous authentication session to avoid stale session conflicts
-            currentBiometricPrompt?.cancelAuthentication()
-
             val executor = ContextCompat.getMainExecutor(context)
             val prompt = BiometricPrompt(activity, executor, object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    isAuthenticating = false
                     currentBiometricPrompt = null
                     biometricRequiredAfterFailure = false
                     onUnlock()
                 }
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    isAuthenticating = false
                     currentBiometricPrompt = null
                     if (hasPin) usePinLock = true
                 }
                 override fun onAuthenticationFailed() {
-                    isAuthenticating = false
                     pinError = true
                 }
             })
@@ -192,10 +187,9 @@ private fun LockGate(
                 )
                 .build()
             prompt.authenticate(promptInfo)
-            return // isAuthenticating reset in callbacks above
+            return
         }
-        // Fallback paths: no biometric prompt was shown, so unblock immediately
-        isAuthenticating = false
+        // Fallback paths: no biometric prompt was shown — nothing to cancel or reset
         if (hasDeviceCredential) {
             val intent = keyguard.createConfirmDeviceCredentialIntent(
                 "FieldMind Privacy Lock",
