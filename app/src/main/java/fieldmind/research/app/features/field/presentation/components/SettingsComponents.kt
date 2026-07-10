@@ -36,6 +36,7 @@ import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.ui.theme.cuteShadow
+import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
