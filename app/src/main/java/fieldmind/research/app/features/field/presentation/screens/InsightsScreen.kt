@@ -273,8 +273,9 @@ fun InsightsScreen(
                         context = "observations",
                         customTitle = "Your research dashboard is empty 📊",
                         customBody = "Insights, charts, and your offline map appear as you log observations. Start capturing to build your research dashboard.",
-                        actionLabel = "Capture first observation"
-                    ) { onNavigate(FieldMindScreen.Observe) }
+                        actionLabel = "Capture first observation",
+                        onAction = { onNavigate(FieldMindScreen.Observe) }
+                    )
                 }
                 return@LazyColumn
             }
