@@ -1151,7 +1151,7 @@ private fun FieldMindNavHost(
                         onOpenSpeciesPacks = { navController.navigateToDestination(FieldMindScreen.SettingsSpeciesPacks.route) },
                         onOpenSpeciesId = { navController.navigateToDestination(FieldMindScreen.SettingsSpeciesId.route) },
                         onOpenAutoGen = { navController.navigateToDestination(FieldMindScreen.SettingsAutoGen.route) },
-                        onOpenNotifications = { navController.navigateToDestination(FieldMindScreen.SettingsNotifications.route) }
+                        onOpenNotifications = { navController.navigateToDestination(FieldMindScreen.SettingsNotifications.route) },
                         onOpenAnimations = { navController.navigateToDestination(FieldMindScreen.SettingsAnimation.route) },
                     )
                 }
