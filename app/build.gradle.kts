@@ -47,7 +47,8 @@ android {
             buildConfigField("boolean", "ENABLE_YOUTUBE_MUSIC", "true")
             buildConfigField("boolean", "ENABLE_APPLE_MUSIC", "true")
             buildConfigField("boolean", "ENABLE_DEEZER", "true")
-            buildConfigField("boolean", "ENABLE_LRCLIB", "true")            buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
+            buildConfigField("boolean", "ENABLE_LRCLIB", "true")
+            buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
             buildConfigField("String", "FLAVOR", "\"fdroid\"")
             // URL of the deployed Cloudflare Worker bug-reporter. Empty by default —
             // when unset, the app falls back to opening the GitHub web-URL issue form.
@@ -64,7 +65,8 @@ android {
             buildConfigField("boolean", "ENABLE_YOUTUBE_MUSIC", "true")
             buildConfigField("boolean", "ENABLE_APPLE_MUSIC", "true")
             buildConfigField("boolean", "ENABLE_DEEZER", "true")
-            buildConfigField("boolean", "ENABLE_LRCLIB", "true")            buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
+            buildConfigField("boolean", "ENABLE_LRCLIB", "true")
+            buildConfigField("boolean", "ENABLE_SPOTIFY_SEARCH", "true")
             buildConfigField("String", "FLAVOR", "\"github\"")
             // URL of the deployed Cloudflare Worker bug-reporter. Empty by default —
             // when unset, the app falls back to opening the GitHub web-URL issue form.
