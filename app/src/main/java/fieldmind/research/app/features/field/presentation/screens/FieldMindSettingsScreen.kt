@@ -255,6 +255,7 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
     val profileRole by settings.profileRole.collectAsState()
     val profileFocus by settings.profileFocus.collectAsState()
     val journalEnabled by settings.journalEnabled.collectAsState()
+    val onboardingFrequency by settings.onboardingFrequency.collectAsState()
 
     SettingsSubPage("Research profile", icon = FieldMindIcons.Nature, onBack = onBack) {
         item {
@@ -272,6 +273,28 @@ fun ProfileSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     OptionPickerField(label = "Role", selected = profileRole, options = listOf("Field learner", "Student", "Naturalist", "Researcher"), onSelected = { settings.setProfileRole(it) }, icon = FieldMindIcons.User)
                     Text("Focus", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     OptionPickerField(label = "Focus", selected = profileFocus, options = listOf("Wildlife & ecology", "Plants & botany", "Weather", "Water", "Geology", "General science"), onSelected = { settings.setProfileFocus(it) }, icon = FieldMindIcons.Category)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    Text("How often do you go out?", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        listOf("Daily", "A few times a week", "Weekends", "Spontaneously").forEach { freq ->
+                            val isSelected = onboardingFrequency == freq
+                            Surface(
+                                onClick = { settings.setOnboardingFrequency(freq) },
+                                shape = RoundedCornerShape(20.dp),
+                                color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    freq,
+                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
