@@ -200,6 +200,18 @@ class FieldMindSettings private constructor(context: Context) {
     private val _backupFolderUri = MutableStateFlow(prefs.getString(KEY_BACKUP_FOLDER_URI, "") ?: "")
     val backupFolderUri: StateFlow<String> = _backupFolderUri.asStateFlow()
 
+    // ── Sound effects settings ──
+    private val _soundEffectsEnabled = MutableStateFlow(prefs.getBoolean(KEY_SOUND_EFFECTS_ENABLED, true))
+    /** Master toggle for all FieldMind sound effects. */
+    val soundEffectsEnabled: StateFlow<Boolean> = _soundEffectsEnabled.asStateFlow()
+
+    private val _soundVolume = MutableStateFlow(prefs.getFloat(KEY_SOUND_VOLUME, 0.7f))
+    /** Sound effects volume (0.0 – 1.0). */
+    val soundVolume: StateFlow<Float> = _soundVolume.asStateFlow()
+
+    fun setSoundEffectsEnabled(value: Boolean) = edit(KEY_SOUND_EFFECTS_ENABLED, value) { _soundEffectsEnabled.value = value }
+    fun setSoundVolume(value: Float) = edit(KEY_SOUND_VOLUME, value.coerceIn(0f, 1f)) { _soundVolume.value = value.coerceIn(0f, 1f) }
+
     // ── Weather & GPS settings ──
     private val _autoWeatherEnabled = MutableStateFlow(prefs.getBoolean(KEY_AUTO_WEATHER, false))
     val autoWeatherEnabled: StateFlow<Boolean> = _autoWeatherEnabled.asStateFlow()
@@ -904,6 +916,8 @@ class FieldMindSettings private constructor(context: Context) {
         _metadataRemoveCamera.value = false
         _metadataRemoveDevice.value = false
         _metadataRemoveExif.value = false
+        _soundEffectsEnabled.value = true
+        _soundVolume.value = 0.7f
         _userInterests.value = UserInterests()
         _screenVisibility.value = ScreenVisibility()
         _onboardingExtendedTourCompleted.value = false
@@ -1027,6 +1041,8 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_METADATA_REMOVE_CAMERA, _metadataRemoveCamera.value)
         put(KEY_METADATA_REMOVE_DEVICE, _metadataRemoveDevice.value)
         put(KEY_METADATA_REMOVE_EXIF, _metadataRemoveExif.value)
+        put(KEY_SOUND_EFFECTS_ENABLED, _soundEffectsEnabled.value)
+        put(KEY_SOUND_VOLUME, _soundVolume.value)
         put(KEY_USER_INTERESTS, UserInterests.toJson(_userInterests.value))
         put(KEY_SCREEN_VISIBILITY, ScreenVisibility.toJson(_screenVisibility.value))
         put(KEY_EXTENDED_TOUR_DONE, _onboardingExtendedTourCompleted.value)
@@ -1150,6 +1166,8 @@ class FieldMindSettings private constructor(context: Context) {
         applyBoolean(KEY_METADATA_REMOVE_CAMERA)
         applyBoolean(KEY_METADATA_REMOVE_DEVICE)
         applyBoolean(KEY_METADATA_REMOVE_EXIF)
+        applyBoolean(KEY_SOUND_EFFECTS_ENABLED)
+        applyFloat(KEY_SOUND_VOLUME, 0.7f)
         if (json.has(KEY_USER_INTERESTS)) {
             val jsonStr = json.optString(KEY_USER_INTERESTS, "")
             val interests = UserInterests.fromJson(jsonStr)
@@ -1389,6 +1407,8 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_METADATA_REMOVE_CAMERA = "metadata_remove_camera"
         private const val KEY_METADATA_REMOVE_DEVICE = "metadata_remove_device"
         private const val KEY_METADATA_REMOVE_EXIF = "metadata_remove_exif"
+        private const val KEY_SOUND_EFFECTS_ENABLED = "sound_effects_enabled"
+        private const val KEY_SOUND_VOLUME = "sound_volume"
         private const val KEY_APP_PIN_LENGTH = "app_pin_length"
         private const val KEY_DECOY_PIN_ENABLED = "decoy_pin_enabled"
         private const val KEY_DECOY_PIN_HASH = "decoy_pin_hash"

@@ -179,6 +179,60 @@ fun FieldMindSettingsScreen(
         item { SettingsNavCard("Notifications", "Weather alerts, task reminders, and session prompts", FieldMindIcons.Notifications, FieldMindTheme.colors.info) { onOpenNotifications?.invoke() } }
 
         // ╔════════════════════════════════════════════╗
+        // ║  SOUND                                     ║
+        // ╚════════════════════════════════════════════╝
+        item { SectionHeader("Sound", "Sound effects, master volume") }
+        item {
+            val soundEnabled by viewModel?.fieldSettings?.soundEffectsEnabled?.collectAsState() ?: remember { mutableStateOf(true) }
+            val soundVolume by viewModel?.fieldSettings?.soundVolume?.collectAsState() ?: remember { mutableStateOf(0.7f) }
+            SettingsGroupCard {
+                ToggleItem(
+                    "Sound effects",
+                    "Gentle chimes on app open, shutter on camera, water drop on save, and night crickets.",
+                    soundEnabled,
+                    { viewModel?.fieldSettings?.setSoundEffectsEnabled(it) },
+                    MaterialSymbolIcon("volume_up")
+                )
+                if (soundEnabled) {
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                MaterialSymbolIcon("volume_up"),
+                                null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                size = 20.dp
+                            )
+                            Text(
+                                "Volume",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(Modifier.weight(1f))
+                            Text(
+                                "${(soundVolume * 100).toInt()}%",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Slider(
+                            value = soundVolume,
+                            onValueChange = { viewModel?.fieldSettings?.setSoundVolume(it) },
+                            valueRange = 0f..1f,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
+        }
+
+        // ╔════════════════════════════════════════════╗
         // ║  AI ASSISTANCE                             ║
         // ╚════════════════════════════════════════════╝
         item { SectionHeader("AI & intelligence", "AI assistant, local model, and auto-generation") }

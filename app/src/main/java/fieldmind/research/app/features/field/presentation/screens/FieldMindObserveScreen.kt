@@ -61,6 +61,8 @@ import fieldmind.research.app.features.field.presentation.screens.species.Specie
 import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindViewModel
 import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenceAttachment
 import fieldmind.research.app.features.field.presentation.components.*
+import fieldmind.research.app.infrastructure.FieldMindSoundManager
+import fieldmind.research.app.infrastructure.FieldMindSounds
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
@@ -162,6 +164,7 @@ fun ObserveScreen(
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
     val celebrationState = rememberCelebrationState()
+    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
     val context = LocalContext.current
 
     // GPS location & accuracy
@@ -448,6 +451,8 @@ fun ObserveScreen(
             if (observations.isEmpty()) {
                 celebrationState.trigger(CelebrationVariant.CONFETTI_BURST)
             }
+            // Play water drop sound on save
+            soundManager.play(FieldMindSounds.WATER_DROP)
             showFastSnackbar(snackbar, scope, "Observation saved! Session: ${session.sessionObservationCount + 1}")
         }
     }

@@ -88,6 +88,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import fieldmind.research.app.features.field.presentation.components.GlassCard
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.infrastructure.FieldMindSoundManager
+import fieldmind.research.app.infrastructure.FieldMindSounds
+import kotlinx.coroutines.isActive
 
 /**
  * Loads a PNG image from Android assets folder as an ImageBitmap for display.
@@ -294,6 +297,18 @@ fun SharedTransitionScope.HomeScreen(
             celebrationState.trigger(variant)
         }
         previousStreak = currentStreak
+    }
+
+    // ── Night cricket ambient sound ──
+    val currentHour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
+    val isNight = currentHour in 22..23 || currentHour in 0..4
+    val soundManager = remember { FieldMindSoundManager.getInstance(context) }
+    LaunchedEffect(isNight) {
+        if (isNight) {
+            soundManager.startCricket(this, durationMs = 60_000L)
+        } else {
+            soundManager.stopCricket()
+        }
     }
 
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()

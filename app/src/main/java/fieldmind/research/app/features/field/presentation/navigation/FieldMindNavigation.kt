@@ -80,6 +80,8 @@ import kotlin.math.roundToInt
 import kotlin.math.abs
 
 import fieldmind.research.app.features.field.presentation.utils.AppLifecycleManager
+import fieldmind.research.app.infrastructure.FieldMindSoundManager
+import fieldmind.research.app.infrastructure.FieldMindSounds
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
@@ -277,6 +279,11 @@ fun FieldMindApp(appSettings: AppSettings, viewModel: FieldMindViewModel, reques
             onSplashComplete = { showSplash = false }
         )
     } else {
+        // Play gentle chime on app open
+        val soundManager = remember { FieldMindSoundManager.getInstance(LocalContext.current) }
+        LaunchedEffect(Unit) {
+            soundManager.play(FieldMindSounds.CHIME)
+        }
         var showJournal by rememberSaveable { mutableStateOf(true) }
         Box(Modifier.fillMaxSize()) {
         FieldMindAppLock(
