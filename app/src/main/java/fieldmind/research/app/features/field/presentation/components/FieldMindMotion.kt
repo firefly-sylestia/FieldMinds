@@ -179,6 +179,30 @@ object FieldMindMotion {
         stiffness = 150f
     )
 
+    // -- Bouncy Springs (visible overshoot) --
+
+    /**
+     * A lively spring with low damping that produces visible overshoot bounce.
+     * Defaults to ~2-3 bounce cycles before settling. Animations end quickly
+     * but overshoot the target, creating a playful "boing" feel.
+     *
+     * @param dampingRatio  Lower = more bounces. Default 0.65 gives ~2-3 cycles.
+     * @param stiffness     Controls speed. Default 120 is moderately snappy.
+     */
+    fun bouncySpring(
+        dampingRatio: Float = 0.65f,
+        stiffness: Float = 120f
+    ): Spring<Float> = spring(dampingRatio = dampingRatio, stiffness = stiffness)
+
+    /** Entrance bounce: soft, playful, 2-3 overshoots before settling. */
+    val bouncyEntrance = bouncySpring(dampingRatio = 0.60f, stiffness = 110f)
+
+    /** Press release bounce: quick, tight bounce-back when released. */
+    val bouncyPress = bouncySpring(dampingRatio = 0.70f, stiffness = 180f)
+
+    /** Celebration bounce: exaggerated, many cycles for rewards/success. */
+    val bouncyCelebration = bouncySpring(dampingRatio = 0.50f, stiffness = 90f)
+
     // -- Standard Springs (no overshoot) --
 
     val layoutSpring = spring<Float>(
@@ -273,9 +297,10 @@ object FieldMindMotion {
         Emphasis.Emphasized -> expressiveSpring
         Emphasis.Standard -> expressiveFloat
         Emphasis.Snap -> expressiveSnap
+        Emphasis.Bouncy -> bouncyEntrance
     }
 
-    enum class Emphasis { Expressive, Emphasized, Standard, Snap }
+    enum class Emphasis { Expressive, Emphasized, Standard, Snap, Bouncy }
 
     @Composable
     fun isReduceMotion(): Boolean {
@@ -468,6 +493,63 @@ fun Modifier.staggeredEntrance(
     this.graphicsLayer {
         this.alpha = alpha
         this.translationY = translationY
+    }
+}
+
+// ── Bouncy Entrance Animation (scale-pop + overshoot) ──
+
+/**
+ * A [Modifier] that animates a composable's entrance with a playful scale-up
+ * bounce, overshooting slightly above the target before settling.
+ *
+ * Items start at [initialScale] (e.g., 0.85 = 85% size), pop up past 1.0 with
+ * a bouncy spring, then settle at 1.0. Works best on cards, buttons, and icons
+ * that benefit from a lively "boing" reveal — use instead of [staggeredEntrance]
+ * when you want attention-grabbing energy rather than smooth fade+slide.
+ *
+ * Respects system reduce-motion accessibility settings.
+ *
+ * @param index       Zero-based position; determines stagger delay.
+ * @param animate     Whether to play the entrance animation. Default false.
+ * @param initialScale  Starting scale (below 1.0). Default 0.85.
+ * @param dampingRatio   Lower = more bounces. Default 0.62.
+ * @param stiffness      Higher = faster. Default 140.
+ */
+fun Modifier.bouncyEntrance(
+    index: Int = 0,
+    animate: Boolean = false,
+    initialScale: Float = 0.85f,
+    dampingRatio: Float = 0.62f,
+    stiffness: Float = 140f
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "bouncyEntrance"
+        properties["index"] = index
+        properties["animate"] = animate
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val shouldAnimate = animate && !reduceMotion
+    val scale = remember { Animatable(if (shouldAnimate) initialScale else 1f) }
+
+    LaunchedEffect(animate, index, reduceMotion) {
+        if (shouldAnimate) {
+            scale.snapTo(initialScale)
+            delay(FieldMindMotion.staggerDelay(index).toLong())
+            // Single animateTo(1f) — low dampingRatio naturally overshoots
+            scale.animateTo(1f, FieldMindMotion.bouncySpring(
+                dampingRatio = dampingRatio,
+                stiffness = stiffness
+            ))
+        } else {
+            scale.snapTo(1f)
+        }
+    }
+
+    this.graphicsLayer {
+        scaleX = scale.value
+        scaleY = scale.value
+        transformOrigin = TransformOrigin.Center
     }
 }
 
