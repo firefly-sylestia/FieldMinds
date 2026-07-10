@@ -3524,6 +3524,7 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             val backgroundAnimKey by settings.backgroundAnimation.collectAsState()
             val microDelightKey by settings.microDelightIntensity.collectAsState()
             val showCloudAnimation by settings.weatherShowCloudAnimation.collectAsState()
+            val weatherBackgroundAnimation by settings.weatherBackgroundAnimationEnabled.collectAsState()
             SettingsGroupCard {
                 Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     PillRadioGroup(
@@ -3542,6 +3543,14 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         options = MicroDelightIntensity.entries.toList(),
                         selectedKey = microDelightKey,
                         onSelect = { settings.setMicroDelightIntensity(it.key) }
+                    )
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
+                    ToggleItem(
+                        "Background weather animation",
+                        "Animated skybox, drifting clouds, fireflies, and atmospheric motion behind the weather widget. Turn off to render a static journal-themed gradient.",
+                        weatherBackgroundAnimation,
+                        settings::setWeatherBackgroundAnimationEnabled,
+                        MaterialSymbolIcon("blur_on")
                     )
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
                     Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {

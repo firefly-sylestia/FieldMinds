@@ -201,7 +201,7 @@ class FieldMindSettings private constructor(context: Context) {
     val backupFolderUri: StateFlow<String> = _backupFolderUri.asStateFlow()
 
     // ── Sound effects settings ──
-    private val _soundEffectsEnabled = MutableStateFlow(prefs.getBoolean(KEY_SOUND_EFFECTS_ENABLED, true))
+    private val _soundEffectsEnabled = MutableStateFlow(prefs.getBoolean(KEY_SOUND_EFFECTS_ENABLED, false))
     /** Master toggle for all FieldMind sound effects. */
     val soundEffectsEnabled: StateFlow<Boolean> = _soundEffectsEnabled.asStateFlow()
 
@@ -246,6 +246,11 @@ class FieldMindSettings private constructor(context: Context) {
     val weatherShowPressure: StateFlow<Boolean> = _weatherShowPressure.asStateFlow()
     private val _weatherShowCloudAnimation = MutableStateFlow(prefs.getBoolean(KEY_WEATHER_SHOW_CLOUD_ANIMATION, true))
     val weatherShowCloudAnimation: StateFlow<Boolean> = _weatherShowCloudAnimation.asStateFlow()
+
+    // ── Background weather animation toggle (master for full skybox + clouds) ──
+    private val _weatherBackgroundAnimationEnabled = MutableStateFlow(prefs.getBoolean(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, true))
+    /** Master toggle for the animated weather skybox (sun/moon drift, drifting clouds, fireflies, birds). When false, holds a static journal-themed gradient while still honoring the chosen journal aesthetic. */
+    val weatherBackgroundAnimationEnabled: StateFlow<Boolean> = _weatherBackgroundAnimationEnabled.asStateFlow()
 
     // ── Weather provider selection ──
     private val _weatherProvider = MutableStateFlow(prefs.getString(KEY_WEATHER_PROVIDER, "met-norway") ?: "met-norway")
@@ -707,6 +712,7 @@ class FieldMindSettings private constructor(context: Context) {
     }
 
     fun setWeatherShowCloudAnimation(value: Boolean) = edit(KEY_WEATHER_SHOW_CLOUD_ANIMATION, value) { _weatherShowCloudAnimation.value = value }
+    fun setWeatherBackgroundAnimationEnabled(value: Boolean) = edit(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, value) { _weatherBackgroundAnimationEnabled.value = value }
     fun setWeatherProvider(value: String) = edit(KEY_WEATHER_PROVIDER, value) {
         _weatherProvider.value = value
         _weatherProviders.value = value
@@ -930,6 +936,7 @@ class FieldMindSettings private constructor(context: Context) {
         _weatherShowCloudCover.value = true
         _weatherShowPressure.value = false
         _weatherShowCloudAnimation.value = true
+        _weatherBackgroundAnimationEnabled.value = true
         _weatherProvider.value = "met-norway"
         _weatherProviders.value = "met-norway"
         _weatherApiKey.value = ""
@@ -983,7 +990,7 @@ class FieldMindSettings private constructor(context: Context) {
         _metadataRemoveCamera.value = false
         _metadataRemoveDevice.value = false
         _metadataRemoveExif.value = false
-        _soundEffectsEnabled.value = true
+        _soundEffectsEnabled.value = false
         _soundVolume.value = 0.7f
         _userInterests.value = UserInterests()
         _screenVisibility.value = ScreenVisibility()
@@ -1059,6 +1066,7 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_WEATHER_SHOW_CLOUD, _weatherShowCloudCover.value)
         put(KEY_WEATHER_SHOW_PRESSURE, _weatherShowPressure.value)
         put(KEY_WEATHER_SHOW_CLOUD_ANIMATION, _weatherShowCloudAnimation.value)
+        put(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, _weatherBackgroundAnimationEnabled.value)
         put(KEY_WEATHER_PROVIDER, _weatherProvider.value)
         put(KEY_WEATHER_PROVIDERS, _weatherProviders.value)
         put(KEY_WEATHER_API_KEY, _weatherApiKey.value)
@@ -1193,6 +1201,7 @@ class FieldMindSettings private constructor(context: Context) {
         applyBoolean(KEY_WEATHER_SHOW_CLOUD, true)
         applyBoolean(KEY_WEATHER_SHOW_PRESSURE)
         applyBoolean(KEY_WEATHER_SHOW_CLOUD_ANIMATION, true)
+        applyBoolean(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, true)
         applyString(KEY_WEATHER_PROVIDER)
         applyString(KEY_WEATHER_PROVIDERS)
         applyString(KEY_WEATHER_API_KEY)
@@ -1329,6 +1338,7 @@ class FieldMindSettings private constructor(context: Context) {
         _weatherShowCloudCover.value = prefs.getBoolean(KEY_WEATHER_SHOW_CLOUD, true)
         _weatherShowPressure.value = prefs.getBoolean(KEY_WEATHER_SHOW_PRESSURE, false)
         _weatherShowCloudAnimation.value = prefs.getBoolean(KEY_WEATHER_SHOW_CLOUD_ANIMATION, true)
+        _weatherBackgroundAnimationEnabled.value = prefs.getBoolean(KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED, true)
         _weatherProvider.value = prefs.getString(KEY_WEATHER_PROVIDER, "met-norway") ?: "met-norway"
         _weatherProviders.value = prefs.getString(KEY_WEATHER_PROVIDERS, "met-norway") ?: "met-norway"
         _weatherApiKey.value = prefs.getString(KEY_WEATHER_API_KEY, "") ?: ""
@@ -1440,6 +1450,7 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_WEATHER_SHOW_CLOUD = "weather_show_cloud"
         private const val KEY_WEATHER_SHOW_PRESSURE = "weather_show_pressure"
         private const val KEY_WEATHER_SHOW_CLOUD_ANIMATION = "weather_show_cloud_animation"
+        private const val KEY_WEATHER_BACKGROUND_ANIMATION_ENABLED = "weather_background_animation_enabled"
         private const val KEY_WEATHER_PROVIDER = "weather_provider"
         private const val KEY_WEATHER_PROVIDERS = "weather_providers"
         private const val KEY_WEATHER_API_KEY = "weather_api_key"

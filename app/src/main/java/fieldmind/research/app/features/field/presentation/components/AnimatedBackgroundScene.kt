@@ -83,6 +83,7 @@ fun AnimatedBackgroundScene(
     sunset: String? = null,
     forceNight: Boolean? = null,
     showCloudAnimation: Boolean = true,
+    weatherBackgroundAnimation: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val journalConfig = LocalJournalStyle.current
@@ -96,6 +97,20 @@ fun AnimatedBackgroundScene(
     // In preview/inspection mode, show a static gradient
     if (LocalInspectionMode.current) {
         StaticJournalBackground(journalConfig, isDark, modifier)
+        return
+    }
+
+    // When the user has toggled "Background weather animation" OFF, hold a static
+    // journal-themed gradient so the chosen aesthetic still colors the screen
+    // (warmth tint, paper texture, vignette) but no skybox/cloud/firefly motion.
+    if (!weatherBackgroundAnimation) {
+        Box(modifier = modifier.fillMaxSize()) {
+            JournalWarmthOverlay(journalConfig, isDark, BackgroundAnimationLevel.Static)
+            if (journalConfig.showTexture) {
+                JournalTextureOverlay(journalConfig, BackgroundAnimationLevel.Static)
+            }
+            VignetteOverlay(isDark, BackgroundAnimationLevel.Static)
+        }
         return
     }
 

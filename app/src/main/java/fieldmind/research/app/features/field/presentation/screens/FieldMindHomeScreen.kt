@@ -185,6 +185,7 @@ fun SharedTransitionScope.HomeScreen(
     val weatherShowCloud by viewModel.fieldSettings.weatherShowCloudCover.collectAsState()
     val weatherShowPressure by viewModel.fieldSettings.weatherShowPressure.collectAsState()
     val weatherShowCloudAnimation by viewModel.fieldSettings.weatherShowCloudAnimation.collectAsState()
+    val weatherBackgroundAnimation by viewModel.fieldSettings.weatherBackgroundAnimationEnabled.collectAsState()
     val tempUnit by viewModel.fieldSettings.tempUnit.collectAsState()
     val windSpeedUnit by viewModel.fieldSettings.windSpeedUnit.collectAsState()
     val developerMode by viewModel.fieldSettings.developerMode.collectAsState()
@@ -368,7 +369,8 @@ fun SharedTransitionScope.HomeScreen(
             temperature = homeCurrentWeather?.temperature,
             sunrise = homeCurrentWeather?.sunrise,
             sunset = homeCurrentWeather?.sunset,
-            showCloudAnimation = weatherShowCloudAnimation
+            showCloudAnimation = weatherShowCloudAnimation,
+            weatherBackgroundAnimation = weatherBackgroundAnimation
         )
         
         // Layer 2: Screen content (status bar padding preserved, screenBackground removed)
