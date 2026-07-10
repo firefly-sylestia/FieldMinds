@@ -266,9 +266,23 @@ fun SharedTransitionScope.HomeScreen(
         }
     }
 
+    // ── Celebration state for daily goal completion ──
+    val goalReached = todayCount >= goal && goal > 0
+    val celebrationState = rememberCelebrationState()
+    // Initialize with current state to avoid celebrating on app start if goal already met
+    var previousGoalReached by remember { mutableStateOf(goalReached) }
+    LaunchedEffect(goalReached) {
+        if (goal > 0 && goalReached && !previousGoalReached) {
+            celebrationState.trigger(CelebrationVariant.GENTLE_SPARKLE)
+        }
+        previousGoalReached = goalReached
+    }
+
     val gradientOpacity by viewModel.fieldSettings.gradientOpacity.collectAsState()
     val homeScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
-    Box(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {            LazyColumn(state = homeScrollState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 0.dp, 20.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+    Box(Modifier.fillMaxSize().statusBarsPadding().screenBackground(gradientOpacity)) {
+        Box(Modifier.fillMaxSize()) { // Wrapper for overlay
+            LazyColumn(state = homeScrollState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 0.dp, 20.dp, 96.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             // ── Merged Header + Goal ──
             item {
                 CompactHomeHeader(
@@ -566,6 +580,10 @@ fun SharedTransitionScope.HomeScreen(
             Icon(MaterialSymbolIcon("add"), "Quick capture", size = 24.dp)
         }
     }
+
+    // ── Celebration overlay for daily goal ──
+            CelebrationOverlay(celebrationState = celebrationState)
+        }
 
     // ── GpsOffDialog ──
     if (showGpsDialog) {
