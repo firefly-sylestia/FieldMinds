@@ -225,7 +225,8 @@ fun DelightfulEmptyState(
 
                 // ── Dismiss hint ──
                 if (onDismiss != null) {
-                    Spacer(Modifier.height(2.dp))                        Row(
+                    Spacer(Modifier.height(2.dp))
+                    Row(
                             modifier = Modifier
                                 .clip(chipShape)
                                 .clickable(
