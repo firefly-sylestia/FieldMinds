@@ -90,7 +90,7 @@ fun AnimatedBackgroundScene(
     val isDark = FieldMindTheme.colors.isDark
 
     // ── Phase 2: time-of-day resolution + 16-mood scene palette ──
-    val tod = resolveTimeOfDay(sunrise, sunset, System.currentTimeMillis(), forceNight)
+    val tod = resolveSkyPhase(sunrise, sunset, System.currentTimeMillis(), forceNight)
     val palette = getBasePalette(tod).applyStyle(journalConfig.style)
 
     // In preview/inspection mode, show a static gradient
@@ -521,8 +521,12 @@ private fun rememberTextureRng(name: String): List<Float> {
 //  Each mood draws from a `ScenePalette` of 17 colors. Per-journal tints (sepia / pencil-
 //  desat / crisp-boost / watercolor-bleed) are tunnelled through 4 Color extensions.
 
-/** Active coarse daily interval driving the skybox. */
-enum class TimeOfDay { Dawn, Day, Evening, Night }
+/** Active coarse visual band driving the skybox (Dawn / Day / Evening / Night).
+ *
+ * NOTE: deliberately distinct from the `TimeOfDay` enum that lives in `AnimatedWeatherScene.kt`
+ * (which carries 6 fine-grained UTC hour bands: Sunrise / Morning / Midday / Afternoon /
+ * Sunset / Twilight). They scope to different render layers and should not collide. */
+enum class SkyPhase { Dawn, Day, Evening, Night }
 
 /** Where the celestial body sits on screen + current moon phase (Night only). */
 private data class CelestialBody(
@@ -576,55 +580,55 @@ private fun parseIsoMillisOrNull(iso: String): Long? = try {
 } catch (_: Exception) { null }
 
 /**
- * Pick the active [TimeOfDay] from sunrise/sunset ISO strings + clock.
+ * Pick the active [SkyPhase] from sunrise/sunset ISO strings + clock.
  * `forceNight` short-circuits to Night (used by dev launcher + tests).
  */
-private fun resolveTimeOfDay(
+private fun resolveSkyPhase(
     sunriseIso: String?,
     sunsetIso: String?,
     nowMillis: Long,
     forceNight: Boolean?
-): TimeOfDay {
-    if (forceNight == true) return TimeOfDay.Night
+): SkyPhase {
+    if (forceNight == true) return SkyPhase.Night
     val sr = sunriseIso?.let { parseIsoMillisOrNull(it) }
     val ss = sunsetIso?.let { parseIsoMillisOrNull(it) }
     if (sr != null && ss != null) {
         val dawn0 = sr - 30 * 60_000L;  val dawn1 = sr + 90 * 60_000L
         val eve0  = ss - 60 * 60_000L;  val eve1  = ss + 90 * 60_000L
         return when {
-            nowMillis in dawn0..dawn1 -> TimeOfDay.Dawn
-            nowMillis in dawn1..eve0  -> TimeOfDay.Day
-            nowMillis in eve0..eve1   -> TimeOfDay.Evening
-            else                       -> TimeOfDay.Night
+            nowMillis in dawn0..dawn1 -> SkyPhase.Dawn
+            nowMillis in dawn1..eve0  -> SkyPhase.Day
+            nowMillis in eve0..eve1   -> SkyPhase.Evening
+            else                       -> SkyPhase.Night
         }
     }
     val cal = Calendar.getInstance().apply { timeInMillis = nowMillis }
     return when (cal.get(Calendar.HOUR_OF_DAY)) {
-        in 5..7   -> TimeOfDay.Dawn
-        in 8..16  -> TimeOfDay.Day
-        in 17..19 -> TimeOfDay.Evening
-        else      -> TimeOfDay.Night
+        in 5..7   -> SkyPhase.Dawn
+        in 8..16  -> SkyPhase.Day
+        in 17..19 -> SkyPhase.Evening
+        else      -> SkyPhase.Night
     }
 }
 
 /** Position on screen for sun or moon disc, indexed by time-of-day. */
-private fun resolveCelestial(tod: TimeOfDay, nowMillis: Long): CelestialBody = when (tod) {
-    TimeOfDay.Dawn -> CelestialBody(
+private fun resolveCelestial(tod: SkyPhase, nowMillis: Long): CelestialBody = when (tod) {
+    SkyPhase.Dawn -> CelestialBody(
         showSun = true, sunCx01 = 0.78f, sunCy01 = 0.62f, sunR01 = 0.105f,
         showMoon = false, moonCx01 = 0f, moonCy01 = 0f, moonR01 = 0f,
         moonPhase = 0f
     )
-    TimeOfDay.Day -> CelestialBody(
+    SkyPhase.Day -> CelestialBody(
         showSun = true, sunCx01 = 0.82f, sunCy01 = 0.18f, sunR01 = 0.075f,
         showMoon = false, moonCx01 = 0f, moonCy01 = 0f, moonR01 = 0f,
         moonPhase = 0f
     )
-    TimeOfDay.Evening -> CelestialBody(
+    SkyPhase.Evening -> CelestialBody(
         showSun = true, sunCx01 = 0.78f, sunCy01 = 0.78f, sunR01 = 0.115f,
         showMoon = false, moonCx01 = 0f, moonCy01 = 0f, moonR01 = 0f,
         moonPhase = 0f
     )
-    TimeOfDay.Night -> CelestialBody(
+    SkyPhase.Night -> CelestialBody(
         showSun = false, sunCx01 = 0f, sunCy01 = 0f, sunR01 = 0f,
         showMoon = true, moonCx01 = 0.22f, moonCy01 = 0.18f, moonR01 = 0.065f,
         moonPhase = moonPhase(nowMillis)
@@ -695,10 +699,10 @@ private fun ScenePalette.applyStyle(style: JournalStyle): ScenePalette {
     )
 }
 
-// ── 4 base palettes (one per TimeOfDay) ────────────────────────────────────────
+// ── 4 base palettes (one per SkyPhase) ────────────────────────────────────────
 
-private fun getBasePalette(tod: TimeOfDay): ScenePalette = when (tod) {
-    TimeOfDay.Dawn -> ScenePalette(
+private fun getBasePalette(tod: SkyPhase): ScenePalette = when (tod) {
+    SkyPhase.Dawn -> ScenePalette(
         skyTop              = Color(0xFF4B5D8F),
         skyBottom           = Color(0xFFFFB07C),
         sunDiscColor        = Color(0xFFFFECCC),
@@ -718,7 +722,7 @@ private fun getBasePalette(tod: TimeOfDay): ScenePalette = when (tod) {
         horizonColor        = Color(0xFF382329),
         birdColor           = Color(0xFF201015).copy(alpha = 0.85f)
     )
-    TimeOfDay.Day -> ScenePalette(
+    SkyPhase.Day -> ScenePalette(
         skyTop              = Color(0xFF4A90E2),
         skyBottom           = Color(0xFF90C8FF),
         sunDiscColor        = Color(0xFFFFFBE0),
@@ -738,7 +742,7 @@ private fun getBasePalette(tod: TimeOfDay): ScenePalette = when (tod) {
         horizonColor        = Color(0xFF2C5E3A),
         birdColor           = Color.Transparent
     )
-    TimeOfDay.Evening -> ScenePalette(
+    SkyPhase.Evening -> ScenePalette(
         skyTop              = Color(0xFF191970),
         skyBottom           = Color(0xFFD85A7F),
         sunDiscColor        = Color(0xFFFFDAB9),
@@ -758,7 +762,7 @@ private fun getBasePalette(tod: TimeOfDay): ScenePalette = when (tod) {
         horizonColor        = Color(0xFF1A1025),
         birdColor           = Color(0xFF100815).copy(alpha = 0.90f)
     )
-    TimeOfDay.Night -> ScenePalette(
+    SkyPhase.Night -> ScenePalette(
         skyTop              = Color(0xFF070B19),
         skyBottom           = Color(0xFF151B2E),
         sunDiscColor        = Color.Transparent,
@@ -813,7 +817,7 @@ private fun rememberFeatureRng(prefix: String, poolSize: Int, count: Int = 100):
  */
 @Composable
 private fun AtmosphericSkyboxScene(
-    tod: TimeOfDay,
+    tod: SkyPhase,
     palette: ScenePalette,
     journalStyle: JournalStyle,
     animLevel: BackgroundAnimationLevel,
@@ -883,12 +887,12 @@ private fun AtmosphericSkyboxScene(
     Canvas(modifier = modifier.fillMaxSize()) {
         drawSky(palette)
         drawCelestialBodies(celestial, palette, journalStyle, sunDrift, celTexRng)
-        if (tod != TimeOfDay.Night && animLevel != BackgroundAnimationLevel.Static) {
+        if (tod != SkyPhase.Night && animLevel != BackgroundAnimationLevel.Static) {
             drawCloudBanks(palette, journalStyle, cloudDrift, cloudRng, isFull)
         }
         drawHorizonAndMist(tod, palette, mistDrift)
 
-        if (tod == TimeOfDay.Night && isFull) {
+        if (tod == SkyPhase.Night && isFull) {
             drawStarsAndConstellations(palette, twinkle, starRng, shootPhase)
         }
         drawFireflies(tod, palette, journalStyle, isStatic, isFull, fireflyPulse, fireflyRng)
@@ -1186,7 +1190,7 @@ private fun DrawScope.drawCloudBanks(
 }
 
 /** Draws the 5-hump mountain silhouette + foreground hills + 4 dawn mist bands. */
-private fun DrawScope.drawHorizonAndMist(tod: TimeOfDay, palette: ScenePalette, mistDrift: Float) {
+private fun DrawScope.drawHorizonAndMist(tod: SkyPhase, palette: ScenePalette, mistDrift: Float) {
     val horizonY = size.height * 0.78f
 
     val mountain = androidx.compose.ui.graphics.Path().apply {
@@ -1215,7 +1219,7 @@ private fun DrawScope.drawHorizonAndMist(tod: TimeOfDay, palette: ScenePalette, 
     }
     drawPath(hills, color = palette.horizonColor.copy(alpha = 0.7f))
 
-    if (tod == TimeOfDay.Dawn && palette.mistColor.alpha > 0.01f) {
+    if (tod == SkyPhase.Dawn && palette.mistColor.alpha > 0.01f) {
         for (i in 0 until 4) {
             val bandY = horizonY - size.height * 0.05f - i * size.height * 0.026f
             val bandH = size.height * 0.038f
@@ -1321,7 +1325,7 @@ private fun DrawScope.drawStarsAndConstellations(
  *  Skipped for BulletJournal (clean style rejects fireflies).
  *  Shown at Evening (always), and Night (for Victorian + Sketchbook + Ghibli). */
 private fun DrawScope.drawFireflies(
-    tod: TimeOfDay,
+    tod: SkyPhase,
     palette: ScenePalette,
     style: JournalStyle,
     isStatic: Boolean,
@@ -1331,7 +1335,7 @@ private fun DrawScope.drawFireflies(
 ) {
     val showFireflies = !isStatic &&
         palette.fireflyColor.alpha > 0.01f &&
-        (tod == TimeOfDay.Evening || tod == TimeOfDay.Night) &&
+        (tod == SkyPhase.Evening || tod == SkyPhase.Night) &&
         style != JournalStyle.BulletJournal
     if (!showFireflies) return
 
@@ -1368,13 +1372,13 @@ private fun DrawScope.drawFireflies(
 
 /** Draws 4 V-shaped bird silhouettes drifting at Dawn / Evening (Full tier only). */
 private fun DrawScope.drawBirds(
-    tod: TimeOfDay,
+    tod: SkyPhase,
     palette: ScenePalette,
     globalDrift: Float,
     rng: List<Float>
 ) {
     val showBirds = palette.birdColor.alpha > 0.01f &&
-        (tod == TimeOfDay.Dawn || tod == TimeOfDay.Evening)
+        (tod == SkyPhase.Dawn || tod == SkyPhase.Evening)
     if (!showBirds) return
 
     val count = 4
