@@ -269,10 +269,10 @@ fun InsightsScreen(
 
             if (observations.isEmpty()) {
                 item {
-                    EmptyState(
-                        "No data yet",
-                        "Insights, charts, and your offline map appear as you log observations. Start capturing to build your research dashboard.",
-                        icon = FieldMindIcons.Insights,
+                    DelightfulEmptyState(
+                        context = "observations",
+                        customTitle = "Your research dashboard is empty 📊",
+                        customBody = "Insights, charts, and your offline map appear as you log observations. Start capturing to build your research dashboard.",
                         actionLabel = "Capture first observation"
                     ) { onNavigate(FieldMindScreen.Observe) }
                 }

@@ -45,7 +45,7 @@ fun ArchiveScreen(viewModel: FieldMindViewModel, onOpenDetail: (String, Long) ->
         }
         val q = query.trim().lowercase()
         if (q.length < 2) {
-            item { EmptyState("Search smarter", "Type at least 2 characters. FieldMind limits in-memory search results so large archives stay responsive; full FTS indexing is the next database step.", icon = FieldMindIcons.Search) }
+            item { DelightfulEmptyState(context = "search", customTitle = "Search your field notes 🔍", customBody = "Type at least 2 characters. FieldMind limits in-memory search results so large archives stay responsive; full FTS indexing is the next database step.") }
         } else {
             fun matches(vararg parts: String) = parts.any { it.lowercase().contains(q) }
             itemsIndexed(observations.filter { matches(it.subject, it.category, it.factsOnlyNotes, it.manualLocation, it.tags) }.take(30)) { i, it -> EntityCard(it.subject, "observation", body = it.factsOnlyNotes.take(120), confidence = it.confidenceLevel, meta = listOf(it.category), onClick = { onOpenDetail("observation", it.id) }, index = i, animate = true) }

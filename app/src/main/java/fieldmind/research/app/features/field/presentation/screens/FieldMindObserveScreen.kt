@@ -965,10 +965,10 @@ fun ObserveScreen(
                 // ── Empty state (only when no form is open AND no saved observations) ──
                 if (!session.showEvidenceForm && !session.isActive && observations.isEmpty() && !showSessionSummary) {
                     item {
-                        EmptyState(
-                            "No observations yet",
-                            "Start a session below to capture evidence and log observations.",
-                            icon = FieldMindIcons.Observation
+                        DelightfulEmptyState(
+                            context = "observations",
+                            customTitle = "Your field notebook is waiting 📓",
+                            customBody = "No observations yet — but every discovery starts with a single step outside. Start a session below to begin!"
                         )
                     }
                 }
