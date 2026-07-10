@@ -44,7 +44,36 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
-        // ── v0.50.0 — Round 10 — Strip sound effects system ──
+        // ── v0.50.1 — Add discoverable Restore from backup card ──
+FieldMindChangelogEntry(
+    version = "0.50.1",
+    date = "2025-07-10",
+    title = "📥 Discoverable Restore from backup card on Backup & Restore",
+    importance = "Patch",
+    tags = listOf("backup", "import", "discoverability", "ui", "fix"),
+    sections = listOf(
+        "📥 Restore from backup, now always visible" to listOf(
+            "✓ New prominent primary-tinted card on the Backup & Restore screen, sitting right below the hero status card",
+            "✓ Card stays visible on the Export, Import, and Backup tabs — no more hunting for the hidden Import tab pill",
+            "✓ Tapping the card switches the active tab to Import AND auto-launches the system file picker (one-tap restore)",
+            "✓ Card explains what it does: 'Import a .fieldmind, .zip, or .json archive — observations, notes, projects, media, and settings'",
+        ),
+        "🎨 Card design follows the journal aesthetic" to listOf(
+            "✓ Card shape, border, and texture overlay read from the active journal style (Victorian / Sketchbook / BulletJournal / Ghibli) — consistent with the other cards on the screen",
+            "✓ Primary-tinted background (`primaryContainer.copy(alpha = 0.35f)`) makes it stand out from the regular export/backup cards",
+            "✓ 48dp icon box with download icon + bold 'Choose file' CTA pill with arrow_forward on the right",
+            "✓ Press scale (0.97f) + cuteShadow give it the same tactile feedback as other clickable cards",
+        ),
+        "🛠️ Implementation" to listOf(
+            "✓ New `QuickRestoreCard(onClick: () -> Unit)` composable in `FieldMindBackupExportComponents.kt`",
+            "✓ Wired into `BackupAndRestoreScreen` between the Hero Status Card and the tab pill selector",
+            "✓ Reuses the existing `filePickerLauncher` declared in the screen scope — no new launcher needed",
+            "✓ Same MIME-type allowlist as the existing Import tab: application/json, application/octet-stream, application/zip, */*",
+        ),
+    )
+),
+
+// ── v0.50.0 — Round 10 — Strip sound effects system ──
 FieldMindChangelogEntry(
     version = "0.50.0",
     date = "2025-07-10",

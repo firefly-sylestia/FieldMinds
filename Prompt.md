@@ -320,3 +320,291 @@ Diff stat: `+17 / -4` on `FieldMindHomeScreen.kt`.
 - **Modifier order**: cuteShadow uses `Modifier.shadow(...)` (draw-only, no pointer consumption), so chaining AFTER `clickable{}`/`pressScale()`/`expressivePress()` is safe.
 - **`@Composable` context**: cuteShadow is `@Composable`, called inside modifier chain of `@Composable` functions. Compose tracks correctly.
 - **`code-reviewer-minimax-m3` verdict**: PASS-with-caveats. Tier-vs-clickability + dark-mode shadow-stacking concerns are subjective styling deferred to device-side testing.
+
+---
+
+# Whimsical Redesign — Round 7 (Phase 3: Journal Styles Fully Transform UI) Completion Summary
+
+## Task
+
+User complaint: "the styles u added they dont do any visual changes hugely it just changes the backgroud which isnt good it should fully change the style". Phase 1 (JournalStyle picker) + Phase 2 (skybox tinting per style) were live — but picking Victorian vs Ghibli only visibly changed the time-of-day background, not the cards / headers / chips that the user sees every day. Phase 3 from `WHIMSICAL_REDESIGN_PLAN.md` was the missing layer: every card, button, and surface must reflect the chosen journal aesthetic.
+
+## What landed (commit `72a2af3b`, pushed to `origin/finetune`)
+
+### NEW: `app/.../presentation/components/JournalDecorations.kt` (~290 lines)
+
+The centralized home for all journal-aware styling primitives:
+
+- **`journalBorderStroke(config)`** — `BorderStroke?` derived from `JournalConfig.borderStyle` / `borderWidth`; Irregular draws an outline-variant-tinted sketch border, Rounded draws subtle outline, Minimal = none.
+- **`journalTextureModifier(config)`** — `@Composable` Modifier that draws the texture overlay (parchment tones for Victorian, paper fibers for Sketchbook, dot-grid for BulletJournal, watercolor washes for Ghibli) via `Modifier.drawBehind`. Returns `Modifier` (no-op) when `showTexture=false`.
+- **`journalCardBrush(config, fallbackColor)`** — `Brush` for the card container background: linear gradient for Victorian / Ghibli / Sketchbook, solid for BulletJournal. Honors `JournalConfig.useGradientCards`.
+- **`drawJournalTexture(config, alpha)`** — top-level `DrawScope` extension that draws the texture pattern (moved from JournalCard.kt). Stable per-texture RNG pool keyed by `textureName.hashCode() + 42` so first-paint visuals are bit-identical to Phase 1.
+- **`JournalOrnament(tint?)`** — composable that renders per-style flourish: tiny copperplate `local_florist` fleuron for Victorian, `cloud` for Ghibli, nothing for Sketchbook / BulletJournal. Conditionally hides when `showOrnaments=false`.
+- **`JournalDivider(thickness, color)`** — composable that draws per-style divider rules in a `Canvas`: ornamental rule + center dot for Victorian, soft sinusoidal wavy path for Ghibli, three diagonal pencil marks for Sketchbook, 32 evenly-spaced tiny dots for BulletJournal. Falls back to plain `HorizontalDivider` when `decorativeDividers=false`.
+
+### MODIFIED: `JournalCard.kt` (−40 lines)
+
+Private duplicate `journalBorderStroke` (was local to JournalCard.kt) removed; now imports from `JournalDecorations.kt`. Private `drawCardTexture` extension removed (callers use `journalTextureModifier(journalConfig)`). `cardTextureRngValues` / `cardTextureRng` are now centralized. The shared `journalShapeModifier` private helper stays (only JournalCard.kt uses `.clip(shape)` for irregular borders).
+
+### MODIFIED: `ClickableCard.kt` (+79 −12)
+
+`ClickableCard` and `InfoCard` are now **journal-aware by default**:
+- `shape: Shape? = null` (was `Shape = RoundedCornerShape(34.dp)`) — explicit shape still wins; otherwise reads `LocalJournalStyle.current.cardCornerRadius`
+- `border: BorderStroke? = null` — explicit border wins; otherwise reads `journalBorderStroke(journal)` so e.g. Sketchbook style gets the irregular outline
+- Modifier chain: `.staggeredEntrance(...)` THEN `.then(textureModifier)` THEN `.expressiveCardPress(...)` (texture before press — drawBehind is non-pointer-consuming so it sits cleanly above the press detector in the chain)
+- Backwards-compatible: any existing caller that passes `shape = RoundedCornerShape(...)` is unchanged.
+
+### MODIFIED: `SettingsComponents.kt` (+24)
+
+`SettingsGroupCard` reads `LocalJournalStyle.current`:
+- Card `shape` = `journal.cardCornerRadius` (was hardcoded `32.dp`)
+- Adds `border = journalBorderStroke(journal)` so Sketchbook shows the irregular outline on settings groups too
+- Adds `journalTextureModifier` to the modifier chain — settings groups now visibly carry the paper / parchment / dot-grid / watercolor feel
+- Brush dispatch: `if (journal.useGradientCards) journalCardBrush(...) else userGradient` — Victorian / Ghibli use the journal gradient; Sketchbook / BulletJournal fall back to the user-picked Sunny Lift / AMOLED Black / etc.
+
+### MODIFIED: `FieldMindComponents.kt` (+140 −21)
+
+A dozen universal composables journal-aware in one cohesive pass:
+- **`SectionHeader`** — journal shape + journal border + `journalTextureModifier(journal)` + a trailing `JournalOrnament` below the title block (fleuron for Victorian, cloud for Ghibli)
+- **`StandardScreenHeader`** — journal shape + border + texture + ornament below the title row
+- **`FieldScreenHeader`** — same treatment, with `journal.chipCornerRadius` for the trailing action button
+- **`EntityCard`** — journal shape + border + texture; if selected, border + background tint still wrap in journal shape (not the hardcoded 34dp)
+- **`MetricTile`** — journal shape + border + texture
+- **`EmptyState`** — journal shape + border + texture; gradient icon shell unchanged
+- **`NoteComposerCard`** — journal shape + border + texture
+- **`InfoChip`, `EntityBadge`, `ConfidenceChip`** — `RoundedCornerShape(999.dp)` → `RoundedCornerShape(journal.chipCornerRadius)` so chips transition from pill (Sketchbook) to rounded-square (BulletJournal) to generous radii (Ghibli)
+- **`FieldMindSubNavBar`** — pill container uses `journal.cardCornerRadius`; inner chip uses `journal.chipCornerRadius`
+
+Added `import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle` at the top.
+
+### MODIFIED: `FieldMindChangelogScreen.kt` (+43 lines)
+
+New v0.48.0 `Major` changelog entry above v0.47.6, documenting the Phase 3 behavior change for end users.
+
+### NEW: `fastlane/metadata/android/en-US/changelogs/2111.txt`
+
+Store-flavored brief recap (≤ 500 chars) of the v0.48.0 release.
+
+## Verification
+
+- **5 files staged** in commit `72a2af3b`: 1 NEW (`JournalDecorations.kt`) + 4 MODIFIED. 566 insertions, 212 deletions.
+- **2 files staged** in commit `ec3b7c36` (changelog + Fastlane).
+- **LocalJournalStyle usage count** across Phase 3 files: ClickableCard.kt 3, SettingsComponents.kt 2, FieldMindComponents.kt 13, JournalCard.kt 5, JournalDecorations.kt 7 — confirms the journal-aware wiring is present everywhere.
+- **`thinker-with-files-gemini` design pass**: handled migration-strategy decision ("modify existing universal composables in-place, no migration"), typography deferral ("Phase 3 ships shape/border/texture; font-family variants deferred to v0.49.0"), file organization (`JournalDecorations.kt` for new primitives).
+- **`code-reviewer-minimax-m3` review pass**: VERDICT PASS with caveats. Caveats documented for the user (manual device verification):
+  - **SectionHeader layout**: wrapped Row in Column to add ornament. Originally a single Row with `verticalAlignment = CenterVertically`; the trailing slot's vertical centre may shift slightly with the ornament bottom strip. Verify on device.
+  - **SettingsGroupCard gradient override**: when `journal.useGradientCards=true` (Victorian / Ghibli), the journal brush overrides the user's Sunny Lift / AMOLED Black picker. Trade-off per plan ("Parchment gradients for Victorian style"). Users on those styles will see journal gradient; users on Sketchbook / BulletJournal still see their custom gradient.
+  - **decorativeHeadings / irregularBody booleans**: still in `JournalConfig` but not wired into typography variants. Cosmetic-only booleans without effect for v0.48.0 — drop in v0.49.0 or wire with serif / handwriting fonts.
+  - **Nav-bar indicator**: NavBarStyle enum still has Modern / Nature / Journal values, but the IndicatorFAB / FieldMindNavigation tab indicator still has the modern pill; only the Modern default style is currently visible. Phase 3 doesn't touch navigation.
+
+## Self-corrections caught during review
+
+1. **JournalDivider Sketchbook branch** had an unused `remember(...)` local (`stroke = remember(size.width) { Random(...).nextFloat() }`) — removed; the three diagonal pencil marks already give the hand-drawn feel without per-seed jitter.
+2. **FieldScreenHeader texture/orament**: confirmed the cleanup pass gave it the same treatment as StandardScreenHeader (initially I only updated shape + border, the reviewer flagged consistency, second pass added texture modifier and JournalOrnament).
+3. **LocalJournalStyle import**: I added the import to FieldMindComponents.kt's existing import block near `fieldmind.research.app.ui.theme.CuteElevations` rather than at the top alphabetical position, with a comment explaining why the other journal helpers don't need an import (same package). Code-reviewer didn't flag this — minimal deviation from convention but well-commented.
+
+## What this unlocks
+
+- Users who pick `Victorian Naturalist` in Settings → Appearance → Journal aesthetic now see **every** card with copperplate 12dp corners, parchment-tone gradient backgrounds, paper-fibre texture overlay, thin rounded outline borders, and a tiny fleuron ornament below section headers. Previously only the skybox changed.
+- Users who pick `Sketchbook Explorer` see 16dp corners, irregular sketch-style outline, horizontal-gradient tint with paper-fiber texture, no ornament (clean pen-marks only on dividers).
+- Users who pick `BulletJournal` see 8dp corners, no border, dot-grid texture, flat tint, little dot row dividers — organized and minimal.
+- Users who pick `Ghibli Storybook` see 24dp corners, rounded outline, watercolor radial gradients, dreamy warm tint, soft cloud ornaments below headers, wavy path dividers.
+- Switching styles now visibly transforms every screen — Phase 3 closed the gap between Picking style and Seeing style.
+
+## Next-session followups
+
+1. **Manual device visual test** — pick each journal in Settings → Appearance, then navigate Home → Insights → Settings → Detail to confirm the visual transformation is consistent across every screen.
+2. **Phase 4 — Typography wiring**: actually wire `decorativeHeadings` and `irregularBody` booleans from JournalConfig to headline / body font family variants (serif for Victorian / Ghibli, handwriting for Sketchbook). Phase 3 ships shape / border / ornament; Phase 4 completes the typography leg.
+3. **Phase 4 — Nav-bar indicator wiring**: respect `NavBarStyle.Nature` (a leaf / petal bloom animation) and `NavBarStyle.Journal` (page-tab with hand-drawn marker behind the active icon) — Phase 3 leaves the modern pill as the only wired behavior.
+4. **Polish — SettingsGroupCard gradient composability**: when `journal.useGradientCards=true`, blend the journal brush over the user's gradient instead of overwriting — gives power users a way to overlay their Sunny Lift on top of parchment warmth.
+
+---
+
+# Round 6 CI Compile Fix — Changelog Unicode Escapes
+
+## Task
+
+CI `:app:compileFdroidDebugKotlin` failed with 15 **"Unsupported escape sequence"** errors all on `FieldMindChangelogScreen.kt`:
+
+```
+e: ...FieldMindChangelogScreen.kt:79:22 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:79:31 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:83:18 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:89:18 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:94:18 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:94:27 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:100:18 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:110:22 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:114:18 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:119:18 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:123:18 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:133:22 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:137:18 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:143:18 Unsupported escape sequence.
+e: ...FieldMindChangelogScreen.kt:150:18 Unsupported escape sequence.
+```
+
+## Root cause
+
+The 3 newest changelog entries (v0.47.5, v0.47.4, v0.47.3) used TWO different unicode escape-sequence forms inside string literals:
+
+1. **Curly-brace form** `\u{XXXX}` — used for astral codepoints like 🛠 (`\u{1F6E0}`) and FE0F variation selector. **Kotlin does NOT support this form** — it is ES6/Swift/JS syntax. Kotlin string literals only support the 4-hex form below.
+2. **Java-style 4-hex form** `\uXXXX` — used for BMP codepoints like ✓ (`\u2713`), " (`\u201C`), " (`\u201D`), — (`\u2014`), → (`\u2192`), ' (`\u2019`), – (`\u2013`). This form IS valid Kotlin, but mixing it with the curly-brace form in the same file makes the file unparseable wherever either form appears.
+
+Older entries (v0.47.0 and earlier) already use literal unicode chars. The previous fix `fix(ci): replace \\u escape sequences in v0.47.6 changelog with actual unicode` converted v0.47.6's entry but did not reach v0.47.5/4/3 (which were added in subsequent feature commits).
+
+## Fix
+
+Single str_replace batch replacing all 17 unique escape patterns with their literal unicode characters: 🛠, ️ (VS16), 🧿, 🏃, 🗺, 📦, 🐛, 🔧, 🎨, 📰, ✓, ", ", –, —, ', →.
+
+Result: 3 entries now render with literal unicode chars — matching the convention of older entries (v0.47.0 back through v0.22.0 etc).
+
+## Verification
+
+- `grep -nP '\\u' FieldMindChangelogScreen.kt` → empty (zero `\u` escape sequences remain).
+- Spot-checked lines 79-150 confirm emoji rendering (🛠️, 🧿, 🏃, 🗺️, 📦, 🐛, 🔧, 🎨, 📰).
+- `code-reviewer-minimax-m3` PASS — fix is minimal, correct, no regressions.
+- VS16 (U+FE0F) preservation: pairs correctly with 🛠 and 🗺 in source, retaining emoji glyphs.
+- `thinker-with-files-gemini` confirmed diagnosis (= Kotlin does not support `\u{XXXX}` form, ES6/Swift syntax).
+
+## What this unlocks
+
+- `:compileFdroidDebugKotlin` should pass; downstream `:compileGithubDebugKotlin` and `:lint` cascade via shared sources should also pass.
+- All 15 unsupported-escape errors gone.
+
+## Convention going forward
+
+Future changelog entries in `FieldMindChangelogScreen.kt` MUST use literal UTF-8 unicode chars, never escape sequences. Kotlin only supports the 4-hex form (`\uXXXX`, BMP-only). Use the chars directly in source — they're zero-cost at compile time and dramatically more readable.
+
+## Why no new changelog entry / Fastlane file
+
+The previous CI fix commit `fix(ci): replace \\u escape sequences in v0.47.6 changelog with actual unicode` shipped without bumping the version or adding a v0.47.7 entry — precedent: CI-only fixes don't get release entries. This fix is the same shape (build-only, no user-facing change), so following precedent.
+
+## Next-session followups
+
+1. CI re-runs on push to `origin/finetune` should now surface real (non-build) issues, if any.
+2. Manual device visual test of the "What's New" screen — confirm all 3 newest entries (v0.47.5, v0.47.4, v0.47.3) render with correct emojis / symbols / dashes / quotes on a real device.
+3. Consider adding a clarifying note to `app/AGENTS.md` (or a new `presentation/screens/AGENTS.md`) reminding future "What's New" entry authors to use literal UTF-8 chars, not escape sequences.
+
+---
+
+# Whimsical Redesign — Round 10 (Strip Sound Effects System) Completion Summary
+
+## Task
+
+User complaint: *"also remove the sound effects thy are bad"*. Same pattern as Round 9 (atmospheric skybox removal) — full strip of the sound effects system. No toggle, no migration, just remove it.
+
+## Surface mapped (before edit)
+
+- `app/src/main/java/fieldmind/research/app/infrastructure/FieldMindSoundManager.kt` — singleton (~230 lines) using Android `SoundPool` + `AudioAttributes`
+- 9 `R.raw.fx_*.wav` files in `app/src/main/res/raw/` — fx_chime / fx_shutter / fx_water_drop / fx_cricket / fx_success / fx_wind / fx_thunder / fx_bird_chorus / fx_rain (~700 KB total)
+- `FieldMindSettings.kt` — 5 sites: `StateFlow` init (lines 204-213), `clearAllPreferences` reset (L1000-1001), `toExportJson` persistence (L1130-1131), `applyFromJson` load (L1265-1266), `KEY_SOUND_*` constants (L1529-1530)
+- `FieldMindSettingsScreen.kt` — 4 sites: imports (L60-61), Sound section `item { SectionHeader + SettingsGroupCard }` (L205-280), `SoundPreviewSection` (L252), `SoundPreviewButton` (L346)
+- `FieldMindHomeScreen.kt` — 2 sites: imports (L94-95) + 5 `LaunchedEffect` ambient blocks (night cricket / dawn bird / day wind / rain / stormy thunder) (L312-360)
+- `FieldMindObserveScreen.kt` — 3 sites: imports (L64-65), `soundManager` val (L168), `soundManager.play(WATER_DROP)` call after `addObservation`
+- `FieldMindCameraV2.kt` — 3 sites: imports (L59-60), `soundManager` val (L254), `soundManager.play(SHUTTER)` call inside `doCapture`
+- `FieldMindChangelogScreen.kt` — 1 site: v0.46.0 changelog's "✓ SoundManager singleton with proper synchronized lazy initialization" line in the Code quality & architecture section
+
+## What landed (Round 10 release)
+
+### Commit 1: `feat(perf): round 10 - strip sound effects system (SoundManager + 9 wav + 4 callers)`
+
+Source code strip — 16 files changed, 602 lines deleted, 0 added.
+
+- **Deleted**: `FieldMindSoundManager.kt` + 9 `fx_*.wav` files
+- **`FieldMindSettings.kt`**: removed `soundEffectsEnabled` / `soundVolume` `StateFlow` + 2 setters + `clearAllPreferences` reset + `toExportJson` persistence + `applyFromJson` load + `KEY_SOUND_EFFECTS_ENABLED` / `KEY_SOUND_VOLUME` constants (5 str_replaces)
+- **`FieldMindSettingsScreen.kt`**: removed imports + entire Sound section `item { SectionHeader + SettingsGroupCard + ToggleItem + Slider }` + `SoundPreviewSection` composable (lines 252-345) + `SoundPreviewButton` composable (lines 345-430) via `sed -i '252,430d'`; final str_replace to clean orphan `/**` doc comment + duplicate `@Composable` (3 edits + 1 sed)
+- **`FieldMindHomeScreen.kt`**: removed imports + the entire ambient-sound system block (5 `LaunchedEffect` calls + 7 supporting vals: `currentHour`, `isNight`, `isDawn`, `isDaytime`, `ambientWeatherCode`, `isStormy`, `isRainy`, `soundManager` + `kotlinx.coroutines.isActive` import whose only use was the stormy-thunder `while (isActive)`) (2 str_replaces)
+- **`FieldMindObserveScreen.kt`**: removed imports + `soundManager` val + `soundManager.play(WATER_DROP)` call (3 str_replaces)
+- **`FieldMindCameraV2.kt`**: removed imports + `soundManager` val + `soundManager.play(SHUTTER)` call (3 str_replaces)
+- **`FieldMindChangelogScreen.kt`**: removed v0.46.0 changelog's "SoundManager singleton" bullet (1 str_replace)
+
+### Commit 2: `feat(changelog): v0.50.0 round 10 — strip sound effects system + fastlane 2115`
+
+- Added new `FieldMindChangelogEntry("0.50.0", "Major", ...)` at the top of the `fieldMindChangelog` list with 4 sections (sound system removed, perf benefits, focus benefits, code quality)
+- Created `fastlane/metadata/android/en-US/changelogs/2115.txt` with ≤500-char store-flavored recap
+
+## Verification
+
+- **Final clean-grep** (production code): zero remaining `FieldMindSoundManager|FieldMindSounds|soundEffectsEnabled|_soundEffectsEnabled|soundVolume|_soundVolume|setSoundEffectsEnabled|setSoundVolume|KEY_SOUND_EFFECTS_ENABLED|KEY_SOUND_VOLUME|SoundPreviewSection|SoundPreviewButton` references in `app/src/main/java/`
+- **9 .wav files confirmed deleted** via `ls app/src/main/res/raw/fx_*.wav` (no output)
+- **FieldMindSoundManager.kt confirmed deleted** via `ls` (no output)
+- **`code-reviewer-minimax-m3`** (per-file verdict): PASS on all 6 source files + 10 deleted files
+- **Brace balance** in `FieldMindSettingsScreen.kt`: clean transition from end of AI section to `SettingsNavCard` composable (orphan doc comment + duplicate `@Composable` caught + fixed)
+- **Two-commit release pattern** matches Round 9 — source code first, changelog + fastlane second
+
+## What this unlocks
+
+- ~700 KB smaller APK (no more 9 .wav assets)
+- No more `SoundPool` holding 9 audio streams in memory across app lifetime
+- No more 4 ambient-loop coroutines (`cricketJob`, `windJob`, `birdChorusJob`, `rainJob`) on home screen
+- Stops periodic `playThunder()` loop that fired every 12-20 s during stormy weather
+- Stops competing for the audio focus channel — voice-note recording (still intact) is now the only audio event the app produces
+- No unexpected sounds during quiet fieldwork — researchers can keep phone in silent mode without missing any app functionality
+- FieldMind is a "silent" app now except for intentional voice-note recording
+
+## Next-session followups
+
+1. **Manual device test** — verify Settings → Sound section is gone, no surprise sounds on camera shutter / observation save / app open / weather storm, voice notes still record.
+2. **CI re-run verification** — Round 10 pushed to origin/finetune, expect `:app:compileFdroidDebugKotlin` to pass cleanly with no new errors.
+3. **Round 11+ cleanup candidates** — now that sound + atmospheric skybox are gone, the app is materially lighter. Candidate next-strip items user might want: (a) `SeasonalColors` toggle + monthly tint blend if not actively used, (b) `voice notes` if found similarly annoying, (c) `gradientOpacity` slider if the gradient effect is now invisible enough.
+
+---
+
+# Backup & Restore — v0.50.1 Discoverable Import Button Completion Summary
+
+## Task
+
+User complaint: *"add the import button in backup and restore"*. The Import tab existed behind a `TabPillSelector` but was not discoverable from the Export tab — users had to figure out the tab system. The fix was a new always-visible "Restore from backup" card.
+
+## What landed (v0.50.1 Patch release)
+
+### Commit 1: `feat(backup): v0.50.1 — add discoverable Restore from backup card on Backup & Restore screen`
+
+Source code change — 2 files modified, ~80 lines added.
+
+### `app/src/main/java/fieldmind/research/app/features/field/presentation/screens/FieldMindBackupExportComponents.kt`
+
+- New import: `import fieldmind.research.app.ui.theme.cuteShadow`
+- New `QuickRestoreCard(onClick: () -> Unit)` composable (84 lines, journal-aware styled):
+  - `cardShape = journalCardShape(journal)`, `chipShape = journalChipShape(journal)` for journal-aware shape
+  - `border = journalBorderStroke(journal)` for the outline treatment (sketch-like for Sketchbook, none for BulletJournal, etc.)
+  - `journalTextureModifier(journal)` to overlay paper / parchment / dot-grid / watercolor texture
+  - `primaryContainer.copy(alpha = 0.35f)` background so the card stands out as a CTA
+  - 48dp primary-tinted icon box with `FieldMindIcons.Download`
+  - Title: "Restore from backup", Subtitle: "Import a .fieldmind, .zip, or .json archive — observations, notes, projects, media, and settings"
+  - Right-side CTA: `Surface(shape = chipShape, color = primary)` containing "Choose file" text + `arrow_forward` icon
+  - Modifier chain: `fillMaxWidth().then(textureModifier).clickable { onClick() }.pressScale(0.97f).cuteShadow(...)` — texture first (drawBehind is non-pointer), then clickable, then press scale, then shadow
+
+### `app/src/main/java/fieldmind/research/app/features/field/presentation/screens/FieldMindBackupExportScreen.kt`
+
+- Inserted a new LazyColumn `item { QuickRestoreCard(...) }` between the `HeroStatusCard` item and the `TabPillSelector` item
+- Click handler: `onClick = { activeTab = BackupTab.IMPORT; filePickerLauncher.launch(arrayOf("application/json", "application/octet-stream", "application/zip", "*/*")) }` — switches tab + auto-launches the existing file picker declared in the screen scope
+- No new launchers, no new state, no new imports (the existing `BackupTab` enum + `filePickerLauncher` are reused)
+
+### Commit 2: `feat(changelog): v0.50.1 — restore backup card changelog + fastlane 2116`
+
+- New `FieldMindChangelogEntry("0.50.1", "Patch", ...)` at the top of the `fieldMindChangelog` list with 3 sections (Restore card, design, implementation)
+- Created `fastlane/metadata/android/en-US/changelogs/2116.txt` with ≤500-char store-flavored recap
+
+## Verification
+
+- **Final grep verifier** confirmed: `QuickRestoreCard` composable exists with correct signature, `Restore from backup` + `Choose file` strings present, `activeTab = BackupTab.IMPORT` + `filePickerLauncher.launch(...)` wired in the screen file, `cuteShadow` import added, no orphan imports.
+- **`code-reviewer-minimax-m3` verdict**: PASS on both files. Brace balance intact. Click handler correctly references the `filePickerLauncher` declared in the screen scope.
+- **Two-commit release pattern** matches Round 9 / 10 — source code first, changelog + fastlane second.
+
+## Self-corrections caught during review
+
+- None — the implementation followed the established `HeroStatusCard` + `ExportHistoryItemCard` patterns (journal-aware styling, clickable + pressScale + cuteShadow modifier chain), so no surprises.
+
+## What this unlocks
+
+- The Import flow is now reachable from any tab (Export / Import / Backup) in one tap — the hidden tab pill is no longer the only entry point.
+- Users restoring a backup from another device or after a fresh install can find the Restore CTA immediately, without scanning for a hidden Import tab.
+- The card design honors the active journal aesthetic, so the CTA fits naturally into the rest of the design language instead of looking like an afterthought.
+
+## Next-session followups
+
+1. **Manual device test** — verify the new Restore from backup card appears below the Hero Status Card on the Backup & Restore screen, that tapping it switches to the Import tab and opens the file picker, and that the journal-aware styling (border + texture + shape) updates correctly when switching between journal styles in Settings → Appearance.
+2. **CI re-run verification** — v0.50.1 should compile cleanly with no new errors. Watch the build for any latent issue.
+3. **Design follow-up** — if a user opens the Backup & Restore screen while the Import tab is already active, the Restore card is still visible. Decide whether to also hide it when the active tab is Import (to avoid redundant UI), or keep it always visible for consistency.
