@@ -62,6 +62,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import fieldmind.research.app.ui.theme.CuteGradients
@@ -286,8 +287,7 @@ private fun SoundPreviewSection() {
     val interactionSounds = listOf(
         PreviewSound("Chime", MaterialSymbolIcon("music_note"), FieldMindSounds.CHIME, "App open"),
         PreviewSound("Shutter", MaterialSymbolIcon("photo_camera"), FieldMindSounds.SHUTTER, "Photo capture"),
-        PreviewSound("Water drop", MaterialSymbolIcon("water_drop"), FieldMindSounds.WATER_DROP, "Save
-observation"),
+        PreviewSound("Water drop", MaterialSymbolIcon("water_drop"), FieldMindSounds.WATER_DROP, "Save observation"),
         PreviewSound("Success", MaterialSymbolIcon("celebration"), FieldMindSounds.SUCCESS, "Achievement"),
     )
 
@@ -380,17 +380,23 @@ private fun SoundPreviewButton(
     modifier: Modifier = Modifier
 ) {
     val haptics = rememberFieldMindHaptics()
+    val scope = rememberCoroutineScope()
     var isPlaying by remember { mutableStateOf(false) }
+
+    // Auto-reset highlight state after sound finishes
+    if (isPlaying) {
+        LaunchedEffect(Unit) {
+            delay(1500L)
+            isPlaying = false
+        }
+    }
 
     Surface(
         onClick = {
             haptics.light()
-            isPlaying = true
-            soundManager.play(soundId)
-            // Auto-reset after sound duration
-            kotlinx.coroutines.MainScope().launch {
-                kotlinx.coroutines.delay(1500L)
-                isPlaying = false
+            scope.launch {
+                isPlaying = true
+                soundManager.play(soundId)
             }
         },
         shape = RoundedCornerShape(16.dp),
