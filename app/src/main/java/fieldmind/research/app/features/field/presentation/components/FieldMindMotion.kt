@@ -192,7 +192,7 @@ object FieldMindMotion {
     fun bouncySpring(
         dampingRatio: Float = 0.65f,
         stiffness: Float = 120f
-    ) = spring(dampingRatio = dampingRatio, stiffness = stiffness)
+    ) = spring<Float>(dampingRatio = dampingRatio, stiffness = stiffness)
 
     /** Entrance bounce: soft, playful, 2-3 overshoots before settling. */
     val bouncyEntrance = bouncySpring(dampingRatio = 0.60f, stiffness = 110f)
