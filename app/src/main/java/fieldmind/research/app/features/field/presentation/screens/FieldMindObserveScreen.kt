@@ -940,7 +940,8 @@ fun ObserveScreen(
                                 Text("Session Complete", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {                                        val finalStartedAt = session.timerStartedAt
                                         MetricTile(
-                                            "Duration",
+                                            "Duration",,
+                                        animate = true,
                                             formatDurationCompact(
                                                 session.timerAccumulatedMs +
                                                     (if (session.timerRunning && finalStartedAt != null) System.currentTimeMillis() - finalStartedAt else 0L)
@@ -948,7 +949,8 @@ fun ObserveScreen(
                                             FieldMindIcons.Calendar,
                                             Modifier.weight(1f)
                                         )
-                                    MetricTile(
+                                    MetricTile(,
+                                        animate = true,
                                         "Observations",
                                         "${session.sessionObservationCount}",
                                         FieldMindIcons.Observation,
