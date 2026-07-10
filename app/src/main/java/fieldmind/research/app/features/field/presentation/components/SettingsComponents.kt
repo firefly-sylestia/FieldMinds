@@ -46,6 +46,11 @@ import fieldmind.research.app.ui.theme.CuteElevations
  * A settings card with a dynamic gradient background based on the user's
  * card gradient style and opacity settings. Wraps content in a pill-shaped
  * card with a plush shadow.
+ *
+ * Phase 3 (Whimsical Redesign): reads [LocalJournalStyle] to apply the
+ * active journal's corner radius, border style, and per-style texture
+ * overlay (parchment tones for Victorian, paper fibers for Sketchbook,
+ * dot-grid for BulletJournal, watercolor washes for Ghibli).
  */
 @Composable
 fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
@@ -54,17 +59,26 @@ fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
     val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
-    val gradient = CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
+    val userGradient = CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
+    val journal = LocalJournalStyle.current
+    val shape = RoundedCornerShape(journal.cardCornerRadius)
+    val effectiveBorder = journalBorderStroke(journal)
+    val textureModifier = journalTextureModifier(journal)
+    val journalBrush = journalCardBrush(journal, fallbackColor = MaterialTheme.colorScheme.surfaceContainerLow)
     Card(
-        modifier = Modifier.fillMaxWidth().cuteShadow(),
-        shape = RoundedCornerShape(32.dp),
+        modifier = Modifier.fillMaxWidth().cuteShadow().then(textureModifier),
+        shape = shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+        border = effectiveBorder
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(brush = gradient, shape = RoundedCornerShape(32.dp))
+                .background(
+                    brush = if (journal.useGradientCards) journalBrush else userGradient,
+                    shape = shape
+                )
         ) { Column(content = content) }
     }
 }
