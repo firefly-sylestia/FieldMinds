@@ -21,6 +21,7 @@ import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import java.text.SimpleDateFormat
@@ -170,6 +171,84 @@ fun HeroStatusCard(
 // ══════════════════════════════════════════════════════════════════════
 //  Tab Pill Selector
 // ══════════════════════════════════════════════════════════════════════
+
+@Composable
+fun QuickRestoreCard(
+    onClick: () -> Unit
+) {
+    val journal = LocalJournalStyle.current
+    val cardShape = journalCardShape(journal)
+    val chipShape = journalChipShape(journal)
+
+    Card(
+        shape = cardShape,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
+        border = journalBorderStroke(journal),
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(journalTextureModifier(journal))
+            .clickable { onClick() }
+            .pressScale(scaleDown = 0.97f)
+            .cuteShadow(elevation = CuteElevations.clickableTier, shape = cardShape)
+    ) {
+        Row(
+            Modifier.fillMaxWidth().padding(18.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            Box(
+                Modifier.size(48.dp).clip(chipShape)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    FieldMindIcons.Download,
+                    null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    size = 26.dp
+                )
+            }
+            Column(Modifier.weight(1f)) {
+                Text(
+                    "Restore from backup",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    "Import a .fieldmind, .zip, or .json archive — observations, notes, projects, media, and settings",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Surface(
+                shape = chipShape,
+                color = MaterialTheme.colorScheme.primary
+            ) {
+                Row(
+                    Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        "Choose file",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                    Icon(
+                        MaterialSymbolIcon("arrow_forward"),
+                        null,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        size = 16.dp
+                    )
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun TabPillSelector(

@@ -296,6 +296,16 @@ fun BackupAndRestoreScreen(
                 )
             }
 
+            // ── Quick restore CTA — always visible, switches to Import tab + auto-launches file picker ──
+            item {
+                QuickRestoreCard(
+                    onClick = {
+                        activeTab = BackupTab.IMPORT
+                        filePickerLauncher.launch(arrayOf("application/json", "application/octet-stream", "application/zip", "*/*"))
+                    }
+                )
+            }
+
             // ── 3-tab pill selector ──
             item {
                 TabPillSelector(
