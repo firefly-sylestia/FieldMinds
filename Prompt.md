@@ -261,3 +261,62 @@ Implement Phase 2 of WHIMSICAL_REDESIGN_PLAN: replace the static warmth + textur
    - Watch for performance hiccups on older devices (especially BulletJournal + Full tier — highest draw-op count).
 2. **Phase 3** — Wire `JournalConfig.cardCornerRadius` + `borderStyle` + `borderWidth` into existing `JournalCard` and Card composables so the journal style visibly affects cards (not just the skybox).
 3. **Manual verification of the `crown` MaterialSymbolIcon** in the Victorian journal-style swatch in Phase 1 — confirm it renders correctly on-device; swap to `local_florist` if it falls back to tofu.
+
+---
+
+# Whimsical Redesign — Round 5 (Card Alignment) Completion Summary
+
+## Task
+
+User complaint: "many cards doesn't follow the ui design language they design such as the media and sharing card data tolls card filedmap card and observation timeline card". Make Home Screen cards follow the existing UI design language.
+
+## Diagnosis
+
+The 5 named parents are **already aligned** via `JournalCard` / `JournalClickableCard` wrappers:
+
+| User-named parent | Wrapper used |
+|---|---|
+| Field Map | `JournalClickableCard` ✅ |
+| Data Tools parent | `JournalCard` ✅ |
+| Media & Sharing parent | `JournalCard` ✅ |
+| Observation Timeline | `JournalCard` ✅ |
+| Reading Review | raw `Card(34dp, surfaceContainerLow, nonClickableTier)` (matches JournalCard defaults) ✅ |
+
+The actual drift is in the **inner mini-tiles** that lacked the theme-aware `Modifier.cuteShadow(...)` extension:
+
+- `DataToolMiniCard` (8 instances: 4 Media/Sharing + 4 Data Tools quick tools)
+- `MiniActionTile` (ReadingReviewCard inline tiles)
+- `QuickActionChip` (QuickActionsRow)
+- `HeroActionChip` (CompactHomeHeader Capture/Note/Projects)
+
+Each had `Card`/`Surface` with elevation tier set but no theme-aware shadow modifier → dark-mode cards felt flat on AMOLED.
+
+## What landed (commit `802e58df`, pushed to `origin/finetune`)
+
+1. **Import added** at L90: `import fieldmind.research.app.ui.theme.cuteShadow`
+2. **`DataToolMiniCard`** (L2889) — chained `Modifier.cuteShadow(CuteElevations.nonClickableTier, RoundedCornerShape(24.dp))`
+3. **`MiniActionTile`** (L2050) — chained `Modifier.cuteShadow(CuteElevations.nonClickableTier, RoundedCornerShape(28.dp))` AFTER `.clickable(onClick = onClick)`
+4. **`QuickActionChip`** (L1989) — chained `Modifier.cuteShadow(CuteElevations.clickableTier, RoundedCornerShape(24.dp))` AFTER `.clickable { haptics.light(); onNavigate(screen) }`
+5. **`HeroActionChip`** (L1357) — chained `Modifier.cuteShadow(CuteElevations.clickableTier, RoundedCornerShape(24.dp))` AFTER `.pressScale(...)`
+
+Diff stat: `+17 / -4` on `FieldMindHomeScreen.kt`.
+
+## Tier rationale
+
+`cuteShadow` elevation tier MIRRORS existing `cardElevation` tier for each tile (keeps shadow/elevation visually consistent within each tile):
+
+| Tile | cuteShadow | cardElevation |
+|---|---|---|
+| DataToolMiniCard | nonClickable (4dp) | nonClickable (4dp) |
+| MiniActionTile | nonClickable (4dp) | nonClickable (4dp) |
+| QuickActionChip | clickable (6dp) | clickable (6dp) |
+| HeroActionChip | clickable (6dp) | Surface tonal 0dp |
+
+## Verification
+
+- **Brace balance**: HOME 660 open / 660 close / delta 0.
+- **cuteShadow sites**: 5 total (1 import + 4 call sites at L1357, L1989, L2050, L2889).
+- **Shape match**: all 4 cuteShadow shape args match underlying Card/Surface shape.
+- **Modifier order**: cuteShadow uses `Modifier.shadow(...)` (draw-only, no pointer consumption), so chaining AFTER `clickable{}`/`pressScale()`/`expressivePress()` is safe.
+- **`@Composable` context**: cuteShadow is `@Composable`, called inside modifier chain of `@Composable` functions. Compose tracks correctly.
+- **`code-reviewer-minimax-m3` verdict**: PASS-with-caveats. Tier-vs-clickability + dark-mode shadow-stacking concerns are subjective styling deferred to device-side testing.

@@ -126,6 +126,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object Search : FieldMindScreen("field_search", "Search", FieldMindIcons.Search)
     data object Changelog : FieldMindScreen("field_changelog", "What's new", FieldMindIcons.Info)
     data object BugReport : FieldMindScreen("field_bug_report", "Report a bug", MaterialSymbolIcon("bug_report"))
+    data object CheckForUpdates : FieldMindScreen("field_check_updates", "Check for updates", MaterialSymbolIcon("system_update"))
     data object Progress : FieldMindScreen("field_progress", "Progress", FieldMindIcons.Check)
     data object Flashcards : FieldMindScreen("field_flashcards_session", "Review", FieldMindIcons.Flashcard)
     data object Reader : FieldMindScreen("field_reader", "Reader", FieldMindIcons.Book)
@@ -1198,6 +1199,15 @@ private fun FieldMindNavHost(
                     )
                 }
             }
+            composable(FieldMindScreen.CheckForUpdates.route) {
+                SwipeBackHost(onBack = { safeBack() }) {
+                    CheckForUpdatesScreen(
+                        appSettings = appSettings,
+                        onBack = { safeBack() },
+                        onOpenChangelog = { navController.navigateToDestination(FieldMindScreen.Changelog.route) }
+                    )
+                }
+            }
             composable(FieldMindScreen.Progress.route) { SwipeBackHost(onBack = { safeBack() }) { InsightsScreen(viewModel = viewModel, onBack = { safeBack() }, onNavigate = { navController.navigateToDestination(it.route) }, onOpenDetail = openDetail) } }
             composable(FieldMindScreen.Flashcards.route) { SwipeBackHost(onBack = { safeBack() }) { FlashcardSessionScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.WeatherDatabase.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherDatabaseScreen(viewModel = viewModel, onBack = { safeBack() }, onOpenSettings = { navController.navigateToDestination(FieldMindScreen.SettingsWeather.route) }, onOpenDetail = openDetail, onOpenWeatherCatalog = { navController.navigateToDestination(FieldMindScreen.WeatherCatalog.route) }) } }
@@ -1230,6 +1240,7 @@ private fun FieldMindNavHost(
                         onOpenAutoGen = { navController.navigateToDestination(FieldMindScreen.SettingsAutoGen.route) },
                         onOpenNotifications = { navController.navigateToDestination(FieldMindScreen.SettingsNotifications.route) },
                         onOpenAnimations = { navController.navigateToDestination(FieldMindScreen.SettingsAnimation.route) },
+                        onOpenCheckForUpdates = { navController.navigateToDestination(FieldMindScreen.CheckForUpdates.route) },
                     )
                 }
             }

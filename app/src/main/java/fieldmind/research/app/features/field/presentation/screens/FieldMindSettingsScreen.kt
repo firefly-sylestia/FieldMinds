@@ -118,7 +118,8 @@ fun FieldMindSettingsScreen(
     onOpenScreenVisibility: (() -> Unit)? = null,
     onOpenNotifications: (() -> Unit)? = null,
     onOpenAnimations: (() -> Unit)? = null,
-    onOpenBugReport: (() -> Unit)? = null
+    onOpenBugReport: (() -> Unit)? = null,
+    onOpenCheckForUpdates: (() -> Unit)? = null
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
@@ -281,7 +282,7 @@ fun FieldMindSettingsScreen(
                 )
             }
         }
-        item { SettingsNavCard("Check for updates", "Latest release notes from GitHub", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenChangelog?.invoke() } }
+        item { SettingsNavCard("Check for updates", "Manually check for the latest release on GitHub", FieldMindIcons.Info, FieldMindTheme.colors.info) { onOpenCheckForUpdates?.invoke() } }
         item { SettingsNavCard("Report a bug", "File feedback directly to the project's GitHub issues", MaterialSymbolIcon("bug_report"), MaterialTheme.colorScheme.error) { onOpenBugReport?.invoke() } }
 
         item { SectionHeader("About & advanced", "Developer tools, changelog, and app info") }
@@ -804,11 +805,9 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
         // ╔══════════════════════════════════════════════════════════════╗
         // ║  JOURNAL AESTHETIC                                          ║
         // ╚══════════════════════════════════════════════════════════════╝
-        item { SectionHeader("Journal aesthetic", "Whimsical personality, background motion, and chatty micro-delights") }
+        item { SectionHeader("Journal aesthetic", "Whimsical journal personality and bottom-nav animation style") }
         item {
             val journalStyleKey by settings.journalStyle.collectAsState()
-            val backgroundAnimKey by settings.backgroundAnimation.collectAsState()
-            val microDelightKey by settings.microDelightIntensity.collectAsState()
             val navBarStyleKey by settings.navBarStyle.collectAsState()
 
             SettingsGroupCard {
@@ -913,31 +912,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
 
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
 
-                    // ── 2. Background Motion (3-pill radio) ──
-                    PillRadioGroup(
-                        title = "Background motion",
-                        description = "How lively the background scene animates. 'Static' saves battery.",
-                        icon = MaterialSymbolIcon("animation"),
-                        options = BackgroundAnimationLevel.entries.toList(),
-                        selectedKey = backgroundAnimKey,
-                        onSelect = { settings.setBackgroundAnimation(it.key) }
-                    )
-
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
-
-                    // ── 3. Micro-delights (3-pill radio) ──
-                    PillRadioGroup(
-                        title = "Micro-delights",
-                        description = "Whimsical touches on captures, streaks, button presses, and celebrations.",
-                        icon = MaterialSymbolIcon("auto_awesome"),
-                        options = MicroDelightIntensity.entries.toList(),
-                        selectedKey = microDelightKey,
-                        onSelect = { settings.setMicroDelightIntensity(it.key) }
-                    )
-
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
-
-                    // ── 4. Nav Bar Style (3-pill radio) ──
+                    // ── 2. Nav Bar Style (3-pill radio) ──
                     PillRadioGroup(
                         title = "Nav bar style",
                         description = "How the active tab indicator animates across the bottom bar.",
@@ -2195,7 +2170,7 @@ fun WeatherSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
             ToggleItem("Show pressure", "Atmospheric pressure in hPa.", showPressure, settings::setWeatherShowPressure, FieldMindIcons.Compress)
                     HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                    ToggleItem("Cloud animations", "Animated clouds and partly-cloudy sky effects.", showCloudAnimation, settings::setWeatherShowCloudAnimation, FieldMindIcons.Cloud)
+
         }
         }
     }
@@ -2693,106 +2668,12 @@ fun DeveloperSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, onO
                     }
                 }
             }
-            // ── Animation Speed Preset (quick access for testing) ──
-            item {
-                val animationsEnabled by settings.animationsEnabled.collectAsState()
-                val speedPreset by settings.animationSpeedPreset.collectAsState()
-                SettingsGroupCard {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
-                                        .background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(MaterialSymbolIcon("motion_photos_on"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
-                                }
-                                Text("Animation speed", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
-                            }
-                            Text(
-                                speedPreset,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            listOf("Reduced", "Normal", "Enhanced").forEach { preset ->
-                                val selected = speedPreset == preset
-                                val mIcon = when (preset) {
-                                    "Reduced" -> MaterialSymbolIcon("slow_motion_video")
-                                    "Normal" -> MaterialSymbolIcon("speed")
-                                    else -> MaterialSymbolIcon("fast_forward")
-                                }
-                                Surface(
-                                    onClick = { settings.setAnimationSpeedPreset(preset) },
-                                    shape = RoundedCornerShape(22.dp),
-                                    color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                    border = if (selected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Column(
-                                        Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        Icon(
-                                            mIcon,
-                                            null,
-                                            tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                            size = 22.dp
-                                        )
-                                        Text(
-                                            preset,
-                                            style = MaterialTheme.typography.labelSmall,
-                                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                                            color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    MaterialSymbolIcon("motion_photos_paused"),
-                                    null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    size = 18.dp
-                                )
-                                Text(
-                                    "Enable animations",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            }
-                            Switch(
-                                checked = animationsEnabled,
-                                onCheckedChange = { settings.setAnimationsEnabled(it) }
-                            )
-                        }
-                    }
-                }
-            }
+            // ── Animation Speed Preset, Enable animations, Cloud animations moved to Settings → Animations page ──
             item {
                 SettingsGroupCard {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Debug options", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                         ToggleItem("Debug logging", "Enable verbose logging for troubleshooting.", debugLogging, settings::setDebugLogging, FieldMindIcons.Sparkle)
-                        HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                         HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                         ToggleItem("Show weather test panel", "Show weather condition test controls on the Home screen weather widget.", showWeatherTest, settings::setShowWeatherTestPanel, MaterialSymbolIcon("test_tube"))
                         ToggleItem("Data integrity check on launch", "Run database health checks on app startup.", dataIntegrityCheck, settings::setDataIntegrityCheckOnLaunch, FieldMindIcons.Archive)
@@ -3632,6 +3513,61 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
 
+        // ── Visual Motion ─ Atmospheric scene liveness + whimsical touches ──
+        item { SectionHeader("Visual motion", "Atmospheric scene liveness and whimsical touches") }
+        item {
+            val backgroundAnimKey by settings.backgroundAnimation.collectAsState()
+            val microDelightKey by settings.microDelightIntensity.collectAsState()
+            val showCloudAnimation by settings.weatherShowCloudAnimation.collectAsState()
+            SettingsGroupCard {
+                Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    PillRadioGroup(
+                        title = "Background motion",
+                        description = "How lively the background scene animates. 'Static' saves battery.",
+                        icon = MaterialSymbolIcon("animation"),
+                        options = BackgroundAnimationLevel.entries.toList(),
+                        selectedKey = backgroundAnimKey,
+                        onSelect = { settings.setBackgroundAnimation(it.key) }
+                    )
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
+                    PillRadioGroup(
+                        title = "Micro-delights",
+                        description = "Whimsical touches on captures, streaks, button presses, and celebrations.",
+                        icon = MaterialSymbolIcon("auto_awesome"),
+                        options = MicroDelightIntensity.entries.toList(),
+                        selectedKey = microDelightKey,
+                        onSelect = { settings.setMicroDelightIntensity(it.key) }
+                    )
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
+                    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Box(
+                                Modifier.size(28.dp).clip(RoundedCornerShape(14.dp))
+                                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(MaterialSymbolIcon("cloud"), contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
+                            }
+                            Text("Cloud animations", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Text("Animated cloud effects in the weather widget. Turn off to render flat cloud icons.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Spacer(Modifier.height(4.dp))
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Icon(FieldMindIcons.Cloud, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
+                                Text("Enable cloud animations", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                            }
+                            Switch(checked = showCloudAnimation, onCheckedChange = { settings.setWeatherShowCloudAnimation(it) })
+                        }
+                    }
+                }
+            }
+        }
+
         item { SectionHeader("Animation speed", "Controls how fast entrance animations play") }
         item {
             SettingsGroupCard {
@@ -3920,6 +3856,179 @@ private fun SpeedPresetAnimationPreview(
                     shape = RoundedCornerShape(20.dp),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp)
                 ) { Text("Spin", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold) }
+            }
+        }
+    }
+}
+
+
+// ══════════════════════════════════════════════════════════════════════
+//  Check for Updates Page — Manually run UpdateChecker.check + show result
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+fun CheckForUpdatesScreen(
+    appSettings: fieldmind.research.app.shared.data.model.AppSettings,
+    onBack: () -> Unit,
+    onOpenChangelog: () -> Unit
+) {
+    val context = LocalContext.current
+    val updateChecker = remember { fieldmind.research.app.infrastructure.updates.UpdateChecker(appSettings) }
+    val updateInfo by updateChecker.updateInfo.collectAsState()
+    val updateEnabled by appSettings.updateCheckEnabled.collectAsState()
+    val lastCheckedAtMs by appSettings.updateLastCheckedAt.collectAsState()
+    val scope = rememberCoroutineScope()
+    val uriHandler = LocalUriHandler.current
+
+    // Helper to run a check
+    fun refreshNow(force: Boolean = true) {
+        if (!updateEnabled) {
+            context.startActivity(android.content.Intent(android.content.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(android.net.Uri.parse("package:${context.packageName}")))
+            return
+        }
+        scope.launch {
+            updateChecker.check(force = force)
+        }
+    }
+
+    SettingsSubPage("Check for updates", icon = MaterialSymbolIcon("system_update"), onBack = onBack) {
+        item { SectionHeader("Update status", "Run a manual check against the latest GitHub release") }
+
+        item {
+            val cardShape = RoundedCornerShape(32.dp)
+            val cardColors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+            Card(shape = cardShape, colors = cardColors, elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = cardShape)) {
+                Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                // ── Status icon + title + body + action per UpdateInfo state ──
+                when (val info = updateInfo) {
+                    fieldmind.research.app.infrastructure.updates.UpdateInfo.Idle -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(MaterialSymbolIcon("system_update"), contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 24.dp)
+                            }
+                            Column(Modifier.weight(1f)) {
+                                Text("Ready to check", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                                Text("Tap below to fetch the latest release from GitHub.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                    fieldmind.research.app.infrastructure.updates.UpdateInfo.Loading -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            CircularProgressIndicator(modifier = Modifier.size(36.dp), strokeWidth = 3.dp, color = MaterialTheme.colorScheme.primary)
+                            Column(Modifier.weight(1f)) {
+                                Text("Checking for updates…", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                                Text("Reaching out to api.github.com", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                    is fieldmind.research.app.infrastructure.updates.UpdateInfo.UpdateAvailable -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(FieldMindTheme.colors.positive.copy(alpha = 0.18f)), contentAlignment = Alignment.Center) {
+                                Icon(FieldMindIcons.Sparkle, contentDescription = null, tint = FieldMindTheme.colors.positive, size = 24.dp)
+                            }
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                Text("New release available", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium, color = FieldMindTheme.colors.positive)
+                                Text(info.versionName, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyLarge)
+                                if (info.publishedAt.isNotBlank()) {
+                                    Text("Published ${info.publishedAt}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
+                                if (info.notes.isNotBlank()) {
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(info.notes.take(400) + if (info.notes.length > 400) "…" else "", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface)
+                                }
+                            }
+                        }
+                    }
+                    fieldmind.research.app.infrastructure.updates.UpdateInfo.UpToDate -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(FieldMindIcons.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
+                            }
+                            Column(Modifier.weight(1f)) {
+                                Text("You're on the latest version", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                                Text("Your installation matches the newest release on GitHub.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                    is fieldmind.research.app.infrastructure.updates.UpdateInfo.Unavailable -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(MaterialSymbolIcon("info"), contentDescription = null, tint = MaterialTheme.colorScheme.tertiary, size = 22.dp)
+                            }
+                            Column(Modifier.weight(1f)) {
+                                Text("Update checker unavailable", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                                Text(info.reason, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                    is fieldmind.research.app.infrastructure.updates.UpdateInfo.Errored -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.errorContainer), contentAlignment = Alignment.Center) {
+                                Icon(MaterialSymbolIcon("error"), contentDescription = null, tint = MaterialTheme.colorScheme.error, size = 22.dp)
+                            }
+                            Column(Modifier.weight(1f)) {
+                                Text("Couldn't reach GitHub", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.error)
+                                Text(info.message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                }
+                // ── Action button row: Check now / Open release / View changelog ──
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                    val isUpToDate = updateInfo is fieldmind.research.app.infrastructure.updates.UpdateInfo.UpToDate
+                    val isAvailable = updateInfo is fieldmind.research.app.infrastructure.updates.UpdateInfo.UpdateAvailable
+                    val isLoading = updateInfo is fieldmind.research.app.infrastructure.updates.UpdateInfo.Loading
+                    Button(
+                        onClick = { refreshNow(force = true) },
+                        enabled = !isLoading,
+                        shape = RoundedCornerShape(22.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(MaterialSymbolIcon("refresh"), contentDescription = null, size = 18.dp)
+                        Spacer(Modifier.width(6.dp))
+                        Text(if (isUpToDate) "Check again" else "Check now")
+                    }
+                    if (isAvailable) {
+                        val releaseUrl = (updateInfo as fieldmind.research.app.infrastructure.updates.UpdateInfo.UpdateAvailable).releaseUrl
+                        OutlinedButton(
+                            onClick = { runCatching { uriHandler.openUri(releaseUrl) } },
+                            shape = RoundedCornerShape(22.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(MaterialSymbolIcon("open_in_new"), contentDescription = null, size = 18.dp)
+                            Spacer(Modifier.width(6.dp))
+                            Text("Open release")
+                        }
+                    }
+                }
+                if (updateInfo is fieldmind.research.app.infrastructure.updates.UpdateInfo.UpdateAvailable) {
+                    OutlinedButton(
+                        onClick = onOpenChangelog,
+                        shape = RoundedCornerShape(22.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(FieldMindIcons.Info, contentDescription = null, size = 18.dp)
+                        Spacer(Modifier.width(6.dp))
+                        Text("View full changelog")
+                    }
+                }
+                // ── Last-checked timestamp + auto-check toggle info ──
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                    Column {
+                        Text(
+                            if (lastCheckedAtMs > 0L) "Last checked: ${java.text.SimpleDateFormat("MMM d, HH:mm", java.util.Locale.getDefault()).format(java.util.Date(lastCheckedAtMs))}" else "Not checked yet",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            if (updateEnabled) "Auto-check on launch is enabled" else "Auto-check on launch is disabled — toggle in Settings → Updates",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+            }
             }
         }
     }
