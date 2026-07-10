@@ -439,7 +439,7 @@ fun WeatherDatabaseScreen(
             if (weatherObs.isEmpty()) {
                 item {
                     InfoCard(
-                        shape = RoundedCornerShape(30.dp),,
+                        shape = RoundedCornerShape(30.dp),
                         animate = true,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         tonalElevation = 0.dp, shadowElevation = 0.dp,
@@ -523,8 +523,8 @@ private fun LiveCurrentWeatherCard(
     }
     val weatherGradient = Brush.horizontalGradient(displayColors)
 
-    InfoCard(,
-                        animate = true,
+    InfoCard(
+        animate = true,
         shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         tonalElevation = 0.dp, shadowElevation = 0.dp,
@@ -621,8 +621,7 @@ private fun LiveCurrentWeatherCard(
                     )
                     }
 
-                    // Glass-morphism detailed metrics card,
-                        animate = true,
+                    // Glass-morphism detailed metrics card
                     InfoCard(
                         shape = RoundedCornerShape(36.dp),
                         colors = CardDefaults.cardColors(containerColor = if (isDarkTheme || isNight) Color.White.copy(alpha = 0.12f) else Color(0xFF1A1A3E).copy(alpha = 0.06f)),
@@ -751,7 +750,6 @@ private fun StatCard(
     value: String,
     color: androidx.compose.ui.graphics.Color,
     modifier: Modifier = Modifier,
-                        animate = true,
 ) {
     InfoCard(
         shape = RoundedCornerShape(24.dp),

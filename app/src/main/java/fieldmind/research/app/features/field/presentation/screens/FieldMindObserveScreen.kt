@@ -938,23 +938,20 @@ fun ObserveScreen(
                         ) {
                             Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                                 Text("Session Complete", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {                                        val finalStartedAt = session.timerStartedAt
-                                        MetricTile(
-                                            "Duration",,
-                                        animate = true,
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {                                        val finalStartedAt = session.timerStartedAt                                                MetricTile("Duration",
                                             formatDurationCompact(
                                                 session.timerAccumulatedMs +
                                                     (if (session.timerRunning && finalStartedAt != null) System.currentTimeMillis() - finalStartedAt else 0L)
                                             ),
                                             FieldMindIcons.Calendar,
-                                            Modifier.weight(1f)
-                                        )
-                                    MetricTile(,
-                                        animate = true,
+                                            Modifier.weight(1f),
+                                            animate = true
+                                        )                                                MetricTile(
                                         "Observations",
                                         "${session.sessionObservationCount}",
                                         FieldMindIcons.Observation,
-                                        Modifier.weight(1f)
+                                        Modifier.weight(1f),
+                                        animate = true
                                     )
                                 }
                                 if (session.sessionName.isNotBlank()) {
