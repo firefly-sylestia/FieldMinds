@@ -309,6 +309,18 @@ class FieldMindSettings private constructor(context: Context) {
     private val _dataIntegrityCheckOnLaunch = MutableStateFlow(prefs.getBoolean(KEY_DATA_INTEGRITY_CHECK, false))
     val dataIntegrityCheckOnLaunch: StateFlow<Boolean> = _dataIntegrityCheckOnLaunch.asStateFlow()
 
+    // ── Animation master toggle & speed preset ──
+    private val _animationsEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIMATIONS_ENABLED, true))
+    val animationsEnabled: StateFlow<Boolean> = _animationsEnabled.asStateFlow()
+
+    private val _animationSpeedPreset = MutableStateFlow(
+        prefs.getString(KEY_ANIMATION_SPEED_PRESET, "Normal") ?: "Normal"
+    )
+    val animationSpeedPreset: StateFlow<String> = _animationSpeedPreset.asStateFlow()
+
+    fun setAnimationsEnabled(value: Boolean) = edit(KEY_ANIMATIONS_ENABLED, value) { _animationsEnabled.value = value; refreshAnimationConfig() }
+    fun setAnimationSpeedPreset(value: String) = edit(KEY_ANIMATION_SPEED_PRESET, value) { _animationSpeedPreset.value = value; refreshAnimationConfig() }
+
     // ── Animation tuning settings (elegant, slow defaults) ──
     private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.95f))
     val animEntranceDamping: StateFlow<Float> = _animEntranceDamping.asStateFlow()
@@ -743,16 +755,23 @@ class FieldMindSettings private constructor(context: Context) {
 
     fun setAppPinHash(value: String) = edit(KEY_APP_PIN_HASH, value) { _appPinHash.value = value }
 
+    private fun speedMultiplier(): Float = when (_animationSpeedPreset.value) {
+        "Reduced" -> 0.40f
+        "Enhanced" -> 2.0f
+        else -> 1.0f
+    }
+
     fun currentAnimationConfig(): AnimationConfig {
+        val mult = if (_animationsEnabled.value) speedMultiplier() else 100_000f
         return AnimationConfig(
             entranceDampingRatio = _animEntranceDamping.value,
-            entranceStiffness = _animEntranceStiffness.value,
+            entranceStiffness = (_animEntranceStiffness.value * mult).coerceAtLeast(1f),
             swipeBackDampingRatio = _animSwipeBackDamping.value,
-            swipeBackStiffness = _animSwipeBackStiffness.value,
+            swipeBackStiffness = (_animSwipeBackStiffness.value * mult).coerceAtLeast(1f),
             swipeThreshold = _animSwipeThreshold.value,
             swipeScaleFactor = _animSwipeScaleFactor.value,
             tabEntranceDampingRatio = _animTabEntranceDamping.value,
-            tabEntranceStiffness = _animTabEntranceStiffness.value
+            tabEntranceStiffness = (_animTabEntranceStiffness.value * mult).coerceAtLeast(1f)
         )
     }
 
@@ -1061,6 +1080,8 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
         put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
         put(KEY_SEASONAL_COLORS, _seasonalColorsEnabled.value)
+        put(KEY_ANIMATIONS_ENABLED, _animationsEnabled.value)
+        put(KEY_ANIMATION_SPEED_PRESET, _animationSpeedPreset.value)
     }.toString(2)
 
     /**
@@ -1199,6 +1220,8 @@ class FieldMindSettings private constructor(context: Context) {
         applyString(KEY_CARD_GRADIENT_STYLE)
         applyBoolean(KEY_SEASONAL_COLORS)
         applyFloat(KEY_GRADIENT_OPACITY)
+        applyBoolean(KEY_ANIMATIONS_ENABLED, true)
+        applyString(KEY_ANIMATION_SPEED_PRESET)
         edit.apply()
 
         // Refresh StateFlows for all edited keys that have backing StateFlows
@@ -1293,6 +1316,8 @@ class FieldMindSettings private constructor(context: Context) {
         _cardGradientStyle.value = prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f)
         _seasonalColorsEnabled.value = prefs.getBoolean(KEY_SEASONAL_COLORS, true)
+        _animationsEnabled.value = prefs.getBoolean(KEY_ANIMATIONS_ENABLED, true)
+        _animationSpeedPreset.value = prefs.getString(KEY_ANIMATION_SPEED_PRESET, "Normal") ?: "Normal"
     }
 
     private inline fun edit(key: String, value: String, after: () -> Unit) { prefs.edit().putString(key, value).apply(); after() }
@@ -1440,5 +1465,8 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_ANIM_SWIPE_SCALE = "anim_swipe_scale"
         private const val KEY_ANIM_TAB_ENTRANCE_DAMPING = "anim_tab_entrance_damping"
         private const val KEY_ANIM_TAB_ENTRANCE_STIFFNESS = "anim_tab_entrance_stiffness"
+        // ── Animation master toggle & speed preset ──
+        private const val KEY_ANIMATIONS_ENABLED = "animations_enabled"
+        private const val KEY_ANIMATION_SPEED_PRESET = "animation_speed_preset"
     }
 }

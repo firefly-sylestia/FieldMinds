@@ -109,7 +109,8 @@ fun FieldMindSettingsScreen(
     onOpenSpeciesId: (() -> Unit)? = null,
     onOpenAutoGen: (() -> Unit)? = null,
     onOpenScreenVisibility: (() -> Unit)? = null,
-    onOpenNotifications: (() -> Unit)? = null
+    onOpenNotifications: (() -> Unit)? = null,
+    onOpenAnimations: (() -> Unit)? = null
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
@@ -171,6 +172,7 @@ fun FieldMindSettingsScreen(
         item { SectionHeader("Display & format", "Appearance, units, and display preferences") }
         item { SettingsNavCard("Appearance", "Theme, dynamic color, map, and layout", FieldMindIcons.Palette, FieldMindTheme.colors.info) { onOpenAppearance?.invoke() } }
         item { SettingsNavCard("Units & format", "Temperature, distance, date/time display", FieldMindIcons.Settings, FieldMindTheme.colors.info) { onOpenUnits?.invoke() } }
+        item { SettingsNavCard("Animations", "Entrance effects, speed preset, disable animations", MaterialSymbolIcon("motion_photos_on"), FieldMindTheme.colors.flashcard) { onOpenAnimations?.invoke() } }
 
         // ╔════════════════════════════════════════════╗
         // ║  DATA ENTRY                                ║
@@ -3268,6 +3270,127 @@ fun AutoGenerationSettingsPage(
                         """When enabled, auto-generation runs in the background after you add new observations.
                         It scans your data for key concepts, patterns, and facts, then builds flashcards and questions — all on your device, with no data leaving your phone.
                         You can always manually create flashcards and questions from the Library tab regardless of these settings.""".trimIndent(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Animation Settings Page — Speed preset, disable toggle
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
+    val settings = viewModel.fieldSettings
+    val animationsEnabled by settings.animationsEnabled.collectAsState()
+    val speedPreset by settings.animationSpeedPreset.collectAsState()
+
+    SettingsSubPage("Animations", icon = MaterialSymbolIcon("motion_photos_on"), onBack = onBack) {
+        item {
+            SettingsGroupCard {
+                ToggleItem(
+                    "Enable animations",
+                    "Disable to stop all entrance transitions, swipe-back gestures, and spring effects. Provides a static, instant-response experience.",
+                    animationsEnabled,
+                    settings::setAnimationsEnabled,
+                    MaterialSymbolIcon("motion_photos_on")
+                )
+            }
+        }
+
+        item { SectionHeader("Animation speed", "Controls how fast entrance animations play") }
+        item {
+            SettingsGroupCard {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Choose how quickly animations complete. Changes take effect immediately.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    listOf("Reduced", "Normal", "Enhanced").forEach { preset ->
+                        val selected = speedPreset == preset
+                        val icon = when (preset) {
+                            "Reduced" -> MaterialSymbolIcon("slow_motion_video")
+                            "Normal" -> MaterialSymbolIcon("speed")
+                            else -> MaterialSymbolIcon("fast_forward")
+                        }
+                        Surface(
+                            onClick = { settings.setAnimationSpeedPreset(preset) },
+                            shape = RoundedCornerShape(22.dp),
+                            color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+                            border = if (selected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                Modifier.fillMaxWidth().padding(14.dp),
+                                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Box(
+                                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                                        .background(
+                                            if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                                            else MaterialTheme.colorScheme.surfaceContainerLow
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        icon,
+                                        null,
+                                        tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                        size = 22.dp
+                                    )
+                                }
+                                Column(Modifier.weight(1f)) {
+                                    Text(
+                                        preset,
+                                        fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
+                                        style = MaterialTheme.typography.titleSmall
+                                    )
+                                    Text(
+                                        when (preset) {
+                                            "Reduced" -> "Gentle, minimal motion — 40% speed"
+                                            "Normal" -> "Balanced spring physics — default speed"
+                                            else -> "Fast, lively animations — 2x speed"
+                                        },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                if (selected) {
+                                    Icon(
+                                        FieldMindIcons.Check,
+                                        null,
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        size = 20.dp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        item {
+            Card(
+                shape = RoundedCornerShape(32.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+            ) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "Fine-tuning",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        "For granular control over damping, stiffness, and swipe thresholds for each animation type, open Developer Options → Animation Tuning.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

@@ -148,6 +148,7 @@ sealed class FieldMindScreen(val route: String, val label: String, val icon: Mat
     data object SettingsSecurityScore : FieldMindScreen("field_settings_security_score", "Security Score", MaterialSymbolIcon("security"))
     data object SettingsAnimationTuning : FieldMindScreen("field_settings_animation_tuning", "Animation Tuning", MaterialSymbolIcon("tune"))
     data object SettingsNotifications : FieldMindScreen("field_settings_notifications", "Notifications", FieldMindIcons.Notifications)
+    data object SettingsAnimation : FieldMindScreen("field_settings_animation", "Animations", MaterialSymbolIcon("motion_photos_on"))
 
 
     // ── Tasks screen ──
@@ -1151,6 +1152,7 @@ private fun FieldMindNavHost(
                         onOpenSpeciesId = { navController.navigateToDestination(FieldMindScreen.SettingsSpeciesId.route) },
                         onOpenAutoGen = { navController.navigateToDestination(FieldMindScreen.SettingsAutoGen.route) },
                         onOpenNotifications = { navController.navigateToDestination(FieldMindScreen.SettingsNotifications.route) }
+                        onOpenAnimations = { navController.navigateToDestination(FieldMindScreen.SettingsAnimation.route) },
                     )
                 }
             }
@@ -1195,6 +1197,7 @@ private fun FieldMindNavHost(
             composable(FieldMindScreen.SettingsSpeciesId.route) { SwipeBackHost(onBack = { safeBack() }) { SpeciesIdentificationSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.SettingsAutoGen.route) { SwipeBackHost(onBack = { safeBack() }) { AutoGenerationSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.SettingsNotifications.route) { SwipeBackHost(onBack = { safeBack() }) { NotificationsSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
+            composable(FieldMindScreen.SettingsAnimation.route) { SwipeBackHost(onBack = { safeBack() }) { AnimationSettingsPage(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.CounterTool.route) { SwipeBackHost(onBack = { safeBack() }) { CounterToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.MeasurementTool.route) { SwipeBackHost(onBack = { safeBack() }) { MeasurementToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
             composable(FieldMindScreen.WeatherLogTool.route) { SwipeBackHost(onBack = { safeBack() }) { WeatherLogToolScreen(viewModel = viewModel, onBack = { safeBack() }) } }
