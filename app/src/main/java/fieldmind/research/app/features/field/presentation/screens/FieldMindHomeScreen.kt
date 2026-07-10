@@ -453,12 +453,7 @@ fun SharedTransitionScope.HomeScreen(
             // ── Observations Timeline — Compact card, opens full page ──
             item {
                 val colors = FieldMindTheme.colors
-                Card(
-                    shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                JournalCard( // Journal-aware card styling
                     Row(
                         Modifier.fillMaxWidth().padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -537,10 +532,7 @@ fun SharedTransitionScope.HomeScreen(
                     Triple("Weather Log", "Conditions record", FieldMindIcons.Weather) to FieldMindScreen.WeatherLogTool,
                     Triple("Species", "Quick observation", FieldMindIcons.Nature) to FieldMindScreen.SpeciesTool
                 )
-                Card(
-                    shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                JournalCard( // Journal-aware card styling
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -585,13 +577,9 @@ fun SharedTransitionScope.HomeScreen(
 
             // ── Field Map Card ──
             item {
-                Card(
-                    shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                JournalClickableCard(
+                    onClick = { onNavigate(FieldMindScreen.MapScreen) },
                     modifier = Modifier.fillMaxWidth()
-                        .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
-                        .clickable { onNavigate(FieldMindScreen.MapScreen) }
                 ) {
                     Row(
                         Modifier.fillMaxWidth().padding(16.dp),
@@ -621,10 +609,7 @@ fun SharedTransitionScope.HomeScreen(
                     Triple("Bibliography", "Manage citations", MaterialSymbolIcon("book")) to FieldMindScreen.CitationManager,
                     Triple("Collaborate", "Share with others", MaterialSymbolIcon("share")) to FieldMindScreen.Collaboration
                 )
-                Card(
-                    shape = RoundedCornerShape(34.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-                    elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                JournalCard(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
