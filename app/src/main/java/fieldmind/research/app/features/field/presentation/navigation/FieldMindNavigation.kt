@@ -65,6 +65,8 @@ import fieldmind.research.app.features.field.presentation.components.LocalPrivac
 import fieldmind.research.app.features.field.presentation.components.PrivacyTextInputWrapper
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
+import fieldmind.research.app.shared.presentation.theme.LocalNavBarStyle
+import fieldmind.research.app.shared.presentation.theme.NavBarStyle
 import fieldmind.research.app.features.field.presentation.components.PeekContentHolder
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
@@ -719,8 +721,35 @@ private fun LiquidNavRow(
     // Arrangement.SpaceEvenly inter-item gaps.
     val tabBounds = remember { mutableStateListOf<TabBounds>() }
 
-    // Capture color scheme in composable scope (Canvas DrawScope is not composable)
-    val blobColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+    // ── NavBarStyle visuals ──
+    val navBarStyle = LocalNavBarStyle.current
+    val isDark = FieldMindTheme.colors.isDark
+    val primary = MaterialTheme.colorScheme.primary
+    val blobColor = when (navBarStyle) {
+        NavBarStyle.Nature -> {
+            // Warm golden-green blended with theme primary for scheme cohesion
+            val natureBase = if (isDark) Color(0xFF7DCDA0) else Color(0xFF2E7D32)
+            Color(
+                red = (natureBase.red + primary.red) / 2f,
+                green = (natureBase.green + primary.green) / 2f,
+                blue = (natureBase.blue + primary.blue) / 2f,
+                alpha = 0.18f
+            )
+        }
+        NavBarStyle.Journal -> {
+            // Warm paper/cream blended with theme primary
+            val journalBase = if (isDark) Color(0xFFD4B896) else Color(0xFF8D6E63)
+            Color(
+                red = (journalBase.red + primary.red) / 2f,
+                green = (journalBase.green + primary.green) / 2f,
+                blue = (journalBase.blue + primary.blue) / 2f,
+                alpha = 0.16f
+            )
+        }
+        NavBarStyle.Modern -> {
+            primary.copy(alpha = 0.15f)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -963,23 +992,26 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
             val direction = primaryTabDirection(fromRoute, toRoute)
             if (direction == 0)
                 fadeIn(animationSpec = FieldMindMotion.expressiveFloat) +
-                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.expressiveFloat)
+                scaleIn(initialScale = 0.96f, animationSpec = FieldMindMotion.expressiveFloat)
             else
-                slideInHorizontally(slideSpec) { direction * it / 8 } + fadeIn(fadeSpec)
+                slideInHorizontally(slideSpec) { direction * it / 5 } + fadeIn(fadeSpec) +
+                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
         }
         fromCat == RouteCategory.Tab && toCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
-        ) -> slideInHorizontally(slideSpec) { it / 8 } + fadeIn(fadeSpec)
+        ) -> slideInHorizontally(slideSpec) { it / 5 } + fadeIn(fadeSpec) +
+            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
         fromCat == RouteCategory.SettingsHub && toCat == RouteCategory.SettingsSubPage ->
-            fadeIn(animationSpec = fadeSpec)
+            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = FieldMindMotion.expressiveFloat)
         fromCat == RouteCategory.SettingsSubPage && toCat == RouteCategory.SettingsHub ->
-            fadeIn(animationSpec = fadeSpec)
+            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = FieldMindMotion.expressiveFloat)
         toCat == RouteCategory.Tab && fromCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation, RouteCategory.Other
-        ) -> slideInHorizontally(slideSpec) { -it / 8 } + fadeIn(fadeSpec)
+        ) -> slideInHorizontally(slideSpec) { -it / 5 } + fadeIn(fadeSpec) +
+            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
         else -> fadeIn(animationSpec = fadeSpec) +
             scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.expressiveFloat)
     }
@@ -1036,7 +1068,8 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
             val direction = primaryTabDirection(toRoute, fromRoute)
             // Full-width slide from the opposite side
-            slideInHorizontally(slideSpec) { -direction * it } + fadeIn(animationSpec = fadeSpec)
+            slideInHorizontally(slideSpec) { -direction * it } + fadeIn(animationSpec = fadeSpec) +
+                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
         }
         toCat == RouteCategory.Tab && fromCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
@@ -1044,11 +1077,13 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
             RouteCategory.Other
         ) -> {
             // Previous screen (tab) slides in from the left at full width — iOS predictive peek
-            slideInHorizontally(slideSpec) { -it } + fadeIn(animationSpec = fadeSpec)
+            slideInHorizontally(slideSpec) { -it } + fadeIn(animationSpec = fadeSpec) +
+                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
         }
         toCat == RouteCategory.SettingsHub && fromCat == RouteCategory.SettingsSubPage ->
-            fadeIn(animationSpec = fadeSpec)
-        else -> slideInHorizontally(slideSpec) { -it } + fadeIn(animationSpec = fadeSpec)
+            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = FieldMindMotion.expressiveFloat)
+        else -> slideInHorizontally(slideSpec) { -it } + fadeIn(animationSpec = fadeSpec) +
+            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
     }
 }
 

@@ -446,7 +446,10 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
             SettingsGroupCard {
                 ThemeToggle(themeMode, settings::setThemeMode)
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
-                ToggleItem("AMOLED dark mode", "Pure black backgrounds in dark mode for OLED screens. Deeper blacks save battery on OLED displays.", amoledTheme, sharedAppSettings::setAmoledTheme, MaterialSymbolIcon("dark_mode"))
+                ToggleItem("AMOLED dark mode", "Pure black backgrounds in dark mode for OLED screens. Automatically switches theme to dark when enabled. Deeper blacks save battery on OLED displays.", amoledTheme, { enabled ->
+                    sharedAppSettings.setAmoledTheme(enabled)
+                    if (enabled) settings.setThemeMode("Dark")
+                }, MaterialSymbolIcon("dark_mode"))
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 ToggleItem("Material You dynamic color", "Use system wallpaper colors that auto-adapt to light/dark. Off keeps the FieldMind brand palette.", dynamicColor, settings::setDynamicColorEnabled, FieldMindIcons.Palette)
                 HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
