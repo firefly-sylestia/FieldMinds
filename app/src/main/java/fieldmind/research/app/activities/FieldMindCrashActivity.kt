@@ -92,7 +92,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                 setTextColor(errorColor)
                 textSize = 36f
                 gravity = Gravity.CENTER
-                val size = LayoutParams(dp72, dp72)
+                val size = LinearLayout.LayoutParams(dp72, dp72)
                 layoutParams = size
                 background = GradientDrawable().apply {
                     shape = GradientDrawable.OVAL
@@ -106,7 +106,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                 text = "FieldMind crashed"
                 setTextColor(onSurfaceColor)
                 textSize = 22f
-                setTypeface(typeface, Typeface.BOLD)
+                typeface = Typeface.DEFAULT_BOLD
                 gravity = Gravity.CENTER
             })
 
@@ -136,7 +136,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                 text = "▸ Crash report"
                 setTextColor(onSurfaceColor)
                 textSize = 15f
-                setTypeface(typeface, Typeface.DEFAULT_BOLD)
+                typeface = Typeface.DEFAULT_BOLD
                 setPadding(0, 0, 0, dp12)
             })
 
@@ -201,7 +201,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                 text = "▸ Recovery options"
                 setTextColor(onSurfaceColor)
                 textSize = 15f
-                setTypeface(typeface, Typeface.DEFAULT_BOLD)
+                typeface = Typeface.DEFAULT_BOLD
                 setPadding(0, 0, 0, dp8)
             })
 
@@ -295,7 +295,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                     setStroke(dp(2), borderColor)
                 }
             }
-            setPadding(dp20, 0, dp20, 0)
+            setPadding(dp(20), 0, dp(20), 0)
         }
     }
 
