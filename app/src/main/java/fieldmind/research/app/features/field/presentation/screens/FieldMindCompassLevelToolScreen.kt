@@ -47,11 +47,12 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -659,6 +660,24 @@ private fun CompassRoseCanvas(
     val glowColor = if (isInterference) colors.warning.copy(alpha = glowPulse * 0.45f)
         else colors.info.copy(alpha = glowPulse * 0.35f)
 
+    // ── Pre-measure cardinal labels with Compose TextMeasurer for crisp typography ──
+    val textMeasurer = rememberTextMeasurer()
+    val nLabel = remember {
+        textMeasurer.measure("N", TextStyle(color = Color(0xFFE53935), fontSize = 48.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
+    }
+    val nGlow = remember {
+        textMeasurer.measure("N", TextStyle(color = Color(0xFFE53935).copy(alpha = 0.2f), fontSize = 52.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
+    }
+    val eLabel = remember {
+        textMeasurer.measure("E", TextStyle(color = onSurface, fontSize = 36.sp, textAlign = TextAlign.Center))
+    }
+    val sLabel = remember {
+        textMeasurer.measure("S", TextStyle(color = onSurface, fontSize = 36.sp, textAlign = TextAlign.Center))
+    }
+    val wLabel = remember {
+        textMeasurer.measure("W", TextStyle(color = onSurface, fontSize = 36.sp, textAlign = TextAlign.Center))
+    }
+
     Box(modifier = Modifier.size(280.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val cx = size.width / 2f
@@ -722,34 +741,24 @@ private fun CompassRoseCanvas(
                     drawLine(color = tickColor, start = Offset(tx, ty), end = Offset(ex, ey), strokeWidth = tickWidth, cap = StrokeCap.Round)
                 }
 
-                // ── Cardinal labels with glow ──
-                val cardinals = listOf(
-                    "N" to Color(0xFFE53935),
-                    "E" to onSurface,
-                    "S" to onSurface,
-                    "W" to onSurface
+                // ── Cardinal labels with Compose drawText (crisp typography, no native Paint) ──
+                val labels = listOf(
+                    Triple(0.0, nLabel, nGlow),
+                    Triple(90.0, eLabel, null),
+                    Triple(180.0, sLabel, null),
+                    Triple(270.0, wLabel, null)
                 )
-                val paint = android.graphics.Paint().apply {
-                    textAlign = android.graphics.Paint.Align.CENTER; isAntiAlias = true
-                }
-                cardinals.forEachIndexed { i, (label, color) ->
-                    val angle = i * 90.0
-                    val rad = Math.toRadians(angle)
+                labels.forEach { (angleDeg, measured, glow) ->
+                    val rad = Math.toRadians(angleDeg)
                     val labelR = radius * 0.74f
                     val x = cx + (labelR * sin(rad)).toFloat()
                     val y = cy - (labelR * cos(rad)).toFloat()
 
-                    // Glow behind N
-                    if (label == "N") {
-                        paint.color = Color(0xFFE53935).copy(alpha = 0.2f).toArgb()
-                        paint.textSize = 52f
-                        drawContext.canvas.nativeCanvas.drawText(label, x, y + paint.textSize / 3f, paint)
+                    // Glow behind cardinal (e.g. red glow behind N)
+                    if (glow != null) {
+                        drawText(glow, topLeft = Offset(x - glow.size.width / 2f, y - glow.size.height / 2f))
                     }
-
-                    paint.color = color.toArgb()
-                    paint.textSize = if (label == "N") 48f else 36f
-                    paint.isFakeBoldText = label == "N"
-                    drawContext.canvas.nativeCanvas.drawText(label, x, y + paint.textSize / 3f, paint)
+                    drawText(measured, topLeft = Offset(x - measured.size.width / 2f, y - measured.size.height / 2f))
                 }
 
                 // ── Intercardinal dots at 45° positions ──
@@ -867,6 +876,17 @@ private fun MagneticFieldChart(readings: List<Float>, lineColor: Color) {
     val onSurfaceV = MaterialTheme.colorScheme.onSurfaceVariant
     val surfaceHigh = MaterialTheme.colorScheme.surfaceContainerHigh
 
+    // ── Pre-measure Y-axis labels with Compose TextMeasurer ──
+    val chartTextMeasurer = rememberTextMeasurer()
+    val yLabels = remember {
+        labels.map { value ->
+            Triple("%.0f".format(value), value, chartTextMeasurer.measure(
+                "%.0f".format(value),
+                TextStyle(color = onSurfaceV.copy(alpha = 0.4f), fontSize = 10.sp, textAlign = TextAlign.Right)
+            ))
+        }
+    }
+
     Canvas(modifier = Modifier.fillMaxWidth().height(80.dp)) {
         val chartX = 38f  // space for Y-axis labels
         val chartW = size.width - chartX
@@ -881,17 +901,10 @@ private fun MagneticFieldChart(readings: List<Float>, lineColor: Color) {
             size = Size(chartW, chartH)
         )
 
-        // ── Y-axis labels (rendered via nativeCanvas for pixel alignment) ──
-        val paint = android.graphics.Paint().apply {
-            isAntiAlias = true
-            color = onSurfaceV.copy(alpha = 0.4f).toArgb()
-            textSize = 22f
-            textAlign = android.graphics.Paint.Align.RIGHT
-        }
-        labels.forEach { value ->
+        // ── Y-axis labels (Compose drawText for crisp typography) ──
+        yLabels.forEach { (_, value, measured) ->
             val y = chartH - (value / maxY * chartH)
-            val text = "%.0f".format(value)
-            drawContext.canvas.nativeCanvas.drawText(text, chartX - 6f, y + paint.textSize / 3f, paint)
+            drawText(measured, topLeft = Offset(chartX - 6f - measured.size.width, y - measured.size.height / 2f))
         }
 
         // ── Horizontal grid lines ──
