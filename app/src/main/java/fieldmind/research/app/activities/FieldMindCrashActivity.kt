@@ -285,7 +285,7 @@ class FieldMindCrashActivity : ComponentActivity() {
             this.text = text
             setTextColor(textColor)
             textSize = 14f
-            setTypeface(typeface, Typeface.DEFAULT_BOLD)
+            typeface = Typeface.DEFAULT_BOLD
             setAllCaps(false)
             gravity = Gravity.CENTER
             background = GradientDrawable().apply {
