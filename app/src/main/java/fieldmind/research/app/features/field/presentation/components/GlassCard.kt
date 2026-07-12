@@ -60,7 +60,7 @@ val LocalHazeState = staticCompositionLocalOf<HazeState?> { null }
 @Composable
 fun GlassCard(
     modifier: Modifier = Modifier,
-    shape: RoundedCornerShape = CuteCardDefaults.OptionShape,
+    shape: Shape = CuteCardDefaults.OptionShape,
     blurRadius: Dp = 24.dp,
     tintAlpha: Float = 0.55f,
     content: @Composable ColumnScope.() -> Unit

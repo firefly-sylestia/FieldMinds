@@ -58,7 +58,7 @@ fun ReportTemplateCard(
                     Text(reportType.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Surface(
-                    shape = MaterialTheme.shapes.small,
+                    shape = CuteCardDefaults.ChipShape,
                     color = MaterialTheme.colorScheme.surface
                 ) {
                     Text(
@@ -173,7 +173,7 @@ fun ReportExportMenu(
 
 @Composable
 private fun ExportButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    OutlinedButton(onClick = onClick, modifier = modifier.height(40.dp), shape = MaterialTheme.shapes.extraSmall) {
+    OutlinedButton(onClick = onClick, modifier = modifier.height(40.dp), shape = CuteCardDefaults.ChipShape) {
         Text(label, style = MaterialTheme.typography.labelSmall)
     }
 }
