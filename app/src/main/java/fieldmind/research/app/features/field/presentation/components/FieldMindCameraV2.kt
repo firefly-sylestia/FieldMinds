@@ -618,9 +618,7 @@ fun FieldMindCameraV2(
                         .fillMaxWidth()
                         .cuteShadow(elevation = CuteElevations.plushTier4, shape = CuteCardDefaults.ShapeHero),
                     shape = CuteCardDefaults.ShapeHero,
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.98f),
-                    shadowElevation = 16.dp,
-                    modifier = Modifier.fillMaxWidth()
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.98f)
                 ) {
                     Column(
                         Modifier
@@ -906,6 +904,7 @@ fun FieldMindCameraV2(
                     .cuteShadow(elevation = CuteElevations.plushTier3, shape = CuteCardDefaults.DialogShape),
                 shape = CuteCardDefaults.DialogShape,
                 color = Color.Black.copy(alpha = 0.48f),
+                shadowElevation = 0.dp,
                 tonalElevation = CuteElevations.plushTier3,
                 ) {
                     Column(Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
@@ -1157,9 +1156,7 @@ private fun SpeciesFieldPanel(
             modifier = Modifier.fillMaxWidth()
                 .cuteShadow(elevation = CuteElevations.plushTier4, shape = CuteCardDefaults.DialogShape),
             shape = CuteCardDefaults.DialogShape,
-            color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.98f),
-            shadowElevation = 24.dp,
-            modifier = Modifier.fillMaxWidth()
+            color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.98f)
         ) {
             Column(
                 Modifier.padding(24.dp),
