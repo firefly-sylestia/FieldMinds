@@ -288,7 +288,7 @@ fun FieldMindCameraV2(
                         pendingCaptureUri = uri
                         pendingCaptureMime = "image/jpeg"
                         capturedCount++
-                        onPhotoCaptured(uri, "image/jpeg")
+                        // Photo reported via SessionPostCaptureDialog on user confirm
                         showCaptureDialog = true
                     } else {
                         showSpeciesPanel = true
@@ -304,7 +304,7 @@ fun FieldMindCameraV2(
                         pendingCaptureUri = uri
                         pendingCaptureMime = "image/jpeg"
                         capturedCount++
-                        onPhotoCaptured(uri, "image/jpeg")
+                        // Photo reported via SessionPostCaptureDialog on user confirm
                         showCaptureDialog = true
                     } else {
                         showSpeciesPanel = true
