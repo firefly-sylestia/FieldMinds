@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -157,7 +158,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
                 ) {
                     Surface(
                         onClick = onBack,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(44.dp)
                     ) {
@@ -178,7 +179,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
             ) {
                 // ── Basic Info Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -200,7 +201,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
 
                 // ── Appearance Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -214,7 +215,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
                                 val isSelected = selectedIcon == icon
                                 Surface(
                                     onClick = { haptics.light(); selectedIcon = icon },
-                                    shape = RoundedCornerShape(24.dp),
+                                    shape = CuteCardDefaults.ShapeCompact,
                                     color = if (isSelected) FieldMindTheme.colors.project.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                     border = if (isSelected) androidx.compose.foundation.BorderStroke(2.dp, FieldMindTheme.colors.project) else null,
                                     modifier = Modifier.size(60.dp)
@@ -231,11 +232,11 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             colorOptions.forEach { (colorLong, color) ->
                                 val isSelected = selectedColor == colorLong
-                                val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(24.dp)) else Modifier
+                                val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, CuteCardDefaults.ShapeCompact) else Modifier
                                 Box(
                                     modifier = Modifier
                                         .size(52.dp)
-                                        .clip(RoundedCornerShape(24.dp))
+                                        .clip(CuteCardDefaults.ShapeCompact)
                                         .background(color)
                                         .then(borderMod)
                                         .clickable { haptics.light(); selectedColor = colorLong },
@@ -252,7 +253,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
 
                 // ── Template Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     onClick = { haptics.light(); showTemplatePicker = true }
@@ -264,7 +265,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             Box(
-                                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                                Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                                     .background(FieldMindTheme.colors.project.copy(alpha = 0.12f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -285,7 +286,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
                 Button(
                     onClick = ::save,
                     modifier = Modifier.fillMaxWidth().height(54.dp),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = CuteCardDefaults.FieldShape,
                     enabled = title.isNotBlank()
                 ) {
                     Icon(FieldMindIcons.Project, null, size = 20.dp)
@@ -313,7 +314,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
                         val isSelected = selectedTemplate == template
                         Surface(
                             onClick = { haptics.light(); selectedTemplate = template; showTemplatePicker = false },
-                            shape = RoundedCornerShape(22.dp),
+                            shape = CuteCardDefaults.ButtonShape,
                             color = if (isSelected) FieldMindTheme.colors.project.copy(alpha = 0.10f) else MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(
@@ -410,7 +411,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity:
             ) {
                 // ── Question Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -422,7 +423,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity:
 
                 // ── Classification Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -438,7 +439,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity:
                                 val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
                                 Surface(
                                     onClick = { haptics.light(); priority = level },
-                                    shape = RoundedCornerShape(22.dp),
+                                    shape = CuteCardDefaults.ButtonShape,
                                     color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                     border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
                                     modifier = Modifier.weight(1f)
@@ -470,7 +471,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity:
 
                 // ── Advanced Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -483,7 +484,7 @@ fun NewQuestionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity:
 
                 Spacer(Modifier.height(8.dp))
 
-                Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = question.isNotBlank()) {
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = CuteCardDefaults.ShapeCompact, enabled = question.isNotBlank()) {
                     Icon(FieldMindIcons.Question, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 }
             }
@@ -562,7 +563,7 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
             ) {
                 // ── Prediction Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -580,7 +581,7 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
 
                 // ── Evidence Rules Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -596,7 +597,7 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
 
                 // ── Confidence Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -613,7 +614,7 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
 
                 // ── Advanced Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -625,7 +626,7 @@ fun NewHypothesisScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
                 }
 
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = prediction.isNotBlank()) {
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = prediction.isNotBlank()) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create hypothesis")
                 }
             }
@@ -696,7 +697,7 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
             ) {
                 // ── Preset & Label Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -717,7 +718,7 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
 
                 // ── Measurement Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -731,7 +732,7 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
 
                 // ── Context Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -743,7 +744,7 @@ fun NewDataRecordScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entit
                 }
 
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = label.isNotBlank()) {
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = label.isNotBlank()) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save record")
                 }
             }
@@ -877,7 +878,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
             ) {
                 // ── Task Info Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -890,7 +891,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
 
                 // ── Priority & Project Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -904,7 +905,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
                                     val accent = priorityColor[level] ?: FieldMindTheme.colors.positive
                                     Surface(
                                         onClick = { haptics.light(); priority = level },
-                                        shape = RoundedCornerShape(22.dp),
+                                        shape = CuteCardDefaults.ButtonShape,
                                         color = if (isSelected) accent.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
                                         modifier = Modifier.weight(1f)
@@ -947,7 +948,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
 
                 // ── Schedule Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1009,7 +1010,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
 
                 // ── Checklist Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1038,7 +1039,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
                                         checklistItems = checklistItems.toMutableList().also { it[index] = newVal }
                                     },
                                     placeholder = { Text("Checklist item", style = MaterialTheme.typography.bodySmall) },
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     modifier = Modifier.weight(1f),
                                     singleLine = true,
                                     textStyle = MaterialTheme.typography.bodySmall
@@ -1055,7 +1056,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
 
                 // ── Attachments Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1129,7 +1130,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
                 Button(
                     onClick = ::save,
                     modifier = Modifier.fillMaxWidth().height(50.dp),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     enabled = title.isNotBlank()
                 ) {
                     Icon(FieldMindIcons.Check, null, size = 20.dp)
@@ -1214,7 +1215,7 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: R
             ) {
                 // ── Type & Title Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1227,7 +1228,7 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: R
 
                 // ── Setup Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1241,7 +1242,7 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: R
 
                 // ── Evidence Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1255,7 +1256,7 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: R
 
                 // ── Conclusion Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1268,7 +1269,7 @@ fun NewReportScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: R
                 }
 
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = title.isNotBlank()) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Build report")
                 }
             }
@@ -1356,7 +1357,7 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, enti
             ) {
                 // ── Subject Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1369,7 +1370,7 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, enti
 
                 // ── Classification Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1382,7 +1383,7 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, enti
 
                 // ── Location Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1398,7 +1399,7 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, enti
 
                 // ── Tags Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1413,7 +1414,7 @@ fun NewObservationScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, enti
                 }
 
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = subject.isNotBlank() || facts.isNotBlank()) {
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = subject.isNotBlank() || facts.isNotBlank()) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save observation")
                 }
             }
@@ -1487,7 +1488,7 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Not
             ) {
                 // ── Content Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1500,7 +1501,7 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Not
 
                 // ── Classification Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1516,7 +1517,7 @@ fun NewNoteScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Not
                 }
 
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank() || body.isNotBlank()) {
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = CuteCardDefaults.ShapeCompact, enabled = title.isNotBlank() || body.isNotBlank()) {
                     Icon(FieldMindIcons.Note, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 }
             }
@@ -1607,7 +1608,7 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: S
             ) {
                 // ── Source Type Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1619,7 +1620,7 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: S
 
                 // ── Identity Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1638,7 +1639,7 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: S
 
                 // ── Notes Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1655,7 +1656,7 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: S
 
                 // ── Status Card ──
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -1677,7 +1678,7 @@ fun NewSourceScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: S
                 }
 
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
+                Button(onClick = ::save, modifier = Modifier.fillMaxWidth().height(50.dp), shape = CuteCardDefaults.ShapeCompact, enabled = title.isNotBlank()) {
                     Icon(FieldMindIcons.Source, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 }
             }
@@ -1762,7 +1763,7 @@ fun NewAttachmentScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 }
             }
             if (capturedUri != null) {
-                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = FieldMindTheme.colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+                Card(shape = CuteCardDefaults.ShapeCompact, colors = CardDefaults.cardColors(containerColor = FieldMindTheme.colors.positive.copy(alpha = 0.08f)), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(MaterialSymbolIcon("check_circle"), null, tint = FieldMindTheme.colors.positive, size = 24.dp)
                         Column(Modifier.weight(1f)) {
@@ -1782,7 +1783,7 @@ fun NewAttachmentScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         onSaved = { onBack() }
                     )
                 }
-            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = capturedUri != null) {
+            }, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = capturedUri != null) {
                 Icon(MaterialSymbolIcon("attach_file"), null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Attach")
             }
         }
@@ -1796,12 +1797,12 @@ private fun AttachmentTypeItem(
 ) {
     Card(
         modifier = modifier.clickable(onClick = onClick),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = accent.copy(alpha = 0.10f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.fillMaxWidth().padding(vertical = 16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(icon, null, tint = accent, size = 22.dp) }
+            Box(Modifier.size(40.dp).clip(MaterialTheme.shapes.medium).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) { Icon(icon, null, tint = accent, size = 22.dp) }
             Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = accent)
         }
     }
@@ -1865,9 +1866,9 @@ fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     colorOptions.forEach { (colorLong, colorName) ->
                         val isSelected = selectedColor == colorLong
-                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(22.dp)) else Modifier
+                        val borderMod = if (isSelected) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, CuteCardDefaults.ButtonShape) else Modifier
                         Box(
-                            modifier = Modifier.size(48.dp).clip(RoundedCornerShape(22.dp)).background(Color(colorLong))
+                            modifier = Modifier.size(48.dp).clip(CuteCardDefaults.ButtonShape).background(Color(colorLong))
                                 .then(borderMod)
                                 .clickable { haptics.light(); selectedColor = colorLong },
                             contentAlignment = Alignment.Center
@@ -1889,7 +1890,7 @@ fun NewFolderScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         onSaved = { onBack() }
                     )
                 }
-            }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = folderName.isNotBlank()) {
+            }, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = folderName.isNotBlank()) {
                 Icon(MaterialSymbolIcon("folder"), null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Create Folder")
             }
         }

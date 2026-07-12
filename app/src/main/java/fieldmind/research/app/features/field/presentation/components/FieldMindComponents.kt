@@ -1771,7 +1771,7 @@ fun InfoBadge(
     Box(
         modifier = modifier
             .size(32.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(CuteCardDefaults.ChipShape)
             .background(tint.copy(alpha = alpha)),
         contentAlignment = Alignment.Center
     ) {

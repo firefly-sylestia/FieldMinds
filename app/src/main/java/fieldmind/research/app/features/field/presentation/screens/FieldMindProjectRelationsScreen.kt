@@ -482,7 +482,7 @@ private fun RelationGroupCard(
                     // Kind icon
                     Box(
                         Modifier.size(28.dp)
-                            .clip(RoundedCornerShape(16.dp))
+                            .clip(CuteCardDefaults.ChipShape)
                             .background(group.color.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -499,7 +499,7 @@ private fun RelationGroupCard(
 
                     // Count badge
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = group.color.copy(alpha = 0.12f)
                     ) {
                         Text(

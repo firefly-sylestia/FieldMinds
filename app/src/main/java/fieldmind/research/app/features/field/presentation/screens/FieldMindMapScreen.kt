@@ -345,7 +345,7 @@ private fun FullScreenMapView(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp),
-            shape = RoundedCornerShape(36.dp),
+            shape = CuteCardDefaults.ShapeHero,
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             shadowElevation = 8.dp
         ) {
@@ -404,7 +404,7 @@ private fun DrawToolButton(icon: MaterialSymbolIcon, label: String, isActive: Bo
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .clip(RoundedCornerShape(24.dp))
+            .clip(CuteCardDefaults.ShapeCompact)
             .clickable(onClick = onClick)
             .background(bgColor)
             .padding(horizontal = 12.dp, vertical = 8.dp)
@@ -484,7 +484,7 @@ private fun MapViewTab(
             if (isRecording) {
                 Surface(
                     modifier = Modifier.align(Alignment.TopStart).padding(8.dp),
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.errorContainer
                 ) {
                     Row(
@@ -515,7 +515,7 @@ private fun MapViewTab(
             // Drawing mode chips
             item {
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -543,7 +543,7 @@ private fun MapViewTab(
             // Stats card
             item {
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -566,7 +566,7 @@ private fun TrackRecordingCard(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = if (isRecording) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -625,7 +625,7 @@ private fun OfflineTilesTab(
 
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         item {
-            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Download, null, tint = FieldMindTheme.colors.info, size = 20.dp)
@@ -650,7 +650,7 @@ private fun OfflineTilesTab(
         itemsIndexed(cachedRegions) { i, region ->
             Card(
                 modifier = Modifier.fillMaxWidth().staggeredEntrance(index = i, animate = true),
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -1123,7 +1123,7 @@ private fun DrawingsTab(
     val colors = FieldMindTheme.colors
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Shape, null, tint = colors.info, size = 20.dp)
@@ -1145,7 +1145,7 @@ private fun DrawingsTab(
                 onClick = { onEditOverlay(overlay) },
                 index = i,
                 animate = true,
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(
@@ -1194,7 +1194,7 @@ private fun TracksTab(
 
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Track, null, tint = colors.info, size = 20.dp)
@@ -1207,7 +1207,7 @@ private fun TracksTab(
         }
         if (currentTrack != null && isRecording) {
             item {
-                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
+                Card(shape = CuteCardDefaults.ShapeCompact, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Box(Modifier.size(8.dp).clip(CircleShape).background(MaterialTheme.colorScheme.error))
@@ -1221,7 +1221,7 @@ private fun TracksTab(
         itemsIndexed(savedTracks.sortedByDescending { it.startedAt }) { i, track ->
             Card(
                 modifier = Modifier.fillMaxWidth().staggeredEntrance(index = i, animate = true),
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1274,7 +1274,7 @@ private fun GeofencesTab(
 
     LazyColumn(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Notifications, null, tint = colors.info, size = 20.dp)
@@ -1291,7 +1291,7 @@ private fun GeofencesTab(
         itemsIndexed(geofenceRegions) { i, region ->
             Card(
                 modifier = Modifier.fillMaxWidth().staggeredEntrance(index = i, animate = true),
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(
@@ -1300,7 +1300,7 @@ private fun GeofencesTab(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Box(
-                        Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                        Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                             .background(if (region.isActive) colors.observation.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceContainerHighest),
                         contentAlignment = Alignment.Center
                     ) {
@@ -1504,6 +1504,6 @@ private fun EditOverlayDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancel") }
         },
-        shape = RoundedCornerShape(34.dp)
+        shape = CuteCardDefaults.Shape
     )
 }

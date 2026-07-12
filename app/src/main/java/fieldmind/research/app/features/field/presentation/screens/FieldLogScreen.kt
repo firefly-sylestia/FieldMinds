@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -228,7 +229,7 @@ fun FieldLogScreen(
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Box(
-                                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                                Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                                     .background(FieldMindTheme.colors.positive.copy(alpha = 0.12f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -282,7 +283,7 @@ fun FieldLogScreen(
                                 }
                             }
                         },
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         singleLine = true
                     )
                 }
@@ -297,7 +298,7 @@ fun FieldLogScreen(
                 ) {
                     // View mode segmented control
                     Surface(
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(2.dp), horizontalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -308,7 +309,7 @@ fun FieldLogScreen(
                                 val selected = viewMode == mode
                                 Surface(
                                     onClick = { viewMode = mode },
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh
                                 ) {
                                     Row(

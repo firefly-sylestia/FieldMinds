@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -190,7 +191,7 @@ fun HypothesisDetailScreen(
                 ) {
                     // Result status badge
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = resultColor.copy(alpha = 0.12f)
                     ) {
                         Row(
@@ -216,7 +217,7 @@ fun HypothesisDetailScreen(
 
                     // Confidence badge
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = FieldMindTheme.colors.hypothesis.copy(alpha = 0.12f)
                     ) {
                         Row(
@@ -283,7 +284,7 @@ fun HypothesisDetailScreen(
                 ) {
                     Surface(
                         onClick = { onOpenDetail("question", linkedQuestion.id) },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -293,7 +294,7 @@ fun HypothesisDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Box(
-                                Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
+                                Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
                                     .background(FieldMindTheme.colors.question.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -369,7 +370,7 @@ fun HypothesisDetailScreen(
                         
                         if (hypothesis.supportCriteria.isNotBlank()) {
                             Surface(
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = FieldMindTheme.colors.positive.copy(alpha = 0.08f),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -391,7 +392,7 @@ fun HypothesisDetailScreen(
 
                         if (hypothesis.weakeningCriteria.isNotBlank()) {
                             Surface(
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.error.copy(alpha = 0.08f),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -455,7 +456,7 @@ fun HypothesisDetailScreen(
                         linkedObservations.forEach { obs ->
                             Surface(
                                 onClick = { onOpenDetail("observation", obs.id) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -465,7 +466,7 @@ fun HypothesisDetailScreen(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
+                                        Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
                                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                 ) {
@@ -500,7 +501,7 @@ fun HypothesisDetailScreen(
                 Spacer(Modifier.size(8.dp))
                 OutlinedButton(
                     onClick = { showObservationPicker = true },
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -579,14 +580,14 @@ fun HypothesisDetailScreen(
                         showDeleteConfirm = false
                         onBack()
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Delete") }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteConfirm = false }) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(34.dp)
+            shape = CuteCardDefaults.Shape
         )
     }
 
@@ -658,7 +659,7 @@ private fun MarkTestedDialog(
                     }
                     Surface(
                         onClick = { selectedStatus = conclusion },
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = if (selectedStatus == conclusion) color.copy(alpha = 0.12f)
                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = if (selectedStatus == conclusion) androidx.compose.foundation.BorderStroke(1.5.dp, color)
@@ -702,14 +703,14 @@ private fun MarkTestedDialog(
         confirmButton = {
             Button(
                 onClick = { onConfirm(selectedStatus) },
-                shape = RoundedCornerShape(22.dp),
+                shape = CuteCardDefaults.ButtonShape,
                 enabled = selectedStatus.isNotBlank()
             ) { Text("Confirm") }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancel") }
         },
-        shape = RoundedCornerShape(34.dp)
+        shape = CuteCardDefaults.Shape
     )
 }
 
@@ -799,7 +800,7 @@ private fun <T> EntityPickerDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Card(
-            shape = RoundedCornerShape(34.dp),
+            shape = CuteCardDefaults.Shape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             modifier = Modifier
@@ -831,7 +832,7 @@ private fun <T> EntityPickerDialog(
                     placeholder = { Text("Search...") },
                     leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) },
                     singleLine = true,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -862,7 +863,7 @@ private fun <T> EntityPickerDialog(
                         items(items) { item ->
                             Surface(
                                 onClick = { onSelect(item) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh
                             ) {
                                 Row(
@@ -875,7 +876,7 @@ private fun <T> EntityPickerDialog(
                                     Box(
                                         Modifier
                                             .size(32.dp)
-                                            .clip(RoundedCornerShape(16.dp))
+                                            .clip(CuteCardDefaults.ChipShape)
                                             .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                                         contentAlignment = Alignment.Center
                                     ) {

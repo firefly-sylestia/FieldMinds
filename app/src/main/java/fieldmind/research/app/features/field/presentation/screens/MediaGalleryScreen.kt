@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -193,9 +194,9 @@ private fun MediaGridTile(
         modifier = Modifier
             .height(140.dp)
             .fillMaxWidth()
-            .cuteShadow(elevation = CuteElevations.clickableTier, shape = RoundedCornerShape(20.dp))
+            .cuteShadow(elevation = CuteElevations.clickableTier, shape = MaterialTheme.shapes.medium)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(20.dp),
+        shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Box(Modifier.fillMaxSize()) {
@@ -234,7 +235,7 @@ private fun MediaGridTile(
             // Type badge
             Surface(
                 modifier = Modifier.align(Alignment.TopStart).padding(6.dp),
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f)
             ) {
                 Text(
@@ -252,8 +253,8 @@ private fun AudioListItem(item: MediaItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(28.dp)),
-        shape = RoundedCornerShape(28.dp),
+            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.FieldShape),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -295,7 +296,7 @@ private fun MediaViewerDialog(
     Dialog(onDismissRequest = onDismiss) {
         Card(
             modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-            shape = RoundedCornerShape(36.dp)
+            shape = CuteCardDefaults.ShapeHero
         ) {
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -313,7 +314,7 @@ private fun MediaViewerDialog(
                     AsyncImage(
                         model = item.uri,
                         contentDescription = item.caption,
-                        modifier = Modifier.fillMaxWidth().heightIn(max = 400.dp).clip(RoundedCornerShape(24.dp)),
+                        modifier = Modifier.fillMaxWidth().heightIn(max = 400.dp).clip(CuteCardDefaults.ShapeCompact),
                         contentScale = ContentScale.Fit
                     )
                 }

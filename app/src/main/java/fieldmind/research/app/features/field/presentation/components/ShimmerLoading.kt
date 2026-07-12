@@ -134,7 +134,7 @@ fun ShimmerEntityCard(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(34.dp))
+            .clip(CuteCardDefaults.Shape)
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Row(
@@ -146,7 +146,7 @@ fun ShimmerEntityCard(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .size(42.dp)
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(MaterialTheme.shapes.medium)
                     .then(shimmerMod)
             )
             Column(Modifier.weight(1f)) {
@@ -237,7 +237,7 @@ fun ShimmerHeader(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .size(46.dp)
-                    .clip(RoundedCornerShape(22.dp))
+                    .clip(CuteCardDefaults.ButtonShape)
                     .then(shimmerMod)
             )
             Column(Modifier.weight(1f)) {

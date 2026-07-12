@@ -735,7 +735,7 @@ private fun AchievementCardV2(item: ResearchAchievement, modifier: Modifier = Mo
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Box(
-                    Modifier.size(36.dp).clip(RoundedCornerShape(20.dp))
+                    Modifier.size(36.dp).clip(MaterialTheme.shapes.medium)
                         .background(item.accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.3f else 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {

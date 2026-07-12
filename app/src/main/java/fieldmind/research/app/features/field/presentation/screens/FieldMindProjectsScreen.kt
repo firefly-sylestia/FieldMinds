@@ -349,7 +349,7 @@ fun ProjectsScreen(
             // Empty state per HTML spec
             item {
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -383,7 +383,7 @@ fun ProjectsScreen(
                         if (searchQuery.isBlank() && selectedFilter == "All") {
                             FilledTonalButton(
                                 onClick = { onNavigate?.invoke(FieldMindScreen.NewProject) },
-                                shape = RoundedCornerShape(22.dp),
+                                shape = CuteCardDefaults.ButtonShape,
                                 colors = ButtonDefaults.filledTonalButtonColors(containerColor = colors.project.copy(alpha = 0.16f))
                             ) {
                                 Icon(FieldMindIcons.Add, null, size = 18.dp)
@@ -458,7 +458,7 @@ private fun ProjectCard(
 
     Card(
         modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate).expressivePress(scaleDown = 0.98f).clickable(onClick = onClick),
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {
@@ -470,7 +470,7 @@ private fun ProjectCard(
             // Project icon with shared element transition
             val projectIconModifier = if (sharedTransitionScope != null && animatedVisibilityScope != null) {
                 with(sharedTransitionScope) {
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.project.copy(alpha = 0.14f))
                         .sharedElement(
                             rememberSharedContentState(key = "project_icon_${project.id}"),
@@ -478,7 +478,7 @@ private fun ProjectCard(
                         )
                 }
             } else {
-                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                     .background(colors.project.copy(alpha = 0.14f))
             }
             Box(
@@ -669,7 +669,7 @@ private fun ProjectCard(
                     onValueChange = { renameText = it },
                     label = { Text("Project name") },
                     singleLine = true,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     modifier = Modifier.fillMaxWidth()
                 )
             },
@@ -682,7 +682,7 @@ private fun ProjectCard(
                         showRenameDialog = false
                     },
                     enabled = renameText.isNotBlank(),
-                    shape = RoundedCornerShape(22.dp)
+                    shape = CuteCardDefaults.ButtonShape
                 ) { Text("Rename") }
             },
             dismissButton = {
@@ -710,7 +710,7 @@ private fun ProjectCard(
                         showDeleteConfirm = false
                         showSnackbar("${project.title} deleted")
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Delete") }
             },

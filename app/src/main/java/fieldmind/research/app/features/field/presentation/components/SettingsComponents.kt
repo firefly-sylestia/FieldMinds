@@ -104,7 +104,7 @@ fun ToggleItem(
         // Optional icon
         if (icon != null) {
             Box(
-                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                     .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -163,7 +163,7 @@ fun ChoiceItemForm(
         Box(
             Modifier
                 .size(40.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .clip(MaterialTheme.shapes.medium)
                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
             contentAlignment = Alignment.Center
         ) {
@@ -217,7 +217,7 @@ fun StepperItem(
         Box(
             Modifier
                 .size(40.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .clip(MaterialTheme.shapes.medium)
                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
             contentAlignment = Alignment.Center
         ) {
@@ -239,7 +239,7 @@ fun StepperItem(
         Box(
             Modifier
                 .size(width = 48.dp, height = 40.dp)
-                .clip(RoundedCornerShape(16.dp))
+                .clip(CuteCardDefaults.ChipShape)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh),
             contentAlignment = Alignment.Center
         ) {

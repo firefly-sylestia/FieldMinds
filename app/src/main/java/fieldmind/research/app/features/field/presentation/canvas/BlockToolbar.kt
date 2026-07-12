@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -152,7 +153,7 @@ private fun BlockToolbarContent(
     hasLinkedEntity: Boolean = false
 ) {
     Surface(
-        shape = RoundedCornerShape(22.dp),
+        shape = CuteCardDefaults.ButtonShape,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = 6.dp,
         shadowElevation = 8.dp,

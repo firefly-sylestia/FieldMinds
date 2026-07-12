@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.Manifest
 import android.content.Context
@@ -499,7 +500,7 @@ fun ResearchSessionScreen(
                 // Session summary
                 item {
                     Card(
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.FieldShape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -512,7 +513,7 @@ fun ResearchSessionScreen(
                             if (sessionName.isNotBlank()) {
                                 Text("Session: $sessionName", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                             }
-                            Button(onClick = { showSummary = false; sessionElapsedMs = 0; observationCount = 0; activeSessionId = null; sessionStartedAt = 0L }, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+                            Button(onClick = { showSummary = false; sessionElapsedMs = 0; observationCount = 0; activeSessionId = null; sessionStartedAt = 0L }, shape = CuteCardDefaults.ChipShape, modifier = Modifier.fillMaxWidth()) {
                                 Text("Start new session")
                             }
                         }
@@ -522,7 +523,7 @@ fun ResearchSessionScreen(
                 // Loading while session is being created
                 item {
                     Card(
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.FieldShape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -552,7 +553,7 @@ fun ResearchSessionScreen(
             } else if (!sessionActive) {
                 // Session setup
                 item {
-                    Card(shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+                    Card(shape = CuteCardDefaults.FieldShape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                             Text("Start a research session", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                             Text("Capture observations rapidly while the timer tracks your field time.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -561,7 +562,7 @@ fun ResearchSessionScreen(
                                 Text("Link to project", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 OptionPickerField(label = "Project", selected = projects.firstOrNull { it.id == selectedProjectId }?.title ?: "No project", options = listOf("No project") + projects.map { it.title }, onSelected = { selected -> selectedProjectId = projects.firstOrNull { it.title == selected }?.id }, icon = FieldMindIcons.Project, modifier = Modifier.fillMaxWidth())
                             }
-                            Button(onClick = ::startSession, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+                            Button(onClick = ::startSession, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ChipShape) {
                                 Icon(FieldMindIcons.Bolt, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Start session")
                             }
                         }
@@ -576,7 +577,7 @@ fun ResearchSessionScreen(
                     }
                     items(completedSessions.take(10)) { session ->
                         Card(
-                            shape = RoundedCornerShape(20.dp),
+                            shape = MaterialTheme.shapes.medium,
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                             modifier = Modifier.fillMaxWidth().clickable { onOpenDetail("research_session", session.id) }
@@ -623,7 +624,7 @@ fun ResearchSessionScreen(
                 // Active session — timer card with pause/end
                 item {
                     Card(
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.FieldShape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -698,7 +699,7 @@ fun ResearchSessionScreen(
                 // ── Location & Weather Status (MOVED TO TOP) ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -760,7 +761,7 @@ fun ResearchSessionScreen(
                 // ── Evidence Tools — separate box below metadata ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.FieldShape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -843,7 +844,7 @@ fun ResearchSessionScreen(
                 if (activeSessionId != null) {
                     item {
                         Card(
-                            shape = RoundedCornerShape(28.dp),
+                            shape = CuteCardDefaults.FieldShape,
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
@@ -875,7 +876,7 @@ fun ResearchSessionScreen(
 
                 // Quick observation form
                 item {
-                    Card(shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+                    Card(shape = CuteCardDefaults.FieldShape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
                         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             Text("Quick observation", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             Text("Type what you see. Tap save. Repeat.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -955,7 +956,7 @@ fun ResearchSessionScreen(
                             Button(
                                 onClick = ::saveQuickObservation,
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(16.dp),
+                                shape = CuteCardDefaults.ChipShape,
                                 enabled = quickSubject.isNotBlank() || quickFacts.isNotBlank()
                             ) {
                                 Icon(FieldMindIcons.Add, null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save observation")
@@ -1049,7 +1050,7 @@ private fun SessionMetadataConfirmCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
         ),
@@ -1246,7 +1247,7 @@ private fun LinkObservationsSheet(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Search observations…") },
                 leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 singleLine = true
             )
 

@@ -162,12 +162,12 @@ private fun CreateItemCard(label: String, icon: MaterialSymbolIcon, accent: Colo
     val haptics = rememberFieldMindHaptics()
     Card(
         modifier = Modifier.fillMaxWidth().clickable { haptics.light(); onClick() },
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = accent.copy(alpha = 0.08f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape).background(accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(icon = icon, contentDescription = null, tint = accent, size = 24.dp)
             }
             Column(Modifier.weight(1f)) {
@@ -218,11 +218,11 @@ fun ProjectSelectorDialog(
                     projects.take(5).forEach { project ->
                         Surface(
                             onClick = { onSelectProject(project) },
-                            shape = RoundedCornerShape(24.dp),
+                            shape = CuteCardDefaults.ShapeCompact,
                             color = MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.project.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Box(Modifier.size(40.dp).clip(MaterialTheme.shapes.medium).background(FieldMindTheme.colors.project.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                     Icon(FieldMindIcons.Project, null, tint = FieldMindTheme.colors.project, size = 22.dp)
                                 }
                                 Column(Modifier.weight(1f)) {
@@ -241,7 +241,7 @@ fun ProjectSelectorDialog(
                 HorizontalDivider()
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(onClick = onCreateNew, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
+                    OutlinedButton(onClick = onCreateNew, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact) {
                         Icon(FieldMindIcons.Add, null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
                         Text("Create New Project")

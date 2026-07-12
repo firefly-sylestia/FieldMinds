@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -118,7 +119,7 @@ fun ProjectSettingsScreen(
         // ════════════════════════════════════════════════════════════
         item {
             Surface(
-                shape = RoundedCornerShape(34.dp),
+                shape = CuteCardDefaults.Shape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp,
                 modifier = Modifier.fillMaxWidth()
@@ -131,7 +132,7 @@ fun ProjectSettingsScreen(
                     ) {
                         Surface(
                             onClick = onBack,
-                            shape = RoundedCornerShape(22.dp),
+                            shape = CuteCardDefaults.ButtonShape,
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.size(40.dp)
                         ) {
@@ -156,7 +157,7 @@ fun ProjectSettingsScreen(
                                         viewModel.updateProjectEntity(project.copy(objective = projectDescription.trim()))
                                     }
                                 },
-                                shape = RoundedCornerShape(20.dp)
+                                shape = MaterialTheme.shapes.medium
                             ) {
                                 Icon(MaterialSymbolIcon("save"), null, size = 16.dp)
                                 Spacer(Modifier.size(4.dp))
@@ -170,7 +171,7 @@ fun ProjectSettingsScreen(
                     // Project identity
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                         Box(
-                            Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                            Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                                 .background(colors.project.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -199,7 +200,7 @@ fun ProjectSettingsScreen(
                     onValueChange = { projectName = it },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -232,7 +233,7 @@ fun ProjectSettingsScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                         )
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -311,7 +312,7 @@ fun ProjectSettingsScreen(
                         label = { Text("Default category") },
                         placeholder = { Text("e.g. Bird, Mammal, Plant") },
                         singleLine = true,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -324,7 +325,7 @@ fun ProjectSettingsScreen(
                         label = { Text("Default confidence") },
                         placeholder = { Text("e.g. Sure, Likely, Unsure") },
                         singleLine = true,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -371,7 +372,7 @@ fun ProjectSettingsScreen(
                                 context.startActivity(Intent.createChooser(intent, "Share Project"))
                             },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(20.dp)
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Icon(MaterialSymbolIcon("text_snippet"), null, size = 16.dp)
                             Spacer(Modifier.size(6.dp))
@@ -405,7 +406,7 @@ fun ProjectSettingsScreen(
                                 context.startActivity(Intent.createChooser(intent, "Export Project As"))
                             },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(20.dp)
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Icon(MaterialSymbolIcon("file_download"), null, size = 16.dp)
                             Spacer(Modifier.size(6.dp))
@@ -482,7 +483,7 @@ fun ProjectSettingsScreen(
                     if (onOpenBackupSettings != null) {
                         TextButton(
                             onClick = onOpenBackupSettings,
-                            shape = RoundedCornerShape(20.dp)
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Icon(MaterialSymbolIcon("settings"), null, size = 16.dp)
                             Spacer(Modifier.size(6.dp))
@@ -518,7 +519,7 @@ fun ProjectSettingsScreen(
                                 showArchiveConfirm = true
                             }
                         },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(
@@ -556,7 +557,7 @@ fun ProjectSettingsScreen(
                     )
                     Button(
                         onClick = { showDeleteConfirm = true },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -589,7 +590,7 @@ fun ProjectSettingsScreen(
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Card(
-                shape = RoundedCornerShape(34.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
                 modifier = Modifier
@@ -607,7 +608,7 @@ fun ProjectSettingsScreen(
                                 exportFormat = format
                                 showExportFormatPicker = false
                             },
-                            shape = RoundedCornerShape(20.dp),
+                            shape = MaterialTheme.shapes.medium,
                             color = if (exportFormat == format) colors.project.copy(alpha = 0.12f)
                                     else MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.fillMaxWidth()
@@ -650,13 +651,13 @@ fun ProjectSettingsScreen(
                         viewModel.updateProjectEntity(project.copy(status = "Archived", archivedAt = System.currentTimeMillis()))
                         showArchiveConfirm = false
                     },
-                    shape = RoundedCornerShape(22.dp)
+                    shape = CuteCardDefaults.ButtonShape
                 ) { Text("Archive") }
             },
             dismissButton = {
                 TextButton(onClick = { showArchiveConfirm = false }) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(34.dp)
+            shape = CuteCardDefaults.Shape
         )
     }
 
@@ -686,14 +687,14 @@ fun ProjectSettingsScreen(
                         showDeleteConfirm = false
                         onBack()
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Delete") }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteConfirm = false }) { Text("Cancel") }
             },
-            shape = RoundedCornerShape(34.dp)
+            shape = CuteCardDefaults.Shape
         )
     }
 }

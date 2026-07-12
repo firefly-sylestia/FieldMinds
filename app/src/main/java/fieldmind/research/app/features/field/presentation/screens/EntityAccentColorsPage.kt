@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -103,7 +104,7 @@ fun EntityAccentColorsPage(
         // ── Info card ──
         item {
             Card(
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.OptionShape,
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                 ),
@@ -140,7 +141,7 @@ fun EntityAccentColorsPage(
             val isEditing = editingKey == key
 
             Card(
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.OptionShape,
                 colors = CardDefaults.cardColors(
                     containerColor = if (isOverridden)
                         Color(currentColor).copy(alpha = 0.06f)
@@ -172,7 +173,7 @@ fun EntityAccentColorsPage(
                         Box(
                             modifier = Modifier
                                 .size(40.dp)
-                                .clip(RoundedCornerShape(20.dp))
+                                .clip(MaterialTheme.shapes.medium)
                                 .background(Color(currentColor)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -369,7 +370,7 @@ fun EntityAccentColorsPage(
                     editingKey = null
                 },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = MaterialTheme.colorScheme.error
                 )

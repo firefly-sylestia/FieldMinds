@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -146,7 +147,7 @@ fun CanvasScreen(
                         showExitConfirm = false
                         onBack()
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error
                     )
@@ -578,7 +579,7 @@ private fun CanvasTopBar(
             // ── Back button ──
             Surface(
                 onClick = onBack,
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 modifier = Modifier.size(36.dp)
             ) {
@@ -619,7 +620,7 @@ private fun CanvasTopBar(
                 modifier = Modifier
                     .background(
                         MaterialTheme.colorScheme.surfaceContainerHigh,
-                        RoundedCornerShape(16.dp)
+                        CuteCardDefaults.ChipShape
                     )
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
@@ -641,7 +642,7 @@ private fun CanvasTopBar(
                 Surface(
                     onClick = onUndo,
                     enabled = canUndo,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = Color.Transparent,
                     modifier = Modifier
                         .size(32.dp)
@@ -662,7 +663,7 @@ private fun CanvasTopBar(
                 Surface(
                     onClick = onRedo,
                     enabled = canRedo,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = Color.Transparent,
                     modifier = Modifier
                         .size(32.dp)
@@ -685,7 +686,7 @@ private fun CanvasTopBar(
             // ── Lock toggle ──
             Surface(
                 onClick = onToggleLock,
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = if (canvasLocked)
                     MaterialTheme.colorScheme.primaryContainer
                 else
@@ -712,7 +713,7 @@ private fun CanvasTopBar(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(1.dp),
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh, CuteCardDefaults.ChipShape)
                     .padding(horizontal = 2.dp)
             ) {
                 // Zoom out
@@ -742,7 +743,7 @@ private fun CanvasTopBar(
             Box {
                 Surface(
                     onClick = { showOverflow = true },
-                    shape = RoundedCornerShape(16.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = Color.Transparent,
                     modifier = Modifier
                         .size(32.dp)
@@ -1096,7 +1097,7 @@ private fun AddBlockMenu(
 
     Surface(
         modifier = modifier.widthIn(min = 160.dp),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         shadowElevation = 8.dp,
         tonalElevation = 4.dp

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -179,7 +180,7 @@ fun DailyFieldJournalOverlay(
                         Box(
                             Modifier
                                 .size(56.dp)
-                                .clip(RoundedCornerShape(28.dp))
+                                .clip(CuteCardDefaults.FieldShape)
                                 .background(
                                     Brush.linearGradient(
                                         colors = when (getTimeOfDay()) {
@@ -241,7 +242,7 @@ fun DailyFieldJournalOverlay(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .heightIn(min = 60.dp),
-                                shape = RoundedCornerShape(24.dp),
+                                shape = CuteCardDefaults.ShapeCompact,
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                                     unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
@@ -275,7 +276,7 @@ fun DailyFieldJournalOverlay(
                                         val isSelected = selectedCategory == label
                                         Surface(
                                             onClick = { selectedCategory = label },
-                                            shape = RoundedCornerShape(22.dp),
+                                            shape = CuteCardDefaults.ButtonShape,
                                             color = if (isSelected) accent.copy(alpha = 0.28f) else accent.copy(alpha = 0.12f),
                                             border = BorderStroke(
                                                 width = if (isSelected) 1.5.dp else 1.dp,
@@ -312,7 +313,7 @@ fun DailyFieldJournalOverlay(
                                         val isSelected = selectedCategory == label
                                         Surface(
                                             onClick = { selectedCategory = label },
-                                            shape = RoundedCornerShape(22.dp),
+                                            shape = CuteCardDefaults.ButtonShape,
                                             color = if (isSelected) accent.copy(alpha = 0.28f) else accent.copy(alpha = 0.12f),
                                             border = BorderStroke(
                                                 width = if (isSelected) 1.5.dp else 1.dp,
@@ -362,7 +363,7 @@ fun DailyFieldJournalOverlay(
                             Box(
                                 Modifier
                                     .size(48.dp)
-                                    .clip(RoundedCornerShape(24.dp))
+                                    .clip(CuteCardDefaults.ShapeCompact)
                                     .background(Color(0xFFFF6F00).copy(alpha = 0.15f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -392,7 +393,7 @@ fun DailyFieldJournalOverlay(
 
                             if (streakCount > 0) {
                                 Surface(
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     color = Color(0xFFFF6F00).copy(alpha = 0.15f)
                                 ) {
                                     Text(
@@ -409,7 +410,7 @@ fun DailyFieldJournalOverlay(
 
                     // Tips section
                     Surface(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)
                     ) {
                         Row(
@@ -448,7 +449,7 @@ fun DailyFieldJournalOverlay(
                         .padding(horizontal = 24.dp, vertical = 12.dp)
                         .height(54.dp)
                         .navigationBarsPadding(),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = CuteCardDefaults.FieldShape,
                     color = MaterialTheme.colorScheme.primary,
                     tonalElevation = 0.dp
                 ) {

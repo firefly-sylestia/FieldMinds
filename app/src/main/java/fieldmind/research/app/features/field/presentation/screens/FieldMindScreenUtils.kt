@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -175,7 +176,7 @@ internal fun FormDialog(title: String, onDismiss: () -> Unit, onSave: () -> Unit
                 .fillMaxWidth(0.94f)
                 .wrapContentHeight()
                 .padding(vertical = 24.dp),
-            shape = RoundedCornerShape(40.dp),
+            shape = CuteCardDefaults.DialogShape,
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -184,7 +185,7 @@ internal fun FormDialog(title: String, onDismiss: () -> Unit, onSave: () -> Unit
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                     TextButton(onClick = onDismiss) { Text("Cancel") }
                     Spacer(Modifier.size(8.dp))
-                    Button(onClick = onSave, shape = RoundedCornerShape(24.dp)) { Text("Save") }
+                    Button(onClick = onSave, shape = CuteCardDefaults.ShapeCompact) { Text("Save") }
                 }
             }
         }
@@ -217,7 +218,7 @@ internal fun FormSectionLabel(text: String) {
 internal fun CaptureStep(title: String, subtitle: String, icon: MaterialSymbolIcon, content: @Composable ColumnScope.() -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Box(Modifier.size(30.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.secondaryContainer), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(30.dp).clip(CuteCardDefaults.ChipShape).background(MaterialTheme.colorScheme.secondaryContainer), contentAlignment = Alignment.Center) {
                 Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer, size = 18.dp)
             }
             Column(Modifier.weight(1f)) {

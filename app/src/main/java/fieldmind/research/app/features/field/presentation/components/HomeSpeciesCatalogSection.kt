@@ -77,7 +77,7 @@ fun HomeSpeciesCatalogSection(
                     Text("Species catalog", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     if (!isLoading) {
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = accentColor.copy(alpha = 0.1f)
                         ) {
                             Text(

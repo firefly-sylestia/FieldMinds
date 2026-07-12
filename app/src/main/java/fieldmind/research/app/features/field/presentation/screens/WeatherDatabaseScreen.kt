@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -204,7 +205,7 @@ fun WeatherDatabaseScreen(
                     .fillMaxWidth()
                     .statusBarsPadding()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                shape = RoundedCornerShape(34.dp),
+                shape = CuteCardDefaults.Shape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp
             ) {
@@ -216,7 +217,7 @@ fun WeatherDatabaseScreen(
                     // ── Back button ──
                     Surface(
                         onClick = onBack,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(40.dp)
                     ) {
@@ -236,7 +237,7 @@ fun WeatherDatabaseScreen(
                             .size(48.dp)
                             .background(
                                 colors.info.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f),
-                                RoundedCornerShape(22.dp)
+                                CuteCardDefaults.ButtonShape
                             ),
                         contentAlignment = Alignment.Center
                     ) {
@@ -267,7 +268,7 @@ fun WeatherDatabaseScreen(
                     // ── Weather Catalog button ──
                     Surface(
                         onClick = onOpenWeatherCatalog,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(40.dp)
                     ) {
@@ -284,7 +285,7 @@ fun WeatherDatabaseScreen(
                     // ── Settings button ──
                     Surface(
                         onClick = onOpenSettings,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(40.dp)
                     ) {
@@ -328,7 +329,7 @@ fun WeatherDatabaseScreen(
             if (dailyGroups.isNotEmpty()) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -525,7 +526,7 @@ private fun LiveCurrentWeatherCard(
 
     InfoCard(
         animate = true,
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         tonalElevation = 0.dp, shadowElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
@@ -536,7 +537,7 @@ private fun LiveCurrentWeatherCard(
                 .then(
                     if (weather == null) Modifier.background(
                         MaterialTheme.colorScheme.surfaceContainerLow,
-                        RoundedCornerShape(36.dp)
+                        CuteCardDefaults.ShapeHero
                     ) else Modifier
                 )
         ) {
@@ -623,7 +624,7 @@ private fun LiveCurrentWeatherCard(
 
                     // Glass-morphism detailed metrics card
                     InfoCard(
-                        shape = RoundedCornerShape(36.dp),
+                        shape = CuteCardDefaults.ShapeHero,
                         colors = CardDefaults.cardColors(containerColor = if (isDarkTheme || isNight) Color.White.copy(alpha = 0.12f) else Color(0xFF1A1A3E).copy(alpha = 0.06f)),
                         tonalElevation = 0.dp, shadowElevation = 0.dp
                     ) {
@@ -752,7 +753,7 @@ private fun StatCard(
     modifier: Modifier = Modifier,
 ) {
     InfoCard(
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp,
         modifier = modifier
@@ -812,7 +813,7 @@ private fun ExpandMetric(value: String, label: String, icon: MaterialSymbolIcon,
 @Composable
 private fun ExpandInfoChip(icon: MaterialSymbolIcon, text: String, modifier: Modifier = Modifier, textColor: Color = Color.White) {
     val chipBg = textColor.copy(alpha = 0.12f)
-    Surface(shape = RoundedCornerShape(22.dp), color = chipBg, modifier = modifier) {
+    Surface(shape = CuteCardDefaults.ButtonShape, color = chipBg, modifier = modifier) {
         Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Icon(icon, null, tint = textColor.copy(alpha = 0.8f), size = 16.dp)
             Text(text, style = MaterialTheme.typography.labelSmall, color = textColor, fontWeight = FontWeight.SemiBold)
@@ -867,7 +868,7 @@ private fun ForecastDashboard(
 
                 Column(
                     Modifier
-                        .clip(RoundedCornerShape(24.dp))
+                        .clip(CuteCardDefaults.ShapeCompact)
                         .clickable { expandedIdx = if (isExpanded) -1 else forecasts.indexOf(day) }
                         .background(textOnScene.copy(alpha = 0.08f))
                         .padding(10.dp)
@@ -1009,7 +1010,7 @@ private fun WeatherRecordCard(
 
     ClickableCard(
         onClick = { onOpenDetail("observation", observation.id) },
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
@@ -1022,7 +1023,7 @@ private fun WeatherRecordCard(
             Box(
                 modifier = Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(CuteCardDefaults.ChipShape)
                     .background(colors.info.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {

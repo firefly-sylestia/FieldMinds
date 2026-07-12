@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
@@ -47,7 +48,7 @@ import fieldmind.research.app.ui.theme.CuteElevations
 @Composable
 fun GestureThresholdsCard() {
     Card(
-        shape = RoundedCornerShape(32.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -82,7 +83,7 @@ fun AnimationStateCard() {
     val reduceMotion = FieldMindMotion.isReduceMotion()
 
     Card(
-        shape = RoundedCornerShape(32.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -96,7 +97,7 @@ fun AnimationStateCard() {
 
             // Reduce-motion indicator
             Row(
-                Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(
+                Modifier.fillMaxWidth().clip(CuteCardDefaults.ButtonShape).background(
                     if (reduceMotion) MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f)
                     else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
                 ).padding(12.dp),
@@ -152,7 +153,7 @@ fun AnimationTuningCard(
     val tabStiffness by settings.animTabEntranceStiffness.collectAsState()
 
     Card(
-        shape = RoundedCornerShape(32.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -289,7 +290,7 @@ fun AnimationTuningCard(
                     settings.setAnimTabEntranceDamping(def.tabEntranceDampingRatio)
                     settings.setAnimTabEntranceStiffness(def.tabEntranceStiffness)
                 },
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -323,7 +324,7 @@ fun TapTestCard() {
     )
 
     Card(
-        shape = RoundedCornerShape(32.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -347,7 +348,7 @@ fun TapTestCard() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
-                    .clip(RoundedCornerShape(24.dp))
+                    .clip(CuteCardDefaults.ShapeCompact)
                     .background(bgColor)
                     .pointerInput(Unit) {
                         detectTapGestures { offset ->
@@ -412,7 +413,7 @@ private fun ThresholdRow(label: String, value: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
-        Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+        Surface(shape = CuteCardDefaults.ChipShape, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
             Text(
                 value,
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
@@ -500,7 +501,7 @@ private fun AnimationPreviewDemo() {
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
-            .clip(RoundedCornerShape(24.dp))
+            .clip(CuteCardDefaults.ShapeCompact)
             .background(
                 Brush.linearGradient(
                     colors = listOf(
@@ -521,7 +522,7 @@ private fun AnimationPreviewDemo() {
                     translationX = offsetXAnim.value
                     translationY = offsetYAnim.value
                 }
-                .clip(RoundedCornerShape(28.dp))
+                .clip(CuteCardDefaults.FieldShape)
                 .background(
                     Brush.sweepGradient(
                         colors = listOf(
@@ -562,7 +563,7 @@ private fun AnimationPreviewDemo() {
                 }
             },
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(20.dp),
+            shape = MaterialTheme.shapes.medium,
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
         ) {
             Text("Entrance", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
@@ -579,7 +580,7 @@ private fun AnimationPreviewDemo() {
                 }
             },
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(20.dp),
+            shape = MaterialTheme.shapes.medium,
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
         ) {
             Text("Snap back", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
@@ -600,7 +601,7 @@ private fun AnimationPreviewDemo() {
                 }
             },
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(20.dp),
+            shape = MaterialTheme.shapes.medium,
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
         ) {
             Text("Dismiss", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
@@ -649,7 +650,7 @@ fun AnimationTuningSettingsPage(
             // ── Live Preview Section ──
             item {
                 Card(
-                    shape = RoundedCornerShape(32.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -780,7 +781,7 @@ fun AnimationTuningSettingsPage(
                         settings.setAnimTabEntranceDamping(def.tabEntranceDampingRatio)
                         settings.setAnimTabEntranceStiffness(def.tabEntranceStiffness)
                     },
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -797,7 +798,7 @@ fun AnimationTuningSettingsPage(
 
             // ── Info card ──
             item {
-                Card(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+                Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Tip", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                         Text("Lower stiffness = slower, more elegant motion. Higher damping = less bounce. Changes take effect immediately.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

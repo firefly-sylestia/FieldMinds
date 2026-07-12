@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -61,7 +62,7 @@ fun ImageBlock(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(16.dp))
+            .clip(CuteCardDefaults.ChipShape)
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .then(
                 if (imageUri.isNotBlank()) {

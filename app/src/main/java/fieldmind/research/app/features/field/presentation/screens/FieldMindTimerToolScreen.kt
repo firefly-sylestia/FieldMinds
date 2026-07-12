@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.RepeatMode
@@ -239,7 +240,7 @@ fun TimerToolScreen(
                         label = { Text("Stopwatch") },
                         leadingIcon = { Icon(FieldMindIcons.Timer, null, size = 16.dp) },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     )
                     FilterChip(
                         selected = timerMode == TimerMode.TIMER,
@@ -247,7 +248,7 @@ fun TimerToolScreen(
                         label = { Text("Timer") },
                         leadingIcon = { Icon(FieldMindIcons.Hourglass, null, size = 16.dp) },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     )
                 }
             }
@@ -256,7 +257,7 @@ fun TimerToolScreen(
             if (timerMode == TimerMode.TIMER && !isRunning && !isPaused) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -329,7 +330,7 @@ fun TimerToolScreen(
             // ── Timer display ──
             item {
                 Card(
-                    shape = RoundedCornerShape(40.dp),
+                    shape = CuteCardDefaults.DialogShape,
                     colors = CardDefaults.cardColors(
                         containerColor = when {
                             countdownFinished -> MaterialTheme.colorScheme.errorContainer
@@ -508,7 +509,7 @@ fun TimerToolScreen(
             if (laps.isNotEmpty()) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -570,7 +571,7 @@ fun TimerToolScreen(
             if (isRunning) {
                 item {
                     Surface(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         color = colors.info.copy(alpha = 0.08f),
                         tonalElevation = 0.dp
                     ) {

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -223,7 +224,7 @@ fun QuestionDetailScreen(
                 ) {
                     // Status badge
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = statusColor.copy(alpha = 0.12f)
                     ) {
                         Row(
@@ -254,7 +255,7 @@ fun QuestionDetailScreen(
 
                     // Priority badge
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = priorityColor.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -269,7 +270,7 @@ fun QuestionDetailScreen(
 
                     // Category badge
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                     ) {
                         Text(
@@ -329,7 +330,7 @@ fun QuestionDetailScreen(
                         linkedObservations.forEach { obs ->
                             Surface(
                                 onClick = { onOpenDetail("observation", obs.id) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -339,7 +340,7 @@ fun QuestionDetailScreen(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
+                                        Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
                                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -375,7 +376,7 @@ fun QuestionDetailScreen(
                 Spacer(Modifier.size(8.dp))
                 OutlinedButton(
                     onClick = { showObservationPicker = true },
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -405,7 +406,7 @@ fun QuestionDetailScreen(
                         linkedSources.forEach { src ->
                             Surface(
                                 onClick = { onOpenDetail("source", src.id) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -415,7 +416,7 @@ fun QuestionDetailScreen(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
+                                        Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
                                             .background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -452,7 +453,7 @@ fun QuestionDetailScreen(
                 Spacer(Modifier.size(8.dp))
                 OutlinedButton(
                     onClick = { showSourcePicker = true },
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -484,7 +485,7 @@ fun QuestionDetailScreen(
                     },
                     minLines = 3,
                     maxLines = 6,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -522,7 +523,7 @@ fun QuestionDetailScreen(
                         }
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Surface(
-                                shape = RoundedCornerShape(16.dp),
+                                shape = CuteCardDefaults.ChipShape,
                                 color = confColor.copy(alpha = 0.12f)
                             ) {
                                 Row(
@@ -556,7 +557,7 @@ fun QuestionDetailScreen(
                                 confidenceLevel = question.confidence
                                 showAnswerEditor = true
                             },
-                            shape = RoundedCornerShape(20.dp)
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Icon(MaterialSymbolIcon("edit"), null, size = 16.dp)
                             Spacer(Modifier.size(6.dp))
@@ -579,7 +580,7 @@ fun QuestionDetailScreen(
                             },
                             minLines = 3,
                             maxLines = 6,
-                            shape = RoundedCornerShape(22.dp),
+                            shape = CuteCardDefaults.ButtonShape,
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -653,7 +654,7 @@ fun QuestionDetailScreen(
                                         answerText = question.answer
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(22.dp)
+                                    shape = CuteCardDefaults.ButtonShape
                                 ) {
                                     Text("Cancel")
                                 }
@@ -665,7 +666,7 @@ fun QuestionDetailScreen(
                                     showAnswerEditor = false
                                 },
                                 modifier = if (question.answer.isNotBlank()) Modifier.weight(1f) else Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(22.dp),
+                                shape = CuteCardDefaults.ButtonShape,
                                 enabled = answerText.isNotBlank()
                             ) {
                                 Icon(MaterialSymbolIcon("save"), null, size = 16.dp)
@@ -794,7 +795,7 @@ private fun <T> EntityPickerDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Card(
-            shape = RoundedCornerShape(34.dp),
+            shape = CuteCardDefaults.Shape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             modifier = Modifier
@@ -826,7 +827,7 @@ private fun <T> EntityPickerDialog(
                     placeholder = { Text("Search...") },
                     leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) },
                     singleLine = true,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -857,7 +858,7 @@ private fun <T> EntityPickerDialog(
                         items(items) { item ->
                             Surface(
                                 onClick = { onSelect(item) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh
                             ) {
                                 Row(
@@ -870,7 +871,7 @@ private fun <T> EntityPickerDialog(
                                     Box(
                                         Modifier
                                             .size(32.dp)
-                                            .clip(RoundedCornerShape(16.dp))
+                                            .clip(CuteCardDefaults.ChipShape)
                                             .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -928,7 +929,7 @@ private fun HypothesisMiniCard(
 
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(22.dp),
+        shape = CuteCardDefaults.ButtonShape,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         modifier = Modifier.fillMaxWidth()
     ) {

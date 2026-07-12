@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.Manifest
 import android.content.Context
@@ -400,7 +401,7 @@ fun CompassToolScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Surface(
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     color = colors.info.copy(alpha = 0.12f),
                                     tonalElevation = 0.dp
                                 ) {
@@ -425,7 +426,7 @@ fun CompassToolScreen(
                                 }
                                 // ── Magnetic / True North toggle ──
                                 Surface(
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     color = if (useTrueNorth) colors.data.copy(alpha = 0.15f) else colors.info.copy(alpha = 0.08f),
                                     tonalElevation = 0.dp,
                                     modifier = Modifier.clickable(
@@ -579,7 +580,7 @@ fun CompassToolScreen(
             } else {
                 OutlinedButton(
                     onClick = { haptics.light(); showCalibrationGuide = true },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("tune"), null, size = 16.dp)
@@ -792,7 +793,7 @@ private fun SensorMiniCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier
@@ -1088,7 +1089,7 @@ private fun CompassCalibrationGuide(
         }
 
         Card(
-            shape = RoundedCornerShape(32.dp),
+            shape = CuteCardDefaults.Shape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             modifier = Modifier.fillMaxWidth()
@@ -1228,7 +1229,7 @@ private fun CompassInterferenceCard(
     val title = if (isStrong) "Strong interference" else "Magnetic interference"
 
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = MaterialTheme.shapes.medium,
         color = bgColor,
         modifier = Modifier.fillMaxWidth().alpha(bannerAlpha)
     ) {
@@ -1528,7 +1529,7 @@ fun LevelToolScreen(
 
             // ── Level display card ──
             Card(
-                shape = RoundedCornerShape(40.dp),
+                shape = CuteCardDefaults.DialogShape,
                 colors = CardDefaults.cardColors(
                     containerColor = if (isLevel) colors.positive.copy(alpha = 0.08f)
                     else (if (isFlatMode) flatBgTint else plumbBgTint)
@@ -1567,7 +1568,7 @@ fun LevelToolScreen(
                     val statusAccent = if (isFlatMode) flatAccent else plumbAccent
                     val statusLabel = if (isFlatMode) flatLabel else plumbLabel
                     val statusBg = if (isFlatMode) flatBgTint else plumbBgTint
-                    Surface(shape = RoundedCornerShape(24.dp), color = statusBg) {
+                    Surface(shape = CuteCardDefaults.ShapeCompact, color = statusBg) {
                         Row(Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1803,7 +1804,7 @@ private fun LinearTiltGauge(
                     modifier = Modifier
                         .width(32.dp)
                         .fillMaxHeight()
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(CuteCardDefaults.ChipShape)
                         .background(sh)
                 )
                 // Fill (bottom to top based on tilt magnitude)
@@ -1812,7 +1813,7 @@ private fun LinearTiltGauge(
                     modifier = Modifier
                         .width(32.dp)
                         .fillMaxHeight(fillFraction.coerceAtLeast(0.01f))
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(CuteCardDefaults.ChipShape)
                         .background(
                             Brush.verticalGradient(
                                 listOf(accent.copy(alpha = 0.7f), accent)

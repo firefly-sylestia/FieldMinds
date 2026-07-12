@@ -184,7 +184,7 @@ fun DrawingToolbar(
                             showWidthSlider = false
                             showShapePicker = false
                         },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         color = MaterialTheme.colorScheme.surfaceContainerLow,
                         modifier = Modifier.height(36.dp)
                     ) {
@@ -219,7 +219,7 @@ fun DrawingToolbar(
                             showColorPicker = false
                             showShapePicker = false
                         },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         color = MaterialTheme.colorScheme.surfaceContainerLow,
                         modifier = Modifier.height(36.dp)
                     ) {
@@ -280,7 +280,7 @@ private fun ToolButton(
 
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
+        shape = MaterialTheme.shapes.medium,
         color = bgColor,
         modifier = Modifier
             .size(40.dp)

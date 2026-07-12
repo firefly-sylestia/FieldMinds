@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -128,7 +129,7 @@ fun CitationManagerScreen(
                             leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 20.dp) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(28.dp)
+                            shape = CuteCardDefaults.OptionShape
                         )
                     }
                 }
@@ -198,7 +199,7 @@ fun CitationManagerScreen(
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 Box(
-                                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                                    Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                                         .background(colors.source.copy(alpha = 0.14f)),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -228,7 +229,7 @@ fun CitationManagerScreen(
 
                                     // Citation preview
                                     Surface(
-                                        shape = RoundedCornerShape(20.dp),
+                                        shape = MaterialTheme.shapes.medium,
                                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                                     ) {
                                         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -305,14 +306,14 @@ private fun NewSourceDialog(
         title = { Text("Add source") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("Title") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp))
-                OutlinedTextField(value = author, onValueChange = { author = it }, label = { Text("Author") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp))
-                OutlinedTextField(value = url, onValueChange = { url = it }, label = { Text("URL (optional)") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp))
-                OutlinedTextField(value = notes, onValueChange = { notes = it }, label = { Text("Notes (optional)") }, minLines = 2, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp))
+                OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("Title") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact)
+                OutlinedTextField(value = author, onValueChange = { author = it }, label = { Text("Author") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact)
+                OutlinedTextField(value = url, onValueChange = { url = it }, label = { Text("URL (optional)") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact)
+                OutlinedTextField(value = notes, onValueChange = { notes = it }, label = { Text("Notes (optional)") }, minLines = 2, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact)
             }
         },
         confirmButton = {
-            Button(onClick = { onSave(title, author, url, notes) }, shape = RoundedCornerShape(22.dp), enabled = title.isNotBlank()) { Text("Add source") }
+            Button(onClick = { onSave(title, author, url, notes) }, shape = CuteCardDefaults.ButtonShape, enabled = title.isNotBlank()) { Text("Add source") }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancel") }

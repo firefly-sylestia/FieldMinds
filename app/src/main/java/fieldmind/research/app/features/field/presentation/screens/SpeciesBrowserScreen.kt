@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -180,7 +181,7 @@ fun SpeciesBrowserScreen(
                 Column(Modifier.fillMaxWidth()) {
                     // ── Species Browser Header — matching StandardScreenHeader style ──
                     Surface(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         color = MaterialTheme.colorScheme.surfaceContainerLow,
                         tonalElevation = 0.dp,
                         modifier = Modifier
@@ -200,7 +201,7 @@ fun SpeciesBrowserScreen(
                             Box(
                                 Modifier
                                     .size(48.dp)
-                                    .clip(RoundedCornerShape(22.dp))
+                                    .clip(CuteCardDefaults.ButtonShape)
                                     .background(FieldMindTheme.colors.info.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -244,7 +245,7 @@ fun SpeciesBrowserScreen(
                             }
                         },
                         singleLine = true,
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                         ),
@@ -301,7 +302,7 @@ fun SpeciesBrowserScreen(
                                 selected = selectedContinent == null,
                                 onClick = { selectedContinent = null },
                                 label = { Text("All regions", fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.labelSmall) },
-                                shape = RoundedCornerShape(24.dp),
+                                shape = CuteCardDefaults.ShapeCompact,
                                 leadingIcon = if (selectedContinent == null) {{ Icon(FieldMindIcons.Check, null, size = 14.dp) }} else null,
                                 colors = FilterChipDefaults.filterChipColors(
                                     selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
@@ -314,7 +315,7 @@ fun SpeciesBrowserScreen(
                                     selected = isSelected,
                                     onClick = { selectedContinent = if (isSelected) null else c },
                                     label = { Text(c, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal, style = MaterialTheme.typography.labelSmall) },
-                                    shape = RoundedCornerShape(24.dp),
+                                    shape = CuteCardDefaults.ShapeCompact,
                                     leadingIcon = if (isSelected) {{ Icon(FieldMindIcons.Check, null, size = 14.dp) }} else null
                                 )
                             }
@@ -479,7 +480,7 @@ internal fun SpeciesCard(
             Box(
                 Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(24.dp))
+                    .clip(CuteCardDefaults.ShapeCompact)
                     .background(accent.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -517,7 +518,7 @@ internal fun SpeciesCard(
                 ) {
                     // Category tag
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = accent.copy(alpha = 0.1f)
                     ) {
                         Text(
@@ -537,7 +538,7 @@ internal fun SpeciesCard(
                             else -> MaterialTheme.colorScheme.onSurfaceVariant
                         }
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = statusColor.copy(alpha = 0.12f)
                         ) {
                             Text(
@@ -623,7 +624,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                 // ── Hero header with back button ──
                 item {
                     Surface(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         color = MaterialTheme.colorScheme.surfaceContainerLow,
                         tonalElevation = 0.dp,
                         modifier = Modifier
@@ -639,7 +640,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 Surface(
                                     onClick = onBack,
-                                    shape = RoundedCornerShape(22.dp),
+                                    shape = CuteCardDefaults.ButtonShape,
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                     modifier = Modifier.size(44.dp)
                                 ) {
@@ -658,7 +659,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 // Category badge
                                 Surface(
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     color = accent.copy(alpha = 0.15f)
                                 ) {
                                     Row(
@@ -754,7 +755,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                     ) {
                         if (record.habitat.isNotBlank()) {
                             InfoCard(
-                                shape = RoundedCornerShape(28.dp),
+                                shape = CuteCardDefaults.FieldShape,
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
                                 modifier = Modifier.weight(1f)
@@ -779,7 +780,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                         }
                         if (record.diet.isNotBlank()) {
                             InfoCard(
-                                shape = RoundedCornerShape(28.dp),
+                                shape = CuteCardDefaults.FieldShape,
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
                                 modifier = Modifier.weight(1f)
@@ -821,7 +822,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 record.keyFeatures.forEach { feature ->
                                     Surface(
-                                        shape = RoundedCornerShape(20.dp),
+                                        shape = MaterialTheme.shapes.medium,
                                         color = accent.copy(alpha = 0.08f)
                                     ) {
                                         Row(
@@ -894,7 +895,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                                     ClickableCard(
                                         animate = true,
                                         onClick = { internalSpeciesId = similar.id },
-                                        shape = RoundedCornerShape(24.dp),
+                                        shape = CuteCardDefaults.ShapeCompact,
                                         colors = CardDefaults.cardColors(
                                             containerColor = MaterialTheme.colorScheme.surface
                                         ),
@@ -912,7 +913,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                                             Box(
                                                 Modifier
                                                     .size(40.dp)
-                                                    .clip(RoundedCornerShape(20.dp))
+                                                    .clip(MaterialTheme.shapes.medium)
                                                     .background(categoryColor(similar.category).copy(alpha = 0.1f)),
                                                 contentAlignment = Alignment.Center
                                             ) {

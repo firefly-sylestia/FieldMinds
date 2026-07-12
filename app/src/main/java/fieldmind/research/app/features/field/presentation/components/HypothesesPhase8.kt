@@ -191,7 +191,7 @@ fun HypothesisUpdateForm(
                 onValueChange = onSupportChange,
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 2,
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 label = { Text("What evidence would support or refute this?") }
             )
         }

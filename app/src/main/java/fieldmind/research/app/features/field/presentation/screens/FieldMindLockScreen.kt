@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.app.KeyguardManager
 import android.content.Context
@@ -231,7 +232,7 @@ private fun LockGate(
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(0.88f),
-            shape = RoundedCornerShape(40.dp),
+            shape = CuteCardDefaults.DialogShape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -400,7 +401,7 @@ private fun LockGate(
                                             usePinLock = false
                                             startBiometricAuth()
                                         },
-                                        shape = RoundedCornerShape(22.dp)
+                                        shape = CuteCardDefaults.ButtonShape
                                     ) { Text("Use device auth") }
                                 }
                             },
@@ -416,12 +417,12 @@ private fun LockGate(
                                             pinError = false
                                             onUnlock()
                                         },
-                                        shape = RoundedCornerShape(22.dp),
+                                        shape = CuteCardDefaults.ButtonShape,
                                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                                     ) { Text("Emergency reset") }
                                     TextButton(
                                         onClick = { showForgotDialog = false },
-                                        shape = RoundedCornerShape(22.dp)
+                                        shape = CuteCardDefaults.ButtonShape
                                     ) { Text("Cancel") }
                                 }
                             }
@@ -446,7 +447,7 @@ private fun LockGate(
                         OutlinedButton(
                             onClick = { usePinLock = true },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(24.dp)
+                            shape = CuteCardDefaults.ShapeCompact
                         ) {
                             Text(if (usePinLock) "Using PIN" else "Use PIN")
                         }
@@ -455,7 +456,7 @@ private fun LockGate(
                         Button(
                             onClick = { startBiometricAuth() },
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(24.dp)
+                            shape = CuteCardDefaults.ShapeCompact
                         ) {
                             Text(if (hasBiometric) "Retry biometric" else "Retry device lock")
                         }
@@ -519,14 +520,14 @@ private fun FieldMindPinNumpad(
                         modifier = Modifier
                             .weight(1f)
                             .height(54.dp)
-                            .clip(RoundedCornerShape(22.dp))
+                            .clip(CuteCardDefaults.ButtonShape)
                             .clickable(
                                 enabled = enabled,
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
                                 onClick = action
                             ),
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = if (enabled) MaterialTheme.colorScheme.surfaceContainerHighest else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
@@ -564,7 +565,7 @@ fun DecoyAppContent(
             // Decoy brand icon
             FieldMindLogo(
                 size = 80.dp,
-                modifier = Modifier.clip(RoundedCornerShape(34.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f))
+                modifier = Modifier.clip(CuteCardDefaults.Shape).background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f))
             )
 
             Text(
@@ -586,7 +587,7 @@ fun DecoyAppContent(
             // Empty state illustration
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(34.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {

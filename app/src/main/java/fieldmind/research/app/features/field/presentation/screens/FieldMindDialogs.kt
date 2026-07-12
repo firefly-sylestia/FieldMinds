@@ -95,7 +95,7 @@ internal fun DialogWrapper(
             confirmButton = {
                 Button(
                     onClick = { showExitConfirm = false; onDismiss() },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
                     Text("Discard")
@@ -146,7 +146,7 @@ internal fun DialogWrapper(
                         ) {
                             Surface(
                                 onClick = { if (isDirty()) showExitConfirm = true else onDismiss() },
-                                shape = RoundedCornerShape(22.dp),
+                                shape = CuteCardDefaults.ButtonShape,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.size(44.dp)
                             ) {
@@ -195,7 +195,7 @@ internal fun DialogHeader(
 ) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         Box(
-            Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+            Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                 .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f)),
             contentAlignment = Alignment.Center
         ) {
@@ -246,7 +246,7 @@ internal fun DialogActions(
         Spacer(Modifier.size(8.dp))
         Button(
             onClick = onSave,
-            shape = RoundedCornerShape(24.dp),
+            shape = CuteCardDefaults.ShapeCompact,
             enabled = saveEnabled
         ) { Text(saveLabel) }
     }
@@ -286,7 +286,7 @@ internal fun CollapsibleSection(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(
             containerColor = if (expanded) MaterialTheme.colorScheme.surfaceContainerLow
             else MaterialTheme.colorScheme.surfaceContainerHigh
@@ -450,7 +450,7 @@ internal fun NewProjectDialog(
         // Template Guide — shows guidance from selected template without auto-filling fields
         if (templateGuide != null) {
             Card(
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.FieldShape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                 elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
             ) {
@@ -486,7 +486,7 @@ internal fun NewProjectDialog(
                                 Text("Recommended methods", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = FieldMindTheme.colors.project)
                                 FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                     templateGuide.defaultMethods.forEach { m ->
-                                        Surface(shape = RoundedCornerShape(16.dp), color = FieldMindTheme.colors.project.copy(alpha = 0.1f)) {
+                                        Surface(shape = CuteCardDefaults.ChipShape, color = FieldMindTheme.colors.project.copy(alpha = 0.1f)) {
                                             Text(m, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp), color = FieldMindTheme.colors.project, fontWeight = FontWeight.Medium)
                                         }
                                     }
@@ -535,9 +535,9 @@ private fun GuideRow(label: String, value: String) {
 }
 @Composable
 private fun SourceFormHero(title: String, body: String) {
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Row(Modifier.fillMaxWidth().padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                 Icon(FieldMindIcons.Source, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 24.dp)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -567,7 +567,7 @@ internal fun SourcePreviewCard(link: String, fileUri: String, modifier: Modifier
                     model = "https://img.youtube.com/vi/$id/hqdefault.jpg",
                     contentDescription = "YouTube thumbnail",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().height(150.dp).clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                    modifier = Modifier.fillMaxWidth().height(150.dp).clip(CuteCardDefaults.ShapeCompact).background(MaterialTheme.colorScheme.surfaceContainerHighest)
                 )
             }
             if (trimmedLink.isNotBlank() && videoId == null) {
@@ -1186,7 +1186,7 @@ internal fun NewObservationDialog(viewModel: FieldMindViewModel, onDismiss: () -
 
         // ── Audio recording section ──
         Spacer(Modifier.height(6.dp))
-        Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
+        Card(shape = CuteCardDefaults.ShapeCompact, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Icon(FieldMindIcons.Mic, null, tint = FieldMindTheme.colors.observation, size = 20.dp)
@@ -1299,7 +1299,7 @@ internal fun NewNoteDialog(viewModel: FieldMindViewModel, onDismiss: () -> Unit,
         if (projectId != null) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(22.dp),
+                shape = CuteCardDefaults.ButtonShape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                 elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
             ) {
@@ -1588,7 +1588,7 @@ private fun EditObservationDialog(entity: ObservationEntity, viewModel: FieldMin
         }
         // ── Audio recording section ──
         Spacer(Modifier.height(6.dp))
-        Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
+        Card(shape = CuteCardDefaults.ShapeCompact, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Icon(FieldMindIcons.Mic, null, tint = FieldMindTheme.colors.observation, size = 20.dp)
@@ -2364,7 +2364,7 @@ internal fun ObservationLocationCard(latitude: Double, longitude: Double, manual
                 Text("Location", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
             }
             if (placeName != null) Text(placeName, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-            Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp))) {
+            Box(Modifier.fillMaxWidth().clip(CuteCardDefaults.ShapeCompact)) {
                 OsmMapView(
                     points = listOf(latitude to longitude),
                     showEmptyState = false,

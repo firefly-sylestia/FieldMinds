@@ -381,7 +381,7 @@ private fun WeatherCatalogCurrentCard(
 
                     // Glass metrics overlay
                     Surface(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         color = if (isDark || isNight) Color.White.copy(alpha = 0.12f) else Color(0xFF1A1A3E).copy(alpha = 0.06f),
                         tonalElevation = 0.dp
                     ) {
@@ -593,7 +593,7 @@ private fun DateGroupSelector(
     val colors = FieldMindTheme.colors
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -659,7 +659,7 @@ private fun ExportButtonsRow(
     ) {
         OutlinedButton(
             onClick = onExportHtml,
-            shape = RoundedCornerShape(16.dp),
+            shape = CuteCardDefaults.ChipShape,
             modifier = Modifier.weight(1f),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = FieldMindTheme.colors.observation)
         ) {
@@ -669,7 +669,7 @@ private fun ExportButtonsRow(
         }
         OutlinedButton(
             onClick = onExportCsv,
-            shape = RoundedCornerShape(16.dp),
+            shape = CuteCardDefaults.ChipShape,
             modifier = Modifier.weight(1f),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = FieldMindTheme.colors.data)
         ) {
@@ -706,7 +706,7 @@ private fun WeatherCatalogRecordCard(
     }
 
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -720,7 +720,7 @@ private fun WeatherCatalogRecordCard(
             Box(
                 modifier = Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(CuteCardDefaults.ChipShape)
                     .background(colors.info.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -803,7 +803,7 @@ private fun WeatherCatalogRecordCard(
 @Composable
 private fun WeatherStatMini(label: String, value: String, color: androidx.compose.ui.graphics.Color, modifier: Modifier = Modifier) {
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier

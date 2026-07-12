@@ -115,7 +115,7 @@ fun PdfBlock(
                 Spacer(Modifier.height(8.dp))
                 Button(
                     onClick = { pdfPicker.launch(arrayOf("application/pdf")) },
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.tertiary
                     ),

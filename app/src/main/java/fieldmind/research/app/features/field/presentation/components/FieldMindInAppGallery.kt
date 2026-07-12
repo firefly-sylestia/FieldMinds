@@ -306,7 +306,7 @@ fun FieldMindInAppGallery(
                                     }
                                     onSelectImage(attachments)
                                 },
-                                shape = RoundedCornerShape(24.dp)
+                                shape = CuteCardDefaults.ShapeCompact
                             ) {
                                 Icon(FieldMindIcons.Archive, null, size = 18.dp)
                                 Spacer(Modifier.size(6.dp))

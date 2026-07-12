@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -189,7 +190,7 @@ fun TaskDetailScreen(
                 ) {
                     // Priority badge
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = priorityColor.copy(alpha = 0.12f)
                     ) {
                         Text(
@@ -211,7 +212,7 @@ fun TaskDetailScreen(
                         } catch (_: Exception) { false }
 
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = if (isOverdue) MaterialTheme.colorScheme.error.copy(alpha = 0.12f)
                                     else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                         ) {
@@ -245,7 +246,7 @@ fun TaskDetailScreen(
                     // Status badge
                     if (task.status == "Done") {
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = FieldMindTheme.colors.positive.copy(alpha = 0.12f)
                         ) {
                             Text(
@@ -284,7 +285,7 @@ fun TaskDetailScreen(
                             viewModel.updateTaskEntity(task.copy(status = if (isDone) "Pending" else "Done"))
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (isDone) FieldMindTheme.colors.warning else FieldMindTheme.colors.positive,
                             contentColor = Color.White
@@ -306,7 +307,7 @@ fun TaskDetailScreen(
                     OutlinedButton(
                         onClick = { showDeleteConfirm = true },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.error
                         )
@@ -445,7 +446,7 @@ fun TaskDetailScreen(
                                         viewModel.updateTaskEntity(latestTask.copy(checklistJson = arr.toString()))
                                     }
                                 },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -510,7 +511,7 @@ fun TaskDetailScreen(
                         linkedObs.forEach { obs ->
                             Surface(
                                 onClick = { onOpenDetail("observation", obs.id) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -520,7 +521,7 @@ fun TaskDetailScreen(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
+                                        Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
                                             .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -549,7 +550,7 @@ fun TaskDetailScreen(
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     OutlinedButton(
                         onClick = { showObservationPicker = true },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -558,7 +559,7 @@ fun TaskDetailScreen(
                     }
                     OutlinedButton(
                         onClick = { showSpeciesPicker = true },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(MaterialSymbolIcon("pets"), null, size = 16.dp)
@@ -567,7 +568,7 @@ fun TaskDetailScreen(
                     }
                     OutlinedButton(
                         onClick = { showEvidencePicker = true },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(MaterialSymbolIcon("description"), null, size = 16.dp)
@@ -590,7 +591,7 @@ fun TaskDetailScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         attachments.forEach { uri ->
                             Surface(
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -608,7 +609,7 @@ fun TaskDetailScreen(
                                         else -> MaterialSymbolIcon("attachment")
                                     }
                                     Box(
-                                        Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
+                                        Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
                                             .background(FieldMindTheme.colors.task.copy(alpha = 0.14f)),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -780,7 +781,7 @@ private fun <T> EntityPickerDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Card(
-            shape = RoundedCornerShape(34.dp),
+            shape = CuteCardDefaults.Shape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             modifier = Modifier
@@ -812,7 +813,7 @@ private fun <T> EntityPickerDialog(
                     placeholder = { Text("Search...") },
                     leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 18.dp) },
                     singleLine = true,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
@@ -843,7 +844,7 @@ private fun <T> EntityPickerDialog(
                         items(items) { item ->
                             Surface(
                                 onClick = { onSelect(item) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh
                             ) {
                                 Row(
@@ -856,7 +857,7 @@ private fun <T> EntityPickerDialog(
                                     Box(
                                         Modifier
                                             .size(32.dp)
-                                            .clip(RoundedCornerShape(16.dp))
+                                            .clip(CuteCardDefaults.ChipShape)
                                             .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -953,7 +954,7 @@ private fun LinkedEntityRow(
 ) {
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
+        shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -963,7 +964,7 @@ private fun LinkedEntityRow(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Box(
-                Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
+                Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
                     .background(accentColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {

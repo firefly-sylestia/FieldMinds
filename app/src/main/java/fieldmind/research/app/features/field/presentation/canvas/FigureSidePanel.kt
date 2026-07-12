@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
@@ -290,7 +291,7 @@ private fun FigureInfoCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(20.dp),
+        shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainerHigh
     ) {
         Row(
@@ -304,7 +305,7 @@ private fun FigureInfoCard(
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(CuteCardDefaults.ChipShape)
                     .background(
                         if (imageUri.isNotBlank())
                             MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
@@ -405,7 +406,7 @@ private fun NotesTab(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             },
-            shape = RoundedCornerShape(20.dp),
+            shape = MaterialTheme.shapes.medium,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
             ),
@@ -482,7 +483,7 @@ private fun InterpretationTab(
 
         if (!assistant.isAvailable()) {
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
             ) {
                 Row(
@@ -570,7 +571,7 @@ private fun InterpretationTab(
                 }
             },
             enabled = !generating,
-            shape = RoundedCornerShape(20.dp),
+            shape = MaterialTheme.shapes.medium,
             modifier = Modifier.fillMaxWidth()
         ) {
             if (generating) {
@@ -594,7 +595,7 @@ private fun InterpretationTab(
 
         if (generationError != null) {
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
             ) {
                 Row(
@@ -628,7 +629,7 @@ private fun InterpretationTab(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             },
-            shape = RoundedCornerShape(20.dp),
+            shape = MaterialTheme.shapes.medium,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
             ),
@@ -637,7 +638,7 @@ private fun InterpretationTab(
 
         if (interpretationText.isNotBlank()) {
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
             ) {
                 Row(
@@ -747,7 +748,7 @@ private fun RelatedIdeasTab(
         // Link button
         OutlinedButton(
             onClick = onLinkToEntity,
-            shape = RoundedCornerShape(20.dp),
+            shape = MaterialTheme.shapes.medium,
             modifier = Modifier.fillMaxWidth()
         ) {
             Icon(MaterialSymbolIcon("add_link"), null, size = 16.dp)
@@ -889,7 +890,7 @@ private fun QuestionsTab(
                     )
                 },
                 singleLine = true,
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
                 ),
@@ -898,7 +899,7 @@ private fun QuestionsTab(
 
             Surface(
                 onClick = onAddQuestion,
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 color = if (newQuestionText.isNotBlank())
                     MaterialTheme.colorScheme.primary
                 else
@@ -980,7 +981,7 @@ private fun QuestionsTab(
                                     questionsToJson(updated)
                                 )
                             },
-                            shape = RoundedCornerShape(16.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(

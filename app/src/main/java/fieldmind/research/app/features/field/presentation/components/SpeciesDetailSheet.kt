@@ -137,7 +137,7 @@ fun SpeciesDetailSheet(
                     ) {
                         if (record.habitat.isNotBlank()) {
                             Card(
-                                shape = RoundedCornerShape(24.dp),
+                                shape = CuteCardDefaults.ShapeCompact,
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 modifier = Modifier.weight(1f)
@@ -151,7 +151,7 @@ fun SpeciesDetailSheet(
                         }
                         if (record.diet.isNotBlank()) {
                             Card(
-                                shape = RoundedCornerShape(24.dp),
+                                shape = CuteCardDefaults.ShapeCompact,
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 modifier = Modifier.weight(1f)
@@ -190,7 +190,7 @@ fun SpeciesDetailSheet(
                     Button(
                         onClick = onDismiss,
                         modifier = Modifier.fillMaxWidth().height(48.dp),
-                        shape = RoundedCornerShape(24.dp)
+                        shape = CuteCardDefaults.ShapeCompact
                     ) {
                         Text("Close", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
                     }
@@ -317,7 +317,7 @@ fun SpeciesInfoCard(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                    Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                         .background(accent.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -344,7 +344,7 @@ fun SpeciesInfoCard(
                 // Detail button
                 Surface(
                     onClick = onOpenDetail,
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.size(36.dp)
                 ) {

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -200,7 +201,7 @@ fun TaxonomicBrowserScreen(
                     ) {
                         Surface(
                             onClick = { goUp() },
-                            shape = RoundedCornerShape(22.dp),
+                            shape = CuteCardDefaults.ButtonShape,
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             modifier = Modifier.size(44.dp)
                         ) {
@@ -365,7 +366,7 @@ private fun TaxoLevelCard(
 
     ClickableCard(
         onClick = onClick,
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp,
         modifier = Modifier
@@ -380,7 +381,7 @@ private fun TaxoLevelCard(
             Box(
                 Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(22.dp))
+                    .clip(CuteCardDefaults.ButtonShape)
                     .background(accent.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -104,7 +105,7 @@ fun FieldMindLearnScreen(
                 subtitle = "Discover resources matched to your research journey.",
                 icon = FieldMindIcons.School,
                 trailing = {
-                    BackButton(onClick = onBack, shape = RoundedCornerShape(20.dp), containerColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.6f), contentDescription = "Back")
+                    BackButton(onClick = onBack, shape = MaterialTheme.shapes.medium, containerColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.6f), contentDescription = "Back")
                 }
             )
         }
@@ -180,7 +181,7 @@ private fun InAppLessonCard(
 
     Card(
         modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -196,7 +197,7 @@ private fun InAppLessonCard(
             Box(
                 Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(22.dp))
+                    .clip(CuteCardDefaults.ButtonShape)
                     .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -280,7 +281,7 @@ private fun NextStepHero(
     onOpenReader: (String, String) -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -297,7 +298,7 @@ private fun NextStepHero(
                 Box(
                     Modifier
                         .size(52.dp)
-                        .clip(RoundedCornerShape(24.dp))
+                        .clip(CuteCardDefaults.ShapeCompact)
                         .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -360,7 +361,7 @@ private fun NextStepHero(
             // CTA button
             Button(
                 onClick = { onOpenReader(milestone.resource.url, milestone.resource.title) },
-                shape = RoundedCornerShape(22.dp),
+                shape = CuteCardDefaults.ButtonShape,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.15f),
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -392,7 +393,7 @@ private fun ActivityRecommendationCard(
 
     Card(
         modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -408,7 +409,7 @@ private fun ActivityRecommendationCard(
             Box(
                 Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(22.dp))
+                    .clip(CuteCardDefaults.ButtonShape)
                     .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -541,7 +542,7 @@ private fun LearnCategoryCardCompact(
                 // Topic count badge + expand arrow
                 Column(horizontalAlignment = Alignment.End) {
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f)
                     ) {
                         Text(
@@ -596,7 +597,7 @@ private fun TopicCard(
     var topicExpanded by rememberSaveable(topic.name) { mutableStateOf(false) }
 
     Surface(
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.7f)
     ) {
         Column(
@@ -614,7 +615,7 @@ private fun TopicCard(
                 Box(
                     Modifier
                         .size(26.dp)
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(CuteCardDefaults.ChipShape)
                         .background(accent.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -680,7 +681,7 @@ private fun ResourceRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(MaterialTheme.shapes.medium)
             .clickable(onClick = onClick)
             .padding(horizontal = 6.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,

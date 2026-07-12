@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.navigation
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -509,7 +510,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                         }
                         pendingNavRoute = null
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Discard & navigate") }
             },
@@ -879,7 +880,7 @@ private fun RailNavTabItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(24.dp))
+            .clip(CuteCardDefaults.ShapeCompact)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -888,7 +889,7 @@ private fun RailNavTabItem(
             .defaultMinSize(minHeight = 48.dp)
             .background(
                 color = if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) else Color.Transparent,
-                shape = RoundedCornerShape(24.dp)
+                shape = CuteCardDefaults.ShapeCompact
             )
             .padding(vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -1863,7 +1864,7 @@ private fun AllTabScreen(
                         activity?.moveTaskToBack(true)
                         showExitConfirm = false
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     )

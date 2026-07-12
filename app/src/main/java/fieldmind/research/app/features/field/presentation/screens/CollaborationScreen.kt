@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.ActivityNotFoundException
 import android.content.ClipData
@@ -278,7 +279,7 @@ fun CollaborationScreen(
                                                 }
                                             }
                                         },
-                                        shape = RoundedCornerShape(22.dp),
+                                        shape = CuteCardDefaults.ButtonShape,
                                         enabled = !isExporting
                                     ) {
                                         Icon(MaterialSymbolIcon("file_download"), null, size = 18.dp)
@@ -319,7 +320,7 @@ fun CollaborationScreen(
                                                 text = summary
                                             )
                                         },
-                                        shape = RoundedCornerShape(22.dp)
+                                        shape = CuteCardDefaults.ButtonShape
                                     ) {
                                         Icon(MaterialSymbolIcon("share"), null, size = 18.dp)
                                         Spacer(Modifier.size(6.dp))
@@ -343,7 +344,7 @@ fun CollaborationScreen(
                         content = {
                             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                 Surface(
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                                 ) {
                                     Row(
@@ -369,7 +370,7 @@ fun CollaborationScreen(
                                                     text = "Join my FieldMind research workspace! Download FieldMind to collaborate."
                                                 )
                                             },
-                                            shape = RoundedCornerShape(22.dp)
+                                            shape = CuteCardDefaults.ButtonShape
                                         ) { Text("Invite") }
                                     }
                                 }
@@ -380,7 +381,7 @@ fun CollaborationScreen(
                                     Text("Shared projects", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
                                     activeProjects.take(5).forEach { project ->
                                         Surface(
-                                            shape = RoundedCornerShape(20.dp),
+                                            shape = MaterialTheme.shapes.medium,
                                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
@@ -418,12 +419,12 @@ fun CollaborationScreen(
                         content = {
                             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                 Surface(
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                                        Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(colors.warning.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                        Box(Modifier.size(40.dp).clip(MaterialTheme.shapes.medium).background(colors.warning.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                             Icon(MaterialSymbolIcon("public"), null, tint = colors.warning, size = 22.dp)
                                         }
                                         Column(Modifier.weight(1f)) {
@@ -573,7 +574,7 @@ fun CollaborationScreen(
                                                 )
                                             }
                                         },
-                                        shape = RoundedCornerShape(22.dp)
+                                        shape = CuteCardDefaults.ButtonShape
                                     ) {
                                         Icon(MaterialSymbolIcon("description"), null, size = 18.dp)
                                         Spacer(Modifier.size(6.dp))
@@ -655,7 +656,7 @@ fun CollaborationScreen(
                                                 }
                                             }
                                         },
-                                        shape = RoundedCornerShape(22.dp),
+                                        shape = CuteCardDefaults.ButtonShape,
                                         enabled = !isExporting
                                     ) {
                                         Icon(FieldMindIcons.Export, null, size = 18.dp)
@@ -680,7 +681,7 @@ fun CollaborationScreen(
                         content = {
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                                 Surface(
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
@@ -692,7 +693,7 @@ fun CollaborationScreen(
                                         Text("Enable backup in Settings to sync your data across devices.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                 }
-                                Button(onClick = { onOpenExport() }, shape = RoundedCornerShape(22.dp), modifier = Modifier.fillMaxWidth()) {
+                                Button(onClick = { onOpenExport() }, shape = CuteCardDefaults.ButtonShape, modifier = Modifier.fillMaxWidth()) {
                                     Icon(MaterialSymbolIcon("settings_backup_restore"), null, size = 18.dp)
                                     Spacer(Modifier.size(6.dp))
                                     Text("Open backup settings")
@@ -751,8 +752,8 @@ private fun CollaborationCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
-        shape = RoundedCornerShape(34.dp),
+            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -766,7 +767,7 @@ private fun CollaborationCard(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(accent.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {

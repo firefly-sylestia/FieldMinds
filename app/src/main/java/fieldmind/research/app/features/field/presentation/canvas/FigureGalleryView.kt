@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -192,7 +193,7 @@ private fun FigureGalleryCard(
 
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         shadowElevation = 2.dp,
         modifier = Modifier.expressivePress(scaleDown = 0.97f)

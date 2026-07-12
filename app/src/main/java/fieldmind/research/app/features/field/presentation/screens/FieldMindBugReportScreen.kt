@@ -142,7 +142,7 @@ fun FieldMindBugReportScreen(
 
             // ── Notice panel explaining what gets sent.───────────────────
             Surface(
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.55f),
                 tonalElevation = 0.dp
             ) {

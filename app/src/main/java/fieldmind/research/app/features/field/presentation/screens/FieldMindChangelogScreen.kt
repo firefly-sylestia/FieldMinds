@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -1372,7 +1373,7 @@ fun FieldMindChangelogScreen(onBack: () -> Unit) {
         // Introduction card
         item {
             Card(
-                shape = RoundedCornerShape(34.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1417,7 +1418,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
     }
     
     Card(
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(
             containerColor = if (isLatest) MaterialTheme.colorScheme.primaryContainer 
                           else MaterialTheme.colorScheme.surfaceContainerLow
@@ -1430,7 +1431,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 Box(
                     Modifier.size(56.dp)
-                        .clip(RoundedCornerShape(28.dp))
+                        .clip(CuteCardDefaults.FieldShape)
                         .background(accentColor.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -1469,7 +1470,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
                 }
                 // Importance badge
                 Box(
-                    Modifier.clip(RoundedCornerShape(20.dp))
+                    Modifier.clip(MaterialTheme.shapes.medium)
                         .background(
                             when (entry.importance) {
                                 "Major" -> MaterialTheme.colorScheme.errorContainer
@@ -1575,7 +1576,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
                 Spacer(Modifier.height(4.dp))
                 Box(
                     Modifier.fillMaxWidth()
-                        .clip(RoundedCornerShape(22.dp))
+                        .clip(CuteCardDefaults.ButtonShape)
                         .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
                         .padding(12.dp),
                     contentAlignment = Alignment.Center

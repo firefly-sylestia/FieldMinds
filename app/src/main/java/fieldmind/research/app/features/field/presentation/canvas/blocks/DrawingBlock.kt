@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -62,7 +63,7 @@ fun DrawingBlock(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(16.dp))
+            .clip(CuteCardDefaults.ChipShape)
             .background(MaterialTheme.colorScheme.surfaceContainerLowest)
     ) {
         Canvas(

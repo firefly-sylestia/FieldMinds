@@ -837,7 +837,7 @@ fun SwipeBackHost(
                         .padding(start = 4.dp)
                         .align(Alignment.CenterStart)
                         .size(40.dp)
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(MaterialTheme.shapes.medium)
                         .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -852,7 +852,7 @@ fun SwipeBackHost(
                         .padding(top = 4.dp)
                         .align(Alignment.TopCenter)
                         .size(40.dp)
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(MaterialTheme.shapes.medium)
                         .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f)),
                     contentAlignment = Alignment.Center
                 ) {
