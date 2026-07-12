@@ -1,5 +1,7 @@
 package fieldmind.research.app.features.field.presentation.components
 import fieldmind.research.app.ui.theme.CuteCardDefaults
+import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.cuteShadow
 
 import android.Manifest
 import android.app.Activity
@@ -428,7 +430,8 @@ fun FieldMindCameraV2(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .background(Color.Black.copy(alpha = 0.45f), CuteCardDefaults.ShapeHero)
+                    .background(Color.Black.copy(alpha = 0.35f), CuteCardDefaults.ShapeHero)
+                    .cuteShadow(elevation = CuteElevations.plushTier2, shape = CuteCardDefaults.ShapeHero)
                     .padding(horizontal = 12.dp, vertical = 6.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -611,7 +614,10 @@ fun FieldMindCameraV2(
                 contentAlignment = Alignment.BottomCenter
             ) {
                 Surface(
-                    shape = RoundedCornerShape(topStart = 32.dp, topEnd = 36.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .cuteShadow(elevation = CuteElevations.plushTier4, shape = CuteCardDefaults.ShapeHero),
+                    shape = CuteCardDefaults.ShapeHero,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.98f),
                     shadowElevation = 16.dp,
                     modifier = Modifier.fillMaxWidth()
@@ -895,12 +901,12 @@ fun FieldMindCameraV2(
                     .padding(horizontal = 16.dp, vertical = 12.dp)
                     .safeDrawingPadding()
             ) {
-                Surface(
-                    shape = RoundedCornerShape(40.dp),
-                    color = Color.Black.copy(alpha = 0.55f),
-                    tonalElevation = 0.dp,
-                    shadowElevation = 12.dp,
-                    modifier = Modifier.fillMaxWidth()
+            Surface(
+                modifier = Modifier.fillMaxWidth()
+                    .cuteShadow(elevation = CuteElevations.plushTier3, shape = CuteCardDefaults.DialogShape),
+                shape = CuteCardDefaults.DialogShape,
+                color = Color.Black.copy(alpha = 0.48f),
+                tonalElevation = CuteElevations.plushTier3,
                 ) {
                     Column(Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
                         // ── Zoom strip (inside the pill) ──
@@ -1148,7 +1154,9 @@ private fun SpeciesFieldPanel(
             .safeDrawingPadding()
     ) {
         Surface(
-            shape = RoundedCornerShape(40.dp),
+            modifier = Modifier.fillMaxWidth()
+                .cuteShadow(elevation = CuteElevations.plushTier4, shape = CuteCardDefaults.DialogShape),
+            shape = CuteCardDefaults.DialogShape,
             color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.98f),
             shadowElevation = 24.dp,
             modifier = Modifier.fillMaxWidth()
@@ -1166,12 +1174,12 @@ private fun SpeciesFieldPanel(
                     // Photo thumbnail with decorative ring
                     Box(
                         Modifier.size(72.dp)
-                            .clip(RoundedCornerShape(30.dp))
+                            .clip(CuteCardDefaults.Shape)
                             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                             .border(
                                 2.dp,
                                 colors.observation.copy(alpha = 0.3f),
-                                RoundedCornerShape(30.dp)
+                                CuteCardDefaults.Shape
                             )
                     ) {
                         if (capturedUri != null) {
@@ -1180,7 +1188,7 @@ private fun SpeciesFieldPanel(
                                 contentDescription = "Captured photo",
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .clip(RoundedCornerShape(28.dp)),
+                                    .clip(CuteCardDefaults.OptionShape),
                                 contentScale = ContentScale.Crop
                             )
                         } else {
@@ -1238,7 +1246,7 @@ private fun SpeciesFieldPanel(
                     placeholder = { Text("e.g. Red-tailed Hawk") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = CuteCardDefaults.FieldShape,
                     leadingIcon = {
                         Icon(
                             FieldMindIcons.Search,
@@ -1412,7 +1420,7 @@ private fun SpeciesFieldPanel(
                     minLines = 1,
                     maxLines = 2,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = CuteCardDefaults.FieldShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = colors.observation,
                         cursorColor = colors.observation
@@ -1430,7 +1438,7 @@ private fun SpeciesFieldPanel(
                     OutlinedButton(
                         onClick = onSaveExit,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.FieldShape,
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1446,7 +1454,7 @@ private fun SpeciesFieldPanel(
                     Button(
                         onClick = onSaveContinue,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.FieldShape,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colors.observation
                         )
