@@ -1948,6 +1948,7 @@ private fun LinearTiltGauge(
                 // ── Tier markers with labels ──
                 val warnLine = 1f - (10f / 90f)
                 val amberLine = 1f - (2f / 90f)
+                val tierErrorColor = MaterialTheme.colorScheme.error
                 Canvas(modifier = Modifier.matchParentSize()) {
                     val barLeft = (size.width - 36.dp.toPx()) / 2f
                     val barRight = barLeft + 36.dp.toPx()
@@ -1967,12 +1968,12 @@ private fun LinearTiltGauge(
                     )
                     // Red tier (10°) with glow
                     drawCircle(
-                        color = MaterialTheme.colorScheme.error.copy(alpha = 0.3f),
+                        color = tierErrorColor.copy(alpha = 0.3f),
                         radius = 5f,
                         center = Offset(barLeft, barBottom * warnLine)
                     )
                     drawLine(
-                        MaterialTheme.colorScheme.error.copy(alpha = 0.25f),
+                        tierErrorColor.copy(alpha = 0.25f),
                         Offset(barLeft + 10f, barBottom * warnLine),
                         Offset(barRight - 10f, barBottom * warnLine),
                         strokeWidth = 1f
