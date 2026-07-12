@@ -300,7 +300,7 @@ internal fun CollapsibleSection(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Box(
-                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                    Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape)
                         .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp) }
@@ -463,7 +463,7 @@ internal fun NewProjectDialog(
                         }
                         Surface(
                             onClick = { showGuide = !showGuide },
-                            shape = RoundedCornerShape(18.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = FieldMindTheme.colors.project.copy(alpha = 0.12f)
                         ) {
                             Row(Modifier.padding(horizontal = 8.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -609,7 +609,7 @@ private fun ProgressiveSection(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Box(Modifier.size(36.dp).clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                    Box(Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp) }
                 Column(Modifier.weight(1f)) {

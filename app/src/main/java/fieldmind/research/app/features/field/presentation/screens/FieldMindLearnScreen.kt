@@ -335,7 +335,7 @@ private fun NextStepHero(
             // Personalized badge
             if (signals.isNotBlank()) {
                 Surface(
-                    shape = RoundedCornerShape(18.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.10f)
                 ) {
                     Row(
@@ -511,7 +511,7 @@ private fun LearnCategoryCardCompact(
                         .size(36.dp)
                         .background(
                             accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f),
-                            RoundedCornerShape(18.dp)
+                            CuteCardDefaults.ChipShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {

@@ -212,7 +212,7 @@ fun FieldMindBugReportScreen(
 
             // ── Auto-attach crash log toggle.──────────────────────────────
             Surface(
-                shape = RoundedCornerShape(18.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp
             ) {

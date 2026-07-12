@@ -273,7 +273,7 @@ private fun BacklinkChip(label: String, onClick: () -> Unit, modifier: Modifier 
     OutlinedButton(
         onClick = onClick,
         modifier = modifier.height(36.dp),
-        shape = RoundedCornerShape(18.dp)
+        shape = CuteCardDefaults.ChipShape
     ) {
         Text(label, style = MaterialTheme.typography.labelSmall)
     }

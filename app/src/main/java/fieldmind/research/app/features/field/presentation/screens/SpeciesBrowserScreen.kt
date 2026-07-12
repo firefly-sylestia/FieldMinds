@@ -370,7 +370,7 @@ fun SpeciesBrowserScreen(
                         Box {
                             Surface(
                                 onClick = { showSortDropdown = !showSortDropdown },
-                                shape = RoundedCornerShape(18.dp),
+                                shape = CuteCardDefaults.ChipShape,
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                 tonalElevation = 0.dp
                             ) {
@@ -861,7 +861,7 @@ fun SharedTransitionScope.SpeciesDetailScreen(
                             ) {
                                 record.tags.forEach { tag ->
                                     Surface(
-                                        shape = RoundedCornerShape(18.dp),
+                                        shape = CuteCardDefaults.ChipShape,
                                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                                     ) {
                                         Text(
@@ -986,7 +986,7 @@ private fun DetailSection(
                 Box(
                     Modifier
                         .size(36.dp)
-                        .clip(RoundedCornerShape(18.dp))
+                        .clip(CuteCardDefaults.ChipShape)
                         .background(accent.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {

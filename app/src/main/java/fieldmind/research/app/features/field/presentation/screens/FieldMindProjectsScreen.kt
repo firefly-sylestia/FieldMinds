@@ -316,7 +316,7 @@ fun ProjectsScreen(
                     Box {
                         Surface(
                             onClick = { showSortMenu = true },
-                            shape = RoundedCornerShape(18.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             tonalElevation = 0.dp
                         ) {

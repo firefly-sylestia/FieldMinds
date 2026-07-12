@@ -386,7 +386,7 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Box(
-                                Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                                Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape)
                                     .background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) { Icon(FieldMindIcons.iconFor(type), null, tint = FieldMindTheme.colors.source, size = 18.dp) }
@@ -1453,7 +1453,7 @@ private fun LibraryFlashcard(
                     )
                 }
                 Box(
-                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                    Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape)
                         .background(
                             if (selected) accent.copy(alpha = 0.3f)
                             else accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)

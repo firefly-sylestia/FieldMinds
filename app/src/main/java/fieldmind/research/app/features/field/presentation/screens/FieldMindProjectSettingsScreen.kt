@@ -438,7 +438,7 @@ fun ProjectSettingsScreen(
                         }
                         Surface(
                             onClick = { showExportFormatPicker = true },
-                            shape = RoundedCornerShape(18.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(

@@ -812,7 +812,7 @@ private fun HypothesisCard(
                 OutlinedButton(
                     onClick = onAddObservation,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(18.dp)
+                    shape = CuteCardDefaults.ChipShape
                 ) {
                     Icon(FieldMindIcons.Add, null, size = 14.dp)
                     Spacer(Modifier.size(4.dp))
@@ -823,7 +823,7 @@ private fun HypothesisCard(
                     FilledTonalButton(
                         onClick = onMarkTested,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(18.dp)
+                        shape = CuteCardDefaults.ChipShape
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 14.dp)
                         Spacer(Modifier.size(4.dp))

@@ -966,7 +966,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
                                     val isSelected = reminder == mins
                                     Surface(
                                         onClick = { haptics.light(); reminder = mins },
-                                        shape = RoundedCornerShape(18.dp),
+                                        shape = CuteCardDefaults.ChipShape,
                                         color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         modifier = Modifier.weight(1f)
                                     ) {
@@ -990,7 +990,7 @@ fun NewTaskScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: Tas
                                     val isSelected = repeatUnit == unit
                                     Surface(
                                         onClick = { haptics.light(); repeatUnit = unit; repeatInterval = interval },
-                                        shape = RoundedCornerShape(18.dp),
+                                        shape = CuteCardDefaults.ChipShape,
                                         color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         modifier = Modifier.weight(1f)
                                     ) {

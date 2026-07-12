@@ -54,7 +54,7 @@ fun GestureThresholdsCard() {
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape).background(FieldMindTheme.colors.hypothesis.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("gesture"), null, tint = FieldMindTheme.colors.hypothesis, size = 18.dp)
                 }
                 Text("Gesture thresholds", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
@@ -89,7 +89,7 @@ fun AnimationStateCard() {
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape).background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("motion_photos_on"), null, tint = FieldMindTheme.colors.observation, size = 18.dp)
                 }
                 Text("Animation state", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
@@ -159,7 +159,7 @@ fun AnimationTuningCard(
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("tune"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
                 }
                 Text("Animation tuning", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
@@ -330,7 +330,7 @@ fun TapTestCard() {
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape).background(FieldMindTheme.colors.info.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(MaterialSymbolIcon("touch_app"), null, tint = FieldMindTheme.colors.info, size = 18.dp)
                 }
                 Text("Tap test area", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
@@ -656,7 +656,7 @@ fun AnimationTuningSettingsPage(
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Box(Modifier.size(32.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                 Icon(MaterialSymbolIcon("play_circle"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
                             }
                             Text("Live Preview", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)

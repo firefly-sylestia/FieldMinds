@@ -248,7 +248,7 @@ fun TaxonomicBrowserScreen(
                                 val accent = levelColor(crumb.level)
                                 Surface(
                                     onClick = { jumpTo(index) },
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     color = accent.copy(alpha = 0.1f)
                                 ) {
                                     Row(

@@ -166,7 +166,7 @@ fun FieldLogScreen(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Box(
-                            Modifier.size(32.dp).clip(RoundedCornerShape(18.dp))
+                            Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
                                 .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -452,7 +452,7 @@ fun FieldLogScreen(
                                     ) {
                                         Box(
                                             Modifier.size(32.dp)
-                                                .clip(RoundedCornerShape(18.dp))
+                                                .clip(CuteCardDefaults.ChipShape)
                                                 .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                             contentAlignment = Alignment.Center
                                         ) {

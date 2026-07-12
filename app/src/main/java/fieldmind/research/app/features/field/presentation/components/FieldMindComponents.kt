@@ -1617,7 +1617,7 @@ fun NoteComposerCard(
                         Text("New note", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                         Surface(
                             onClick = { haptics.light(); showTemplates = !showTemplates },
-                            shape = RoundedCornerShape(18.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = if (showTemplates) FieldMindTheme.colors.warning.cardBg(FieldMindTheme.colors.isDark) else MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {

@@ -1501,7 +1501,7 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
                 ) {
                     entry.tags.forEach { tag ->
                         Box(
-                            Modifier.clip(RoundedCornerShape(18.dp))
+                            Modifier.clip(CuteCardDefaults.ChipShape)
                                 .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f))
                                 .padding(horizontal = 10.dp, vertical = 5.dp),
                             contentAlignment = Alignment.Center

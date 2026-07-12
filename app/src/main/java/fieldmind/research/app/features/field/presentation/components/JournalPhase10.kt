@@ -68,7 +68,7 @@ fun JournalEditorHeader(
                     onValueChange = onCategoryChange,
                     label = { Text("Category") },
                     modifier = Modifier.weight(0.4f),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     singleLine = true
                 )
                 OutlinedTextField(
@@ -76,7 +76,7 @@ fun JournalEditorHeader(
                     onValueChange = onTagsChange,
                     label = { Text("Tags") },
                     modifier = Modifier.weight(0.6f),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     singleLine = true
                 )
             }

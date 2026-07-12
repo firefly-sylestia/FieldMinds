@@ -353,7 +353,7 @@ fun ProjectRelationsScreen(
                             // Observation icon
                             Box(
                                 Modifier.size(36.dp)
-                                    .clip(RoundedCornerShape(18.dp))
+                                    .clip(CuteCardDefaults.ChipShape)
                                     .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -379,7 +379,7 @@ fun ProjectRelationsScreen(
                             val totalCount = rel.groups.sumOf { it.count }
                             if (totalCount > 0) {
                                 Surface(
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     color = FieldMindTheme.colors.project.copy(alpha = 0.12f)
                                 ) {
                                     Text(

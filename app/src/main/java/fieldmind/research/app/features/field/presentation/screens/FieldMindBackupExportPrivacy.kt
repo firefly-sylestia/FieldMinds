@@ -142,7 +142,7 @@ fun ExportPrivacyOptionsCard(
                                     val selected = gpsPrivacy == mode
                                     Surface(
                                         onClick = { onGpsPrivacyChange(mode) },
-                                        shape = RoundedCornerShape(18.dp),
+                                        shape = CuteCardDefaults.ChipShape,
                                         color = if (selected) colors.data.copy(alpha = 0.14f)
                                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         border = if (selected) BorderStroke(1.2.dp, colors.data) else null,

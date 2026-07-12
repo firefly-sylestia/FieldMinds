@@ -938,7 +938,7 @@ fun WeatherLogToolScreen(
                                 FilledTonalButton(
                                     onClick = { autoFetchWeather() },
                                     enabled = !autoFetching,
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                                 ) {
                                     if (autoFetching) {

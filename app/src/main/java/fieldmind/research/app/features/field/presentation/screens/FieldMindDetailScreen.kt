@@ -718,7 +718,7 @@ fun ObservationBehaviorSection(
             ) {
                 if (behaviorData.behavior.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), 
@@ -731,7 +731,7 @@ fun ObservationBehaviorSection(
                 }
                 if (behaviorData.lifeStage.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -744,7 +744,7 @@ fun ObservationBehaviorSection(
                 }
                 if (behaviorData.sex.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp),

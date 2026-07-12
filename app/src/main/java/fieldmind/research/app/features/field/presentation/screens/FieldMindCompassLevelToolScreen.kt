@@ -1126,7 +1126,7 @@ private fun CompassCalibrationGuide(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Box(
-                        Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                        Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape)
                             .background(colors.info.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) { Icon(MaterialSymbolIcon("tune"), null, tint = colors.info, size = 20.dp) }

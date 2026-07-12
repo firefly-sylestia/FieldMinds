@@ -390,7 +390,7 @@ fun CollaborationScreen(
                                                 verticalAlignment = Alignment.CenterVertically,
                                                 horizontalArrangement = Arrangement.spacedBy(10.dp)
                                             ) {
-                                                Box(Modifier.size(36.dp).clip(RoundedCornerShape(18.dp)).background(colors.project.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                                Box(Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape).background(colors.project.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                                     Icon(FieldMindIcons.Project, null, tint = colors.project, size = 20.dp)
                                                 }
                                                 Column(Modifier.weight(1f)) {

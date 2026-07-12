@@ -998,7 +998,7 @@ private fun SectionCard(
                 Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                 if (badge != null) {
                     Surface(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = FieldMindTheme.colors.hypothesis.copy(alpha = 0.12f)
                     ) {
                         Text(

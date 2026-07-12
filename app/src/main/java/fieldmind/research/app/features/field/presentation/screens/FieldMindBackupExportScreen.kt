@@ -1270,7 +1270,7 @@ private fun ExportTabContent(
                                         verticalArrangement = Arrangement.spacedBy(4.dp)
                                     ) {
                                         Box(
-                                            Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                                            Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape)
                                                 .background(if (isSelected) fmt.color.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest),
                                             contentAlignment = Alignment.Center
                                         ) {
@@ -1574,7 +1574,7 @@ private fun ImportTabContent(
                         ) {
                             items.forEach { (label, count) ->
                                 Surface(
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                                 ) {
                                     Row(

@@ -244,7 +244,7 @@ fun FieldMindSnackbarOverlay(
                             Box(
                                 modifier = Modifier
                                     .size(36.dp)
-                                    .clip(RoundedCornerShape(18.dp))
+                                    .clip(CuteCardDefaults.ChipShape)
                                     .background(accentColor.copy(alpha = 0.12f)),
                                 contentAlignment = Alignment.Center
                             ) {

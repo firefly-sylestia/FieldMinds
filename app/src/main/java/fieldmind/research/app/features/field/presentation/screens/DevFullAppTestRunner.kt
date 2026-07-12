@@ -246,7 +246,7 @@ fun DevFullAppTestRunner(
                     Box(
                         Modifier
                             .size(36.dp)
-                            .clip(RoundedCornerShape(18.dp))
+                            .clip(CuteCardDefaults.ChipShape)
                             .background(statusColor.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {

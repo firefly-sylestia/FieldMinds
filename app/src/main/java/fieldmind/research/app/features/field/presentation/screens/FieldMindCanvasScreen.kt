@@ -1113,7 +1113,7 @@ private fun AddBlockMenu(
 
             blockTypes.forEach { (type, label) ->
                 Surface(
-                    shape = RoundedCornerShape(18.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier
                         .fillMaxWidth()

@@ -1065,7 +1065,7 @@ private fun ProjectEntityCard(
     ) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.size(36.dp).clip(RoundedCornerShape(18.dp)).background(accentColor.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape).background(accentColor.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(
                         when (kind) {
                             "observation" -> FieldMindIcons.Observation; "note" -> MaterialSymbolIcon("edit_note")

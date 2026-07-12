@@ -92,7 +92,7 @@ private fun HealthIssueBadge(issue: ResearchHealthIssue) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(severityColor.copy(alpha = 0.1f), RoundedCornerShape(18.dp))
+            .background(severityColor.copy(alpha = 0.1f), CuteCardDefaults.ChipShape)
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)

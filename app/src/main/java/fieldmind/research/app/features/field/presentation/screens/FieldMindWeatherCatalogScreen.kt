@@ -410,7 +410,7 @@ private fun WeatherCatalogCurrentCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         weather.sunrise?.let { sunrise ->
-                            Surface(shape = RoundedCornerShape(18.dp), color = textOnScene.copy(alpha = 0.12f), modifier = Modifier.weight(1f)) {
+                            Surface(shape = CuteCardDefaults.ChipShape, color = textOnScene.copy(alpha = 0.12f), modifier = Modifier.weight(1f)) {
                                 Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                     Icon(MaterialSymbolIcon("sunny"), null, tint = textOnScene.copy(alpha = 0.7f), size = 14.dp)
                                     Text("Sunrise ${formatTimeFromIso(sunrise)}", style = MaterialTheme.typography.labelSmall, color = textOnScene, fontWeight = FontWeight.SemiBold)
@@ -418,7 +418,7 @@ private fun WeatherCatalogCurrentCard(
                             }
                         }
                         weather.sunset?.let { sunset ->
-                            Surface(shape = RoundedCornerShape(18.dp), color = textOnScene.copy(alpha = 0.12f), modifier = Modifier.weight(1f)) {
+                            Surface(shape = CuteCardDefaults.ChipShape, color = textOnScene.copy(alpha = 0.12f), modifier = Modifier.weight(1f)) {
                                 Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                     Icon(MaterialSymbolIcon("clear_night"), null, tint = textOnScene.copy(alpha = 0.7f), size = 14.dp)
                                     Text("Sunset ${formatTimeFromIso(sunset)}", style = MaterialTheme.typography.labelSmall, color = textOnScene, fontWeight = FontWeight.SemiBold)

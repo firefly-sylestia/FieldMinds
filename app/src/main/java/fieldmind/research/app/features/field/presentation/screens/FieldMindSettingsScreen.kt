@@ -909,7 +909,7 @@ fun LocalModelSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Box(Modifier.size(36.dp).clip(RoundedCornerShape(18.dp)).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                             Icon(FieldMindIcons.Sparkle, null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
                         }
                         Text("On-device study generation", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)

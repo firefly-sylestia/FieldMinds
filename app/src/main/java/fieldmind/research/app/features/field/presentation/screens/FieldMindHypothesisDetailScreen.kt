@@ -673,7 +673,7 @@ private fun MarkTestedDialog(
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Box(
-                                Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                                Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape)
                                     .background(if (selectedStatus == conclusion) color.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -740,7 +740,7 @@ private fun SectionCard(
                 Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                 if (badge != null) {
                     Surface(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = iconTint.copy(alpha = 0.12f)
                     ) {
                         Text(

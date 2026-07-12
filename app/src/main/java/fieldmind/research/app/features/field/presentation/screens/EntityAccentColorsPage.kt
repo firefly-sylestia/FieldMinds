@@ -226,7 +226,7 @@ fun EntityAccentColorsPage(
                                 Box(
                                     modifier = Modifier
                                         .size(36.dp)
-                                        .clip(RoundedCornerShape(18.dp))
+                                        .clip(CuteCardDefaults.ChipShape)
                                         .background(Color(tempColor)),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -247,7 +247,7 @@ fun EntityAccentColorsPage(
                                 if (tempColor != defaultColor) {
                                     Surface(
                                         onClick = { tempColor = defaultColor },
-                                        shape = RoundedCornerShape(18.dp),
+                                        shape = CuteCardDefaults.ChipShape,
                                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                                     ) {
                                         Icon(MaterialSymbolIcon("restart_alt"), "Reset", size = 18.dp, modifier = Modifier.padding(8.dp))
@@ -262,7 +262,7 @@ fun EntityAccentColorsPage(
                                         settings.setEntityColors(updated)
                                         editingKey = null
                                     },
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     color = Color(tempColor)
                                 ) {
                                     Icon(MaterialSymbolIcon("check"), "Apply", tint = Color.White, size = 18.dp, modifier = Modifier.padding(8.dp))
@@ -270,7 +270,7 @@ fun EntityAccentColorsPage(
                                 // Cancel
                                 Surface(
                                     onClick = { editingKey = null },
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                                 ) {
                                     Icon(MaterialSymbolIcon("close"), "Cancel", size = 18.dp, modifier = Modifier.padding(8.dp))
@@ -294,12 +294,12 @@ fun EntityAccentColorsPage(
                                         Box(
                                             modifier = Modifier
                                                 .size(40.dp)
-                                                .clip(RoundedCornerShape(18.dp))
+                                                .clip(CuteCardDefaults.ChipShape)
                                                 .background(Color(colorLong))
                                                 .then(
                                                     if (isSelected) Modifier.border(
                                                         3.dp, MaterialTheme.colorScheme.onSurface,
-                                                        RoundedCornerShape(18.dp)
+                                                        CuteCardDefaults.ChipShape
                                                     ) else Modifier
                                                 )
                                                 .clickable {
@@ -346,7 +346,7 @@ fun EntityAccentColorsPage(
                                 },
                                 modifier = Modifier.width(120.dp),
                                 singleLine = true,
-                                shape = RoundedCornerShape(18.dp),
+                                shape = CuteCardDefaults.ChipShape,
                                 textStyle = MaterialTheme.typography.bodySmall,
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,

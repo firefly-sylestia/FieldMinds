@@ -486,7 +486,7 @@ private fun TaskSectionHeader(
             Box(
                 modifier = Modifier
                     .size(32.dp)
-                    .clip(RoundedCornerShape(18.dp))
+                    .clip(CuteCardDefaults.ChipShape)
                     .background(accentColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
