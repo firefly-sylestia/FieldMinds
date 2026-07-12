@@ -42,7 +42,7 @@ import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.cuteShadow
-import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 /**
  * A delightful empty state card with an animated nature scene, warm personality-filled
@@ -99,18 +99,17 @@ fun DelightfulEmptyState(
         label = "actionPulseGlow"
     )
 
-    val journal = LocalJournalStyle.current
-    val cardShape = journalCardShape(journal)
-    val chipShape = journalChipShape(journal)
+    val cardShape = CuteCardDefaults.ShapeCompact
+    val chipShape = CuteCardDefaults.ChipShape
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .then(journalTextureModifier(journal))
+            
             .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = cardShape),
         shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        border = journalBorderStroke(journal)
+        border = journalBorderStroke()
     ) {
         Column(
             modifier = Modifier

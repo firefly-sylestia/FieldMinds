@@ -53,7 +53,6 @@ import fieldmind.research.app.features.field.presentation.components.ColorScheme
 import fieldmind.research.app.features.field.presentation.components.pressScale
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
 
-import fieldmind.research.app.shared.presentation.theme.JournalStyle
 import fieldmind.research.app.shared.presentation.theme.KeyedEnum
 import fieldmind.research.app.shared.presentation.theme.MicroDelightIntensity
 import fieldmind.research.app.shared.presentation.theme.NavBarStyle
@@ -600,125 +599,21 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
         }
 
         // ╔══════════════════════════════════════════════════════════════╗
-        // ║  JOURNAL AESTHETIC                                          ║
+        // ║  NAV BAR STYLE                                              ║
         // ╚══════════════════════════════════════════════════════════════╝
-        item { SectionHeader("Journal aesthetic", "Whimsical journal personality and bottom-nav animation style") }
+        item { SectionHeader("Navigation bar", "How the bottom navigation bar looks and animates") }
         item {
-            val journalStyleKey by settings.journalStyle.collectAsState()
             val navBarStyleKey by settings.navBarStyle.collectAsState()
 
             SettingsGroupCard {
-                Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-
-                    // ── 1. Journal Style (4 large swatches in a horizontal scroll) ──
-                    Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Box(
-                                Modifier.size(28.dp).clip(RoundedCornerShape(14.dp))
-                                    .background(fieldmind.research.app.shared.presentation.theme.JournalPresets.Sketchbook.accentWarmth),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(MaterialSymbolIcon("auto_stories"), contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
-                            }
-                            Text("Journal style", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                        Text("Choose your journal's visual personality. Affects cards, background, and ornaments.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Row(
-                            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            JournalStyle.entries.forEach { style ->
-                                val isSelected = journalStyleKey == style.key
-                                // Preview brush — single uniform Brush type so the swatch background
-                                // can be applied with one Modifier.background() and no smart-cast.
-                                val previewBrush: Brush = when (style.key) {
-                                    "victorian" -> Brush.linearGradient(
-                                        colors = listOf(Color(0xFFF5E8D8), Color(0xFFE8D6B8))
-                                    )
-                                    "sketchbook" -> Brush.linearGradient(
-                                        colors = listOf(Color(0xFFFBF7F0), Color(0xFFF5EBD9))
-                                    )
-                                    "bullet_journal" -> Brush.linearGradient(
-                                        colors = listOf(Color(0xFFF8F8FA), Color(0xFFEDEDF0))
-                                    )
-                                    else /* ghibli */ -> Brush.radialGradient(
-                                        colors = listOf(Color(0xFFFFF1E6), Color(0xFFE8B4B4).copy(alpha = 0.5f), Color(0xFFF0ECE4)),
-                                        radius = 220f
-                                    )
-                                }
-                                Surface(
-                                    onClick = { settings.setJournalStyle(style.key) },
-                                    shape = RoundedCornerShape(18.dp),
-                                    color = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                    border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
-                                    modifier = Modifier.width(150.dp).pressScale(scaleDown = 0.96f)
-                                ) {
-                                    Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                        // Mini visual preview of the journal style
-                                        Box(
-                                            modifier = Modifier.fillMaxWidth().height(56.dp).clip(RoundedCornerShape(10.dp))
-                                                .background(previewBrush)
-                                        ) {
-                                            // Style-specific overlay motif
-                                            when (style.key) {
-                                                "victorian" -> {
-                                                    // Sepia book icon bottom-right
-                                                    Icon(MaterialSymbolIcon("auto_stories"), contentDescription = null, tint = Color(0xFF8B4513).copy(alpha = 0.75f), modifier = Modifier.align(Alignment.BottomEnd).padding(4.dp).size(26.dp))
-                                                    // Ornamental crown icon top-left (replaces unreliable ❦ glyph)
-                                                    Icon(MaterialSymbolIcon("crown"), contentDescription = null, tint = Color(0xFF8B4513).copy(alpha = 0.65f), modifier = Modifier.align(Alignment.TopStart).padding(4.dp).size(14.dp))
-                                                }
-                                                "sketchbook" -> {
-                                                    Icon(MaterialSymbolIcon("edit"), contentDescription = null, tint = Color(0xFF5D4037).copy(alpha = 0.6f), modifier = Modifier.align(Alignment.Center).size(22.dp))
-                                                    // Pencil-line sketch detail (subtle horizontal rule)
-                                                    Box(
-                                                        Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(horizontal = 8.dp).height(1.dp)
-                                                            .background(Color(0xFF5D4037).copy(alpha = 0.35f))
-                                                    )
-                                                }
-                                                "bullet_journal" -> {
-                                                    // 4x5 dot grid
-                                                    Column(Modifier.fillMaxSize().padding(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                                        repeat(4) {
-                                                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                                                                repeat(5) {
-                                                                    Box(Modifier.size(3.dp).clip(CircleShape).background(Color(0xFF37474F).copy(alpha = 0.35f)))
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                "ghibli" -> {
-                                                    Icon(MaterialSymbolIcon("cloud"), contentDescription = null, tint = Color.White.copy(alpha = 0.9f), modifier = Modifier.align(Alignment.TopEnd).padding(4.dp).size(28.dp))
-                                                    Icon(MaterialSymbolIcon("auto_awesome"), contentDescription = null, tint = Color.White.copy(alpha = 0.9f), modifier = Modifier.align(Alignment.BottomStart).padding(4.dp).size(16.dp))
-                                                }
-                                            }
-                                        }
-                                        Text(style.displayName, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, maxLines = 1)
-                                        Text(style.description, style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                                        if (isSelected) {
-                                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                                                Icon(FieldMindIcons.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 14.dp)
-                                                Text("Selected", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
-
-                    // ── 2. Nav Bar Style (3-pill radio) ──
-                    PillRadioGroup(
-                        title = "Nav bar style",
-                        description = "How the active tab indicator animates across the bottom bar.",
-                        icon = MaterialSymbolIcon("dock_to_bottom"),
-                        options = NavBarStyle.entries.toList(),
-                        selectedKey = navBarStyleKey,
-                        onSelect = { settings.setNavBarStyle(it.key) }
-                    )
-                }
+                PillRadioGroup(
+                    title = "Nav bar style",
+                    description = "How the active tab indicator animates across the bottom bar.",
+                    icon = MaterialSymbolIcon("dock_to_bottom"),
+                    options = NavBarStyle.entries.toList(),
+                    selectedKey = navBarStyleKey,
+                    onSelect = { settings.setNavBarStyle(it.key) }
+                )
             }
         }
 

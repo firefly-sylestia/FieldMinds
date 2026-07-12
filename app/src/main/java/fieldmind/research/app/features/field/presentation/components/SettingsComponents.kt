@@ -36,7 +36,7 @@ import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.ui.theme.cuteShadow
-import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
 
 // ══════════════════════════════════════════════════════════════════════
@@ -48,10 +48,8 @@ import fieldmind.research.app.ui.theme.CuteElevations
  * card gradient style and opacity settings. Wraps content in a pill-shaped
  * card with a plush shadow.
  *
- * Phase 3 (Whimsical Redesign): reads [LocalJournalStyle] to apply the
- * active journal's corner radius, border style, and per-style texture
- * overlay (parchment tones for Victorian, paper fibers for Sketchbook,
- * dot-grid for BulletJournal, watercolor washes for Ghibli).
+ * v0.51.0 — Unified cute rounded design via [CuteCardDefaults]. The journal
+ * style system has been retired; all cards share a consistent pill aesthetic.
  */
 @Composable
 fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
@@ -61,13 +59,10 @@ fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val userGradient = CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
-    val journal = LocalJournalStyle.current
-    val shape = RoundedCornerShape(journal.cardCornerRadius)
-    val effectiveBorder = journalBorderStroke(journal)
-    val textureModifier = journalTextureModifier(journal)
-    val journalBrush = journalCardBrush(journal, fallbackColor = MaterialTheme.colorScheme.surfaceContainerLow)
+    val shape = CuteCardDefaults.ShapeCompact
+    val effectiveBorder = journalBorderStroke()
     Card(
-        modifier = Modifier.fillMaxWidth().cuteShadow().then(textureModifier),
+        modifier = Modifier.fillMaxWidth().cuteShadow(),
         shape = shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
@@ -77,7 +72,7 @@ fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    brush = if (journal.useGradientCards) journalBrush else userGradient,
+                    brush = userGradient,
                     shape = shape
                 )
         ) { Column(content = content) }

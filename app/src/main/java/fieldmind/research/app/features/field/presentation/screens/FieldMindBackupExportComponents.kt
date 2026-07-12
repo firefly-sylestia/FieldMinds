@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
-import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.shared.presentation.components.icons.Icon
@@ -42,18 +42,17 @@ fun HeroStatusCard(
 ) {
     val colors = FieldMindTheme.colors
     val totalRecords = entityCounts.values.sum()
-    val journal = LocalJournalStyle.current
-    val cardShape = journalCardShape(journal)
-    val chipShape = journalChipShape(journal)
+    val cardShape = CuteCardDefaults.ShapeCompact
+    val chipShape = CuteCardDefaults.ChipShape
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .then(journalTextureModifier(journal)),
+            ,
         shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
-        border = journalBorderStroke(journal)
+        border = journalBorderStroke()
     ) {
         Column(
             Modifier
@@ -176,18 +175,17 @@ fun HeroStatusCard(
 fun QuickRestoreCard(
     onClick: () -> Unit
 ) {
-    val journal = LocalJournalStyle.current
-    val cardShape = journalCardShape(journal)
-    val chipShape = journalChipShape(journal)
+    val cardShape = CuteCardDefaults.ShapeCompact
+    val chipShape = CuteCardDefaults.ChipShape
 
     Card(
         shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f)),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier),
-        border = journalBorderStroke(journal),
+        border = journalBorderStroke(),
         modifier = Modifier
             .fillMaxWidth()
-            .then(journalTextureModifier(journal))
+            
             .clickable { onClick() }
             .pressScale(scaleDown = 0.97f)
             .cuteShadow(elevation = CuteElevations.clickableTier, shape = cardShape)
@@ -260,15 +258,14 @@ fun TabPillSelector(
         Triple(BackupTab.IMPORT, FieldMindIcons.Download, "Import"),
         Triple(BackupTab.BACKUP, FieldMindIcons.Archive, "Backup")
     )
-    val journal = LocalJournalStyle.current
-    val cardShape = journalCardShape(journal)
-    val chipShape = journalChipShape(journal)
+    val cardShape = CuteCardDefaults.ShapeCompact
+    val chipShape = CuteCardDefaults.ChipShape
 
     Surface(
         shape = cardShape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp,
-        border = journalBorderStroke(journal)
+        border = journalBorderStroke()
     ) {
         Row(
             Modifier.fillMaxWidth().padding(4.dp),
@@ -340,14 +337,13 @@ fun ExportHistoryItemCard(
         else -> FieldMindIcons.File
     }
 
-    val journal = LocalJournalStyle.current
     val cardShape = journalCardShape(journal)
     Card(
         shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        border = journalBorderStroke(journal),
-        modifier = Modifier.fillMaxWidth().then(journalTextureModifier(journal)).clickable { onShare() }
+        border = journalBorderStroke(),
+        modifier = Modifier.fillMaxWidth().clickable { onShare() }
     ) {
         Row(
             Modifier.fillMaxWidth().padding(14.dp),
@@ -426,7 +422,7 @@ fun BackupConfirmationDialog(
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text("Cancel") }
             },
-            shape = journalCardShape(LocalJournalStyle.current)
+            shape = CuteCardDefaults.ShapeCompact
         )
     }
 }
@@ -460,7 +456,7 @@ fun ExportConfirmationDialog(
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text("Cancel") }
             },
-            shape = journalCardShape(LocalJournalStyle.current)
+            shape = CuteCardDefaults.ShapeCompact
         )
     }
 }

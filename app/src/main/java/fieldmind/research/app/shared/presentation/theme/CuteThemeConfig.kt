@@ -200,6 +200,16 @@ object CuteCardDefaults {
     val ShapeCompact: Shape = RoundedCornerShape(24.dp)
     /** Large hero card shape. */
     val ShapeHero: Shape = RoundedCornerShape(36.dp)
+    /** Standard chip/badge shape — rounded pill. */
+    val ChipShape: Shape = RoundedCornerShape(16.dp)
+    /** Button / small interactive element shape. */
+    val ButtonShape: Shape = RoundedCornerShape(22.dp)
+    /** Dialog / modal shape. */
+    val DialogShape: Shape = RoundedCornerShape(40.dp)
+    /** Option picker item shape. */
+    val OptionShape: Shape = RoundedCornerShape(28.dp)
+    /** Text field shape. */
+    val FieldShape: Shape = RoundedCornerShape(28.dp)
 
     /**
      * Default card colours — uses surfaceContainerLowest so the card

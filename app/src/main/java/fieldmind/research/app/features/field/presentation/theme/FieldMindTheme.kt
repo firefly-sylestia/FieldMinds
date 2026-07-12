@@ -25,9 +25,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
-import fieldmind.research.app.shared.presentation.theme.JournalPresets
-import fieldmind.research.app.shared.presentation.theme.JournalStyle
-import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.shared.presentation.theme.LocalMicroDelightIntensity
 import fieldmind.research.app.shared.presentation.theme.LocalNavBarStyle
 import fieldmind.research.app.shared.presentation.theme.MicroDelightIntensity
@@ -820,10 +817,6 @@ fun FieldMindTheme(
         }
     }
 
-    val journalStyleKey by FieldMindSettings
-        .getInstance(context)
-        .journalStyle
-        .collectAsState()
     val microDelightKey by FieldMindSettings
         .getInstance(context)
         .microDelightIntensity
@@ -833,9 +826,6 @@ fun FieldMindTheme(
         .navBarStyle
         .collectAsState()
 
-    val journalConfig = remember(journalStyleKey) {
-        JournalPresets.forStyle(JournalStyle.fromKey(journalStyleKey))
-    }
     val delightIntensity = remember(microDelightKey) {
         MicroDelightIntensity.fromKey(microDelightKey)
     }
@@ -845,7 +835,6 @@ fun FieldMindTheme(
 
     CompositionLocalProvider(
         LocalFieldMindColors provides semantic,
-        LocalJournalStyle provides journalConfig,
         LocalMicroDelightIntensity provides delightIntensity,
         LocalNavBarStyle provides navBarConfig
     ) {
