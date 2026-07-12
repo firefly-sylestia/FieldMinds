@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -169,7 +170,7 @@ fun VoiceNotesScreen(
                             leadingIcon = { Icon(MaterialSymbolIcon("search"), null, size = 20.dp) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(28.dp)
+                            shape = CuteCardDefaults.OptionShape
                         )
                     }
                 }
@@ -179,8 +180,8 @@ fun VoiceNotesScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .cuteShadow(elevation = CuteElevations.clickableTier, shape = RoundedCornerShape(34.dp)),
-                        shape = RoundedCornerShape(34.dp),
+                            .cuteShadow(elevation = CuteElevations.clickableTier, shape = CuteCardDefaults.Shape),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = if (isRecording) MaterialTheme.colorScheme.errorContainer
                             else MaterialTheme.colorScheme.surfaceContainerLow
@@ -235,7 +236,7 @@ fun VoiceNotesScreen(
                                 if (!isRecording) {
                                     FilledTonalButton(
                                         onClick = { startRecording() },
-                                        shape = RoundedCornerShape(28.dp)
+                                        shape = CuteCardDefaults.OptionShape
                                     ) {
                                         Icon(MaterialSymbolIcon("fiber_manual_record"), null, size = 18.dp)
                                         Spacer(Modifier.size(6.dp))
@@ -244,7 +245,7 @@ fun VoiceNotesScreen(
                                 } else {
                                     FilledTonalButton(
                                         onClick = { stopRecording() },
-                                        shape = RoundedCornerShape(28.dp),
+                                        shape = CuteCardDefaults.OptionShape,
                                         colors = ButtonDefaults.filledTonalButtonColors(
                                             containerColor = MaterialTheme.colorScheme.error
                                         )
@@ -278,8 +279,8 @@ fun VoiceNotesScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp)),
-                        shape = RoundedCornerShape(30.dp),
+                            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = if (isPlaying) colors.observation.copy(alpha = 0.08f)
                             else MaterialTheme.colorScheme.surfaceContainerLow
@@ -421,7 +422,7 @@ fun VoiceNotesScreen(
                         showDeleteConfirm = null
                         showFastSnackbar(snackbar, scope, "Voice note deleted")
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Delete") }
             },
@@ -443,7 +444,7 @@ fun VoiceNotesScreen(
                     onValueChange = { renameText = it },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp)
+                    shape = CuteCardDefaults.ShapeCompact
                 )
             },
             confirmButton = {
@@ -456,7 +457,7 @@ fun VoiceNotesScreen(
                         }
                         showRenameDialog = null
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     enabled = renameText.isNotBlank()
                 ) { Text("Rename") }
             },

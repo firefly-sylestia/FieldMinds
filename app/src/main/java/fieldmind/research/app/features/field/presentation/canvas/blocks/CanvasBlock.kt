@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -143,18 +144,18 @@ fun CanvasBlock(
                     Modifier.border(
                         width = (2f / canvasState.zoom).coerceAtLeast(1f).dp,
                         color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(16.dp)
+                        shape = CuteCardDefaults.ChipShape
                     )
                 } else Modifier
             )
             // Shadow / elevation
             .shadow(
                 elevation = elevation.dp,
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 clip = false
             )
             // Background
-            .clip(RoundedCornerShape(16.dp))
+            .clip(CuteCardDefaults.ChipShape)
             .background(MaterialTheme.colorScheme.surface)
             // Long-press + drag to move (taps pass through to child composables)
             .pointerInput(block.id, canvasState.zoom) {

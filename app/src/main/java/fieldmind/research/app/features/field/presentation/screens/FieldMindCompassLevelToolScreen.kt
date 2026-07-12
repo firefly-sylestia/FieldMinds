@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.Manifest
 import android.content.Context
@@ -36,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -45,11 +47,12 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -361,7 +364,7 @@ fun CompassToolScreen(
 
             // ── Glassmorphic Compass Face ──
             Card(
-                shape = RoundedCornerShape(44.dp),
+                shape = CuteCardDefaults.DialogShape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -390,8 +393,8 @@ fun CompassToolScreen(
                                 "%.1f°".format(displayAzimuth),
                                 style = MaterialTheme.typography.displayLarge.copy(
                                     fontWeight = FontWeight.ExtraBold,
-                                    fontSize = 52.sp,
-                                    letterSpacing = (-2).sp
+                                    fontSize = 64.sp,
+                                    letterSpacing = (-3).sp
                                 ),
                                 color = colors.info
                             )
@@ -400,7 +403,7 @@ fun CompassToolScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Surface(
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     color = colors.info.copy(alpha = 0.12f),
                                     tonalElevation = 0.dp
                                 ) {
@@ -425,7 +428,7 @@ fun CompassToolScreen(
                                 }
                                 // ── Magnetic / True North toggle ──
                                 Surface(
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     color = if (useTrueNorth) colors.data.copy(alpha = 0.15f) else colors.info.copy(alpha = 0.08f),
                                     tonalElevation = 0.dp,
                                     modifier = Modifier.clickable(
@@ -527,7 +530,7 @@ fun CompassToolScreen(
             ) {
                 // Field chart
                 Card(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.weight(1.4f)
@@ -549,7 +552,7 @@ fun CompassToolScreen(
 
                 // Pitch/Roll compact card with glassmorphic sparklines
                 Card(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.weight(1f)
@@ -579,7 +582,7 @@ fun CompassToolScreen(
             } else {
                 OutlinedButton(
                     onClick = { haptics.light(); showCalibrationGuide = true },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(MaterialSymbolIcon("tune"), null, size = 16.dp)
@@ -599,7 +602,7 @@ fun CompassToolScreen(
             val lastSpecies = remember(allObservations) { allObservations.maxByOrNull { it.createdAt }?.subject }
 
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -650,39 +653,70 @@ private fun CompassRoseCanvas(
     // ── Pulsing glow for the outer ring ──
     val infiniteTransition = rememberInfiniteTransition(label = "compassGlow")
     val glowPulse by infiniteTransition.animateFloat(
-        initialValue = 0.6f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(2000, easing = LinearEasing), RepeatMode.Reverse),
+        initialValue = 0.5f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(3000, easing = LinearEasing), RepeatMode.Reverse),
         label = "glowPulse"
     )
-    val glowColor = if (isInterference) colors.warning.copy(alpha = glowPulse * 0.4f)
-        else colors.info.copy(alpha = glowPulse * 0.3f)
+    val glowColor = if (isInterference) colors.warning.copy(alpha = glowPulse * 0.45f)
+        else colors.info.copy(alpha = glowPulse * 0.35f)
+
+    // ── Pre-measure cardinal labels with Compose TextMeasurer for crisp typography ──
+    val textMeasurer = rememberTextMeasurer()
+    val nLabel = remember {
+        textMeasurer.measure("N", TextStyle(color = Color(0xFFE53935), fontSize = 48.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
+    }
+    val nGlow = remember {
+        textMeasurer.measure("N", TextStyle(color = Color(0xFFE53935).copy(alpha = 0.2f), fontSize = 52.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
+    }
+    val eLabel = remember {
+        textMeasurer.measure("E", TextStyle(color = onSurface, fontSize = 36.sp, textAlign = TextAlign.Center))
+    }
+    val sLabel = remember {
+        textMeasurer.measure("S", TextStyle(color = onSurface, fontSize = 36.sp, textAlign = TextAlign.Center))
+    }
+    val wLabel = remember {
+        textMeasurer.measure("W", TextStyle(color = onSurface, fontSize = 36.sp, textAlign = TextAlign.Center))
+    }
 
     Box(modifier = Modifier.size(280.dp), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val cx = size.width / 2f
             val cy = size.height / 2f
-            val radius = minOf(cx, cy) * 0.82f
+            val radius = minOf(cx, cy) * 0.80f
 
-            // ── Outer gradient glow ring ──
+            // ── Outer gradient glow ring (larger, smoother) ──
             drawCircle(
                 brush = Brush.sweepGradient(
                     colors = listOf(
                         glowColor,
-                        glowColor.copy(alpha = 0.05f),
+                        glowColor.copy(alpha = 0.03f),
                         glowColor,
-                        glowColor.copy(alpha = 0.05f),
+                        glowColor.copy(alpha = 0.03f),
                         glowColor
                     )
                 ),
-                radius = radius + 18f,
+                radius = radius + 22f,
                 center = Offset(cx, cy)
             )
 
-            // ── Outer ring ──
-            drawCircle(color = surfaceHighest, radius = radius + 10f, center = Offset(cx, cy))
+            // ── Outer ring with subtle border ──
             drawCircle(
-                color = outlineVariant.copy(alpha = 0.25f), radius = radius + 4f, center = Offset(cx, cy),
-                style = Stroke(width = 2f)
+                color = surfaceHighest,
+                radius = radius + 12f,
+                center = Offset(cx, cy)
+            )
+            drawCircle(
+                color = outlineVariant.copy(alpha = 0.3f),
+                radius = radius + 5f,
+                center = Offset(cx, cy),
+                style = Stroke(width = 1.5f)
+            )
+            // Inner decorative ring
+            drawCircle(
+                color = outlineVariant.copy(alpha = 0.12f),
+                radius = radius * 0.28f,
+                center = Offset(cx, cy),
+                style = Stroke(width = 1f)
             )
 
             // ── Rotating compass rose ──
@@ -707,34 +741,24 @@ private fun CompassRoseCanvas(
                     drawLine(color = tickColor, start = Offset(tx, ty), end = Offset(ex, ey), strokeWidth = tickWidth, cap = StrokeCap.Round)
                 }
 
-                // ── Cardinal labels with glow ──
-                val cardinals = listOf(
-                    "N" to Color(0xFFE53935),
-                    "E" to onSurface,
-                    "S" to onSurface,
-                    "W" to onSurface
+                // ── Cardinal labels with Compose drawText (crisp typography, no native Paint) ──
+                val labels = listOf(
+                    Triple(0.0, nLabel, nGlow),
+                    Triple(90.0, eLabel, null),
+                    Triple(180.0, sLabel, null),
+                    Triple(270.0, wLabel, null)
                 )
-                val paint = android.graphics.Paint().apply {
-                    textAlign = android.graphics.Paint.Align.CENTER; isAntiAlias = true
-                }
-                cardinals.forEachIndexed { i, (label, color) ->
-                    val angle = i * 90.0
-                    val rad = Math.toRadians(angle)
+                labels.forEach { (angleDeg, measured, glow) ->
+                    val rad = Math.toRadians(angleDeg)
                     val labelR = radius * 0.74f
                     val x = cx + (labelR * sin(rad)).toFloat()
                     val y = cy - (labelR * cos(rad)).toFloat()
 
-                    // Glow behind N
-                    if (label == "N") {
-                        paint.color = Color(0xFFE53935).copy(alpha = 0.2f).toArgb()
-                        paint.textSize = 52f
-                        drawContext.canvas.nativeCanvas.drawText(label, x, y + paint.textSize / 3f, paint)
+                    // Glow behind cardinal (e.g. red glow behind N)
+                    if (glow != null) {
+                        drawText(glow, topLeft = Offset(x - glow.size.width / 2f, y - glow.size.height / 2f))
                     }
-
-                    paint.color = color.toArgb()
-                    paint.textSize = if (label == "N") 48f else 36f
-                    paint.isFakeBoldText = label == "N"
-                    drawContext.canvas.nativeCanvas.drawText(label, x, y + paint.textSize / 3f, paint)
+                    drawText(measured, topLeft = Offset(x - measured.size.width / 2f, y - measured.size.height / 2f))
                 }
 
                 // ── Intercardinal dots at 45° positions ──
@@ -770,10 +794,11 @@ private fun CompassRoseCanvas(
             }
             drawPath(southPath, color = Color(0xFF9E9E9E))
 
-            // ── Center pivot ──
-            drawCircle(color = onSurface.copy(alpha = 0.3f), radius = 7f, center = Offset(cx, cy))
-            drawCircle(color = Color(0xFFE53935), radius = 4f, center = Offset(cx, cy))
-            drawCircle(color = Color.White.copy(alpha = 0.5f), radius = 1.5f, center = Offset(cx - 1f, cy - 1f))
+            // ── Center pivot with layered glow ──
+            drawCircle(color = onSurface.copy(alpha = 0.15f), radius = 9f, center = Offset(cx, cy))
+            drawCircle(color = onSurface.copy(alpha = 0.25f), radius = 6f, center = Offset(cx, cy))
+            drawCircle(color = Color(0xFFE53935), radius = 3.5f, center = Offset(cx, cy))
+            drawCircle(color = Color.White.copy(alpha = 0.55f), radius = 1.2f, center = Offset(cx - 0.8f, cy - 0.8f))
         }
     }
 }
@@ -792,7 +817,7 @@ private fun SensorMiniCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier
@@ -851,6 +876,17 @@ private fun MagneticFieldChart(readings: List<Float>, lineColor: Color) {
     val onSurfaceV = MaterialTheme.colorScheme.onSurfaceVariant
     val surfaceHigh = MaterialTheme.colorScheme.surfaceContainerHigh
 
+    // ── Pre-measure Y-axis labels with Compose TextMeasurer ──
+    val chartTextMeasurer = rememberTextMeasurer()
+    val yLabels = remember {
+        labels.map { value ->
+            Triple("%.0f".format(value), value, chartTextMeasurer.measure(
+                "%.0f".format(value),
+                TextStyle(color = onSurfaceV.copy(alpha = 0.4f), fontSize = 10.sp, textAlign = TextAlign.Right)
+            ))
+        }
+    }
+
     Canvas(modifier = Modifier.fillMaxWidth().height(80.dp)) {
         val chartX = 38f  // space for Y-axis labels
         val chartW = size.width - chartX
@@ -865,17 +901,10 @@ private fun MagneticFieldChart(readings: List<Float>, lineColor: Color) {
             size = Size(chartW, chartH)
         )
 
-        // ── Y-axis labels (rendered via nativeCanvas for pixel alignment) ──
-        val paint = android.graphics.Paint().apply {
-            isAntiAlias = true
-            color = onSurfaceV.copy(alpha = 0.4f).toArgb()
-            textSize = 22f
-            textAlign = android.graphics.Paint.Align.RIGHT
-        }
-        labels.forEach { value ->
+        // ── Y-axis labels (Compose drawText for crisp typography) ──
+        yLabels.forEach { (_, value, measured) ->
             val y = chartH - (value / maxY * chartH)
-            val text = "%.0f".format(value)
-            drawContext.canvas.nativeCanvas.drawText(text, chartX - 6f, y + paint.textSize / 3f, paint)
+            drawText(measured, topLeft = Offset(chartX - 6f - measured.size.width, y - measured.size.height / 2f))
         }
 
         // ── Horizontal grid lines ──
@@ -1088,7 +1117,7 @@ private fun CompassCalibrationGuide(
         }
 
         Card(
-            shape = RoundedCornerShape(32.dp),
+            shape = CuteCardDefaults.Shape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             modifier = Modifier.fillMaxWidth()
@@ -1097,7 +1126,7 @@ private fun CompassCalibrationGuide(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Box(
-                        Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                        Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape)
                             .background(colors.info.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) { Icon(MaterialSymbolIcon("tune"), null, tint = colors.info, size = 20.dp) }
@@ -1198,7 +1227,7 @@ private fun CompassCalibrationGuide(
                 }
 
                 if (accuracy == "High") {
-                    Surface(shape = RoundedCornerShape(14.dp), color = colors.positive.copy(alpha = 0.1f), modifier = Modifier.fillMaxWidth()) {
+                    Surface(shape = CuteCardDefaults.ChipShape, color = colors.positive.copy(alpha = 0.1f), modifier = Modifier.fillMaxWidth()) {
                         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(MaterialSymbolIcon("check_circle", filled = true), null, tint = colors.positive, size = 20.dp)
                             Text("Calibrated — heading is now accurate.", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, color = colors.positive, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -1228,7 +1257,7 @@ private fun CompassInterferenceCard(
     val title = if (isStrong) "Strong interference" else "Magnetic interference"
 
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = MaterialTheme.shapes.medium,
         color = bgColor,
         modifier = Modifier.fillMaxWidth().alpha(bannerAlpha)
     ) {
@@ -1418,27 +1447,37 @@ fun LevelToolScreen(
     val plumbColors = remember(plumbSeverityAngle) { tiltSeverityColor(plumbSeverityAngle) }
     val (plumbAccent, plumbBgTint, plumbLabel) = plumbColors
 
-    // ── Auto mode selection based on flatness ──
+    // ── Auto mode selection based on flatness with hysteresis ──
     var manualMode by remember { mutableStateOf<Boolean?>(null) }
-    val isFlatMode by remember(flatness, manualMode) {
-        derivedStateOf { manualMode ?: (flatness > 0.5f) }
+    // Use hysteresis to prevent flickering: switch to flat at >0.55, back to vertical at <0.4
+    var lastAutoMode by remember { mutableStateOf(true) }  // start in flat mode
+    val autoMode by remember(flatness, lastAutoMode) {
+        derivedStateOf {
+            if (flatness > 0.55f && !lastAutoMode) true
+            else if (flatness < 0.4f && lastAutoMode) false
+            else lastAutoMode
+        }
+    }
+    LaunchedEffect(autoMode) { lastAutoMode = autoMode }
+    val isFlatMode by remember(flatness, manualMode, lastAutoMode) {
+        derivedStateOf { manualMode ?: lastAutoMode }
     }
 
     val isLevel by remember(isFlatMode, smoothFlatPitch, smoothFlatRoll, smoothTiltFromVertical, isReferenced, refApplied) {
         derivedStateOf {
-            if (isReferenced) refApplied < 2f
-            else if (isFlatMode) abs(smoothFlatPitch) < 2f && abs(smoothFlatRoll) < 2f
-            else smoothTiltFromVertical < 2f
+            if (isReferenced) refApplied < 1.5f
+            else if (isFlatMode) abs(smoothFlatPitch) < 1.5f && abs(smoothFlatRoll) < 1.5f
+            else smoothTiltFromVertical < 1.5f
         }
     }
 
-    // ── Haptic feedback at ±1° ──
+    // ── Haptic feedback at ±0.8° ──
     val haptics = rememberFieldMindHaptics()
     val isHapticLevel by remember(isReferenced, refApplied, isFlatMode, smoothFlatPitch, smoothFlatRoll, smoothTiltFromVertical) {
         derivedStateOf {
-            if (isReferenced) refApplied < 1f
-            else if (isFlatMode) abs(smoothFlatPitch) < 1f && abs(smoothFlatRoll) < 1f
-            else smoothTiltFromVertical < 1f
+            if (isReferenced) refApplied < 0.8f
+            else if (isFlatMode) abs(smoothFlatPitch) < 0.8f && abs(smoothFlatRoll) < 0.8f
+            else smoothTiltFromVertical < 0.8f
         }
     }
     var wasHapticLevel by remember { mutableStateOf(false) }
@@ -1528,7 +1567,7 @@ fun LevelToolScreen(
 
             // ── Level display card ──
             Card(
-                shape = RoundedCornerShape(40.dp),
+                shape = CuteCardDefaults.DialogShape,
                 colors = CardDefaults.cardColors(
                     containerColor = if (isLevel) colors.positive.copy(alpha = 0.08f)
                     else (if (isFlatMode) flatBgTint else plumbBgTint)
@@ -1567,7 +1606,7 @@ fun LevelToolScreen(
                     val statusAccent = if (isFlatMode) flatAccent else plumbAccent
                     val statusLabel = if (isFlatMode) flatLabel else plumbLabel
                     val statusBg = if (isFlatMode) flatBgTint else plumbBgTint
-                    Surface(shape = RoundedCornerShape(24.dp), color = statusBg) {
+                    Surface(shape = CuteCardDefaults.ShapeCompact, color = statusBg) {
                         Row(Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1590,7 +1629,7 @@ fun LevelToolScreen(
 
             // ── Tilt data + reference controls ──
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -1612,7 +1651,7 @@ fun LevelToolScreen(
                     // Reference controls
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         if (isReferenced) {
-                            Surface(shape = RoundedCornerShape(12.dp), color = colors.info.copy(alpha = 0.08f), modifier = Modifier.weight(1f)) {
+                            Surface(shape = MaterialTheme.shapes.extraSmall, color = colors.info.copy(alpha = 0.08f), modifier = Modifier.weight(1f)) {
                                 Column(Modifier.padding(10.dp)) {
                                     Text("Reference set", style = MaterialTheme.typography.labelSmall, color = colors.info)
                                     Text("Deviation: %.1f°".format(refApplied), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1624,7 +1663,7 @@ fun LevelToolScreen(
                                     containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.12f),
                                     contentColor = MaterialTheme.colorScheme.error
                                 ),
-                                shape = RoundedCornerShape(14.dp),
+                                shape = CuteCardDefaults.ChipShape,
                                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
                             ) {
                                 Icon(MaterialSymbolIcon("clear"), null, modifier = Modifier.size(16.dp))
@@ -1637,7 +1676,7 @@ fun LevelToolScreen(
                                     refGravX = gx; refGravY = gy; refGravZ = gz
                                     isReferenced = true
                                 },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = CuteCardDefaults.ChipShape,
                                 colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.info),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -1668,6 +1707,8 @@ fun LevelToolScreen(
 /**
  * Circular bubble level for flat (horizontal) surface mode.
  * Shows tilt in X (forward/back) and Y (left/right) axes.
+ * Features a liquid glass bubble with specular highlights, animated glow,
+ * and concentric reference rings for precise leveling.
  */
 @Composable
 private fun CircularBubbleLevel(
@@ -1675,66 +1716,112 @@ private fun CircularBubbleLevel(
     accentColor: Color, severityLabel: String,
     colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
 ) {
+    val sh = MaterialTheme.colorScheme.surfaceContainerHighest
+    val ov = MaterialTheme.colorScheme.outlineVariant
+    val osv = MaterialTheme.colorScheme.onSurfaceVariant
+    val accent = if (isLevel) colors.positive else accentColor
+
+    // ── Pulsing outer glow ring matching tier color ──
+    val infiniteTransition = rememberInfiniteTransition(label = "levelGlow")
+    val glowPulse by infiniteTransition.animateFloat(
+        initialValue = 0.6f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(2400, easing = LinearEasing), RepeatMode.Reverse),
+        label = "levelGlowPulse"
+    )
+    val glowColor = accent.copy(alpha = glowPulse * 0.35f)
+
+    // ── Bubble smooth animation ──
+    val maxTilt = 45f; val sensitivity = 0.84f
+    val targetBubbleX = (roll.coerceIn(-maxTilt, maxTilt) / maxTilt * sensitivity)
+    val targetBubbleY = (pitch.coerceIn(-maxTilt, maxTilt) / maxTilt * sensitivity)
+    val smoothBX by animateFloatAsState(targetBubbleX, spring(dampingRatio = 0.65f, stiffness = 220f), label = "bubbleX")
+    val smoothBY by animateFloatAsState(targetBubbleY, spring(dampingRatio = 0.65f, stiffness = 220f), label = "bubbleY")
+
     Box(modifier = Modifier.size(260.dp), contentAlignment = Alignment.Center) {
-        val sh = MaterialTheme.colorScheme.surfaceContainerHighest
-        val ov = MaterialTheme.colorScheme.outlineVariant
-        val osv = MaterialTheme.colorScheme.onSurfaceVariant
-        val accent = if (isLevel) colors.positive else accentColor
-
-        // ── Pulsing outer glow ring matching tier color ──
-        val infiniteTransition = rememberInfiniteTransition(label = "levelGlow")
-        val glowPulse by infiniteTransition.animateFloat(
-            initialValue = 0.6f, targetValue = 1f,
-            animationSpec = infiniteRepeatable(tween(2000, easing = LinearEasing), RepeatMode.Reverse),
-            label = "levelGlowPulse"
-        )
-        val glowColor = accent.copy(alpha = glowPulse * 0.3f)
-
+        val bubbleColor = accent
         Canvas(Modifier.fillMaxSize()) {
             val cx = size.width / 2f; val cy = size.height / 2f
-            val outerRadius = minOf(cx, cy) * 0.95f
-            val bubbleRadius = outerRadius * 0.12f
+            val outerRadius = minOf(cx, cy) * 0.92f
+            val bubbleRadius = outerRadius * 0.13f
 
-            // ── Animated gradient glow ring ──
+            // ── Outer glow ring ──
             drawCircle(
                 brush = Brush.sweepGradient(
                     colors = listOf(
-                        glowColor, glowColor.copy(alpha = 0.05f),
-                        glowColor, glowColor.copy(alpha = 0.05f),
+                        glowColor, glowColor.copy(alpha = 0.04f),
+                        glowColor, glowColor.copy(alpha = 0.04f),
                         glowColor
                     )
                 ),
-                radius = outerRadius + 14f, center = Offset(cx, cy)
+                radius = outerRadius + 16f, center = Offset(cx, cy)
             )
 
-            // ── Outer ring ──
+            // ── Outer ring with gradient stroke ──
             drawCircle(color = sh, radius = outerRadius, center = Offset(cx, cy))
-            drawCircle(color = accent.copy(alpha = 0.25f), radius = outerRadius, center = Offset(cx, cy), style = Stroke(width = if (isLevel) 2f else 2.5f))
+            drawCircle(
+                brush = Brush.sweepGradient(
+                    colors = listOf(accent.copy(alpha = 0.35f), accent.copy(alpha = 0.15f), accent.copy(alpha = 0.35f))
+                ),
+                radius = outerRadius, center = Offset(cx, cy),
+                style = Stroke(width = if (isLevel) 3f else 2.5f)
+            )
 
-            // ── Reference circles ──
-            drawCircle(color = ov.copy(alpha = 0.10f), radius = outerRadius * 0.6f, center = Offset(cx, cy),
-                style = Stroke(width = 1f, pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(6f, 6f))))
+            // ── Concentric reference rings ──
+            for (ringRatio in listOf(0.75f, 0.50f, 0.25f)) {
+                drawCircle(
+                    color = ov.copy(alpha = 0.08f + (1f - ringRatio) * 0.06f),
+                    radius = outerRadius * ringRatio, center = Offset(cx, cy),
+                    style = Stroke(width = 1f, pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(8f, 8f)))
+                )
+            }
 
-            // ── Crosshair with glow ──
-            drawLine(osv.copy(alpha = 0.18f), Offset(cx, cy - outerRadius * 0.85f), Offset(cx, cy + outerRadius * 0.85f), 2f)
-            drawLine(osv.copy(alpha = 0.18f), Offset(cx - outerRadius * 0.85f, cy), Offset(cx + outerRadius * 0.85f, cy), 2f)
+            // ── Crosshair with subtle gradient ──
+            val crossLen = outerRadius * 0.88f
+            drawLine(osv.copy(alpha = 0.12f), Offset(cx, cy - crossLen), Offset(cx, cy + crossLen), 1.5f)
+            drawLine(osv.copy(alpha = 0.12f), Offset(cx - crossLen, cy), Offset(cx + crossLen, cy), 1.5f)
 
-            // ── Center reference ──
-            drawCircle(color = osv.copy(alpha = 0.3f), radius = 3f, center = Offset(cx, cy))
+            // ── Center reference dot with glow ──
+            drawCircle(color = osv.copy(alpha = 0.2f), radius = 4f, center = Offset(cx, cy))
+            drawCircle(color = accent.copy(alpha = 0.4f), radius = 2f, center = Offset(cx, cy))
 
-            // ── Bubble ──
-            val maxTilt = 45f; val sensitivity = 0.88f
-            val bubbleX = cx + (roll.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
-            val bubbleY = cy + (pitch.coerceIn(-maxTilt, maxTilt) / maxTilt * outerRadius * sensitivity)
+            // ── Liquid glass bubble ──
+            val bubbleX = cx + smoothBX * outerRadius
+            val bubbleY = cy + smoothBY * outerRadius
 
-            val bubbleColor = accent
-            // Glow aura
-            drawCircle(color = bubbleColor.copy(alpha = 0.08f), radius = bubbleRadius * 2.5f, center = Offset(bubbleX, bubbleY))
-            // Bubble body
-            drawCircle(color = bubbleColor, radius = bubbleRadius, center = Offset(bubbleX, bubbleY))
-            // Specular highlight
-            drawCircle(color = Color.White.copy(alpha = 0.35f), radius = bubbleRadius * 0.4f,
-                center = Offset(bubbleX - bubbleRadius * 0.2f, bubbleY - bubbleRadius * 0.2f))
+            // Outer aura (soft radial glow)
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(bubbleColor.copy(alpha = 0.15f), bubbleColor.copy(alpha = 0f)),
+                    center = Offset(bubbleX, bubbleY),
+                    radius = bubbleRadius * 3f
+                ),
+                radius = bubbleRadius * 3f, center = Offset(bubbleX, bubbleY)
+            )
+            // Mid aura
+            drawCircle(color = bubbleColor.copy(alpha = 0.12f), radius = bubbleRadius * 1.8f, center = Offset(bubbleX, bubbleY))
+            // Shadow beneath
+            drawCircle(color = Color.Black.copy(alpha = 0.08f), radius = bubbleRadius, center = Offset(bubbleX + 1f, bubbleY + 2f))
+            // Bubble body with gradient
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(bubbleColor, bubbleColor.copy(alpha = 0.8f)),
+                    center = Offset(bubbleX, bubbleY),
+                    radius = bubbleRadius
+                ),
+                radius = bubbleRadius, center = Offset(bubbleX, bubbleY)
+            )
+            // Inner glass reflection (small bright spot)
+            drawCircle(
+                color = Color.White.copy(alpha = 0.45f),
+                radius = bubbleRadius * 0.35f,
+                center = Offset(bubbleX - bubbleRadius * 0.25f, bubbleY - bubbleRadius * 0.25f)
+            )
+            // Secondary reflection
+            drawCircle(
+                color = Color.White.copy(alpha = 0.15f),
+                radius = bubbleRadius * 0.15f,
+                center = Offset(bubbleX + bubbleRadius * 0.1f, bubbleY + bubbleRadius * 0.35f)
+            )
         }
     }
 }
@@ -1744,6 +1831,7 @@ private fun CircularBubbleLevel(
  * Shows tilt from vertical as a vertical bar that fills from bottom to top.
  * 0° tilt = empty bar (perfectly vertical), 90° tilt = full bar (horizontal).
  * Color transitions: green (<2°) → amber (2-10°) → red (>10°).
+ * Features glassmorphic fill, tier glow markers, and smooth animations.
  */
 @Composable
 private fun LinearTiltGauge(
@@ -1754,18 +1842,34 @@ private fun LinearTiltGauge(
     severityLabel: String,
     colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
 ) {
-    Box(modifier = Modifier.size(260.dp, 300.dp), contentAlignment = Alignment.Center) {
-        val sh = MaterialTheme.colorScheme.surfaceContainerHighest
-        val osv = MaterialTheme.colorScheme.onSurfaceVariant
-        val accent = if (isLevel) colors.positive else accentColor
+    val sh = MaterialTheme.colorScheme.surfaceContainerHighest
+    val osv = MaterialTheme.colorScheme.onSurfaceVariant
+    val accent = if (isLevel) colors.positive else accentColor
 
-        // ── Pulsing glow ──
-        val infiniteTransition = rememberInfiniteTransition(label = "linearGlow")
-        val glowPulse by infiniteTransition.animateFloat(
-            initialValue = 0.6f, targetValue = 1f,
-            animationSpec = infiniteRepeatable(tween(2000, easing = LinearEasing), RepeatMode.Reverse),
-            label = "linearGlowPulse"
-        )
+    // ── Pulsing glow ──
+    val infiniteTransition = rememberInfiniteTransition(label = "linearGlow")
+    val glowPulse by infiniteTransition.animateFloat(
+        initialValue = 0.6f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(2400, easing = LinearEasing), RepeatMode.Reverse),
+        label = "linearGlowPulse"
+    )
+    val fillFraction = tiltMagnitude.coerceIn(0.0, 1.0).toFloat()
+
+    Box(modifier = Modifier.size(260.dp, 300.dp), contentAlignment = Alignment.Center) {
+        // ── Animated glow behind the gauge ──
+        Canvas(modifier = Modifier.matchParentSize()) {
+            val gc = size.width / 2f
+            val gy = size.height * 0.38f
+            val glowRadius = 90f + glowPulse * 30f
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(accent.copy(alpha = glowPulse * 0.12f), Color.Transparent),
+                    center = Offset(gc, gy),
+                    radius = glowRadius
+                ),
+                radius = glowRadius, center = Offset(gc, gy)
+            )
+        }
 
         Column(
             Modifier.fillMaxSize().padding(horizontal = 40.dp),
@@ -1777,7 +1881,8 @@ private fun LinearTiltGauge(
                 "%.1f°".format(tiltAngleDeg),
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 42.sp
+                    fontSize = 48.sp,
+                    letterSpacing = (-2).sp
                 ),
                 color = accent
             )
@@ -1789,83 +1894,104 @@ private fun LinearTiltGauge(
 
             Spacer(Modifier.height(16.dp))
 
-            // ── Linear bar gauge ──
-            val warnColor = colors.warning
-            val barErrorColor = MaterialTheme.colorScheme.error
+            // ── Glassmorphic linear bar gauge ──
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                // Track background
+                // Track background with glassmorphic border
                 Box(
                     modifier = Modifier
-                        .width(32.dp)
+                        .width(36.dp)
                         .fillMaxHeight()
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(sh)
+                        .clip(CuteCardDefaults.ChipShape)
+                        .background(sh.copy(alpha = 0.6f))
+                        .then(
+                            Modifier.drawBehind {
+                                drawRoundRect(
+                                    color = accent.copy(alpha = 0.08f),
+                                    cornerRadius = CornerRadius(18f, 18f),
+                                    style = Stroke(width = 1f)
+                                )
+                            }
+                        )
                 )
-                // Fill (bottom to top based on tilt magnitude)
-                val fillFraction = tiltMagnitude.coerceIn(0.0, 1.0).toFloat()
+                // Fill with gradient
                 Box(
                     modifier = Modifier
-                        .width(32.dp)
-                        .fillMaxHeight(fillFraction.coerceAtLeast(0.01f))
-                        .clip(RoundedCornerShape(16.dp))
+                        .width(36.dp)
+                        .fillMaxHeight(fillFraction.coerceAtLeast(0.015f))
+                        .clip(CuteCardDefaults.ChipShape)
                         .background(
                             Brush.verticalGradient(
-                                listOf(accent.copy(alpha = 0.7f), accent)
+                                listOf(
+                                    accent.copy(alpha = 0.5f),
+                                    accent,
+                                    accent.copy(alpha = 0.85f)
+                                )
                             )
                         ),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.TopCenter
                 ) {
-                    // Animated pulse glow on the fill top
+                    // Glass highlight line at fill top
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(4.dp)
+                            .height(3.dp)
                             .clip(RoundedCornerShape(2.dp))
-                            .background(Color.White.copy(alpha = glowPulse * 0.5f))
+                            .background(Color.White.copy(alpha = glowPulse * 0.4f))
                     )
                 }
 
-                // ── Tiers markers ──
-                val warnLine = 1f - (10f / 90f)  // ~0.89 from bottom
-                val amberLine = 1f - (2f / 90f)  // ~0.978 from bottom
+                // ── Tier markers with labels ──
+                val warnLine = 1f - (10f / 90f)
+                val amberLine = 1f - (2f / 90f)
+                val tierErrorColor = MaterialTheme.colorScheme.error
                 Canvas(modifier = Modifier.matchParentSize()) {
-                    val barLeft = (size.width - 32.dp.toPx()) / 2f
-                    val barRight = barLeft + 32.dp.toPx()
+                    val barLeft = (size.width - 36.dp.toPx()) / 2f
+                    val barRight = barLeft + 36.dp.toPx()
                     val barBottom = size.height
 
-                    // Amber tier marker (2°)
-                    drawLine(
-                        warnColor.copy(alpha = 0.4f),
-                        Offset(barLeft, barBottom * amberLine),
-                        Offset(barRight, barBottom * amberLine),
-                        strokeWidth = 1.5f
+                    // Amber tier (2°) with glow
+                    drawCircle(
+                        color = colors.warning.copy(alpha = 0.3f),
+                        radius = 5f,
+                        center = Offset(barLeft, barBottom * amberLine)
                     )
-                    // Red tier marker (10°)
                     drawLine(
-                        barErrorColor.copy(alpha = 0.4f),
-                        Offset(barLeft, barBottom * warnLine),
-                        Offset(barRight, barBottom * warnLine),
-                        strokeWidth = 1.5f
+                        colors.warning.copy(alpha = 0.25f),
+                        Offset(barLeft + 10f, barBottom * amberLine),
+                        Offset(barRight - 10f, barBottom * amberLine),
+                        strokeWidth = 1f
+                    )
+                    // Red tier (10°) with glow
+                    drawCircle(
+                        color = tierErrorColor.copy(alpha = 0.3f),
+                        radius = 5f,
+                        center = Offset(barLeft, barBottom * warnLine)
+                    )
+                    drawLine(
+                        tierErrorColor.copy(alpha = 0.25f),
+                        Offset(barLeft + 10f, barBottom * warnLine),
+                        Offset(barRight - 10f, barBottom * warnLine),
+                        strokeWidth = 1f
                     )
                 }
             }
 
             Spacer(Modifier.height(8.dp))
 
-            // ── Tilt labels ──
+            // ── Tilt labels with tier colors ──
             Row(
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxWidth().padding(horizontal = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("0°", style = MaterialTheme.typography.labelSmall, color = osv.copy(alpha = 0.4f), fontSize = 9.sp)
-                Text("2°", style = MaterialTheme.typography.labelSmall, color = colors.warning.copy(alpha = 0.5f), fontSize = 9.sp)
-                Text("10°", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error.copy(alpha = 0.5f), fontSize = 9.sp)
-                Text("90°", style = MaterialTheme.typography.labelSmall, color = osv.copy(alpha = 0.4f), fontSize = 9.sp)
+                Text("0°", style = MaterialTheme.typography.labelSmall, color = colors.positive.copy(alpha = 0.6f), fontSize = 10.sp)
+                Text("2°", style = MaterialTheme.typography.labelSmall, color = colors.warning.copy(alpha = 0.6f), fontSize = 10.sp)
+                Text("10°", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error.copy(alpha = 0.6f), fontSize = 10.sp)
+                Text("90°", style = MaterialTheme.typography.labelSmall, color = osv.copy(alpha = 0.35f), fontSize = 10.sp)
             }
         }
     }

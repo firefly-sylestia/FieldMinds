@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.Context
 import android.content.Intent
@@ -130,7 +131,7 @@ fun SharedTransitionScope.DetailScreen(
                 ) {
                     Surface(
                         onClick = onBack,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(44.dp)
                     ) { Box(contentAlignment = Alignment.Center) { Icon(FieldMindIcons.Back, null, size = 22.dp) } }
@@ -286,7 +287,7 @@ fun ObservationDetailContent(
     val clipboard = LocalClipboardManager.current
     
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -297,7 +298,7 @@ fun ObservationDetailContent(
             // ── 2. Header with subject and badges ��─
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.observation.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Observation, null, tint = colors.observation, size = 24.dp) }
@@ -312,7 +313,7 @@ fun ObservationDetailContent(
 
             // ── 3. Date / GPS / Weather stat bar ──
             Row(
-                Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp))
+                Modifier.fillMaxWidth().clip(CuteCardDefaults.ShapeCompact)
                     .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f))
                     .padding(vertical = 10.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -397,7 +398,7 @@ fun ObservationDetailContent(
             var showProvenance by remember { mutableStateOf(false) }
             Card(
                 modifier = Modifier.fillMaxWidth().clickable { showProvenance = !showProvenance },
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -460,7 +461,7 @@ fun ReObservationLink(
         val parent = observations.firstOrNull { it.id == parentId }
         if (parent != null) {
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = colors.hypothesis.copy(alpha = 0.08f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -486,7 +487,7 @@ fun ReObservationLink(
     val children = observations.filter { it.parentObservationId == o.id }
     if (children.isNotEmpty()) {
         Card(
-            shape = RoundedCornerShape(30.dp),
+            shape = CuteCardDefaults.Shape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -566,7 +567,7 @@ fun ObservationSpeciesInfoSection(
     if (!hasAnyInfo) return
 
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.observation.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -616,7 +617,7 @@ fun ObservationSpeciesInfoSection(
                             }
                             Text("Conservation", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Box(
-                                Modifier.clip(RoundedCornerShape(16.dp))
+                                Modifier.clip(CuteCardDefaults.ChipShape)
                                     .background(statusColor.copy(alpha = 0.15f))
                                     .padding(horizontal = 8.dp, vertical = 4.dp)
                             ) {
@@ -702,7 +703,7 @@ fun ObservationBehaviorSection(
     if (!hasAny) return
     
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.hypothesis.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -717,7 +718,7 @@ fun ObservationBehaviorSection(
             ) {
                 if (behaviorData.behavior.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), 
@@ -730,7 +731,7 @@ fun ObservationBehaviorSection(
                 }
                 if (behaviorData.lifeStage.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -743,7 +744,7 @@ fun ObservationBehaviorSection(
                 }
                 if (behaviorData.sex.isNotBlank()) {
                     Surface(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh
                     ) {
                         Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -839,7 +840,7 @@ fun ObservationStructuredDetailsSection(
     if (!hasAnyContent) return
 
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.data.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -927,7 +928,7 @@ fun QualityScoreCard(score: Int) {
     }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = scoreColor.copy(alpha = 0.08f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -945,7 +946,7 @@ fun QualityScoreCard(score: Int) {
             }
             LinearProgressIndicator(
                 progress = { score.coerceIn(0, 100) / 100f },
-                modifier = Modifier.width(100.dp).height(6.dp).clip(RoundedCornerShape(8.dp)),
+                modifier = Modifier.width(100.dp).height(6.dp).clip(CuteCardDefaults.ProgressBarShape),
                 color = scoreColor,
                 trackColor = scoreColor.copy(alpha = 0.12f)
             )
@@ -989,7 +990,7 @@ fun ObservationEvidenceCountsRow(
     
     val colors = FieldMindTheme.colors
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp))
+        Modifier.fillMaxWidth().clip(CuteCardDefaults.ShapeCompact)
             .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.3f))
             .padding(vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
@@ -1045,7 +1046,7 @@ fun ObservationWeatherLocationSection(
     if (!hasWeather && !hasLocation) return
     
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.info.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1165,7 +1166,7 @@ fun ObservationAiAnalysisCard(
     if (analysisResult == null) return
     
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.project.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1178,7 +1179,7 @@ fun ObservationAiAnalysisCard(
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 // Top match
                 Surface(
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                 ) {
                     Row(
@@ -1287,7 +1288,7 @@ fun ObservationExportSection(
     val haptics = rememberFieldMindHaptics()
     
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1307,7 +1308,7 @@ fun ObservationExportSection(
                             showFastSnackbar(snackbar, scope, "Markdown copied to clipboard")
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     ) {
                         Icon(FieldMindIcons.Article, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
@@ -1320,7 +1321,7 @@ fun ObservationExportSection(
                             showFastSnackbar(snackbar, scope, "CSV copied to clipboard")
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     ) {
                         Icon(FieldMindIcons.Data, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
@@ -1336,7 +1337,7 @@ fun ObservationExportSection(
                             showFastSnackbar(snackbar, scope, "JSON copied to clipboard")
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     ) {
                         Icon(FieldMindIcons.Data, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
@@ -1348,7 +1349,7 @@ fun ObservationExportSection(
                             sharePlainText(context, exportText)
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     ) {
                         Icon(FieldMindIcons.Export, null, size = 16.dp)
                         Spacer(Modifier.size(4.dp))
@@ -1363,7 +1364,7 @@ fun ObservationExportSection(
 fun WeatherChip(text: String, color: androidx.compose.ui.graphics.Color) {
     Box(
         Modifier
-            .clip(RoundedCornerShape(16.dp))
+            .clip(CuteCardDefaults.ChipShape)
             .background(color.copy(alpha = 0.15f))
             .padding(horizontal = 8.dp, vertical = 4.dp),
         contentAlignment = Alignment.Center
@@ -1422,7 +1423,7 @@ fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId: Long, 
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(36.dp))
+                    .clip(CuteCardDefaults.ShapeHero)
                     .background(MaterialTheme.colorScheme.surfaceContainerHighest)
                     .clickable {
                         imageViewerUri = displayUri
@@ -1455,7 +1456,7 @@ fun ObservationHeroCarousel(viewModel: FieldMindViewModel, observationId: Long, 
         if (media.size > 1) {
             Surface(
                 modifier = Modifier.align(Alignment.TopEnd).padding(12.dp),
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.85f)
             ) {
                 Text(
@@ -1499,7 +1500,7 @@ fun NoteDetailContent(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1507,7 +1508,7 @@ fun NoteDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.source.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Note, null, tint = colors.note, size = 24.dp) }
@@ -1542,7 +1543,7 @@ fun NoteDetailContent(
                 Button(
                     onClick = { onOpenCanvas(n.id) },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colors.note.cardBg(colors.isDark),
                         contentColor = colors.note
@@ -1574,7 +1575,7 @@ fun QuestionDetailContent(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1582,7 +1583,7 @@ fun QuestionDetailContent(
             // Header with icon and badges
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.question.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Question, null, tint = colors.question, size = 24.dp) }
@@ -1613,7 +1614,7 @@ fun QuestionDetailContent(
                 Text("Hypotheses (${linked.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = colors.hypothesis)
                 linked.forEach { h ->
                     Row(
-                        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp))
+                        Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium)
                             .background(colors.hypothesis.copy(alpha = 0.08f)).padding(12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -1644,7 +1645,7 @@ fun HypothesisDetailContent(
     }
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1652,7 +1653,7 @@ fun HypothesisDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.hypothesis.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Hypothesis, null, tint = colors.hypothesis, size = 24.dp) }
@@ -1699,7 +1700,7 @@ fun HypothesisDetailContent(
             }
             LinearProgressIndicator(
                 progress = { (h.confidencePercent).coerceIn(0, 100) / 100f },
-                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)),
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(CuteCardDefaults.ProgressBarShape),
                 color = resultColor,
                 trackColor = resultColor.copy(alpha = 0.12f)
             )
@@ -1784,7 +1785,7 @@ fun ObservationQuickAddDialog(
                     label = { Text("Subject *") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(22.dp)
+                    shape = CuteCardDefaults.ButtonShape
                 )
                 ExposedDropdownMenuBox(
                     expanded = showCategoryMenu,
@@ -1797,7 +1798,7 @@ fun ObservationQuickAddDialog(
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showCategoryMenu) },
                         modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                         readOnly = true,
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     )
                     ExposedDropdownMenu(expanded = showCategoryMenu, onDismissRequest = { showCategoryMenu = false }) {
                         categories.forEach { cat ->
@@ -1815,7 +1816,7 @@ fun ObservationQuickAddDialog(
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 2,
                     maxLines = 4,
-                    shape = RoundedCornerShape(22.dp)
+                    shape = CuteCardDefaults.ButtonShape
                 )
             }
         },
@@ -1837,7 +1838,7 @@ fun ObservationQuickAddDialog(
                     onDismiss()
                 },
                 enabled = subject.isNotBlank(),
-                shape = RoundedCornerShape(22.dp)
+                shape = CuteCardDefaults.ButtonShape
             ) {
                 Text("Save")
             }
@@ -1847,7 +1848,7 @@ fun ObservationQuickAddDialog(
                 Text("Cancel")
             }
         },
-        shape = RoundedCornerShape(34.dp)
+        shape = CuteCardDefaults.Shape
     )
 }
 
@@ -1888,7 +1889,7 @@ fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
         Button(
             onClick = { showForm = !showForm; if (!showForm) { commonName = ""; scientificName = ""; speciesName = "" } },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(22.dp)
+            shape = CuteCardDefaults.ButtonShape
         ) {
             Icon(FieldMindIcons.Add, null, size = 18.dp)
             Spacer(Modifier.size(6.dp))
@@ -1896,7 +1897,7 @@ fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
         }
 
         if (showForm) {
-            Card(shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+            Card(shape = CuteCardDefaults.FieldShape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                 Column(modifier = Modifier.padding(14.dp).heightIn(max = 600.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("Add Species to Registry", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = colors.observation)
                     Text("Fill in common name and taxonomy (scroll for more fields).", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1941,7 +1942,7 @@ fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                         leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         trailingIcon = {
                             if (speciesSearchQuery.isNotBlank()) {
                                 IconButton(onClick = { speciesSearchQuery = ""; speciesSuggestions = emptyList(); showGenusSuggestions = false }) {
@@ -1952,7 +1953,7 @@ fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                     )
                     if (showGenusSuggestions && speciesSuggestions.isNotEmpty()) {
                         Card(
-                            shape = RoundedCornerShape(24.dp),
+                            shape = CuteCardDefaults.ShapeCompact,
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                         ) {
@@ -1975,7 +1976,7 @@ fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                                             showGenusSuggestions = false
                                             haptics.confirm()
                                         },
-                                        shape = RoundedCornerShape(16.dp),
+                                        shape = CuteCardDefaults.ChipShape,
                                         color = MaterialTheme.colorScheme.surfaceContainerLow
                                     ) {
                                         Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
@@ -2021,7 +2022,7 @@ fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                             kingdom = ""; phylum = ""; classs = ""
                             order = ""; family = ""; genus = ""
                         },
-                        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
+                        modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ButtonShape,
                         enabled = commonName.isNotBlank()
                     ) { Text("Save to Registry") }
                 }
@@ -2030,7 +2031,7 @@ fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
 
         Text("Species Registry (${projectSpecies.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         if (projectSpecies.isEmpty()) {
-            Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+            Surface(shape = CuteCardDefaults.ShapeCompact, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
                 Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Nature, null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 40.dp)
@@ -2041,7 +2042,7 @@ fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
             }
         } else {
             projectSpecies.forEach { sp ->
-                Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+                Card(shape = CuteCardDefaults.ButtonShape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(FieldMindIcons.Nature, null, tint = colors.observation, size = 18.dp)
@@ -2055,7 +2056,7 @@ fun SpeciesRegistryBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                                     sp.conservationStatus.contains("Vulnerable") || sp.conservationStatus.contains("Near") -> colors.warning
                                     else -> colors.positive
                                 }
-                                Surface(shape = RoundedCornerShape(16.dp), color = statusColor.copy(alpha = 0.12f)) {
+                                Surface(shape = CuteCardDefaults.ChipShape, color = statusColor.copy(alpha = 0.12f)) {
                                     Text(sp.conservationStatus.take(12), modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = statusColor)
                                 }
                             }
@@ -2105,7 +2106,7 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Button(
             onClick = { showForm = !showForm; if (!showForm) { taskTitle = ""; taskDesc = ""; subtasks = emptyList() } },
-            modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp)
+            modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ButtonShape
         ) {
             Icon(FieldMindIcons.Add, null, size = 18.dp)
             Spacer(Modifier.size(6.dp))
@@ -2113,7 +2114,7 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
         }
 
         if (showForm) {
-            Card(shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+            Card(shape = CuteCardDefaults.FieldShape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                 Column(modifier = Modifier.padding(14.dp).heightIn(max = 420.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("Create Project Task", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = colors.project)
                     FieldTextField(taskTitle, { taskTitle = it }, "Task Title *", supportingText = "e.g. Survey Zone A")
@@ -2150,10 +2151,10 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                             value = subtaskInput, onValueChange = { subtaskInput = it },
                             modifier = Modifier.weight(1f),
                             placeholder = { Text("Add subtask...") },
-                            shape = RoundedCornerShape(20.dp), singleLine = true,
+                            shape = MaterialTheme.shapes.medium, singleLine = true,
                             textStyle = MaterialTheme.typography.bodySmall
                         )
-                        FilledTonalButton(onClick = { if (subtaskInput.isNotBlank()) { subtasks = subtasks + subtaskInput; subtaskInput = "" } }, shape = RoundedCornerShape(20.dp)) {
+                        FilledTonalButton(onClick = { if (subtaskInput.isNotBlank()) { subtasks = subtasks + subtaskInput; subtaskInput = "" } }, shape = MaterialTheme.shapes.medium) {
                             Icon(FieldMindIcons.Add, null, size = 18.dp)
                         }
                     }
@@ -2193,7 +2194,7 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                             showForm = false
                             taskTitle = ""; taskDesc = ""; subtasks = emptyList()
                         },
-                        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
+                        modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ButtonShape,
                         enabled = taskTitle.isNotBlank()
                     ) { Text(if (subtasks.isEmpty()) "Save Task" else "Save Task with ${subtasks.size} Subtasks") }
                 }
@@ -2202,7 +2203,7 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
 
         Text("Project Tasks (${projectTasks.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         if (projectTasks.isEmpty()) {
-            Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+            Surface(shape = CuteCardDefaults.ShapeCompact, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
                 Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Icon(FieldMindIcons.Check, null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 40.dp)
@@ -2218,7 +2219,7 @@ fun ProjectTasksBuilder(projectId: Long, viewModel: FieldMindViewModel) {
                     "medium" -> colors.warning
                     else -> colors.positive
                 }
-                Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+                Card(shape = CuteCardDefaults.ButtonShape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
                     Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Checkbox(
                             modifier = Modifier.size(24.dp),
@@ -2308,14 +2309,14 @@ fun GenericDataRecordDetailContent(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.data.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Data, null, tint = colors.data, size = 24.dp) }
@@ -2363,14 +2364,14 @@ fun GenericDataRecordDetailContent(
 fun CounterDetailContent(d: DataRecordEntity) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.data.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Add, null, tint = colors.data, size = 24.dp) }
@@ -2405,14 +2406,14 @@ fun CounterDetailContent(d: DataRecordEntity) {
 fun MeasurementDetailContent(d: DataRecordEntity) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.data.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Graph, null, tint = colors.data, size = 24.dp) }
@@ -2460,14 +2461,14 @@ fun WeatherLogDetailContent(d: DataRecordEntity) {
     val wind = components.firstOrNull { it.contains("km/h") }?.substringBefore("km/h")?.trim()?.toDoubleOrNull()
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.info.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Weather, null, tint = colors.info, size = 24.dp) }
@@ -2478,7 +2479,7 @@ fun WeatherLogDetailContent(d: DataRecordEntity) {
             }
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
             Surface(
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.FieldShape,
                 color = colors.info.copy(alpha = 0.08f),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -2547,14 +2548,14 @@ fun ChecklistDetailContent(d: DataRecordEntity) {
     val totalItems = items.size
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.positive.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Check, null, tint = colors.positive, size = 24.dp) }
@@ -2579,7 +2580,7 @@ fun ChecklistDetailContent(d: DataRecordEntity) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     items.forEach { item ->
                         Row(
-                            Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(
+                            Modifier.fillMaxWidth().clip(CuteCardDefaults.ChipShape).background(
                                 if (item.done) colors.positive.copy(alpha = 0.06f)
                                 else MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.3f)
                             ).padding(12.dp),
@@ -2659,14 +2660,14 @@ fun ComparisonDetailContent(d: DataRecordEntity) {
     val rows = parsedData.second
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.data.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Data, null, tint = colors.data, size = 24.dp) }
@@ -2681,7 +2682,7 @@ fun ComparisonDetailContent(d: DataRecordEntity) {
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
             if (rows.isNotEmpty()) {
                 Surface(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.4f),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -2719,14 +2720,14 @@ fun EventLogDetailContent(d: DataRecordEntity) {
     val dateFromValue = d.value.substringAfter("| ")
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.hypothesis.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.List, null, tint = colors.hypothesis, size = 24.dp) }
@@ -2773,14 +2774,14 @@ fun SiteLogDetailContent(d: DataRecordEntity) {
     val findingsText = d.notes.substringAfter("Findings: ")
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.info.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Map, null, tint = colors.info, size = 24.dp) }
@@ -2851,7 +2852,7 @@ fun ReportDetailContent(
     }
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2859,7 +2860,7 @@ fun ReportDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.report.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Report, null, tint = colors.report, size = 24.dp) }
@@ -2889,7 +2890,7 @@ fun ReportDetailContent(
             // Full report preview
             Text("Full report", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -2911,7 +2912,7 @@ fun FlashcardDetailContent(
     val colors = FieldMindTheme.colors
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2919,7 +2920,7 @@ fun FlashcardDetailContent(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.flashcard.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Flashcard, null, tint = colors.flashcard, size = 24.dp) }
@@ -2935,7 +2936,7 @@ fun FlashcardDetailContent(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(24.dp))
+                    .clip(CuteCardDefaults.ShapeCompact)
                     .background(colors.flashcard.copy(alpha = 0.08f))
                     .padding(16.dp)
             ) {
@@ -2949,7 +2950,7 @@ fun FlashcardDetailContent(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(24.dp))
+                    .clip(CuteCardDefaults.ShapeCompact)
                     .background(colors.info.copy(alpha = 0.08f))
                     .padding(16.dp)
             ) {
@@ -2980,7 +2981,7 @@ fun ResearchSessionDetailContent(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = colors.surfaceVariant.copy(alpha = 0.5f)),
-            shape = RoundedCornerShape(24.dp)
+            shape = CuteCardDefaults.ShapeCompact
         ) {
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(session.name.ifBlank { "Research Session" }, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
@@ -3003,7 +3004,7 @@ fun ResearchSessionDetailContent(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = colors.surfaceVariant.copy(alpha = 0.3f)),
-                shape = RoundedCornerShape(20.dp)
+                shape = MaterialTheme.shapes.medium
             ) {
                 Text(
                     "No linked observations found.",
@@ -3019,7 +3020,7 @@ fun ResearchSessionDetailContent(
                         .fillMaxWidth()
                         .clickable { onOpenDetail("observation", obs.id) },
                     colors = CardDefaults.cardColors(containerColor = colors.surface),
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Row(Modifier.fillMaxWidth()) {
@@ -3079,7 +3080,7 @@ fun AssetCountChip(label: String, count: Int, icon: MaterialSymbolIcon, color: a
 fun StatusChip(status: String, color: androidx.compose.ui.graphics.Color) {
     Row(
         Modifier
-            .clip(RoundedCornerShape(16.dp))
+            .clip(CuteCardDefaults.ChipShape)
             .background(color.copy(alpha = 0.12f))
             .padding(horizontal = 8.dp, vertical = 3.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -3103,13 +3104,13 @@ fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
             .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        FilledTonalButton(onClick = { haptics.light(); onEdit() }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(24.dp)) {
+        FilledTonalButton(onClick = { haptics.light(); onEdit() }, modifier = Modifier.weight(1f), shape = CuteCardDefaults.ShapeCompact) {
             Icon(icon = FieldMindIcons.Edit, contentDescription = null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Edit")
         }
         OutlinedButton(
             onClick = { haptics.light(); onDelete() },
             modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(24.dp),
+            shape = CuteCardDefaults.ShapeCompact,
             colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
         ) {
             Icon(icon = FieldMindIcons.Delete, contentDescription = null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Delete")
@@ -3125,7 +3126,7 @@ fun DetailActionBar(onEdit: () -> Unit, onDelete: () -> Unit) {
 fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Unit) {
     var editing by remember(question.id, question.answer) { mutableStateOf(question.answer.isBlank()) }
     var draft by remember(question.id) { mutableStateOf(question.answer) }
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(icon = FieldMindIcons.Answer, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -3134,7 +3135,7 @@ fun QuestionAnswerCard(question: QuestionEntity, onSave: (String) -> Unit) {
             if (editing) {
                 FieldTextField(draft, { draft = it }, "What did you conclude?", minLines = 3, supportingText = "Saving marks this question as Answered.")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = { onSave(draft); editing = false }, shape = RoundedCornerShape(22.dp), enabled = draft.isNotBlank()) { Text("Save answer") }
+                    Button(onClick = { onSave(draft); editing = false }, shape = CuteCardDefaults.ButtonShape, enabled = draft.isNotBlank()) { Text("Save answer") }
                     if (question.answer.isNotBlank()) TextButton(onClick = { draft = question.answer; editing = false }) { Text("Cancel") }
                 }
             } else {
@@ -3226,7 +3227,7 @@ fun SourceDetailContent(
 ) {
     val colors = FieldMindTheme.colors
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -3234,7 +3235,7 @@ fun SourceDetailContent(
             // ── Header ──
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.source.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Source, null, tint = colors.source, size = 24.dp) }
@@ -3319,7 +3320,7 @@ fun SourceDetailContent(
 
 @Composable
 fun DetailBody(title: String, kind: String, fields: List<Pair<String, String>>) {
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 EntityBadge(kind)
@@ -3343,12 +3344,12 @@ fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity>, viewM
     val haptics = rememberFieldMindHaptics()
     var showProjects by remember { mutableStateOf(false) }
     val citation = remember(source) { viewModel.buildSourceCitation(source) }
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             SectionHeader("Source actions", "Open, cite, prioritize, and turn reading into review cards.")
             SourcePreviewCard(source.link, source.fileUri)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilledTonalButton(onClick = { haptics.light(); runCatching { uriHandler.openUri(source.link) } }, enabled = source.link.isNotBlank(), modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
+                FilledTonalButton(onClick = { haptics.light(); runCatching { uriHandler.openUri(source.link) } }, enabled = source.link.isNotBlank(), modifier = Modifier.weight(1f), shape = CuteCardDefaults.ButtonShape) {
                     Icon(FieldMindIcons.OpenLink, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Open link")
                 }
                 var showPdfViewer by remember { mutableStateOf(false) }
@@ -3379,7 +3380,7 @@ fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity>, viewM
                         "audio" -> showAudioPlayer = true
                         else -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(source.fileUri.orEmpty())).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)) }
                     }
-                }, enabled = source.fileUri.isNotBlank(), modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
+                }, enabled = source.fileUri.isNotBlank(), modifier = Modifier.weight(1f), shape = CuteCardDefaults.ButtonShape) {
                     Icon(FieldMindIcons.File, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Open file")
                 }
                 if (showPdfViewer) {
@@ -3393,15 +3394,15 @@ fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity>, viewM
                 }
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = { haptics.light(); clipboard.setText(AnnotatedString(citation)) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
+                OutlinedButton(onClick = { haptics.light(); clipboard.setText(AnnotatedString(citation)) }, modifier = Modifier.weight(1f), shape = CuteCardDefaults.ButtonShape) {
                     Icon(FieldMindIcons.Article, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Copy citation")
                 }
-                OutlinedButton(onClick = { haptics.confirm(); viewModel.toggleSourceImportant(source) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
+                OutlinedButton(onClick = { haptics.confirm(); viewModel.toggleSourceImportant(source) }, modifier = Modifier.weight(1f), shape = CuteCardDefaults.ButtonShape) {
                     Icon(FieldMindIcons.Favorite, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text(if (source.importance == "Normal") "Important" else "Normal")
                 }
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = { haptics.confirm(); viewModel.markSourceRead(source) }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp), enabled = source.readingStatus != "Read") {
+                OutlinedButton(onClick = { haptics.confirm(); viewModel.markSourceRead(source) }, modifier = Modifier.weight(1f), shape = CuteCardDefaults.ButtonShape, enabled = source.readingStatus != "Read") {
                     Icon(FieldMindIcons.Done, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Mark read")
                 }
                 OutlinedButton(onClick = {
@@ -3409,7 +3410,7 @@ fun SourceActionPanel(source: SourceEntity, projects: List<ProjectEntity>, viewM
                     if (source.title.isNotBlank() && source.whatThisSourceTaughtMe.isNotBlank()) viewModel.addFlashcard(source.title, source.whatThisSourceTaughtMe, "source-takeaway", source.id, source.relatedProjectId)
                     if (source.keyFindings.isNotBlank()) viewModel.addFlashcard("Key finding from ${source.title}", source.keyFindings, "source-finding", source.id, source.relatedProjectId)
                     if (source.questionsGenerated.isNotBlank()) viewModel.addFlashcard("Question from ${source.title}", source.questionsGenerated, "source-question", source.id, source.relatedProjectId)
-                }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(22.dp)) {
+                }, modifier = Modifier.weight(1f), shape = CuteCardDefaults.ButtonShape) {
                     Icon(FieldMindIcons.Flashcard, null, size = 18.dp); Spacer(Modifier.size(6.dp)); Text("Smart cards")
                 }
             }
@@ -3440,7 +3441,7 @@ fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observationId: Lo
     var showAudioPlayer by remember { mutableStateOf(false) }
     var viewerUri by remember { mutableStateOf("") }
     var viewerCaption by remember { mutableStateOf("") }
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(icon = FieldMindIcons.Gallery, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -3455,7 +3456,7 @@ fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observationId: Lo
                                 model = displayUri,
                                 contentDescription = img.caption.ifBlank { "Observation photo" },
                                 contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxWidth().height(140.dp).clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest).clickable {
+                                modifier = Modifier.fillMaxWidth().height(140.dp).clip(CuteCardDefaults.ShapeCompact).background(MaterialTheme.colorScheme.surfaceContainerHighest).clickable {
                                     viewerUri = displayUri
                                     viewerCaption = img.caption.ifBlank { "Observation image" }
                                     showImageViewer = true
@@ -3468,7 +3469,7 @@ fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observationId: Lo
             }
             others.forEach { att ->
                 val displayUri = att.localPath ?: att.uri
-                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).clickable {
+                Row(Modifier.fillMaxWidth().clip(CuteCardDefaults.ButtonShape).clickable {
                     if (att.type.equals("Audio", true)) {
                         viewerUri = displayUri
                         viewerCaption = att.caption.ifBlank { "Audio evidence" }
@@ -3481,7 +3482,7 @@ fun ObservationAttachmentsPanel(viewModel: FieldMindViewModel, observationId: Lo
                         onOpenReader(displayUri, att.caption.ifBlank { att.type })
                     }
                 }.padding(4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
+                    Box(Modifier.size(40.dp).clip(MaterialTheme.shapes.medium).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
                         Icon(icon = if (att.type.equals("Audio", true)) FieldMindIcons.Mic else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
                     }
                     Column(Modifier.weight(1f)) {
@@ -3514,11 +3515,11 @@ fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, String) -> U
     val target = source.fileUri.ifBlank { source.link }
     if (target.isBlank()) return
     var showImageViewer by remember { mutableStateOf(false) }
-    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
+    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text("Source preview", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             if (source.type.equals("Image", true) || uriLooksImage(target)) {
-                AsyncImage(model = target, contentDescription = source.title, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(28.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest).clickable { showImageViewer = true })
+                AsyncImage(model = target, contentDescription = source.title, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxWidth().height(220.dp).clip(CuteCardDefaults.FieldShape).background(MaterialTheme.colorScheme.surfaceContainerHighest).clickable { showImageViewer = true })
             }
             AttachmentOpenRow(target, source.title, source.type, onOpenReader)
         }
@@ -3537,7 +3538,7 @@ fun SourcePreviewPanel(source: SourceEntity, onOpenReader: (String, String) -> U
 
 @Composable
 fun AttachmentOpenRow(uri: String, title: String, type: String, onOpenReader: (String, String) -> Unit) {
-    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).clickable { onOpenReader(uri, title) }.background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+    Row(Modifier.fillMaxWidth().clip(CuteCardDefaults.ShapeCompact).clickable { onOpenReader(uri, title) }.background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Icon(icon = if (type.equals("Image", true) || type.equals("Gallery", true) || type.equals("Photo", true) || uriLooksImage(uri)) FieldMindIcons.Gallery else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)

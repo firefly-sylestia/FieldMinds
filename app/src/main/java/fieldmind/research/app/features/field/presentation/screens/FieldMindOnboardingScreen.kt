@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -286,7 +287,7 @@ private fun OnboardingWelcomePage(
             Column(Modifier.weight(1f).padding(top = 32.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 AnimatedVisibility(visible = showContent,
                     enter = fadeIn(tween(400)) + scaleIn(initialScale = 0.8f, animationSpec = tween(400))) {
-                    Box(Modifier.size(72.dp).clip(RoundedCornerShape(34.dp))
+                    Box(Modifier.size(72.dp).clip(CuteCardDefaults.Shape)
                         .background(Brush.linearGradient(
                             listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primaryContainer))),
                         contentAlignment = Alignment.Center) {
@@ -313,7 +314,7 @@ private fun OnboardingWelcomePage(
                         label = { Text("Your name (optional)") },
                         placeholder = { Text("e.g. Alex") },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(28.dp), singleLine = true,
+                        shape = CuteCardDefaults.FieldShape, singleLine = true,
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Next),
                         leadingIcon = { Icon(FieldMindIcons.User, null, size = 20.dp) })
@@ -328,7 +329,7 @@ private fun OnboardingWelcomePage(
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(
                                 expanded = roleExpanded) },
                             modifier = Modifier.fillMaxWidth().menuAnchor(),
-                            shape = RoundedCornerShape(28.dp),
+                            shape = CuteCardDefaults.FieldShape,
                             leadingIcon = { Icon(FieldMindIcons.School, null, size = 20.dp) })
                         ExposedDropdownMenu(expanded = roleExpanded,
                             onDismissRequest = { roleExpanded = false }) {
@@ -351,7 +352,7 @@ private fun OnboardingWelcomePage(
                     frequencies.forEach { freq ->
                         val isSelected = frequency == freq
                         Surface(onClick = { onFrequencyChange(freq) },
-                            shape = RoundedCornerShape(20.dp),
+                            shape = MaterialTheme.shapes.medium,
                             color = if (isSelected) MaterialTheme.colorScheme.primary.copy(
                                 alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) BorderStroke(1.5.dp,
@@ -368,7 +369,7 @@ private fun OnboardingWelcomePage(
                 Button(onClick = onNext,
                     modifier = Modifier.fillMaxWidth().height(54.dp)
                         .expressivePress(scaleDown = 0.96f),
-                    shape = RoundedCornerShape(28.dp)) {
+                    shape = CuteCardDefaults.FieldShape) {
                     Text("Get started", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
                     Spacer(Modifier.size(8.dp))
                     Icon(FieldMindIcons.Forward, null, size = 20.dp)
@@ -458,11 +459,11 @@ private fun OnboardingInterestsPage(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically) {
                 OutlinedButton(onClick = onBack,
-                    shape = RoundedCornerShape(24.dp)) { Text("Back") }
+                    shape = CuteCardDefaults.ShapeCompact) { Text("Back") }
                 PageIndicator(current = 1, total = 5,
                     modifier = Modifier.weight(1f))
                 Button(onClick = onNext,
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     modifier = Modifier.height(48.dp)) { Text("Continue") }
             }
         }
@@ -489,7 +490,7 @@ private fun <T> InterestChipGroup(
                 val fieldName = (field as? ZoologySubfield)?.displayName
                     ?: (field as? BotanySubfield)?.displayName ?: field.name
                 Surface(onClick = { onToggle(field) },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     color = if (isSelected) accent.copy(alpha = 0.15f)
                         else MaterialTheme.colorScheme.surfaceContainerHighest,
                     border = if (isSelected) BorderStroke(1.5.dp,
@@ -546,7 +547,7 @@ private fun OtherFieldsSection(
                         geology = !isSelected)
                     else -> interests
                 })
-            }, shape = RoundedCornerShape(24.dp),
+            }, shape = CuteCardDefaults.ShapeCompact,
                 color = if (isSelected) accent.copy(alpha = 0.12f)
                     else MaterialTheme.colorScheme.surfaceContainerHigh,
                 border = if (isSelected) BorderStroke(1.5.dp,
@@ -556,7 +557,7 @@ private fun OtherFieldsSection(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Box(Modifier.size(36.dp)
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(MaterialTheme.shapes.medium)
                         .background(accent.copy(
                             if (isSelected) 0.22f else 0.1f)),
                         contentAlignment = Alignment.Center) {
@@ -592,7 +593,7 @@ private fun CustomInterestSection(
             label = { Text("Add custom field") },
             placeholder = { Text("e.g. Mycology, Entomology…") },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp), singleLine = true,
+            shape = CuteCardDefaults.ShapeCompact, singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
                 if (customInput.isNotBlank()) {
@@ -614,7 +615,7 @@ private fun CustomInterestSection(
                             style = MaterialTheme.typography.labelMedium) },
                         trailingIcon = { Icon(FieldMindIcons.Close,
                             null, size = 16.dp) },
-                        shape = RoundedCornerShape(20.dp))
+                        shape = MaterialTheme.shapes.medium)
                 }
             }
         }
@@ -689,11 +690,11 @@ private fun OnboardingPermissionsPage(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically) {
                 OutlinedButton(onClick = onBack,
-                    shape = RoundedCornerShape(24.dp)) { Text("Back") }
+                    shape = CuteCardDefaults.ShapeCompact) { Text("Back") }
                 PageIndicator(current = 2, total = 5,
                     modifier = Modifier.weight(1f))
                 Button(onClick = onNext,
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     modifier = Modifier.height(48.dp)) { Text("Continue") }
             }
         }
@@ -708,7 +709,7 @@ private data class PermItem(
 
 @Composable
 private fun PermissionCard(item: PermItem) {
-    Card(shape = RoundedCornerShape(30.dp),
+    Card(shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = if (item.granted) item.accent.copy(
                 alpha = 0.08f)
@@ -720,7 +721,7 @@ private fun PermissionCard(item: PermItem) {
         Row(Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+            Box(Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                 .background(if (item.granted) item.accent.copy(
                     alpha = 0.2f) else item.accent.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center) {
@@ -737,7 +738,7 @@ private fun PermissionCard(item: PermItem) {
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold)
                     if (item.granted) {
-                        Surface(shape = RoundedCornerShape(16.dp),
+                        Surface(shape = CuteCardDefaults.ChipShape,
                             color = item.accent.copy(alpha = 0.15f)) {
                             Text("Granted",
                                 style = MaterialTheme.typography.labelSmall,
@@ -754,7 +755,7 @@ private fun PermissionCard(item: PermItem) {
             }
             if (!item.granted) {
                 Button(onClick = item.onRequest,
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     contentPadding = PaddingValues(
                         horizontal = 16.dp, vertical = 6.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -822,7 +823,7 @@ private fun OnboardingThemePage(
                                 val sel = layoutStyle == style
                                 Surface(onClick = {
                                     onLayoutStyleChange(style) },
-                                    shape = RoundedCornerShape(24.dp),
+                                    shape = CuteCardDefaults.ShapeCompact,
                                     color = if (sel) MaterialTheme.colorScheme.primaryContainer
                                         else MaterialTheme.colorScheme.surfaceContainerHighest,
                                     border = if (sel) BorderStroke(2.dp,
@@ -905,11 +906,11 @@ private fun OnboardingThemePage(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically) {
                 OutlinedButton(onClick = onBack,
-                    shape = RoundedCornerShape(24.dp)) { Text("Back") }
+                    shape = CuteCardDefaults.ShapeCompact) { Text("Back") }
                 PageIndicator(current = 3, total = 5,
                     modifier = Modifier.weight(1f))
                 Button(onClick = onNext,
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     modifier = Modifier.height(48.dp)) { Text("Continue") }
             }
         }
@@ -927,7 +928,7 @@ private fun ThemeSelector(selectedTheme: String,
             listOf("System", "Light", "Dark").forEach { theme ->
                 val sel = selectedTheme == theme
                 Surface(onClick = { onThemeChange(theme) },
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     color = when {
                         sel && theme == "Dark" -> Color(0xFF1A1A2E)
                         sel && theme == "Light" -> Color(0xFFF5F0E8)
@@ -1007,7 +1008,7 @@ private fun SegBtn(options: List<String>, selected: String,
             val first = index == 0
             val last = index == options.lastIndex
             Surface(onClick = { onSelect(option) },
-                shape = if (first && last) RoundedCornerShape(20.dp)
+                shape = if (first && last) MaterialTheme.shapes.medium
                     else if (first) RoundedCornerShape(
                         topStart = 16.dp, bottomStart = 20.dp)
                     else if (last) RoundedCornerShape(
@@ -1103,7 +1104,7 @@ private fun OnboardingReviewPage(
                             Brush.linearGradient(
                                 listOf(Color(0xFF1F6B4C),
                                     Color(0xFF4CAF50))),
-                            RoundedCornerShape(36.dp)),
+                            CuteCardDefaults.ShapeHero),
                             contentAlignment = Alignment.Center) {
                             Icon(FieldMindIcons.Check, null,
                                 tint = Color.White, size = 44.dp)
@@ -1122,7 +1123,7 @@ private fun OnboardingReviewPage(
                 AnimatedVisibility(visible = showContent,
                     enter = fadeIn(FieldMindMotion.expressiveFloat)
                         + slideInVertically { it / 4 }) {
-                    Card(shape = RoundedCornerShape(34.dp),
+                    Card(shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(
@@ -1181,7 +1182,7 @@ private fun OnboardingReviewPage(
                     Row(Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         OutlinedButton(onClick = onBack,
-                            shape = RoundedCornerShape(24.dp),
+                            shape = CuteCardDefaults.ShapeCompact,
                             modifier = Modifier.weight(1f)) {
                             Text("Back") }
                     }
@@ -1189,7 +1190,7 @@ private fun OnboardingReviewPage(
                         modifier = Modifier.fillMaxWidth()
                             .height(54.dp)
                             .expressivePress(scaleDown = 0.96f),
-                        shape = RoundedCornerShape(28.dp)) {
+                        shape = CuteCardDefaults.FieldShape) {
                         Text("Start exploring",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp)

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -205,14 +206,14 @@ fun ProjectsScreen(
                         FilledTonalIconButton(
                             onClick = { showSearch = !showSearch },
                             modifier = Modifier.size(40.dp),
-                            shape = RoundedCornerShape(20.dp)
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Icon(if (showSearch) MaterialSymbolIcon("close") else FieldMindIcons.Search, null, size = 20.dp)
                         }
                         FilledTonalIconButton(
                             onClick = { showCreateSheet = true },
                             modifier = Modifier.size(40.dp),
-                            shape = RoundedCornerShape(20.dp),
+                            shape = MaterialTheme.shapes.medium,
                             colors = IconButtonDefaults.filledTonalIconButtonColors(
                                 containerColor = colors.project.copy(alpha = 0.16f),
                                 contentColor = colors.project
@@ -241,7 +242,7 @@ fun ProjectsScreen(
                             }
                         }
                     },
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = colors.project.copy(alpha = 0.5f),
@@ -262,7 +263,7 @@ fun ProjectsScreen(
                     val isSelected = selectedFilter == filter
                     Surface(
                         onClick = { selectedFilter = filter; searchQuery = "" },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         color = if (isSelected) colors.project.copy(alpha = 0.16f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         tonalElevation = 0.dp
                     ) {
@@ -281,7 +282,7 @@ fun ProjectsScreen(
         // ── Stats row: Total | Active | Archive | Not Synced ──
         item {
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
             ) {
@@ -315,7 +316,7 @@ fun ProjectsScreen(
                     Box {
                         Surface(
                             onClick = { showSortMenu = true },
-                            shape = RoundedCornerShape(18.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = MaterialTheme.colorScheme.surfaceContainerHigh,
                             tonalElevation = 0.dp
                         ) {
@@ -348,7 +349,7 @@ fun ProjectsScreen(
             // Empty state per HTML spec
             item {
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                 ) {
@@ -358,7 +359,7 @@ fun ProjectsScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Box(
-                            Modifier.size(72.dp).clip(RoundedCornerShape(30.dp))
+                            Modifier.size(72.dp).clip(CuteCardDefaults.Shape)
                                 .background(colors.project.copy(alpha = 0.12f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -382,7 +383,7 @@ fun ProjectsScreen(
                         if (searchQuery.isBlank() && selectedFilter == "All") {
                             FilledTonalButton(
                                 onClick = { onNavigate?.invoke(FieldMindScreen.NewProject) },
-                                shape = RoundedCornerShape(22.dp),
+                                shape = CuteCardDefaults.ButtonShape,
                                 colors = ButtonDefaults.filledTonalButtonColors(containerColor = colors.project.copy(alpha = 0.16f))
                             ) {
                                 Icon(FieldMindIcons.Add, null, size = 18.dp)
@@ -457,7 +458,7 @@ private fun ProjectCard(
 
     Card(
         modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate).expressivePress(scaleDown = 0.98f).clickable(onClick = onClick),
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {
@@ -469,7 +470,7 @@ private fun ProjectCard(
             // Project icon with shared element transition
             val projectIconModifier = if (sharedTransitionScope != null && animatedVisibilityScope != null) {
                 with(sharedTransitionScope) {
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(colors.project.copy(alpha = 0.14f))
                         .sharedElement(
                             rememberSharedContentState(key = "project_icon_${project.id}"),
@@ -477,7 +478,7 @@ private fun ProjectCard(
                         )
                 }
             } else {
-                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                     .background(colors.project.copy(alpha = 0.14f))
             }
             Box(
@@ -668,7 +669,7 @@ private fun ProjectCard(
                     onValueChange = { renameText = it },
                     label = { Text("Project name") },
                     singleLine = true,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     modifier = Modifier.fillMaxWidth()
                 )
             },
@@ -681,7 +682,7 @@ private fun ProjectCard(
                         showRenameDialog = false
                     },
                     enabled = renameText.isNotBlank(),
-                    shape = RoundedCornerShape(22.dp)
+                    shape = CuteCardDefaults.ButtonShape
                 ) { Text("Rename") }
             },
             dismissButton = {
@@ -709,7 +710,7 @@ private fun ProjectCard(
                         showDeleteConfirm = false
                         showSnackbar("${project.title} deleted")
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Delete") }
             },

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -162,7 +163,7 @@ fun LinkToEntityDialog(
                                 ) {
                                     Surface(
                                         onClick = onDismiss,
-                                        shape = RoundedCornerShape(22.dp),
+                                        shape = CuteCardDefaults.ButtonShape,
                                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                         modifier = Modifier.size(40.dp)
                                     ) {
@@ -234,7 +235,7 @@ fun LinkToEntityDialog(
                                     }
                                 },
                                 singleLine = true,
-                                shape = RoundedCornerShape(24.dp),
+                                shape = CuteCardDefaults.ShapeCompact,
                                 colors = OutlinedTextFieldDefaults.colors(
                                     unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                                 ),
@@ -254,7 +255,7 @@ fun LinkToEntityDialog(
                                     val isSelected = tab == selectedTab
                                     Surface(
                                         onClick = { selectedTab = tab; searchQuery = "" },
-                                        shape = RoundedCornerShape(20.dp),
+                                        shape = MaterialTheme.shapes.medium,
                                         color = if (isSelected) FieldMindTheme.colors.accentFor(tab.entityType).copy(alpha = 0.15f)
                                         else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         modifier = Modifier.weight(1f)
@@ -450,7 +451,7 @@ private fun EntityListItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onLink),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
@@ -467,7 +468,7 @@ private fun EntityListItem(
             Box(
                 modifier = Modifier
                     .size(40.dp)
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(MaterialTheme.shapes.medium)
                     .background(accentColor.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {

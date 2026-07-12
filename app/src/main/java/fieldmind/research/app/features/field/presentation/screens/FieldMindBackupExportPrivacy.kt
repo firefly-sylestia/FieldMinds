@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -64,7 +65,7 @@ fun ExportPrivacyOptionsCard(
     var expanded by remember { mutableStateOf(false) }
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
     ) {
@@ -96,7 +97,7 @@ fun ExportPrivacyOptionsCard(
                     }
                     if (activeItems.isNotEmpty()) {
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = colors.data.copy(alpha = 0.15f)
                         ) {
                             Text(
@@ -141,7 +142,7 @@ fun ExportPrivacyOptionsCard(
                                     val selected = gpsPrivacy == mode
                                     Surface(
                                         onClick = { onGpsPrivacyChange(mode) },
-                                        shape = RoundedCornerShape(18.dp),
+                                        shape = CuteCardDefaults.ChipShape,
                                         color = if (selected) colors.data.copy(alpha = 0.14f)
                                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         border = if (selected) BorderStroke(1.2.dp, colors.data) else null,
@@ -235,7 +236,7 @@ fun ExportPrivacyOptionsCard(
                                 label = { Text(if (isBackup) "Backup password" else "Export password") },
                                 placeholder = { Text("Enter a strong password") },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(24.dp),
+                                shape = CuteCardDefaults.ShapeCompact,
                                 singleLine = true,
                                 keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                                 trailingIcon = {
@@ -264,7 +265,7 @@ fun ExportPrivacyOptionsCard(
                                         modifier = Modifier
                                             .weight(1f)
                                             .height(8.dp)
-                                            .clip(RoundedCornerShape(8.dp)),
+                                            .clip(CuteCardDefaults.ProgressBarShape),
                                         color = Color(strength.color),
                                         trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                                     )
@@ -285,7 +286,7 @@ fun ExportPrivacyOptionsCard(
                                     label = { Text("Confirm password") },
                                     placeholder = { Text("Re-enter password") },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(24.dp),
+                                    shape = CuteCardDefaults.ShapeCompact,
                                     singleLine = true,
                                     keyboardOptions = KeyboardOptions.Default.withPrivacyTyping(LocalPrivacyTypingEnabled.current),
                                     trailingIcon = {

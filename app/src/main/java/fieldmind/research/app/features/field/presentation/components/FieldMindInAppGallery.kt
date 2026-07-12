@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.net.Uri
 import android.os.Environment
@@ -119,7 +120,7 @@ fun FieldMindInAppGallery(
                                     capturedImages.indices.toSet()
                                 }
                             },
-                            shape = RoundedCornerShape(20.dp)
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Text(
                                 if (selectedIndices.size == capturedImages.size) "Deselect all"
@@ -161,7 +162,7 @@ fun FieldMindInAppGallery(
                         Spacer(Modifier.height(12.dp))
                         OutlinedButton(
                             onClick = onDismiss,
-                            shape = RoundedCornerShape(22.dp)
+                            shape = CuteCardDefaults.ButtonShape
                         ) {
                             Text("Go back")
                         }
@@ -183,7 +184,7 @@ fun FieldMindInAppGallery(
                         Box(
                             modifier = Modifier
                                 .aspectRatio(1f)
-                                .clip(RoundedCornerShape(20.dp))
+                                .clip(MaterialTheme.shapes.medium)
                                 .clickable { toggleSelection(index) }
                         ) {
                             // Thumbnail
@@ -305,7 +306,7 @@ fun FieldMindInAppGallery(
                                     }
                                     onSelectImage(attachments)
                                 },
-                                shape = RoundedCornerShape(24.dp)
+                                shape = CuteCardDefaults.ShapeCompact
                             ) {
                                 Icon(FieldMindIcons.Archive, null, size = 18.dp)
                                 Spacer(Modifier.size(6.dp))

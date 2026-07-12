@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -150,9 +151,9 @@ fun FlashcardSessionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     index = 0; flipped = false; reviewed = 0; againCount = 0; goodCount = 0; easyCount = 0
                 },
                 Modifier.fillMaxWidth().height(56.dp),
-                shape = RoundedCornerShape(24.dp)
+                shape = CuteCardDefaults.ShapeCompact
             ) { Text("Review again") }
-            OutlinedButton(onClick = onBack, Modifier.fillMaxWidth().height(48.dp), shape = RoundedCornerShape(24.dp)) { Text("Done") }
+            OutlinedButton(onClick = onBack, Modifier.fillMaxWidth().height(48.dp), shape = CuteCardDefaults.ShapeCompact) { Text("Done") }
         } else {
             val card = queue[index]
             ReviewCard(card, flipped) { flipped = !flipped }
@@ -162,7 +163,7 @@ fun FlashcardSessionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 Button(
                     onClick = { flipped = true },
                     Modifier.fillMaxWidth().height(56.dp),
-                    shape = RoundedCornerShape(24.dp)
+                    shape = CuteCardDefaults.ShapeCompact
                 ) {
                     Icon(icon = FieldMindIcons.Flip, contentDescription = null, size = 20.dp)
                     Spacer(Modifier.size(8.dp))
@@ -214,7 +215,7 @@ fun FlashcardSessionScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 private fun SessionCompleteCard(reviewed: Int, again: Int, good: Int, easy: Int, isSm2: Boolean) {
     Card(
         Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(Modifier.padding(28.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -271,7 +272,7 @@ private fun Sm2RatingButtons(card: FlashcardEntity, onRate: (Int) -> Unit) {
         }
         OutlinedCard(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
+            shape = CuteCardDefaults.ShapeCompact,
             colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
         ) {
             Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -294,7 +295,7 @@ private fun Sm2RatingButtons(card: FlashcardEntity, onRate: (Int) -> Unit) {
                 Button(
                     onClick = { onRate(rating) },
                     modifier = Modifier.weight(1f).height(52.dp),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     colors = ButtonDefaults.buttonColors(containerColor = color.copy(alpha = 0.12f), contentColor = color)
                 ) { Text(label, fontWeight = FontWeight.SemiBold) }
             }
@@ -311,9 +312,9 @@ private fun Sm2RatingButtons(card: FlashcardEntity, onRate: (Int) -> Unit) {
 @Composable
 private fun BasicRatingButtons(onRate: (Boolean) -> Unit) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        OutlinedButton(onClick = { onRate(true) }, Modifier.weight(1f).height(52.dp), shape = RoundedCornerShape(24.dp)) { Text("Again") }
-        FilledTonalButton(onClick = { onRate(false) }, Modifier.weight(1f).height(52.dp), shape = RoundedCornerShape(24.dp)) { Text("Good") }
-        Button(onClick = { onRate(false) }, Modifier.weight(1f).height(52.dp), shape = RoundedCornerShape(24.dp)) { Text("Easy") }
+        OutlinedButton(onClick = { onRate(true) }, Modifier.weight(1f).height(52.dp), shape = CuteCardDefaults.ShapeCompact) { Text("Again") }
+        FilledTonalButton(onClick = { onRate(false) }, Modifier.weight(1f).height(52.dp), shape = CuteCardDefaults.ShapeCompact) { Text("Good") }
+        Button(onClick = { onRate(false) }, Modifier.weight(1f).height(52.dp), shape = CuteCardDefaults.ShapeCompact) { Text("Easy") }
     }
 }
 
@@ -328,7 +329,7 @@ private fun ColumnScope.ReviewCard(card: FlashcardEntity, flipped: Boolean, onFl
             .heightIn(min = 220.dp)
             .graphicsLayer { rotationY = rotation; cameraDistance = 32f }
             .clickable(onClick = onFlip),
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = if (flipped) MaterialTheme.colorScheme.surfaceContainerHigh else MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -340,7 +341,7 @@ private fun ColumnScope.ReviewCard(card: FlashcardEntity, flipped: Boolean, onFl
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
-                Modifier.size(48.dp).background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(22.dp)),
+                Modifier.size(48.dp).background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), CuteCardDefaults.ButtonShape),
                 contentAlignment = Alignment.Center
             ) { Icon(icon = FieldMindIcons.Flashcard, contentDescription = null, tint = accent, size = 26.dp) }
             InfoChip(if (flipped) "Answer" else "Question · ${card.type}")

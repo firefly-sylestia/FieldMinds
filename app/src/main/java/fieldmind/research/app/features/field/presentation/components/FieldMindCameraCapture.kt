@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.Manifest
 import android.content.ContentValues
@@ -176,14 +177,14 @@ fun FieldMindCameraCapture(
             modifier = modifier
                 .fillMaxWidth()
                 .height(400.dp)
-                .clip(RoundedCornerShape(36.dp))
+                .clip(CuteCardDefaults.ShapeHero)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh),
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Icon(icon = FieldMindIcons.Camera, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 48.dp)
                 Text("Camera permission required", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }, shape = RoundedCornerShape(24.dp)) {
+                Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }, shape = CuteCardDefaults.ShapeCompact) {
                     Text("Grant permission")
                 }
                 TextButton(onClick = onDismiss) { Text("Cancel") }
@@ -198,7 +199,7 @@ fun FieldMindCameraCapture(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(3f / 4f)
-                .clip(RoundedCornerShape(36.dp)),
+                .clip(CuteCardDefaults.ShapeHero),
             factory = { ctx ->
                 PreviewView(ctx).apply {
                     layoutParams = ViewGroup.LayoutParams(

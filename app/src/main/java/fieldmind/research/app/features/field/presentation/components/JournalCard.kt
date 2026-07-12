@@ -16,28 +16,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import fieldmind.research.app.shared.presentation.theme.JournalConfig
-import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
 
 // ════════════════════════════════════════════════════════════════════════
 //  🌿 JournalCard — Journal-aware card components
 //
-//  These composables automatically read the active [JournalConfig] from
-//  [LocalJournalStyle] and apply the aesthetic's card shape, border
-//  treatment, shadow warmth, and optional texture overlay.
+//  v0.51.0 — Unified around CuteCardDefaults. The journal style system
+//  has been retired in favour of a single "cute rounded" design language.
 //
-//  Replace plain `Card(...)` / `Surface(...)` calls with these to make
-//  cards feel like they belong in the chosen journal style.
+//  Replace plain `Card(...)` / `Surface(...)` calls with these to
+//  maintain a consistent rounded card aesthetic across the app.
 // ════════════════════════════════════════════════════════════════════════
 
 /**
- * Non-clickable information card with journal-aware styling.
- * Reads [LocalJournalStyle] to pick corner radius, border, and shadow.
+ * Non-clickable information card with cute rounded styling.
  *
  * @param modifier Modifier for the card.
- * @param shape Corner shape (defaults to journalConfig.cardCornerRadius).
+ * @param shape Corner shape (defaults to [CuteCardDefaults.ShapeCompact], 24dp).
  * @param colors Card colors (defaults to surfaceContainerLow themed).
  * @param tonalElevation Tonal elevation (defaults to non-clickable tier).
  * @param shadowElevation Shadow elevation (defaults to non-clickable tier).
@@ -56,15 +52,11 @@ fun JournalCard(
     border: BorderStroke? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val journalConfig = LocalJournalStyle.current
-    val cardShape = shape ?: RoundedCornerShape(journalConfig.cardCornerRadius)
-    val effectiveBorder = border ?: journalBorderStroke(journalConfig)
-    val textureModifier = journalTextureModifier(journalConfig)
+    val cardShape = shape ?: CuteCardDefaults.ShapeCompact
+    val effectiveBorder = border ?: journalBorderStroke()
 
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .then(journalShapeModifier(journalConfig, cardShape)),
+        modifier = modifier.fillMaxWidth(),
         shape = cardShape,
         color = colors.containerColor,
         contentColor = colors.contentColor,
@@ -72,31 +64,14 @@ fun JournalCard(
         shadowElevation = shadowElevation,
         border = effectiveBorder
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(textureModifier)
-        ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                content()
-            }
+        Column(modifier = Modifier.fillMaxWidth()) {
+            content()
         }
     }
 }
 
 /**
- * Clickable card with journal-aware styling + press animation.
- *
- * @param onClick Click handler.
- * @param modifier Modifier for the card.
- * @param shape Corner shape (defaults to journalConfig.cardCornerRadius).
- * @param colors Card colors (defaults to surfaceContainerLow themed).
- * @param tonalElevation Tonal elevation (defaults to clickable tier).
- * @param shadowElevation Shadow elevation (defaults to clickable tier).
- * @param liftDp Lift amount on press.
- * @param scaleDown Scale amount on press.
- * @param border Optional border override.
- * @param content The card content.
+ * Clickable card with cute rounded styling + press animation.
  */
 @Composable
 fun JournalClickableCard(
@@ -113,16 +88,13 @@ fun JournalClickableCard(
     border: BorderStroke? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val journalConfig = LocalJournalStyle.current
-    val cardShape = shape ?: RoundedCornerShape(journalConfig.cardCornerRadius)
-    val effectiveBorder = border ?: journalBorderStroke(journalConfig)
-    val textureModifier = journalTextureModifier(journalConfig)
+    val cardShape = shape ?: CuteCardDefaults.ShapeCompact
+    val effectiveBorder = border ?: journalBorderStroke()
 
     Surface(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .then(journalShapeModifier(journalConfig, cardShape))
             .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
         shape = cardShape,
         color = colors.containerColor,
@@ -131,14 +103,8 @@ fun JournalClickableCard(
         shadowElevation = shadowElevation,
         border = effectiveBorder
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(textureModifier)
-        ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                content()
-            }
+        Column(modifier = Modifier.fillMaxWidth()) {
+            content()
         }
     }
 }
@@ -169,25 +135,3 @@ fun JournalTintedCard(
     scaleDown = scaleDown,
     content = content
 )
-
-// ════════════════════════════════════════════════════════════════════════
-//  Styling Utilities — moved to JournalDecorations.kt (Phase 3)
-// ════════════════════════════════════════════════════════════════════════
-
-/**
- * Returns a modifier that applies irregular border shaping for sketch-like cards.
- * Kept private here because only JournalCard uses it — the broader helpers
- * ([journalBorderStroke], [journalTextureModifier]) were promoted to
- * JournalDecorations.kt so all universal cards share them.
- */
-private fun journalShapeModifier(
-    config: JournalConfig,
-    shape: Shape
-): Modifier {
-    // For Irregular border style, add a subtle clip to give the card
-    // a slightly uneven edge feel. For other styles, no extra modifier.
-    return when (config.borderStyle) {
-        fieldmind.research.app.shared.presentation.theme.CardBorderStyle.Irregular -> Modifier.clip(shape)
-        else -> Modifier
-    }
-}

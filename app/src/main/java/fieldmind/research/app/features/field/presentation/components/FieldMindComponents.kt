@@ -76,11 +76,10 @@ import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.components.LocalPrivacyTypingEnabled
 import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
-import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
-// JournalDecorations.kt lives in the same package: journalBorderStroke, journalTextureModifier,
-// journalCardBrush, JournalOrnament, JournalDivider, and drawJournalTexture are all reachable
-// without an import. LocalJournalStyle is in shared.presentation.theme (above).
+// JournalDecorations.kt lives in the same package: journalBorderStroke,
+// JournalDivider are all reachable without an import.
 // FieldMindIcons is in the same package (components.FieldMindIcons)
 
 /**
@@ -131,8 +130,7 @@ fun FieldMindSubNavBar(
 ) {
     val haptics = rememberFieldMindHaptics()
     val scrollState = rememberScrollState()
-    val journal = LocalJournalStyle.current
-    val containerShape = RoundedCornerShape(journal.cardCornerRadius)
+    val containerShape = CuteCardDefaults.Shape
 
     Box(
         modifier = modifier
@@ -145,7 +143,7 @@ fun FieldMindSubNavBar(
             color = MaterialTheme.colorScheme.surfaceContainerLow,
             tonalElevation = 2.dp,
             shadowElevation = 2.dp,
-            border = journalBorderStroke(journal)
+            border = journalBorderStroke()
         ) {
             Row(
                 modifier = Modifier
@@ -168,7 +166,7 @@ fun FieldMindSubNavBar(
                                 onTabSelected(index)
                             }
                         },
-                        shape = RoundedCornerShape(journal.chipCornerRadius),
+                        shape = CuteCardDefaults.ChipShape,
                         color = if (selected)
                             MaterialTheme.colorScheme.primaryContainer
                         else
@@ -275,7 +273,7 @@ fun OptionPickerDialog(
                 .fillMaxWidth(0.94f)
                 .wrapContentHeight()
                 .padding(vertical = 24.dp),
-            shape = RoundedCornerShape(40.dp),
+            shape = CuteCardDefaults.DialogShape,
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
         ) {
@@ -286,7 +284,7 @@ fun OptionPickerDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     Box(
-                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                             .background(accentColor.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -312,7 +310,7 @@ fun OptionPickerDialog(
                         leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(28.dp)
+                        shape = CuteCardDefaults.OptionShape
                     )
                 }
 
@@ -334,7 +332,7 @@ fun OptionPickerDialog(
                                 onDismiss()
                             }
                         },
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.OptionShape,
                         color = if (isSelected) accentColor.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = if (isSelected) BorderStroke(1.5.dp, accentColor) else null,
                         tonalElevation = 0.dp,
@@ -347,7 +345,7 @@ fun OptionPickerDialog(
                         ) {
                             if (icon != null) {
                                 Box(
-                                    Modifier.size(36.dp).clip(RoundedCornerShape(20.dp))
+                                    Modifier.size(36.dp).clip(MaterialTheme.shapes.medium)
                                         .background(accentColor.copy(alpha = if (isSelected) 0.18f else 0.08f)),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -391,7 +389,7 @@ fun OptionPickerDialog(
                             onDismiss()
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         enabled = selectedMulti.isNotEmpty()
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -430,7 +428,7 @@ fun MultiSelectPickerField(
 
         Surface(
             onClick = { haptics.light(); showDialog = true },
-            shape = RoundedCornerShape(28.dp),
+            shape = CuteCardDefaults.OptionShape,
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
             modifier = Modifier.pressScale(scaleDown = 0.97f)
@@ -509,7 +507,7 @@ fun OptionPickerField(
         
         Surface(
             onClick = { haptics.light(); showDialog = true },
-            shape = RoundedCornerShape(28.dp),
+            shape = CuteCardDefaults.OptionShape,
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
             modifier = Modifier.pressScale(scaleDown = 0.97f)
@@ -568,15 +566,14 @@ fun FieldScreenHeader(
     onAction: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val journal = LocalJournalStyle.current
-    val shape = RoundedCornerShape(journal.cardCornerRadius)
+    val shape = CuteCardDefaults.ShapeCompact
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = shape,
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
         tonalElevation = 2.dp,
         shadowElevation = 2.dp,
-        border = journalBorderStroke(journal)
+        border = journalBorderStroke()
     ) {
         Row(
             Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
@@ -587,7 +584,7 @@ fun FieldScreenHeader(
                 Box(
                     Modifier
                         .size(42.dp)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(20.dp)),
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh, MaterialTheme.shapes.medium),
                     contentAlignment = Alignment.Center
                 ) { Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp) }
             }
@@ -600,7 +597,7 @@ fun FieldScreenHeader(
             if (actionIcon != null && onAction != null) {
                 Surface(
                     onClick = onAction,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.pressScale(scaleDown = 0.90f)
                 ) {
@@ -625,14 +622,12 @@ fun SectionHeader(
     animate: Boolean = true
 ) {
     val accent = accentColor ?: FieldMindTheme.colors.accentFor(title)
-    val journal = LocalJournalStyle.current
-    val shape = RoundedCornerShape(journal.cardCornerRadius)
-    val effectiveBorder = journalBorderStroke(journal)
+    val shape = CuteCardDefaults.ShapeCompact
+    val effectiveBorder = journalBorderStroke()
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .staggeredEntrance(index = index, animate = animate)
-            .then(journalTextureModifier(journal))
             .cuteShadow(elevation = 2.dp, shape = shape),
         shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -660,9 +655,7 @@ fun SectionHeader(
                 }
                 if (trailing != null) trailing()
             }
-            // Phase 3: per-style ornament below section title (fleuron for Victorian,
-            // cloud for Ghibli, nothing for Sketchbook/BulletJournal).
-            JournalOrnament(modifier = Modifier.padding(top = 6.dp), tint = accent)
+            // v0.51.0 — Journal ornaments retired with the journal style system.
         }
     }
 }
@@ -689,17 +682,15 @@ fun StandardScreenHeader(
     trailing: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val journal = LocalJournalStyle.current
-    val shape = RoundedCornerShape(journal.cardCornerRadius)
+    val shape = CuteCardDefaults.ShapeCompact
     Surface(
         modifier = modifier
-            .fillMaxWidth()
-            .then(journalTextureModifier(journal)),
+            .fillMaxWidth(),
         shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 3.dp,
         shadowElevation = 3.dp,
-        border = journalBorderStroke(journal)
+        border = journalBorderStroke()
     ) {
         Row(
             Modifier.padding(18.dp),
@@ -709,7 +700,7 @@ fun StandardScreenHeader(
             Box(
                 Modifier
                     .size(44.dp)
-                    .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), RoundedCornerShape(22.dp)),
+                    .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), CuteCardDefaults.ButtonShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(icon = icon, contentDescription = null, tint = heroColor, size = 24.dp)
@@ -749,7 +740,7 @@ fun BackButton(
     modifier: Modifier = Modifier,
     icon: MaterialSymbolIcon = FieldMindIcons.Back,
     contentDescription: String? = null,
-    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(22.dp),
+    shape: androidx.compose.ui.graphics.Shape = CuteCardDefaults.ButtonShape,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh
 ) {
     Surface(
@@ -776,7 +767,7 @@ fun BackButton(
 @Composable
 fun EntityBadge(kind: String, modifier: Modifier = Modifier) {
     val accent = FieldMindTheme.colors.accentFor(kind)
-    val shape = RoundedCornerShape(LocalJournalStyle.current.chipCornerRadius)
+    val shape = CuteCardDefaults.ChipShape
     Surface(
         modifier = modifier.cuteShadow(elevation = 2.dp, shape = shape),
         shape = shape,
@@ -798,7 +789,7 @@ fun EntityBadge(kind: String, modifier: Modifier = Modifier) {
 @Composable
 fun InfoChip(text: String, modifier: Modifier = Modifier, icon: MaterialSymbolIcon? = null, color: Color? = null) {
     val content = color ?: MaterialTheme.colorScheme.onSurfaceVariant
-    val shape = RoundedCornerShape(LocalJournalStyle.current.chipCornerRadius)
+    val shape = CuteCardDefaults.ChipShape
     Surface(
         modifier = modifier.cuteShadow(elevation = 2.dp, shape = shape),
         shape = shape,
@@ -820,7 +811,7 @@ fun InfoChip(text: String, modifier: Modifier = Modifier, icon: MaterialSymbolIc
 @Composable
 fun ConfidenceChip(level: String, modifier: Modifier = Modifier) {
     val color = FieldMindTheme.colors.confidenceColor(level)
-    val shape = RoundedCornerShape(LocalJournalStyle.current.chipCornerRadius)
+    val shape = CuteCardDefaults.ChipShape
     Surface(
         modifier = modifier.cuteShadow(elevation = 2.dp, shape = shape),
         shape = shape,
@@ -887,16 +878,13 @@ fun EntityCard(
     animate: Boolean = false
 ) {
     val accent = FieldMindTheme.colors.accentFor(kind)
-    val journal = LocalJournalStyle.current
-    val shape = RoundedCornerShape(journal.cardCornerRadius)
-    val effectiveBorder = journalBorderStroke(journal)
-    val textureModifier = journalTextureModifier(journal)
+    val shape = CuteCardDefaults.ShapeCompact
+    val effectiveBorder = journalBorderStroke()
 
     Card(
         modifier = modifier
             .fillMaxWidth()
             .staggeredEntrance(index = index, animate = animate)
-            .then(textureModifier)
             .then(
                 if (onClick != null) Modifier.expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 else Modifier
@@ -917,7 +905,7 @@ fun EntityCard(
             Box(
                 Modifier
                     .size(42.dp)
-                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(20.dp)),
+                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), MaterialTheme.shapes.medium),
                 contentAlignment = Alignment.Center
             ) { Icon(icon = FieldMindIcons.iconFor(kind), contentDescription = null, tint = accent, size = 22.dp) }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -958,10 +946,8 @@ fun MetricTile(
     animate: Boolean = false
 ) {
     val tint = accent ?: MaterialTheme.colorScheme.primary
-    val journal = LocalJournalStyle.current
-    val shape = RoundedCornerShape(journal.cardCornerRadius)
-    val effectiveBorder = journalBorderStroke(journal)
-    val textureModifier = journalTextureModifier(journal)
+    val shape = CuteCardDefaults.ShapeCompact
+    val effectiveBorder = journalBorderStroke()
 
     // ── Count-up animation for numeric values ──
     // Parse the leading number from the value string (e.g., "42" or "5/10" or "12 observations")
@@ -1011,7 +997,6 @@ fun MetricTile(
     Card(
         modifier = modifier
             .staggeredEntrance(index = index, animate = animate)
-            .then(textureModifier)
             .then(if (onClick != null) Modifier.expressivePress(scaleDown = 0.96f) else Modifier)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         shape = shape,
@@ -1044,15 +1029,12 @@ fun EmptyState(
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null
 ) {
-    val journal = LocalJournalStyle.current
-    val shape = RoundedCornerShape(journal.cardCornerRadius)
-    val effectiveBorder = journalBorderStroke(journal)
-    val textureModifier = journalTextureModifier(journal)
+    val shape = CuteCardDefaults.ShapeCompact
+    val effectiveBorder = journalBorderStroke()
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .cuteShadow(elevation = 2.dp, shape = shape)
-            .then(textureModifier),
+            .cuteShadow(elevation = 2.dp, shape = shape),
         shape = shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -1085,7 +1067,7 @@ fun EmptyState(
                                 iconColor.copy(alpha = 0.06f)
                             )
                         ),
-                        shape = RoundedCornerShape(30.dp)
+                        shape = CuteCardDefaults.Shape
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -1095,7 +1077,7 @@ fun EmptyState(
             Text(body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             if (actionLabel != null && onAction != null) {
                 Spacer(Modifier.height(4.dp))
-                androidx.compose.material3.Button(onClick = onAction, modifier = Modifier, shape = RoundedCornerShape(22.dp)) {
+                androidx.compose.material3.Button(onClick = onAction, modifier = Modifier, shape = CuteCardDefaults.ButtonShape) {
                     Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 18.dp)
                     Spacer(Modifier.size(6.dp))
                     Text(actionLabel)
@@ -1144,7 +1126,7 @@ fun FieldTextField(
             }
         },
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.OptionShape,
         enabled = enabled
     )
 }
@@ -1250,7 +1232,7 @@ fun NumberField(
                         }
                     },
                     modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(20.dp)
+                    shape = MaterialTheme.shapes.medium
                 ) {
                     Text("−", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 }
@@ -1267,7 +1249,7 @@ fun NumberField(
                     else if (supportingText != null) Text(supportingText)
                 },
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.OptionShape,
                 enabled = enabled
             )
 
@@ -1284,7 +1266,7 @@ fun NumberField(
                         }
                     },
                     modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(20.dp)
+                    shape = MaterialTheme.shapes.medium
                 ) {
                     Text("+", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 }
@@ -1304,7 +1286,7 @@ fun NumberField(
                     else if (supportingText != null) Text(supportingText)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.OptionShape,
                 enabled = enabled
             )
         }
@@ -1320,7 +1302,7 @@ fun NumberField(
 fun OutlinedSection(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         color = Color.Transparent,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) { Box(Modifier.padding(14.dp)) { content() } }
@@ -1499,7 +1481,7 @@ fun ProtocolStepField(
                 Text(step.instruction, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1529,7 +1511,7 @@ fun ProtocolPicker(
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).wrapContentHeight().padding(vertical = 24.dp),
-            shape = RoundedCornerShape(40.dp),
+            shape = CuteCardDefaults.DialogShape,
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -1542,7 +1524,7 @@ fun ProtocolPicker(
                             .fillMaxWidth()
                             .expressivePress(scaleDown = 0.97f)
                             .clickable { onSelect(protocol) },
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.OptionShape,
                         colors = CardDefaults.cardColors(
                             containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh
                         ),
@@ -1550,7 +1532,7 @@ fun ProtocolPicker(
                         border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                     ) {
                         Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                 Icon(protocol.icon, null, tint = MaterialTheme.colorScheme.primary, size = 24.dp)
                             }
                             Column(Modifier.weight(1f)) {
@@ -1612,13 +1594,11 @@ fun NoteComposerCard(
     var showTemplates by remember { mutableStateOf(false) }
     var selectedTemplate by remember { mutableStateOf(noteTemplates.first()) }
     val haptics = rememberFieldMindHaptics()
-    val journal = LocalJournalStyle.current
-    val shape = RoundedCornerShape(journal.cardCornerRadius)
-    val effectiveBorder = journalBorderStroke(journal)
-    val textureModifier = journalTextureModifier(journal)
+    val shape = CuteCardDefaults.ShapeCompact
+    val effectiveBorder = journalBorderStroke()
 
     Card(
-        modifier = modifier.fillMaxWidth().then(textureModifier),
+        modifier = modifier.fillMaxWidth(),
         shape = shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -1628,7 +1608,7 @@ fun NoteComposerCard(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                    Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                         .background(FieldMindTheme.colors.note.cardBg(FieldMindTheme.colors.isDark)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Note, null, tint = FieldMindTheme.colors.note, size = 22.dp) }
@@ -1637,7 +1617,7 @@ fun NoteComposerCard(
                         Text("New note", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                         Surface(
                             onClick = { haptics.light(); showTemplates = !showTemplates },
-                            shape = RoundedCornerShape(18.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = if (showTemplates) FieldMindTheme.colors.warning.cardBg(FieldMindTheme.colors.isDark) else MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1685,7 +1665,7 @@ fun NoteComposerCard(
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 6,
                 placeholder = { Text("Start writing your note...", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
-                shape = RoundedCornerShape(28.dp)
+                shape = CuteCardDefaults.OptionShape
             )
 
             // Category & save row
@@ -1697,7 +1677,7 @@ fun NoteComposerCard(
                 ChoiceChips(categories, category, modifier = Modifier.weight(1f), onSelected = onCategoryChange)
                 Button(
                     onClick = { haptics.confirm(); onSave() },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     enabled = saveEnabled && (title.isNotBlank() || body.isNotBlank())
                 ) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -1791,7 +1771,7 @@ fun InfoBadge(
     Box(
         modifier = modifier
             .size(32.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(CuteCardDefaults.ChipShape)
             .background(tint.copy(alpha = alpha)),
         contentAlignment = Alignment.Center
     ) {

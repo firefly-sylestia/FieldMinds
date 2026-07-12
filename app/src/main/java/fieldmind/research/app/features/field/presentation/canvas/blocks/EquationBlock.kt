@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -93,12 +94,12 @@ fun EquationBlock(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(CuteCardDefaults.ChipShape)
                     .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                     .border(
                         1.dp,
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                        RoundedCornerShape(16.dp)
+                        CuteCardDefaults.ChipShape
                     )
                     .padding(10.dp),
                 textStyle = TextStyle(

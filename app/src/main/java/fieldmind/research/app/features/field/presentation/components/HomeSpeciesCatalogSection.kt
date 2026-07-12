@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -47,11 +48,11 @@ fun HomeSpeciesCatalogSection(
 
 
     Card(
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier.fillMaxWidth()
-            .cuteShadow(elevation = 6.dp, shape = RoundedCornerShape(34.dp))
+            .cuteShadow(elevation = 6.dp, shape = CuteCardDefaults.Shape)
     ) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),
@@ -60,7 +61,7 @@ fun HomeSpeciesCatalogSection(
         ) {
             // Icon
             Box(
-                Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                     .background(accentColor.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -76,7 +77,7 @@ fun HomeSpeciesCatalogSection(
                     Text("Species catalog", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     if (!isLoading) {
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = accentColor.copy(alpha = 0.1f)
                         ) {
                             Text(
@@ -99,7 +100,7 @@ fun HomeSpeciesCatalogSection(
             // Browse button
             FilledTonalButton(
                 onClick = { onNavigate(FieldMindScreen.SpeciesBrowser) },
-                shape = RoundedCornerShape(22.dp),
+                shape = CuteCardDefaults.ButtonShape,
                 colors = ButtonDefaults.filledTonalButtonColors(
                     containerColor = accentColor.copy(alpha = 0.12f)
                 )

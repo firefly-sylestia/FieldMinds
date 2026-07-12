@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -195,7 +196,7 @@ fun DevFullAppTestRunner(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(32.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = if (FieldMindTheme.colors.isDark) 12.dp else 2.dp)
     ) {
@@ -214,7 +215,7 @@ fun DevFullAppTestRunner(
                 Box(
                     Modifier
                         .size(40.dp)
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(MaterialTheme.shapes.medium)
                         .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -245,7 +246,7 @@ fun DevFullAppTestRunner(
                     Box(
                         Modifier
                             .size(36.dp)
-                            .clip(RoundedCornerShape(18.dp))
+                            .clip(CuteCardDefaults.ChipShape)
                             .background(statusColor.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -329,7 +330,7 @@ fun DevFullAppTestRunner(
                     },
                     enabled = !isRunning,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (report.isComplete && report.failedTests == 0)
                             FieldMindTheme.colors.positive else MaterialTheme.colorScheme.primary
@@ -354,7 +355,7 @@ fun DevFullAppTestRunner(
                     OutlinedButton(
                         onClick = { testJob?.cancel() },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     ) {
                         Text("Cancel", fontWeight = FontWeight.SemiBold)
                     }
@@ -370,7 +371,7 @@ fun DevFullAppTestRunner(
                             Toast.makeText(context, "Test report copied to clipboard", Toast.LENGTH_SHORT).show()
                         },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     ) {
                         Icon(FieldMindIcons.Copy, null, size = 18.dp)
                         Spacer(Modifier.width(6.dp))
@@ -440,7 +441,7 @@ fun DevFullAppTestRunner(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 Surface(
                     onClick = { logExpanded = !logExpanded },
-                    shape = RoundedCornerShape(16.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.fillMaxWidth()
                 ) {

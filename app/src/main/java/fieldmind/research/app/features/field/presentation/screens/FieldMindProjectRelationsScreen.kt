@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -205,7 +206,7 @@ fun ProjectRelationsScreen(
         // ════════════════════════════════════════════════════════════
         item {
             Surface(
-                shape = RoundedCornerShape(34.dp),
+                shape = CuteCardDefaults.Shape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp,
                 modifier = Modifier.fillMaxWidth()
@@ -217,7 +218,7 @@ fun ProjectRelationsScreen(
                 ) {
                     Surface(
                         onClick = onBack,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(40.dp)
                     ) {
@@ -226,7 +227,7 @@ fun ProjectRelationsScreen(
                         }
                     }
                     Box(
-                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                             .background(FieldMindTheme.colors.project.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -254,7 +255,7 @@ fun ProjectRelationsScreen(
         item {
             val totalLinked = relations.sumOf { rel -> rel.groups.sumOf { it.count } }
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -265,7 +266,7 @@ fun ProjectRelationsScreen(
                 ) {
                     Box(
                         Modifier.size(44.dp)
-                            .clip(RoundedCornerShape(22.dp))
+                            .clip(CuteCardDefaults.ButtonShape)
                             .background(FieldMindTheme.colors.project.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -329,7 +330,7 @@ fun ProjectRelationsScreen(
             var expanded by remember(obs.id) { mutableStateOf(rel.groups.isNotEmpty()) }
 
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -340,7 +341,7 @@ fun ProjectRelationsScreen(
                             haptics.light()
                             expanded = !expanded
                         },
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -352,7 +353,7 @@ fun ProjectRelationsScreen(
                             // Observation icon
                             Box(
                                 Modifier.size(36.dp)
-                                    .clip(RoundedCornerShape(18.dp))
+                                    .clip(CuteCardDefaults.ChipShape)
                                     .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -378,7 +379,7 @@ fun ProjectRelationsScreen(
                             val totalCount = rel.groups.sumOf { it.count }
                             if (totalCount > 0) {
                                 Surface(
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     color = FieldMindTheme.colors.project.copy(alpha = 0.12f)
                                 ) {
                                     Text(
@@ -454,7 +455,7 @@ private fun RelationGroupCard(
     var expanded by remember { mutableStateOf(false) }
 
     Card(
-        shape = RoundedCornerShape(22.dp),
+        shape = CuteCardDefaults.ButtonShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -463,7 +464,7 @@ private fun RelationGroupCard(
             // ── Group header ──
             Surface(
                 onClick = { expanded = !expanded },
-                shape = RoundedCornerShape(22.dp),
+                shape = CuteCardDefaults.ButtonShape,
                 color = Color.Transparent,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -481,7 +482,7 @@ private fun RelationGroupCard(
                     // Kind icon
                     Box(
                         Modifier.size(28.dp)
-                            .clip(RoundedCornerShape(16.dp))
+                            .clip(CuteCardDefaults.ChipShape)
                             .background(group.color.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -498,7 +499,7 @@ private fun RelationGroupCard(
 
                     // Count badge
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = group.color.copy(alpha = 0.12f)
                     ) {
                         Text(

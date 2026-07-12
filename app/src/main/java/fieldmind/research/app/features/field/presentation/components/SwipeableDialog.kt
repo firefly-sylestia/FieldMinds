@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -62,7 +63,7 @@ fun SwipeableAlertDialog(
     text: @Composable (() -> Unit)? = null,
     confirmButton: @Composable () -> Unit,
     dismissButton: @Composable (() -> Unit)? = null,
-    shape: Shape = RoundedCornerShape(36.dp),
+    shape: Shape = CuteCardDefaults.ShapeHero,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     tonalElevation: androidx.compose.ui.unit.Dp = 6.dp
 ) {

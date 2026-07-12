@@ -3,6 +3,7 @@ package fieldmind.research.app
 import android.app.Application
 import android.content.ComponentCallbacks2
 import android.os.Build
+import android.os.Process
 import android.util.Log
 import fieldmind.research.app.shared.data.model.AppSettings
 import fieldmind.research.app.util.ANRWatchdog
@@ -37,6 +38,21 @@ class FieldMindApplication : Application() {
         super.onCreate()
         
         instance = this
+
+        // ── Crash-process guard ────────────────────────────────────────────
+        // FieldMindCrashActivity runs in :crash_process so the crash UI
+        // survives the corrupted main process.  However the <application>
+        // tag's android:name causes FieldMindApplication.onCreate() to
+        // execute in EVERY process.  Heavy init (AppSettings, CrashReporter,
+        // LeakCanary, ANRWatchdog) can itself crash and prevent the crash
+        // UI from ever appearing, creating an infinite crash loop.
+        //
+        // Detect the crash process and bail out early — the crash activity
+        // is self-contained and does not need any application-level init.
+        if (isCrashProcess()) {
+            Log.d(TAG, "Running in :crash_process — skipping initialization")
+            return
+        }
         
         Log.d(TAG, "═══════════════════════════════════════════════════")
         Log.d(TAG, "FieldMindApplication onCreate")
@@ -58,6 +74,21 @@ class FieldMindApplication : Application() {
         }
         
         Log.d(TAG, "FieldMindApplication initialization complete")
+    }
+
+    /**
+     * Returns true when the current process is the dedicated :crash_process
+     * that hosts [fieldmind.research.app.activities.FieldMindCrashActivity].
+     *
+     * We read /proc/self/cmdline rather than ActivityManager.getProcessName()
+     * because the former works without any Android framework services and
+     * cannot throw if the system is unstable (which is likely during a crash).
+     */
+    private fun isCrashProcess(): Boolean {
+        return runCatching {
+            val cmdline = java.io.File("/proc/${Process.myPid()}/cmdline").readText()
+            cmdline.contains(":crash_process")
+        }.getOrDefault(false)
     }
     
     private fun configureLeakCanary() {

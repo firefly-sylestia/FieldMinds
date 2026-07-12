@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -116,7 +117,7 @@ fun ZoomSlider(
             modifier = Modifier
                 .width(with(density) { 32.dp })
                 .height(with(density) { 180.dp })
-                .clip(RoundedCornerShape(24.dp))
+                .clip(CuteCardDefaults.ShapeCompact)
                 .background(
                     MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.85f)
                 )
@@ -214,7 +215,7 @@ fun ZoomSlider(
         ) {
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(CuteCardDefaults.ChipShape)
                     .background(
                         MaterialTheme.colorScheme.surfaceContainerHigh.copy(
                             alpha = 0.9f * labelAlpha

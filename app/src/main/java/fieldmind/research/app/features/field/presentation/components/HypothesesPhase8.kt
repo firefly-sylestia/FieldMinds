@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,7 +48,7 @@ fun HypothesisCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(enabled = onClick != {}) { onClick() },
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -76,7 +77,7 @@ fun HypothesisCard(
                 
                 // Status badge
                 Surface(
-                    shape = RoundedCornerShape(16.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = statusColor.copy(alpha = 0.15f)
                 ) {
                     Text(
@@ -124,7 +125,7 @@ fun HypothesisStatusBadge(
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
+        shape = CuteCardDefaults.ChipShape,
         color = backgroundColor
     ) {
         Text(
@@ -190,7 +191,7 @@ fun HypothesisUpdateForm(
                 onValueChange = onSupportChange,
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 2,
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 label = { Text("What evidence would support or refute this?") }
             )
         }

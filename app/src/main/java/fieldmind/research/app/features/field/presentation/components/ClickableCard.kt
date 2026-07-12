@@ -16,8 +16,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import fieldmind.research.app.shared.presentation.theme.JournalConfig
-import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
 
 /**
@@ -26,11 +25,10 @@ import fieldmind.research.app.ui.theme.CuteElevations
  * and [shadowElevation] for the drop shadow.
  *
  * Uses [Surface] internally (instead of [androidx.compose.material3.Card]) so that
- * [tonalElevation] and [shadowElevation] can be controlled separately. This is the
- * primary mechanism for M3 primary-tinted depth in dark mode.
+ * [tonalElevation] and [shadowElevation] can be controlled separately.
  *
  * Defaults:
- * - RoundedCornerShape(34.dp)
+ * - [CuteCardDefaults.Shape] (32dp)
  * - surfaceContainerLow background
  * - tonalElevation = clickableTier (8dp) — produces visible primary-tint overlay on dark backgrounds
  * - shadowElevation = clickableTier (8dp)
@@ -54,10 +52,8 @@ fun ClickableCard(
     animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val journal = LocalJournalStyle.current
-    val effectiveShape = shape ?: RoundedCornerShape(journal.cardCornerRadius)
-    val effectiveBorder = border ?: journalBorderStroke(journal)
-    val textureModifier = journalTextureModifier(journal)
+    val effectiveShape = shape ?: CuteCardDefaults.Shape
+    val effectiveBorder = border ?: journalBorderStroke()
 
     Surface(
         onClick = onClick,
@@ -65,7 +61,6 @@ fun ClickableCard(
             .fillMaxWidth()
             .heightIn(min = minHeight)
             .staggeredEntrance(index = index, animate = animate)
-            .then(textureModifier)
             .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
         shape = effectiveShape,
         color = colors.containerColor,
@@ -97,17 +92,14 @@ fun InfoCard(
     animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val journal = LocalJournalStyle.current
-    val effectiveShape = shape ?: RoundedCornerShape(journal.cardCornerRadius)
-    val effectiveBorder = border ?: journalBorderStroke(journal)
-    val textureModifier = journalTextureModifier(journal)
+    val effectiveShape = shape ?: CuteCardDefaults.Shape
+    val effectiveBorder = border ?: journalBorderStroke()
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = minHeight)
-            .staggeredEntrance(index = index, animate = animate)
-            .then(textureModifier),
+            .staggeredEntrance(index = index, animate = animate),
         shape = effectiveShape,
         color = colors.containerColor,
         contentColor = colors.contentColor,
@@ -129,7 +121,7 @@ fun ClickableCard(
     modifier: Modifier = Modifier,
     fillMaxWidth: Boolean = true,
     minHeight: Dp = 68.dp,
-    shape: Shape = RoundedCornerShape(34.dp),
+    shape: Shape = CuteCardDefaults.Shape,
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
@@ -163,15 +155,6 @@ fun ClickableCard(
 /**
  * Convenience overload with an [accentColor] parameter that tints the card container.
  * Use this for colorful, visually distinct cards across the UI.
- *
- * @param onClick click handler
- * @param accentColor the accent color for tinting the card background
- * @param tintStrength how strong the tint should be (default 0.06f for subtle, 0.10f for noticeable)
- * @param modifier modifier
- * @param shape corner shape
- * @param liftDp lift amount on press
- * @param scaleDown scale amount on press
- * @param content card content
  */
 @Composable
 fun ClickableCard(
@@ -180,7 +163,7 @@ fun ClickableCard(
     modifier: Modifier = Modifier,
     tintStrength: Float = 0.08f,
     minHeight: Dp = 68.dp,
-    shape: Shape = RoundedCornerShape(34.dp),
+    shape: Shape = CuteCardDefaults.Shape,
     tonalElevation: Dp = CuteElevations.clickableTier,
     shadowElevation: Dp = CuteElevations.clickableTier,
     liftDp: Float = 1.5f,

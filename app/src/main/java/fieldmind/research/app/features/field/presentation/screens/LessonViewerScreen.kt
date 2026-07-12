@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -58,7 +59,7 @@ fun LessonViewerScreen(
             trailing = {
                 BackButton(
                     onClick = onBack,
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     containerColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.6f),
                     contentDescription = "Back"
                 )
@@ -74,7 +75,7 @@ fun LessonViewerScreen(
         ) {
             // ── Summary card ──
             Surface(
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.FieldShape,
                 color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -90,7 +91,7 @@ fun LessonViewerScreen(
                         size = 32.dp,
                         modifier = Modifier
                             .size(52.dp)
-                            .clip(RoundedCornerShape(24.dp))
+                            .clip(CuteCardDefaults.ShapeCompact)
                             .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
                             .padding(10.dp)
                     )
@@ -125,7 +126,7 @@ fun LessonViewerScreen(
 
             // ── Key Takeaways ──
             Surface(
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.FieldShape,
                 color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -174,7 +175,7 @@ fun LessonViewerScreen(
             // ── Practice Challenge (if present) ──
             if (lesson.practiceChallenge.isNotBlank()) {
                 Surface(
-                    shape = RoundedCornerShape(28.dp),
+                    shape = CuteCardDefaults.FieldShape,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -223,7 +224,7 @@ private fun LevelBadge(level: String) {
         else -> MaterialTheme.colorScheme.surfaceContainerHighest to MaterialTheme.colorScheme.onSurfaceVariant
     }
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = CuteCardDefaults.ChipShape,
         color = bgColor
     ) {
         Text(
@@ -239,7 +240,7 @@ private fun LevelBadge(level: String) {
 @Composable
 private fun InfoChip2(text: String, icon: MaterialSymbolIcon? = null) {
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = CuteCardDefaults.ChipShape,
         color = MaterialTheme.colorScheme.surfaceContainerHighest
     ) {
         Row(
@@ -349,7 +350,7 @@ private fun StepSectionBlock(section: StepSection) {
         }
         section.steps.forEachIndexed { idx, step ->
             Surface(
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -360,7 +361,7 @@ private fun StepSectionBlock(section: StepSection) {
                 ) {
                     // Numbered circle
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
                         modifier = Modifier.size(32.dp)
                     ) {
@@ -448,7 +449,7 @@ private fun CalloutSectionBlock(section: CalloutSection) {
     }
 
     Surface(
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         color = bgColor,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -488,7 +489,7 @@ private fun CalloutSectionBlock(section: CalloutSection) {
 @Composable
 private fun ExampleSectionBlock(section: ExampleSection) {
     Surface(
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -602,7 +603,7 @@ private fun CodeBlockSectionBlock(section: CodeBlockSection) {
             }
         }
         Surface(
-            shape = RoundedCornerShape(20.dp),
+            shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -638,7 +639,7 @@ private fun ComparisonSectionBlock(section: ComparisonSection) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = FieldMindTheme.colors.positive.copy(alpha = 0.1f),
                 modifier = Modifier.weight(1f)
             ) {
@@ -651,7 +652,7 @@ private fun ComparisonSectionBlock(section: ComparisonSection) {
                 )
             }
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
                 modifier = Modifier.weight(1f)
             ) {
@@ -668,7 +669,7 @@ private fun ComparisonSectionBlock(section: ComparisonSection) {
         // Rows
         section.rows.forEach { (left, right) ->
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 modifier = Modifier.fillMaxWidth()
             ) {

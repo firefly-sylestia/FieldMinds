@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.RepeatMode
@@ -131,7 +132,7 @@ fun DataToolsHubScreen(
                 val comparisonCount = dataRecords.count { it.toolType == "Comparison Table" }
 
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
                     modifier = Modifier
@@ -174,7 +175,7 @@ fun DataToolsHubScreen(
                                 Row(
                                     Modifier
                                         .fillMaxWidth()
-                                        .clip(RoundedCornerShape(20.dp))
+                                        .clip(MaterialTheme.shapes.medium)
                                         .clickable { onOpenDetail("data", record.id) }
                                         .padding(vertical = 6.dp, horizontal = 4.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -226,7 +227,7 @@ private fun ToolCardItem(tool: ToolCardInfo, modifier: Modifier = Modifier, onCl
     Card(
         onClick = onClick,
         modifier = modifier.height(130.dp),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {
@@ -238,7 +239,7 @@ private fun ToolCardItem(tool: ToolCardInfo, modifier: Modifier = Modifier, onCl
             Box(
                 modifier = Modifier
                     .size(44.dp)
-                    .clip(RoundedCornerShape(22.dp))
+                    .clip(CuteCardDefaults.ButtonShape)
                     .background(tool.accentColor.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -344,7 +345,7 @@ fun CounterToolScreen(
                 // ── Big counter display ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(40.dp),
+                        shape = CuteCardDefaults.DialogShape,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                         ),
@@ -389,7 +390,7 @@ fun CounterToolScreen(
                                     modifier = Modifier
                                         .weight(1f)
                                         .height(72.dp),
-                                    shape = RoundedCornerShape(34.dp)
+                                    shape = CuteCardDefaults.Shape
                                 ) {
                                     Text("−", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
                                 }
@@ -401,7 +402,7 @@ fun CounterToolScreen(
                                     modifier = Modifier
                                         .weight(1f)
                                         .height(72.dp),
-                                    shape = RoundedCornerShape(34.dp)
+                                    shape = CuteCardDefaults.Shape
                                 ) {
                                     Text("+", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
                                 }
@@ -427,7 +428,7 @@ fun CounterToolScreen(
                 // ── Label + Save row ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                         ),
@@ -450,7 +451,7 @@ fun CounterToolScreen(
                             Button(
                                 onClick = ::saveCurrentCount,
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(24.dp),
+                                shape = CuteCardDefaults.ShapeCompact,
                                 enabled = count > 0
                             ) {
                                 Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -471,7 +472,7 @@ fun CounterToolScreen(
                 if (counterRecords.isNotEmpty()) {
                     item {
                         Card(
-                            shape = RoundedCornerShape(34.dp),
+                            shape = CuteCardDefaults.Shape,
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                             ),
@@ -640,7 +641,7 @@ fun MeasurementToolScreen(
                 // ── Value + Unit entry ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                         ),
@@ -688,7 +689,7 @@ fun MeasurementToolScreen(
                                     OutlinedButton(
                                         onClick = { showUnitPicker = !showUnitPicker },
                                         modifier = Modifier.height(56.dp),
-                                        shape = RoundedCornerShape(28.dp)
+                                        shape = CuteCardDefaults.FieldShape
                                     ) {
                                         Text(unit, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                                         Spacer(Modifier.size(4.dp))
@@ -725,7 +726,7 @@ fun MeasurementToolScreen(
                             Button(
                                 onClick = ::saveMeasurement,
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(24.dp),
+                                shape = CuteCardDefaults.ShapeCompact,
                                 enabled = canSave
                             ) {
                                 Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -739,7 +740,7 @@ fun MeasurementToolScreen(
                 // ── Details form ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                         ),
@@ -917,7 +918,7 @@ fun WeatherLogToolScreen(
                 // ── Condition picker ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                         ),
@@ -937,7 +938,7 @@ fun WeatherLogToolScreen(
                                 FilledTonalButton(
                                     onClick = { autoFetchWeather() },
                                     enabled = !autoFetching,
-                                    shape = RoundedCornerShape(18.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                                 ) {
                                     if (autoFetching) {
@@ -989,7 +990,7 @@ fun WeatherLogToolScreen(
                 // ── Location & notes ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                         ),
@@ -1022,7 +1023,7 @@ fun WeatherLogToolScreen(
                     Button(
                         onClick = ::saveWeatherLog,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp)
+                        shape = CuteCardDefaults.ShapeCompact
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
@@ -1129,7 +1130,7 @@ fun SpeciesToolScreen(
                 // ── Species name + count ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                         ),
@@ -1192,7 +1193,7 @@ fun SpeciesToolScreen(
                 // ── Behavior & habitat ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                         ),
@@ -1217,7 +1218,7 @@ fun SpeciesToolScreen(
                     OutlinedButton(
                         onClick = onOpenBrowser,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp)
+                        shape = CuteCardDefaults.ShapeCompact
                     ) {
                         Icon(FieldMindIcons.Nature, null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
@@ -1230,7 +1231,7 @@ fun SpeciesToolScreen(
                     OutlinedButton(
                         onClick = onOpenTaxonomicBrowser,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp)
+                        shape = CuteCardDefaults.ShapeCompact
                     ) {
                         Icon(FieldMindIcons.Category, null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
@@ -1242,7 +1243,7 @@ fun SpeciesToolScreen(
                     Button(
                         onClick = ::saveSpeciesObservation,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         enabled = canSave
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -1373,7 +1374,7 @@ fun ChecklistToolScreen(
                 // ── Add item input ──
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                     ) {
@@ -1390,7 +1391,7 @@ fun ChecklistToolScreen(
                                     onClick = ::addItem,
                                     modifier = Modifier.height(56.dp),
                                     enabled = newItemText.isNotBlank(),
-                                    shape = RoundedCornerShape(28.dp)
+                                    shape = CuteCardDefaults.FieldShape
                                 ) {
                                     Text("Add", fontWeight = FontWeight.Bold)
                                 }
@@ -1403,7 +1404,7 @@ fun ChecklistToolScreen(
                 if (items.isNotEmpty()) {
                     item {
                         Card(
-                            shape = RoundedCornerShape(34.dp),
+                            shape = CuteCardDefaults.Shape,
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
                         ) {
@@ -1431,7 +1432,7 @@ fun ChecklistToolScreen(
                         Button(
                             onClick = ::saveChecklist,
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(24.dp)
+                            shape = CuteCardDefaults.ShapeCompact
                         ) {
                             Icon(FieldMindIcons.Check, null, size = 18.dp)
                             Spacer(Modifier.size(8.dp))
@@ -1533,14 +1534,14 @@ fun EventLogToolScreen(
                 )
                 }
                 item {
-                    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+                    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             Text("Event details", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                             FieldTextField(title, { title = it }, "Event title", required = true, supportingText = "e.g. First monarch sighting of season")
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                                 FieldTextField(date, { date = it }, "Date", modifier = Modifier.weight(1f))
                                 Box {
-                                    OutlinedButton(onClick = { showCategoryPicker = true }, modifier = Modifier.height(56.dp), shape = RoundedCornerShape(28.dp)) {
+                                    OutlinedButton(onClick = { showCategoryPicker = true }, modifier = Modifier.height(56.dp), shape = CuteCardDefaults.FieldShape) {
                                         Text(category, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
                                         Spacer(Modifier.size(4.dp))
                                         Icon(FieldMindIcons.Down, null, size = 14.dp)
@@ -1553,7 +1554,7 @@ fun EventLogToolScreen(
                                 }
                             }
                             FieldTextField(description, { description = it }, "Description", minLines = 3, supportingText = "What happened, where, and any notable details")
-                            Button(onClick = ::saveEvent, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = title.isNotBlank()) {
+                            Button(onClick = ::saveEvent, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = title.isNotBlank()) {
                                 Icon(FieldMindIcons.Check, null, size = 18.dp)
                                 Spacer(Modifier.size(8.dp))
                                 Text("Save event")
@@ -1655,7 +1656,7 @@ fun SiteLogToolScreen(
                 )
                 }
                 item {
-                    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+                    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
                         Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             Text("Site visit details", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                             FieldTextField(siteName, { siteName = it }, "Site name", required = true, supportingText = "e.g. North Meadow, Creek Bend")
@@ -1665,7 +1666,7 @@ fun SiteLogToolScreen(
                             }
                             FieldTextField(conditions, { conditions = it }, "Conditions", supportingText = "Weather, terrain, accessibility notes")
                             FieldTextField(findings, { findings = it }, "Key findings", minLines = 2, supportingText = "What did you observe or collect?")
-                            Button(onClick = ::saveSiteLog, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = siteName.isNotBlank()) {
+                            Button(onClick = ::saveSiteLog, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = siteName.isNotBlank()) {
                                 Icon(FieldMindIcons.Check, null, size = 18.dp)
                                 Spacer(Modifier.size(8.dp))
                                 Text("Save site log")
@@ -1798,7 +1799,7 @@ fun ComparisonTableScreen(
                 )
                 }
                 item {
-                    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+                    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Text("Table setup", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                             FieldTextField(tableName, { tableName = it }, "Table name", required = true, supportingText = "e.g. Bird species comparison")
@@ -1818,7 +1819,7 @@ fun ComparisonTableScreen(
 
                 // ── Add row ──
                 item {
-                    Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+                    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Text("Add row", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                             FieldTextField(newRowLabel, { newRowLabel = it }, "Row label (e.g. species name)")
@@ -1836,7 +1837,7 @@ fun ComparisonTableScreen(
                                     )
                                 }
                             }
-                            FilledTonalButton(onClick = ::addRow, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = newRowLabel.isNotBlank()) {
+                            FilledTonalButton(onClick = ::addRow, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = newRowLabel.isNotBlank()) {
                                 Text("Add row", fontWeight = FontWeight.Bold)
                             }
                         }
@@ -1846,7 +1847,7 @@ fun ComparisonTableScreen(
                 // ── Table preview ──
                 if (rows.isNotEmpty()) {
                     item {
-                        Card(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+                        Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
                             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text("Table (${rows.size} rows)", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                                 rows.forEach { row ->
@@ -1859,7 +1860,7 @@ fun ComparisonTableScreen(
                                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                                 }
                                 Spacer(Modifier.size(8.dp))
-                                Button(onClick = ::saveComparison, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), enabled = tableName.isNotBlank() && rows.isNotEmpty()) {
+                                Button(onClick = ::saveComparison, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact, enabled = tableName.isNotBlank() && rows.isNotEmpty()) {
                                     Icon(FieldMindIcons.Check, null, size = 18.dp)
                                     Spacer(Modifier.size(8.dp))
                                     Text("Save comparison table")

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
@@ -179,14 +180,14 @@ fun FieldMindReportScreen(
             // ── Report title ──
             item {
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             Box(
-                                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                                Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                                     .background(colors.report.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -201,7 +202,7 @@ fun FieldMindReportScreen(
                             value = reportTitle,
                             onValueChange = { reportTitle = it },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(28.dp),
+                            shape = CuteCardDefaults.FieldShape,
                             singleLine = true,
                             placeholder = { Text("Enter report title") }
                         )
@@ -212,7 +213,7 @@ fun FieldMindReportScreen(
             // ── Overview stats ──
             item {
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -242,7 +243,7 @@ fun FieldMindReportScreen(
             if (reportData.overview.topCategories.isNotEmpty()) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -270,7 +271,7 @@ fun FieldMindReportScreen(
             // ── Options card ──
             item {
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -287,7 +288,7 @@ fun FieldMindReportScreen(
                                 val selected = reportFormat == fmt
                                 Surface(
                                     onClick = { reportFormat = fmt },
-                                    shape = RoundedCornerShape(22.dp),
+                                    shape = CuteCardDefaults.ButtonShape,
                                     color = if (selected) MaterialTheme.colorScheme.primaryContainer
                                     else MaterialTheme.colorScheme.surfaceContainerHigh,
                                     border = if (selected) androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
@@ -328,7 +329,7 @@ fun FieldMindReportScreen(
                 Button(
                     onClick = { generateReport() },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     enabled = !isGenerating,
                     colors = ButtonDefaults.buttonColors(containerColor = colors.report)
                 ) {
@@ -352,7 +353,7 @@ fun FieldMindReportScreen(
             if (generatedHtml != null) {
                 item {
                     Card(
-                        shape = RoundedCornerShape(34.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -387,7 +388,7 @@ fun FieldMindReportScreen(
                             Button(
                                 onClick = { exportReport() },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(24.dp)
+                                shape = CuteCardDefaults.ShapeCompact
                             ) {
                                 Icon(FieldMindIcons.Export, null, size = 18.dp)
                                 Spacer(Modifier.width(8.dp))
@@ -401,7 +402,7 @@ fun FieldMindReportScreen(
             // ── Information card ──
             item {
                 Card(
-                    shape = RoundedCornerShape(34.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {

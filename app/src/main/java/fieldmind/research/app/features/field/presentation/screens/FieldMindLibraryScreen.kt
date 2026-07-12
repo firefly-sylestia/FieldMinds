@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -139,7 +140,7 @@ fun SharedTransitionScope.KnowledgeLibraryScreen(
                     placeholder = { Text("Search sources, notes...") },
                     leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                     trailingIcon = { if (searchQuery.isNotBlank()) IconButton(onClick = { searchQuery = "" }) { Icon(MaterialSymbolIcon("close"), contentDescription = "Clear", size = 18.dp) } },
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
@@ -230,7 +231,7 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
         if (items.isNotEmpty()) {
             item {
                 InfoCard(
-                    shape = RoundedCornerShape(32.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
@@ -258,14 +259,14 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
                 // Import from URL
                 Surface(
                     onClick = { haptics.light(); showQuickImport = true },
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                     tonalElevation = 0.dp,
                     modifier = Modifier.weight(1f)
                 ) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Box(
-                            Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
+                            Modifier.size(40.dp).clip(MaterialTheme.shapes.medium).background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) { Icon(FieldMindIcons.OpenLink, null, tint = FieldMindTheme.colors.source, size = 22.dp) }
                         Column {
@@ -277,14 +278,14 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
                 // Import evidence (file / image)
                 Surface(
                     onClick = { haptics.light(); showQuickImport = true },
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                     tonalElevation = 0.dp,
                     modifier = Modifier.weight(1f)
                 ) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Box(
-                            Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
+                            Modifier.size(40.dp).clip(MaterialTheme.shapes.medium).background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) { Icon(FieldMindIcons.File, null, tint = FieldMindTheme.colors.source, size = 22.dp) }
                         Column {
@@ -301,17 +302,17 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(
                     onClick = { showBulkImport = true },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     modifier = Modifier.weight(1f)
                 ) { Icon(FieldMindIcons.List, null, size = 16.dp); Spacer(Modifier.size(4.dp)); Text("Bulk") }
                 OutlinedButton(
                     onClick = { showReadingTimer = true },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     modifier = Modifier.weight(1f)
                 ) { Icon(FieldMindIcons.Timer, null, size = 16.dp); Spacer(Modifier.size(4.dp)); Text("Timer") }
                 OutlinedButton(
                     onClick = { showAdvancedDialog = true },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     modifier = Modifier.weight(1f)
                 ) { Icon(FieldMindIcons.Add, null, size = 16.dp); Spacer(Modifier.size(4.dp)); Text("Full form") }
             }
@@ -332,7 +333,7 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
                     },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = CuteCardDefaults.FieldShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                     )
@@ -366,7 +367,7 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
             item {
                 InfoCard(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
@@ -385,7 +386,7 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Box(
-                                Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                                Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape)
                                     .background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center
                             ) { Icon(FieldMindIcons.iconFor(type), null, tint = FieldMindTheme.colors.source, size = 18.dp) }
@@ -454,7 +455,7 @@ private fun SourceCardWithCitations(
 
     InfoCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
@@ -465,7 +466,7 @@ private fun SourceCardWithCitations(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                    Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                         .background(FieldMindTheme.colors.source.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.iconFor(source.type), null, tint = FieldMindTheme.colors.source, size = 20.dp) }
@@ -500,7 +501,7 @@ private fun SourceCardWithCitations(
                 // Citation button
                 Surface(
                     onClick = { haptics.light(); showCitationMenu = !showCitationMenu },
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -511,7 +512,7 @@ private fun SourceCardWithCitations(
                 // Mark read/unread
                 Surface(
                     onClick = { haptics.light(); onToggleRead() },
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -527,7 +528,7 @@ private fun SourceCardWithCitations(
             // Citation format picker
             AnimatedVisibility(showCitationMenu) {
                 InfoCard(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                     tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
@@ -541,7 +542,7 @@ private fun SourceCardWithCitations(
                                     clipboard.setText(AnnotatedString(citation))
                                     showCitationMenu = false
                                 },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = MaterialTheme.colorScheme.surface
                             ) {
                                 Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -559,7 +560,7 @@ private fun SourceCardWithCitations(
             // Preview if link available
             if (source.link.isNotBlank()) {
                 Row(
-                    Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f).clip(RoundedCornerShape(20.dp)).clickable(onClick = onClick).background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(horizontal = 10.dp, vertical = 6.dp),
+                    Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f).clip(MaterialTheme.shapes.medium).clickable(onClick = onClick).background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(horizontal = 10.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
@@ -688,7 +689,7 @@ private fun QuickImportDialog(viewModel: FieldMindViewModel, onDismiss: () -> Un
             OutlinedButton(
                 onClick = { filePicker.launch(arrayOf("*/*")) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(22.dp)
+                shape = CuteCardDefaults.ButtonShape
             ) {
                 Icon(FieldMindIcons.File, null, size = 18.dp)
                 Spacer(Modifier.size(6.dp))
@@ -750,7 +751,7 @@ private fun BulkImportDialog(viewModel: FieldMindViewModel, onDismiss: () -> Uni
             modifier = Modifier.fillMaxWidth().height(200.dp),
             minLines = 6,
             placeholder = { Text("https://example.com/article1\nhttps://youtube.com/watch?v=...\nhttps://doi.org/...") },
-            shape = RoundedCornerShape(28.dp)
+            shape = CuteCardDefaults.FieldShape
         )
         if (bulkText.isNotBlank()) {
             val count = bulkText.lines().count { it.trim().isNotBlank() }
@@ -933,7 +934,7 @@ private fun ReadingTimerDialog(onDismiss: () -> Unit) {
             Column {
                 LinearProgressIndicator(
                     progress = progress,
-                    modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)),
+                    modifier = Modifier.fillMaxWidth().height(6.dp).clip(CuteCardDefaults.ProgressBarShape),
                     color = FieldMindTheme.colors.source,
                     trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
                 )
@@ -962,7 +963,7 @@ private fun ReadingTimerDialog(onDismiss: () -> Unit) {
                     selected = targetMinutes == mins,
                     onClick = { if (!isRunning) { targetMinutes = mins; haptics.light() } },
                     label = { Text("${mins}m") },
-                    shape = RoundedCornerShape(20.dp)
+                    shape = MaterialTheme.shapes.medium
                 )
             }
         }
@@ -977,7 +978,7 @@ private fun ReadingTimerDialog(onDismiss: () -> Unit) {
                         haptics.confirm()
                     },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = FieldMindTheme.colors.flashcard.copy(alpha = 0.18f)
                     )
@@ -1001,7 +1002,7 @@ private fun ReadingTimerDialog(onDismiss: () -> Unit) {
                         haptics.confirm()
                     },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = FieldMindTheme.colors.source
                     )
@@ -1023,7 +1024,7 @@ private fun ReadingTimerDialog(onDismiss: () -> Unit) {
                     onDismiss()
                 },
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(24.dp)
+                shape = CuteCardDefaults.ShapeCompact
             ) {
                 Icon(FieldMindIcons.Close, null, size = 18.dp)
                 Spacer(Modifier.size(6.dp))
@@ -1035,7 +1036,7 @@ private fun ReadingTimerDialog(onDismiss: () -> Unit) {
         if (elapsedSeconds > 0 && !isRunning) {
             val readMin = elapsedSeconds / 60
             InfoCard(
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 animate = true,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                 tonalElevation = 0.dp, shadowElevation = 0.dp
@@ -1085,7 +1086,7 @@ private fun NotePanel(viewModel: FieldMindViewModel, items: List<NoteEntity>, on
         item { LibraryAddButton(if (showAdd) "Close note composer" else "Add note") { showAdd = !showAdd } }
         if (showAdd) item { NoteCaptureCard(viewModel = viewModel, initialCategory = selectedCategory.takeIf { it != "All" } ?: observationCategories.last()) { showAdd = false } }
         item {
-            InfoCard(shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
+            InfoCard(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f).clickable { categoriesExpanded = !categoriesExpanded }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(icon = FieldMindIcons.Category, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -1131,7 +1132,7 @@ private fun PaperReadingPanel(items: List<SourceEntity>, onOpenDetail: (String, 
         if (items.isNotEmpty()) {
             item {
                 InfoCard(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     animate = true,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     tonalElevation = 0.dp, shadowElevation = 0.dp
@@ -1224,10 +1225,10 @@ private fun FlashcardPanel(
     LazyColumn(state = scrollState, contentPadding = libraryPanelPadding(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Button(onClick = onStartReview, Modifier.weight(1f), shape = RoundedCornerShape(24.dp), enabled = items.isNotEmpty()) {
+                Button(onClick = onStartReview, Modifier.weight(1f), shape = CuteCardDefaults.ShapeCompact, enabled = items.isNotEmpty()) {
                     Icon(icon = FieldMindIcons.Flip, contentDescription = null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Review (${items.size})")
                 }
-                OutlinedButton(onClick = { show = !show; if (!show) { front = ""; back = "" } }, Modifier.weight(1f), shape = RoundedCornerShape(24.dp)) {
+                OutlinedButton(onClick = { show = !show; if (!show) { front = ""; back = "" } }, Modifier.weight(1f), shape = CuteCardDefaults.ShapeCompact) {
                     Icon(icon = if (show) FieldMindIcons.Close else FieldMindIcons.Add, contentDescription = null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text(if (show) "Cancel" else "New card")
                 }
             }
@@ -1236,7 +1237,7 @@ private fun FlashcardPanel(
         if (items.isNotEmpty()) {
             item {
                 InfoCard(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
@@ -1252,7 +1253,7 @@ private fun FlashcardPanel(
                                 if (!selectMode) selectedIds = emptySet()
                                 haptics.light()
                             },
-                            shape = RoundedCornerShape(20.dp),
+                            shape = MaterialTheme.shapes.medium,
                             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
                             colors = if (selectMode) ButtonDefaults.filledTonalButtonColors(
                                 containerColor = FieldMindTheme.colors.flashcard.copy(alpha = 0.18f)
@@ -1270,7 +1271,7 @@ private fun FlashcardPanel(
                         if (selectMode && selectedIds.isNotEmpty()) {
                             FilledTonalButton(
                                 onClick = { showDeleteConfirm = true },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
                                 colors = ButtonDefaults.filledTonalButtonColors(
                                     containerColor = MaterialTheme.colorScheme.errorContainer
@@ -1366,7 +1367,7 @@ private fun FlashcardPanel(
                         showDeleteConfirm = false
                         haptics.confirm()
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text("Delete ${selectedIds.size}") }
             },
@@ -1380,7 +1381,7 @@ private fun FlashcardPanel(
 
 @Composable
 private fun LocalStudyModelCard(enabled: Boolean, downloaded: Boolean, model: String, onGenerate: () -> Unit) {
-    InfoCard(shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
+    InfoCard(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Icon(icon = FieldMindIcons.Sparkle, contentDescription = null, tint = FieldMindTheme.colors.flashcard, size = 24.dp)
@@ -1388,7 +1389,7 @@ private fun LocalStudyModelCard(enabled: Boolean, downloaded: Boolean, model: St
                     Text("Offline study generator", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                     Text(if (enabled && downloaded) "$model is ready inside the app" else "Download a local model in Settings to make cards without servers.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Button(onClick = onGenerate, enabled = enabled && downloaded, shape = RoundedCornerShape(22.dp)) { Text("Auto cards") }
+                Button(onClick = onGenerate, enabled = enabled && downloaded, shape = CuteCardDefaults.ButtonShape) { Text("Auto cards") }
             }
         }
     }
@@ -1427,7 +1428,7 @@ private fun LibraryFlashcard(
                 else if (!revealed) revealed = !revealed
                 else onClick()
             },
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         animate = true,
         colors = CardDefaults.cardColors(
             containerColor = if (selected) FieldMindTheme.colors.flashcard.copy(alpha = 0.12f)
@@ -1452,7 +1453,7 @@ private fun LibraryFlashcard(
                     )
                 }
                 Box(
-                    Modifier.size(36.dp).clip(RoundedCornerShape(18.dp))
+                    Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape)
                         .background(
                             if (selected) accent.copy(alpha = 0.3f)
                             else accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)
@@ -1486,7 +1487,7 @@ private fun LibraryFlashcard(
 private fun LearnScreenRedirect(onOpenReader: (String, String) -> Unit, onOpenLearn: () -> Unit) {
     InfoCard(
         modifier = Modifier.fillMaxSize().padding(20.dp),
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
@@ -1500,7 +1501,7 @@ private fun LearnScreenRedirect(onOpenReader: (String, String) -> Unit, onOpenLe
                 contentDescription = null,
                 tint = FieldMindTheme.colors.source,
                 size = 56.dp,
-                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(34.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.12f)).padding(12.dp)
+                modifier = Modifier.size(80.dp).clip(CuteCardDefaults.Shape).background(FieldMindTheme.colors.source.copy(alpha = 0.12f)).padding(12.dp)
             )
             Spacer(Modifier.height(20.dp))
             Text(
@@ -1518,7 +1519,7 @@ private fun LearnScreenRedirect(onOpenReader: (String, String) -> Unit, onOpenLe
             Spacer(Modifier.height(24.dp))
             Button(
                 onClick = onOpenLearn,
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 modifier = Modifier.fillMaxWidth(0.7f)
             ) {
                 Icon(icon = FieldMindIcons.School, contentDescription = null, size = 18.dp)
@@ -1591,10 +1592,10 @@ private fun LearnPanel(viewModel: FieldMindViewModel, onOpenReader: (String, Str
 
 @Composable
 private fun BookSuggestionCard(title: String, category: String, genre: String, author: String, why: String, freeUrl: String, buyUrl: String, onOpenReader: (String, String) -> Unit) {
-    InfoCard(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
+    InfoCard(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape).background(FieldMindTheme.colors.source.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
                     Icon(icon = FieldMindIcons.Book, contentDescription = null, tint = FieldMindTheme.colors.source, size = 24.dp)
                 }
                 Column(Modifier.weight(1f)) {
@@ -1604,8 +1605,8 @@ private fun BookSuggestionCard(title: String, category: String, genre: String, a
             }
             Text(why, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = { onOpenReader(freeUrl, title) }, shape = RoundedCornerShape(22.dp)) { Text("Free/read") }
-                OutlinedButton(onClick = { onOpenReader(buyUrl, "$title buying options") }, shape = RoundedCornerShape(22.dp)) { Text("Buy options") }
+                Button(onClick = { onOpenReader(freeUrl, title) }, shape = CuteCardDefaults.ButtonShape) { Text("Free/read") }
+                OutlinedButton(onClick = { onOpenReader(buyUrl, "$title buying options") }, shape = CuteCardDefaults.ButtonShape) { Text("Buy options") }
             }
         }
     }
@@ -1618,7 +1619,7 @@ private fun LearnCategoryCard(category: LearnCategory, onOpenResource: (LearnRes
     InfoCard(
         modifier = Modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
@@ -1626,7 +1627,7 @@ private fun LearnCategoryCard(category: LearnCategory, onOpenResource: (LearnRes
                     modifier = Modifier
                         .fillMaxWidth()
                         .pressScale(scaleDown = 0.97f)
-                        .clip(RoundedCornerShape(28.dp))
+                        .clip(CuteCardDefaults.FieldShape)
                         .clickable { expanded = !expanded }
                         .padding(vertical = 2.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -1635,7 +1636,7 @@ private fun LearnCategoryCard(category: LearnCategory, onOpenResource: (LearnRes
                 Box(
                     Modifier
                         .size(44.dp)
-                        .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(22.dp)),
+                        .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), CuteCardDefaults.ButtonShape),
                     contentAlignment = Alignment.Center
                 ) { Icon(icon = FieldMindIcons.School, contentDescription = null, tint = accent, size = 24.dp) }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1649,7 +1650,7 @@ private fun LearnCategoryCard(category: LearnCategory, onOpenResource: (LearnRes
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     category.topics.forEach { topic ->
                         Surface(
-                            shape = RoundedCornerShape(30.dp),
+                            shape = CuteCardDefaults.Shape,
                             color = MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1660,7 +1661,7 @@ private fun LearnCategoryCard(category: LearnCategory, onOpenResource: (LearnRes
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .pressScale(scaleDown = 0.97f)
-                                            .clip(RoundedCornerShape(22.dp))
+                                            .clip(CuteCardDefaults.ButtonShape)
                                             .clickable { onOpenResource(resource) }
                                             .padding(10.dp),
                                         verticalAlignment = Alignment.CenterVertically,
@@ -1688,7 +1689,7 @@ private fun OnlineApiProposalCard() {
     var expanded by rememberSaveable { mutableStateOf(false) }
     InfoCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
@@ -1696,12 +1697,12 @@ private fun OnlineApiProposalCard() {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(28.dp))
+                    .clip(CuteCardDefaults.FieldShape)
                     .clickable { expanded = !expanded },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Box(Modifier.size(44.dp).background(MaterialTheme.colorScheme.secondaryContainer, RoundedCornerShape(22.dp)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(44.dp).background(MaterialTheme.colorScheme.secondaryContainer, CuteCardDefaults.ButtonShape), contentAlignment = Alignment.Center) {
                     Icon(icon = FieldMindIcons.Source, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer, size = 23.dp)
                 }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1733,7 +1734,7 @@ private fun OnlineApiProposalCard() {
 private fun ResearchAssistantCard() {
     InfoCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
@@ -1744,7 +1745,7 @@ private fun ResearchAssistantCard() {
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Box(
-                    Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                    Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                         .background(MaterialTheme.colorScheme.primaryContainer),
                     contentAlignment = Alignment.Center
                 ) {
@@ -1770,7 +1771,7 @@ private fun ResearchJourneyHero(next: ResearchMilestone, signals: String, onOpen
     InfoCard(shape = RoundedCornerShape(38.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), tonalElevation = 0.dp, shadowElevation = 0.dp, modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                Box(Modifier.size(56.dp).clip(RoundedCornerShape(28.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(next.icon, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 30.dp) }
+                Box(Modifier.size(56.dp).clip(CuteCardDefaults.FieldShape).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(next.icon, null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 30.dp) }
                 Column(Modifier.weight(1f)) {
                     Text("Recommended next step", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.76f), fontWeight = FontWeight.SemiBold)
                     Text(next.title, style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.Bold)
@@ -1778,7 +1779,7 @@ private fun ResearchJourneyHero(next: ResearchMilestone, signals: String, onOpen
             }
             Text(next.body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.82f))
             if (signals.isNotBlank()) InfoChip("Personalized from recent activity", icon = FieldMindIcons.Sparkle, color = MaterialTheme.colorScheme.onPrimaryContainer)
-            Button(onClick = { onOpenReader(next.resource.url, next.resource.title) }, shape = RoundedCornerShape(24.dp)) { Text("Open starter resource") }
+            Button(onClick = { onOpenReader(next.resource.url, next.resource.title) }, shape = CuteCardDefaults.ShapeCompact) { Text("Open starter resource") }
         }
     }
 }
@@ -1788,7 +1789,7 @@ private fun ResearchMilestoneCard(milestone: ResearchMilestone, onOpenReader: (S
     var expanded by remember { mutableStateOf(false) }
     EntityCard(milestone.title, "learn", body = milestone.body, meta = listOf(milestone.resource.kind), onClick = { expanded = !expanded }, animate = true)
     AnimatedVisibility(expanded) {
-        InfoCard(shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), tonalElevation = 0.dp, shadowElevation = 0.dp) {
+        InfoCard(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), tonalElevation = 0.dp, shadowElevation = 0.dp) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(milestone.resource.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 Text(milestone.resource.why, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1805,13 +1806,13 @@ private fun GuidedPathCard(path: GuidedPath, onOpenReader: (String, String) -> U
     ClickableCard(
         onClick = { expanded = !expanded },
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(32.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.size(40.dp).clip(RoundedCornerShape(20.dp)).background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(40.dp).clip(MaterialTheme.shapes.medium).background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f)), contentAlignment = Alignment.Center) {
                     Icon(icon = FieldMindIcons.School, contentDescription = null, tint = accent, size = 22.dp)
                 }
                 Column(Modifier.weight(1f)) {
@@ -1823,7 +1824,7 @@ private fun GuidedPathCard(path: GuidedPath, onOpenReader: (String, String) -> U
             if (expanded) {
                 path.steps.forEachIndexed { i, res ->
                     Row(
-                        Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).clickable { onOpenReader(res.url, res.title) }.background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(12.dp),
+                        Modifier.fillMaxWidth().clip(CuteCardDefaults.ButtonShape).clickable { onOpenReader(res.url, res.title) }.background(MaterialTheme.colorScheme.surfaceContainerHigh).padding(12.dp),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Box(Modifier.size(28.dp).clip(CircleShape).background(accent.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
@@ -1894,7 +1895,7 @@ fun LearnReaderScreen(url: String, title: String, onBack: () -> Unit) {
                     model = url,
                     contentDescription = title,
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxSize().padding(16.dp).clip(RoundedCornerShape(34.dp)).background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    modifier = Modifier.fillMaxSize().padding(16.dp).clip(CuteCardDefaults.Shape).background(MaterialTheme.colorScheme.surfaceContainerLow)
                 )
 
                 // ── Audio player ──
@@ -1978,7 +1979,7 @@ private fun NativeAudioPlayer(uri: Uri, title: String, modifier: Modifier = Modi
         }
     }
     Card(
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         modifier = modifier
     ) {
@@ -1992,7 +1993,7 @@ private fun NativeAudioPlayer(uri: Uri, title: String, modifier: Modifier = Modi
                 contentDescription = null,
                 tint = FieldMindTheme.colors.source,
                 size = 64.dp,
-                modifier = Modifier.size(96.dp).clip(RoundedCornerShape(40.dp)).background(FieldMindTheme.colors.source.copy(alpha = 0.12f)).padding(16.dp)
+                modifier = Modifier.size(96.dp).clip(CuteCardDefaults.DialogShape).background(FieldMindTheme.colors.source.copy(alpha = 0.12f)).padding(16.dp)
             )
             Spacer(Modifier.size(24.dp))
             Text(
@@ -2092,7 +2093,7 @@ private fun NativeVideoPlayer(uri: Uri, modifier: Modifier = Modifier) {
 private fun PdfOpenCard(url: String, uriHandler: androidx.compose.ui.platform.UriHandler, context: android.content.Context, displayTitle: String = "PDF Document") {
     Card(
         Modifier.fillMaxSize().padding(32.dp),
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
     ) {
         Column(
@@ -2107,7 +2108,7 @@ private fun PdfOpenCard(url: String, uriHandler: androidx.compose.ui.platform.Ur
             Text("Open this PDF in your device's PDF viewer for the best reading experience.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             Spacer(Modifier.size(8.dp))
             var showPdfViewer by remember { mutableStateOf(false) }
-            Button(onClick = { showPdfViewer = true }, shape = RoundedCornerShape(24.dp)) {
+            Button(onClick = { showPdfViewer = true }, shape = CuteCardDefaults.ShapeCompact) {
                 Icon(FieldMindIcons.File, null, size = 18.dp)
                 Spacer(Modifier.size(8.dp))
                 Text("View in reader")
@@ -2131,7 +2132,7 @@ private fun OpenExternallyCard(url: String, uriHandler: androidx.compose.ui.plat
     val isPdf = Regex("""\.(pdf)""", RegexOption.IGNORE_CASE).containsMatchIn(url)
     val isImage = Regex("""\.(jpg|jpeg|png|webp|gif|heic|bmp)""", RegexOption.IGNORE_CASE).containsMatchIn(url)
     val isAudio = Regex("""\.(mp3|wav|ogg|m4a|aac|flac|wma)""", RegexOption.IGNORE_CASE).containsMatchIn(url)
-    InfoCard(shape = RoundedCornerShape(32.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp, modifier = Modifier.fillMaxWidth()) {
+    InfoCard(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp, modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Icon(FieldMindIcons.File, null, tint = MaterialTheme.colorScheme.primary, size = 36.dp)
             Text("Local file", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -2145,7 +2146,7 @@ private fun OpenExternallyCard(url: String, uriHandler: androidx.compose.ui.plat
                             isImage -> showImageViewer = true
                             isAudio -> showAudioPlayer = true
                         }
-                    }, shape = RoundedCornerShape(24.dp), modifier = Modifier.weight(1f)) {
+                    }, shape = CuteCardDefaults.ShapeCompact, modifier = Modifier.weight(1f)) {
                         Icon(FieldMindIcons.File, null, size = 18.dp)
                         Spacer(Modifier.size(8.dp))
                         Text("View in app")
@@ -2163,7 +2164,7 @@ private fun OpenExternallyCard(url: String, uriHandler: androidx.compose.ui.plat
                             uriHandler.openUri(url)
                         }
                     }
-                }, shape = RoundedCornerShape(24.dp), modifier = if (isPdf || isImage || isAudio) Modifier else Modifier.fillMaxWidth()) {
+                }, shape = CuteCardDefaults.ShapeCompact, modifier = if (isPdf || isImage || isAudio) Modifier else Modifier.fillMaxWidth()) {
                     Text("Open externally"); Spacer(Modifier.size(8.dp)); Icon(FieldMindIcons.OpenLink, null, size = 18.dp)
                 }
             }
@@ -2182,7 +2183,7 @@ private fun OpenExternallyCard(url: String, uriHandler: androidx.compose.ui.plat
 @Composable
 private fun ReaderFallbackCard(message: String, url: String, onPrimary: () -> Unit, modifier: Modifier = Modifier, onDismiss: () -> Unit = {}) {
     val uriHandler = LocalUriHandler.current
-    Card(modifier.padding(20.dp), shape = RoundedCornerShape(34.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
+    Card(modifier.padding(20.dp), shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(FieldMindIcons.Info, null, tint = MaterialTheme.colorScheme.primary, size = 22.dp)
@@ -2192,8 +2193,8 @@ private fun ReaderFallbackCard(message: String, url: String, onPrimary: () -> Un
             Text(message, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(url, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilledTonalButton(onClick = onPrimary, shape = RoundedCornerShape(22.dp)) { Text("Retry") }
-                Button(onClick = { runCatching { uriHandler.openUri(url) } }, shape = RoundedCornerShape(22.dp)) { Text("Open externally") }
+                FilledTonalButton(onClick = onPrimary, shape = CuteCardDefaults.ButtonShape) { Text("Retry") }
+                Button(onClick = { runCatching { uriHandler.openUri(url) } }, shape = CuteCardDefaults.ButtonShape) { Text("Open externally") }
             }
         }
     }
@@ -2209,7 +2210,7 @@ private fun libraryPanelPadding() = PaddingValues(horizontal = 20.dp, vertical =
 private fun LibraryAddButton(text: String, onClick: () -> Unit) {
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         Row(

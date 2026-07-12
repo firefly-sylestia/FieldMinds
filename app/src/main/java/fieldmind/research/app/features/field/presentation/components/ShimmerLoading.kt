@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -109,7 +110,7 @@ fun ShimmerRow(
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(lineHeight)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(CuteCardDefaults.ChipShape)
                     .then(shimmerMod)
             )
             Spacer(Modifier.height(8.dp))
@@ -117,7 +118,7 @@ fun ShimmerRow(
                 modifier = Modifier
                     .fillMaxWidth(0.4f)
                     .height(lineHeight)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(CuteCardDefaults.ChipShape)
                     .then(shimmerMod)
             )
         }
@@ -133,7 +134,7 @@ fun ShimmerEntityCard(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(34.dp))
+            .clip(CuteCardDefaults.Shape)
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Row(
@@ -145,7 +146,7 @@ fun ShimmerEntityCard(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .size(42.dp)
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(MaterialTheme.shapes.medium)
                     .then(shimmerMod)
             )
             Column(Modifier.weight(1f)) {
@@ -154,7 +155,7 @@ fun ShimmerEntityCard(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
                         .height(16.dp)
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(CuteCardDefaults.ChipShape)
                         .shimmerEffect()
                 )
                 Spacer(Modifier.height(8.dp))
@@ -225,7 +226,7 @@ fun ShimmerHeader(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(30.dp))
+            .clip(CuteCardDefaults.Shape)
             .background(MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.6f))
     ) {
         Row(
@@ -236,7 +237,7 @@ fun ShimmerHeader(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .size(46.dp)
-                    .clip(RoundedCornerShape(22.dp))
+                    .clip(CuteCardDefaults.ButtonShape)
                     .then(shimmerMod)
             )
             Column(Modifier.weight(1f)) {
@@ -244,7 +245,7 @@ fun ShimmerHeader(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(18.dp)
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(CuteCardDefaults.ChipShape)
                         .then(shimmerMod)
                 )
                 Spacer(Modifier.height(6.dp))

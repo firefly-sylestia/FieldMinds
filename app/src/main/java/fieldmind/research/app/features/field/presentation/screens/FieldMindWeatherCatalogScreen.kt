@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.Context
 import android.content.Intent
@@ -237,7 +238,7 @@ fun WeatherCatalogScreen(
                 if (weatherCatalog.isEmpty()) {
                     item {
                         Card(
-                            shape = RoundedCornerShape(30.dp),
+                            shape = CuteCardDefaults.Shape,
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -306,7 +307,7 @@ private fun WeatherCatalogCurrentCard(
     }
 
     Card(
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -317,7 +318,7 @@ private fun WeatherCatalogCurrentCard(
                 .then(
                     if (weather == null) Modifier.background(
                         MaterialTheme.colorScheme.surfaceContainerLow,
-                        RoundedCornerShape(36.dp)
+                        CuteCardDefaults.ShapeHero
                     ) else Modifier
                 )
         ) {
@@ -380,7 +381,7 @@ private fun WeatherCatalogCurrentCard(
 
                     // Glass metrics overlay
                     Surface(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         color = if (isDark || isNight) Color.White.copy(alpha = 0.12f) else Color(0xFF1A1A3E).copy(alpha = 0.06f),
                         tonalElevation = 0.dp
                     ) {
@@ -409,7 +410,7 @@ private fun WeatherCatalogCurrentCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         weather.sunrise?.let { sunrise ->
-                            Surface(shape = RoundedCornerShape(18.dp), color = textOnScene.copy(alpha = 0.12f), modifier = Modifier.weight(1f)) {
+                            Surface(shape = CuteCardDefaults.ChipShape, color = textOnScene.copy(alpha = 0.12f), modifier = Modifier.weight(1f)) {
                                 Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                     Icon(MaterialSymbolIcon("sunny"), null, tint = textOnScene.copy(alpha = 0.7f), size = 14.dp)
                                     Text("Sunrise ${formatTimeFromIso(sunrise)}", style = MaterialTheme.typography.labelSmall, color = textOnScene, fontWeight = FontWeight.SemiBold)
@@ -417,7 +418,7 @@ private fun WeatherCatalogCurrentCard(
                             }
                         }
                         weather.sunset?.let { sunset ->
-                            Surface(shape = RoundedCornerShape(18.dp), color = textOnScene.copy(alpha = 0.12f), modifier = Modifier.weight(1f)) {
+                            Surface(shape = CuteCardDefaults.ChipShape, color = textOnScene.copy(alpha = 0.12f), modifier = Modifier.weight(1f)) {
                                 Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                     Icon(MaterialSymbolIcon("clear_night"), null, tint = textOnScene.copy(alpha = 0.7f), size = 14.dp)
                                     Text("Sunset ${formatTimeFromIso(sunset)}", style = MaterialTheme.typography.labelSmall, color = textOnScene, fontWeight = FontWeight.SemiBold)
@@ -462,7 +463,7 @@ private fun ScheduleControlCard(
     colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
 ) {
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -478,7 +479,7 @@ private fun ScheduleControlCard(
                     FilledTonalButton(
                         onClick = onStopCapture,
                         colors = ButtonDefaults.filledTonalButtonColors(containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.12f), contentColor = MaterialTheme.colorScheme.error),
-                        shape = RoundedCornerShape(14.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
                     ) {
                         Icon(MaterialSymbolIcon("stop", filled = true), null, modifier = Modifier.size(16.dp))
@@ -489,7 +490,7 @@ private fun ScheduleControlCard(
                     FilledTonalButton(
                         onClick = onStartCapture,
                         colors = ButtonDefaults.filledTonalButtonColors(containerColor = colors.info.copy(alpha = 0.12f), contentColor = colors.info),
-                        shape = RoundedCornerShape(14.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
                     ) {
                         Icon(MaterialSymbolIcon("play_arrow", filled = true), null, modifier = Modifier.size(16.dp))
@@ -558,7 +559,7 @@ private fun ScheduleControlCard(
             // Status
             if (isAutoCapturing) {
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = colors.positive.copy(alpha = 0.1f)
                 ) {
                     Row(
@@ -592,7 +593,7 @@ private fun DateGroupSelector(
     val colors = FieldMindTheme.colors
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -617,7 +618,7 @@ private fun DateGroupSelector(
                     selected = allSelected,
                     onClick = { onSelect("") },
                     label = { Text("All", style = MaterialTheme.typography.labelSmall, fontWeight = if (allSelected) FontWeight.Bold else FontWeight.Normal) },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     leadingIcon = if (allSelected) {{
                         Icon(MaterialSymbolIcon("check"), null, size = 14.dp)
                     }} else null
@@ -636,7 +637,7 @@ private fun DateGroupSelector(
                         selected = date == selected,
                         onClick = { onSelect(date) },
                         label = { Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = if (date == selected) FontWeight.Bold else FontWeight.Normal) },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         leadingIcon = if (date == selected) {{
                             Icon(MaterialSymbolIcon("check"), null, size = 14.dp)
                         }} else null
@@ -658,7 +659,7 @@ private fun ExportButtonsRow(
     ) {
         OutlinedButton(
             onClick = onExportHtml,
-            shape = RoundedCornerShape(16.dp),
+            shape = CuteCardDefaults.ChipShape,
             modifier = Modifier.weight(1f),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = FieldMindTheme.colors.observation)
         ) {
@@ -668,7 +669,7 @@ private fun ExportButtonsRow(
         }
         OutlinedButton(
             onClick = onExportCsv,
-            shape = RoundedCornerShape(16.dp),
+            shape = CuteCardDefaults.ChipShape,
             modifier = Modifier.weight(1f),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = FieldMindTheme.colors.data)
         ) {
@@ -705,7 +706,7 @@ private fun WeatherCatalogRecordCard(
     }
 
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -719,7 +720,7 @@ private fun WeatherCatalogRecordCard(
             Box(
                 modifier = Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(CuteCardDefaults.ChipShape)
                     .background(colors.info.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -802,7 +803,7 @@ private fun WeatherCatalogRecordCard(
 @Composable
 private fun WeatherStatMini(label: String, value: String, color: androidx.compose.ui.graphics.Color, modifier: Modifier = Modifier) {
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier

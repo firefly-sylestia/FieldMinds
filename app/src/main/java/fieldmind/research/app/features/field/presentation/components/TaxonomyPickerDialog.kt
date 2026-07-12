@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -68,7 +69,7 @@ fun TaxonomyPickerDialog(
             modifier = Modifier
                 .fillMaxWidth(0.92f)
                 .fillMaxHeight(0.7f),
-            shape = RoundedCornerShape(36.dp),
+            shape = CuteCardDefaults.ShapeHero,
             color = MaterialTheme.colorScheme.surface,
             tonalElevation = 4.dp
         ) {
@@ -108,7 +109,7 @@ fun TaxonomyPickerDialog(
                     placeholder = { Text("Search $rankLabel...") },
                     leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary
@@ -166,7 +167,7 @@ fun TaxonomyPickerDialog(
                             onClick = {
                                 selectedValue = option
                             },
-                            shape = RoundedCornerShape(22.dp),
+                            shape = CuteCardDefaults.ButtonShape,
                             color = if (isSelected)
                                 MaterialTheme.colorScheme.primaryContainer
                             else
@@ -216,7 +217,7 @@ fun TaxonomyPickerDialog(
                             onSelected(selectedValue)
                             onDismiss()
                         },
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         enabled = selectedValue.isNotBlank()
                     ) {
                         Text("Select $rankLabel")
@@ -246,7 +247,7 @@ fun TaxonTextField(
         placeholder = { Text("Enter $label...") },
         supportingText = supportingText?.let { { Text(it) } },
         modifier = modifier,
-        shape = RoundedCornerShape(22.dp),
+        shape = CuteCardDefaults.ButtonShape,
         singleLine = true
     )
 }
@@ -268,7 +269,7 @@ fun TaxonomyPickerField(
 
     Surface(
         onClick = { showPicker = true },
-        shape = RoundedCornerShape(22.dp),
+        shape = CuteCardDefaults.ButtonShape,
         color = if (value.isNotBlank())
             MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
         else

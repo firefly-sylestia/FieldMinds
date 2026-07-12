@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -94,7 +95,7 @@ fun FieldMindAnimatedSplash(
                 FieldMindLogo(
                     size = 96.dp,
                     modifier = Modifier
-                        .clip(RoundedCornerShape(36.dp))
+                        .clip(CuteCardDefaults.ShapeHero)
                         .background(
                             MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
                         )

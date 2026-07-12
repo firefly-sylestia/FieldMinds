@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.Manifest
 import android.content.Context
@@ -488,7 +489,7 @@ fun ObserveScreen(
                         showExitConfirm = false
                         onBack?.invoke()
                     },
-                    shape = RoundedCornerShape(22.dp)
+                    shape = CuteCardDefaults.ButtonShape
                 ) { Text("Save and exit") }
             },
             dismissButton = {
@@ -644,8 +645,8 @@ fun ObserveScreen(
                     // ── Start capture button ──
                     item {
                         Card(
-                            modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
-                            shape = RoundedCornerShape(36.dp),
+                            modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.ShapeHero),
+                            shape = CuteCardDefaults.ShapeHero,
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
@@ -660,7 +661,7 @@ fun ObserveScreen(
                                     label = { Text("Session name (optional)") },
                                     placeholder = { Text("e.g. Morning bird walk") },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(28.dp),
+                                    shape = CuteCardDefaults.FieldShape,
                                     singleLine = true
                                 )
                                 
@@ -680,7 +681,7 @@ fun ObserveScreen(
                                 Button(
                                     onClick = { startCapture() },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(28.dp)
+                                    shape = CuteCardDefaults.FieldShape
                                 ) {
                                     Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 20.dp)
                                     Spacer(Modifier.size(8.dp))
@@ -710,10 +711,10 @@ fun ObserveScreen(
                         items(completedSessions.take(10)) { researchSession ->
                             Card(
                                 modifier = Modifier.fillMaxWidth()
-                                    .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp))
+                                    .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape)
                                     .expressiveCardPress()
                                     .clickable { onOpenDetail("research_session", researchSession.id) },
-                                shape = RoundedCornerShape(30.dp),
+                                shape = CuteCardDefaults.Shape,
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                             ) {
@@ -933,8 +934,8 @@ fun ObserveScreen(
                 if (showSessionSummary) {
                     item {
                         Card(
-                            modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
-                            shape = RoundedCornerShape(36.dp),
+                            modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.ShapeHero),
+                            shape = CuteCardDefaults.ShapeHero,
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
@@ -971,7 +972,7 @@ fun ObserveScreen(
                                     )
                                     session = session.copy(sessionName = "")
                                     session = session.copy(selectedProjectId = null)
-                                }, shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth()) {
+                                }, shape = CuteCardDefaults.ShapeCompact, modifier = Modifier.fillMaxWidth()) {
                                     Text("Start new session")
                                 }
                             }
@@ -1129,8 +1130,8 @@ private fun LiveObservationTimer(
     )
 
     Card(
-        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
-        shape = RoundedCornerShape(34.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = if (isRunning)
                 MaterialTheme.colorScheme.primaryContainer
@@ -1285,15 +1286,15 @@ private fun EvidenceCaptureRow(
     onIdentifyFromPhoto: (String?) -> Unit = {}
 ) {
     Card(
-        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
-        shape = RoundedCornerShape(36.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.ShapeHero),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                    Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                         .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -1383,7 +1384,7 @@ private fun EvidenceButton(
 ) {
     Card(
         modifier = modifier.height(80.dp).expressivePress(scaleDown = 0.95f).clickable(onClick = onClick),
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1393,7 +1394,7 @@ private fun EvidenceButton(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
-                Modifier.size(36.dp).clip(RoundedCornerShape(20.dp))
+                Modifier.size(36.dp).clip(MaterialTheme.shapes.medium)
                     .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.24f else 0.14f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -1458,15 +1459,15 @@ private fun QuickObservationForm(
     val hasMeasurements = measurements.values.any { it.isNotBlank() }
 
 Card(
-    modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
-    shape = RoundedCornerShape(36.dp),
+    modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.ShapeHero),
+    shape = CuteCardDefaults.ShapeHero,
     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
 ) {
     Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         // Form header
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Box(
-                Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                     .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -1582,7 +1583,7 @@ Card(
             // Protocol steps (when selected)
             selectedProtocol?.let { protocol ->
                 Card(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -1621,7 +1622,7 @@ Card(
             Button(
                 onClick = onSave,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp)
+                shape = CuteCardDefaults.ShapeCompact
             ) {
                 Icon(icon = FieldMindIcons.Check, contentDescription = null, size = 18.dp)
                 Spacer(Modifier.size(8.dp))
@@ -1654,8 +1655,8 @@ private fun QuickClassificationGrid(
     )
 
     Card(
-        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
-        shape = RoundedCornerShape(36.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.ShapeHero),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1675,7 +1676,7 @@ private fun QuickClassificationGrid(
                         val accent = colors.accentFor(cat.name)
                         Surface(
                             onClick = { onCategorySelected(cat.name) },
-                            shape = RoundedCornerShape(24.dp),
+                            shape = CuteCardDefaults.ShapeCompact,
                             color = if (isSelected) accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                             border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accent) else null,
                             modifier = Modifier.weight(1f)
@@ -1725,8 +1726,8 @@ private fun AutoFetchConfirmCard(
     onSkip: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
-        shape = RoundedCornerShape(34.dp),
+        modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
         ),
@@ -1738,7 +1739,7 @@ private fun AutoFetchConfirmCard(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                    Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                         .background(FieldMindTheme.colors.info.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -1756,14 +1757,14 @@ private fun AutoFetchConfirmCard(
                 OutlinedButton(
                     onClick = onSkip,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(22.dp)
+                    shape = CuteCardDefaults.ButtonShape
                 ) {
                     Text("Skip", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Button(
                     onClick = onConfirm,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(22.dp)
+                    shape = CuteCardDefaults.ButtonShape
                 ) {
                     Icon(FieldMindIcons.Location, null, size = 18.dp)
                     Spacer(Modifier.size(6.dp))
@@ -1798,8 +1799,8 @@ private fun AutoMetadataStatusCard(
     val showWeatherConfirm = remember { mutableStateOf(false) }
     
     Card(
-        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
-        shape = RoundedCornerShape(34.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1828,7 +1829,7 @@ private fun AutoMetadataStatusCard(
                 if (!hasGps && !autoFetching && !gpsFetching) {
                     Surface(
                         onClick = onFetchBoth,
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         color = colors.info.copy(alpha = 0.12f)
                     ) {
                         Row(Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1887,7 +1888,7 @@ private fun AutoMetadataStatusCard(
                                 showWeatherConfirm.value = false
                                 onFetchWeather()
                             },
-                            shape = RoundedCornerShape(22.dp)
+                            shape = CuteCardDefaults.ButtonShape
                         ) { Text("Fetch weather") }
                     },
                     dismissButton = {
@@ -1913,7 +1914,7 @@ private fun MetadataStatusChip(
     val haptics = rememberFieldMindHaptics()
     Surface(
         onClick = { if (onTap != null) { haptics.light(); onTap() } },
-        shape = RoundedCornerShape(22.dp),
+        shape = CuteCardDefaults.ButtonShape,
         color = if (acquired) accent.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
         modifier = modifier
     ) {
@@ -1970,8 +1971,8 @@ private fun SpeciesIdentificationLiveCard(
     if (!hasPhoto && identifiedSpecies == null) return
 
     Card(
-        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(34.dp)),
-        shape = RoundedCornerShape(34.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = if (identifiedSpecies != null)
                 colors.observation.copy(alpha = 0.08f)
@@ -2032,7 +2033,7 @@ private fun SpeciesIdentificationLiveCard(
                     onClick = {
                         attachments.firstOrNull { it.isImage() }?.uri?.let { onRunIdentification(it) }
                     },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(FieldMindIcons.Nature, null, size = 16.dp)
@@ -2120,8 +2121,8 @@ private fun EnhancedObservationForm(
     }
 
     Card(
-        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(36.dp)),
-        shape = RoundedCornerShape(36.dp),
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.ShapeHero),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2129,7 +2130,7 @@ private fun EnhancedObservationForm(
             // Form header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                    Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                         .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -2179,7 +2180,7 @@ private fun EnhancedObservationForm(
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
+                    shape = CuteCardDefaults.FieldShape,
                     singleLine = true
                 )
 
@@ -2187,7 +2188,7 @@ private fun EnhancedObservationForm(
                 AnimatedVisibility(visible = showSuggestions) {
                     Card(
                         modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                         ),
@@ -2208,7 +2209,7 @@ private fun EnhancedObservationForm(
                                         )
                                         showSuggestions = false
                                     },
-                                    shape = RoundedCornerShape(20.dp),
+                                    shape = MaterialTheme.shapes.medium,
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                                 ) {
                                     Row(
@@ -2217,7 +2218,7 @@ private fun EnhancedObservationForm(
                                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                                     ) {
                                         Box(
-                                            Modifier.size(32.dp).clip(RoundedCornerShape(16.dp))
+                                            Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
                                                 .background(FieldMindTheme.colors.observation.copy(alpha = 0.14f)),
                                             contentAlignment = Alignment.Center
                                         ) {
@@ -2245,7 +2246,7 @@ private fun EnhancedObservationForm(
                 if (showSpeciesSearch && !showSuggestions && speciesSearchQuery.value.isNotBlank()) {
                     Surface(
                         onClick = onOpenSpeciesSearch,
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                     ) {
                         Row(
@@ -2401,7 +2402,7 @@ private fun EnhancedObservationForm(
                         onSave()
                     },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     enabled = session.subject.isNotBlank() || session.facts.isNotBlank()
                 ) {
                     Icon(FieldMindIcons.Archive, null, size = 18.dp)
@@ -2411,7 +2412,7 @@ private fun EnhancedObservationForm(
                 Button(
                     onClick = onSave,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     enabled = session.subject.isNotBlank() || session.facts.isNotBlank()
                 ) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -2462,7 +2463,7 @@ private fun MissingFieldsChecklist(
     }
     if (missing.isEmpty()) return
     Surface(
-        shape = RoundedCornerShape(22.dp),
+        shape = CuteCardDefaults.ButtonShape,
         color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f)
     ) {
         Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2586,7 +2587,7 @@ private fun FieldModeScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     item {
                         Surface(
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(24.dp),
+                            shape = CuteCardDefaults.ShapeCompact,
                             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                         ) {
                             Row(
@@ -2608,7 +2609,7 @@ private fun FieldModeScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                 } else {
                     item { Text("Tap a type to save instantly", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold) }
                     item {
-                        Button(onClick = { haptics.light(); showQuickSnapCategory = true }, Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp)) {
+                        Button(onClick = { haptics.light(); showQuickSnapCategory = true }, Modifier.fillMaxWidth(), shape = CuteCardDefaults.FieldShape) {
                             Icon(icon = FieldMindIcons.Camera, contentDescription = null, size = 18.dp)
                             Spacer(Modifier.size(8.dp))
                             Text("Quick snap")
@@ -2645,7 +2646,7 @@ private fun FieldModeScreen(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                         }
                     }
                     item {
-                        OutlinedButton(onClick = { showFull = true }, Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
+                        OutlinedButton(onClick = { showFull = true }, Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact) {
                             Icon(icon = FieldMindIcons.Edit, contentDescription = null, size = 18.dp)
                             Spacer(Modifier.size(8.dp))
                             Text("Add full details instead")
@@ -2758,7 +2759,7 @@ private fun QuickSnapCategoryPicker(
                     val accent = FieldMindTheme.colors.accentFor(category)
                     Surface(
                         onClick = { onCategorySelected(category) },
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         color = if (selected) accent.copy(alpha = 0.16f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = androidx.compose.foundation.BorderStroke(
                             width = if (selected) 1.5.dp else 1.dp,
@@ -2802,7 +2803,7 @@ private fun FieldModeButton(category: String, modifier: Modifier = Modifier, onC
     val accent = FieldMindTheme.colors.accentFor("observation")
     Card(
         modifier = modifier.height(104.dp).expressivePress(scaleDown = 0.96f).clickable(onClick = onClick),
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -2906,10 +2907,10 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
     if (showInAppCamera) { Dialog(onDismissRequest = { showInAppCamera = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) { FieldMindCameraV2(onPhotoCaptured = { uri, mimeType -> attachments = attachments + DraftEvidenceAttachment("Photo", uri, "Camera photo", mimeType = mimeType); showInAppCamera = false; scope.launch { snackbar.showSnackbar("Photo captured.") } }, onDismiss = { showInAppCamera = false }, modifier = Modifier.fillMaxSize()) } }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SnackbarHost(snackbar)
-        Card(shape = RoundedCornerShape(36.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), modifier = Modifier.fillMaxWidth()) {
+        Card(shape = CuteCardDefaults.ShapeHero, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(icon = FieldMindIcons.Observation, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 24.dp) }
+                    Box(Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Icon(icon = FieldMindIcons.Observation, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 24.dp) }
                     Column(Modifier.weight(1f)) {
                         Text(if (compact) "Quick field note" else if (snapFirst) "Snap evidence" else "New observation", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                         Text(if (snapFirst) "Evidence first, then facts-only observation notes." else "Date and time are stamped automatically.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -3003,7 +3004,7 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
                         
                         // Audio recording section
                         if (audioEnabled) {
-                            Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
+                            Card(shape = CuteCardDefaults.ShapeCompact, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.fillMaxWidth()) {
                                 Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                                         Icon(FieldMindIcons.Mic, null, tint = FieldMindTheme.colors.observation, size = 20.dp)
@@ -3054,7 +3055,7 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
                             scope.launch { snackbar.showSnackbar("Observation saved to your archive.") }; onSaved()
                         }
                     }
-                }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
+                }, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact) {
                     Icon(icon = FieldMindIcons.Check, contentDescription = null, size = 18.dp); Spacer(Modifier.size(8.dp)); Text("Save observation")
                 }
             }
@@ -3069,7 +3070,7 @@ internal fun ObservationCaptureCard(viewModel: FieldMindViewModel, compact: Bool
 private fun ObservationQualityCard(score: Int, missing: List<String>) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.45f)
     ) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -3106,7 +3107,7 @@ private fun MoodDropdown(value: String, onValueChange: (String) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text("Mood / context preset", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Box {
-            OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp)) {
+            OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact) {
                 Text(value.ifBlank { "Choose context" }, modifier = Modifier.weight(1f), textAlign = TextAlign.Start)
                 Icon(FieldMindIcons.Down, null, size = 18.dp)
             }
@@ -3137,7 +3138,7 @@ private fun autoObservationTags(subject: String, facts: String, category: String
 
 @Composable
 private fun FactsInterpretationBanner() {
-    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)).padding(12.dp),
+    Row(Modifier.fillMaxWidth().clip(CuteCardDefaults.ButtonShape).background(MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)).padding(12.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Icon(icon = FieldMindIcons.Lightbulb, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer, size = 18.dp)
         Text("Facts vs. interpretation: log what you sensed here; save guesses as a question or hypothesis.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
@@ -3148,7 +3149,7 @@ private fun FactsInterpretationBanner() {
 private fun RecordingIndicator(seconds: Int) {
     val transition = rememberInfiniteTransition(label = "rec")
     val alpha by transition.animateFloat(initialValue = 1f, targetValue = 0.25f, animationSpec = infiniteRepeatable(tween(700), RepeatMode.Reverse), label = "recDot")
-    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.errorContainer).padding(horizontal = 16.dp, vertical = 12.dp),
+    Row(Modifier.fillMaxWidth().clip(CuteCardDefaults.ShapeCompact).background(MaterialTheme.colorScheme.errorContainer).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Box(Modifier.size(12.dp).graphicsLayer { this.alpha = alpha }.clip(CircleShape).background(MaterialTheme.colorScheme.error))
         Text("Recording…", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onErrorContainer)
@@ -3180,7 +3181,7 @@ internal fun SpeciesIdButton(
     val hasPhoto = attachments.any { it.isImage() }
 
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(
             containerColor = if (identifiedSpecies != null)
                 colors.observation.copy(alpha = 0.1f)
@@ -3225,7 +3226,7 @@ internal fun SpeciesIdButton(
                     onClick = { onIdentifyFromPhoto(attachments.firstOrNull { it.isImage() }?.uri) },
                     enabled = hasPhoto && identifiedSpecies == null,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(20.dp)
+                    shape = MaterialTheme.shapes.medium
                 ) {
                     Icon(FieldMindIcons.Camera, null, size = 16.dp)
                     Spacer(Modifier.size(6.dp))
@@ -3234,7 +3235,7 @@ internal fun SpeciesIdButton(
                 OutlinedButton(
                     onClick = onOpenSearch,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(20.dp)
+                    shape = MaterialTheme.shapes.medium
                 ) {
                     Icon(FieldMindIcons.Search, null, size = 16.dp)
                     Spacer(Modifier.size(6.dp))
@@ -3257,13 +3258,13 @@ internal fun SpeciesIdButton(
 internal fun AttachmentPreviewList(items: List<DraftEvidenceAttachment>, onCaptionChange: (Int, String) -> Unit, onRemove: (Int) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items.forEachIndexed { index, item ->
-            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), shape = RoundedCornerShape(30.dp)) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), shape = CuteCardDefaults.Shape) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         if (item.isImage()) {
-                            AsyncImage(model = item.uri, contentDescription = item.caption.ifBlank { "Attached image" }, contentScale = ContentScale.Crop, modifier = Modifier.size(64.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest))
+                            AsyncImage(model = item.uri, contentDescription = item.caption.ifBlank { "Attached image" }, contentScale = ContentScale.Crop, modifier = Modifier.size(64.dp).clip(CuteCardDefaults.ButtonShape).background(MaterialTheme.colorScheme.surfaceContainerHighest))
                         } else {
-                            Box(Modifier.size(64.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(64.dp).clip(CuteCardDefaults.ButtonShape).background(MaterialTheme.colorScheme.surfaceContainerHighest), contentAlignment = Alignment.Center) {
                                 Icon(icon = if (item.type.equals("Audio", true)) FieldMindIcons.Mic else FieldMindIcons.File, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 26.dp)
                             }
                         }

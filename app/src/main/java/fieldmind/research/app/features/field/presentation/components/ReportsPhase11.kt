@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
@@ -43,7 +44,7 @@ fun ReportTemplateCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceContainerLow
         ),
@@ -57,7 +58,7 @@ fun ReportTemplateCard(
                     Text(reportType.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = MaterialTheme.colorScheme.surface
                 ) {
                     Text(
@@ -92,7 +93,7 @@ fun ReportSectionEditor(
                 .fillMaxWidth()
                 .heightIn(min = 100.dp),
             placeholder = { Text(hint) },
-            shape = RoundedCornerShape(20.dp)
+            shape = MaterialTheme.shapes.medium
         )
     }
 }
@@ -112,7 +113,7 @@ fun ReportPreviewCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -151,7 +152,7 @@ fun ReportExportMenu(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -172,7 +173,7 @@ fun ReportExportMenu(
 
 @Composable
 private fun ExportButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    OutlinedButton(onClick = onClick, modifier = modifier.height(40.dp), shape = RoundedCornerShape(18.dp)) {
+    OutlinedButton(onClick = onClick, modifier = modifier.height(40.dp), shape = CuteCardDefaults.ChipShape) {
         Text(label, style = MaterialTheme.typography.labelSmall)
     }
 }
@@ -189,7 +190,7 @@ fun AutoGenerateReportOption(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onGenerate),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)

@@ -91,7 +91,7 @@ fun ColorSchemeSwatchPicker(
             val isSelected = selected == swatch.name
             Surface(
                 onClick = { onSelected(swatch.name) },
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.surface,
                 border = if (isSelected) {
                     BorderStroke(2.dp, swatch.primary)

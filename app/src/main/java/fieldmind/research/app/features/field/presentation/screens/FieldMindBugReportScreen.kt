@@ -53,6 +53,7 @@ import fieldmind.research.app.infrastructure.bugreport.BugReportResult
 import fieldmind.research.app.infrastructure.bugreport.BugReportSanitizer
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 import kotlinx.coroutines.launch
 
 /**
@@ -110,7 +111,7 @@ fun FieldMindBugReportScreen(
             // ── Custom header bar (back + title).───────────────────────────
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     onClick = onBack,
                     modifier = Modifier.size(40.dp)
@@ -142,7 +143,7 @@ fun FieldMindBugReportScreen(
 
             // ── Notice panel explaining what gets sent.───────────────────
             Surface(
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.55f),
                 tonalElevation = 0.dp
             ) {
@@ -211,7 +212,7 @@ fun FieldMindBugReportScreen(
 
             // ── Auto-attach crash log toggle.──────────────────────────────
             Surface(
-                shape = RoundedCornerShape(18.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp
             ) {
@@ -290,7 +291,7 @@ fun FieldMindBugReportScreen(
 
             // ── Auto-filled metadata strip.───────────────────────────────
             Surface(
-                shape = RoundedCornerShape(14.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.surfaceContainerLowest,
                 tonalElevation = 0.dp
             ) {
@@ -365,7 +366,7 @@ fun FieldMindBugReportScreen(
             // ── Result feedback.──────────────────────────────────────────
             resultText?.let { msg ->
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = if (resultIsError)
                         MaterialTheme.colorScheme.errorContainer
                     else

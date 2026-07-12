@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.canvas
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -882,19 +883,19 @@ private fun PageBlock(
                     Modifier.border(
                         width = (2f / zoom).coerceAtLeast(1f).dp,
                         color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(16.dp)
+                        shape = CuteCardDefaults.ChipShape
                     )
                 } else Modifier
             )
             // Animated shadow/elevation with consistent ambient/spot colors
             .shadow(
                 elevation = elevation.dp,
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 ambientColor = Color(0x40000000),
                 spotColor = Color(0x28000000),
                 clip = false
             )
-            .clip(RoundedCornerShape(16.dp))
+            .clip(CuteCardDefaults.ChipShape)
             .background(MaterialTheme.colorScheme.surface)
             // Rotation (e.g. sticky notes have slight random rotation)
             .graphicsLayer {

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.Context
 import android.content.Intent
@@ -146,7 +147,7 @@ fun FieldDataTable(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(34.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -160,7 +161,7 @@ fun FieldDataTable(
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         Modifier.size(32.dp)
-                            .clip(RoundedCornerShape(18.dp))
+                            .clip(CuteCardDefaults.ChipShape)
                             .background(accentColor.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) { Icon(icon = MaterialSymbolIcon("table_rows"), contentDescription = null, tint = accentColor, size = 18.dp) }
@@ -194,7 +195,7 @@ fun FieldDataTable(
                     placeholder = { Text("Search all columns...") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     trailingIcon = { if (searchQuery.isNotBlank()) IconButton(onClick = { searchQuery = "" }) { Icon(icon = MaterialSymbolIcon("close"), contentDescription = "Clear", size = 18.dp) } }
                 )
             }
@@ -229,7 +230,7 @@ fun FieldDataTable(
             // ── Filter panel ──
             AnimatedVisibility(showFilters) {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                 ) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -264,7 +265,7 @@ fun FieldDataTable(
             // ── Aggregates panel ──
             AnimatedVisibility(showAggregates) {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f))
                 ) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -286,7 +287,7 @@ fun FieldDataTable(
             // ── Pivot panel ──
             AnimatedVisibility(showPivot) {
                 Card(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
                 ) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -361,7 +362,7 @@ fun FieldDataTable(
                         Icon(icon = MaterialSymbolIcon("table_rows"), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 40.dp)
                         Text(emptyMessage, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         if (onAddRow != null) {
-                            Button(onClick = onAddRow, shape = RoundedCornerShape(22.dp)) { Text("Add record") }
+                            Button(onClick = onAddRow, shape = CuteCardDefaults.ButtonShape) { Text("Add record") }
                         }
                     }
                 }
@@ -370,7 +371,7 @@ fun FieldDataTable(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(MaterialTheme.shapes.medium)
                         .background(MaterialTheme.colorScheme.surfaceContainerHighest)
                         .padding(horizontal = 8.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -454,7 +455,7 @@ private fun TableDataRow(
     Row(
         Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(18.dp))
+            .clip(CuteCardDefaults.ChipShape)
             .background(if (isSelected) accentColor.copy(alpha = 0.08f) else Color.Transparent)
             .clickable { showActions = !showActions }
             .padding(horizontal = 8.dp, vertical = 8.dp),

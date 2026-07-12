@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -140,7 +141,7 @@ fun CalendarHeatmap(
                                 Modifier
                                     .weight(1f)
                                     .aspectRatio(1f)
-                                    .clip(RoundedCornerShape(16.dp))
+                                    .clip(CuteCardDefaults.ChipShape)
                                     .background(cellColor)
                                     .clickable {
                                         selectedDay = date
@@ -297,7 +298,7 @@ fun RadarChart(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(CuteCardDefaults.ChipShape)
                         .background(
                             if (isSelected) accentColor.copy(alpha = 0.12f)
                             else Color.Transparent
@@ -983,12 +984,12 @@ fun NetworkGraphTimeline(
         // Timeline slider
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Past", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 9.sp)
-            Box(Modifier.weight(1f).height(24.dp).clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)) {
+            Box(Modifier.weight(1f).height(24.dp).clip(MaterialTheme.shapes.medium).background(MaterialTheme.colorScheme.surfaceContainerHighest)) {
                 Box(
                     Modifier
                         .fillMaxWidth(sliderPosition)
                         .fillMaxHeight()
-                        .background(FieldMindTheme.colors.observation.copy(alpha = 0.3f), RoundedCornerShape(20.dp))
+                        .background(FieldMindTheme.colors.observation.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
                         .clickable { /* handled by pointer input */ },
                     contentAlignment = Alignment.CenterEnd
                 ) {
@@ -1061,7 +1062,7 @@ fun DataQualityMeter(
                 Text("${(fraction * 100).toInt()}%", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Box(
-                Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                Modifier.fillMaxWidth().height(6.dp).clip(CuteCardDefaults.ProgressBarShape).background(MaterialTheme.colorScheme.surfaceContainerHighest)
             ) {
                 Box(
                     Modifier.fillMaxWidth(fraction.coerceIn(0f, 1f)).fillMaxHeight()
