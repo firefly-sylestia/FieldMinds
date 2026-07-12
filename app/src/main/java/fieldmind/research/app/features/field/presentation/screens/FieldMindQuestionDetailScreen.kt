@@ -636,7 +636,7 @@ fun QuestionDetailScreen(
                         // Confidence visual indicator
                         LinearProgressIndicator(
                             progress = { animatedConfidence },
-                            modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)),
+                            modifier = Modifier.fillMaxWidth().height(6.dp).clip(CuteCardDefaults.ProgressBarShape),
                             color = when {
                                 confidenceLevel >= 80 -> FieldMindTheme.colors.positive
                                 confidenceLevel >= 50 -> FieldMindTheme.colors.warning

@@ -371,7 +371,7 @@ fun TaskDetailScreen(
                         }
                         LinearProgressIndicator(
                             progress = { animatedProgress },
-                            modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
+                            modifier = Modifier.fillMaxWidth().height(8.dp).clip(CuteCardDefaults.ProgressBarShape),
                             color = priorityColor,
                             trackColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         )

@@ -1020,14 +1020,14 @@ private fun CompactHomeHeader(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(10.dp)
-                        .clip(RoundedCornerShape(12.dp))
+                        .clip(CuteCardDefaults.ProgressBarShape)
                         .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(animatedProgress)
                             .fillMaxHeight()
-                            .clip(RoundedCornerShape(12.dp))
+                            .clip(CuteCardDefaults.ProgressBarShape)
                             .background(
                                 if (complete) Brush.horizontalGradient(listOf(colors.positive, colors.confidenceSure))
                                 else Brush.horizontalGradient(listOf(colors.observation, colors.data))

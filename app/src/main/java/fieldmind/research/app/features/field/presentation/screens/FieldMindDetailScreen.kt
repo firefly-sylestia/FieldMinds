@@ -946,7 +946,7 @@ fun QualityScoreCard(score: Int) {
             }
             LinearProgressIndicator(
                 progress = { score.coerceIn(0, 100) / 100f },
-                modifier = Modifier.width(100.dp).height(6.dp).clip(RoundedCornerShape(8.dp)),
+                modifier = Modifier.width(100.dp).height(6.dp).clip(CuteCardDefaults.ProgressBarShape),
                 color = scoreColor,
                 trackColor = scoreColor.copy(alpha = 0.12f)
             )
@@ -1700,7 +1700,7 @@ fun HypothesisDetailContent(
             }
             LinearProgressIndicator(
                 progress = { (h.confidencePercent).coerceIn(0, 100) / 100f },
-                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)),
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(CuteCardDefaults.ProgressBarShape),
                 color = resultColor,
                 trackColor = resultColor.copy(alpha = 0.12f)
             )

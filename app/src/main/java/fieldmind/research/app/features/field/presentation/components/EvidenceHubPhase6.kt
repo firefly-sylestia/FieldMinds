@@ -77,7 +77,7 @@ fun CompletenessIndicator(observation: ObservationEntity) {
             }
             LinearProgressIndicator(
                 progress = { completenessPercent / 100f },
-                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp))
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(CuteCardDefaults.ProgressBarShape)
             )
             LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 items(checks) { (label, completed) ->

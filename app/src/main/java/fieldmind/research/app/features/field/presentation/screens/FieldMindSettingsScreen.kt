@@ -1088,7 +1088,7 @@ fun SecuritySettingsPage(
                         Column { Text("Security Status", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold); Text("$enabledCount of 5 protections enabled", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { listOf(appLockActive, backupEncryption, clipboardCleanup, privacyTyping, screenCapture).forEach { active -> Box(Modifier.size(10.dp).clip(CircleShape).background(if (active) FieldMindTheme.colors.positive else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))) } }
                     }
-                    LinearProgressIndicator(progress = { enabledCount / 5f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)), color = FieldMindTheme.colors.positive, trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    LinearProgressIndicator(progress = { enabledCount / 5f }, modifier = Modifier.fillMaxWidth().height(6.dp).clip(CuteCardDefaults.ProgressBarShape), color = FieldMindTheme.colors.positive, trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                     Surface(onClick = { onOpenSecurityScore?.invoke() }, shape = CuteCardDefaults.ShapeCompact, color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), modifier = Modifier
                         .fillMaxWidth()
                         .pressScale(scaleDown = 0.97f)

@@ -752,7 +752,7 @@ private fun HypothesisCard(
                 }
                 LinearProgressIndicator(
                     progress = { animatedConfidence },
-                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
+                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(CuteCardDefaults.ProgressBarShape),
                     color = if (confidence >= 60) FieldMindTheme.colors.positive
                             else if (confidence >= 30) FieldMindTheme.colors.warning
                             else MaterialTheme.colorScheme.error,

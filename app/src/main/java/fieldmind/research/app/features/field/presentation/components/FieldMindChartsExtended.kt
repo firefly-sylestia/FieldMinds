@@ -1062,7 +1062,7 @@ fun DataQualityMeter(
                 Text("${(fraction * 100).toInt()}%", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Box(
-                Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                Modifier.fillMaxWidth().height(6.dp).clip(CuteCardDefaults.ProgressBarShape).background(MaterialTheme.colorScheme.surfaceContainerHighest)
             ) {
                 Box(
                     Modifier.fillMaxWidth(fraction.coerceIn(0f, 1f)).fillMaxHeight()

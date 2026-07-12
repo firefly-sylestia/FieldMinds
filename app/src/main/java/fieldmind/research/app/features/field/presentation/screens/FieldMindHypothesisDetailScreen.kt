@@ -264,7 +264,7 @@ fun HypothesisDetailScreen(
                     }
                     LinearProgressIndicator(
                         progress = { animatedConfidence },
-                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
+                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(CuteCardDefaults.ProgressBarShape),
                         color = resultColor,
                         trackColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                     )

@@ -101,7 +101,7 @@ fun SecurityScoreDetailPage(settings: FieldMindSettings, onBack: () -> Unit) {
                     // Progress bar
                     LinearProgressIndicator(
                         progress = { score / 100f },
-                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
+                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(CuteCardDefaults.ProgressBarShape),
                         color = scoreColor,
                         trackColor = scoreColor.copy(alpha = 0.12f)
                     )

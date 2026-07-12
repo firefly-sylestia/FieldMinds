@@ -265,7 +265,7 @@ fun ExportPrivacyOptionsCard(
                                         modifier = Modifier
                                             .weight(1f)
                                             .height(8.dp)
-                                            .clip(RoundedCornerShape(8.dp)),
+                                            .clip(CuteCardDefaults.ProgressBarShape),
                                         color = Color(strength.color),
                                         trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                                     )

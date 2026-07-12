@@ -210,6 +210,8 @@ object CuteCardDefaults {
     val OptionShape: Shape = RoundedCornerShape(36.dp)
     /** Text field shape. */
     val FieldShape: Shape = RoundedCornerShape(36.dp)
+    /** Progress bar shape — slightly rounded for a soft, glass-like look. */
+    val ProgressBarShape: Shape = RoundedCornerShape(10.dp)
 
     /**
      * Default card colours — uses surfaceContainerLowest so the card

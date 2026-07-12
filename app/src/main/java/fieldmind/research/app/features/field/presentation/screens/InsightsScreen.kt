@@ -698,7 +698,7 @@ private fun CollapsibleAchievements(
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.ShapeCompact).pressScale(scaleDown = 0.98f).clickable { expanded = !expanded },
+        modifier = Modifier.fillMaxWidth().cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.ShapeCompact),
         shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -710,7 +710,9 @@ private fun CollapsibleAchievements(
                     Text("Achievements", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     Text("$unlockedCount/${items.size} unlocked • tap to ${if (expanded) "collapse" else "explore"}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Icon(if (expanded) FieldMindIcons.Up else FieldMindIcons.Down, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
+                IconButton(onClick = { expanded = !expanded }, modifier = Modifier.size(36.dp)) {
+                    Icon(if (expanded) FieldMindIcons.Up else FieldMindIcons.Down, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 22.dp)
+                }
             }
             if (expanded) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp), maxItemsInEachRow = 2) {
@@ -759,7 +761,7 @@ private fun AchievementCardV2(item: ResearchAchievement, modifier: Modifier = Mo
             }
             LinearProgressIndicator(
                 progress = animatedProgress,
-                modifier = Modifier.fillMaxWidth().height(5.dp).clip(RoundedCornerShape(999.dp)),
+                modifier = Modifier.fillMaxWidth().height(5.dp).clip(CuteCardDefaults.ProgressBarShape),
                 color = item.accent,
                 trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
             )

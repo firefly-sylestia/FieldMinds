@@ -934,7 +934,7 @@ private fun ReadingTimerDialog(onDismiss: () -> Unit) {
             Column {
                 LinearProgressIndicator(
                     progress = progress,
-                    modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)),
+                    modifier = Modifier.fillMaxWidth().height(6.dp).clip(CuteCardDefaults.ProgressBarShape),
                     color = FieldMindTheme.colors.source,
                     trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
                 )
