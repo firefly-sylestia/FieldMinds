@@ -709,7 +709,7 @@ private data class PermItem(
 
 @Composable
 private fun PermissionCard(item: PermItem) {
-    Card(shape = RoundedCornerShape(30.dp),
+    Card(shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = if (item.granted) item.accent.copy(
                 alpha = 0.08f)

@@ -440,7 +440,7 @@ fun WeatherDatabaseScreen(
             if (weatherObs.isEmpty()) {
                 item {
                     InfoCard(
-                        shape = RoundedCornerShape(30.dp),
+                        shape = CuteCardDefaults.Shape,
                         animate = true,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         tonalElevation = 0.dp, shadowElevation = 0.dp,

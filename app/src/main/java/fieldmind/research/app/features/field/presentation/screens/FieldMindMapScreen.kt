@@ -1451,7 +1451,7 @@ private fun EditOverlayDialog(
                         val isSelected = selectedColor == colorLong
                         Surface(
                             onClick = { selectedColor = colorLong },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             color = Color(colorInt),
                             modifier = Modifier
                                 .size(42.dp)
@@ -1459,7 +1459,7 @@ private fun EditOverlayDialog(
                                     if (isSelected) Modifier.border(
                                         2.5.dp,
                                         MaterialTheme.colorScheme.onSurface,
-                                        RoundedCornerShape(14.dp)
+                                        CuteCardDefaults.ChipShape
                                     ) else Modifier
                                 )
                         ) {

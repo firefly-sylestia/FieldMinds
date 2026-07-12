@@ -798,7 +798,7 @@ private fun LiquidNavRow(
                             }
                             tabBounds[index] = TabBounds(x, width)
                         }
-                        .clip(RoundedCornerShape(30.dp))
+                        .clip(CuteCardDefaults.Shape)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,

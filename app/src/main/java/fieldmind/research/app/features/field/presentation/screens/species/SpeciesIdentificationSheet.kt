@@ -409,7 +409,7 @@ private fun SpeciesMatchCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onSelect),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected)
                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)

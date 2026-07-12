@@ -282,7 +282,7 @@ fun ProjectsScreen(
         // ── Stats row: Total | Active | Archive | Not Synced ──
         item {
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
             ) {
@@ -359,7 +359,7 @@ fun ProjectsScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Box(
-                            Modifier.size(72.dp).clip(RoundedCornerShape(30.dp))
+                            Modifier.size(72.dp).clip(CuteCardDefaults.Shape)
                                 .background(colors.project.copy(alpha = 0.12f)),
                             contentAlignment = Alignment.Center
                         ) {

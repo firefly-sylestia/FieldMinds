@@ -147,7 +147,7 @@ fun NewProjectScreen(viewModel: FieldMindViewModel, onBack: () -> Unit, entity: 
             // ── Custom header: back button + title/subtitle ──
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f),
                 tonalElevation = 0.dp
             ) {

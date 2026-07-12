@@ -224,7 +224,7 @@ private fun LevelBadge(level: String) {
         else -> MaterialTheme.colorScheme.surfaceContainerHighest to MaterialTheme.colorScheme.onSurfaceVariant
     }
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = CuteCardDefaults.ChipShape,
         color = bgColor
     ) {
         Text(
@@ -240,7 +240,7 @@ private fun LevelBadge(level: String) {
 @Composable
 private fun InfoChip2(text: String, icon: MaterialSymbolIcon? = null) {
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = CuteCardDefaults.ChipShape,
         color = MaterialTheme.colorScheme.surfaceContainerHighest
     ) {
         Row(

@@ -279,8 +279,8 @@ fun VoiceNotesScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp)),
-                        shape = RoundedCornerShape(30.dp),
+                            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(
                             containerColor = if (isPlaying) colors.observation.copy(alpha = 0.08f)
                             else MaterialTheme.colorScheme.surfaceContainerLow

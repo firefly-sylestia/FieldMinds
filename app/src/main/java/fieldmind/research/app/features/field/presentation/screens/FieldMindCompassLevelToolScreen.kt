@@ -528,7 +528,7 @@ fun CompassToolScreen(
             ) {
                 // Field chart
                 Card(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.weight(1.4f)
@@ -550,7 +550,7 @@ fun CompassToolScreen(
 
                 // Pitch/Roll compact card with glassmorphic sparklines
                 Card(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.weight(1f)
@@ -600,7 +600,7 @@ fun CompassToolScreen(
             val lastSpecies = remember(allObservations) { allObservations.maxByOrNull { it.createdAt }?.subject }
 
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -1199,7 +1199,7 @@ private fun CompassCalibrationGuide(
                 }
 
                 if (accuracy == "High") {
-                    Surface(shape = RoundedCornerShape(14.dp), color = colors.positive.copy(alpha = 0.1f), modifier = Modifier.fillMaxWidth()) {
+                    Surface(shape = CuteCardDefaults.ChipShape, color = colors.positive.copy(alpha = 0.1f), modifier = Modifier.fillMaxWidth()) {
                         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Icon(MaterialSymbolIcon("check_circle", filled = true), null, tint = colors.positive, size = 20.dp)
                             Text("Calibrated — heading is now accurate.", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, color = colors.positive, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -1591,7 +1591,7 @@ fun LevelToolScreen(
 
             // ── Tilt data + reference controls ──
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -1613,7 +1613,7 @@ fun LevelToolScreen(
                     // Reference controls
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         if (isReferenced) {
-                            Surface(shape = RoundedCornerShape(12.dp), color = colors.info.copy(alpha = 0.08f), modifier = Modifier.weight(1f)) {
+                            Surface(shape = MaterialTheme.shapes.extraSmall, color = colors.info.copy(alpha = 0.08f), modifier = Modifier.weight(1f)) {
                                 Column(Modifier.padding(10.dp)) {
                                     Text("Reference set", style = MaterialTheme.typography.labelSmall, color = colors.info)
                                     Text("Deviation: %.1f°".format(refApplied), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1625,7 +1625,7 @@ fun LevelToolScreen(
                                     containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.12f),
                                     contentColor = MaterialTheme.colorScheme.error
                                 ),
-                                shape = RoundedCornerShape(14.dp),
+                                shape = CuteCardDefaults.ChipShape,
                                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
                             ) {
                                 Icon(MaterialSymbolIcon("clear"), null, modifier = Modifier.size(16.dp))
@@ -1638,7 +1638,7 @@ fun LevelToolScreen(
                                     refGravX = gx; refGravY = gy; refGravZ = gz
                                     isReferenced = true
                                 },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = CuteCardDefaults.ChipShape,
                                 colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.info),
                                 modifier = Modifier.fillMaxWidth()
                             ) {

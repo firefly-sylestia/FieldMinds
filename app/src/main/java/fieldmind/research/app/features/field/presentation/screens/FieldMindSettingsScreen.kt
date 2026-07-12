@@ -687,7 +687,7 @@ private fun <T> PillRadioGroup(
     Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Box(
-                Modifier.size(28.dp).clip(RoundedCornerShape(14.dp))
+                Modifier.size(28.dp).clip(CuteCardDefaults.ChipShape)
                     .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
@@ -1433,7 +1433,7 @@ fun AboutPage(onBack: () -> Unit, onOpenChangelog: (() -> Unit)? = null) {
                 Column(Modifier.padding(22.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     FieldMindLogo(
                         size = 64.dp,
-                        modifier = Modifier.clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.08f))
+                        modifier = Modifier.clip(CuteCardDefaults.Shape).background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.08f))
                     )
                     Text("FieldMind", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     Text("Observe. Question. Research clearly.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f), textAlign = TextAlign.Center)
@@ -3255,7 +3255,7 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
                     Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Box(
-                                Modifier.size(28.dp).clip(RoundedCornerShape(14.dp))
+                                Modifier.size(28.dp).clip(CuteCardDefaults.ChipShape)
                                     .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                                 contentAlignment = Alignment.Center
                             ) {

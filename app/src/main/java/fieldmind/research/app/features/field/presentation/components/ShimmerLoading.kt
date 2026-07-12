@@ -226,7 +226,7 @@ fun ShimmerHeader(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(30.dp))
+            .clip(CuteCardDefaults.Shape)
             .background(MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.6f))
     ) {
         Row(

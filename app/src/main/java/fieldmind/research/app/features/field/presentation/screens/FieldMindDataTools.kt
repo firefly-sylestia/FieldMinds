@@ -227,7 +227,7 @@ private fun ToolCardItem(tool: ToolCardInfo, modifier: Modifier = Modifier, onCl
     Card(
         onClick = onClick,
         modifier = modifier.height(130.dp),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {

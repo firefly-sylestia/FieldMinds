@@ -74,8 +74,8 @@ fun DrawingToolbar(
     Surface(
         modifier = modifier
             .widthIn(min = 200.dp, max = 420.dp)
-            .shadow(16.dp, RoundedCornerShape(30.dp), ambientColor = Color.Black.copy(alpha = 0.2f)),
-        shape = RoundedCornerShape(30.dp),
+            .shadow(16.dp, CuteCardDefaults.Shape, ambientColor = Color.Black.copy(alpha = 0.2f)),
+        shape = CuteCardDefaults.Shape,
         color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.92f),
         tonalElevation = 8.dp
     ) {

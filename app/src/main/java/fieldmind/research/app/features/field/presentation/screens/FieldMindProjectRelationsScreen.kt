@@ -255,7 +255,7 @@ fun ProjectRelationsScreen(
         item {
             val totalLinked = relations.sumOf { rel -> rel.groups.sumOf { it.count } }
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -330,7 +330,7 @@ fun ProjectRelationsScreen(
             var expanded by remember(obs.id) { mutableStateOf(rel.groups.isNotEmpty()) }
 
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {

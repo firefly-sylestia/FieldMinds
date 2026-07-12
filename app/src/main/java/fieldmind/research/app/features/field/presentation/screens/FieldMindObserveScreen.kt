@@ -711,10 +711,10 @@ fun ObserveScreen(
                         items(completedSessions.take(10)) { researchSession ->
                             Card(
                                 modifier = Modifier.fillMaxWidth()
-                                    .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp))
+                                    .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape)
                                     .expressiveCardPress()
                                     .clickable { onOpenDetail("research_session", researchSession.id) },
-                                shape = RoundedCornerShape(30.dp),
+                                shape = CuteCardDefaults.Shape,
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                             ) {
@@ -1583,7 +1583,7 @@ Card(
             // Protocol steps (when selected)
             selectedProtocol?.let { protocol ->
                 Card(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
@@ -3258,7 +3258,7 @@ internal fun SpeciesIdButton(
 internal fun AttachmentPreviewList(items: List<DraftEvidenceAttachment>, onCaptionChange: (Int, String) -> Unit, onRemove: (Int) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items.forEachIndexed { index, item ->
-            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), shape = RoundedCornerShape(30.dp)) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), shape = CuteCardDefaults.Shape) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         if (item.isImage()) {

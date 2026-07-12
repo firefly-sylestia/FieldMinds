@@ -486,7 +486,7 @@ private fun LearnCategoryCardCompact(
         modifier = Modifier
             .fillMaxWidth()
             .staggeredEntrance(index = index, animate = animate),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

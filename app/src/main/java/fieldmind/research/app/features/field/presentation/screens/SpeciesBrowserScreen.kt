@@ -268,7 +268,7 @@ fun SpeciesBrowserScreen(
                                 selected = selectedCategory == null,
                                 onClick = { selectedCategory = null },
                                 label = { Text("All ($totalCount)", fontWeight = FontWeight.SemiBold) },
-                                shape = RoundedCornerShape(30.dp),
+                                shape = CuteCardDefaults.Shape,
                                 leadingIcon = if (selectedCategory == null) {{ Icon(FieldMindIcons.Check, null, size = 16.dp) }} else null
                             )
                             categories.forEach { (cat, count) ->
@@ -277,7 +277,7 @@ fun SpeciesBrowserScreen(
                                     selected = selectedCategory == cat,
                                     onClick = { selectedCategory = if (selectedCategory == cat) null else cat },
                                     label = { Text("$cat ($count)", fontWeight = FontWeight.SemiBold) },
-                                    shape = RoundedCornerShape(30.dp),
+                                    shape = CuteCardDefaults.Shape,
                                     leadingIcon = if (selectedCategory == cat) {{ Icon(FieldMindIcons.Check, null, size = 16.dp, tint = accent) }} else null,
                                     colors = FilterChipDefaults.filterChipColors(
                                         selectedContainerColor = accent.copy(alpha = 0.12f),
@@ -466,10 +466,10 @@ internal fun SpeciesCard(
     ClickableCard(
                         animate = true,
         onClick = onClick,
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp,
-        modifier = Modifier.cuteShadow(elevation = CuteElevations.clickableTier, shape = RoundedCornerShape(30.dp))
+        modifier = Modifier.cuteShadow(elevation = CuteElevations.clickableTier, shape = CuteCardDefaults.Shape)
     ) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),
@@ -973,7 +973,7 @@ private fun DetailSection(
     content: @Composable ColumnScope.() -> Unit
 ) {
     InfoCard(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = CuteElevations.nonClickableTier, shadowElevation = CuteElevations.nonClickableTier,
         modifier = Modifier.fillMaxWidth()

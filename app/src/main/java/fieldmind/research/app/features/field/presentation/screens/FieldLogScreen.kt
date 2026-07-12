@@ -219,7 +219,7 @@ fun FieldLogScreen(
                     ClickableCard(
                         onClick = { onOpenDetail("research_session", session.id) },
                         animate = true,
-                        shape = RoundedCornerShape(30.dp),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         tonalElevation = 0.dp, shadowElevation = 0.dp
                     ) {

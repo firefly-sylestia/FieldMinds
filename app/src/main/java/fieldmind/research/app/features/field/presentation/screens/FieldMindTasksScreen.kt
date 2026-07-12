@@ -503,7 +503,7 @@ private fun TaskSectionHeader(
             // Count badge
             if (count > 0) {
                 Surface(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     color = accentColor.copy(alpha = 0.12f)
                 ) {
                     Text(
@@ -557,7 +557,7 @@ private fun TaskCard(
     Card(
         onClick = onTap,
         modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = if (isChecked)
                 MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.6f)
@@ -817,7 +817,7 @@ private fun SwipeToCompleteTaskCard(
         modifier = Modifier
             .fillMaxWidth()
             .staggeredEntrance(index = index, animate = animate)
-            .clip(RoundedCornerShape(30.dp))
+            .clip(CuteCardDefaults.Shape)
             .onGloballyPositioned { coords ->
                 contentWidthPx = coords.size.width.toFloat().coerceAtLeast(1f)
             }
@@ -922,9 +922,9 @@ private fun SwipeToCompleteTaskCard(
 
 @Composable
 private fun StatCard(value: String, label: String, icon: MaterialSymbolIcon, color: Color, modifier: Modifier = Modifier) {
-    Card(modifier, shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+    Card(modifier, shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Box(Modifier.size(28.dp).clip(RoundedCornerShape(14.dp)).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(28.dp).clip(CuteCardDefaults.ChipShape).background(color.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(icon, null, tint = color, size = 16.dp)
             }
             Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)

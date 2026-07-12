@@ -133,7 +133,7 @@ internal fun DialogWrapper(
                     // Standardized full-screen header with back button
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(30.dp),
+                        shape = CuteCardDefaults.Shape,
                         color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.4f),
                         tonalElevation = 0.dp
                     ) {
@@ -553,7 +553,7 @@ internal fun SourcePreviewCard(link: String, fileUri: String, modifier: Modifier
     val trimmedLink = link.trim()
     val videoId = remember(trimmedLink) { youtubeVideoId(trimmedLink) }
     if (trimmedLink.isBlank() && fileUri.isBlank()) return
-    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+    Card(modifier = modifier.fillMaxWidth(), shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Icon(icon = if (videoId != null) FieldMindIcons.Play else if (fileUri.isNotBlank()) FieldMindIcons.File else FieldMindIcons.OpenLink, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -596,7 +596,7 @@ private fun ProgressiveSection(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = if (expanded) MaterialTheme.colorScheme.surfaceContainerLow
             else MaterialTheme.colorScheme.surfaceContainerHigh
@@ -2354,7 +2354,7 @@ internal fun ObservationLocationCard(latitude: Double, longitude: Double, manual
     val placeName = manualLocation.substringBefore(" • GPS").trim().takeIf { it.isNotBlank() && !it.startsWith("GPS") }
     Card(
         Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
     ) {

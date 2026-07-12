@@ -110,7 +110,7 @@ fun FieldMindBugReportScreen(
             // ── Custom header bar (back + title).───────────────────────────
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     onClick = onBack,
                     modifier = Modifier.size(40.dp)
@@ -290,7 +290,7 @@ fun FieldMindBugReportScreen(
 
             // ── Auto-filled metadata strip.───────────────────────────────
             Surface(
-                shape = RoundedCornerShape(14.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.surfaceContainerLowest,
                 tonalElevation = 0.dp
             ) {
@@ -365,7 +365,7 @@ fun FieldMindBugReportScreen(
             // ── Result feedback.──────────────────────────────────────────
             resultText?.let { msg ->
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = if (resultIsError)
                         MaterialTheme.colorScheme.errorContainer
                     else

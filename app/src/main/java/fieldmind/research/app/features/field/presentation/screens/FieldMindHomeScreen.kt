@@ -3215,7 +3215,7 @@ private fun VoiceNoteCaptureDialog(
 
                 // ── Recording Controls ──
                 Card(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                     ),

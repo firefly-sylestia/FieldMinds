@@ -259,7 +259,7 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
                 // Import from URL
                 Surface(
                     onClick = { haptics.light(); showQuickImport = true },
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                     tonalElevation = 0.dp,
                     modifier = Modifier.weight(1f)
@@ -278,7 +278,7 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
                 // Import evidence (file / image)
                 Surface(
                     onClick = { haptics.light(); showQuickImport = true },
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                     tonalElevation = 0.dp,
                     modifier = Modifier.weight(1f)
@@ -367,7 +367,7 @@ private fun SourcePanel(viewModel: FieldMindViewModel, items: List<SourceEntity>
             item {
                 InfoCard(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
@@ -455,7 +455,7 @@ private fun SourceCardWithCitations(
 
     InfoCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         tonalElevation = 0.dp, shadowElevation = 0.dp
     ) {
@@ -1086,7 +1086,7 @@ private fun NotePanel(viewModel: FieldMindViewModel, items: List<NoteEntity>, on
         item { LibraryAddButton(if (showAdd) "Close note composer" else "Add note") { showAdd = !showAdd } }
         if (showAdd) item { NoteCaptureCard(viewModel = viewModel, initialCategory = selectedCategory.takeIf { it != "All" } ?: observationCategories.last()) { showAdd = false } }
         item {
-            InfoCard(shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
+            InfoCard(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), tonalElevation = 0.dp, shadowElevation = 0.dp) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(Modifier.fillMaxWidth().pressScale(scaleDown = 0.97f).clickable { categoriesExpanded = !categoriesExpanded }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Icon(icon = FieldMindIcons.Category, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
@@ -1132,7 +1132,7 @@ private fun PaperReadingPanel(items: List<SourceEntity>, onOpenDetail: (String, 
         if (items.isNotEmpty()) {
             item {
                 InfoCard(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     animate = true,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     tonalElevation = 0.dp, shadowElevation = 0.dp
@@ -1237,7 +1237,7 @@ private fun FlashcardPanel(
         if (items.isNotEmpty()) {
             item {
                 InfoCard(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                     tonalElevation = 0.dp, shadowElevation = 0.dp
                 ) {
@@ -1428,7 +1428,7 @@ private fun LibraryFlashcard(
                 else if (!revealed) revealed = !revealed
                 else onClick()
             },
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         animate = true,
         colors = CardDefaults.cardColors(
             containerColor = if (selected) FieldMindTheme.colors.flashcard.copy(alpha = 0.12f)
@@ -1650,7 +1650,7 @@ private fun LearnCategoryCard(category: LearnCategory, onOpenResource: (LearnRes
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     category.topics.forEach { topic ->
                         Surface(
-                            shape = RoundedCornerShape(30.dp),
+                            shape = CuteCardDefaults.Shape,
                             color = MaterialTheme.colorScheme.surfaceContainerHigh
                         ) {
                             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1789,7 +1789,7 @@ private fun ResearchMilestoneCard(milestone: ResearchMilestone, onOpenReader: (S
     var expanded by remember { mutableStateOf(false) }
     EntityCard(milestone.title, "learn", body = milestone.body, meta = listOf(milestone.resource.kind), onClick = { expanded = !expanded }, animate = true)
     AnimatedVisibility(expanded) {
-        InfoCard(shape = RoundedCornerShape(30.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), tonalElevation = 0.dp, shadowElevation = 0.dp) {
+        InfoCard(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh), tonalElevation = 0.dp, shadowElevation = 0.dp) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(milestone.resource.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 Text(milestone.resource.why, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

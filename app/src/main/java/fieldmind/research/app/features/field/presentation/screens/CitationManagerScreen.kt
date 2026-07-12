@@ -139,8 +139,8 @@ fun CitationManagerScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp)),
-                        shape = RoundedCornerShape(30.dp),
+                            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -183,8 +183,8 @@ fun CitationManagerScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = RoundedCornerShape(30.dp)),
-                        shape = RoundedCornerShape(30.dp),
+                            .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = CuteCardDefaults.Shape),
+                        shape = CuteCardDefaults.Shape,
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {

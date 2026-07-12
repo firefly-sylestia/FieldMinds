@@ -461,7 +461,7 @@ fun ReObservationLink(
         val parent = observations.firstOrNull { it.id == parentId }
         if (parent != null) {
             Card(
-                shape = RoundedCornerShape(30.dp),
+                shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = colors.hypothesis.copy(alpha = 0.08f)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -487,7 +487,7 @@ fun ReObservationLink(
     val children = observations.filter { it.parentObservationId == o.id }
     if (children.isNotEmpty()) {
         Card(
-            shape = RoundedCornerShape(30.dp),
+            shape = CuteCardDefaults.Shape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -567,7 +567,7 @@ fun ObservationSpeciesInfoSection(
     if (!hasAnyInfo) return
 
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.observation.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -703,7 +703,7 @@ fun ObservationBehaviorSection(
     if (!hasAny) return
     
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.hypothesis.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -840,7 +840,7 @@ fun ObservationStructuredDetailsSection(
     if (!hasAnyContent) return
 
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.data.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1046,7 +1046,7 @@ fun ObservationWeatherLocationSection(
     if (!hasWeather && !hasLocation) return
     
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.info.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1166,7 +1166,7 @@ fun ObservationAiAnalysisCard(
     if (analysisResult == null) return
     
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = colors.project.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -1288,7 +1288,7 @@ fun ObservationExportSection(
     val haptics = rememberFieldMindHaptics()
     
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

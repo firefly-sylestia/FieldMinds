@@ -479,7 +479,7 @@ private fun ScheduleControlCard(
                     FilledTonalButton(
                         onClick = onStopCapture,
                         colors = ButtonDefaults.filledTonalButtonColors(containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.12f), contentColor = MaterialTheme.colorScheme.error),
-                        shape = RoundedCornerShape(14.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
                     ) {
                         Icon(MaterialSymbolIcon("stop", filled = true), null, modifier = Modifier.size(16.dp))
@@ -490,7 +490,7 @@ private fun ScheduleControlCard(
                     FilledTonalButton(
                         onClick = onStartCapture,
                         colors = ButtonDefaults.filledTonalButtonColors(containerColor = colors.info.copy(alpha = 0.12f), contentColor = colors.info),
-                        shape = RoundedCornerShape(14.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
                     ) {
                         Icon(MaterialSymbolIcon("play_arrow", filled = true), null, modifier = Modifier.size(16.dp))
@@ -559,7 +559,7 @@ private fun ScheduleControlCard(
             // Status
             if (isAutoCapturing) {
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     color = colors.positive.copy(alpha = 0.1f)
                 ) {
                     Row(
@@ -618,7 +618,7 @@ private fun DateGroupSelector(
                     selected = allSelected,
                     onClick = { onSelect("") },
                     label = { Text("All", style = MaterialTheme.typography.labelSmall, fontWeight = if (allSelected) FontWeight.Bold else FontWeight.Normal) },
-                    shape = RoundedCornerShape(14.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     leadingIcon = if (allSelected) {{
                         Icon(MaterialSymbolIcon("check"), null, size = 14.dp)
                     }} else null
@@ -637,7 +637,7 @@ private fun DateGroupSelector(
                         selected = date == selected,
                         onClick = { onSelect(date) },
                         label = { Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = if (date == selected) FontWeight.Bold else FontWeight.Normal) },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = CuteCardDefaults.ChipShape,
                         leadingIcon = if (date == selected) {{
                             Icon(MaterialSymbolIcon("check"), null, size = 14.dp)
                         }} else null

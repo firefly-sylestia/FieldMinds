@@ -473,7 +473,7 @@ private fun AnimationPreviewDemo() {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
-            Modifier.size(28.dp).clip(RoundedCornerShape(14.dp))
+            Modifier.size(28.dp).clip(CuteCardDefaults.ChipShape)
                 .background(colors.flashcard.copy(alpha = 0.14f)),
             contentAlignment = Alignment.Center
         ) {

@@ -242,7 +242,7 @@ private fun LockGate(
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 // Lock icon
-                Box(Modifier.size(64.dp).clip(RoundedCornerShape(30.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(64.dp).clip(CuteCardDefaults.Shape).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                     Icon(FieldMindIcons.Lock, null, tint = MaterialTheme.colorScheme.primary, size = 32.dp)
                 }
 

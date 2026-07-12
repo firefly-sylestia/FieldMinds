@@ -451,7 +451,7 @@ fun ResearchSessionScreen(
                         endSession()
                         onBack()
                     },
-                    shape = RoundedCornerShape(14.dp)
+                    shape = CuteCardDefaults.ChipShape
                 ) { Text("Save and exit") }
             },
             dismissButton = {
@@ -588,7 +588,7 @@ fun ResearchSessionScreen(
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 Box(
-                                    Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                                    Modifier.size(44.dp).clip(CuteCardDefaults.ChipShape)
                                         .background(FieldMindTheme.colors.positive.copy(alpha = 0.12f)),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -859,7 +859,7 @@ fun ResearchSessionScreen(
                                         showLinkObservationsDialog = true
                                     },
                                     modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(14.dp),
+                                    shape = CuteCardDefaults.ChipShape,
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = FieldMindTheme.colors.observation.copy(alpha = 0.12f),
                                         contentColor = FieldMindTheme.colors.observation
@@ -1080,14 +1080,14 @@ private fun SessionMetadataConfirmCard(
                 OutlinedButton(
                     onClick = onSkip,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = CuteCardDefaults.ChipShape
                 ) {
                     Text("Skip", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Button(
                     onClick = onConfirm,
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = CuteCardDefaults.ChipShape
                 ) {
                     Icon(FieldMindIcons.Location, null, size = 18.dp)
                     Spacer(Modifier.size(6.dp))
@@ -1114,7 +1114,7 @@ private fun SessionMetaChip(
 ) {
     Surface(
         onClick = { if (onTap != null) onTap() },
-        shape = RoundedCornerShape(14.dp),
+        shape = CuteCardDefaults.ChipShape,
         color = if (acquired) accent.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = 0.dp,
         modifier = modifier
@@ -1288,7 +1288,7 @@ private fun LinkObservationsSheet(
                                     selectedIds = if (isSelected) selectedIds - obs.id
                                     else selectedIds + obs.id
                                 },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = CuteCardDefaults.ChipShape,
                             colors = CardDefaults.cardColors(
                                 containerColor = if (isSelected)
                                     MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
@@ -1350,7 +1350,7 @@ private fun LinkObservationsSheet(
                 OutlinedButton(
                     onClick = { onDismiss() },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = CuteCardDefaults.ChipShape
                 ) {
                     Text("Cancel")
                 }
@@ -1362,7 +1362,7 @@ private fun LinkObservationsSheet(
                         onDismiss()
                     },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(14.dp),
+                    shape = CuteCardDefaults.ChipShape,
                     enabled = selectedIds.isNotEmpty()
                 ) {
                     Icon(FieldMindIcons.Session, null, size = 18.dp)
