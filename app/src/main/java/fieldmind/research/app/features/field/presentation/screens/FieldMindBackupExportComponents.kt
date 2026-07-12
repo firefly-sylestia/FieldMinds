@@ -337,7 +337,7 @@ fun ExportHistoryItemCard(
         else -> FieldMindIcons.File
     }
 
-    val cardShape = journalCardShape(journal)
+    val cardShape = CuteCardDefaults.ShapeCompact
     Card(
         shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
