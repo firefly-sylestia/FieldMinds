@@ -707,9 +707,9 @@ fun SharedTransitionScope.HomeScreen(
                 // Category picker bottom sheet
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(topStart = 36.dp, topEnd = 40.dp),
+                    shape = RoundedCornerShape(topStart = 44.dp, topEnd = 44.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    tonalElevation = 4.dp
+                    tonalElevation = CuteElevations.clickableTier
                 ) {
                     Column(
                         Modifier.padding(24.dp),
@@ -774,15 +774,14 @@ fun SharedTransitionScope.HomeScreen(
                                                 Modifier.padding(16.dp),
                                                 horizontalAlignment = Alignment.CenterHorizontally,
                                                 verticalArrangement = Arrangement.spacedBy(6.dp)
-                                            ) {
-                                                Box(
-                                                    Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
-                                                        .background(
-                                                            if (isSelected) accent.copy(alpha = 0.22f)
-                                                            else MaterialTheme.colorScheme.surfaceContainerLow
-                                                        ),
-                                                    contentAlignment = Alignment.Center
-                                                ) {
+                                            ) {                    Box(
+                        Modifier.size(40.dp).clip(CuteCardDefaults.ChipShape)
+                            .background(
+                                if (isSelected) accent.copy(alpha = 0.22f)
+                                else MaterialTheme.colorScheme.surfaceContainerLow
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
                                                     Icon(
                                                         icon,
                                                         null,
@@ -935,10 +934,10 @@ private fun CompactHomeHeader(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 18.dp),
-        shape = RoundedCornerShape(38.dp),
+        shape = CuteCardDefaults.Shape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 2.dp,
-        shadowElevation = 6.dp
+        tonalElevation = CuteElevations.clickableTier,
+        shadowElevation = CuteElevations.clickableTier
     ) {
         Column(
             Modifier.padding(22.dp),
@@ -1989,7 +1988,10 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
-    Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+    JournalCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = CuteCardDefaults.Shape
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
