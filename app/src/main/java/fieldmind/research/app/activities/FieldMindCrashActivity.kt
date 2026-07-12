@@ -1,5 +1,6 @@
 package fieldmind.research.app.activities
 
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -18,7 +19,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.core.content.ContextCompat
 import kotlin.system.exitProcess
 
 /**
@@ -87,25 +87,16 @@ class FieldMindCrashActivity : ComponentActivity() {
             setPadding(dp24, dp24, dp24, dp24)
         }.also { card ->
             // Error icon circle
-            val iconCircle = View(this).apply {
+            card.addView(TextView(this).apply {
+                text = "!"
+                setTextColor(errorColor)
+                textSize = 36f
+                gravity = Gravity.CENTER
                 val size = LayoutParams(dp72, dp72)
                 layoutParams = size
                 background = GradientDrawable().apply {
                     shape = GradientDrawable.OVAL
-                    setColor(errorColor and 0x00FFFFFF or 0x28000000) // alpha ~0.16
-                }
-            }
-            card.addView(iconCircle)
-            // "!" text as icon
-            card.addView(iconCircle.let { parent ->
-                TextView(this).apply {
-                    text = "!"
-                    setTextColor(errorColor)
-                    textSize = 36f
-                    gravity = Gravity.CENTER
-                    val lp = LayoutParams(dp72, dp72)
-                    lp.topMargin = -dp72
-                    layoutParams = lp
+                    setColor(errorColor and 0x00FFFFFF or 0x28000000)
                 }
             })
 
@@ -234,7 +225,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, dp(52)
                 ).apply { bottomMargin = dp12 }
-                setOnClickListener { disableSecurityAndRestart() }
+                setOnClickListener { showDisableConfirmDialog() }
             })
 
             card.addView(styledButton(
@@ -327,6 +318,21 @@ class FieldMindCrashActivity : ComponentActivity() {
     private fun statusBarHeight(): Int {
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
         return if (resourceId > 0) resources.getDimensionPixelSize(resourceId) else dp(24)
+    }
+
+    // ── Confirmation Dialog ──
+
+    private fun showDisableConfirmDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Disable lock & PIN?")
+            .setMessage(
+                "Your research data and observations are safe. Only the privacy lock, app PIN, " +
+                    "decoy PIN, panic-lock setting, and export password will be turned off. " +
+                    "You can re-enable them in Settings after the restart."
+            )
+            .setPositiveButton("Disable & restart") { _, _ -> disableSecurityAndRestart() }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     // ── Actions ──
