@@ -707,7 +707,7 @@ fun SharedTransitionScope.HomeScreen(
                 // Category picker bottom sheet
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(topStart = 44.dp, topEnd = 44.dp),
+                    shape = CuteCardDefaults.ShapeHero,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     tonalElevation = CuteElevations.clickableTier
                 ) {
