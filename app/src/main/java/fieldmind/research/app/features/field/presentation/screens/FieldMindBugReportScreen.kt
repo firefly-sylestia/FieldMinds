@@ -53,6 +53,7 @@ import fieldmind.research.app.infrastructure.bugreport.BugReportResult
 import fieldmind.research.app.infrastructure.bugreport.BugReportSanitizer
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 import kotlinx.coroutines.launch
 
 /**
