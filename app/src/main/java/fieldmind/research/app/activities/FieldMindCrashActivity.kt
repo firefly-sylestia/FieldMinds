@@ -36,6 +36,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -44,7 +45,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.ripple.LocalRippleTheme
+import androidx.compose.material3.ripple.RippleAlpha
+import androidx.compose.material3.ripple.RippleTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -104,34 +109,70 @@ class FieldMindCrashActivity : ComponentActivity() {
     }
 
     /**
-     * Self-contained Material 3 theme. Uses hardcoded [SafeColors] so it never resolves
-     * theme attributes, dynamic color, or app-specific styling. If the crash was caused
-     * by corrupted theme resources, this theme still renders correctly.
+     * No-op ripple theme that prevents Material3 from resolving ripple drawables
+     * via [painterResource].  The crash activity runs in a separate process and
+     * must not trigger any resource loading that could fail.
+     */
+    private object NoOpRippleTheme : RippleTheme {
+        @Composable
+        override fun defaultColor(): Color = Color.Unspecified
+        @Composable
+        override fun rippleAlpha(): RippleAlpha = RippleAlpha(
+            draggedAlpha = 0f,
+            focusedAlpha = 0f,
+            hoveredAlpha = 0f,
+            pressedAlpha = 0f
+        )
+    }
+
+    /**
+     * A [CardElevation] with all values explicitly zeroed so [Card] does not
+     * attempt any tonal-elevation computation that could load resources.
+     */
+    private val zeroElevation = CardElevation(
+        defaultElevation = 0.dp,
+        pressedElevation = 0.dp,
+        focusedElevation = 0.dp,
+        hoveredElevation = 0.dp,
+        draggedElevation = 0.dp
+    )
+
+    /**
+     * Self-contained Material 3 theme. Uses hardcoded [SafeColors] so it never
+     * resolves theme attributes, dynamic color, or app-specific styling. If the
+     * crash was caused by corrupted theme resources, this theme still renders
+     * correctly.  Also provides a no-op [RippleTheme] to prevent Material3 from
+     * calling [painterResource] during composition.
      */
     @Composable
     private fun CrashTheme(content: @Composable () -> Unit) {
-        MaterialTheme(
-            colorScheme = lightColorScheme(
-                primary = SafeColors.primary,
-                onPrimary = SafeColors.onPrimary,
-                primaryContainer = SafeColors.primaryContainer,
-                secondary = SafeColors.secondary,
-                onSecondary = SafeColors.onPrimary,
-                tertiary = SafeColors.tertiary,
-                onTertiary = SafeColors.onPrimary,
-                error = SafeColors.error,
-                onError = SafeColors.onError,
-                errorContainer = SafeColors.errorContainer,
-                onErrorContainer = SafeColors.error,
-                surface = SafeColors.surface,
-                onSurface = SafeColors.onSurface,
-                onSurfaceVariant = SafeColors.onSurfaceVariant,
-                outline = SafeColors.outline,
-                surfaceVariant = SafeColors.surfaceVariant
-            ),
-            typography = MaterialTheme.typography, // System fonts only — no custom types
-            content = content
-        )
+        // Provide a no-op ripple theme so Material3 never calls painterResource
+        // for ripple masks.  Wrap in a safe MaterialTheme with only hardcoded
+        // colors — no theme-attribute resolution.
+        CompositionLocalProvider(LocalRippleTheme provides NoOpRippleTheme) {
+            MaterialTheme(
+                colorScheme = lightColorScheme(
+                    primary = SafeColors.primary,
+                    onPrimary = SafeColors.onPrimary,
+                    primaryContainer = SafeColors.primaryContainer,
+                    secondary = SafeColors.secondary,
+                    onSecondary = SafeColors.onPrimary,
+                    tertiary = SafeColors.tertiary,
+                    onTertiary = SafeColors.onPrimary,
+                    error = SafeColors.error,
+                    onError = SafeColors.onError,
+                    errorContainer = SafeColors.errorContainer,
+                    onErrorContainer = SafeColors.error,
+                    surface = SafeColors.surface,
+                    onSurface = SafeColors.onSurface,
+                    onSurfaceVariant = SafeColors.onSurfaceVariant,
+                    outline = SafeColors.outline,
+                    surfaceVariant = SafeColors.surfaceVariant
+                ),
+                typography = MaterialTheme.typography, // System fonts only — no custom types
+                content = content
+            )
+        }
     }
 
     /**
@@ -227,7 +268,7 @@ class FieldMindCrashActivity : ComponentActivity() {
         Card(
             shape = CuteCardDefaults.Shape,
             colors = CardDefaults.cardColors(containerColor = SafeColors.primaryContainer),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            elevation = zeroElevation,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -278,7 +319,7 @@ class FieldMindCrashActivity : ComponentActivity() {
         Card(
             shape = CuteCardDefaults.OptionShape,
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            elevation = zeroElevation,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -358,7 +399,7 @@ class FieldMindCrashActivity : ComponentActivity() {
         Card(
             shape = CuteCardDefaults.OptionShape,
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            elevation = zeroElevation,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
