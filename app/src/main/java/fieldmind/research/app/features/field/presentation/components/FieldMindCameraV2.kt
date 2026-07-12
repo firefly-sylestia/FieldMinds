@@ -45,11 +45,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -74,29 +75,34 @@ import kotlin.math.roundToInt
 
 
 // ══════════════════════════════════════════════════════════════════════
-//  FieldMind Camera V2 — Redesigned with glassmorphic controls,
-//  pro drawer, improved focus, species field mode
+//  FieldMind Camera V2 — Full-screen CameraX with glassmorphic UI
+//
+//  Z-layer stack (bottom → top):
+//    Layer 0  — Camera preview (AndroidView)
+//    Layer 1  — Overlays: grid, crop guide, focus ring, countdown
+//    Layer 2  — Glassmorphic top bar + bottom pill bar
+//    Layer 3  — Dim overlay (when panels/drawers are open)
+//    Layer 4  — Slide-up panels: SpeciesFieldPanel, ProControlsDrawer,
+//               Session post-capture dialog (multiCaptureMode only)
 // ══════════════════════════════════════════════════════════════════════
 
 private const val FLASH_OFF = ImageCapture.FLASH_MODE_OFF
 private const val FLASH_ON = ImageCapture.FLASH_MODE_ON
 private const val FLASH_AUTO = ImageCapture.FLASH_MODE_AUTO
 
+private const val FOCUS_RING_SIZE_DP = 56
+
 /**
- * Full-screen CameraX with redesigned controls:
+ * Full-screen camera with glassmorphic controls, tap-to-focus, pinch-zoom,
+ * pro drawer, species tagging, capture timer, grid overlay, and aspect-ratio crop guide.
  *
- * - **Glassmorphic pill bottom bar**: zoom strip, gallery thumbnail, capture button,
- *   flip camera, pro toggle — all in one floating pill
- * - **Pinch-to-zoom + strip slider** inside the pill
- * - **Tap-to-focus** with animated ring + AE/AF lock indicator
- * - **Slide-up pro drawer**: ISO, EV, WB, manual focus with large touch targets
- * - **Flash toggle** (Off/On/Auto)
- * - **Front/rear switch**
- * - **Grid overlay** (rule-of-thirds)
- * - **Capture timer** (3s/5s/10s)
- * - **Aspect ratio crop guide** (4:3 / 16:9 / 1:1)
- * - **Species field mode**: inline panel after capture with species autocomplete,
- *   category, confidence, notes — "Save" or " Save & Exit"
+ * @param onPhotoCaptured    called every time a photo is captured (uri, mimeType).
+ * @param onSpeciesCaptured  optional callback with species metadata.
+ * @param onAddToObservation optional "Add to Observation" action after capture.
+ * @param onAddQuestion      optional "Add Question" action after capture.
+ * @param onDismiss          called when the user closes the camera.
+ * @param multiCaptureMode   when true, shows a post-capture dialog after each photo
+ *                           (keep shooting / done) instead of the species field panel.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -114,6 +120,7 @@ fun FieldMindCameraV2(
     val cameraExecutor: ExecutorService = remember { Executors.newSingleThreadExecutor() }
     val scope = rememberCoroutineScope()
     val view = LocalView.current
+    val density = LocalDensity.current
 
     // ── Immersive mode ──
     DisposableEffect(view) {
@@ -158,7 +165,7 @@ fun FieldMindCameraV2(
     var maxZoom by remember { mutableFloatStateOf(1f) }
 
     // ── Focus ──
-    var focusPoint by remember { mutableStateOf<Offset?>(null) }
+    var focusPointPx by remember { mutableStateOf<Offset?>(null) }
     var focusRingVisible by remember { mutableStateOf(false) }
     var focusLocked by remember { mutableStateOf(false) }
     val focusRingAnim = rememberInfiniteTransition(label = "focusRing")
@@ -187,16 +194,15 @@ fun FieldMindCameraV2(
     var capturedUri by remember { mutableStateOf<String?>(null) }
     var capturedMime by remember { mutableStateOf<String?>(null) }
     var lastCaptureUri by remember { mutableStateOf<String?>(null) }
-    var showPostCapture by remember { mutableStateOf(false) }
 
-    // ── Species field mode ──
+    // ── Species field mode (default post-capture flow) ──
     var showSpeciesPanel by remember { mutableStateOf(false) }
     var speciesName by remember { mutableStateOf("") }
     var speciesCategory by remember { mutableStateOf("Other") }
     var speciesConfidence by remember { mutableIntStateOf(80) }
     var speciesNotes by remember { mutableStateOf("") }
 
-    // ── Session capture post-capture dialog ──
+    // ── Session capture post-capture dialog (multiCaptureMode only) ──
     var showCaptureDialog by remember { mutableStateOf(false) }
     var pendingCaptureUri by remember { mutableStateOf<String?>(null) }
     var pendingCaptureMime by remember { mutableStateOf<String?>(null) }
@@ -208,8 +214,7 @@ fun FieldMindCameraV2(
         hasCameraPermission = granted
         if (!granted) onDismiss()
     }
-    // Request permission only when camera is actually about to be used
-    LaunchedEffect(previewViewRef) { 
+    LaunchedEffect(previewViewRef) {
         if (previewViewRef != null && !hasCameraPermission) {
             permissionLauncher.launch(Manifest.permission.CAMERA)
         }
@@ -252,7 +257,7 @@ fun FieldMindCameraV2(
     LaunchedEffect(flashMode) { imageCapture?.flashMode = flashMode }
 
     // ── Capture function ──
-    val doCapture = remember(imageCapture, onPhotoCaptured) {
+    val doCapture = remember(imageCapture, multiCaptureMode) {
         {
             val capture = imageCapture ?: return@remember
             isCapturing = true
@@ -273,7 +278,6 @@ fun FieldMindCameraV2(
                             context.contentResolver.openOutputStream(uri)?.use { os -> photoFile.inputStream().use { it.copyTo(os) } }
                         }
                     }
-                    // Apply timestamp watermark
                     FieldMindWatermark.applyWatermark(context, photoFile.absolutePath)
                     isCapturing = false
                     val uri = photoFile.toURI().toString()
@@ -284,8 +288,8 @@ fun FieldMindCameraV2(
                         pendingCaptureUri = uri
                         pendingCaptureMime = "image/jpeg"
                         capturedCount++
-                        // Session mode: save directly without category dialog
                         onPhotoCaptured(uri, "image/jpeg")
+                        showCaptureDialog = true
                     } else {
                         showSpeciesPanel = true
                     }
@@ -300,8 +304,8 @@ fun FieldMindCameraV2(
                         pendingCaptureUri = uri
                         pendingCaptureMime = "image/jpeg"
                         capturedCount++
-                        // Session mode: save directly without category dialog
                         onPhotoCaptured(uri, "image/jpeg")
+                        showCaptureDialog = true
                     } else {
                         showSpeciesPanel = true
                     }
@@ -322,7 +326,9 @@ fun FieldMindCameraV2(
         }
     }
 
-    // ── Permission denied state ──
+    // ══════════════════════════════════════════════════════════════
+    //  Permission denied state
+    // ══════════════════════════════════════════════════════════════
     if (!hasCameraPermission) {
         Box(modifier.fillMaxSize().background(Color.Black), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -336,11 +342,11 @@ fun FieldMindCameraV2(
     }
 
     // ══════════════════════════════════════════════════════════════
-    //  Main camera layout
+    //  Main camera layout — Z-layered
     // ══════════════════════════════════════════════════════════════
     Box(modifier.fillMaxSize().background(Color.Black)) {
 
-        // ── Camera preview ──
+        // ━━━━━━━━━━━━━━━━━━━━━━━━  LAYER 0: Camera preview  ━━━━━━━━━━━━━━━━━━━━━━━━
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
@@ -360,7 +366,8 @@ fun FieldMindCameraV2(
                         val point = factory.createPoint(offset.x, offset.y)
                         val action = FocusMeteringAction.Builder(point).build()
                         camera?.cameraControl?.startFocusAndMetering(action)
-                        focusPoint = offset
+                        // Store PIXEL coordinates for the focus ring overlay
+                        focusPointPx = offset
                         focusRingVisible = true
                         focusLocked = false
                         scope.launch {
@@ -386,7 +393,9 @@ fun FieldMindCameraV2(
             update = { previewViewRef = it }
         )
 
-        // ── Grid overlay ──
+        // ━━━━━━━━━━━━━━━━━━━━━━━━  LAYER 1: Overlays  ━━━━━━━━━━━━━━━━━━━━━━━━
+
+        // Grid overlay (rule of thirds)
         if (showGrid) {
             Canvas(Modifier.fillMaxSize()) {
                 val w = size.width; val h = size.height
@@ -398,12 +407,12 @@ fun FieldMindCameraV2(
             }
         }
 
-        // ── Crop guide ──
+        // Crop guide overlay
         if (aspectLabel != "Full") {
             CropGuideOverlay(aspectRatio)
         }
 
-        // ── Countdown ──
+        // Countdown overlay
         if (isCountingDown && countdown > 0) {
             val countScale by rememberInfiniteTransition(label = "countScale").animateFloat(
                 0.8f, 1.2f,
@@ -419,19 +428,76 @@ fun FieldMindCameraV2(
             }
         }
 
-        // ── Top controls bar (glassmorphic) ──
-        Box(
-            Modifier
+        // Focus ring — positioned using PIXEL offsets (not dp!)
+        if (focusRingVisible && focusPointPx != null) {
+            val pt = focusPointPx!!
+            val ringRadiusPx = with(density) { (FOCUS_RING_SIZE_DP / 2).dp.toPx().roundToInt() }
+            Box(
+                Modifier
+                    .offset { IntOffset(pt.x.roundToInt() - ringRadiusPx, pt.y.roundToInt() - ringRadiusPx) }
+                    .size(FOCUS_RING_SIZE_DP.dp)
+                    .graphicsLayer {
+                        scaleX = focusRingScale
+                        scaleY = focusRingScale
+                        alpha = focusRingAlpha
+                    }
+                    .border(2.dp, if (focusLocked) Color(0xFF4CAF50) else Color.White, CircleShape)
+            ) {
+                if (focusLocked) {
+                    Box(
+                        Modifier
+                            .size(16.dp)
+                            .align(Alignment.Center)
+                            .background(Color(0xFF4CAF50).copy(alpha = 0.3f), CircleShape)
+                            .border(1.5f.dp, Color(0xFF4CAF50), CircleShape)
+                    )
+                }
+            }
+        }
+
+        // AE/AF lock indicator
+        if (focusLocked) {
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 60.dp),
+                shape = CuteCardDefaults.ChipShape,
+                color = Color(0xFF4CAF50).copy(alpha = 0.85f)
+            ) {
+                Row(
+                    Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text("🔒", style = MaterialTheme.typography.labelSmall)
+                    Text(
+                        "AE/AF LOCK",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        letterSpacing = 1.sp
+                    )
+                }
+            }
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━  LAYER 2: Glassmorphic bars  ━━━━━━━━━━━━━━━━━━━━━━━━
+
+        // Top controls bar — wrapped in Surface for proper glassmorphic clipping
+        Surface(
+            modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .safeDrawingPadding()
+                .cuteShadow(elevation = CuteElevations.plushTier2, shape = CuteCardDefaults.ShapeHero),
+            shape = CuteCardDefaults.ShapeHero,
+            color = Color.Black.copy(alpha = 0.35f),
+            shadowElevation = 0.dp
         ) {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .background(Color.Black.copy(alpha = 0.35f), CuteCardDefaults.ShapeHero)
-                    .cuteShadow(elevation = CuteElevations.plushTier2, shape = CuteCardDefaults.ShapeHero)
                     .padding(horizontal = 12.dp, vertical = 6.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -485,70 +551,149 @@ fun FieldMindCameraV2(
             }
         }
 
-        // ── Focus ring ──
-        focusPoint?.let { pt ->
-            if (focusRingVisible) {
-                Box(
-                    Modifier
-                        .offset(x = pt.x.dp - 24.dp, y = pt.y.dp - 24.dp)
-                        .size(48.dp)
-                        .graphicsLayer {
-                            scaleX = focusRingScale
-                            scaleY = focusRingScale
-                            alpha = focusRingAlpha
-                        }
-                        .border(2.dp, if (focusLocked) Color(0xFF4CAF50) else Color.White, CircleShape)
-                ) {
-                    if (focusLocked) {
-                        Box(
+        // Bottom pill bar — clean Surface, no broken Box wrapper
+        if (!showSpeciesPanel) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .safeDrawingPadding()
+                    .cuteShadow(elevation = CuteElevations.plushTier3, shape = CuteCardDefaults.DialogShape),
+                shape = CuteCardDefaults.DialogShape,
+                color = Color.Black.copy(alpha = 0.48f),
+                shadowElevation = 0.dp,
+                tonalElevation = 0.dp
+            ) {
+                Column(Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
+                    // Zoom strip inside the pill
+                    if (maxZoom > 1f) {
+                        Row(
                             Modifier
-                                .size(16.dp)
-                                .align(Alignment.Center)
-                                .background(Color(0xFF4CAF50).copy(alpha = 0.3f), CircleShape)
-                                .border(1.5f.dp, Color(0xFF4CAF50), CircleShape)
-                        )
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.dp, vertical = 2.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                "W",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.White.copy(alpha = 0.5f),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 10.sp
+                            )
+                            Slider(
+                                value = zoomRatio,
+                                onValueChange = {
+                                    zoomRatio = it
+                                    camera?.cameraControl?.setZoomRatio(it)
+                                },
+                                valueRange = 1f..maxZoom,
+                                modifier = Modifier.weight(1f).height(24.dp),
+                                colors = SliderDefaults.colors(
+                                    thumbColor = Color.White,
+                                    activeTrackColor = Color.White,
+                                    inactiveTrackColor = Color.White.copy(alpha = 0.25f)
+                                )
+                            )
+                            Text(
+                                "${zoomRatio.roundToInt()}x",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 11.sp,
+                                modifier = Modifier.width(28.dp),
+                                textAlign = TextAlign.End
+                            )
+                        }
+                    }
+
+                    // Bottom controls row
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Gallery thumbnail
+                        Box(
+                            Modifier.size(44.dp).clip(CuteCardDefaults.ShapeCompact)
+                                .background(Color.White.copy(alpha = 0.12f))
+                                .clickable { showInAppGallery = true },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (lastCaptureUri != null) {
+                                AsyncImage(
+                                    model = lastCaptureUri,
+                                    contentDescription = "Last photo",
+                                    modifier = Modifier.fillMaxSize().clip(CuteCardDefaults.ShapeCompact),
+                                    contentScale = ContentScale.Crop
+                                )
+                            } else {
+                                Icon(
+                                    MaterialSymbolIcon("photo_library"),
+                                    null,
+                                    tint = Color.White.copy(alpha = 0.5f),
+                                    size = 20.dp
+                                )
+                            }
+                        }
+
+                        // Capture button
+                        Box(
+                            Modifier.size(72.dp).clip(CircleShape)
+                                .background(Color.White.copy(alpha = 0.9f))
+                                .clickable(enabled = !isCapturing && !isCountingDown) {
+                                    if (timerSeconds > 0) {
+                                        countdown = timerSeconds
+                                        isCountingDown = true
+                                    } else {
+                                        doCapture()
+                                    }
+                                }
+                                .padding(5.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Box(
+                                Modifier.fillMaxSize().clip(CircleShape)
+                                    .background(if (isCapturing) Color.Gray else Color.White)
+                            )
+                        }
+
+                        // Right side: flip + pro toggle
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            PillIconButton(
+                                icon = FieldMindIcons.FlipCamera,
+                                onClick = {
+                                    lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK)
+                                        CameraSelector.LENS_FACING_FRONT
+                                    else
+                                        CameraSelector.LENS_FACING_BACK
+                                }
+                            )
+                            PillIconButton(
+                                label = "P",
+                                active = showProDrawer,
+                                onClick = { showProDrawer = !showProDrawer }
+                            )
+                        }
                     }
                 }
             }
         }
 
-        // ── AE/AF lock indicator ──
-        if (focusLocked) {
-            Surface(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 60.dp),
-                shape = MaterialTheme.shapes.medium,
-                color = Color(0xFF4CAF50).copy(alpha = 0.85f)
-            ) {
-                Row(
-                    Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Text("🔒", style = MaterialTheme.typography.labelSmall)
-                    Text(
-                        "AE/AF LOCK",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        letterSpacing = 1.sp
-                    )
-                }
-            }
-        }
-
-        // ── Dim overlay when species panel or pro drawer is open ──
-        if (showSpeciesPanel) {
+        // ━━━━━━━━━━━━━━━━━━━━━━━━  LAYER 3: Dim overlay  ━━━━━━━━━━━━━━━━━━━━━━━━
+        if (showSpeciesPanel || showProDrawer) {
             Box(
                 Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.5f))
-                    .clickable(enabled = false) {} // block touches behind panel
+                    .clickable(enabled = false) {} // block touches behind overlay
             )
         }
 
-        // ── Species field panel (slides up) ──
+        // ━━━━━━━━━━━━━━━━━━━━━━━━  LAYER 4: Slide-up panels  ━━━━━━━━━━━━━━━━━━━━━━━━
+
+        // Species field panel (default post-capture flow)
         AnimatedVisibility(
             visible = showSpeciesPanel,
             enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(300, easing = FastOutSlowInEasing)) + fadeIn(tween(200)),
@@ -567,11 +712,8 @@ fun FieldMindCameraV2(
                 onSaveContinue = {
                     val uri = capturedUri ?: return@SpeciesFieldPanel
                     val mime = capturedMime ?: "image/jpeg"
-                    // Always call onPhotoCaptured first so all callers get the photo
                     onPhotoCaptured(uri, mime)
-                    // Also call onSpeciesCaptured for callers that want metadata (defaults to no-op)
                     onSpeciesCaptured(uri, mime, speciesName, speciesCategory, speciesConfidence.toString(), speciesNotes)
-                    // Reset for next capture
                     speciesName = ""
                     speciesCategory = "Other"
                     speciesConfidence = 80
@@ -581,449 +723,60 @@ fun FieldMindCameraV2(
                 onSaveExit = {
                     val uri = capturedUri ?: return@SpeciesFieldPanel
                     val mime = capturedMime ?: "image/jpeg"
-                    // Always call onPhotoCaptured first so all callers get the photo
                     onPhotoCaptured(uri, mime)
-                    // Also call onSpeciesCaptured for callers that want metadata (defaults to no-op)
                     onSpeciesCaptured(uri, mime, speciesName, speciesCategory, speciesConfidence.toString(), speciesNotes)
                     showSpeciesPanel = false
                     onDismiss()
                 },
                 onDismissPanel = {
-                    // Just save without species data
-                    capturedUri?.let { uri ->
-                        onPhotoCaptured(uri, capturedMime ?: "image/jpeg")
-                    }
+                    capturedUri?.let { uri -> onPhotoCaptured(uri, capturedMime ?: "image/jpeg") }
                     showSpeciesPanel = false
                 }
             )
         }
 
-        // ── Session post-capture dialog (redesigned with categories) ──
+        // Session post-capture dialog (multiCaptureMode only)
         if (showCaptureDialog && multiCaptureMode) {
-            // Post-capture category/confidence state
-            var postCategory by remember { mutableStateOf("Other") }
-            var postConfidence by remember { mutableIntStateOf(80) }
-            var postNotes by remember { mutableStateOf("") }
-            var postSpeciesName by remember { mutableStateOf("") }
-
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.55f))
-                    .clickable(enabled = false) {},
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .cuteShadow(elevation = CuteElevations.plushTier4, shape = CuteCardDefaults.ShapeHero),
-                    shape = CuteCardDefaults.ShapeHero,
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.98f)
-                ) {
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        // ── Header with thumbnail + count ──
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(14.dp)
-                        ) {
-                            // Photo thumbnail
-                            if (pendingCaptureUri != null) {
-                                Box(
-                                    Modifier
-                                        .size(64.dp)
-                                        .clip(CuteCardDefaults.ButtonShape)
-                                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                                ) {
-                                    AsyncImage(
-                                        model = pendingCaptureUri,
-                                        contentDescription = "Last capture",
-                                        modifier = Modifier.fillMaxSize().clip(CuteCardDefaults.ButtonShape),
-                                        contentScale = ContentScale.Crop
-                                    )
-                                }
-                            }
-                            Column(Modifier.weight(1f)) {
-                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Text(
-                                        "Photo $capturedCount",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Surface(
-                                        shape = RoundedCornerShape(99.dp),
-                                        color = MaterialTheme.colorScheme.primaryContainer
-                                    ) {
-                                        Text(
-                                            "#$capturedCount",
-                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                                            style = MaterialTheme.typography.labelSmall,
-                                            fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.onPrimaryContainer
-                                        )
-                                    }
-                                }
-                                Text(
-                                    "Captured at ${SimpleDateFormat("HH:mm", Locale.US).format(Date())}",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            // Close button (save photo without metadata, then close dialog)
-                            IconButton(onClick = {
-                                val uri = pendingCaptureUri
-                                val mime = pendingCaptureMime
-                                if (uri != null) {
-                                    onPhotoCaptured(uri, mime ?: "image/jpeg")
-                                }
-                                pendingCaptureUri = null
-                                pendingCaptureMime = null
-                                showCaptureDialog = false
-                            }, modifier = Modifier.size(36.dp)) {
-                                Icon(FieldMindIcons.Close, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
-                            }
-                        }
-
-                        // ── Species name field ──
-                        OutlinedTextField(
-                            value = postSpeciesName,
-                            onValueChange = { postSpeciesName = it },
-                            label = { Text("Species name (optional)") },
-                            placeholder = { Text("e.g. Red-tailed Hawk") },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = CuteCardDefaults.ShapeCompact
-                        )
-
-                        // ── Category chips (2 rows) ──
-                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(
-                                "Category",
-                                style = MaterialTheme.typography.labelMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(start = 4.dp)
-                            )
-                            val captureCategories = listOf(
-                                "Bird", "Mammal", "Insect", "Plant", "Fungi",
-                                "Reptile", "Amphibian", "Fish", "Mollusk", "Habitat", "Other"
-                            )
-                            FlowRow(
-                                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                                verticalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                captureCategories.forEach { cat ->
-                                    val selected = postCategory == cat
-                                    Surface(
-                                        onClick = { postCategory = cat },
-                                        shape = MaterialTheme.shapes.medium,
-                                        color = if (selected) MaterialTheme.colorScheme.primary
-                                        else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                        border = if (!selected) androidx.compose.foundation.BorderStroke(
-                                            1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
-                                        ) else null,
-                                        tonalElevation = 0.dp
-                                    ) {
-                                        Row(
-                                            Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                        ) {
-                                            if (selected) {
-                                                Icon(
-                                                    FieldMindIcons.Check, null,
-                                                    tint = MaterialTheme.colorScheme.onPrimary,
-                                                    size = 14.dp
-                                                )
-                                            }
-                                            Text(
-                                                cat,
-                                                style = MaterialTheme.typography.labelSmall,
-                                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                                                color = if (selected) MaterialTheme.colorScheme.onPrimary
-                                                else MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // ── Confidence slider ──
-                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    "Confidence",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.padding(start = 4.dp)
-                                )
-                                Text(
-                                    "${postConfidence}%",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            }
-                            Slider(
-                                value = postConfidence.toFloat(),
-                                onValueChange = { postConfidence = it.roundToInt() },
-                                valueRange = 50f..99f,
-                                steps = 4,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text("50%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
-                                Text("99%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
-                            }
-                        }
-
-                        // ── Notes field ──
-                        OutlinedTextField(
-                            value = postNotes,
-                            onValueChange = { postNotes = it },
-                            label = { Text("Quick notes (optional)") },
-                            placeholder = { Text("Behavior, location details, etc.") },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = CuteCardDefaults.ShapeCompact
-                        )
-
-                        // ── Action buttons ──
-                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            // Keep Shooting — saves photo (via onPhotoCaptured) + optional metadata (via onSpeciesCaptured), stays in camera
-                            OutlinedButton(
-                                onClick = {
-                                    val uri = pendingCaptureUri
-                                    val mime = pendingCaptureMime
-                                    if (uri != null) {
-                                        // ALWAYS call onPhotoCaptured so all callers get the photo
-                                        onPhotoCaptured(uri, mime ?: "image/jpeg")
-                                        // Also call onSpeciesCaptured for callers that want metadata (defaults to no-op)
-                                        onSpeciesCaptured(
-                                            uri, mime ?: "image/jpeg",
-                                            postSpeciesName, postCategory, postConfidence.toString(), postNotes
-                                        )
-                                    }
-                                    // Reset dialog for next capture
-                                    pendingCaptureUri = null
-                                    pendingCaptureMime = null
-                                    postSpeciesName = ""
-                                    postCategory = "Other"
-                                    postConfidence = 80
-                                    postNotes = ""
-                                    showCaptureDialog = false
-                                },
-                                modifier = Modifier.weight(1f),
-                                shape = CuteCardDefaults.ShapeCompact,
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.primary
-                                )
-                            ) {
-                                Icon(FieldMindIcons.Camera, null, size = 18.dp)
-                                Spacer(Modifier.size(6.dp))
-                                Text("Keep shooting", maxLines = 1)
-                            }
-
-                            // Done — saves photo, closes camera
-                            Button(
-                                onClick = {
-                                    val uri = pendingCaptureUri
-                                    val mime = pendingCaptureMime
-                                    if (uri != null) {
-                                        // ALWAYS call onPhotoCaptured so all callers get the photo
-                                        onPhotoCaptured(uri, mime ?: "image/jpeg")
-                                        // Also call onSpeciesCaptured for callers that want metadata (defaults to no-op)
-                                        onSpeciesCaptured(
-                                            uri, mime ?: "image/jpeg",
-                                            postSpeciesName, postCategory, postConfidence.toString(), postNotes
-                                        )
-                                    }
-                                    pendingCaptureUri = null
-                                    pendingCaptureMime = null
-                                    showCaptureDialog = false
-                                    onDismiss()
-                                },
-                                modifier = Modifier.weight(1f),
-                                shape = CuteCardDefaults.ShapeCompact
-                            ) {
-                                Icon(FieldMindIcons.Archive, null, size = 18.dp)
-                                Spacer(Modifier.size(6.dp))
-                                Text("Done", maxLines = 1)
-                            }
-                        }
+            SessionPostCaptureDialog(
+                pendingCaptureUri = pendingCaptureUri,
+                pendingCaptureMime = pendingCaptureMime,
+                capturedCount = capturedCount,
+                onPhotoCaptured = onPhotoCaptured,
+                onSpeciesCaptured = onSpeciesCaptured,
+                onKeepShooting = {
+                    pendingCaptureUri = null
+                    pendingCaptureMime = null
+                    showCaptureDialog = false
+                },
+                onDone = {
+                    pendingCaptureUri = null
+                    pendingCaptureMime = null
+                    showCaptureDialog = false
+                    onDismiss()
+                },
+                onDismissDialog = {
+                    pendingCaptureUri?.let { uri ->
+                        onPhotoCaptured(uri, pendingCaptureMime ?: "image/jpeg")
                     }
+                    pendingCaptureUri = null
+                    pendingCaptureMime = null
+                    showCaptureDialog = false
                 }
-            }
+            )
         }
 
-        // ── Pro controls drawer ──
-        Box(Modifier.fillMaxSize()) { 
-            AnimatedVisibility(
-                visible = showProDrawer && !showSpeciesPanel,
-                enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(280, easing = FastOutSlowInEasing)) + fadeIn(tween(200)),
-                exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(220)) + fadeOut(tween(150))
-            ) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-                    ProControlsDrawer(
-                        camera = camera,
-                        maxZoom = maxZoom,
-                        onClose = { showProDrawer = false }
-                    )
-                }
-            }
-        }
-
-        // ── Glassmorphic pill bottom bar ──
-        if (!showSpeciesPanel) {
-            Box(
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .safeDrawingPadding()
-            ) {
-            Surface(
-                modifier = Modifier.fillMaxWidth()
-                    .cuteShadow(elevation = CuteElevations.plushTier3, shape = CuteCardDefaults.DialogShape),
-                shape = CuteCardDefaults.DialogShape,
-                color = Color.Black.copy(alpha = 0.48f),
-                shadowElevation = 0.dp,
-                tonalElevation = CuteElevations.plushTier3,
-                ) {
-                    Column(Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
-                        // ── Zoom strip (inside the pill) ──
-                        if (maxZoom > 1f) {
-                            Row(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 4.dp, vertical = 2.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Text(
-                                    "W",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = Color.White.copy(alpha = 0.5f),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 10.sp
-                                )
-                                Slider(
-                                    value = zoomRatio,
-                                    onValueChange = {
-                                        zoomRatio = it
-                                        camera?.cameraControl?.setZoomRatio(it)
-                                    },
-                                    valueRange = 1f..maxZoom,
-                                    modifier = Modifier.weight(1f).height(24.dp),
-                                    colors = SliderDefaults.colors(
-                                        thumbColor = Color.White,
-                                        activeTrackColor = Color.White,
-                                        inactiveTrackColor = Color.White.copy(alpha = 0.25f)
-                                    )
-                                )
-                                Text(
-                                    "${zoomRatio.roundToInt()}x",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 11.sp,
-                                    modifier = Modifier.width(28.dp),
-                                    textAlign = TextAlign.End
-                                )
-                            }
-                        }
-
-                        // ── Bottom controls row ──
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Gallery thumbnail (in-app FieldMind gallery)
-                            Box(
-                                Modifier.size(44.dp).clip(MaterialTheme.shapes.medium)
-                                    .background(Color.White.copy(alpha = 0.12f))
-                                    .clickable { showInAppGallery = true },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                if (lastCaptureUri != null) {
-                                    AsyncImage(
-                                        model = lastCaptureUri,
-                                        contentDescription = "Last photo",
-                                        modifier = Modifier.fillMaxSize().clip(MaterialTheme.shapes.medium),
-                                        contentScale = ContentScale.Crop
-                                    )
-                                } else {
-                                    Icon(
-                                        MaterialSymbolIcon("photo_library"),
-                                        null,
-                                        tint = Color.White.copy(alpha = 0.5f),
-                                        size = 20.dp
-                                    )
-                                }
-                            }
-
-                            // Capture button
-                            Box(
-                                Modifier.size(72.dp).clip(CircleShape)
-                                    .background(Color.White.copy(alpha = 0.9f))
-                                    .clickable(enabled = !isCapturing && !isCountingDown) {
-                                        if (timerSeconds > 0) {
-                                            countdown = timerSeconds
-                                            isCountingDown = true
-                                        } else {
-                                            doCapture()
-                                        }
-                                    }
-                                    .padding(5.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Box(
-                                    Modifier.fillMaxSize().clip(CircleShape)
-                                        .background(if (isCapturing) Color.Gray else Color.White)
-                                )
-                            }
-
-                            // Right side: flip + pro toggle
-                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                                // Flip camera
-                                PillIconButton(
-                                    icon = FieldMindIcons.FlipCamera,
-                                    onClick = {
-                                        lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK)
-                                            CameraSelector.LENS_FACING_FRONT
-                                        else
-                                            CameraSelector.LENS_FACING_BACK
-                                    }
-                                )
-                                // Pro toggle
-                                PillIconButton(
-                                    label = "P",
-                                    active = showProDrawer,
-                                    onClick = { showProDrawer = !showProDrawer }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+        // Pro controls drawer
+        AnimatedVisibility(
+            visible = showProDrawer && !showSpeciesPanel,
+            enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(280, easing = FastOutSlowInEasing)) + fadeIn(tween(200)),
+            exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(220)) + fadeOut(tween(150)),
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            ProControlsDrawer(
+                camera = camera,
+                maxZoom = maxZoom,
+                onClose = { showProDrawer = false }
+            )
         }
 
         // ── Capturing indicator ──
@@ -1055,9 +808,7 @@ fun FieldMindCameraV2(
 //  Sub-components
 // ══════════════════════════════════════════════════════════════════════
 
-/**
- * Small icon button for the top controls bar.
- */
+/** Small icon button for the top controls bar. */
 @Composable
 private fun CameraTopIcon(
     icon: MaterialSymbolIcon? = null,
@@ -1079,9 +830,7 @@ private fun CameraTopIcon(
     }
 }
 
-/**
- * Icon button for the glassmorphic pill bottom bar.
- */
+/** Icon button for the glassmorphic pill bottom bar. */
 @Composable
 private fun PillIconButton(
     icon: MaterialSymbolIcon? = null,
@@ -1103,11 +852,10 @@ private fun PillIconButton(
     }
 }
 
-/**
- * Species field mode inline panel — slides up after capture.
- * Lets the user tag the photo with species details and optionally continue shooting.
- * Redesigned with polished visual hierarchy, Material icons, and color-coded categories.
- */
+// ══════════════════════════════════════════════════════════════════════
+//  Species field panel — slides up after capture for tagging
+// ══════════════════════════════════════════════════════════════════════
+
 @Composable
 private fun SpeciesFieldPanel(
     capturedUri: String?,
@@ -1133,11 +881,11 @@ private fun SpeciesFieldPanel(
         80 to "Plausible", 90 to "Confident", 95 to "Very confident", 99 to "Certain"
     )
     val categoryIcons = mapOf(
-        "Bird" to MaterialSymbolIcon("raven"),
+        "Bird" to MaterialSymbolIcon("flight"),
         "Mammal" to MaterialSymbolIcon("pets"),
         "Insect" to MaterialSymbolIcon("bug_report"),
         "Plant" to MaterialSymbolIcon("local_florist"),
-        "Fungi" to MaterialSymbolIcon("psychiatry"),
+        "Fungi" to MaterialSymbolIcon("psychology"),
         "Reptile" to MaterialSymbolIcon("pets"),
         "Amphibian" to MaterialSymbolIcon("pets"),
         "Fish" to MaterialSymbolIcon("water_drop"),
@@ -1168,69 +916,37 @@ private fun SpeciesFieldPanel(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Photo thumbnail with decorative ring
                     Box(
                         Modifier.size(72.dp)
                             .clip(CuteCardDefaults.Shape)
                             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                            .border(
-                                2.dp,
-                                colors.observation.copy(alpha = 0.3f),
-                                CuteCardDefaults.Shape
-                            )
+                            .border(2.dp, colors.observation.copy(alpha = 0.3f), CuteCardDefaults.Shape)
                     ) {
                         if (capturedUri != null) {
                             AsyncImage(
                                 model = capturedUri,
                                 contentDescription = "Captured photo",
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(CuteCardDefaults.OptionShape),
+                                modifier = Modifier.fillMaxSize().clip(CuteCardDefaults.OptionShape),
                                 contentScale = ContentScale.Crop
                             )
                         } else {
-                            Box(
-                                Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    FieldMindIcons.Camera,
-                                    null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                                    size = 28.dp
-                                )
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Icon(FieldMindIcons.Camera, null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 28.dp)
                             }
                         }
                     }
                     Column(Modifier.weight(1f)) {
-                        Text(
-                            "Tag species",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                        Text(
-                            "Add details and keep shooting",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        Text("Tag species", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)
+                        Text("Add details and keep shooting", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                    // Dismiss button
                     Surface(
                         onClick = onDismissPanel,
                         shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         tonalElevation = 0.dp
                     ) {
-                        Box(
-                            Modifier.size(40.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                FieldMindIcons.Close,
-                                "Dismiss",
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                size = 20.dp
-                            )
+                        Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                            Icon(FieldMindIcons.Close, "Dismiss", tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
                         }
                     }
                 }
@@ -1244,35 +960,15 @@ private fun SpeciesFieldPanel(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     shape = CuteCardDefaults.FieldShape,
-                    leadingIcon = {
-                        Icon(
-                            FieldMindIcons.Search,
-                            null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            size = 20.dp
-                        )
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = colors.observation,
-                        cursorColor = colors.observation
-                    )
+                    leadingIcon = { Icon(FieldMindIcons.Search, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp) },
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = colors.observation, cursorColor = colors.observation)
                 )
 
                 // ── Category chips with icons ──
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        "Category",
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(start = 2.dp)
-                    )
-                    // Categories in flow layout
+                    Text("Category", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 2.dp))
                     @OptIn(ExperimentalLayoutApi::class)
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         categories.forEach { cat ->
                             val isSelected = speciesCategory == cat
                             val accentColor = when (cat) {
@@ -1290,31 +986,13 @@ private fun SpeciesFieldPanel(
                             Surface(
                                 onClick = { onSpeciesCategoryChange(cat) },
                                 shape = CuteCardDefaults.ButtonShape,
-                                color = if (isSelected) accentColor.copy(alpha = 0.14f)
-                                else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accentColor)
-                                else androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                                color = if (isSelected) accentColor.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accentColor) else androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
                                 tonalElevation = 0.dp
                             ) {
-                                Row(
-                                    Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                                ) {
-                                    Icon(
-                                        categoryIcons[cat] ?: MaterialSymbolIcon("category"),
-                                        null,
-                                        tint = if (isSelected) accentColor
-                                        else MaterialTheme.colorScheme.onSurfaceVariant,
-                                        size = 16.dp
-                                    )
-                                    Text(
-                                        cat,
-                                        style = MaterialTheme.typography.labelMedium,
-                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                        color = if (isSelected) accentColor
-                                        else MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
+                                Row(Modifier.padding(horizontal = 14.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    Icon(categoryIcons[cat] ?: MaterialSymbolIcon("category"), null, tint = if (isSelected) accentColor else MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                                    Text(cat, style = MaterialTheme.typography.labelMedium, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium, color = if (isSelected) accentColor else MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
                             }
                         }
@@ -1323,85 +1001,27 @@ private fun SpeciesFieldPanel(
 
                 // ── Confidence section ──
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                "Confidence",
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Text(
-                                confidenceLabels[speciesConfidence] ?: "Moderate",
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.SemiBold,
-                                color = colors.observation
-                            )
-                            Text(
-                                "$speciesConfidence%",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                        Text("Confidence", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text(confidenceLabels[speciesConfidence] ?: "Moderate", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, color = colors.observation)
+                            Text("$speciesConfidence%", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
                         }
                     }
-                    // Confidence bubbly slider
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         confidenceValues.forEach { value ->
                             val isSelected = speciesConfidence == value
-                            val selectable = abs(speciesConfidence - value) <= 10 || isSelected
-                            val alpha = when {
-                                isSelected -> 1f
-                                abs(speciesConfidence - value) <= 10 -> 0.6f
-                                else -> 0.3f
-                            }
                             Surface(
                                 onClick = { onSpeciesConfidenceChange(value) },
-                                shape = MaterialTheme.shapes.medium,
-                                color = if (isSelected) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.surfaceContainerHigh,                                 border = if (!isSelected) androidx.compose.foundation.BorderStroke(
-                                     1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
-                                ) else null,
+                                shape = CuteCardDefaults.ChipShape,
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                border = if (!isSelected) androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)) else null,
                                 tonalElevation = 0.dp,
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Column(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 8.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(2.dp)
-                                ) {
-                                    Text(
-                                        "$value",
-                                        style = MaterialTheme.typography.labelMedium,
-                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                        color = if (isSelected) MaterialTheme.colorScheme.onPrimary
-                                        else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha),
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        "%",
-                                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-                                        color = if (isSelected) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
-                                        else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha * 0.6f),
-                                        textAlign = TextAlign.Center
-                                    )
+                                Column(Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                    Text("$value", style = MaterialTheme.typography.labelMedium, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium, color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                                    Text("%", style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = if (isSelected) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), textAlign = TextAlign.Center)
                                 }
                             }
                         }
@@ -1414,37 +1034,22 @@ private fun SpeciesFieldPanel(
                     onValueChange = onSpeciesNotesChange,
                     label = { Text("Notes (optional)") },
                     placeholder = { Text("Behavior, habitat, field marks…") },
-                    minLines = 1,
-                    maxLines = 2,
+                    minLines = 1, maxLines = 2,
                     modifier = Modifier.fillMaxWidth(),
                     shape = CuteCardDefaults.FieldShape,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = colors.observation,
-                        cursorColor = colors.observation
-                    )
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = colors.observation, cursorColor = colors.observation)
                 )
 
                 // ── Action buttons ──
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
-                )
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     OutlinedButton(
                         onClick = onSaveExit,
                         modifier = Modifier.weight(1f),
                         shape = CuteCardDefaults.FieldShape,
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurfaceVariant)
                     ) {
-                        Icon(
-                            FieldMindIcons.Archive,
-                            null,
-                            size = 18.dp
-                        )
+                        Icon(FieldMindIcons.Archive, null, size = 18.dp)
                         Spacer(Modifier.size(6.dp))
                         Text("Save & Exit", maxLines = 1)
                     }
@@ -1452,15 +1057,9 @@ private fun SpeciesFieldPanel(
                         onClick = onSaveContinue,
                         modifier = Modifier.weight(1f),
                         shape = CuteCardDefaults.FieldShape,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colors.observation
-                        )
+                        colors = ButtonDefaults.buttonColors(containerColor = colors.observation)
                     ) {
-                        Icon(
-                            FieldMindIcons.Camera,
-                            null,
-                            size = 18.dp
-                        )
+                        Icon(FieldMindIcons.Camera, null, size = 18.dp)
                         Spacer(Modifier.size(6.dp))
                         Text("Add More", maxLines = 1)
                     }
@@ -1470,16 +1069,178 @@ private fun SpeciesFieldPanel(
     }
 }
 
+// ══════════════════════════════════════════════════════════════════════
+//  Session post-capture dialog (multiCaptureMode only)
+// ══════════════════════════════════════════════════════════════════════
 
-/**
- * Slide-up pro controls drawer with ISO, EV, WB, and manual focus.
- */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun SessionPostCaptureDialog(
+    pendingCaptureUri: String?,
+    pendingCaptureMime: String?,
+    capturedCount: Int,
+    onPhotoCaptured: (String, String) -> Unit,
+    onSpeciesCaptured: (String, String, String, String, String, String) -> Unit,
+    onKeepShooting: () -> Unit,
+    onDone: () -> Unit,
+    onDismissDialog: () -> Unit
+) {
+    var postSpeciesName by remember { mutableStateOf("") }
+    var postCategory by remember { mutableStateOf("Other") }
+    var postConfidence by remember { mutableIntStateOf(80) }
+    var postNotes by remember { mutableStateOf("") }
+
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.55f))
+            .clickable(enabled = false) {},
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .cuteShadow(elevation = CuteElevations.plushTier4, shape = CuteCardDefaults.ShapeHero),
+            shape = CuteCardDefaults.ShapeHero,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.98f)
+        ) {
+            Column(
+                Modifier.fillMaxWidth().padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Header with thumbnail + count
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                    if (pendingCaptureUri != null) {
+                        Box(Modifier.size(64.dp).clip(CuteCardDefaults.ButtonShape).background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
+                            AsyncImage(model = pendingCaptureUri, contentDescription = "Last capture", modifier = Modifier.fillMaxSize().clip(CuteCardDefaults.ButtonShape), contentScale = ContentScale.Crop)
+                        }
+                    }
+                    Column(Modifier.weight(1f)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("Photo $capturedCount", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            Surface(shape = RoundedCornerShape(99.dp), color = MaterialTheme.colorScheme.primaryContainer) {
+                                Text("#$capturedCount", modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                            }
+                        }
+                        Text("Captured at ${SimpleDateFormat("HH:mm", Locale.US).format(Date())}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    IconButton(onClick = onDismissDialog, modifier = Modifier.size(36.dp)) {
+                        Icon(FieldMindIcons.Close, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
+                    }
+                }
+
+                // Species name
+                OutlinedTextField(
+                    value = postSpeciesName,
+                    onValueChange = { postSpeciesName = it },
+                    label = { Text("Species name (optional)") },
+                    placeholder = { Text("e.g. Red-tailed Hawk") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = CuteCardDefaults.FieldShape
+                )
+
+                // Category chips
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("Category", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 4.dp))
+                    val captureCategories = listOf("Bird", "Mammal", "Insect", "Plant", "Fungi", "Reptile", "Amphibian", "Fish", "Mollusk", "Habitat", "Other")
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        captureCategories.forEach { cat ->
+                            val selected = postCategory == cat
+                            Surface(
+                                onClick = { postCategory = cat },
+                                shape = CuteCardDefaults.ChipShape,
+                                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
+                                border = if (!selected) androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)) else null,
+                                tonalElevation = 0.dp
+                            ) {
+                                Row(Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    if (selected) Icon(FieldMindIcons.Check, null, tint = MaterialTheme.colorScheme.onPrimary, size = 14.dp)
+                                    Text(cat, style = MaterialTheme.typography.labelSmall, fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium, color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Confidence slider
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text("Confidence", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 4.dp))
+                        Text("${postConfidence}%", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                    }
+                    Slider(value = postConfidence.toFloat(), onValueChange = { postConfidence = it.roundToInt() }, valueRange = 50f..99f, steps = 4, modifier = Modifier.fillMaxWidth())
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text("50%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                        Text("99%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                    }
+                }
+
+                // Notes
+                OutlinedTextField(
+                    value = postNotes,
+                    onValueChange = { postNotes = it },
+                    label = { Text("Quick notes (optional)") },
+                    placeholder = { Text("Behavior, location details, etc.") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = CuteCardDefaults.FieldShape
+                )
+
+                // Action buttons
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    OutlinedButton(
+                        onClick = {
+                            val uri = pendingCaptureUri
+                            val mime = pendingCaptureMime
+                            if (uri != null) {
+                                onPhotoCaptured(uri, mime ?: "image/jpeg")
+                                onSpeciesCaptured(uri, mime ?: "image/jpeg", postSpeciesName, postCategory, postConfidence.toString(), postNotes)
+                            }
+                            onKeepShooting()
+                        },
+                        modifier = Modifier.weight(1f),
+                        shape = CuteCardDefaults.ShapeCompact,
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                    ) {
+                        Icon(FieldMindIcons.Camera, null, size = 18.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Keep shooting", maxLines = 1)
+                    }
+                    Button(
+                        onClick = {
+                            val uri = pendingCaptureUri
+                            val mime = pendingCaptureMime
+                            if (uri != null) {
+                                onPhotoCaptured(uri, mime ?: "image/jpeg")
+                                onSpeciesCaptured(uri, mime ?: "image/jpeg", postSpeciesName, postCategory, postConfidence.toString(), postNotes)
+                            }
+                            onDone()
+                        },
+                        modifier = Modifier.weight(1f),
+                        shape = CuteCardDefaults.ShapeCompact
+                    ) {
+                        Icon(FieldMindIcons.Archive, null, size = 18.dp)
+                        Spacer(Modifier.size(6.dp))
+                        Text("Done", maxLines = 1)
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Pro controls drawer — ISO, EV, WB, manual focus
+// ══════════════════════════════════════════════════════════════════════
+
 @Composable
 private fun ProControlsDrawer(
     camera: Camera?,
     maxZoom: Float,
-    onClose: () -> Unit,
-    modifier: Modifier = Modifier
+    onClose: () -> Unit
 ) {
     var evValue by remember { mutableFloatStateOf(0f) }
     var isoMode by remember { mutableIntStateOf(0) }
@@ -1490,7 +1251,7 @@ private fun ProControlsDrawer(
     val wbLabels = listOf("Auto", "☀️Sun", "☁️Cloud", "💡Tung", "🏠Fluor")
 
     Surface(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .safeDrawingPadding(),
@@ -1498,27 +1259,11 @@ private fun ProControlsDrawer(
         color = Color.Black.copy(alpha = 0.82f),
         shadowElevation = 16.dp
     ) {
-        Column(
-            Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
+        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             // Header
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    "Pro Controls",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-                Surface(
-                    onClick = onClose,
-                    shape = MaterialTheme.shapes.medium,
-                    color = Color.White.copy(alpha = 0.12f)
-                ) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text("Pro Controls", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = Color.White)
+                Surface(onClick = onClose, shape = CuteCardDefaults.ChipShape, color = Color.White.copy(alpha = 0.12f)) {
                     Box(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
                         Text("Done", color = Color(0xFFFFCC80), fontWeight = FontWeight.Bold)
                     }
@@ -1526,65 +1271,36 @@ private fun ProControlsDrawer(
             }
 
             // EV compensation
-            ProControlRow(
-                label = "EV",
-                value = "${evValue.toInt()}${if (evValue > 0) "+" else ""}",
-                accent = evValue != 0f
-            ) {
+            ProControlRow(label = "EV", value = "${evValue.toInt()}${if (evValue > 0) "+" else ""}", accent = evValue != 0f) {
                 Slider(
                     value = evValue,
                     onValueChange = {
                         evValue = it.roundToInt().toFloat()
                         camera?.cameraInfo?.exposureState?.let { state ->
-                            val idx = it.toInt().coerceIn(
-                                state.exposureCompensationRange.lower,
-                                state.exposureCompensationRange.upper
-                            )
+                            val idx = it.toInt().coerceIn(state.exposureCompensationRange.lower, state.exposureCompensationRange.upper)
                             camera.cameraControl?.setExposureCompensationIndex(idx)
                         }
                     },
                     valueRange = -2f..2f,
                     modifier = Modifier.weight(1f),
-                    colors = SliderDefaults.colors(
-                        thumbColor = Color.White,
-                        activeTrackColor = Color(0xFFFFCC80),
-                        inactiveTrackColor = Color.White.copy(alpha = 0.2f)
-                    )
+                    colors = SliderDefaults.colors(thumbColor = Color.White, activeTrackColor = Color(0xFFFFCC80), inactiveTrackColor = Color.White.copy(alpha = 0.2f))
                 )
             }
 
             // ISO selector
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    "ISO",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White.copy(alpha = 0.6f)
-                )
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
+                Text("ISO", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = Color.White.copy(alpha = 0.6f))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     isoLabels.forEachIndexed { i, label ->
                         val selected = isoMode == i
                         Surface(
                             onClick = { isoMode = i },
                             shape = CuteCardDefaults.ButtonShape,
-                            color = if (selected) Color(0xFFFFCC80).copy(alpha = 0.25f)
-                            else Color.White.copy(alpha = 0.08f),
-                            border = if (selected) androidx.compose.foundation.BorderStroke(
-                                1.dp, Color(0xFFFFCC80).copy(alpha = 0.5f)
-                            ) else null,
+                            color = if (selected) Color(0xFFFFCC80).copy(alpha = 0.25f) else Color.White.copy(alpha = 0.08f),
+                            border = if (selected) androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFFCC80).copy(alpha = 0.5f)) else null,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text(
-                                label,
-                                modifier = Modifier.padding(vertical = 10.dp).fillMaxWidth(),
-                                style = MaterialTheme.typography.labelMedium,
-                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                                color = if (selected) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.8f),
-                                textAlign = TextAlign.Center
-                            )
+                            Text(label, modifier = Modifier.padding(vertical = 10.dp).fillMaxWidth(), style = MaterialTheme.typography.labelMedium, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal, color = if (selected) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.8f), textAlign = TextAlign.Center)
                         }
                     }
                 }
@@ -1592,36 +1308,18 @@ private fun ProControlsDrawer(
 
             // WB selector
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    "White Balance",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White.copy(alpha = 0.6f)
-                )
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
+                Text("White Balance", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = Color.White.copy(alpha = 0.6f))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     wbLabels.forEachIndexed { i, label ->
                         val selected = wbMode == i
                         Surface(
                             onClick = { wbMode = i },
                             shape = CuteCardDefaults.ButtonShape,
-                            color = if (selected) Color(0xFFFFCC80).copy(alpha = 0.25f)
-                            else Color.White.copy(alpha = 0.08f),
-                            border = if (selected) androidx.compose.foundation.BorderStroke(
-                                1.dp, Color(0xFFFFCC80).copy(alpha = 0.5f)
-                            ) else null,
+                            color = if (selected) Color(0xFFFFCC80).copy(alpha = 0.25f) else Color.White.copy(alpha = 0.08f),
+                            border = if (selected) androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFFCC80).copy(alpha = 0.5f)) else null,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text(
-                                label,
-                                modifier = Modifier.padding(vertical = 10.dp).fillMaxWidth(),
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                                color = if (selected) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.8f),
-                                textAlign = TextAlign.Center
-                            )
+                            Text(label, modifier = Modifier.padding(vertical = 10.dp).fillMaxWidth(), style = MaterialTheme.typography.labelSmall, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal, color = if (selected) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.8f), textAlign = TextAlign.Center)
                         }
                     }
                 }
@@ -1629,48 +1327,23 @@ private fun ProControlsDrawer(
 
             // Manual focus slider
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    "Focus",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White.copy(alpha = 0.6f)
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        "AF",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (manualFocus == 0f) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.5f),
-                        fontWeight = FontWeight.Bold
-                    )
+                Text("Focus", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = Color.White.copy(alpha = 0.6f))
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("AF", style = MaterialTheme.typography.labelSmall, color = if (manualFocus == 0f) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.5f), fontWeight = FontWeight.Bold)
                     Slider(
                         value = manualFocus,
                         onValueChange = { manualFocus = it },
                         valueRange = 0f..1f,
                         modifier = Modifier.weight(1f),
-                        colors = SliderDefaults.colors(
-                            thumbColor = Color.White,
-                            activeTrackColor = Color(0xFFFFCC80),
-                            inactiveTrackColor = Color.White.copy(alpha = 0.2f)
-                        )
+                        colors = SliderDefaults.colors(thumbColor = Color.White, activeTrackColor = Color(0xFFFFCC80), inactiveTrackColor = Color.White.copy(alpha = 0.2f))
                     )
-                    Text(
-                        "MF",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (manualFocus > 0f) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.5f),
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text("MF", style = MaterialTheme.typography.labelSmall, color = if (manualFocus > 0f) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.5f), fontWeight = FontWeight.Bold)
                 }
             }
         }
     }
 }
 
-/**
- * Row label + value for pro control sliders.
- */
 @Composable
 private fun ProControlRow(
     label: String,
@@ -1678,31 +1351,15 @@ private fun ProControlRow(
     accent: Boolean = false,
     content: @Composable RowScope.() -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        Text(
-            label,
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold,
-            color = Color.White.copy(alpha = 0.6f),
-            modifier = Modifier.width(28.dp)
-        )
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = Color.White.copy(alpha = 0.6f), modifier = Modifier.width(28.dp))
         Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, content = content)
-        Text(
-            value,
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = if (accent) FontWeight.Bold else FontWeight.Normal,
-            color = if (accent) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.6f),
-            modifier = Modifier.width(28.dp),
-            textAlign = TextAlign.End
-        )
+        Text(value, style = MaterialTheme.typography.labelSmall, fontWeight = if (accent) FontWeight.Bold else FontWeight.Normal, color = if (accent) Color(0xFFFFCC80) else Color.White.copy(alpha = 0.6f), modifier = Modifier.width(28.dp), textAlign = TextAlign.End)
     }
 }
 
 // ══════════════════════════════════════════════════════════════════════
-//  Crop Guide Overlay (unchanged from original)
+//  Crop guide overlay
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -1731,14 +1388,3 @@ private fun CropGuideOverlay(aspectRatio: Float) {
         drawLine(lineColor, Offset(left + guideWidth, top + guideHeight), Offset(left + guideWidth, top + guideHeight - cornerLen), strokeWidth = 3f)
     }
 }
-
-/**
- * Resolve MIME type from a content URI using ContentResolver.
- * Falls back to image/jpeg if the type cannot be determined.
- */
-private fun getMimeTypeForUri(context: android.content.Context, uri: android.net.Uri): String? {
-    return runCatching {
-        context.contentResolver.getType(uri)
-    }.getOrNull()?.takeIf { it.isNotBlank() }
-}
-
