@@ -272,7 +272,7 @@ fun PdfViewerDialog(
                         }
                         loadError -> {
                             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Icon(MaterialSymbolIcon("description_off"), null, tint = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.5f), size = 56.dp)
+                                Icon(MaterialSymbolIcon("description"), null, tint = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.5f), size = 56.dp)
                                 Text("Could not open PDF", style = MaterialTheme.typography.titleMedium, color = androidx.compose.ui.graphics.Color.White, fontWeight = FontWeight.SemiBold)
                                 Text(if (errorMessage.isNotBlank()) errorMessage else "The file may be corrupted, inaccessible, or in an unsupported format.", style = MaterialTheme.typography.bodySmall, color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.5f), textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 32.dp))
                                 Button(onClick = { openPdfExternally(context, uri); onDismiss() }, shape = CuteCardDefaults.ButtonShape, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
