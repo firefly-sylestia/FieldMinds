@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -48,7 +49,7 @@ fun ResearchHealthCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -137,7 +138,7 @@ fun ConfidenceSummaryCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = confidenceColor.copy(alpha = 0.15f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -178,7 +179,7 @@ fun InsightsCategoryRanking(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -219,7 +220,7 @@ fun OpenQuestionsCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

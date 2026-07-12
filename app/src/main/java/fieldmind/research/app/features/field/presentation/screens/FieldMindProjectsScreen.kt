@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -205,14 +206,14 @@ fun ProjectsScreen(
                         FilledTonalIconButton(
                             onClick = { showSearch = !showSearch },
                             modifier = Modifier.size(40.dp),
-                            shape = RoundedCornerShape(20.dp)
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Icon(if (showSearch) MaterialSymbolIcon("close") else FieldMindIcons.Search, null, size = 20.dp)
                         }
                         FilledTonalIconButton(
                             onClick = { showCreateSheet = true },
                             modifier = Modifier.size(40.dp),
-                            shape = RoundedCornerShape(20.dp),
+                            shape = MaterialTheme.shapes.medium,
                             colors = IconButtonDefaults.filledTonalIconButtonColors(
                                 containerColor = colors.project.copy(alpha = 0.16f),
                                 contentColor = colors.project
@@ -241,7 +242,7 @@ fun ProjectsScreen(
                             }
                         }
                     },
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = colors.project.copy(alpha = 0.5f),
@@ -262,7 +263,7 @@ fun ProjectsScreen(
                     val isSelected = selectedFilter == filter
                     Surface(
                         onClick = { selectedFilter = filter; searchQuery = "" },
-                        shape = RoundedCornerShape(20.dp),
+                        shape = MaterialTheme.shapes.medium,
                         color = if (isSelected) colors.project.copy(alpha = 0.16f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         tonalElevation = 0.dp
                     ) {

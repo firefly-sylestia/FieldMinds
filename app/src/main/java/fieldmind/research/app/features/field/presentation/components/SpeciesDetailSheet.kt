@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -80,7 +81,7 @@ fun SpeciesDetailSheet(
                         horizontalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         Box(
-                            Modifier.size(56.dp).clip(RoundedCornerShape(28.dp))
+                            Modifier.size(56.dp).clip(CuteCardDefaults.OptionShape)
                                 .background(accent.copy(alpha = 0.14f)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -89,7 +90,7 @@ fun SpeciesDetailSheet(
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             // Category badge
                             Surface(
-                                shape = RoundedCornerShape(16.dp),
+                                shape = CuteCardDefaults.ChipShape,
                                 color = accent.copy(alpha = 0.12f)
                             ) {
                                 Text(
@@ -225,7 +226,7 @@ fun TaxonomySection(
     if (taxonomyLevels.isEmpty()) return
 
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.OptionShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -303,7 +304,7 @@ fun SpeciesInfoCard(
     val accent = categoryColor(record.category)
 
     Card(
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.OptionShape,
         colors = CardDefaults.cardColors(containerColor = colors.observation.copy(alpha = 0.06f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -66,7 +67,7 @@ fun UnsavedChangesGuard(
                             showDialog = false
                             onSave()
                         },
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     ) {
                         Text("Save & exit")
                     }
@@ -76,7 +77,7 @@ fun UnsavedChangesGuard(
                             showDialog = false
                             onDiscard()
                         },
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error
                         )

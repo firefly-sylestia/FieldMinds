@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -47,7 +48,7 @@ fun JournalEditorHeader(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -57,7 +58,7 @@ fun JournalEditorHeader(
                 onValueChange = onTitleChange,
                 placeholder = { Text("Untitled note...") },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 textStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
             )
             
@@ -97,7 +98,7 @@ fun JournalBlockPalette(
         Button(
             onClick = { expanded = !expanded },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp)
+            shape = MaterialTheme.shapes.medium
         ) {
             Text(if (expanded) "Hide blocks" else "+ Add block", fontWeight = FontWeight.SemiBold)
         }
@@ -105,7 +106,7 @@ fun JournalBlockPalette(
         if (expanded) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -130,7 +131,7 @@ private fun BlockTypeButton(blockType: JournalBlockType, onClick: () -> Unit) {
         modifier = Modifier
             .size(56.dp)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(20.dp),
+        shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surfaceContainerHigh
     ) {
         Column(
@@ -162,7 +163,7 @@ fun JournalEntryCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -210,7 +211,7 @@ fun RichTextFormattingToolbar(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -249,8 +250,8 @@ fun ObservationEmbedBlock(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), RoundedCornerShape(22.dp)),
-        shape = RoundedCornerShape(22.dp),
+            .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), CuteCardDefaults.ButtonShape),
+        shape = CuteCardDefaults.ButtonShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {

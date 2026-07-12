@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -94,7 +95,7 @@ fun CreateEntitySheet(
             // Sheet
             Surface(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 24.dp),
-                shape = RoundedCornerShape(40.dp),
+                shape = CuteCardDefaults.DialogShape,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 tonalElevation = 4.dp,
                 shadowElevation = 8.dp
@@ -196,7 +197,7 @@ fun ProjectSelectorDialog(
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).padding(vertical = 24.dp),
-            shape = RoundedCornerShape(40.dp),
+            shape = CuteCardDefaults.DialogShape,
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
         ) {

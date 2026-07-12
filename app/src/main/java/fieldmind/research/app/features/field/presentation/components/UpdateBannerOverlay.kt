@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
@@ -93,7 +94,7 @@ fun UpdateBannerOverlay(
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
         Surface(
-            shape = RoundedCornerShape(20.dp),
+            shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.primaryContainer,
             tonalElevation = 2.dp,
             shadowElevation = 6.dp,
@@ -168,7 +169,7 @@ private fun BannerActionButton(
         MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
     }
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = CuteCardDefaults.ChipShape,
         color = bg,
         modifier = Modifier.clickable(onClick = onClick)
     ) {

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,7 +42,7 @@ fun ArchiveScreen(viewModel: FieldMindViewModel, onOpenDetail: (String, Long) ->
             )
         }
         item {
-            OutlinedTextField(query, { query = it }, label = { Text("Search") }, leadingIcon = { Icon(icon = FieldMindIcons.Search, contentDescription = null, size = 20.dp) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp), singleLine = true)
+            OutlinedTextField(query, { query = it }, label = { Text("Search") }, leadingIcon = { Icon(icon = FieldMindIcons.Search, contentDescription = null, size = 20.dp) }, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.FieldShape, singleLine = true)
         }
         val q = query.trim().lowercase()
         if (q.length < 2) {

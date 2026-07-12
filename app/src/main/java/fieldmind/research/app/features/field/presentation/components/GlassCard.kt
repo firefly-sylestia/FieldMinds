@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -59,7 +60,7 @@ val LocalHazeState = staticCompositionLocalOf<HazeState?> { null }
 @Composable
 fun GlassCard(
     modifier: Modifier = Modifier,
-    shape: RoundedCornerShape = RoundedCornerShape(28.dp),
+    shape: RoundedCornerShape = CuteCardDefaults.OptionShape,
     blurRadius: Dp = 24.dp,
     tintAlpha: Float = 0.55f,
     content: @Composable ColumnScope.() -> Unit

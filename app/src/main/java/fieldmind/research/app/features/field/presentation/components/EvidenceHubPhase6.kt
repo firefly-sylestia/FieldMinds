@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
@@ -61,7 +62,7 @@ fun CompletenessIndicator(observation: ObservationEntity) {
     val completenessPercent = (completedCount * 100) / checks.size
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
     ) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -81,7 +82,7 @@ fun CompletenessIndicator(observation: ObservationEntity) {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 items(checks) { (label, completed) ->
                     Box(
-                        Modifier.clip(RoundedCornerShape(12.dp))
+                        Modifier.clip(MaterialTheme.shapes.small)
                             .background(
                                 if (completed) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                                 else MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)
@@ -115,7 +116,7 @@ fun BulkSelectionToolbar(
 ) {
     AnimatedVisibility(visible = selectedCount > 0, enter = slideInVertically(), exit = slideOutVertically()) {
         Card(
-            shape = RoundedCornerShape(30.dp),
+            shape = CuteCardDefaults.ShapeHero,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -143,7 +144,7 @@ fun BulkSelectionToolbar(
                         FilledTonalButton(
                             onClick = action,
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(20.dp)
+                            shape = MaterialTheme.shapes.medium
                         ) {
                             Icon(icon, null, size = 16.dp)
                             Spacer(Modifier.width(4.dp))
@@ -243,7 +244,7 @@ fun EvidenceGridCard(
     onClick: () -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
             else MaterialTheme.colorScheme.surfaceContainerLow

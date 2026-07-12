@@ -273,7 +273,7 @@ fun OptionPickerDialog(
                 .fillMaxWidth(0.94f)
                 .wrapContentHeight()
                 .padding(vertical = 24.dp),
-            shape = RoundedCornerShape(40.dp),
+            shape = CuteCardDefaults.DialogShape,
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
         ) {
@@ -284,7 +284,7 @@ fun OptionPickerDialog(
                 // Header
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     Box(
-                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                             .background(accentColor.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -310,7 +310,7 @@ fun OptionPickerDialog(
                         leadingIcon = { Icon(FieldMindIcons.Search, null, size = 20.dp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(28.dp)
+                        shape = CuteCardDefaults.OptionShape
                     )
                 }
 
@@ -332,7 +332,7 @@ fun OptionPickerDialog(
                                 onDismiss()
                             }
                         },
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.OptionShape,
                         color = if (isSelected) accentColor.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                         border = if (isSelected) BorderStroke(1.5.dp, accentColor) else null,
                         tonalElevation = 0.dp,
@@ -345,7 +345,7 @@ fun OptionPickerDialog(
                         ) {
                             if (icon != null) {
                                 Box(
-                                    Modifier.size(36.dp).clip(RoundedCornerShape(20.dp))
+                                    Modifier.size(36.dp).clip(MaterialTheme.shapes.medium)
                                         .background(accentColor.copy(alpha = if (isSelected) 0.18f else 0.08f)),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -389,7 +389,7 @@ fun OptionPickerDialog(
                             onDismiss()
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp),
+                        shape = CuteCardDefaults.ShapeCompact,
                         enabled = selectedMulti.isNotEmpty()
                     ) {
                         Icon(FieldMindIcons.Check, null, size = 18.dp)
@@ -428,7 +428,7 @@ fun MultiSelectPickerField(
 
         Surface(
             onClick = { haptics.light(); showDialog = true },
-            shape = RoundedCornerShape(28.dp),
+            shape = CuteCardDefaults.OptionShape,
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
             modifier = Modifier.pressScale(scaleDown = 0.97f)
@@ -507,7 +507,7 @@ fun OptionPickerField(
         
         Surface(
             onClick = { haptics.light(); showDialog = true },
-            shape = RoundedCornerShape(28.dp),
+            shape = CuteCardDefaults.OptionShape,
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
             modifier = Modifier.pressScale(scaleDown = 0.97f)
@@ -584,7 +584,7 @@ fun FieldScreenHeader(
                 Box(
                     Modifier
                         .size(42.dp)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(20.dp)),
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh, MaterialTheme.shapes.medium),
                     contentAlignment = Alignment.Center
                 ) { Icon(icon = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 22.dp) }
             }
@@ -597,7 +597,7 @@ fun FieldScreenHeader(
             if (actionIcon != null && onAction != null) {
                 Surface(
                     onClick = onAction,
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.pressScale(scaleDown = 0.90f)
                 ) {
@@ -700,7 +700,7 @@ fun StandardScreenHeader(
             Box(
                 Modifier
                     .size(44.dp)
-                    .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), RoundedCornerShape(22.dp)),
+                    .background(heroColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.28f else 0.14f), CuteCardDefaults.ButtonShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(icon = icon, contentDescription = null, tint = heroColor, size = 24.dp)
@@ -740,7 +740,7 @@ fun BackButton(
     modifier: Modifier = Modifier,
     icon: MaterialSymbolIcon = FieldMindIcons.Back,
     contentDescription: String? = null,
-    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(22.dp),
+    shape: androidx.compose.ui.graphics.Shape = CuteCardDefaults.ButtonShape,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh
 ) {
     Surface(
@@ -905,7 +905,7 @@ fun EntityCard(
             Box(
                 Modifier
                     .size(42.dp)
-                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), RoundedCornerShape(20.dp)),
+                    .background(accent.copy(alpha = if (FieldMindTheme.colors.isDark) 0.22f else 0.14f), MaterialTheme.shapes.medium),
                 contentAlignment = Alignment.Center
             ) { Icon(icon = FieldMindIcons.iconFor(kind), contentDescription = null, tint = accent, size = 22.dp) }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1067,7 +1067,7 @@ fun EmptyState(
                                 iconColor.copy(alpha = 0.06f)
                             )
                         ),
-                        shape = RoundedCornerShape(30.dp)
+                        shape = CuteCardDefaults.Shape
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -1077,7 +1077,7 @@ fun EmptyState(
             Text(body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             if (actionLabel != null && onAction != null) {
                 Spacer(Modifier.height(4.dp))
-                androidx.compose.material3.Button(onClick = onAction, modifier = Modifier, shape = RoundedCornerShape(22.dp)) {
+                androidx.compose.material3.Button(onClick = onAction, modifier = Modifier, shape = CuteCardDefaults.ButtonShape) {
                     Icon(icon = FieldMindIcons.Add, contentDescription = null, size = 18.dp)
                     Spacer(Modifier.size(6.dp))
                     Text(actionLabel)
@@ -1126,7 +1126,7 @@ fun FieldTextField(
             }
         },
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
+        shape = CuteCardDefaults.OptionShape,
         enabled = enabled
     )
 }
@@ -1232,7 +1232,7 @@ fun NumberField(
                         }
                     },
                     modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(20.dp)
+                    shape = MaterialTheme.shapes.medium
                 ) {
                     Text("−", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 }
@@ -1249,7 +1249,7 @@ fun NumberField(
                     else if (supportingText != null) Text(supportingText)
                 },
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.OptionShape,
                 enabled = enabled
             )
 
@@ -1266,7 +1266,7 @@ fun NumberField(
                         }
                     },
                     modifier = Modifier.size(44.dp),
-                    shape = RoundedCornerShape(20.dp)
+                    shape = MaterialTheme.shapes.medium
                 ) {
                     Text("+", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 }
@@ -1286,7 +1286,7 @@ fun NumberField(
                     else if (supportingText != null) Text(supportingText)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.OptionShape,
                 enabled = enabled
             )
         }
@@ -1302,7 +1302,7 @@ fun NumberField(
 fun OutlinedSection(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         color = Color.Transparent,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) { Box(Modifier.padding(14.dp)) { content() } }
@@ -1481,7 +1481,7 @@ fun ProtocolStepField(
                 Text(step.instruction, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh
                 ) {
                     Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1511,7 +1511,7 @@ fun ProtocolPicker(
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier.fillMaxWidth(0.94f).wrapContentHeight().padding(vertical = 24.dp),
-            shape = RoundedCornerShape(40.dp),
+            shape = CuteCardDefaults.DialogShape,
             elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -1524,7 +1524,7 @@ fun ProtocolPicker(
                             .fillMaxWidth()
                             .expressivePress(scaleDown = 0.97f)
                             .clickable { onSelect(protocol) },
-                        shape = RoundedCornerShape(28.dp),
+                        shape = CuteCardDefaults.OptionShape,
                         colors = CardDefaults.cardColors(
                             containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh
                         ),
@@ -1532,7 +1532,7 @@ fun ProtocolPicker(
                         border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
                     ) {
                         Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                                 Icon(protocol.icon, null, tint = MaterialTheme.colorScheme.primary, size = 24.dp)
                             }
                             Column(Modifier.weight(1f)) {
@@ -1608,7 +1608,7 @@ fun NoteComposerCard(
             // Header
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(20.dp))
+                    Modifier.size(40.dp).clip(MaterialTheme.shapes.medium)
                         .background(FieldMindTheme.colors.note.cardBg(FieldMindTheme.colors.isDark)),
                     contentAlignment = Alignment.Center
                 ) { Icon(FieldMindIcons.Note, null, tint = FieldMindTheme.colors.note, size = 22.dp) }
@@ -1665,7 +1665,7 @@ fun NoteComposerCard(
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 6,
                 placeholder = { Text("Start writing your note...", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
-                shape = RoundedCornerShape(28.dp)
+                shape = CuteCardDefaults.OptionShape
             )
 
             // Category & save row
@@ -1677,7 +1677,7 @@ fun NoteComposerCard(
                 ChoiceChips(categories, category, modifier = Modifier.weight(1f), onSelected = onCategoryChange)
                 Button(
                     onClick = { haptics.confirm(); onSave() },
-                    shape = RoundedCornerShape(22.dp),
+                    shape = CuteCardDefaults.ButtonShape,
                     enabled = saveEnabled && (title.isNotBlank() || body.isNotBlank())
                 ) {
                     Icon(FieldMindIcons.Check, null, size = 18.dp)

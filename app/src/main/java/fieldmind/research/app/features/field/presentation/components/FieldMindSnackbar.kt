@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.PaddingValues
@@ -83,7 +84,7 @@ private fun SwipeableSnackbarHost(hostState: SnackbarHostState) {
                         }
                     )
                 },
-            shape = RoundedCornerShape(24.dp)
+            shape = CuteCardDefaults.ShapeCompact
         ) {
             Snackbar(
                 modifier = Modifier.offset { IntOffset(offsetX.toInt(), 0) }

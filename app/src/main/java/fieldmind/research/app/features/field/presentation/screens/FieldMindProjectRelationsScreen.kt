@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -205,7 +206,7 @@ fun ProjectRelationsScreen(
         // ════════════════════════════════════════════════════════════
         item {
             Surface(
-                shape = RoundedCornerShape(34.dp),
+                shape = CuteCardDefaults.Shape,
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 tonalElevation = 0.dp,
                 modifier = Modifier.fillMaxWidth()
@@ -217,7 +218,7 @@ fun ProjectRelationsScreen(
                 ) {
                     Surface(
                         onClick = onBack,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.size(40.dp)
                     ) {
@@ -226,7 +227,7 @@ fun ProjectRelationsScreen(
                         }
                     }
                     Box(
-                        Modifier.size(44.dp).clip(RoundedCornerShape(22.dp))
+                        Modifier.size(44.dp).clip(CuteCardDefaults.ButtonShape)
                             .background(FieldMindTheme.colors.project.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -265,7 +266,7 @@ fun ProjectRelationsScreen(
                 ) {
                     Box(
                         Modifier.size(44.dp)
-                            .clip(RoundedCornerShape(22.dp))
+                            .clip(CuteCardDefaults.ButtonShape)
                             .background(FieldMindTheme.colors.project.copy(alpha = 0.14f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -340,7 +341,7 @@ fun ProjectRelationsScreen(
                             haptics.light()
                             expanded = !expanded
                         },
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -454,7 +455,7 @@ private fun RelationGroupCard(
     var expanded by remember { mutableStateOf(false) }
 
     Card(
-        shape = RoundedCornerShape(22.dp),
+        shape = CuteCardDefaults.ButtonShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -463,7 +464,7 @@ private fun RelationGroupCard(
             // ── Group header ──
             Surface(
                 onClick = { expanded = !expanded },
-                shape = RoundedCornerShape(22.dp),
+                shape = CuteCardDefaults.ButtonShape,
                 color = Color.Transparent,
                 modifier = Modifier.fillMaxWidth()
             ) {

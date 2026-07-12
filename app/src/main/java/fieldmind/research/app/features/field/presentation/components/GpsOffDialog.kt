@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.Intent
 import android.provider.Settings
@@ -40,7 +41,7 @@ fun GpsOffDialog(
     }
     SwipeableAlertDialog(
         onDismissRequest = onDismiss,
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         title = {
             Row(
@@ -52,7 +53,7 @@ fun GpsOffDialog(
                         .size(40.dp)
                         .background(
                             MaterialTheme.colorScheme.errorContainer,
-                            RoundedCornerShape(22.dp)
+                            CuteCardDefaults.ButtonShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -87,7 +88,7 @@ fun GpsOffDialog(
                     effectiveOnOpenSettings()
                     onDismiss()
                 },
-                shape = RoundedCornerShape(24.dp),
+                shape = CuteCardDefaults.ShapeCompact,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )

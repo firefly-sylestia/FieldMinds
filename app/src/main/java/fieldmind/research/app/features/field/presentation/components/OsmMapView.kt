@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.graphics.Color
 import androidx.compose.foundation.background
@@ -126,7 +127,7 @@ fun OsmMapView(
         modifier = modifier
             .fillMaxWidth()
             .height(height)
-            .background(MaterialTheme.colorScheme.surfaceContainerHighest, RoundedCornerShape(24.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest, CuteCardDefaults.ShapeCompact)
     ) {
         AndroidView(
             factory = { ctx ->
@@ -208,7 +209,7 @@ fun OsmMapView(
         if (isOffline) {
             Surface(
                 modifier = Modifier.align(Alignment.TopStart).padding(8.dp),
-                shape = RoundedCornerShape(16.dp),
+                shape = CuteCardDefaults.ChipShape,
                 color = MaterialTheme.colorScheme.errorContainer
             ) {
                 Text(

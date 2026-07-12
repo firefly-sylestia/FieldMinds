@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.screens
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.Context
 import android.content.Intent
@@ -237,7 +238,7 @@ fun WeatherCatalogScreen(
                 if (weatherCatalog.isEmpty()) {
                     item {
                         Card(
-                            shape = RoundedCornerShape(30.dp),
+                            shape = CuteCardDefaults.Shape,
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
                             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -306,7 +307,7 @@ private fun WeatherCatalogCurrentCard(
     }
 
     Card(
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()
@@ -317,7 +318,7 @@ private fun WeatherCatalogCurrentCard(
                 .then(
                     if (weather == null) Modifier.background(
                         MaterialTheme.colorScheme.surfaceContainerLow,
-                        RoundedCornerShape(36.dp)
+                        CuteCardDefaults.ShapeHero
                     ) else Modifier
                 )
         ) {
@@ -462,7 +463,7 @@ private fun ScheduleControlCard(
     colors: fieldmind.research.app.features.field.presentation.theme.FieldMindColors
 ) {
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier.fillMaxWidth()

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.Context
 import android.content.Intent
@@ -274,7 +275,7 @@ fun PdfViewerDialog(
                                 Icon(MaterialSymbolIcon("description_off"), null, tint = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.5f), size = 56.dp)
                                 Text("Could not open PDF", style = MaterialTheme.typography.titleMedium, color = androidx.compose.ui.graphics.Color.White, fontWeight = FontWeight.SemiBold)
                                 Text(if (errorMessage.isNotBlank()) errorMessage else "The file may be corrupted, inaccessible, or in an unsupported format.", style = MaterialTheme.typography.bodySmall, color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.5f), textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 32.dp))
-                                Button(onClick = { openPdfExternally(context, uri); onDismiss() }, shape = RoundedCornerShape(22.dp), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
+                                Button(onClick = { openPdfExternally(context, uri); onDismiss() }, shape = CuteCardDefaults.ButtonShape, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
                                     Icon(MaterialSymbolIcon("open_in_new"), null, size = 18.dp)
                                     Spacer(Modifier.size(6.dp))
                                     Text("Open in system viewer")
@@ -291,7 +292,7 @@ fun PdfViewerDialog(
                             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                 Icon(MaterialSymbolIcon("page_off"), null, tint = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.5f), size = 48.dp)
                                 Text("Failed to render this page", style = MaterialTheme.typography.bodyMedium, color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.7f))
-                                OutlinedButton(onClick = { renderError = false; renderRetryTrigger++ }, shape = RoundedCornerShape(20.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = androidx.compose.ui.graphics.Color.White)) {
+                                OutlinedButton(onClick = { renderError = false; renderRetryTrigger++ }, shape = MaterialTheme.shapes.medium, colors = ButtonDefaults.outlinedButtonColors(contentColor = androidx.compose.ui.graphics.Color.White)) {
                                     Text("Retry")
                                 }
                             }
@@ -331,14 +332,14 @@ fun PdfViewerDialog(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            OutlinedButton(onClick = { currentPage = (currentPage - 1).coerceAtLeast(0) }, enabled = currentPage > 0 && !isRendering, shape = RoundedCornerShape(20.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = androidx.compose.ui.graphics.Color.White)) {
+                            OutlinedButton(onClick = { currentPage = (currentPage - 1).coerceAtLeast(0) }, enabled = currentPage > 0 && !isRendering, shape = MaterialTheme.shapes.medium, colors = ButtonDefaults.outlinedButtonColors(contentColor = androidx.compose.ui.graphics.Color.White)) {
                                 Icon(MaterialSymbolIcon("chevron_left"), null, size = 18.dp); Spacer(Modifier.size(4.dp)); Text("Previous")
                             }
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text("${currentPage + 1}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = androidx.compose.ui.graphics.Color.White)
                                 Text("/ $totalPages", style = MaterialTheme.typography.bodySmall, color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.6f))
                             }
-                            OutlinedButton(onClick = { currentPage = (currentPage + 1).coerceAtMost(totalPages - 1) }, enabled = currentPage < totalPages - 1 && !isRendering, shape = RoundedCornerShape(20.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = androidx.compose.ui.graphics.Color.White)) {
+                            OutlinedButton(onClick = { currentPage = (currentPage + 1).coerceAtMost(totalPages - 1) }, enabled = currentPage < totalPages - 1 && !isRendering, shape = MaterialTheme.shapes.medium, colors = ButtonDefaults.outlinedButtonColors(contentColor = androidx.compose.ui.graphics.Color.White)) {
                                 Text("Next"); Spacer(Modifier.size(4.dp)); Icon(MaterialSymbolIcon("chevron_right"), null, size = 18.dp)
                             }
                         }

@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.Manifest
 import android.app.Activity
@@ -325,7 +326,7 @@ fun FieldMindCameraV2(
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Icon(icon = FieldMindIcons.Camera, contentDescription = null, tint = Color.White.copy(alpha = 0.6f), size = 48.dp)
                 Text("Camera permission required", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = Color.White)
-                Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }, shape = RoundedCornerShape(24.dp)) { Text("Grant permission") }
+                Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }, shape = CuteCardDefaults.ShapeCompact) { Text("Grant permission") }
                 TextButton(onClick = onDismiss) { Text("Cancel", color = Color.White.copy(alpha = 0.7f)) }
             }
         }
@@ -427,7 +428,7 @@ fun FieldMindCameraV2(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .background(Color.Black.copy(alpha = 0.45f), RoundedCornerShape(36.dp))
+                    .background(Color.Black.copy(alpha = 0.45f), CuteCardDefaults.ShapeHero)
                     .padding(horizontal = 12.dp, vertical = 6.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -514,7 +515,7 @@ fun FieldMindCameraV2(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(top = 60.dp),
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.medium,
                 color = Color(0xFF4CAF50).copy(alpha = 0.85f)
             ) {
                 Row(
@@ -633,13 +634,13 @@ fun FieldMindCameraV2(
                                 Box(
                                     Modifier
                                         .size(64.dp)
-                                        .clip(RoundedCornerShape(22.dp))
+                                        .clip(CuteCardDefaults.ButtonShape)
                                         .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                                 ) {
                                     AsyncImage(
                                         model = pendingCaptureUri,
                                         contentDescription = "Last capture",
-                                        modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(22.dp)),
+                                        modifier = Modifier.fillMaxSize().clip(CuteCardDefaults.ButtonShape),
                                         contentScale = ContentScale.Crop
                                     )
                                 }
@@ -693,7 +694,7 @@ fun FieldMindCameraV2(
                             placeholder = { Text("e.g. Red-tailed Hawk") },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(24.dp)
+                            shape = CuteCardDefaults.ShapeCompact
                         )
 
                         // ── Category chips (2 rows) ──
@@ -717,7 +718,7 @@ fun FieldMindCameraV2(
                                     val selected = postCategory == cat
                                     Surface(
                                         onClick = { postCategory = cat },
-                                        shape = RoundedCornerShape(20.dp),
+                                        shape = MaterialTheme.shapes.medium,
                                         color = if (selected) MaterialTheme.colorScheme.primary
                                         else MaterialTheme.colorScheme.surfaceContainerHigh,
                                         border = if (!selected) androidx.compose.foundation.BorderStroke(
@@ -794,7 +795,7 @@ fun FieldMindCameraV2(
                             placeholder = { Text("Behavior, location details, etc.") },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(24.dp)
+                            shape = CuteCardDefaults.ShapeCompact
                         )
 
                         // ── Action buttons ──
@@ -827,7 +828,7 @@ fun FieldMindCameraV2(
                                     showCaptureDialog = false
                                 },
                                 modifier = Modifier.weight(1f),
-                                shape = RoundedCornerShape(24.dp),
+                                shape = CuteCardDefaults.ShapeCompact,
                                 colors = ButtonDefaults.outlinedButtonColors(
                                     contentColor = MaterialTheme.colorScheme.primary
                                 )
@@ -857,7 +858,7 @@ fun FieldMindCameraV2(
                                     onDismiss()
                                 },
                                 modifier = Modifier.weight(1f),
-                                shape = RoundedCornerShape(24.dp)
+                                shape = CuteCardDefaults.ShapeCompact
                             ) {
                                 Icon(FieldMindIcons.Archive, null, size = 18.dp)
                                 Spacer(Modifier.size(6.dp))
@@ -952,7 +953,7 @@ fun FieldMindCameraV2(
                         ) {
                             // Gallery thumbnail (in-app FieldMind gallery)
                             Box(
-                                Modifier.size(44.dp).clip(RoundedCornerShape(20.dp))
+                                Modifier.size(44.dp).clip(MaterialTheme.shapes.medium)
                                     .background(Color.White.copy(alpha = 0.12f))
                                     .clickable { showInAppGallery = true },
                                 contentAlignment = Alignment.Center
@@ -961,7 +962,7 @@ fun FieldMindCameraV2(
                                     AsyncImage(
                                         model = lastCaptureUri,
                                         contentDescription = "Last photo",
-                                        modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)),
+                                        modifier = Modifier.fillMaxSize().clip(MaterialTheme.shapes.medium),
                                         contentScale = ContentScale.Crop
                                     )
                                 } else {
@@ -1211,7 +1212,7 @@ private fun SpeciesFieldPanel(
                     // Dismiss button
                     Surface(
                         onClick = onDismissPanel,
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         tonalElevation = 0.dp
                     ) {
@@ -1283,7 +1284,7 @@ private fun SpeciesFieldPanel(
                             }
                             Surface(
                                 onClick = { onSpeciesCategoryChange(cat) },
-                                shape = RoundedCornerShape(22.dp),
+                                shape = CuteCardDefaults.ButtonShape,
                                 color = if (isSelected) accentColor.copy(alpha = 0.14f)
                                 else MaterialTheme.colorScheme.surfaceContainerHigh,
                                 border = if (isSelected) androidx.compose.foundation.BorderStroke(1.5.dp, accentColor)
@@ -1366,7 +1367,7 @@ private fun SpeciesFieldPanel(
                             }
                             Surface(
                                 onClick = { onSpeciesConfidenceChange(value) },
-                                shape = RoundedCornerShape(20.dp),
+                                shape = MaterialTheme.shapes.medium,
                                 color = if (isSelected) MaterialTheme.colorScheme.primary
                                 else MaterialTheme.colorScheme.surfaceContainerHigh,                                 border = if (!isSelected) androidx.compose.foundation.BorderStroke(
                                      1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
@@ -1488,7 +1489,7 @@ private fun ProControlsDrawer(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .safeDrawingPadding(),
-        shape = RoundedCornerShape(36.dp),
+        shape = CuteCardDefaults.ShapeHero,
         color = Color.Black.copy(alpha = 0.82f),
         shadowElevation = 16.dp
     ) {
@@ -1510,7 +1511,7 @@ private fun ProControlsDrawer(
                 )
                 Surface(
                     onClick = onClose,
-                    shape = RoundedCornerShape(20.dp),
+                    shape = MaterialTheme.shapes.medium,
                     color = Color.White.copy(alpha = 0.12f)
                 ) {
                     Box(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
@@ -1563,7 +1564,7 @@ private fun ProControlsDrawer(
                         val selected = isoMode == i
                         Surface(
                             onClick = { isoMode = i },
-                            shape = RoundedCornerShape(22.dp),
+                            shape = CuteCardDefaults.ButtonShape,
                             color = if (selected) Color(0xFFFFCC80).copy(alpha = 0.25f)
                             else Color.White.copy(alpha = 0.08f),
                             border = if (selected) androidx.compose.foundation.BorderStroke(
@@ -1600,7 +1601,7 @@ private fun ProControlsDrawer(
                         val selected = wbMode == i
                         Surface(
                             onClick = { wbMode = i },
-                            shape = RoundedCornerShape(22.dp),
+                            shape = CuteCardDefaults.ButtonShape,
                             color = if (selected) Color(0xFFFFCC80).copy(alpha = 0.25f)
                             else Color.White.copy(alpha = 0.08f),
                             border = if (selected) androidx.compose.foundation.BorderStroke(

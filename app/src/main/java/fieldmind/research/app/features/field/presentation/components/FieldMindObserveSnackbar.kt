@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -188,7 +189,7 @@ fun FieldMindSnackbarOverlay(
                     .fillMaxWidth()
                     .offset { IntOffset(offsetX.toInt(), 0) }
                     .graphicsLayer { scaleX = scale; scaleY = scale }
-                    .shadow(16.dp, RoundedCornerShape(32.dp), ambientColor = accentColor.copy(alpha = 0.08f), spotColor = accentColor.copy(alpha = 0.12f))
+                    .shadow(16.dp, CuteCardDefaults.Shape, ambientColor = accentColor.copy(alpha = 0.08f), spotColor = accentColor.copy(alpha = 0.12f))
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
@@ -204,7 +205,7 @@ fun FieldMindSnackbarOverlay(
                             }
                         )
                     },
-                shape = RoundedCornerShape(32.dp),
+                shape = CuteCardDefaults.Shape,
                 color = bgColor,
                 tonalElevation = 0.dp
             ) {

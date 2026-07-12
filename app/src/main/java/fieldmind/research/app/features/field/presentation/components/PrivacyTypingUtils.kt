@@ -1,4 +1,5 @@
 package fieldmind.research.app.features.field.presentation.components
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.os.Build
 import android.text.InputType
@@ -259,7 +260,7 @@ fun PrivacyStatusCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(32.dp),
+        shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = if (allEnabled)
                 MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f)
@@ -300,7 +301,7 @@ fun PrivacyStatusCard(
                 val summaryText = "$enabledCount / ${rows.size} active"
                 val summaryDesc = "$enabledCount of ${rows.size} privacy features enabled"
                 Surface(
-                    shape = RoundedCornerShape(30.dp),
+                    shape = CuteCardDefaults.Shape,
                     color = if (allEnabled)
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                     else

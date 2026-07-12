@@ -90,7 +90,7 @@ fun SwipeToRevealActions(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(MaterialTheme.shapes.medium)
             .onGloballyPositioned { coords ->
                 contentWidth = coords.size.width.toFloat().coerceAtLeast(1f)
             }

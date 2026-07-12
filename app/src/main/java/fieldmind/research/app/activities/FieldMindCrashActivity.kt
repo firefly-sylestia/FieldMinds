@@ -1,4 +1,5 @@
 package fieldmind.research.app.activities
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -206,16 +207,16 @@ class FieldMindCrashActivity : ComponentActivity() {
                             showDisableConfirm = false
                             disableSecurityAndRestart(context)
                         },
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     ) { Text("Disable & restart") }
                 },
                 dismissButton = {
                     TextButton(
                         onClick = { showDisableConfirm = false },
-                        shape = RoundedCornerShape(22.dp)
+                        shape = CuteCardDefaults.ButtonShape
                     ) { Text("Cancel") }
                 },
-                shape = RoundedCornerShape(28.dp),
+                shape = CuteCardDefaults.OptionShape,
                 containerColor = SafeColors.surface
             )
         }
@@ -224,7 +225,7 @@ class FieldMindCrashActivity : ComponentActivity() {
     @Composable
     private fun CrashHeader() {
         Card(
-            shape = RoundedCornerShape(32.dp),
+            shape = CuteCardDefaults.Shape,
             colors = CardDefaults.cardColors(containerColor = SafeColors.primaryContainer),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             modifier = Modifier.fillMaxWidth()
@@ -275,7 +276,7 @@ class FieldMindCrashActivity : ComponentActivity() {
         onShare: () -> Unit
     ) {
         Card(
-            shape = RoundedCornerShape(28.dp),
+            shape = CuteCardDefaults.OptionShape,
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             modifier = Modifier.fillMaxWidth()
@@ -318,7 +319,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                         focusedLabelColor = SafeColors.onSurfaceVariant,
                         unfocusedLabelColor = SafeColors.onSurfaceVariant
                     ),
-                    shape = RoundedCornerShape(20.dp)
+                    shape = CuteCardDefaults.ShapeCompact
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -327,7 +328,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                     OutlinedButton(
                         onClick = onCopy,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
                     ) {
                         Icon(MaterialSymbolIcon("content_copy"), null, size = 16.dp)
@@ -337,7 +338,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                     Button(
                         onClick = onShare,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(22.dp),
+                        shape = CuteCardDefaults.ButtonShape,
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
                     ) {
                         Icon(MaterialSymbolIcon("share"), null, size = 16.dp)
@@ -355,7 +356,7 @@ class FieldMindCrashActivity : ComponentActivity() {
         onRestart: () -> Unit
     ) {
         Card(
-            shape = RoundedCornerShape(28.dp),
+            shape = CuteCardDefaults.OptionShape,
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             modifier = Modifier.fillMaxWidth()
@@ -391,7 +392,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                 Button(
                     onClick = onDisableAndRestart,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
                 ) {
                     Icon(MaterialSymbolIcon("lock_open"), null, size = 18.dp)
@@ -401,7 +402,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                 OutlinedButton(
                     onClick = onRestart,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = CuteCardDefaults.ShapeCompact,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
                 ) {
                     Icon(MaterialSymbolIcon("restart_alt"), null, size = 18.dp)

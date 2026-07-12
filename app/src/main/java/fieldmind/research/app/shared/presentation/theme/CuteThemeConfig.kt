@@ -1,4 +1,5 @@
 package fieldmind.research.app.ui.theme
+import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
