@@ -196,21 +196,21 @@ object CuteShadows {
  */
 object CuteCardDefaults {
     /** Standard cute card shape — very rounded, pill-like. */
-    val Shape: Shape = RoundedCornerShape(32.dp)
+    val Shape: Shape = RoundedCornerShape(40.dp)
     /** Slightly smaller card shape for inline / compact cards. */
-    val ShapeCompact: Shape = RoundedCornerShape(24.dp)
+    val ShapeCompact: Shape = RoundedCornerShape(30.dp)
     /** Large hero card shape. */
-    val ShapeHero: Shape = RoundedCornerShape(36.dp)
+    val ShapeHero: Shape = RoundedCornerShape(44.dp)
     /** Standard chip/badge shape — rounded pill. */
-    val ChipShape: Shape = RoundedCornerShape(16.dp)
+    val ChipShape: Shape = RoundedCornerShape(20.dp)
     /** Button / small interactive element shape. */
-    val ButtonShape: Shape = RoundedCornerShape(22.dp)
+    val ButtonShape: Shape = RoundedCornerShape(28.dp)
     /** Dialog / modal shape. */
-    val DialogShape: Shape = RoundedCornerShape(40.dp)
+    val DialogShape: Shape = RoundedCornerShape(48.dp)
     /** Option picker item shape. */
-    val OptionShape: Shape = RoundedCornerShape(28.dp)
+    val OptionShape: Shape = RoundedCornerShape(36.dp)
     /** Text field shape. */
-    val FieldShape: Shape = RoundedCornerShape(28.dp)
+    val FieldShape: Shape = RoundedCornerShape(36.dp)
 
     /**
      * Default card colours — uses surfaceContainerLowest so the card
@@ -348,7 +348,7 @@ object CuteGradients {
  * - All content is laid out with consistent padding
  *
  * @param style the tint style (defaults to ScreenBackground)
- * @param shape corner shape (defaults to CuteCardDefaults.Shape = 32dp)
+ * @param shape corner shape (defaults to CuteCardDefaults.Shape = 40dp)
  * @param elevation card elevation (defaults to plushTier2 = 4dp)
  * @param modifier additional modifier
  * @param content card content
