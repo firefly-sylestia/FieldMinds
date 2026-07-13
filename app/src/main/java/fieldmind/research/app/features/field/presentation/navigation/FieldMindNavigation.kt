@@ -953,53 +953,63 @@ private fun categorizeRoute(route: String): RouteCategory = when (route) {
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransition(): EnterTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransition(config: AnimationConfig): EnterTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
     // Spring-based sliding and fading — smooth, responsive feel
-    val slideSpec = FieldMindMotion.slideOffsetSpring
-    val fadeSpec = FieldMindMotion.expressiveFloat
+    val slideSpec = config.slideSpring()
+    val fadeSpec = spring<Float>(
+        dampingRatio = config.entranceDampingRatio,
+        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+    )
+    val bouncySpec = spring<Float>(
+        dampingRatio = 0.55f,
+        stiffness = (config.entranceStiffness * 0.55f).coerceAtLeast(60f)
+    )
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
             val direction = primaryTabDirection(fromRoute, toRoute)
             if (direction == 0)
-                fadeIn(animationSpec = FieldMindMotion.expressiveFloat) +
-                scaleIn(initialScale = 0.96f, animationSpec = FieldMindMotion.expressiveFloat)
+                fadeIn(animationSpec = fadeSpec) +
+                scaleIn(initialScale = 0.96f, animationSpec = fadeSpec)
             else
                 slideInHorizontally(slideSpec) { direction * it / 5 } + fadeIn(fadeSpec) +
-                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+                scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         }
         fromCat == RouteCategory.Tab && toCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
         ) -> slideInHorizontally(slideSpec) { it / 5 } + fadeIn(fadeSpec) +
-            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+            scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         fromCat == RouteCategory.SettingsHub && toCat == RouteCategory.SettingsSubPage ->
-            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = FieldMindMotion.expressiveFloat)
+            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = fadeSpec)
         fromCat == RouteCategory.SettingsSubPage && toCat == RouteCategory.SettingsHub ->
-            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = FieldMindMotion.expressiveFloat)
+            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = fadeSpec)
         toCat == RouteCategory.Tab && fromCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation, RouteCategory.Other
         ) -> slideInHorizontally(slideSpec) { -it / 5 } + fadeIn(fadeSpec) +
-            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+            scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         else -> fadeIn(animationSpec = fadeSpec) +
-            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.expressiveFloat)
+            scaleIn(initialScale = 0.97f, animationSpec = fadeSpec)
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransition(): ExitTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransition(config: AnimationConfig): ExitTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
     // Spring-based sliding and fading — smooth, responsive feel
-    val slideSpec = FieldMindMotion.slideOffsetSpring
-    val fadeSpec = FieldMindMotion.expressiveFloat
+    val slideSpec = config.slideSpring()
+    val fadeSpec = spring<Float>(
+        dampingRatio = config.entranceDampingRatio,
+        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+    )
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -1030,21 +1040,28 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTransition(): EnterTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTransition(config: AnimationConfig): EnterTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
     // Spring-based sliding and fading — smooth, responsive feel
-    val slideSpec = FieldMindMotion.slideOffsetSpring
-    val fadeSpec = FieldMindMotion.expressiveFloat
+    val slideSpec = config.slideSpring()
+    val fadeSpec = spring<Float>(
+        dampingRatio = config.entranceDampingRatio,
+        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+    )
+    val bouncySpec = spring<Float>(
+        dampingRatio = 0.55f,
+        stiffness = (config.entranceStiffness * 0.55f).coerceAtLeast(60f)
+    )
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
             val direction = primaryTabDirection(toRoute, fromRoute)
             // Full-width slide from the opposite side
             slideInHorizontally(slideSpec) { -direction * it } + fadeIn(animationSpec = fadeSpec) +
-                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+                scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         }
         toCat == RouteCategory.Tab && fromCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
@@ -1053,23 +1070,26 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
         ) -> {
             // Previous screen (tab) slides in from the left at full width — iOS predictive peek
             slideInHorizontally(slideSpec) { -it } + fadeIn(animationSpec = fadeSpec) +
-                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+                scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         }
         toCat == RouteCategory.SettingsHub && fromCat == RouteCategory.SettingsSubPage ->
-            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = FieldMindMotion.expressiveFloat)
+            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = fadeSpec)
         else -> slideInHorizontally(slideSpec) { -it } + fadeIn(animationSpec = fadeSpec) +
-            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+            scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransition(): ExitTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransition(config: AnimationConfig): ExitTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
     // Spring-based sliding and fading — smooth, responsive feel
-    val slideSpec = FieldMindMotion.slideOffsetSpring
-    val fadeSpec = FieldMindMotion.expressiveFloat
+    val slideSpec = config.slideSpring()
+    val fadeSpec = spring<Float>(
+        dampingRatio = config.entranceDampingRatio,
+        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+    )
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -1168,10 +1188,10 @@ private fun FieldMindNavHost(
             navController = navController,
             startDestination = "field_tab_container",
             modifier = Modifier,
-            enterTransition = { routeEnterTransition() },
-            exitTransition = { routeExitTransition() },
-            popEnterTransition = { routePopEnterTransition() },
-            popExitTransition = { routePopExitTransition() }
+            enterTransition = { routeEnterTransition(animConfig) },
+            exitTransition = { routeExitTransition(animConfig) },
+            popEnterTransition = { routePopEnterTransition(animConfig) },
+            popExitTransition = { routePopExitTransition(animConfig) }
         ) {
             // ── Single tab container: all 5 tabs rendered simultaneously ──
             // Swipe gestures reveal the real adjacent tab content behind the current one.

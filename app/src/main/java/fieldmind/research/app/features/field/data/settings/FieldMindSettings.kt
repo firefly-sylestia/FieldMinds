@@ -3,6 +3,7 @@ package fieldmind.research.app.features.field.data.settings
 import android.content.Context
 import androidx.compose.animation.core.Spring
 import com.google.gson.Gson
+import kotlin.math.roundToInt
 import fieldmind.research.app.features.field.data.background.FieldMindBackgroundScheduler
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import kotlinx.coroutines.flow.MutableStateFlow
