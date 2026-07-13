@@ -69,6 +69,7 @@ import fieldmind.research.app.features.field.presentation.components.SwipeableAl
 import fieldmind.research.app.features.field.presentation.components.PeekContentHolder
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
+import fieldmind.research.app.features.field.presentation.components.LocalAnimationsEnabled
 import fieldmind.research.app.features.field.presentation.components.LocalPeekContentHolder
 import fieldmind.research.app.features.field.presentation.components.FieldMindAnimatedSplash
 import androidx.activity.compose.BackHandler
@@ -1153,13 +1154,15 @@ private fun FieldMindNavHost(
     // animation parameter changes (set via animation tuning sliders).
     // collectAsState() ensures the CompositionLocal reactively updates.
     val animConfig by viewModel.fieldSettings.animationConfig.collectAsState(AnimationConfig.DEFAULT)
+    val animationsEnabled by viewModel.fieldSettings.animationsEnabled.collectAsState()
 
     SharedTransitionLayout(modifier = modifier) {
         val composableScope = this
         CompositionLocalProvider(
             LocalSharedTransitionScope provides composableScope,
             LocalPeekContentHolder provides peekHolder,
-            LocalAnimationConfig provides animConfig
+            LocalAnimationConfig provides animConfig,
+            LocalAnimationsEnabled provides animationsEnabled
         ) {
             NavHost(
             navController = navController,

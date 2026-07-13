@@ -334,18 +334,7 @@ class FieldMindSettings private constructor(context: Context) {
     val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
     // ── Reactive combined AnimationConfig flow (reacts to any parameter change) ──
-    private val _animationConfig = MutableStateFlow(
-        AnimationConfig(
-            entranceDampingRatio = _animEntranceDamping.value,
-            entranceStiffness = _animEntranceStiffness.value,
-            swipeBackDampingRatio = _animSwipeBackDamping.value,
-            swipeBackStiffness = _animSwipeBackStiffness.value,
-            swipeThreshold = _animSwipeThreshold.value,
-            swipeScaleFactor = _animSwipeScaleFactor.value,
-            tabEntranceDampingRatio = _animTabEntranceDamping.value,
-            tabEntranceStiffness = _animTabEntranceStiffness.value
-        )
-    )
+    private val _animationConfig = MutableStateFlow(currentAnimationConfig())
     /**
      * Reactive [StateFlow] of the current [AnimationConfig], re-emitted whenever
      * any individual animation parameter changes. Use [collectAsState] in Compose
@@ -761,12 +750,20 @@ class FieldMindSettings private constructor(context: Context) {
         return AnimationConfig(
             entranceDampingRatio = _animEntranceDamping.value,
             entranceStiffness = (_animEntranceStiffness.value * mult).coerceAtLeast(1f),
+            expressiveDampingRatio = (_animEntranceDamping.value - 0.04f).coerceIn(0.5f, 0.95f),
+            expressiveStiffness = (_animEntranceStiffness.value * mult * 1.15f).coerceAtLeast(1f),
+            pressDampingRatio = (_animEntranceDamping.value + 0.03f).coerceIn(0.5f, 0.98f),
+            pressStiffness = (_animEntranceStiffness.value * mult * 1.25f).coerceAtLeast(1f),
             swipeBackDampingRatio = _animSwipeBackDamping.value,
             swipeBackStiffness = (_animSwipeBackStiffness.value * mult).coerceAtLeast(1f),
             swipeThreshold = _animSwipeThreshold.value,
             swipeScaleFactor = _animSwipeScaleFactor.value,
             tabEntranceDampingRatio = _animTabEntranceDamping.value,
-            tabEntranceStiffness = (_animTabEntranceStiffness.value * mult).coerceAtLeast(1f)
+            tabEntranceStiffness = (_animTabEntranceStiffness.value * mult).coerceAtLeast(1f),
+            slideStiffness = (_animEntranceStiffness.value * mult * 1.4f).coerceAtLeast(1f),
+            staggerItemDelayMs = (if (_animationsEnabled.value) (30f / mult).roundToInt() else 0).coerceIn(0, 300),
+            staggerInitialDelayMs = (if (_animationsEnabled.value) (40f / mult).roundToInt() else 0).coerceIn(0, 300),
+            staggerMaxDurationMs = (if (_animationsEnabled.value) (300f / mult).roundToInt() else 0).coerceIn(0, 500)
         )
     }
 
