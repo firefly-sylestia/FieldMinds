@@ -67,6 +67,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -359,8 +361,9 @@ fun Modifier.expressivePress(
                         isPressed = true
                         down.consume()
                         // Wait for up or cancellation
+                        var upEvent: PointerEvent
                         do {
-                            val upEvent = awaitPointerEvent()
+                            upEvent = awaitPointerEvent()
                         } while (upEvent.changes.all { it.pressed })
                         upEvent.changes.forEach { it.consume() }
                         isPressed = false
@@ -410,8 +413,9 @@ fun Modifier.expressiveCardPress(
                         isPressed = true
                         down.consume()
                         // Wait for up or cancellation
+                        var upEvent: PointerEvent
                         do {
-                            val upEvent = awaitPointerEvent()
+                            upEvent = awaitPointerEvent()
                         } while (upEvent.changes.all { it.pressed })
                         upEvent.changes.forEach { it.consume() }
                         isPressed = false
@@ -457,8 +461,9 @@ fun Modifier.pressScale(
                         isPressed = true
                         down.consume()
                         // Wait for up or cancellation
+                        var upEvent: PointerEvent
                         do {
-                            val upEvent = awaitPointerEvent()
+                            upEvent = awaitPointerEvent()
                         } while (upEvent.changes.all { it.pressed })
                         upEvent.changes.forEach { it.consume() }
                         isPressed = false
