@@ -65,8 +65,7 @@ import fieldmind.research.app.features.field.presentation.components.LocalPrivac
 import fieldmind.research.app.features.field.presentation.components.PrivacyTextInputWrapper
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
-import fieldmind.research.app.shared.presentation.theme.LocalNavBarStyle
-import fieldmind.research.app.shared.presentation.theme.NavBarStyle
+
 import fieldmind.research.app.features.field.presentation.components.PeekContentHolder
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
@@ -721,35 +720,10 @@ private fun LiquidNavRow(
     // Arrangement.SpaceEvenly inter-item gaps.
     val tabBounds = remember { mutableStateListOf<TabBounds>() }
 
-    // ── NavBarStyle visuals ──
-    val navBarStyle = LocalNavBarStyle.current
+    // ── Nav bar blob color — uses theme primary ──
     val isDark = FieldMindTheme.colors.isDark
     val primary = MaterialTheme.colorScheme.primary
-    val blobColor = when (navBarStyle) {
-        NavBarStyle.Nature -> {
-            // Warm golden-green blended with theme primary for scheme cohesion
-            val natureBase = if (isDark) Color(0xFF7DCDA0) else Color(0xFF2E7D32)
-            Color(
-                red = (natureBase.red + primary.red) / 2f,
-                green = (natureBase.green + primary.green) / 2f,
-                blue = (natureBase.blue + primary.blue) / 2f,
-                alpha = 0.18f
-            )
-        }
-        NavBarStyle.Journal -> {
-            // Warm paper/cream blended with theme primary
-            val journalBase = if (isDark) Color(0xFFD4B896) else Color(0xFF8D6E63)
-            Color(
-                red = (journalBase.red + primary.red) / 2f,
-                green = (journalBase.green + primary.green) / 2f,
-                blue = (journalBase.blue + primary.blue) / 2f,
-                alpha = 0.16f
-            )
-        }
-        NavBarStyle.Modern -> {
-            primary.copy(alpha = 0.15f)
-        }
-    }
+    val blobColor = primary.copy(alpha = 0.15f)
 
     Box(
         modifier = Modifier

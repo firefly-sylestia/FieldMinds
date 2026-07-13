@@ -54,9 +54,6 @@ import fieldmind.research.app.features.field.presentation.components.ColorScheme
 import fieldmind.research.app.features.field.presentation.components.pressScale
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
 
-import fieldmind.research.app.shared.presentation.theme.KeyedEnum
-import fieldmind.research.app.shared.presentation.theme.MicroDelightIntensity
-import fieldmind.research.app.shared.presentation.theme.NavBarStyle
 import fieldmind.research.app.features.field.presentation.screens.DevWeatherTestPanel
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.foundation.text.KeyboardOptions
@@ -602,26 +599,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
             }
         }
 
-        // ╔══════════════════════════════════════════════════════════════╗
-        // ║  NAV BAR STYLE                                              ║
-        // ╚══════════════════════════════════════════════════════════════╝
-        item { SectionHeader("Navigation bar", "How the bottom navigation bar looks and animates") }
-        item {
-            val navBarStyleKey by settings.navBarStyle.collectAsState()
 
-            SettingsGroupCard {
-                PillRadioGroup(
-                    title = "Nav bar style",
-                    description = "How the active tab indicator animates across the bottom bar.",
-                    icon = MaterialSymbolIcon("dock_to_bottom"),
-                    options = NavBarStyle.entries.toList(),
-                    selectedKey = navBarStyleKey,
-                    onSelect = { settings.setNavBarStyle(it.key) }
-                )
-            }
-        }
-
-        // ── Map settings ──
         // ── Entity accent colors ──
         item { SectionHeader("Entity Colors", "Per-category accent color customization") }
         item {
@@ -664,66 +642,6 @@ private fun ThemeToggle(current: String, onSet: (String) -> Unit) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-//  PillRadioGroup — generic three-option radio row
-// ══════════════════════════════════════════════════════════════════════
-
-/**
- * Three-option horizontal radio row used by the Journal Aesthetic section.
- * Renders any [Enum] subtype of [KeyedEnum].
- *
- * @param title       short section title (labelLarge, semi-bold)
- * @param description subtitle describing the trade-off
- * @param icon        leading icon shown next to title
- * @param options     3 keyed enum entries to render as pills
- * @param selectedKey currently-active enum.key
- * @param onSelect    invoked with the chosen enum value
- */
-@Composable
-private fun <T> PillRadioGroup(
-    title: String,
-    description: String,
-    icon: MaterialSymbolIcon,
-    options: List<T>,
-    selectedKey: String,
-    onSelect: (T) -> Unit
-) where T : Enum<T>, T : KeyedEnum {
-    Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Box(
-                Modifier.size(28.dp).clip(CuteCardDefaults.ChipShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
-            }
-            Text(title, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        Text(description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Spacer(Modifier.height(2.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            options.forEach { option ->
-                val isSelected = option.key == selectedKey
-                Surface(
-                    onClick = { onSelect(option) },
-                    shape = MaterialTheme.shapes.medium,
-                    color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                    border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
-                    modifier = Modifier.weight(1f).pressScale(scaleDown = 0.95f)
-                ) {
-                    Text(
-                        text = option.displayName,
-                        modifier = Modifier.padding(vertical = 10.dp, horizontal = 4.dp).fillMaxWidth(),
-                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                        textAlign = TextAlign.Center,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-        }
-    }
-}
 
 // ══════════════════════════════════════════════════════════════════════
 //  Capture Defaults Settings Page
@@ -3235,18 +3153,8 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             val showCloudAnimation by settings.weatherShowCloudAnimation.collectAsState()
             val weatherBackgroundAnimation by settings.weatherBackgroundAnimationEnabled.collectAsState()
-            val microDelightKey by settings.microDelightIntensity.collectAsState()
             SettingsGroupCard {
                 Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    PillRadioGroup(
-                        title = "Micro-delights",
-                        description = "Whimsical touches on captures, streaks, button presses, and celebrations.",
-                        icon = MaterialSymbolIcon("auto_awesome"),
-                        options = MicroDelightIntensity.entries.toList(),
-                        selectedKey = microDelightKey,
-                        onSelect = { settings.setMicroDelightIntensity(it.key) }
-                    )
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
                     ToggleItem(
                         "Background weather animation",
                         "Animated skybox, drifting clouds, fireflies, and atmospheric motion behind the weather widget. Turn off to render a static journal-themed gradient.",

@@ -25,10 +25,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
-import fieldmind.research.app.shared.presentation.theme.LocalMicroDelightIntensity
-import fieldmind.research.app.shared.presentation.theme.LocalNavBarStyle
-import fieldmind.research.app.shared.presentation.theme.MicroDelightIntensity
-import fieldmind.research.app.shared.presentation.theme.NavBarStyle
+
 import fieldmind.research.app.ui.theme.getCustomColorScheme
 import fieldmind.research.app.ui.theme.getTypographyForFont
 
@@ -817,26 +814,8 @@ fun FieldMindTheme(
         }
     }
 
-    val microDelightKey by FieldMindSettings
-        .getInstance(context)
-        .microDelightIntensity
-        .collectAsState()
-    val navStyleKey by FieldMindSettings
-        .getInstance(context)
-        .navBarStyle
-        .collectAsState()
-
-    val delightIntensity = remember(microDelightKey) {
-        MicroDelightIntensity.fromKey(microDelightKey)
-    }
-    val navBarConfig = remember(navStyleKey) {
-        NavBarStyle.fromKey(navStyleKey)
-    }
-
     CompositionLocalProvider(
-        LocalFieldMindColors provides semantic,
-        LocalMicroDelightIntensity provides delightIntensity,
-        LocalNavBarStyle provides navBarConfig
+        LocalFieldMindColors provides semantic
     ) {
         MaterialTheme(
             colorScheme = fullAnimatedColorScheme,
