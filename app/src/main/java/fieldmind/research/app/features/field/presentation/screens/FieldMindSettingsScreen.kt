@@ -239,7 +239,6 @@ fun FieldMindSettingsScreen(
         item { SettingsNavCard("About", "Credits, acknowledgements, and version", FieldMindIcons.Info, FieldMindTheme.colors.source) { onOpenAbout?.invoke() } }
         item { SettingsNavCard("Developer options", "Debug tools, logging, performance stats, and test data", MaterialSymbolIcon("tune"), FieldMindTheme.colors.hypothesis) { onOpenDeveloper?.invoke() } }
 
-        var resetConfettiTrigger by remember { mutableIntStateOf(0) }
         item {
             OutlinedButton(
                 onClick = {

@@ -3,6 +3,7 @@ package fieldmind.research.app.features.field.presentation.components
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
@@ -48,6 +49,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -79,6 +81,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 import androidx.activity.compose.BackHandler
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -355,7 +358,11 @@ fun Modifier.expressivePress(
                     if (down.pressed) {
                         isPressed = true
                         down.consume()
-                        waitForUpOrCancellation()?.consume()
+                        // Wait for up or cancellation
+                        do {
+                            val upEvent = awaitPointerEvent()
+                        } while (upEvent.changes.all { it.pressed })
+                        upEvent.changes.forEach { it.consume() }
                         isPressed = false
                     }
                 }
@@ -402,7 +409,11 @@ fun Modifier.expressiveCardPress(
                     if (down.pressed) {
                         isPressed = true
                         down.consume()
-                        waitForUpOrCancellation()?.consume()
+                        // Wait for up or cancellation
+                        do {
+                            val upEvent = awaitPointerEvent()
+                        } while (upEvent.changes.all { it.pressed })
+                        upEvent.changes.forEach { it.consume() }
                         isPressed = false
                     }
                 }
@@ -445,7 +456,11 @@ fun Modifier.pressScale(
                     if (down.pressed) {
                         isPressed = true
                         down.consume()
-                        waitForUpOrCancellation()?.consume()
+                        // Wait for up or cancellation
+                        do {
+                            val upEvent = awaitPointerEvent()
+                        } while (upEvent.changes.all { it.pressed })
+                        upEvent.changes.forEach { it.consume() }
                         isPressed = false
                     }
                 }

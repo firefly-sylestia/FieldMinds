@@ -1804,7 +1804,10 @@ private fun AllTabScreen(
                                     scope.launch {
                                         animX.animateTo(
                                             0f,
-                                            animationSpec = FieldMindMotion.expressiveFloat
+                                            animationSpec = spring<Float>(
+                                                dampingRatio = animConfig.entranceDampingRatio,
+                                                stiffness = (animConfig.entranceStiffness * 0.78f).coerceAtLeast(60f)
+                                            )
                                         )
                                     }
                                 }
@@ -1814,7 +1817,10 @@ private fun AllTabScreen(
                                 scope.launch {
                                     animX.animateTo(
                                         0f,
-                                        animationSpec = FieldMindMotion.expressiveFloat
+                                        animationSpec = spring<Float>(
+                                            dampingRatio = animConfig.entranceDampingRatio,
+                                            stiffness = (animConfig.entranceStiffness * 0.78f).coerceAtLeast(60f)
+                                        )
                                     )
                                 }
                             }

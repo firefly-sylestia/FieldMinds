@@ -2,6 +2,7 @@ package fieldmind.research.app.features.field.presentation.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +54,7 @@ fun FieldMindCheckbox(
     )
     val checkedColor by animateColorAsState(
         targetValue = if (checked) accentColor else MaterialTheme.colorScheme.outlineVariant,
-        animationSpec = FieldMindMotion.expressiveFloat,
+        animationSpec = tween(durationMillis = FieldMindMotion.durationSubtle),
         label = "checkboxColor"
     )
 
@@ -106,7 +108,7 @@ fun FieldMindRadioButton(
     )
     val borderColor by animateColorAsState(
         targetValue = if (selected) accentColor else MaterialTheme.colorScheme.outlineVariant,
-        animationSpec = FieldMindMotion.expressiveFloat,
+        animationSpec = tween(durationMillis = FieldMindMotion.durationSubtle),
         label = "radioBorder"
     )
 
