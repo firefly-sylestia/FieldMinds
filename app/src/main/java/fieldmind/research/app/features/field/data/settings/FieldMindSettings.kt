@@ -333,6 +333,22 @@ class FieldMindSettings private constructor(context: Context) {
     private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, 120f))
     val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
+    // ── New expressive motion tunables ──
+    private val _animMorphDurationMs = MutableStateFlow(prefs.getInt(KEY_ANIM_MORPH_DURATION_MS, 400))
+    val animMorphDurationMs: StateFlow<Int> = _animMorphDurationMs.asStateFlow()
+    private val _animSideRevealDistanceDp = MutableStateFlow(prefs.getFloat(KEY_ANIM_SIDE_REVEAL_DISTANCE_DP, 40f))
+    val animSideRevealDistanceDp: StateFlow<Float> = _animSideRevealDistanceDp.asStateFlow()
+    private val _animShimmerSpeedMs = MutableStateFlow(prefs.getInt(KEY_ANIM_SHIMMER_SPEED_MS, 1200))
+    val animShimmerSpeedMs: StateFlow<Int> = _animShimmerSpeedMs.asStateFlow()
+    private val _animPulseDurationMs = MutableStateFlow(prefs.getInt(KEY_ANIM_PULSE_DURATION_MS, 1500))
+    val animPulseDurationMs: StateFlow<Int> = _animPulseDurationMs.asStateFlow()
+    private val _animListChoreographyEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIM_LIST_CHOREOGRAPHY_ENABLED, true))
+    val animListChoreographyEnabled: StateFlow<Boolean> = _animListChoreographyEnabled.asStateFlow()
+    private val _animConfettiEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIM_CONFETTI_ENABLED, true))
+    val animConfettiEnabled: StateFlow<Boolean> = _animConfettiEnabled.asStateFlow()
+    private val _animPageFlipEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIM_PAGE_FLIP_ENABLED, true))
+    val animPageFlipEnabled: StateFlow<Boolean> = _animPageFlipEnabled.asStateFlow()
+
     // ── Reactive combined AnimationConfig flow (reacts to any parameter change) ──
     private val _animationConfig = MutableStateFlow(currentAnimationConfig())
     /**
@@ -763,7 +779,14 @@ class FieldMindSettings private constructor(context: Context) {
             slideStiffness = (_animEntranceStiffness.value * mult * 1.4f).coerceAtLeast(1f),
             staggerItemDelayMs = (if (_animationsEnabled.value) (30f / mult).roundToInt() else 0).coerceIn(0, 300),
             staggerInitialDelayMs = (if (_animationsEnabled.value) (40f / mult).roundToInt() else 0).coerceIn(0, 300),
-            staggerMaxDurationMs = (if (_animationsEnabled.value) (300f / mult).roundToInt() else 0).coerceIn(0, 500)
+            staggerMaxDurationMs = (if (_animationsEnabled.value) (300f / mult).roundToInt() else 0).coerceIn(0, 500),
+            morphDurationMs = _animMorphDurationMs.value,
+            sideRevealDistanceDp = _animSideRevealDistanceDp.value,
+            shimmerSpeedMs = _animShimmerSpeedMs.value,
+            pulseDurationMs = _animPulseDurationMs.value,
+            listChoreographyEnabled = _animListChoreographyEnabled.value,
+            confettiEnabled = _animConfettiEnabled.value,
+            pageFlipEnabled = _animPageFlipEnabled.value
         )
     }
 
@@ -776,6 +799,15 @@ class FieldMindSettings private constructor(context: Context) {
     fun setAnimSwipeScaleFactor(value: Float) = edit(KEY_ANIM_SWIPE_SCALE, value) { _animSwipeScaleFactor.value = value; refreshAnimationConfig() }
     fun setAnimTabEntranceDamping(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_DAMPING, value) { _animTabEntranceDamping.value = value; refreshAnimationConfig() }
     fun setAnimTabEntranceStiffness(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, value) { _animTabEntranceStiffness.value = value; refreshAnimationConfig() }
+
+    // ── New expressive motion tunable setters ──
+    fun setAnimMorphDurationMs(value: Int) = edit(KEY_ANIM_MORPH_DURATION_MS, value) { _animMorphDurationMs.value = value; refreshAnimationConfig() }
+    fun setAnimSideRevealDistanceDp(value: Float) = edit(KEY_ANIM_SIDE_REVEAL_DISTANCE_DP, value) { _animSideRevealDistanceDp.value = value; refreshAnimationConfig() }
+    fun setAnimShimmerSpeedMs(value: Int) = edit(KEY_ANIM_SHIMMER_SPEED_MS, value) { _animShimmerSpeedMs.value = value; refreshAnimationConfig() }
+    fun setAnimPulseDurationMs(value: Int) = edit(KEY_ANIM_PULSE_DURATION_MS, value) { _animPulseDurationMs.value = value; refreshAnimationConfig() }
+    fun setAnimListChoreographyEnabled(value: Boolean) = edit(KEY_ANIM_LIST_CHOREOGRAPHY_ENABLED, value) { _animListChoreographyEnabled.value = value; refreshAnimationConfig() }
+    fun setAnimConfettiEnabled(value: Boolean) = edit(KEY_ANIM_CONFETTI_ENABLED, value) { _animConfettiEnabled.value = value; refreshAnimationConfig() }
+    fun setAnimPageFlipEnabled(value: Boolean) = edit(KEY_ANIM_PAGE_FLIP_ENABLED, value) { _animPageFlipEnabled.value = value; refreshAnimationConfig() }
 
     fun verifyAppPin(input: String): Boolean {
         val hash = _appPinHash.value
@@ -1490,6 +1522,14 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_ANIM_SWIPE_SCALE = "anim_swipe_scale"
         private const val KEY_ANIM_TAB_ENTRANCE_DAMPING = "anim_tab_entrance_damping"
         private const val KEY_ANIM_TAB_ENTRANCE_STIFFNESS = "anim_tab_entrance_stiffness"
+        // ── New expressive motion keys ──
+        private const val KEY_ANIM_MORPH_DURATION_MS = "anim_morph_duration_ms"
+        private const val KEY_ANIM_SIDE_REVEAL_DISTANCE_DP = "anim_side_reveal_distance_dp"
+        private const val KEY_ANIM_SHIMMER_SPEED_MS = "anim_shimmer_speed_ms"
+        private const val KEY_ANIM_PULSE_DURATION_MS = "anim_pulse_duration_ms"
+        private const val KEY_ANIM_LIST_CHOREOGRAPHY_ENABLED = "anim_list_choreography_enabled"
+        private const val KEY_ANIM_CONFETTI_ENABLED = "anim_confetti_enabled"
+        private const val KEY_ANIM_PAGE_FLIP_ENABLED = "anim_page_flip_enabled"
         // ── Animation master toggle & speed preset ──
         private const val KEY_ANIMATIONS_ENABLED = "animations_enabled"
         private const val KEY_ANIMATION_SPEED_PRESET = "animation_speed_preset"

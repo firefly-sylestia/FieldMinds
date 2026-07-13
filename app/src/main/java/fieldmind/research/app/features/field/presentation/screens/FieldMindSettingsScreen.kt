@@ -53,6 +53,11 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.features.field.presentation.components.ColorSchemeSwatchPicker
 import fieldmind.research.app.features.field.presentation.components.pressScale
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
+import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
+import fieldmind.research.app.features.field.presentation.components.SideRevealDirection
+import fieldmind.research.app.features.field.presentation.components.pulse
+import fieldmind.research.app.features.field.presentation.components.shimmer
+import fieldmind.research.app.features.field.presentation.components.morphShape
 
 import fieldmind.research.app.features.field.presentation.screens.DevWeatherTestPanel
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -124,7 +129,9 @@ fun FieldMindSettingsScreen(
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
     val settingsScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
-    LazyColumn(
+    var resetConfettiTrigger by remember { mutableIntStateOf(0) }
+    Box(Modifier.fillMaxSize()) {
+        LazyColumn(
         state = settingsScrollState,
         modifier = Modifier.fillMaxSize().statusBarsPadding(),
         contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 40.dp),
@@ -232,12 +239,22 @@ fun FieldMindSettingsScreen(
         item { SettingsNavCard("About", "Credits, acknowledgements, and version", FieldMindIcons.Info, FieldMindTheme.colors.source) { onOpenAbout?.invoke() } }
         item { SettingsNavCard("Developer options", "Debug tools, logging, performance stats, and test data", MaterialSymbolIcon("tune"), FieldMindTheme.colors.hypothesis) { onOpenDeveloper?.invoke() } }
 
+        var resetConfettiTrigger by remember { mutableIntStateOf(0) }
         item {
-            OutlinedButton(onClick = onResetOnboarding, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact) {
+            OutlinedButton(
+                onClick = {
+                    resetConfettiTrigger++
+                    onResetOnboarding()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = CuteCardDefaults.ShapeCompact
+            ) {
                 Text("Reset onboarding")
             }
             Spacer(Modifier.height(40.dp))
         }
+    }
+    ConfettiOverlay(trigger = resetConfettiTrigger, particleCount = 80)
     }
 }
 
@@ -249,8 +266,18 @@ private fun SettingsNavCard(title: String, subtitle: String, icon: MaterialSymbo
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradient = CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
+    val animConfig = LocalAnimationConfig.current
+    val listChoreography = animConfig.listChoreographyEnabled
     Card(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).pressScale(scaleDown = 0.97f),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .pressScale(scaleDown = 0.97f)
+            .sideReveal(
+                fromSide = SideRevealDirection.Start,
+                animate = listChoreography,
+                distance = animConfig.sideRevealDistanceDp.dp
+            ),
         shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
@@ -549,7 +576,10 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                                     Box(
                                         Modifier
                                             .size(32.dp)
-                                            .clip(CuteCardDefaults.ChipShape)
+                                            .morphShape(
+                                                targetCornerRadius = if (isSelected) 12.dp else 4.dp,
+                                                animate = isSelected
+                                            )
                                             .background(brush = previewBrush)
                                     )
                                     Text(
@@ -1344,12 +1374,18 @@ fun BackupImportSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, 
 fun AboutPage(onBack: () -> Unit, onOpenChangelog: (() -> Unit)? = null) {
     val uriHandler = LocalUriHandler.current
 
+    var logoFlipProgress by remember { mutableFloatStateOf(0f) }
+    val aboutAnimConfig = LocalAnimationConfig.current
     SettingsSubPage("About", icon = FieldMindIcons.Info, onBack = onBack) {
         item {
             Card(
                 shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { logoFlipProgress = if (logoFlipProgress == 0f) 1f else 0f }
+                    .pageFlip(progress = logoFlipProgress, enabled = aboutAnimConfig.pageFlipEnabled)
             ) {
                 Column(Modifier.padding(22.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     FieldMindLogo(
@@ -1969,9 +2005,9 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
         }
         item {
             if (isRunning) {
-                Card(shape = CuteCardDefaults.ShapeCompact, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+                Card(shape = CuteCardDefaults.ShapeCompact, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.shimmer(enabled = true)) {
                     Row(Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                        CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                        CircularProgressIndicator(modifier = Modifier.size(20.dp).pulse(enabled = true, minScale = 0.9f, maxScale = 1.1f), strokeWidth = 2.dp)
                         Text("Running integrity check…", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     }
                 }
@@ -3266,6 +3302,114 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
 
+
+        // ── Expressive Motion ──
+        item { SectionHeader("Expressive motion", "Side reveals, morphs, shimmer, pulse, and celebrations") }
+        item {
+            val morphDuration by settings.animMorphDurationMs.collectAsState()
+            val sideRevealDistance by settings.animSideRevealDistanceDp.collectAsState()
+            val shimmerSpeed by settings.animShimmerSpeedMs.collectAsState()
+            val pulseDuration by settings.animPulseDurationMs.collectAsState()
+            val listChoreography by settings.animListChoreographyEnabled.collectAsState()
+            val confetti by settings.animConfettiEnabled.collectAsState()
+            val pageFlip by settings.animPageFlipEnabled.collectAsState()
+
+            SettingsGroupCard {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text(
+                        "Toggle and tune the new expressive animation effects. These respect the master animation switch and speed preset above.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    ToggleItem(
+                        "List choreography",
+                        "Staggered, choreographed entrances for list and grid items.",
+                        listChoreography,
+                        settings::setAnimListChoreographyEnabled,
+                        MaterialSymbolIcon("view_list")
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    ToggleItem(
+                        "Celebration confetti",
+                        "Brief particle burst on achievements and completion moments.",
+                        confetti,
+                        settings::setAnimConfettiEnabled,
+                        MaterialSymbolIcon("celebration")
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    ToggleItem(
+                        "Page flip transitions",
+                        "3D card-flip style transitions for detail screens.",
+                        pageFlip,
+                        settings::setAnimPageFlipEnabled,
+                        MaterialSymbolIcon("flip")
+                    )
+
+                    HorizontalDivider(Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+
+                    // Morph duration
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Morph duration", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${morphDuration}ms", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(
+                            value = morphDuration.toFloat(),
+                            onValueChange = { settings.setAnimMorphDurationMs(it.toInt()) },
+                            valueRange = 100f..1000f,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary, activeTrackColor = MaterialTheme.colorScheme.primary)
+                        )
+                    }
+
+                    // Side reveal distance
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Side reveal distance", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${sideRevealDistance.toInt()}dp", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(
+                            value = sideRevealDistance,
+                            onValueChange = { settings.setAnimSideRevealDistanceDp(it) },
+                            valueRange = 16f..120f,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary, activeTrackColor = MaterialTheme.colorScheme.primary)
+                        )
+                    }
+
+                    // Shimmer speed
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Shimmer speed", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${shimmerSpeed}ms", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(
+                            value = shimmerSpeed.toFloat(),
+                            onValueChange = { settings.setAnimShimmerSpeedMs(it.toInt()) },
+                            valueRange = 400f..3000f,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary, activeTrackColor = MaterialTheme.colorScheme.primary)
+                        )
+                    }
+
+                    // Pulse duration
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Pulse duration", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${pulseDuration}ms", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(
+                            value = pulseDuration.toFloat(),
+                            onValueChange = { settings.setAnimPulseDurationMs(it.toInt()) },
+                            valueRange = 500f..3000f,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary, activeTrackColor = MaterialTheme.colorScheme.primary)
+                        )
+                    }
+                }
+            }
+        }
         // ── Interactive Animation Preview ──
         item { SectionHeader("Live preview", "See how each speed preset affects animation feel") }
         item {

@@ -6,6 +6,10 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -26,6 +30,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.util.lerp
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.random.Random
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -116,7 +132,15 @@ data class AnimationConfig(
     val slideStiffness: Float = 400f,
     val staggerItemDelayMs: Int = 30,
     val staggerInitialDelayMs: Int = 40,
-    val staggerMaxDurationMs: Int = 300
+    val staggerMaxDurationMs: Int = 300,
+    // — New expressive motion tunables —
+    val morphDurationMs: Int = 400,
+    val sideRevealDistanceDp: Float = 40f,
+    val shimmerSpeedMs: Int = 1200,
+    val pulseDurationMs: Int = 1500,
+    val listChoreographyEnabled: Boolean = true,
+    val confettiEnabled: Boolean = true,
+    val pageFlipEnabled: Boolean = true
 ) {
     companion object {
         /** Default config used when no LocalAnimationConfig is provided. */
@@ -536,6 +560,356 @@ fun Modifier.bouncyEntrance(
         scaleX = scale.value
         scaleY = scale.value
         transformOrigin = TransformOrigin.Center
+    }
+}
+
+// ── Side Reveal Animation (slide in from a side) ──
+
+/**
+ * A [Modifier] that animates a composable's entrance by sliding it in from
+ * one of the four sides. The composable starts off-screen (or partially
+ * offset) and slides into its final position with a spring.
+ *
+ * @param fromSide  Which side to slide from: [SideRevealDirection.Start],
+ *                  [End], [Top], or [Bottom].
+ * @param animate   Whether to play the entrance animation.
+ * @param distance  How far to slide (in dp). Defaults to the config value.
+ */
+fun Modifier.sideReveal(
+    fromSide: SideRevealDirection = SideRevealDirection.Start,
+    animate: Boolean = false,
+    distance: Dp? = null
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "sideReveal"
+        properties["fromSide"] = fromSide
+        properties["animate"] = animate
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val shouldAnimate = animate && !reduceMotion
+    var hasAnimatedIn by remember { mutableStateOf(false) }
+    val animConfig = LocalAnimationConfig.current
+    val density = LocalDensity.current
+    val slideDistance = with(density) { (distance ?: animConfig.sideRevealDistanceDp.dp).toPx() }
+
+    LaunchedEffect(animate, fromSide, reduceMotion) {
+        if (shouldAnimate) {
+            delay(animConfig.staggerInitialDelayMs.toLong())
+            hasAnimatedIn = true
+        } else {
+            hasAnimatedIn = true
+        }
+    }
+
+    val target = if (hasAnimatedIn) 0f else slideDistance
+    val offsetX by animateFloatAsState(
+        targetValue = when (fromSide) {
+            SideRevealDirection.Start -> if (hasAnimatedIn) 0f else slideDistance
+            SideRevealDirection.End -> if (hasAnimatedIn) 0f else -slideDistance
+            else -> 0f
+        },
+        animationSpec = FieldMindMotion.expressiveSpring,
+        label = "sideRevealX"
+    )
+    val offsetY by animateFloatAsState(
+        targetValue = when (fromSide) {
+            SideRevealDirection.Top -> if (hasAnimatedIn) 0f else slideDistance
+            SideRevealDirection.Bottom -> if (hasAnimatedIn) 0f else -slideDistance
+            else -> 0f
+        },
+        animationSpec = FieldMindMotion.expressiveSpring,
+        label = "sideRevealY"
+    )
+
+    this.graphicsLayer {
+        this.translationX = offsetX
+        this.translationY = offsetY
+        this.alpha = if (hasAnimatedIn) 1f else 0f
+    }
+}
+
+enum class SideRevealDirection { Start, End, Top, Bottom }
+
+// ── Morph Shape Animation (corner radius / shape morph) ──
+
+/**
+ * A [Modifier] that animates the corner radius of a composable between two
+ * values. Useful for morphing chips into cards, or buttons into pills.
+ *
+ * @param targetCornerRadius  Target corner radius in dp.
+ * @param animate             Whether to animate the change.
+ */
+fun Modifier.morphShape(
+    targetCornerRadius: Dp,
+    animate: Boolean = true
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "morphShape"
+        properties["targetCornerRadius"] = targetCornerRadius
+        properties["animate"] = animate
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val density = LocalDensity.current
+    val targetPx = with(density) { targetCornerRadius.toPx() }
+
+    val animatedRadius by animateFloatAsState(
+        targetValue = targetPx,
+        animationSpec = if (animate && !reduceMotion) {
+            spring(dampingRatio = animConfig.entranceDampingRatio, stiffness = animConfig.entranceStiffness)
+        } else {
+            spring(stiffness = Spring.StiffnessMedium)
+        },
+        label = "morphShape"
+    )
+
+    this.clip(RoundedCornerShape(animatedRadius))
+}
+
+// ── Shimmer Loading Effect ──
+
+/**
+ * A [Modifier] that applies a shimmering sweep effect over the composable.
+ * Ideal for loading placeholders. Respects reduce-motion and the global
+ * animation toggle.
+ *
+ * @param enabled  Whether the shimmer is active.
+ * @param baseColor  Base color of the shimmer; defaults to surface variant.
+ * @param highlightColor  Highlight color; defaults to a lighter variant.
+ */
+fun Modifier.shimmer(
+    enabled: Boolean = true,
+    baseColor: Color? = null,
+    highlightColor: Color? = null
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "shimmer"
+        properties["enabled"] = enabled
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion
+
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val shimmerProgress by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(animConfig.shimmerSpeedMs, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "shimmerProgress"
+    )
+
+    val colorBase = baseColor ?: MaterialTheme.colorScheme.surfaceVariant
+    val colorHighlight = highlightColor ?: MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+
+    if (shouldAnimate) {
+        this.drawWithCache {
+            val gradientWidth = size.width * 1.5f
+            onDrawWithContent {
+                drawContent()
+                val offsetX = (shimmerProgress * (size.width + gradientWidth)) - gradientWidth
+                val brush = Brush.linearGradient(
+                    0f to colorBase,
+                    0.5f to colorHighlight,
+                    1f to colorBase,
+                    start = Offset(offsetX, 0f),
+                    end = Offset(offsetX + gradientWidth, 0f)
+                )
+                drawRect(brush = brush, alpha = 0.6f)
+            }
+        }
+    } else {
+        this
+    }
+}
+
+// ── Pulse / Breathe Animation ──
+
+/**
+ * A [Modifier] that applies a gentle pulsing/breathing scale animation to a
+ * composable. Great for attention badges, recording indicators, or live
+ * status dots.
+ *
+ * @param enabled  Whether the pulse is active.
+ * @param minScale Minimum scale during the pulse.
+ * @param maxScale Maximum scale during the pulse.
+ */
+fun Modifier.pulse(
+    enabled: Boolean = true,
+    minScale: Float = 0.95f,
+    maxScale: Float = 1.05f
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "pulse"
+        properties["enabled"] = enabled
+        properties["minScale"] = minScale
+        properties["maxScale"] = maxScale
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion
+
+    val transition = rememberInfiniteTransition(label = "pulse")
+    val scale by transition.animateFloat(
+        initialValue = minScale,
+        targetValue = maxScale,
+        animationSpec = infiniteRepeatable(
+            animation = tween(animConfig.pulseDurationMs / 2, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulseScale"
+    )
+
+    if (shouldAnimate) {
+        this.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            transformOrigin = TransformOrigin.Center
+        }
+    } else {
+        this
+    }
+}
+
+// ── Page Flip / 3D Card Rotation ──
+
+/**
+ * A [Modifier] that applies a 3D page-flip rotation around the Y axis.
+ * Useful for card flip reveals or dramatic transitions.
+ *
+ * @param progress  0f = front face, 1f = back face (180 degrees).
+ * @param enabled   Whether to apply the flip transform.
+ */
+fun Modifier.pageFlip(
+    progress: Float,
+    enabled: Boolean = true
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "pageFlip"
+        properties["progress"] = progress
+        properties["enabled"] = enabled
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion
+
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress,
+        animationSpec = if (shouldAnimate) {
+            spring(dampingRatio = animConfig.entranceDampingRatio, stiffness = animConfig.entranceStiffness)
+        } else {
+            spring(stiffness = Spring.StiffnessMedium)
+        },
+        label = "pageFlip"
+    )
+
+    if (shouldAnimate) {
+        this.graphicsLayer {
+            rotationY = animatedProgress * 180f
+            cameraDistance = 36f
+            transformOrigin = TransformOrigin.Center
+        }
+    } else {
+        this
+    }
+}
+
+// ── Confetti / Particle Celebration Overlay ──
+
+/**
+ * Renders a burst of confetti particles over the full screen. Trigger by
+ * toggling [trigger] to a new value. Particles respect reduce-motion and
+ * the global animation toggle.
+ *
+ * @param trigger      Change this value to fire a new burst.
+ * @param particleCount  Number of particles in the burst.
+ * @param colors       Optional list of colors for the particles.
+ */
+@Composable
+fun ConfettiOverlay(
+    trigger: Any,
+    modifier: Modifier = Modifier,
+    particleCount: Int = 60,
+    colors: List<Color> = emptyList()
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    if (reduceMotion || !animConfig.confettiEnabled) return
+
+    val defaultColors = listOf(
+        MaterialTheme.colorScheme.primary,
+        MaterialTheme.colorScheme.secondary,
+        MaterialTheme.colorScheme.tertiary,
+        FieldMindTheme.colors.positive,
+        FieldMindTheme.colors.observation,
+        FieldMindTheme.colors.flashcard
+    )
+    val palette = colors.ifEmpty { defaultColors }
+    val density = LocalDensity.current
+
+    data class Particle(
+        val color: Color,
+        val startX: Float,
+        val startY: Float,
+        val angle: Float,
+        val velocity: Float,
+        val size: Float,
+        val rotation: Float,
+        val rotationSpeed: Float
+    )
+
+    var particles by remember { mutableStateOf<List<Particle>>(emptyList()) }
+    var burstKey by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(trigger) {
+        burstKey++
+        val newParticles = List(particleCount) {
+            Particle(
+                color = palette.random(),
+                startX = 0f,
+                startY = 0f,
+                angle = Random.nextDouble(0.0, 2 * PI).toFloat(),
+                velocity = Random.nextDouble(200.0, 600.0).toFloat(),
+                size = Random.nextDouble(4.0, 12.0).toFloat(),
+                rotation = Random.nextDouble(0.0, 360.0).toFloat(),
+                rotationSpeed = Random.nextDouble(-180.0, 180.0).toFloat()
+            )
+        }
+        particles = newParticles
+    }
+
+    if (particles.isEmpty()) return
+
+    Box(modifier = modifier.fillMaxSize()) {
+        particles.forEachIndexed { index, particle ->
+            val anim = remember(burstKey, index) { Animatable(0f) }
+            LaunchedEffect(burstKey) {
+                anim.animateTo(1f, animationSpec = tween(1200, easing = FastOutSlowInEasing))
+            }
+            val progress = anim.value
+            val x = with(density) { particle.startX + cos(particle.angle) * particle.velocity * progress }.dp
+            val y = with(density) { particle.startY + sin(particle.angle) * particle.velocity * progress + 200f * progress * progress }.dp
+            val rotation = particle.rotation + particle.rotationSpeed * progress
+            val alpha = 1f - progress
+
+            Box(
+                modifier = Modifier
+                    .offset(x = x, y = y)
+                    .size(with(density) { particle.size }.dp)
+                    .graphicsLayer {
+                        rotationZ = rotation
+                        this.alpha = alpha
+                    }
+                    .background(particle.color, RoundedCornerShape(2.dp))
+            )
+        }
     }
 }
 
