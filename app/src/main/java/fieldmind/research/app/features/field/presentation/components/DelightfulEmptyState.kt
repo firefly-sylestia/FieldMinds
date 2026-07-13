@@ -2,6 +2,7 @@ package fieldmind.research.app.features.field.presentation.components
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -30,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
@@ -101,15 +103,39 @@ fun DelightfulEmptyState(
 
     val cardShape = CuteCardDefaults.ShapeCompact
     val chipShape = CuteCardDefaults.ChipShape
+
+    // Subtle entrance animation for the whole card
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    var hasAnimatedIn by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if (!reduceMotion) {
+            hasAnimatedIn = true
+        } else {
+            hasAnimatedIn = true
+        }
+    }
+    val entranceAlpha by animateFloatAsState(
+        targetValue = if (hasAnimatedIn) 1f else 0f,
+        animationSpec = FieldMindMotion.expressiveFloat,
+        label = "emptyStateEntrance"
+    )
+    val entranceOffset by animateFloatAsState(
+        targetValue = if (hasAnimatedIn) 0f else 16f,
+        animationSpec = FieldMindMotion.expressiveFloat,
+        label = "emptyStateOffset"
+    )
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            
+            .alpha(if (reduceMotion) 1f else entranceAlpha)
+            .graphicsLayer {
+                translationY = if (reduceMotion) 0f else entranceOffset
+            }
             .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = cardShape),
         shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        border = journalBorderStroke()
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier
@@ -117,7 +143,7 @@ fun DelightfulEmptyState(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            accentColor.copy(alpha = 0.03f),
+                            accentColor.copy(alpha = 0.04f),
                             Color.Transparent,
                             MaterialTheme.colorScheme.surface
                         )
@@ -158,7 +184,7 @@ fun DelightfulEmptyState(
                     lineHeight = MaterialTheme.typography.bodyMedium.lineHeight
                 )
 
-                // ── Helpful tip ──
+                // ── Helpful tip (inline, no box) ──
                 if (tip.isNotBlank()) {
                     Spacer(Modifier.height(4.dp))
                     Row(
@@ -166,22 +192,18 @@ fun DelightfulEmptyState(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(
-                                accentColor.copy(alpha = 0.06f),
-                                chipShape
-                            )
-                            .padding(horizontal = 14.dp, vertical = 8.dp)
+                            .padding(horizontal = 4.dp)
                     ) {
                         Icon(
                             MaterialSymbolIcon("lightbulb"),
                             contentDescription = null,
-                            tint = accentColor.copy(alpha = 0.7f),
+                            tint = accentColor.copy(alpha = 0.85f),
                             size = 16.dp
                         )
                         Text(
                             text = tip,
                             style = MaterialTheme.typography.bodySmall,
-                            color = accentColor.copy(alpha = 0.8f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.Medium,
                             maxLines = 2
                         )

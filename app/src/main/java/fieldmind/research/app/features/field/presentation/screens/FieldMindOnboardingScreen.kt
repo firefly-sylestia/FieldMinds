@@ -1013,7 +1013,7 @@ private fun SegBtn(options: List<String>, selected: String,
                         topStart = 16.dp, bottomStart = 20.dp)
                     else if (last) RoundedCornerShape(
                         topEnd = 16.dp, bottomEnd = 20.dp)
-                    else RoundedCornerShape(0.dp),
+                    else RoundedCornerShape(8.dp),
                 color = if (sel) MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.surfaceContainerHighest,
                 border = BorderStroke(0.5.dp,

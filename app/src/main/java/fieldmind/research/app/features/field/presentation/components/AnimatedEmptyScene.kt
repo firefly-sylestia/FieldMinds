@@ -7,8 +7,10 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -21,6 +23,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -101,6 +104,12 @@ fun AnimatedEmptyScene(
         label = "wingFlap"
     )
 
+    val isDark = isSystemInDarkTheme() || FieldMindTheme.colors.isDark
+    // Boost alpha in dark mode so the scene stays visible against dark surfaces
+    val alphaBoost = if (isDark) 1.6f else 1f
+    // Use theme-aware surface tints for background elements so they adapt to light/dark
+    val surfaceTint = MaterialTheme.colorScheme.onSurfaceVariant
+
     Canvas(
         modifier = modifier
             .fillMaxWidth()
@@ -110,24 +119,24 @@ fun AnimatedEmptyScene(
         val h = size.height
         val cx = w / 2f
         val groundY = h * 0.85f
-        val grassColor = accentColor.copy(alpha = 0.45f)
-        val accentLight = accentColor.copy(alpha = 0.25f)
+        val grassColor = accentColor.copy(alpha = (0.45f * alphaBoost).coerceAtMost(1f))
+        val accentLight = accentColor.copy(alpha = (0.35f * alphaBoost).coerceAtMost(1f))
 
         when (variant) {
             EmptySceneVariant.MEADOW -> drawMeadow(
                 w, h, cx, groundY, grassPhase, bugProgress, sparkleGlow,
-                grassColor, accentColor, accentLight
+                grassColor, accentColor, accentLight, surfaceTint, isDark, alphaBoost
             )
             EmptySceneVariant.GARDEN -> drawGarden(
                 w, h, cx, groundY, grassPhase, bugProgress, sparkleGlow,
-                accentColor, accentLight
+                accentColor, accentLight, surfaceTint, isDark, alphaBoost
             )
             EmptySceneVariant.NIGHT -> drawNight(
-                w, h, cx, bugProgress, sparkleGlow, accentColor
+                w, h, cx, bugProgress, sparkleGlow, accentColor, surfaceTint, isDark, alphaBoost
             )
             EmptySceneVariant.SEASIDE -> drawSeaside(
                 w, h, cx, groundY, grassPhase, bugProgress, wingPhase, sparkleGlow,
-                accentColor, accentLight
+                accentColor, accentLight, surfaceTint, isDark, alphaBoost
             )
         }
     }
@@ -138,7 +147,8 @@ fun AnimatedEmptyScene(
 private fun DrawScope.drawMeadow(
     w: Float, h: Float, cx: Float, groundY: Float,
     grassPhase: Float, bugProgress: Float, glow: Float,
-    grassColor: Color, accentColor: Color, accentLight: Color
+    grassColor: Color, accentColor: Color, accentLight: Color,
+    surfaceTint: Color, isDark: Boolean, alphaBoost: Float
 ) {
     // ── Ground line ──
     drawLine(grassColor, Offset(0f, groundY), Offset(w, groundY), strokeWidth = 2f)
@@ -173,12 +183,12 @@ private fun DrawScope.drawMeadow(
     for (i in 0..3) {
         val fx = w * 0.15f + i * w * 0.22f
         drawCircle(
-            flowerColors[i % flowerColors.size].copy(alpha = 0.5f),
+            flowerColors[i % flowerColors.size].copy(alpha = (0.55f * alphaBoost).coerceAtMost(1f)),
             radius = 4f,
             center = Offset(fx, groundY - 2f)
         )
         drawCircle(
-            flowerColors[i % flowerColors.size].copy(alpha = 0.25f),
+            flowerColors[i % flowerColors.size].copy(alpha = (0.35f * alphaBoost).coerceAtMost(1f)),
             radius = 2f,
             center = Offset(fx - 3f, groundY - 3f)
         )
@@ -187,7 +197,7 @@ private fun DrawScope.drawMeadow(
     // ── Butterfly ──
     val bugX = cx + sin(bugProgress * 6.28f) * w * 0.3f
     val bugY = groundY - 35f + cos(bugProgress * 6.28f * 1.5f) * 10f
-    drawButterfly(bugX, bugY, bugProgress, accentColor)
+    drawButterfly(bugX, bugY, bugProgress, accentColor, alphaBoost)
 
     // ── Floating seeds (ambient particles) ──
     val seedBaseX = (bugProgress * 2f % 1f) * w
@@ -196,8 +206,8 @@ private fun DrawScope.drawMeadow(
         val sx = seedBaseX + sin(bugProgress * 3f + i * 2f) * 20f + i * 40f
         val sy = seedBaseY + cos(bugProgress * 2f + i * 1.5f) * 10f - i * 8f
         drawCircle(
-            accentLight.copy(alpha = 0.3f * glow),
-            radius = 2f,
+            accentLight.copy(alpha = (0.45f * glow * alphaBoost).coerceAtMost(1f)),
+            radius = 2.5f,
             center = Offset(sx % w, sy.coerceIn(10f, groundY - 10f))
         )
     }
@@ -206,14 +216,15 @@ private fun DrawScope.drawMeadow(
 private fun DrawScope.drawGarden(
     w: Float, h: Float, cx: Float, groundY: Float,
     grassPhase: Float, bugProgress: Float, glow: Float,
-    accentColor: Color, accentLight: Color
+    accentColor: Color, accentLight: Color,
+    surfaceTint: Color, isDark: Boolean, alphaBoost: Float
 ) {
     // ── Ground with deeper soil color ──
-    val earthColor = Color(0xFF795548).copy(alpha = 0.2f)
+    val earthColor = if (isDark) surfaceTint.copy(alpha = 0.25f) else Color(0xFF795548).copy(alpha = 0.2f)
     drawLine(earthColor, Offset(0f, groundY), Offset(w, groundY), strokeWidth = 3f)
 
     // ── Broad leaves ──
-    val leafColor = Color(0xFF4CAF50).copy(alpha = 0.3f)
+    val leafColor = accentColor.copy(alpha = (0.45f * alphaBoost).coerceAtMost(1f))
     for (i in 0..5) {
         val lx = w * 0.08f + i * w * 0.16f
         val sway = sin(grassPhase * 5f + i * 1.1f) * 4f
@@ -222,7 +233,7 @@ private fun DrawScope.drawGarden(
         drawLine(leafColor, Offset(lx, groundY), Offset(lx + sway, groundY - leafH), strokeWidth = 2f)
         // Leaf blob
         drawCircle(
-            leafColor.copy(alpha = 0.2f),
+            leafColor.copy(alpha = (0.35f * alphaBoost).coerceAtMost(1f)),
             radius = 5f,
             center = Offset(lx + sway + 3f, groundY - leafH * 0.5f)
         )
@@ -231,7 +242,7 @@ private fun DrawScope.drawGarden(
     // ── Ladybug ──
     val bugX = cx + sin(bugProgress * 5f) * w * 0.25f
     val bugY = groundY - 30f + cos(bugProgress * 4f) * 8f
-    drawLadybug(bugX, bugY, bugProgress, Color(0xFFE53935))
+    drawLadybug(bugX, bugY, bugProgress, Color(0xFFE53935), alphaBoost)
 
     // ── Glowing fireflies ──
     val fireflyColors = listOf(Color(0xFFFFF176), Color(0xFF80D8FF), Color(0xFFA5D6A7))
@@ -240,12 +251,12 @@ private fun DrawScope.drawGarden(
         val fy = groundY * 0.3f + sin(bugProgress * 3f + i * 1.2f) * groundY * 0.2f
         val alpha = (glow * 0.6f + 0.2f)
         drawCircle(
-            fireflyColors[i % fireflyColors.size].copy(alpha = alpha * 0.3f),
+            fireflyColors[i % fireflyColors.size].copy(alpha = (alpha * 0.45f * alphaBoost).coerceAtMost(1f)),
             radius = 6f,
             center = Offset(fx, fy)
         )
         drawCircle(
-            fireflyColors[i % fireflyColors.size].copy(alpha = alpha * 0.8f),
+            fireflyColors[i % fireflyColors.size].copy(alpha = (alpha * 0.95f * alphaBoost).coerceAtMost(1f)),
             radius = 2.5f,
             center = Offset(fx, fy)
         )
@@ -255,20 +266,21 @@ private fun DrawScope.drawGarden(
 private fun DrawScope.drawNight(
     w: Float, h: Float, cx: Float,
     bugProgress: Float, glow: Float,
-    accentColor: Color
+    accentColor: Color, surfaceTint: Color, isDark: Boolean, alphaBoost: Float
 ) {
-    val baseAlpha = 0.25f
+    val baseAlpha = (0.35f * alphaBoost).coerceAtMost(1f)
+    val starColor = if (isDark) Color(0xFFFFF176) else Color(0xFFFFB300)
 
     // ── Crescent moon ──
     val moonX = w * 0.8f
     val moonY = h * 0.18f
     drawCircle(
-        Color(0xFFFFF176).copy(alpha = baseAlpha * 1.5f * glow),
+        starColor.copy(alpha = baseAlpha * 1.5f * glow),
         radius = 12f,
         center = Offset(moonX, moonY)
     )
     drawCircle(
-        Color(0xFFFFF176).copy(alpha = baseAlpha),
+        starColor.copy(alpha = baseAlpha),
         radius = 8f,
         center = Offset(moonX + 4f, moonY - 2f)
     )
@@ -282,15 +294,15 @@ private fun DrawScope.drawNight(
     starPositions.forEachIndexed { i, (sx, sy) ->
         val starGlow = (glow * 0.5f + 0.3f + (i % 2) * 0.2f).coerceIn(0f, 1f)
         drawCircle(
-            Color.White.copy(alpha = starGlow * baseAlpha * 1.5f),
-            radius = 2f,
+            starColor.copy(alpha = starGlow * baseAlpha * 1.5f),
+            radius = 2.5f,
             center = Offset(w * sx, h * sy)
         )
         // Cross glow for brighter stars
         if (i % 3 == 0) {
             drawCircle(
-                Color.White.copy(alpha = starGlow * baseAlpha * 0.3f),
-                radius = 4f,
+                starColor.copy(alpha = starGlow * baseAlpha * 0.5f),
+                radius = 5f,
                 center = Offset(w * sx, h * sy)
             )
         }
@@ -301,19 +313,19 @@ private fun DrawScope.drawNight(
         val fx = (bugProgress * 2.3f + i * 0.25f) % 1f * w
         val fy = h * 0.5f + sin(bugProgress * 2f + i * 1.5f) * h * 0.15f
         drawCircle(
-            Color(0xFFFFF176).copy(alpha = glow * 0.2f),
+            starColor.copy(alpha = (glow * 0.35f * alphaBoost).coerceAtMost(1f)),
             radius = 5f,
             center = Offset(fx, fy)
         )
         drawCircle(
-            Color(0xFFFFF176).copy(alpha = glow * 0.6f),
-            radius = 2f,
+            starColor.copy(alpha = (glow * 0.9f * alphaBoost).coerceAtMost(1f)),
+            radius = 2.5f,
             center = Offset(fx, fy)
         )
     }
 
     // ── Ground silhouette ──
-    val groundColor = Color(0xFF2E7D32).copy(alpha = baseAlpha * 0.3f)
+    val groundColor = if (isDark) surfaceTint.copy(alpha = 0.25f) else Color(0xFF2E7D32).copy(alpha = baseAlpha * 0.35f)
     for (i in 0..8) {
         val gx = i * w * 0.12f
         val gh = 6f + sin(i * 1.3f) * 4f
@@ -324,10 +336,11 @@ private fun DrawScope.drawNight(
 private fun DrawScope.drawSeaside(
     w: Float, h: Float, cx: Float, groundY: Float,
     grassPhase: Float, bugProgress: Float, wingPhase: Float, glow: Float,
-    accentColor: Color, accentLight: Color
+    accentColor: Color, accentLight: Color,
+    surfaceTint: Color, isDark: Boolean, alphaBoost: Float
 ) {
     // ── Gentle waves ──
-    val waveColor = Color(0xFF42A5F5).copy(alpha = 0.2f)
+    val waveColor = if (isDark) accentColor.copy(alpha = (0.35f * alphaBoost).coerceAtMost(1f)) else Color(0xFF42A5F5).copy(alpha = 0.25f)
     for (wave in 0..2) {
         val wy = groundY + 8f + wave * 10f
         val path = Path().apply {
@@ -341,11 +354,11 @@ private fun DrawScope.drawSeaside(
             lineTo(0f, wy + 15f)
             close()
         }
-        drawPath(path, waveColor.copy(alpha = 0.15f / (wave + 1)))
+        drawPath(path, waveColor.copy(alpha = (0.2f / (wave + 1) * alphaBoost).coerceAtMost(1f)))
     }
 
     // ── Shore grass ──
-    val shoreColor = accentColor.copy(alpha = 0.4f)
+    val shoreColor = accentColor.copy(alpha = (0.5f * alphaBoost).coerceAtMost(1f))
     for (i in 0..8) {
         val gx = w * 0.05f + i * w * 0.1f
         val sway = sin(grassPhase * 5f + i * 0.9f) * 5f
@@ -355,43 +368,45 @@ private fun DrawScope.drawSeaside(
     // ── Seagull ──
     val gullX = cx + sin(bugProgress * 3f) * w * 0.35f
     val gullY = groundY * 0.35f + cos(bugProgress * 2f) * 10f
+    val gullColor = if (isDark) surfaceTint else Color.White
     // Body
-    drawCircle(Color.White.copy(alpha = 0.6f), radius = 4f, center = Offset(gullX, gullY))
+    drawCircle(gullColor.copy(alpha = (0.75f * alphaBoost).coerceAtMost(1f)), radius = 4f, center = Offset(gullX, gullY))
     // Wings (flapping)
     val wingAngle = sin(wingPhase * 6.28f) * 0.4f
     drawLine(
-        Color.White.copy(alpha = 0.5f),
+        gullColor.copy(alpha = (0.6f * alphaBoost).coerceAtMost(1f)),
         Offset(gullX, gullY),
         Offset(gullX - 8f, gullY - 6f + wingAngle * 8f),
         strokeWidth = 2f
     )
     drawLine(
-        Color.White.copy(alpha = 0.5f),
+        gullColor.copy(alpha = (0.6f * alphaBoost).coerceAtMost(1f)),
         Offset(gullX, gullY),
         Offset(gullX + 8f, gullY - 6f + wingAngle * 8f),
         strokeWidth = 2f
     )
     // Beak
-    drawLine(Color(0xFFFFA726).copy(alpha = 0.5f), Offset(gullX, gullY), Offset(gullX + 5f, gullY + 1f), strokeWidth = 1.5f)
+    drawLine(Color(0xFFFFA726).copy(alpha = (0.6f * alphaBoost).coerceAtMost(1f)), Offset(gullX, gullY), Offset(gullX + 5f, gullY + 1f), strokeWidth = 1.5f)
 
     // ── Clouds ──
     val cloudProgress = (bugProgress * 0.7f) % 1f
-    drawCloud(Offset(cloudProgress * w * 1.2f - 30f, h * 0.08f), glow)
-    drawCloud(Offset((cloudProgress + 0.4f) * w * 1.2f - 30f, h * 0.18f), glow * 0.7f)
+    drawCloud(Offset(cloudProgress * w * 1.2f - 30f, h * 0.08f), glow, alphaBoost, isDark)
+    drawCloud(Offset((cloudProgress + 0.4f) * w * 1.2f - 30f, h * 0.18f), glow * 0.7f, alphaBoost, isDark)
 }
 
 // ── Helper drawings ──
 
-private fun DrawScope.drawButterfly(x: Float, y: Float, phase: Float, color: Color) {
+private fun DrawScope.drawButterfly(x: Float, y: Float, phase: Float, color: Color, alphaBoost: Float) {
     val wingFlap = sin(phase * 8f) * 3f
+    val alpha = (0.8f * alphaBoost).coerceAtMost(1f)
     // Left wing
     val pathL = Path().apply {
         moveTo(x, y)
         quadraticTo(x - 8f - wingFlap, y - 6f, x - 3f, y - 2f)
         close()
     }
-    drawPath(pathL, color.copy(alpha = 0.7f), style = Fill)
-    drawPath(pathL, color.copy(alpha = 0.5f), style = Stroke(width = 1f))
+    drawPath(pathL, color.copy(alpha = alpha), style = Fill)
+    drawPath(pathL, color.copy(alpha = alpha * 0.7f), style = Stroke(width = 1f))
 
     // Right wing
     val pathR = Path().apply {
@@ -399,33 +414,34 @@ private fun DrawScope.drawButterfly(x: Float, y: Float, phase: Float, color: Col
         quadraticTo(x + 8f + wingFlap, y - 6f, x + 3f, y - 2f)
         close()
     }
-    drawPath(pathR, color.copy(alpha = 0.7f), style = Fill)
-    drawPath(pathR, color.copy(alpha = 0.5f), style = Stroke(width = 1f))
+    drawPath(pathR, color.copy(alpha = alpha), style = Fill)
+    drawPath(pathR, color.copy(alpha = alpha * 0.7f), style = Stroke(width = 1f))
 
     // Body
-    drawCircle(color.copy(alpha = 0.8f), radius = 1.5f, center = Offset(x, y))
+    drawCircle(color.copy(alpha = alpha), radius = 1.5f, center = Offset(x, y))
 }
 
-private fun DrawScope.drawLadybug(x: Float, y: Float, phase: Float, color: Color) {
+private fun DrawScope.drawLadybug(x: Float, y: Float, phase: Float, color: Color, alphaBoost: Float) {
     val bounce = sin(phase * 6f) * 2f
     // Body
-    drawCircle(color.copy(alpha = 0.7f), radius = 5f, center = Offset(x, y + bounce))
+    drawCircle(color.copy(alpha = (0.85f * alphaBoost).coerceAtMost(1f)), radius = 5f, center = Offset(x, y + bounce))
     // Head
-    drawCircle(Color(0xFF212121).copy(alpha = 0.6f), radius = 2.5f, center = Offset(x - 4f, y + bounce - 1f))
+    drawCircle(Color(0xFF212121).copy(alpha = (0.7f * alphaBoost).coerceAtMost(1f)), radius = 2.5f, center = Offset(x - 4f, y + bounce - 1f))
     // Spot
-    drawCircle(Color(0xFF212121).copy(alpha = 0.4f), radius = 1.5f, center = Offset(x + 2f, y + bounce - 2f))
-    drawCircle(Color(0xFF212121).copy(alpha = 0.4f), radius = 1.5f, center = Offset(x - 1f, y + bounce + 3f))
+    drawCircle(Color(0xFF212121).copy(alpha = (0.55f * alphaBoost).coerceAtMost(1f)), radius = 1.5f, center = Offset(x + 2f, y + bounce - 2f))
+    drawCircle(Color(0xFF212121).copy(alpha = (0.55f * alphaBoost).coerceAtMost(1f)), radius = 1.5f, center = Offset(x - 1f, y + bounce + 3f))
     // Antennae
-    drawLine(Color(0xFF212121).copy(alpha = 0.4f), Offset(x - 5.5f, y + bounce - 3f), Offset(x - 8f, y + bounce - 6f), strokeWidth = 1f)
-    drawLine(Color(0xFF212121).copy(alpha = 0.4f), Offset(x - 4.5f, y + bounce - 3f), Offset(x - 3f, y + bounce - 7f), strokeWidth = 1f)
+    drawLine(Color(0xFF212121).copy(alpha = (0.55f * alphaBoost).coerceAtMost(1f)), Offset(x - 5.5f, y + bounce - 3f), Offset(x - 8f, y + bounce - 6f), strokeWidth = 1f)
+    drawLine(Color(0xFF212121).copy(alpha = (0.55f * alphaBoost).coerceAtMost(1f)), Offset(x - 4.5f, y + bounce - 3f), Offset(x - 3f, y + bounce - 7f), strokeWidth = 1f)
 }
 
-private fun DrawScope.drawCloud(offset: Offset, glow: Float) {
-    val baseAlpha = 0.15f * glow
-    drawCircle(Color.White.copy(alpha = baseAlpha), radius = 8f, center = offset)
-    drawCircle(Color.White.copy(alpha = baseAlpha), radius = 10f, center = Offset(offset.x + 8f, offset.y - 2f))
-    drawCircle(Color.White.copy(alpha = baseAlpha), radius = 7f, center = Offset(offset.x + 16f, offset.y + 1f))
-    drawCircle(Color.White.copy(alpha = baseAlpha), radius = 6f, center = Offset(offset.x + 22f, offset.y + 2f))
+private fun DrawScope.drawCloud(offset: Offset, glow: Float, alphaBoost: Float, isDark: Boolean) {
+    val cloudColor = if (isDark) Color(0xFFE0E0E0) else Color.White
+    val baseAlpha = 0.2f * glow * alphaBoost
+    drawCircle(cloudColor.copy(alpha = baseAlpha), radius = 8f, center = offset)
+    drawCircle(cloudColor.copy(alpha = baseAlpha), radius = 10f, center = Offset(offset.x + 8f, offset.y - 2f))
+    drawCircle(cloudColor.copy(alpha = baseAlpha), radius = 7f, center = Offset(offset.x + 16f, offset.y + 1f))
+    drawCircle(cloudColor.copy(alpha = baseAlpha), radius = 6f, center = Offset(offset.x + 22f, offset.y + 2f))
 }
 
 /**

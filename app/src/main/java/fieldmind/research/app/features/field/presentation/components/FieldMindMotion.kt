@@ -348,10 +348,16 @@ fun Modifier.expressivePress(
 
     this
         .pointerInput(enabled) {
+            if (!enabled) return@pointerInput
             awaitPointerEventScope {
                 while (true) {
-                    val event = awaitPointerEvent()
-                    isPressed = event.changes.any { it.pressed }
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    if (down.pressed) {
+                        isPressed = true
+                        down.consume()
+                        waitForUpOrCancellation()?.consume()
+                        isPressed = false
+                    }
                 }
             }
         }
@@ -389,10 +395,16 @@ fun Modifier.expressiveCardPress(
 
     this
         .pointerInput(enabled) {
+            if (!enabled) return@pointerInput
             awaitPointerEventScope {
                 while (true) {
-                    val event = awaitPointerEvent()
-                    isPressed = event.changes.any { it.pressed }
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    if (down.pressed) {
+                        isPressed = true
+                        down.consume()
+                        waitForUpOrCancellation()?.consume()
+                        isPressed = false
+                    }
                 }
             }
         }
@@ -426,10 +438,16 @@ fun Modifier.pressScale(
 
     this
         .pointerInput(enabled) {
+            if (!enabled) return@pointerInput
             awaitPointerEventScope {
                 while (true) {
-                    val event = awaitPointerEvent()
-                    isPressed = event.changes.any { it.pressed }
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    if (down.pressed) {
+                        isPressed = true
+                        down.consume()
+                        waitForUpOrCancellation()?.consume()
+                        isPressed = false
+                    }
                 }
             }
         }

@@ -203,7 +203,41 @@ Each item lists the **user-visible impact**, **affected files**, and **recommend
 
 ---
 
-## 2. Functionality / Feature Issues
+### 1.13 Crash recovery screen shares the main app theme
+
+**Severity:** 🟠 High  
+**Impact:** `FieldMindCrashActivity` runs in a separate `:crash_process` to survive a corrupted main process, but its manifest entry still used `Theme.Rhythm`. If the main theme, dynamic colors, or Material3 resources are what caused the crash, the crash UI may fail to inflate or render as an invisible/black screen. The activity also hardcodes a light palette while the host theme could be dark, producing a jarring or unreadable screen.
+
+**Affected files:**
+- `FieldMindCrashActivity.kt`
+- `AndroidManifest.xml`
+- `app/src/main/res/values/themes.xml`
+
+**Fix direction:** Give the crash activity its own isolated, light, no-dependency theme (`Theme.FieldMind.Crash`) and apply it in the manifest. Keep the UI as plain Android Views so it cannot be affected by Compose/Material3 failures.
+
+---
+
+### 1.14 Additional screens lose scroll position on rotation
+
+**Severity:** 🟡 Medium  
+**Impact:** Beyond the screens already listed in 1.9, several other top-level screens create `LazyColumn` without a `rememberSaveable` scroll state. After rotation the user is returned to the top of the list.
+
+**Affected screens (additional):**
+- `FieldMindQuestionsScreen.kt`
+- `FieldMindProjectSettingsScreen.kt`
+- `FieldMindMapScreen.kt`
+- `FieldMindDataTools.kt`
+- `FieldMindResearchSession.kt`
+- `MediaGalleryScreen.kt`
+- `FieldMindArchiveScreen.kt`
+- `FieldMindProjectRelationsScreen.kt`
+- `FieldMindWeatherCatalogScreen.kt`
+- `FieldMindReportScreen.kt`
+- `DeveloperDebugSection.kt`
+- `FieldLogScreen.kt`
+- `FieldMindLibraryScreen.kt` (some panels)
+
+**Fix direction:** Add `rememberSaveable(saver = LazyListState.Saver) { LazyListState() }` to each affected screen and pass it to `LazyColumn(state = ...)`.
 
 ### 2.1 Halloween and Valentine's festive effects are TODO placeholders
 
@@ -482,6 +516,23 @@ Each item lists the **user-visible impact**, **affected files**, and **recommend
 - `FieldMindQuestionsScreen.kt`
 
 **Fix direction:** Audit dialog state and apply `rememberSaveable` where appropriate.
+
+---
+
+### 4.4 Back-route handling gaps and tab-state drift
+
+**Severity:** 🟠 High  
+**Impact:** `FieldMindNavigation` keeps the selected tab in a `rememberSaveable` integer (`activeTabIndex`) that is independent of the `NavController`'s current destination. After deep-linking, process death, or a long back-chain, the remembered index can diverge from the route actually on screen, leaving the bottom nav highlighting the wrong tab. In addition, the `fieldMindBackAction()` helper exists but is not wired into the actual back handling; every sub-screen simply calls `safePopOrHome()`, which can pop the `field_tab_container` root and leave the app frozen on a blank screen.
+
+**Affected files:**
+- `FieldMindNavigation.kt`
+- `FieldMindObserveScreen.kt` (unconditional back confirmation)
+- `AllTabScreen.kt`
+
+**Fix direction:**
+- Derive the selected tab from `navController.currentBackStackEntry?.destination?.route` whenever possible, falling back to the remembered index only when the route is the tab container.
+- Wire `fieldMindBackAction()` into the navigation host so back on a sub-page pops one level, back on a non-home tab switches to the home tab, and back on the home tab exits the app.
+- Make `FieldMindObserveScreen`'s `BackHandler` conditional on `hasDirtyContent || session.isActive`.
 
 ---
 

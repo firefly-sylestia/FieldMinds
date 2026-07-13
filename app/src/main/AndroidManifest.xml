@@ -45,7 +45,7 @@
         <activity
             android:name="fieldmind.research.app.activities.FieldMindCrashActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rhythm"
+            android:theme="@style/Theme.FieldMind.Crash"
             android:process=":crash_process" />
 
         <!-- FieldMind Glance Widgets -->
