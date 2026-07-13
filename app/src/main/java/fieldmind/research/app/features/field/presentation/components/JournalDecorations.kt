@@ -1,6 +1,7 @@
 package fieldmind.research.app.features.field.presentation.components
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
