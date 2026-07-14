@@ -335,6 +335,12 @@ class FieldMindSettings private constructor(context: Context) {
     val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
     // ── New expressive motion tunables ──
+    private val _animMorphEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIM_MORPH_ENABLED, true))
+    val animMorphEnabled: StateFlow<Boolean> = _animMorphEnabled.asStateFlow()
+    private val _animMorphDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_MORPH_DAMPING, 0.72f))
+    val animMorphDamping: StateFlow<Float> = _animMorphDamping.asStateFlow()
+    private val _animMorphStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_MORPH_STIFFNESS, 220f))
+    val animMorphStiffness: StateFlow<Float> = _animMorphStiffness.asStateFlow()
     private val _animMorphDurationMs = MutableStateFlow(prefs.getInt(KEY_ANIM_MORPH_DURATION_MS, 400))
     val animMorphDurationMs: StateFlow<Int> = _animMorphDurationMs.asStateFlow()
     private val _animSideRevealDistanceDp = MutableStateFlow(prefs.getFloat(KEY_ANIM_SIDE_REVEAL_DISTANCE_DP, 40f))
@@ -775,6 +781,9 @@ class FieldMindSettings private constructor(context: Context) {
             staggerItemDelayMs = (if (_animationsEnabled.value) (35f / mult).roundToInt() else 0).coerceIn(0, 300),
             staggerInitialDelayMs = (if (_animationsEnabled.value) (40f / mult).roundToInt() else 0).coerceIn(0, 300),
             staggerMaxDurationMs = (if (_animationsEnabled.value) (300f / mult).roundToInt() else 0).coerceIn(0, 500),
+            morphEnabled = _animMorphEnabled.value,
+            morphDampingRatio = _animMorphDamping.value,
+            morphStiffness = (_animMorphStiffness.value * mult).coerceAtLeast(1f),
             morphDurationMs = _animMorphDurationMs.value,
             sideRevealDistanceDp = _animSideRevealDistanceDp.value,
             shimmerSpeedMs = _animShimmerSpeedMs.value,
@@ -796,6 +805,9 @@ class FieldMindSettings private constructor(context: Context) {
     fun setAnimTabEntranceStiffness(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, value) { _animTabEntranceStiffness.value = value; refreshAnimationConfig() }
 
     // ── New expressive motion tunable setters ──
+    fun setAnimMorphEnabled(value: Boolean) = edit(KEY_ANIM_MORPH_ENABLED, value) { _animMorphEnabled.value = value; refreshAnimationConfig() }
+    fun setAnimMorphDamping(value: Float) = edit(KEY_ANIM_MORPH_DAMPING, value) { _animMorphDamping.value = value; refreshAnimationConfig() }
+    fun setAnimMorphStiffness(value: Float) = edit(KEY_ANIM_MORPH_STIFFNESS, value) { _animMorphStiffness.value = value; refreshAnimationConfig() }
     fun setAnimMorphDurationMs(value: Int) = edit(KEY_ANIM_MORPH_DURATION_MS, value) { _animMorphDurationMs.value = value; refreshAnimationConfig() }
     fun setAnimSideRevealDistanceDp(value: Float) = edit(KEY_ANIM_SIDE_REVEAL_DISTANCE_DP, value) { _animSideRevealDistanceDp.value = value; refreshAnimationConfig() }
     fun setAnimShimmerSpeedMs(value: Int) = edit(KEY_ANIM_SHIMMER_SPEED_MS, value) { _animShimmerSpeedMs.value = value; refreshAnimationConfig() }
@@ -880,6 +892,10 @@ class FieldMindSettings private constructor(context: Context) {
         _bugReportsAttachCrashLog.value = true
         _animationsEnabled.value = true
         _animationSpeedPreset.value = "Normal"
+        _animMorphEnabled.value = true
+        _animMorphDamping.value = 0.72f
+        _animMorphStiffness.value = 220f
+        _animMorphDurationMs.value = 400
         prefs.edit().clear().apply()
         // Reset all StateFlow backing fields to defaults
         _dailyObservationGoal.value = 1
@@ -1518,6 +1534,9 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_ANIM_TAB_ENTRANCE_DAMPING = "anim_tab_entrance_damping"
         private const val KEY_ANIM_TAB_ENTRANCE_STIFFNESS = "anim_tab_entrance_stiffness"
         // ── New expressive motion keys ──
+        private const val KEY_ANIM_MORPH_ENABLED = "anim_morph_enabled"
+        private const val KEY_ANIM_MORPH_DAMPING = "anim_morph_damping"
+        private const val KEY_ANIM_MORPH_STIFFNESS = "anim_morph_stiffness"
         private const val KEY_ANIM_MORPH_DURATION_MS = "anim_morph_duration_ms"
         private const val KEY_ANIM_SIDE_REVEAL_DISTANCE_DP = "anim_side_reveal_distance_dp"
         private const val KEY_ANIM_SHIMMER_SPEED_MS = "anim_shimmer_speed_ms"

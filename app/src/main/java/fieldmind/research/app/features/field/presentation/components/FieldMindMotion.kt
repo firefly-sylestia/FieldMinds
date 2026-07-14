@@ -64,7 +64,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Matrix
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.PointerEvent
@@ -76,7 +81,13 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
+import androidx.graphics.shapes.CornerRounding
+import androidx.graphics.shapes.Morph
+import androidx.graphics.shapes.RoundedPolygon
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
 import kotlinx.coroutines.delay
@@ -137,6 +148,10 @@ data class AnimationConfig(
     val staggerItemDelayMs: Int = 35,
     val staggerInitialDelayMs: Int = 40,
     val staggerMaxDurationMs: Int = 300,
+    // ── Shape morphing (graphics-shapes powered) ──
+    val morphEnabled: Boolean = true,
+    val morphDampingRatio: Float = 0.72f,
+    val morphStiffness: Float = 220f,
     // ── Feature toggles ──
     val sideRevealDistanceDp: Float = 40f,
     val morphDurationMs: Int = 380,
@@ -155,6 +170,7 @@ data class AnimationConfig(
     fun swipeBackSpring() = spring<Float>(dampingRatio = swipeBackDampingRatio, stiffness = swipeBackStiffness)
     fun slideSpring() = spring<IntOffset>(dampingRatio = 0.85f, stiffness = slideStiffness)
     fun bouncySpring() = spring<Float>(dampingRatio = 0.50f, stiffness = (stiffness * 0.55f).coerceAtLeast(60f))
+    fun morphSpring() = spring<Float>(dampingRatio = morphDampingRatio, stiffness = morphStiffness)
 }
 
 val LocalAnimationConfig = compositionLocalOf { AnimationConfig.DEFAULT }
@@ -688,6 +704,248 @@ fun Modifier.morphShape(
     )
 
     this.clip(RoundedCornerShape(animatedRadius))
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Polygon Morph Shape — graphics-shapes powered morphing between
+//  arbitrary RoundedPolygons (circle ↔ rounded rect, etc.)
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * A [Shape] implementation powered by [androidx.graphics.shapes.Morph]
+ * that interpolates between two [RoundedPolygon] instances based on a
+ * [progress] value (0f = start polygon, 1f = end polygon).
+ *
+ * Use with [Modifier.clip] + [Modifier.background] to clip any composable
+ * (image, text, gradient) to a smoothly morphing shape.
+ *
+ * @param morph   Pre-computed [Morph] between two [RoundedPolygon]s.
+ * @param progress  0f → start shape, 1f → end shape.
+ */
+class MorphPolygonShape(
+    private val morph: Morph,
+    private val progress: Float
+) : Shape {
+    private val matrix = Matrix()
+
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        val path = morph.toPath(progress).asComposePath()
+        // Scale to fill the available size (polygons are unit-centered)
+        val scaleX = size.width / 2f
+        val scaleY = size.height / 2f
+        matrix.reset()
+        matrix.scale(scaleX, scaleY)
+        matrix.translate(size.width / 2f, size.height / 2f)
+        path.transform(matrix)
+        return Outline.Generic(path)
+    }
+}
+
+/**
+ * Predefined [RoundedPolygon] shapes available for morphing.
+ * Each factory creates a unit-sized polygon suitable for use with [Morph].
+ */
+object MorphPolygons {
+    /** Smooth circle (64 vertices for high-quality rendering). */
+    fun circle(radius: Float = 1f) = RoundedPolygon.circle(numVertices = 64, radius = radius)
+
+    /** Standard rounded rectangle with uniform corner rounding. */
+    fun roundedRect(
+        width: Float = 1f,
+        height: Float = 1f,
+        cornerRadius: Float = 0.16f
+    ) = RoundedPolygon.rectangle(
+        width = width,
+        height = height,
+        cornerRounding = CornerRounding(cornerRadius)
+    )
+
+    /** Rounded rectangle with different corner rounding per corner (superellipse-like). */
+    fun pillRect(
+        width: Float = 1f,
+        height: Float = 0.6f
+    ) = RoundedPolygon.rectangle(
+        width = width,
+        height = height,
+        cornerRounding = CornerRounding(height / 2f, smoothing = 0.6f)
+    )
+
+    /** Hexagon shape (6 vertices). */
+    fun hexagon(radius: Float = 1f) = RoundedPolygon(
+        numVertices = 6,
+        radius = radius,
+        rounding = CornerRounding(0.08f)
+    )
+
+    /** Diamond/rhombus shape (4 vertices, rotated 45°). */
+    fun diamond(radius: Float = 1f) = RoundedPolygon(
+        numVertices = 4,
+        radius = radius,
+        rounding = CornerRounding(0.06f)
+    )
+
+    /** Star-like shape (5 vertices with inner/outer radius for star effect). */
+    fun star(
+        outerRadius: Float = 1f,
+        innerRadius: Float = 0.4f
+    ) = RoundedPolygon.star(
+        numVerticesPerRadius = 5,
+        radius = outerRadius,
+        innerRadius = innerRadius,
+        rounding = CornerRounding(0.05f)
+    )
+
+    /** Triangle (3 vertices). */
+    fun triangle(radius: Float = 1f) = RoundedPolygon(
+        numVertices = 3,
+        radius = radius,
+        rounding = CornerRounding(0.06f)
+    )
+}
+
+/**
+ * A [Modifier] that clips the composable using a morphing polygon shape,
+ * animating between [startPolygon] and [endPolygon] driven by [progress].
+ *
+ * Uses [androidx.graphics.shapes.Morph] for smooth, hardware-accelerated
+ * shape interpolation. Combine with [animateFloatAsState] for smooth progress
+ * animation, or use [Modifier.morphPolygon] with [trigger] for declarative
+ * toggling.
+ *
+ * @param startPolygon  The shape at progress=0f.
+ * @param endPolygon    The shape at progress=1f.
+ * @param progress      0f → [startPolygon], 1f → [endPolygon].
+ */
+fun Modifier.morphPolygon(
+    startPolygon: RoundedPolygon,
+    endPolygon: RoundedPolygon,
+    progress: Float
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "morphPolygon"
+        properties["progress"] = progress
+    }
+) {
+    val morph = remember(startPolygon, endPolygon) {
+        Morph(startPolygon, endPolygon)
+    }
+    this.clip(MorphPolygonShape(morph, progress.coerceIn(0f, 1f)))
+}
+
+/**
+ * A [Modifier] that morphs between two [RoundedPolygon] shapes triggered by
+ * a togglable boolean [trigger]. When [trigger] is true, the shape animates
+ * from [startPolygon] to [endPolygon] (and back when false).
+ *
+ * Uses the [AnimationConfig.morphSpring] for smooth, tunable spring physics.
+ *
+ * @param trigger       Toggle state (true=end shape, false=start shape).
+ * @param startPolygon  The shape at trigger=false.
+ * @param endPolygon    The shape at trigger=true.
+ * @param enabled       Whether the morph animation is enabled.
+ */
+@Composable
+fun Modifier.animateMorphPolygon(
+    trigger: Boolean,
+    startPolygon: RoundedPolygon,
+    endPolygon: RoundedPolygon,
+    enabled: Boolean = true
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "animateMorphPolygon"
+        properties["trigger"] = trigger
+        properties["enabled"] = enabled
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion && animConfig.morphEnabled
+
+    val progress by animateFloatAsState(
+        targetValue = if (trigger) 1f else 0f,
+        animationSpec = if (shouldAnimate) {
+            animConfig.morphSpring()
+        } else {
+            spring(stiffness = Spring.StiffnessMedium)
+        },
+        label = "animateMorphPolygon"
+    )
+
+    this.morphPolygon(startPolygon, endPolygon, progress)
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  MorphTransition Composable — full stateful morph between shapes
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * A composable that wraps any content in a container whose shape smoothly
+ * morphs between [startPolygon] and [endPolygon] with a spring animation.
+ *
+ * Call [onTrigger] (e.g., `onClick`) to toggle between the two shapes.
+ * The backing shape is pre-computed with [Morph] for efficient rendering.
+ *
+ * Provides a beautiful, interactive shape-transition effect for cards,
+ * buttons, avatars, and any content — especially striking with gradients
+ * or images as children.
+ *
+ * @param trigger       External toggle state.
+ * @param onTrigger     Called when the user wants to toggle the shape.
+ * @param startPolygon  The shape at trigger=false.
+ * @param endPolygon    The shape at trigger=true.
+ * @param modifier      Modifier applied to the outer container.
+ * @param enabled       Whether morph animation is active.
+ * @param content       The composable content inside the morphing shape.
+ */
+@Composable
+fun MorphTransition(
+    trigger: Boolean,
+    onTrigger: () -> Unit,
+    startPolygon: RoundedPolygon = MorphPolygons.roundedRect(),
+    endPolygon: RoundedPolygon = MorphPolygons.circle(),
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion && animConfig.morphEnabled
+
+    val progress by animateFloatAsState(
+        targetValue = if (trigger) 1f else 0f,
+        animationSpec = if (shouldAnimate) {
+            animConfig.morphSpring()
+        } else {
+            spring(stiffness = Spring.StiffnessMedium)
+        },
+        label = "MorphTransition"
+    )
+
+    val shapeMorph = remember(startPolygon, endPolygon) {
+        Morph(startPolygon, endPolygon)
+    }
+
+    Box(
+        modifier = modifier
+            .clip(MorphPolygonShape(shapeMorph, progress))
+            .then(
+                if (shouldAnimate) {
+                    Modifier.clickable(
+                        indication = null,
+                        interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+                    ) { onTrigger() }
+                } else {
+                    Modifier
+                }
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        content()
+    }
 }
 
 // ── Shimmer Loading Effect ──

@@ -3,6 +3,10 @@ import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.graphics.shapes.Morph
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -30,6 +34,8 @@ import fieldmind.research.app.features.field.presentation.components.FieldMindIc
 import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
+import fieldmind.research.app.features.field.presentation.components.MorphPolygonShape
+import fieldmind.research.app.features.field.presentation.components.MorphPolygons
 import fieldmind.research.app.features.field.presentation.components.StandardScreenHeader
 import fieldmind.research.app.features.field.presentation.components.BackButton
 import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
@@ -151,6 +157,9 @@ fun AnimationTuningCard(
     val swipeScale by settings.animSwipeScaleFactor.collectAsState()
     val tabDamping by settings.animTabEntranceDamping.collectAsState()
     val tabStiffness by settings.animTabEntranceStiffness.collectAsState()
+    val morphEnabled by settings.animMorphEnabled.collectAsState()
+    val morphDamping by settings.animMorphDamping.collectAsState()
+    val morphStiffness by settings.animMorphStiffness.collectAsState()
 
     Card(
         shape = CuteCardDefaults.Shape,
@@ -273,8 +282,50 @@ fun AnimationTuningCard(
                 Text("Dramatic", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
+            // ── Morph damping + stiffness ──
+            Text("Morph damping: %.2f".format(morphDamping), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = morphDamping,
+                onValueChange = { settings.setAnimMorphDamping(it.coerceIn(0.3f, 1.0f)) },
+                valueRange = 0.3f..1.0f,
+                steps = 13,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Bouncy", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Smooth", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Text("Morph stiffness: %.0f".format(morphStiffness), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = morphStiffness,
+                onValueChange = { settings.setAnimMorphStiffness(it.coerceIn(50f, 5000f)) },
+                valueRange = 50f..5000f,
+                steps = 99,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Soft", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Stiff", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
+            // ── Morph enabled toggle ──
+            Row(
+                Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Morph animations", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                Switch(
+                    checked = morphEnabled,
+                    onCheckedChange = { settings.setAnimMorphEnabled(it) }
+                )
+            }
+
             // ── Live Preview ──
             AnimationPreviewDemo()
+
+            // ── Morph Preview ──
+            MorphPreviewDemo()
 
             // ── Reset button ──
             Spacer(Modifier.height(4.dp))
@@ -289,6 +340,9 @@ fun AnimationTuningCard(
                     settings.setAnimSwipeScaleFactor(def.swipeScaleFactor)
                     settings.setAnimTabEntranceDamping(def.dampingRatio)
                     settings.setAnimTabEntranceStiffness(def.stiffness)
+                    settings.setAnimMorphEnabled(def.morphEnabled)
+                    settings.setAnimMorphDamping(def.morphDampingRatio)
+                    settings.setAnimMorphStiffness(def.morphStiffness)
                 },
                 shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
@@ -628,6 +682,9 @@ fun AnimationTuningSettingsPage(
     val swipeScale by settings.animSwipeScaleFactor.collectAsState()
     val tabDamping by settings.animTabEntranceDamping.collectAsState()
     val tabStiffness by settings.animTabEntranceStiffness.collectAsState()
+    val morphEnabled by settings.animMorphEnabled.collectAsState()
+    val morphDamping by settings.animMorphDamping.collectAsState()
+    val morphStiffness by settings.animMorphStiffness.collectAsState()
 
     // Hardware/gesture back button support
     BackHandler(enabled = true) { onBack() }
@@ -739,6 +796,50 @@ fun AnimationTuningSettingsPage(
                 }
             }
 
+            // ── Shape Morphing ──
+            item {
+                SectionHeader("Shape morphing", "Polygon morph animation: circle ↔ rounded rect")
+            }
+            item {
+                SettingsGroupCard {
+                    Row(
+                        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text("Morph animations", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                            Text("Smooth shape transitions between geometric forms", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Switch(
+                            checked = morphEnabled,
+                            onCheckedChange = { settings.setAnimMorphEnabled(it) }
+                        )
+                    }
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    DampingSlider(
+                        label = "Morph damping",
+                        value = morphDamping,
+                        onValueChange = { settings.setAnimMorphDamping(it.coerceIn(0.3f, 1.0f)) },
+                        lowLabel = "Bouncy",
+                        highLabel = "Smooth"
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    StiffnessSlider(
+                        label = "Morph stiffness",
+                        value = morphStiffness,
+                        onValueChange = { settings.setAnimMorphStiffness(it.coerceIn(50f, 5000f)) },
+                        lowLabel = "Soft",
+                        highLabel = "Stiff"
+                    )
+                }
+            }
+
+            // ── Morph Live Preview ──
+            item {
+                MorphPreviewDemo()
+            }
+
             // ── Swipe Threshold & Scale ──
             item {
                 SectionHeader("Swipe behavior", "Commit threshold and scale effect")
@@ -780,6 +881,9 @@ fun AnimationTuningSettingsPage(
                         settings.setAnimSwipeScaleFactor(def.swipeScaleFactor)
                         settings.setAnimTabEntranceDamping(def.dampingRatio)
                         settings.setAnimTabEntranceStiffness(def.stiffness)
+                        settings.setAnimMorphEnabled(def.morphEnabled)
+                        settings.setAnimMorphDamping(def.morphDampingRatio)
+                        settings.setAnimMorphStiffness(def.morphStiffness)
                     },
                     shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
@@ -865,6 +969,179 @@ private fun StiffnessSlider(
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(lowLabel, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(highLabel, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Morph Preview Demo — interactive polygon morphing live preview
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun MorphPreviewDemo() {
+    val animConfig = LocalAnimationConfig.current
+    val scope = rememberCoroutineScope()
+    val colors = FieldMindTheme.colors
+
+    var isMorphed by remember { mutableStateOf(false) }
+    var shapePair by remember { mutableIntStateOf(0) }
+
+    // Pre-defined shape pairs for the demo
+    val shapePairs = remember {
+        listOf(
+            Pair(MorphPolygons.roundedRect(), MorphPolygons.circle()),
+            Pair(MorphPolygons.triangle(), MorphPolygons.circle()),
+            Pair(MorphPolygons.diamond(), MorphPolygons.roundedRect()),
+            Pair(MorphPolygons.star(), MorphPolygons.hexagon()),
+            Pair(MorphPolygons.pillRect(), MorphPolygons.circle()),
+        )
+    }
+
+    val (startPoly, endPoly) = shapePairs[shapePair % shapePairs.size]
+
+    val morph = remember(startPoly, endPoly) {
+        Morph(startPoly, endPoly)
+    }
+
+    val progress by animateFloatAsState(
+        targetValue = if (isMorphed) 1f else 0f,
+        animationSpec = if (animConfig.morphEnabled) {
+            spring(dampingRatio = animConfig.morphDampingRatio, stiffness = animConfig.morphStiffness)
+        } else {
+            spring(stiffness = Spring.StiffnessMedium)
+        },
+        label = "morphPreview"
+    )
+
+    // Re-trigger after a delay for auto-demo
+    LaunchedEffect(shapePair) {
+        isMorphed = false
+        delay(200)
+        isMorphed = true
+    }
+
+    val shapePairNames = listOf(
+        "Rect → Circle",
+        "Triangle → Circle",
+        "Diamond → Rect",
+        "Star → Hexagon",
+        "Pill → Circle"
+    )
+
+    Card(
+        shape = CuteCardDefaults.Shape,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            // Header
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Box(
+                    Modifier.size(28.dp).clip(CuteCardDefaults.ChipShape)
+                        .background(colors.hypothesis.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(MaterialSymbolIcon("shapes"), null, tint = colors.hypothesis, size = 16.dp)
+                }
+                Text(
+                    "Morph preview",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    shapePairNames[shapePair % shapePairNames.size],
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            // Preview area — morphing gradient pill
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .clip(CuteCardDefaults.ShapeCompact)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.surfaceContainerHigh,
+                                MaterialTheme.colorScheme.surfaceContainerLow
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                // Morphing shape container
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(MorphPolygonShape(morph, progress))
+                        .background(
+                            Brush.sweepGradient(
+                                colors = listOf(
+                                    colors.positive,
+                                    colors.flashcard,
+                                    colors.observation,
+                                    colors.data,
+                                    colors.positive
+                                )
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        if (isMorphed) MaterialSymbolIcon("circle") else MaterialSymbolIcon("square"),
+                        null,
+                        tint = Color.White.copy(alpha = 0.9f),
+                        size = 28.dp
+                    )
+                }
+            }
+
+            // Toggle + cycle buttons
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Button(
+                    onClick = { isMorphed = !isMorphed },
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.medium,
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+                ) {
+                    Icon(
+                        if (isMorphed) MaterialSymbolIcon("undo") else MaterialSymbolIcon("transform"),
+                        null,
+                        size = 14.dp
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        if (isMorphed) "Revert" else "Morph",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+
+                OutlinedButton(
+                    onClick = { shapePair = (shapePair + 1) % shapePairs.size },
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.medium,
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+                ) {
+                    Icon(MaterialSymbolIcon("swap_horiz"), null, size = 14.dp)
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        "Next pair",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
         }
     }
 }

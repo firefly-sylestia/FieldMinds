@@ -233,6 +233,9 @@ dependencies {
     implementation(libs.androidx.compose.animation.graphics)
     implementation(libs.androidx.compose.animation.core)
     
+    // Graphics Shapes — polygon morphing (circle ↔ rounded rect, etc.)
+    implementation(libs.androidx.graphics.shapes)
+    
     // Navigation
     implementation(libs.androidx.navigation.compose)
     
