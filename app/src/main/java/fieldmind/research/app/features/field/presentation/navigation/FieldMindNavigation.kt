@@ -958,15 +958,15 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Spring-based sliding and fading — smooth, responsive feel
+    // Telegram-like spring-based sliding with slight bounce
     val slideSpec = config.slideSpring()
     val fadeSpec = spring<Float>(
-        dampingRatio = config.entranceDampingRatio,
-        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
     )
     val bouncySpec = spring<Float>(
-        dampingRatio = 0.55f,
-        stiffness = (config.entranceStiffness * 0.55f).coerceAtLeast(60f)
+        dampingRatio = 0.50f,
+        stiffness = (config.stiffness * 0.55f).coerceAtLeast(60f)
     )
 
     return when {
@@ -976,14 +976,15 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
                 fadeIn(animationSpec = fadeSpec) +
                 scaleIn(initialScale = 0.96f, animationSpec = fadeSpec)
             else
-                slideInHorizontally(slideSpec) { direction * it / 5 } + fadeIn(fadeSpec) +
+                // Telegram-like: full slide with scale pop
+                slideInHorizontally(slideSpec) { direction * it / 3 } + fadeIn(fadeSpec) +
                 scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         }
         fromCat == RouteCategory.Tab && toCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
-        ) -> slideInHorizontally(slideSpec) { it / 5 } + fadeIn(fadeSpec) +
+        ) -> slideInHorizontally(slideSpec) { it / 3 } + fadeIn(fadeSpec) +
             scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         fromCat == RouteCategory.SettingsHub && toCat == RouteCategory.SettingsSubPage ->
             fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = fadeSpec)
@@ -992,7 +993,7 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
         toCat == RouteCategory.Tab && fromCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation, RouteCategory.Other
-        ) -> slideInHorizontally(slideSpec) { -it / 5 } + fadeIn(fadeSpec) +
+        ) -> slideInHorizontally(slideSpec) { -it / 3 } + fadeIn(fadeSpec) +
             scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         else -> fadeIn(animationSpec = fadeSpec) +
             scaleIn(initialScale = 0.97f, animationSpec = fadeSpec)
@@ -1004,11 +1005,10 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Spring-based sliding and fading — smooth, responsive feel
     val slideSpec = config.slideSpring()
     val fadeSpec = spring<Float>(
-        dampingRatio = config.entranceDampingRatio,
-        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
     )
 
     return when {
@@ -1016,7 +1016,8 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
             val direction = primaryTabDirection(fromRoute, toRoute)
             if (direction == 0) fadeOut(fadeSpec)
             else {
-                slideOutHorizontally(slideSpec) { -direction * it / 8 } + fadeOut(fadeSpec)
+                // Telegram-like: quick exit with slight slide
+                slideOutHorizontally(slideSpec) { -direction * it / 6 } + fadeOut(fadeSpec)
             }
         }
         fromCat == RouteCategory.Tab && toCat in listOf(
@@ -1024,7 +1025,7 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
         ) -> {
-            slideOutHorizontally(slideSpec) { -it / 8 } + fadeOut(fadeSpec)
+            slideOutHorizontally(slideSpec) { -it / 6 } + fadeOut(fadeSpec)
         }
         fromCat == RouteCategory.SettingsHub && toCat == RouteCategory.SettingsSubPage ->
             fadeOut(fadeSpec)
@@ -1034,7 +1035,7 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation, RouteCategory.Other
         ) -> {
-            slideOutHorizontally(slideSpec) { it / 8 } + fadeOut(fadeSpec)
+            slideOutHorizontally(slideSpec) { it / 6 } + fadeOut(fadeSpec)
         }
         else -> fadeOut(fadeSpec)
     }
@@ -1045,21 +1046,19 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Spring-based sliding and fading — smooth, responsive feel
     val slideSpec = config.slideSpring()
     val fadeSpec = spring<Float>(
-        dampingRatio = config.entranceDampingRatio,
-        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
     )
     val bouncySpec = spring<Float>(
-        dampingRatio = 0.55f,
-        stiffness = (config.entranceStiffness * 0.55f).coerceAtLeast(60f)
+        dampingRatio = 0.50f,
+        stiffness = (config.stiffness * 0.55f).coerceAtLeast(60f)
     )
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
             val direction = primaryTabDirection(toRoute, fromRoute)
-            // Full-width slide from the opposite side
             slideInHorizontally(slideSpec) { -direction * it } + fadeIn(animationSpec = fadeSpec) +
                 scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         }
@@ -1068,7 +1067,6 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
         ) -> {
-            // Previous screen (tab) slides in from the left at full width — iOS predictive peek
             slideInHorizontally(slideSpec) { -it } + fadeIn(animationSpec = fadeSpec) +
                 scaleIn(initialScale = 0.97f, animationSpec = bouncySpec)
         }
@@ -1084,17 +1082,15 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Spring-based sliding and fading — smooth, responsive feel
     val slideSpec = config.slideSpring()
     val fadeSpec = spring<Float>(
-        dampingRatio = config.entranceDampingRatio,
-        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
     )
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
             val direction = primaryTabDirection(toRoute, fromRoute)
-            // Full-width slide out in the direction of the pop
             slideOutHorizontally(slideSpec) { direction * it } + fadeOut(animationSpec = fadeSpec)
         }
         fromCat == RouteCategory.Tab && toCat in listOf(
@@ -1102,7 +1098,6 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
         ) -> {
-            // Current screen (tab) slides out to the right at full width
             slideOutHorizontally(slideSpec) { it } + fadeOut(animationSpec = fadeSpec)
         }
         toCat == RouteCategory.Tab && fromCat in listOf(
@@ -1110,7 +1105,6 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
         ) -> {
-            // Current screen (sub-screen) slides out to the right at full width — iOS predictive
             slideOutHorizontally(slideSpec) { it } + fadeOut(animationSpec = fadeSpec)
         }
         else -> fadeOut(animationSpec = fadeSpec)
@@ -1805,8 +1799,8 @@ private fun AllTabScreen(
                                         animX.animateTo(
                                             0f,
                                             animationSpec = spring<Float>(
-                                                dampingRatio = animConfig.entranceDampingRatio,
-                                                stiffness = (animConfig.entranceStiffness * 0.78f).coerceAtLeast(60f)
+                                                dampingRatio = animConfig.dampingRatio,
+                                                stiffness = (animConfig.stiffness * 0.78f).coerceAtLeast(60f)
                                             )
                                         )
                                     }
@@ -1818,8 +1812,8 @@ private fun AllTabScreen(
                                     animX.animateTo(
                                         0f,
                                         animationSpec = spring<Float>(
-                                            dampingRatio = animConfig.entranceDampingRatio,
-                                            stiffness = (animConfig.entranceStiffness * 0.78f).coerceAtLeast(60f)
+                                            dampingRatio = animConfig.dampingRatio,
+                                            stiffness = (animConfig.stiffness * 0.78f).coerceAtLeast(60f)
                                         )
                                     )
                                 }

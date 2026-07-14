@@ -281,14 +281,14 @@ fun AnimationTuningCard(
             Surface(
                 onClick = {
                     val def = AnimationConfig.DEFAULT
-                    settings.setAnimEntranceDamping(def.entranceDampingRatio)
-                    settings.setAnimEntranceStiffness(def.entranceStiffness)
+                    settings.setAnimEntranceDamping(def.dampingRatio)
+                    settings.setAnimEntranceStiffness(def.stiffness)
                     settings.setAnimSwipeBackDamping(def.swipeBackDampingRatio)
                     settings.setAnimSwipeBackStiffness(def.swipeBackStiffness)
                     settings.setAnimSwipeThreshold(def.swipeThreshold)
                     settings.setAnimSwipeScaleFactor(def.swipeScaleFactor)
-                    settings.setAnimTabEntranceDamping(def.tabEntranceDampingRatio)
-                    settings.setAnimTabEntranceStiffness(def.tabEntranceStiffness)
+                    settings.setAnimTabEntranceDamping(def.dampingRatio)
+                    settings.setAnimTabEntranceStiffness(def.stiffness)
                 },
                 shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
@@ -559,7 +559,7 @@ private fun AnimationPreviewDemo() {
                     scaleAnim.snapTo(0f)
                     offsetXAnim.snapTo(0f)
                     offsetYAnim.snapTo(0f)
-                    scaleAnim.animateTo(1f, animConfig.entranceSpring())
+                    scaleAnim.animateTo(1f, animConfig.spring())
                 }
             },
             modifier = Modifier.weight(1f),
@@ -593,11 +593,11 @@ private fun AnimationPreviewDemo() {
                 scope.launch {
                     offsetYAnim.snapTo(0f)
                     scaleAnim.snapTo(1f)
-                    offsetYAnim.animateTo(-300f, animConfig.entranceSpring())
+                    offsetYAnim.animateTo(-300f, animConfig.spring())
                     // Reset after fly-out completes
                     scaleAnim.snapTo(0f)
                     offsetYAnim.snapTo(0f)
-                    scaleAnim.animateTo(1f, animConfig.entranceSpring())
+                    scaleAnim.animateTo(1f, animConfig.spring())
                 }
             },
             modifier = Modifier.weight(1f),
@@ -772,14 +772,14 @@ fun AnimationTuningSettingsPage(
                 Surface(
                     onClick = {
                         val def = AnimationConfig.DEFAULT
-                        settings.setAnimEntranceDamping(def.entranceDampingRatio)
-                        settings.setAnimEntranceStiffness(def.entranceStiffness)
+                    settings.setAnimEntranceDamping(def.dampingRatio)
+                    settings.setAnimEntranceStiffness(def.stiffness)
                         settings.setAnimSwipeBackDamping(def.swipeBackDampingRatio)
                         settings.setAnimSwipeBackStiffness(def.swipeBackStiffness)
                         settings.setAnimSwipeThreshold(def.swipeThreshold)
                         settings.setAnimSwipeScaleFactor(def.swipeScaleFactor)
-                        settings.setAnimTabEntranceDamping(def.tabEntranceDampingRatio)
-                        settings.setAnimTabEntranceStiffness(def.tabEntranceStiffness)
+                        settings.setAnimTabEntranceDamping(def.dampingRatio)
+                        settings.setAnimTabEntranceStiffness(def.stiffness)
                     },
                     shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),

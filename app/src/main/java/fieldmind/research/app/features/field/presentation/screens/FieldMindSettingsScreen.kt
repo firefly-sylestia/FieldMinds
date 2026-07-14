@@ -3472,10 +3472,10 @@ private fun SpeedPresetAnimationPreview(
         offsetYAnim.snapTo(0f)
         rotationAnim.snapTo(0f)
         delay(150)
-        scaleAnim.animateTo(1f, animConfig.entranceSpring())
+        scaleAnim.animateTo(1f, animConfig.spring())
         delay(400)
-        scaleAnim.animateTo(0.95f, animConfig.entranceSpring())
-        scaleAnim.animateTo(1f, animConfig.entranceSpring())
+        scaleAnim.animateTo(0.95f, animConfig.spring())
+        scaleAnim.animateTo(1f, animConfig.spring())
         delay(200)
         scaleAnim.animateTo(0f, animConfig.swipeBackSpring())
         lastAction = "Ready"
@@ -3585,7 +3585,7 @@ private fun SpeedPresetAnimationPreview(
                         lastAction = "Entrance — scale spring"
                         scope.launch {
                             scaleAnim.snapTo(0f); offsetXAnim.snapTo(0f); offsetYAnim.snapTo(0f); rotationAnim.snapTo(0f)
-                            scaleAnim.animateTo(1f, animConfig.entranceSpring())
+                            scaleAnim.animateTo(1f, animConfig.spring())
                         }
                     },
                     enabled = animationsEnabled,
@@ -3614,7 +3614,7 @@ private fun SpeedPresetAnimationPreview(
                         lastAction = "Rotation — spinner"
                         scope.launch {
                             rotationAnim.snapTo(0f); scaleAnim.snapTo(1f); offsetXAnim.snapTo(0f); offsetYAnim.snapTo(0f)
-                            rotationAnim.animateTo(360f, animConfig.entranceSpring())
+                            rotationAnim.animateTo(360f, animConfig.spring())
                             rotationAnim.snapTo(0f)
                         }
                     },

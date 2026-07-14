@@ -316,14 +316,14 @@ class FieldMindSettings private constructor(context: Context) {
     fun setAnimationSpeedPreset(value: String) = edit(KEY_ANIMATION_SPEED_PRESET, value) { _animationSpeedPreset.value = value; refreshAnimationConfig() }
 
     // ── Animation tuning settings (elegant, slow defaults) ──
-    private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.95f))
+    private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.65f))
     val animEntranceDamping: StateFlow<Float> = _animEntranceDamping.asStateFlow()
-    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, 80f))
+    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, 350f))
     val animEntranceStiffness: StateFlow<Float> = _animEntranceStiffness.asStateFlow()
 
-    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.93f))
+    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.72f))
     val animSwipeBackDamping: StateFlow<Float> = _animSwipeBackDamping.asStateFlow()
-    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 80f))
+    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 320f))
     val animSwipeBackStiffness: StateFlow<Float> = _animSwipeBackStiffness.asStateFlow()
     private val _animSwipeThreshold = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_THRESHOLD, 0.20f))
     val animSwipeThreshold: StateFlow<Float> = _animSwipeThreshold.asStateFlow()
@@ -765,20 +765,14 @@ class FieldMindSettings private constructor(context: Context) {
     fun currentAnimationConfig(): AnimationConfig {
         val mult = if (_animationsEnabled.value) speedMultiplier() else 100_000f
         return AnimationConfig(
-            entranceDampingRatio = _animEntranceDamping.value,
-            entranceStiffness = (_animEntranceStiffness.value * mult).coerceAtLeast(1f),
-            expressiveDampingRatio = (_animEntranceDamping.value - 0.04f).coerceIn(0.5f, 0.95f),
-            expressiveStiffness = (_animEntranceStiffness.value * mult * 1.15f).coerceAtLeast(1f),
-            pressDampingRatio = (_animEntranceDamping.value + 0.03f).coerceIn(0.5f, 0.98f),
-            pressStiffness = (_animEntranceStiffness.value * mult * 1.25f).coerceAtLeast(1f),
+            dampingRatio = _animEntranceDamping.value,
+            stiffness = (_animEntranceStiffness.value * mult).coerceAtLeast(1f),
             swipeBackDampingRatio = _animSwipeBackDamping.value,
             swipeBackStiffness = (_animSwipeBackStiffness.value * mult).coerceAtLeast(1f),
             swipeThreshold = _animSwipeThreshold.value,
             swipeScaleFactor = _animSwipeScaleFactor.value,
-            tabEntranceDampingRatio = _animTabEntranceDamping.value,
-            tabEntranceStiffness = (_animTabEntranceStiffness.value * mult).coerceAtLeast(1f),
-            slideStiffness = (_animEntranceStiffness.value * mult * 1.4f).coerceAtLeast(1f),
-            staggerItemDelayMs = (if (_animationsEnabled.value) (30f / mult).roundToInt() else 0).coerceIn(0, 300),
+            slideStiffness = (_animEntranceStiffness.value * mult * 1.1f).coerceAtLeast(1f),
+            staggerItemDelayMs = (if (_animationsEnabled.value) (35f / mult).roundToInt() else 0).coerceIn(0, 300),
             staggerInitialDelayMs = (if (_animationsEnabled.value) (40f / mult).roundToInt() else 0).coerceIn(0, 300),
             staggerMaxDurationMs = (if (_animationsEnabled.value) (300f / mult).roundToInt() else 0).coerceIn(0, 500),
             morphDurationMs = _animMorphDurationMs.value,

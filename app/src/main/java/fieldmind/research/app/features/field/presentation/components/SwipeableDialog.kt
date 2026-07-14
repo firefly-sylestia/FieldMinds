@@ -98,7 +98,7 @@ fun SwipeableAlertDialog(
         animationSpec = if (isDragging)
             FieldMindMotion.expressiveFloat
         else if (isAnimatingAway)
-            animConfig.entranceSpring()
+            animConfig.spring()
         else
             animConfig.swipeBackSpring(),
         label = "dialogSwipe"

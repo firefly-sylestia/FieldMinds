@@ -117,30 +117,29 @@ val LocalPeekContentHolder = compositionLocalOf { PeekContentHolder() }
  * to customize spring physics without recompiling.
  */
 data class AnimationConfig(
-    // — Lively, snappy spring defaults —
-    // Damping: lower = more visible bounce (0.82 = gentle pop, 0.65 = playful)
-    // Stiffness: higher = faster completion (280 = snappy, 120 = relaxed)
-    val entranceDampingRatio: Float = 0.82f,
-    val entranceStiffness: Float = 280f,
-    val expressiveDampingRatio: Float = 0.78f,
-    val expressiveStiffness: Float = 320f,
-    val pressDampingRatio: Float = 0.85f,
-    val pressStiffness: Float = 350f,
-    val swipeBackDampingRatio: Float = 0.88f,
-    val swipeBackStiffness: Float = 340f,
-    val cancelDampingRatio: Float = 0.90f,
-    val cancelStiffness: Float = 200f,
-    val tabEntranceDampingRatio: Float = 0.80f,
-    val tabEntranceStiffness: Float = 300f,
+    // ── Telegram-inspired spring physics ──
+    // Telegram uses slightly bouncy, snappy springs:
+    //   damping 0.55-0.75 = visible but fast-decaying bounce
+    //   stiffness 300-400 = fast completion without harshness
+    //
+    // Primary spring (used for most animations: entrances, presses, transitions)
+    val dampingRatio: Float = 0.65f,
+    val stiffness: Float = 350f,
+    // Swipe-back / predictive back spring (slightly smoother for gesture-driven motion)
+    val swipeBackDampingRatio: Float = 0.72f,
+    val swipeBackStiffness: Float = 320f,
+    // Swipe behavior
     val swipeThreshold: Float = 0.20f,
     val swipeScaleFactor: Float = 0.92f,
-    val slideStiffness: Float = 400f,
-    val staggerItemDelayMs: Int = 30,
+    // Transition slide stiffness
+    val slideStiffness: Float = 380f,
+    // Stagger delays for list choreography
+    val staggerItemDelayMs: Int = 35,
     val staggerInitialDelayMs: Int = 40,
     val staggerMaxDurationMs: Int = 300,
-    // — New expressive motion tunables —
-    val morphDurationMs: Int = 400,
+    // ── Feature toggles ──
     val sideRevealDistanceDp: Float = 40f,
+    val morphDurationMs: Int = 380,
     val shimmerSpeedMs: Int = 1200,
     val pulseDurationMs: Int = 1500,
     val listChoreographyEnabled: Boolean = true,
@@ -148,17 +147,14 @@ data class AnimationConfig(
     val pageFlipEnabled: Boolean = true
 ) {
     companion object {
-        /** Default config used when no LocalAnimationConfig is provided. */
         val DEFAULT = AnimationConfig()
     }
 
-    fun entranceSpring() = spring<Float>(dampingRatio = entranceDampingRatio, stiffness = entranceStiffness)
-    fun expressiveSpring() = spring<Float>(dampingRatio = expressiveDampingRatio, stiffness = expressiveStiffness)
-    fun pressSpring() = spring<Float>(dampingRatio = pressDampingRatio, stiffness = pressStiffness)
+    // Convenience spring builders (used by callers for direct Animatable usage)
+    fun spring() = spring<Float>(dampingRatio = dampingRatio, stiffness = stiffness)
     fun swipeBackSpring() = spring<Float>(dampingRatio = swipeBackDampingRatio, stiffness = swipeBackStiffness)
-    fun cancelSpring() = spring<Float>(dampingRatio = cancelDampingRatio, stiffness = cancelStiffness)
-    fun tabEntranceSpring() = spring<Float>(dampingRatio = tabEntranceDampingRatio, stiffness = tabEntranceStiffness)
-    fun slideSpring() = spring<IntOffset>(dampingRatio = 0.90f, stiffness = slideStiffness)
+    fun slideSpring() = spring<IntOffset>(dampingRatio = 0.85f, stiffness = slideStiffness)
+    fun bouncySpring() = spring<Float>(dampingRatio = 0.50f, stiffness = (stiffness * 0.55f).coerceAtLeast(60f))
 }
 
 val LocalAnimationConfig = compositionLocalOf { AnimationConfig.DEFAULT }
@@ -169,92 +165,90 @@ val LocalAnimationsEnabled = compositionLocalOf { true }
 /**
  * Material expressive motion specifications for FieldMind.
  * All spring specs now read from [LocalAnimationConfig] for runtime tuning.
+ * Simplified to fewer, better-named springs with Telegram-inspired defaults.
  */
 object FieldMindMotion {
 
-    // — Lively, tunable spring specs —
-    // Every spring reads from AnimationConfig so Developer sliders and speed
-    // presets affect ALL animations throughout the app.
-
+    // ── Primary Spring (most animations) ──
+    // Uses the main damping/stiffness from AnimationConfig.
+    // Telegram-like: slightly bouncy (damping 0.65), snappy (stiffness 350).
     val expressiveSpring
         @Composable get() = spring<Float>(
-            dampingRatio = LocalAnimationConfig.current.entranceDampingRatio,
-            stiffness = LocalAnimationConfig.current.entranceStiffness
+            dampingRatio = LocalAnimationConfig.current.dampingRatio,
+            stiffness = LocalAnimationConfig.current.stiffness
         )
 
+    // Softer variant — same damping, ~22% less stiffness for gentler motions
     val expressiveFloat
         @Composable get() = spring<Float>(
-            dampingRatio = LocalAnimationConfig.current.entranceDampingRatio,
-            stiffness = (LocalAnimationConfig.current.entranceStiffness * 0.78f).coerceAtLeast(60f)
+            dampingRatio = LocalAnimationConfig.current.dampingRatio,
+            stiffness = (LocalAnimationConfig.current.stiffness * 0.78f).coerceAtLeast(60f)
         )
 
+    // Even softer — for subtle layout/position changes
     val expressiveSoft
         @Composable get() = spring<Float>(
-            dampingRatio = LocalAnimationConfig.current.entranceDampingRatio + 0.06f,
-            stiffness = (LocalAnimationConfig.current.entranceStiffness * 0.45f).coerceAtLeast(40f)
+            dampingRatio = LocalAnimationConfig.current.dampingRatio + 0.06f,
+            stiffness = (LocalAnimationConfig.current.stiffness * 0.45f).coerceAtLeast(40f)
         )
 
-    val expressiveElastic
-        @Composable get() = spring<Float>(
-            dampingRatio = (LocalAnimationConfig.current.entranceDampingRatio - 0.04f).coerceIn(0.5f, 0.95f),
-            stiffness = LocalAnimationConfig.current.entranceStiffness
-        )
-
+    // Snappy press response — same damping but faster stiffness
     val expressiveSnap
         @Composable get() = spring<Float>(
-            dampingRatio = LocalAnimationConfig.current.pressDampingRatio,
-            stiffness = LocalAnimationConfig.current.pressStiffness
+            dampingRatio = (LocalAnimationConfig.current.dampingRatio + 0.05f).coerceIn(0.5f, 0.95f),
+            stiffness = (LocalAnimationConfig.current.stiffness * 1.15f).coerceAtLeast(80f)
         )
 
-    val expressiveDramatic
-        @Composable get() = spring<Float>(
-            dampingRatio = LocalAnimationConfig.current.expressiveDampingRatio,
-            stiffness = LocalAnimationConfig.current.expressiveStiffness
-        )
-
-    // -- Bouncy Springs (visible overshoot) --
-
-    fun bouncySpring(dampingRatio: Float = 0.58f, stiffness: Float = 160f) =
+    // ── Bouncy Springs ──
+    fun bouncySpring(dampingRatio: Float = 0.50f, stiffness: Float = 180f) =
         spring<Float>(dampingRatio = dampingRatio, stiffness = stiffness)
 
     val bouncyEntrance
-        @Composable get() = bouncySpring(dampingRatio = 0.55f, stiffness = (LocalAnimationConfig.current.entranceStiffness * 0.55f).coerceAtLeast(60f))
+        @Composable get() = bouncySpring(dampingRatio = 0.48f, stiffness = (LocalAnimationConfig.current.stiffness * 0.55f).coerceAtLeast(60f))
 
     val bouncyPress
-        @Composable get() = bouncySpring(dampingRatio = 0.65f, stiffness = (LocalAnimationConfig.current.pressStiffness * 0.6f).coerceAtLeast(80f))
+        @Composable get() = bouncySpring(dampingRatio = 0.55f, stiffness = (LocalAnimationConfig.current.stiffness * 0.72f).coerceAtLeast(80f))
 
     val bouncyCelebration
-        @Composable get() = bouncySpring(dampingRatio = 0.45f, stiffness = 120f)
+        @Composable get() = bouncySpring(dampingRatio = 0.40f, stiffness = 140f)
 
-    // -- Standard Springs (no overshoot) --
+    // ── Standard Springs (near-critical damping) ──
 
     val layoutSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.88f, stiffness = (LocalAnimationConfig.current.entranceStiffness * 0.6f).coerceAtLeast(60f))
+        @Composable get() = spring<Float>(dampingRatio = 0.82f, stiffness = (LocalAnimationConfig.current.stiffness * 0.6f).coerceAtLeast(60f))
 
     val pressSpring
-        @Composable get() = spring<Float>(dampingRatio = LocalAnimationConfig.current.pressDampingRatio, stiffness = LocalAnimationConfig.current.pressStiffness)
+        @Composable get() = spring<Float>(dampingRatio = (LocalAnimationConfig.current.dampingRatio + 0.05f).coerceIn(0.6f, 0.95f), stiffness = (LocalAnimationConfig.current.stiffness * 1.15f).coerceAtLeast(80f))
 
     val confirmSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.88f, stiffness = (LocalAnimationConfig.current.entranceStiffness * 0.55f).coerceAtLeast(60f))
+        @Composable get() = spring<Float>(dampingRatio = 0.85f, stiffness = (LocalAnimationConfig.current.stiffness * 0.55f).coerceAtLeast(60f))
 
-    // -- Navigation Springs --
+    // ── Navigation Springs ──
 
     val swipeBackSpring
         @Composable get() = spring<Float>(dampingRatio = LocalAnimationConfig.current.swipeBackDampingRatio, stiffness = LocalAnimationConfig.current.swipeBackStiffness)
 
     val sharedElementSpring
-        @Composable get() = spring<Float>(dampingRatio = LocalAnimationConfig.current.entranceDampingRatio, stiffness = (LocalAnimationConfig.current.entranceStiffness * 0.7f).coerceAtLeast(80f))
+        @Composable get() = spring<Float>(dampingRatio = LocalAnimationConfig.current.dampingRatio, stiffness = (LocalAnimationConfig.current.stiffness * 0.7f).coerceAtLeast(80f))
 
     val slideSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.90f, stiffness = (LocalAnimationConfig.current.slideStiffness * 0.5f).coerceAtLeast(80f))
+        @Composable get() = spring<Float>(dampingRatio = 0.85f, stiffness = (LocalAnimationConfig.current.slideStiffness * 0.5f).coerceAtLeast(80f))
 
     val fadeThroughSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.88f, stiffness = (LocalAnimationConfig.current.entranceStiffness * 0.6f).coerceAtLeast(80f))
+        @Composable get() = spring<Float>(dampingRatio = 0.85f, stiffness = (LocalAnimationConfig.current.stiffness * 0.6f).coerceAtLeast(80f))
 
     val slideOffsetSpring
-        @Composable get() = spring<IntOffset>(dampingRatio = 0.90f, stiffness = LocalAnimationConfig.current.slideStiffness)
+        @Composable get() = spring<IntOffset>(dampingRatio = 0.85f, stiffness = LocalAnimationConfig.current.slideStiffness)
 
-    // -- Duration Tokens (ms) --
+    // ── Shape Morphing ──
+
+    val morphSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.82f, stiffness = (LocalAnimationConfig.current.stiffness * 0.65f).coerceAtLeast(70f))
+
+    val cornerSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.82f, stiffness = (LocalAnimationConfig.current.stiffness * 0.75f).coerceAtLeast(80f))
+
+    // ── Duration Tokens (ms) ──
 
     const val durationMicro = 80
     const val durationSubtle = 150
@@ -263,7 +257,7 @@ object FieldMindMotion {
     const val durationExpressive = 600
     const val countUpMs = 500
 
-    // -- Stagger & Delay Tokens (now tunable via AnimationConfig) --
+    // ── Stagger Tokens ──
 
     val staggerItemDelayMs
         @Composable get() = LocalAnimationConfig.current.staggerItemDelayMs
@@ -272,37 +266,29 @@ object FieldMindMotion {
     val staggerMaxDurationMs
         @Composable get() = LocalAnimationConfig.current.staggerMaxDurationMs
 
-    // -- Shape Morphing --
-
-    val morphSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.88f, stiffness = (LocalAnimationConfig.current.entranceStiffness * 0.65f).coerceAtLeast(70f))
-
-    val cornerSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.88f, stiffness = (LocalAnimationConfig.current.entranceStiffness * 0.75f).coerceAtLeast(80f))
-
-    // -- Convenience Tween --
+    // ── Convenience Tween ──
 
     val fadeTween = tween<Float>(durationMillis = durationSubtle)
     val pressScaleTween = tween<Float>(durationMillis = durationMicro)
 
-    // -- Swipe-back Constants --
+    // ── Swipe-back Constants ──
 
     const val swipeEdgeWidthDp = 30f
     const val swipeEdgeHeightDp = 30f
     const val swipeThreshold = 0.18f
     const val swipeScaleFactor = 0.90f
-    const val swipeScrimAlpha = 0.30f
+    const val swipeScrimAlpha = 0.28f
     const val swipeShadowElevationDp = 24f
     const val swipeCornerRadiusDp = 28f
-    const val swipeBaseCornerRadiusDp = 8f
+    const val swipeBaseCornerRadiusDp = 12f
 
-    // -- Utility --
+    // ── Utility ──
 
     @Composable
     fun entranceSpec(emphasis: Emphasis = Emphasis.Standard): AnimationSpec<Float> = when (emphasis) {
-        Emphasis.Expressive -> expressiveDramatic
-        Emphasis.Emphasized -> expressiveSpring
-        Emphasis.Standard -> expressiveFloat
+        Emphasis.Expressive -> expressiveSpring
+        Emphasis.Emphasized -> expressiveFloat
+        Emphasis.Standard -> expressiveSoft
         Emphasis.Snap -> expressiveSnap
         Emphasis.Bouncy -> bouncyEntrance
     }
@@ -312,7 +298,6 @@ object FieldMindMotion {
     @Composable
     fun isReduceMotion(): Boolean {
         if (LocalInspectionMode.current) return false
-        // Respect app's global animation toggle
         if (!LocalAnimationsEnabled.current) return true
         val context = LocalContext.current
         val animatorScale = try {
@@ -324,7 +309,6 @@ object FieldMindMotion {
         return animatorScale == 0f
     }
 
-    /** Compute stagger delay from the provided [config]. Call from @Composable scope. */
     fun staggerDelay(index: Int, config: AnimationConfig = AnimationConfig.DEFAULT): Int =
         (config.staggerInitialDelayMs + index * config.staggerItemDelayMs).coerceAtMost(config.staggerMaxDurationMs)
 }
@@ -696,7 +680,7 @@ fun Modifier.morphShape(
     val animatedRadius by animateFloatAsState(
         targetValue = targetPx,
         animationSpec = if (animate && !reduceMotion) {
-            spring(dampingRatio = animConfig.entranceDampingRatio, stiffness = animConfig.entranceStiffness)
+            spring(dampingRatio = animConfig.dampingRatio, stiffness = animConfig.stiffness)
         } else {
             spring(stiffness = Spring.StiffnessMedium)
         },
@@ -841,7 +825,7 @@ fun Modifier.pageFlip(
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
         animationSpec = if (shouldAnimate) {
-            spring(dampingRatio = animConfig.entranceDampingRatio, stiffness = animConfig.entranceStiffness)
+            spring(dampingRatio = animConfig.dampingRatio, stiffness = animConfig.stiffness)
         } else {
             spring(stiffness = Spring.StiffnessMedium)
         },
@@ -1142,12 +1126,14 @@ fun SwipeBackHost(
                         Modifier.pointerInput(isImeVisible) {
                             if (isImeVisible) return@pointerInput
                             awaitEachGesture {
-                                val down = awaitFirstDown(requireUnconsumed = false)
+                                // requireUnconsumed = true: only handle touches NOT consumed
+                                // by child composables (e.g., clickable cards, buttons, sliders).
+                                // This fixes the settings navigation bug where taps on cards
+                                // produced visual feedback but didn't navigate.
+                                val down = awaitFirstDown(requireUnconsumed = true)
                                 val isAtLeftEdge = down.position.x <= FieldMindMotion.swipeEdgeWidthDp
                                 val isAtTopEdge = down.position.y <= FieldMindMotion.swipeEdgeHeightDp
 
-                                // NOT near any edge — release the gesture and let children
-                                // (e.g. LazyColumn in settings) process it normally.
                                 if (!isAtLeftEdge && !isAtTopEdge) {
                                     return@awaitEachGesture
                                 }

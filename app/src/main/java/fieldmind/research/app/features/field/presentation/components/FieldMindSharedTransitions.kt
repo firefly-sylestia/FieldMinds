@@ -69,8 +69,8 @@ fun AnimatedContentTransitionScope<*>.sharedAxisHorizontal(
 ): ContentTransform {
     val slideSpec = config.slideSpring()
     val fadeSpec = spring<Float>(
-        dampingRatio = config.entranceDampingRatio,
-        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
     )
 
     val enter: EnterTransition = if (direction != 0) {
@@ -120,8 +120,8 @@ fun scaleEnter(
     config: AnimationConfig = AnimationConfig.DEFAULT
 ): EnterTransition {
     val spec = spring<Float>(
-        dampingRatio = config.entranceDampingRatio,
-        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
     )
     return fadeIn(animationSpec = spec) +
         scaleIn(initialScale = initialScale, animationSpec = spec)
@@ -134,8 +134,8 @@ fun fadeExit(
     config: AnimationConfig = AnimationConfig.DEFAULT
 ): ExitTransition {
     val spec = spring<Float>(
-        dampingRatio = config.entranceDampingRatio,
-        stiffness = (config.entranceStiffness * 0.78f).coerceAtLeast(60f)
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
     )
     return fadeOut(animationSpec = spec)
 }
