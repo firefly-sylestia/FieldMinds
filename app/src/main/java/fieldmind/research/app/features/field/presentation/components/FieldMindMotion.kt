@@ -86,6 +86,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import android.graphics.RectF
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.Morph
 import androidx.graphics.shapes.RoundedPolygon
@@ -756,7 +757,7 @@ class MorphPolygonShape(
         layoutDirection: LayoutDirection,
         density: Density
     ): Outline {
-        val path = morph.toPath(progress).asComposePath()
+        val path = morph.asPath(progress).asComposePath()
         // Scale to fill the available size (polygons are unit-centered)
         val scaleX = size.width / 2f
         val scaleY = size.height / 2f
@@ -782,9 +783,8 @@ object MorphPolygons {
         height: Float = 1f,
         cornerRadius: Float = 0.16f
     ) = RoundedPolygon.rectangle(
-        width = width,
-        height = height,
-        cornerRounding = CornerRounding(cornerRadius)
+        bounds = RectF(-width / 2f, -height / 2f, width / 2f, height / 2f),
+        cornerRadius = cornerRadius
     )
 
     /** Rounded rectangle with different corner rounding per corner (superellipse-like). */
@@ -792,9 +792,8 @@ object MorphPolygons {
         width: Float = 1f,
         height: Float = 0.6f
     ) = RoundedPolygon.rectangle(
-        width = width,
-        height = height,
-        cornerRounding = CornerRounding(height / 2f, smoothing = 0.6f)
+        bounds = RectF(-width / 2f, -height / 2f, width / 2f, height / 2f),
+        cornerRadius = height / 2f
     )
 
     /** Hexagon shape (6 vertices). */
@@ -816,10 +815,9 @@ object MorphPolygons {
         outerRadius: Float = 1f,
         innerRadius: Float = 0.4f
     ) = RoundedPolygon.star(
-        numVerticesPerRadius = 5,
+        numVertices = 5,
         radius = outerRadius,
-        innerRadius = innerRadius,
-        rounding = CornerRounding(0.05f)
+        innerRadius = innerRadius
     )
 
     /** Triangle (3 vertices). */
