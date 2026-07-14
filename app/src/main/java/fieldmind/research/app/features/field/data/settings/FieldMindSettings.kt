@@ -334,6 +334,18 @@ class FieldMindSettings private constructor(context: Context) {
     private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, 120f))
     val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
+    // ── Side swipe settings ──
+    private val _sideSwipeEnabled = MutableStateFlow(prefs.getBoolean(KEY_SIDE_SWIPE_ENABLED, true))
+    val sideSwipeEnabled: StateFlow<Boolean> = _sideSwipeEnabled.asStateFlow()
+    private val _sideSwipeThreshold = MutableStateFlow(prefs.getFloat(KEY_SIDE_SWIPE_THRESHOLD, 0.25f))
+    val sideSwipeThreshold: StateFlow<Float> = _sideSwipeThreshold.asStateFlow()
+    private val _sideSwipeDamping = MutableStateFlow(prefs.getFloat(KEY_SIDE_SWIPE_DAMPING, 0.62f))
+    val sideSwipeDamping: StateFlow<Float> = _sideSwipeDamping.asStateFlow()
+    private val _sideSwipeStiffness = MutableStateFlow(prefs.getFloat(KEY_SIDE_SWIPE_STIFFNESS, 380f))
+    val sideSwipeStiffness: StateFlow<Float> = _sideSwipeStiffness.asStateFlow()
+    private val _sideSwipeMaxRevealDp = MutableStateFlow(prefs.getFloat(KEY_SIDE_SWIPE_MAX_REVEAL_DP, 80f))
+    val sideSwipeMaxRevealDp: StateFlow<Float> = _sideSwipeMaxRevealDp.asStateFlow()
+
     // ── Predictive back settings ──
     private val _predictiveBackEnabled = MutableStateFlow(prefs.getBoolean(KEY_PREDICTIVE_BACK_ENABLED, true))
     val predictiveBackEnabled: StateFlow<Boolean> = _predictiveBackEnabled.asStateFlow()
@@ -779,6 +791,11 @@ class FieldMindSettings private constructor(context: Context) {
         return AnimationConfig(
             predictiveBackEnabled = _predictiveBackEnabled.value,
             predictiveBackScaleMin = _predictiveBackScaleMin.value,
+            sideSwipeEnabled = _sideSwipeEnabled.value,
+            sideSwipeThreshold = _sideSwipeThreshold.value,
+            sideSwipeDampingRatio = _sideSwipeDamping.value,
+            sideSwipeStiffness = (_sideSwipeStiffness.value * mult).coerceAtLeast(1f),
+            sideSwipeMaxRevealDp = _sideSwipeMaxRevealDp.value,
             dampingRatio = _animEntranceDamping.value,
             stiffness = (_animEntranceStiffness.value * mult).coerceAtLeast(1f),
             swipeBackDampingRatio = _animSwipeBackDamping.value,
@@ -811,6 +828,13 @@ class FieldMindSettings private constructor(context: Context) {
     fun setAnimSwipeScaleFactor(value: Float) = edit(KEY_ANIM_SWIPE_SCALE, value) { _animSwipeScaleFactor.value = value; refreshAnimationConfig() }
     fun setAnimTabEntranceDamping(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_DAMPING, value) { _animTabEntranceDamping.value = value; refreshAnimationConfig() }
     fun setAnimTabEntranceStiffness(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, value) { _animTabEntranceStiffness.value = value; refreshAnimationConfig() }
+
+    // ── Side swipe setters ──
+    fun setSideSwipeEnabled(value: Boolean) = edit(KEY_SIDE_SWIPE_ENABLED, value) { _sideSwipeEnabled.value = value; refreshAnimationConfig() }
+    fun setSideSwipeThreshold(value: Float) = edit(KEY_SIDE_SWIPE_THRESHOLD, value) { _sideSwipeThreshold.value = value; refreshAnimationConfig() }
+    fun setSideSwipeDamping(value: Float) = edit(KEY_SIDE_SWIPE_DAMPING, value) { _sideSwipeDamping.value = value; refreshAnimationConfig() }
+    fun setSideSwipeStiffness(value: Float) = edit(KEY_SIDE_SWIPE_STIFFNESS, value) { _sideSwipeStiffness.value = value; refreshAnimationConfig() }
+    fun setSideSwipeMaxRevealDp(value: Float) = edit(KEY_SIDE_SWIPE_MAX_REVEAL_DP, value) { _sideSwipeMaxRevealDp.value = value; refreshAnimationConfig() }
 
     // ── Predictive back setters ──
     fun setPredictiveBackEnabled(value: Boolean) = edit(KEY_PREDICTIVE_BACK_ENABLED, value) { _predictiveBackEnabled.value = value; refreshAnimationConfig() }
@@ -906,6 +930,11 @@ class FieldMindSettings private constructor(context: Context) {
         _animationSpeedPreset.value = "Normal"
         _predictiveBackEnabled.value = true
         _predictiveBackScaleMin.value = 0.85f
+        _sideSwipeEnabled.value = true
+        _sideSwipeThreshold.value = 0.25f
+        _sideSwipeDamping.value = 0.62f
+        _sideSwipeStiffness.value = 380f
+        _sideSwipeMaxRevealDp.value = 80f
         _animMorphEnabled.value = true
         _animMorphDamping.value = 0.72f
         _animMorphStiffness.value = 220f
@@ -1548,6 +1577,12 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_ANIM_TAB_ENTRANCE_DAMPING = "anim_tab_entrance_damping"
         private const val KEY_ANIM_TAB_ENTRANCE_STIFFNESS = "anim_tab_entrance_stiffness"
         // ── Predictive back keys ──
+        // ── Side swipe keys ──
+        private const val KEY_SIDE_SWIPE_ENABLED = "side_swipe_enabled"
+        private const val KEY_SIDE_SWIPE_THRESHOLD = "side_swipe_threshold"
+        private const val KEY_SIDE_SWIPE_DAMPING = "side_swipe_damping"
+        private const val KEY_SIDE_SWIPE_STIFFNESS = "side_swipe_stiffness"
+        private const val KEY_SIDE_SWIPE_MAX_REVEAL_DP = "side_swipe_max_reveal_dp"
         private const val KEY_PREDICTIVE_BACK_ENABLED = "predictive_back_enabled"
         private const val KEY_PREDICTIVE_BACK_SCALE_MIN = "predictive_back_scale_min"
         // ── New expressive motion keys ──

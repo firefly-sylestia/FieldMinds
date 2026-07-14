@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.RectangleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithCache
@@ -152,6 +153,12 @@ data class AnimationConfig(
     val staggerItemDelayMs: Int = 35,
     val staggerInitialDelayMs: Int = 40,
     val staggerMaxDurationMs: Int = 300,
+    // ── Side swipe (item-level Telegram-style swipe actions) ──
+    val sideSwipeEnabled: Boolean = true,
+    val sideSwipeThreshold: Float = 0.25f,
+    val sideSwipeDampingRatio: Float = 0.62f,
+    val sideSwipeStiffness: Float = 380f,
+    val sideSwipeMaxRevealDp: Float = 80f,
     // ── Shape morphing (graphics-shapes powered) ──
     val morphEnabled: Boolean = true,
     val morphDampingRatio: Float = 0.72f,
@@ -175,6 +182,7 @@ data class AnimationConfig(
     fun slideSpring() = spring<IntOffset>(dampingRatio = 0.85f, stiffness = slideStiffness)
     fun bouncySpring() = spring<Float>(dampingRatio = 0.50f, stiffness = (stiffness * 0.55f).coerceAtLeast(60f))
     fun morphSpring() = spring<Float>(dampingRatio = morphDampingRatio, stiffness = morphStiffness)
+    fun sideSwipeSpring() = spring<Float>(dampingRatio = sideSwipeDampingRatio, stiffness = sideSwipeStiffness)
 }
 
 val LocalAnimationConfig = compositionLocalOf { AnimationConfig.DEFAULT }
@@ -1235,6 +1243,7 @@ private fun PeekPreviewContent(
 fun SwipeBackHost(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    swipeFromCenter: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val reduceMotion = FieldMindMotion.isReduceMotion()
@@ -1429,13 +1438,20 @@ fun SwipeBackHost(
                                 val isAtLeftEdge = down.position.x <= FieldMindMotion.swipeEdgeWidthDp
                                 val isAtTopEdge = down.position.y <= FieldMindMotion.swipeEdgeHeightDp
 
-                                if (!isAtLeftEdge && !isAtTopEdge) {
-                                    return@awaitEachGesture
+                                // When swipeFromCenter is enabled, any horizontal drag triggers back.
+                                // When false (default), only edge swipes trigger back.
+                                if (!swipeFromCenter) {
+                                    if (!isAtLeftEdge && !isAtTopEdge) {
+                                        return@awaitEachGesture
+                                    }
+                                    // Near edge — consume the down event and handle drag
+                                    down.consume()
+                                    activeDirection = if (isAtLeftEdge) SwipeDirection.Horizontal else SwipeDirection.Vertical
+                                } else {
+                                    // Center swipe: only horizontal, ignore vertical
+                                    down.consume()
+                                    activeDirection = SwipeDirection.Horizontal
                                 }
-
-                                // Near edge — consume the down event and handle drag
-                                down.consume()
-                                activeDirection = if (isAtLeftEdge) SwipeDirection.Horizontal else SwipeDirection.Vertical
 
                                 try {
                                     var pointerUp = false
@@ -1538,6 +1554,192 @@ fun SwipeBackHost(
                     Icon(FieldMindIcons.ChevronDown, "Swipe down to dismiss", size = 22.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  SwipeActionHost — Telegram-style item-level swipe actions
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Result of a swipe action — which side was activated (if any).
+ */
+enum class SwipeActionResult { Left, Right, None }
+
+/**
+ * A composable that wraps a list item or card and provides Telegram-style
+ * horizontal swipe-to-reveal actions. Drag from anywhere on the item to
+ * reveal action buttons behind.
+ *
+ * Uses spring-animated snap-to-actions: swipe past the threshold and release
+ * to snap to the revealed state; swipe less and it springs back to neutral.
+ *
+ * @param onSwipe        Called with [SwipeActionResult] AFTER the snap animation completes.
+ * @param resetTrigger   Change this value to programmatically snap back to neutral.
+ * @param modifier       Modifier for the outer container.
+ * @param leftActions    Composable rendered behind the content on the left side.
+ * @param rightActions   Composable rendered behind the content on the right side.
+ * @param enabled        Whether swipe actions are enabled.
+ * @param content        The main item content.
+ */
+@Composable
+fun SwipeActionHost(
+    onSwipe: (SwipeActionResult) -> Unit,
+    resetTrigger: Any? = null,
+    modifier: Modifier = Modifier,
+    leftActions: @Composable (androidx.compose.foundation.layout.RowScope.() -> Unit)? = null,
+    rightActions: @Composable (androidx.compose.foundation.layout.RowScope.() -> Unit)? = null,
+    enabled: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val scope = rememberCoroutineScope()
+    val density = LocalDensity.current
+    val shouldAnimate = enabled && !reduceMotion && animConfig.sideSwipeEnabled
+
+    val offsetX = remember { Animatable(0f) }
+
+    // Compute the max reveal distance in pixels
+    val maxRevealPx = with(density) { animConfig.sideSwipeMaxRevealDp.dp.toPx() }
+
+    // ── Reset to neutral when resetTrigger changes ──
+    LaunchedEffect(resetTrigger) {
+        if (resetTrigger != null && offsetX.value != 0f) {
+            offsetX.animateTo(0f, animConfig.sideSwipeSpring())
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        // ── Layer 1: Action buttons (behind content) ──
+        val leftAlpha = (offsetX.value / maxRevealPx).coerceIn(0f, 1f)
+        val rightAlpha = (-offsetX.value / maxRevealPx).coerceIn(0f, 1f)
+
+        Row(modifier = Modifier.fillMaxSize()) {
+            // Left action area
+            if (leftActions != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .graphicsLayer { alpha = leftAlpha },
+                    content = leftActions
+                )
+            }
+            Spacer(Modifier.weight(1f))
+            // Right action area
+            if (rightActions != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .graphicsLayer { alpha = rightAlpha },
+                    content = rightActions
+                )
+            }
+        }
+
+        // ── Layer 2: Content (slides to reveal actions) ──
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    translationX = offsetX.value
+                }
+                .then(
+                    if (shouldAnimate) {
+                        Modifier.pointerInput(Unit) {
+                            awaitEachGesture {
+                                val down = awaitFirstDown(requireUnconsumed = false)
+                                down.consume()
+
+                                try {
+                                    // Track cumulative drag offset locally to avoid
+                                    // race conditions from reading stale offsetX.value
+                                    var dragOffset = offsetX.value
+                                    var lastPosition = down.position
+                                    var pointerUp = false
+                                    do {
+                                        val event = awaitPointerEvent()
+                                        val change = event.changes.firstOrNull() ?: break
+                                        if (change.isConsumed || !change.pressed) {
+                                            pointerUp = !change.pressed
+                                            break
+                                        }
+                                        change.consume()
+                                        val deltaX = change.position.x - lastPosition.x
+                                        lastPosition = change.position
+                                        dragOffset = (dragOffset + deltaX)
+                                            .coerceIn(-maxRevealPx, maxRevealPx)
+                                        scope.launch { offsetX.snapTo(dragOffset) }
+                                    } while (true)
+
+                                    // ── onDragEnd: snap to nearest anchor ──
+                                    val thresholdPx = maxRevealPx * animConfig.sideSwipeThreshold
+                                    when {
+                                        pointerUp && dragOffset > thresholdPx -> {
+                                            scope.launch {
+                                                offsetX.animateTo(maxRevealPx, animConfig.sideSwipeSpring())
+                                                onSwipe(SwipeActionResult.Left)
+                                            }
+                                        }
+                                        pointerUp && dragOffset < -thresholdPx -> {
+                                            scope.launch {
+                                                offsetX.animateTo(-maxRevealPx, animConfig.sideSwipeSpring())
+                                                onSwipe(SwipeActionResult.Right)
+                                            }
+                                        }
+                                        else -> {
+                                            scope.launch {
+                                                offsetX.animateTo(0f, animConfig.sideSwipeSpring())
+                                            }
+                                        }
+                                    }
+                                } catch (_: CancellationException) {
+                                    scope.launch {
+                                        offsetX.animateTo(0f, animConfig.sideSwipeSpring())
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        Modifier
+                    }
+                ),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            content()
+        }
+    }
+}
+
+// ── Convenience: side swipe action buttons ──
+
+/**
+ * A styled action button for use inside [SwipeActionHost]'s [leftActions]
+ * or [rightActions]. Renders an icon slot with a colored background, sized to
+ * the swipe reveal distance.
+ */
+@Composable
+fun SwipeActionButton(
+    icon: @Composable () -> Unit,
+    backgroundColor: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val animConfig = LocalAnimationConfig.current
+    Surface(
+        onClick = onClick,
+        modifier = modifier
+            .width(animConfig.sideSwipeMaxRevealDp.dp)
+            .fillMaxHeight(),
+        color = backgroundColor,
+        shape = RectangleShape
+    ) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            icon()
         }
     }
 }

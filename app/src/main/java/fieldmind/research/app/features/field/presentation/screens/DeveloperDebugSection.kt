@@ -162,6 +162,11 @@ fun AnimationTuningCard(
     val morphStiffness by settings.animMorphStiffness.collectAsState()
     val predictiveBackEnabled by settings.predictiveBackEnabled.collectAsState()
     val predictiveBackScaleMin by settings.predictiveBackScaleMin.collectAsState()
+    val sideSwipeEnabled by settings.sideSwipeEnabled.collectAsState()
+    val sideSwipeThreshold by settings.sideSwipeThreshold.collectAsState()
+    val sideSwipeDamping by settings.sideSwipeDamping.collectAsState()
+    val sideSwipeStiffness by settings.sideSwipeStiffness.collectAsState()
+    val sideSwipeMaxReveal by settings.sideSwipeMaxRevealDp.collectAsState()
 
     Card(
         shape = CuteCardDefaults.Shape,
@@ -341,6 +346,46 @@ fun AnimationTuningCard(
                 Text("Stiff", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
+            // ── Side swipe tuning ──
+            Row(
+                Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text("Side swipe", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                    Text("Telegram-style item swipe actions", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Switch(
+                    checked = sideSwipeEnabled,
+                    onCheckedChange = { settings.setSideSwipeEnabled(it) }
+                )
+            }
+            Text("Side swipe threshold: %.0f%%".format(sideSwipeThreshold * 100), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = sideSwipeThreshold,
+                onValueChange = { settings.setSideSwipeThreshold(it.coerceIn(0.10f, 0.50f)) },
+                valueRange = 0.10f..0.50f,
+                steps = 7,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Easy", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Firm", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Text("Side swipe reveal: %.0f dp".format(sideSwipeMaxReveal), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = sideSwipeMaxReveal,
+                onValueChange = { settings.setSideSwipeMaxRevealDp(it.coerceIn(40f, 150f)) },
+                valueRange = 40f..150f,
+                steps = 10,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Narrow", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Wide", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+
             // ── Morph enabled toggle ──
             Row(
                 Modifier.fillMaxWidth().padding(vertical = 4.dp),
@@ -378,6 +423,11 @@ fun AnimationTuningCard(
                     settings.setAnimMorphStiffness(def.morphStiffness)
                     settings.setPredictiveBackEnabled(def.predictiveBackEnabled)
                     settings.setPredictiveBackScaleMin(def.predictiveBackScaleMin)
+                    settings.setSideSwipeEnabled(def.sideSwipeEnabled)
+                    settings.setSideSwipeThreshold(def.sideSwipeThreshold)
+                    settings.setSideSwipeDamping(def.sideSwipeDampingRatio)
+                    settings.setSideSwipeStiffness(def.sideSwipeStiffness)
+                    settings.setSideSwipeMaxRevealDp(def.sideSwipeMaxRevealDp)
                 },
                 shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
@@ -722,6 +772,11 @@ fun AnimationTuningSettingsPage(
     val morphStiffness by settings.animMorphStiffness.collectAsState()
     val predictiveBackEnabled by settings.predictiveBackEnabled.collectAsState()
     val predictiveBackScaleMin by settings.predictiveBackScaleMin.collectAsState()
+    val sideSwipeEnabled by settings.sideSwipeEnabled.collectAsState()
+    val sideSwipeThreshold by settings.sideSwipeThreshold.collectAsState()
+    val sideSwipeDamping by settings.sideSwipeDamping.collectAsState()
+    val sideSwipeStiffness by settings.sideSwipeStiffness.collectAsState()
+    val sideSwipeMaxReveal by settings.sideSwipeMaxRevealDp.collectAsState()
 
     // Hardware/gesture back button support
     BackHandler(enabled = true) { onBack() }
@@ -829,6 +884,65 @@ fun AnimationTuningSettingsPage(
                         onValueChange = { settings.setAnimTabEntranceStiffness(it.coerceIn(50f, 5000f)) },
                         lowLabel = "Soft",
                         highLabel = "Stiff"
+                    )
+                }
+            }
+
+            // ── Side Swipe ──
+            item {
+                SectionHeader("Side swipe actions", "Telegram-style item swipe to reveal actions")
+            }
+            item {
+                SettingsGroupCard {
+                    Row(
+                        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text("Side swipe", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                            Text("Swipe items left/right from anywhere to reveal actions", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Switch(
+                            checked = sideSwipeEnabled,
+                            onCheckedChange = { settings.setSideSwipeEnabled(it) }
+                        )
+                    }
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    DampingSlider(
+                        label = "Side swipe damping",
+                        value = sideSwipeDamping,
+                        onValueChange = { settings.setSideSwipeDamping(it.coerceIn(0.3f, 1.0f)) },
+                        lowLabel = "Bouncy",
+                        highLabel = "Smooth"
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    StiffnessSlider(
+                        label = "Side swipe stiffness",
+                        value = sideSwipeStiffness,
+                        onValueChange = { settings.setSideSwipeStiffness(it.coerceIn(50f, 5000f)) },
+                        lowLabel = "Soft",
+                        highLabel = "Stiff"
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    StiffnessSlider(
+                        label = "Side swipe threshold",
+                        value = sideSwipeThreshold * 100,
+                        onValueChange = { settings.setSideSwipeThreshold((it / 100f).coerceIn(0.10f, 0.50f)) },
+                        valueRange = 10f..50f,
+                        lowLabel = "Easy",
+                        highLabel = "Firm",
+                        formatValue = { "%.0f%%".format(it) }
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    StiffnessSlider(
+                        label = "Side swipe reveal",
+                        value = sideSwipeMaxReveal,
+                        onValueChange = { settings.setSideSwipeMaxRevealDp(it.coerceIn(40f, 150f)) },
+                        valueRange = 40f..150f,
+                        lowLabel = "Narrow",
+                        highLabel = "Wide",
+                        formatValue = { "%.0f dp".format(it) }
                     )
                 }
             }
@@ -956,6 +1070,11 @@ fun AnimationTuningSettingsPage(
                         settings.setAnimMorphStiffness(def.morphStiffness)
                         settings.setPredictiveBackEnabled(def.predictiveBackEnabled)
                         settings.setPredictiveBackScaleMin(def.predictiveBackScaleMin)
+                        settings.setSideSwipeEnabled(def.sideSwipeEnabled)
+                        settings.setSideSwipeThreshold(def.sideSwipeThreshold)
+                        settings.setSideSwipeDamping(def.sideSwipeDampingRatio)
+                        settings.setSideSwipeStiffness(def.sideSwipeStiffness)
+                        settings.setSideSwipeMaxRevealDp(def.sideSwipeMaxRevealDp)
                     },
                     shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
