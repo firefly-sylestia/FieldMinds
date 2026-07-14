@@ -1713,7 +1713,7 @@ private fun AllTabScreen(
                 tabEntranceProgress.snapTo(0f)
                 tabEntranceProgress.animateTo(
                     1f,
-                    animationSpec = animConfig.tabEntranceSpring()
+                    animationSpec = animConfig.spring()
                 )
             }
         }
