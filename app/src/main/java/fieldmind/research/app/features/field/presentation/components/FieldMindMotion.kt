@@ -94,6 +94,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import kotlin.math.abs
@@ -136,6 +137,9 @@ data class AnimationConfig(
     // Primary spring (used for most animations: entrances, presses, transitions)
     val dampingRatio: Float = 0.65f,
     val stiffness: Float = 350f,
+    // ── Predictive back (Android 13+ system back gesture) ──
+    val predictiveBackEnabled: Boolean = true,
+    val predictiveBackScaleMin: Float = 0.85f,
     // Swipe-back / predictive back spring (slightly smoother for gesture-driven motion)
     val swipeBackDampingRatio: Float = 0.72f,
     val swipeBackStiffness: Float = 320f,
@@ -286,6 +290,17 @@ object FieldMindMotion {
 
     val fadeTween = tween<Float>(durationMillis = durationSubtle)
     val pressScaleTween = tween<Float>(durationMillis = durationMicro)
+
+    // ── Predictive Back Constants ──
+    // These override the swipe-back values when the Android 13+ system
+    // predictive back gesture is active (vs. manual edge-swipe).
+    // The predictive back scale is applied to the current screen to reveal
+    // the previous one underneath, matching iOS/Telegram peek behavior.
+
+    /** Default minimum scale for the current screen during predictive back. */
+    const val predictiveBackScaleMin = 0.85f
+    /** Default scrim alpha for predictive back. */
+    const val predictiveBackScrimAlpha = 0.28f
 
     // ── Swipe-back Constants ──
 
@@ -1238,17 +1253,39 @@ fun SwipeBackHost(
     val isImeVisible = imeBottom > 0
 
     // ── BackHandler for hardware button press (innermost wins priority) ──
-    // This replaces PredictiveBackHandler which caused double-fire issues
-    // during navigation transitions when two SwipeBackHost instances
-    // (outgoing and incoming screen) were simultaneously active.
-    // The manual detectDragGestures below handles swipe gesture animations.
     BackHandler(enabled = !isImeVisible) {
         onBack()
     }
 
+    // ── PredictiveBackHandler: Android 13+ system back gesture ──
+    // Drives the same peek/scrim/scale transforms as manual edge-swipe,
+    // giving a unified iOS/Telegram-style peek experience for both
+    // the system back gesture and manual drag-from-edge.
+    // Disabled when keyboard is visible or predictive back is turned off.
+    val predictiveBackEnabled = animConfig.predictiveBackEnabled && !isImeVisible
+    if (predictiveBackEnabled && !reduceMotion) {
+        PredictiveBackHandler(enabled = true) { backEventFlow ->
+            try {
+                backEventFlow.collect { event ->
+                    activeDirection = SwipeDirection.Horizontal
+                    animX.snapTo(event.progress * contentWidth)
+                }
+                // Flow completed → gesture committed
+                haptics.confirm()
+                activeDirection = null
+                onBack()
+            } catch (_: CancellationException) {
+                // Gesture cancelled → spring back to origin
+                activeDirection = null
+                animX.animateTo(0f, animConfig.swipeBackSpring())
+                animY.animateTo(0f, animConfig.swipeBackSpring())
+            }
+        }
+    }
+
     // ── Unified progress computation ──
-    // Only manual drag drives animX (PredictiveBackHandler was removed to
-    // prevent nested SwipeBackHost conflicts during nav transitions).
+    // Progress is driven by both manual edge-swipe (detectDragGestures)
+    // and the PredictiveBackHandler above, both updating animX/animY.
     val animConfig = LocalAnimationConfig.current
     val horizontalProgress = (abs(animX.value) / contentWidth).coerceIn(0f, 1f)
     val verticalProgress = (abs(animY.value) / contentHeight).coerceIn(0f, 1f)
@@ -1257,8 +1294,8 @@ fun SwipeBackHost(
         SwipeDirection.Vertical -> Pair(verticalProgress, false)
         null -> Pair(horizontalProgress.coerceAtLeast(verticalProgress), horizontalProgress >= verticalProgress)
     }
-    val scrimAlpha = progress * FieldMindMotion.swipeScrimAlpha
-    val contentScale = 1f - progress * (1f - animConfig.swipeScaleFactor)
+    val scrimAlpha = progress * (if (predictiveBackEnabled && activeDirection == SwipeDirection.Horizontal) FieldMindMotion.predictiveBackScrimAlpha else FieldMindMotion.swipeScrimAlpha)
+    val contentScale = 1f - progress * (1f - if (predictiveBackEnabled && activeDirection == SwipeDirection.Horizontal) animConfig.predictiveBackScaleMin else animConfig.swipeScaleFactor)
     val swipeElevation = progress * FieldMindMotion.swipeShadowElevationDp
     val swipeCornerRadius = (FieldMindMotion.swipeBaseCornerRadiusDp + progress * (FieldMindMotion.swipeCornerRadiusDp - FieldMindMotion.swipeBaseCornerRadiusDp)).dp
 

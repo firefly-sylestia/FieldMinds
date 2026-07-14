@@ -334,6 +334,12 @@ class FieldMindSettings private constructor(context: Context) {
     private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, 120f))
     val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
+    // ── Predictive back settings ──
+    private val _predictiveBackEnabled = MutableStateFlow(prefs.getBoolean(KEY_PREDICTIVE_BACK_ENABLED, true))
+    val predictiveBackEnabled: StateFlow<Boolean> = _predictiveBackEnabled.asStateFlow()
+    private val _predictiveBackScaleMin = MutableStateFlow(prefs.getFloat(KEY_PREDICTIVE_BACK_SCALE_MIN, 0.85f))
+    val predictiveBackScaleMin: StateFlow<Float> = _predictiveBackScaleMin.asStateFlow()
+
     // ── New expressive motion tunables ──
     private val _animMorphEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIM_MORPH_ENABLED, true))
     val animMorphEnabled: StateFlow<Boolean> = _animMorphEnabled.asStateFlow()
@@ -771,6 +777,8 @@ class FieldMindSettings private constructor(context: Context) {
     fun currentAnimationConfig(): AnimationConfig {
         val mult = if (_animationsEnabled.value) speedMultiplier() else 100_000f
         return AnimationConfig(
+            predictiveBackEnabled = _predictiveBackEnabled.value,
+            predictiveBackScaleMin = _predictiveBackScaleMin.value,
             dampingRatio = _animEntranceDamping.value,
             stiffness = (_animEntranceStiffness.value * mult).coerceAtLeast(1f),
             swipeBackDampingRatio = _animSwipeBackDamping.value,
@@ -803,6 +811,10 @@ class FieldMindSettings private constructor(context: Context) {
     fun setAnimSwipeScaleFactor(value: Float) = edit(KEY_ANIM_SWIPE_SCALE, value) { _animSwipeScaleFactor.value = value; refreshAnimationConfig() }
     fun setAnimTabEntranceDamping(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_DAMPING, value) { _animTabEntranceDamping.value = value; refreshAnimationConfig() }
     fun setAnimTabEntranceStiffness(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, value) { _animTabEntranceStiffness.value = value; refreshAnimationConfig() }
+
+    // ── Predictive back setters ──
+    fun setPredictiveBackEnabled(value: Boolean) = edit(KEY_PREDICTIVE_BACK_ENABLED, value) { _predictiveBackEnabled.value = value; refreshAnimationConfig() }
+    fun setPredictiveBackScaleMin(value: Float) = edit(KEY_PREDICTIVE_BACK_SCALE_MIN, value) { _predictiveBackScaleMin.value = value; refreshAnimationConfig() }
 
     // ── New expressive motion tunable setters ──
     fun setAnimMorphEnabled(value: Boolean) = edit(KEY_ANIM_MORPH_ENABLED, value) { _animMorphEnabled.value = value; refreshAnimationConfig() }
@@ -892,6 +904,8 @@ class FieldMindSettings private constructor(context: Context) {
         _bugReportsAttachCrashLog.value = true
         _animationsEnabled.value = true
         _animationSpeedPreset.value = "Normal"
+        _predictiveBackEnabled.value = true
+        _predictiveBackScaleMin.value = 0.85f
         _animMorphEnabled.value = true
         _animMorphDamping.value = 0.72f
         _animMorphStiffness.value = 220f
@@ -1533,6 +1547,9 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_ANIM_SWIPE_SCALE = "anim_swipe_scale"
         private const val KEY_ANIM_TAB_ENTRANCE_DAMPING = "anim_tab_entrance_damping"
         private const val KEY_ANIM_TAB_ENTRANCE_STIFFNESS = "anim_tab_entrance_stiffness"
+        // ── Predictive back keys ──
+        private const val KEY_PREDICTIVE_BACK_ENABLED = "predictive_back_enabled"
+        private const val KEY_PREDICTIVE_BACK_SCALE_MIN = "predictive_back_scale_min"
         // ── New expressive motion keys ──
         private const val KEY_ANIM_MORPH_ENABLED = "anim_morph_enabled"
         private const val KEY_ANIM_MORPH_DAMPING = "anim_morph_damping"

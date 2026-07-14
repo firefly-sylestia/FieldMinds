@@ -160,6 +160,8 @@ fun AnimationTuningCard(
     val morphEnabled by settings.animMorphEnabled.collectAsState()
     val morphDamping by settings.animMorphDamping.collectAsState()
     val morphStiffness by settings.animMorphStiffness.collectAsState()
+    val predictiveBackEnabled by settings.predictiveBackEnabled.collectAsState()
+    val predictiveBackScaleMin by settings.predictiveBackScaleMin.collectAsState()
 
     Card(
         shape = CuteCardDefaults.Shape,
@@ -172,6 +174,37 @@ fun AnimationTuningCard(
                     Icon(MaterialSymbolIcon("tune"), null, tint = FieldMindTheme.colors.flashcard, size = 18.dp)
                 }
                 Text("Animation tuning", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            // ── Predictive back ──
+            Row(
+                Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text("Predictive back", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                    Text("Android 13+ system back gesture with peek", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Switch(
+                    checked = predictiveBackEnabled,
+                    onCheckedChange = { settings.setPredictiveBackEnabled(it) }
+                )
+            }
+            Text("Predictive back scale: %.0f%%".format(predictiveBackScaleMin * 100), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+            Slider(
+                value = predictiveBackScaleMin,
+                onValueChange = { settings.setPredictiveBackScaleMin(it.coerceIn(0.70f, 0.95f)) },
+                valueRange = 0.70f..0.95f,
+                steps = 24,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Small", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Large", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
             }
 
             Spacer(Modifier.height(4.dp))
@@ -343,6 +376,8 @@ fun AnimationTuningCard(
                     settings.setAnimMorphEnabled(def.morphEnabled)
                     settings.setAnimMorphDamping(def.morphDampingRatio)
                     settings.setAnimMorphStiffness(def.morphStiffness)
+                    settings.setPredictiveBackEnabled(def.predictiveBackEnabled)
+                    settings.setPredictiveBackScaleMin(def.predictiveBackScaleMin)
                 },
                 shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
@@ -685,6 +720,8 @@ fun AnimationTuningSettingsPage(
     val morphEnabled by settings.animMorphEnabled.collectAsState()
     val morphDamping by settings.animMorphDamping.collectAsState()
     val morphStiffness by settings.animMorphStiffness.collectAsState()
+    val predictiveBackEnabled by settings.predictiveBackEnabled.collectAsState()
+    val predictiveBackScaleMin by settings.predictiveBackScaleMin.collectAsState()
 
     // Hardware/gesture back button support
     BackHandler(enabled = true) { onBack() }
@@ -796,6 +833,39 @@ fun AnimationTuningSettingsPage(
                 }
             }
 
+            // ── Predictive Back ──
+            item {
+                SectionHeader("Predictive back", "Android 13+ system back gesture with peek")
+            }
+            item {
+                SettingsGroupCard {
+                    Row(
+                        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text("Predictive back", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                            Text("iOS/Telegram-style peek when swiping back from edge", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Switch(
+                            checked = predictiveBackEnabled,
+                            onCheckedChange = { settings.setPredictiveBackEnabled(it) }
+                        )
+                    }
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    StiffnessSlider(
+                        label = "Scale on back",
+                        value = predictiveBackScaleMin * 100,
+                        onValueChange = { settings.setPredictiveBackScaleMin((it / 100f).coerceIn(0.70f, 0.95f)) },
+                        valueRange = 70f..95f,
+                        lowLabel = "Small",
+                        highLabel = "Large",
+                        formatValue = { "%.0f%%".format(it) }
+                    )
+                }
+            }
+
             // ── Shape Morphing ──
             item {
                 SectionHeader("Shape morphing", "Polygon morph animation: circle ↔ rounded rect")
@@ -884,6 +954,8 @@ fun AnimationTuningSettingsPage(
                         settings.setAnimMorphEnabled(def.morphEnabled)
                         settings.setAnimMorphDamping(def.morphDampingRatio)
                         settings.setAnimMorphStiffness(def.morphStiffness)
+                        settings.setPredictiveBackEnabled(def.predictiveBackEnabled)
+                        settings.setPredictiveBackScaleMin(def.predictiveBackScaleMin)
                     },
                     shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
