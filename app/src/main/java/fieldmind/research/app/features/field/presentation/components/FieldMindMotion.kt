@@ -30,7 +30,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.shape.RectangleShape
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithCache
@@ -1271,6 +1271,7 @@ fun SwipeBackHost(
     // giving a unified iOS/Telegram-style peek experience for both
     // the system back gesture and manual drag-from-edge.
     // Disabled when keyboard is visible or predictive back is turned off.
+    val animConfig = LocalAnimationConfig.current
     val predictiveBackEnabled = animConfig.predictiveBackEnabled && !isImeVisible
     if (predictiveBackEnabled && !reduceMotion) {
         PredictiveBackHandler(enabled = true) { backEventFlow ->
@@ -1295,7 +1296,6 @@ fun SwipeBackHost(
     // ── Unified progress computation ──
     // Progress is driven by both manual edge-swipe (detectDragGestures)
     // and the PredictiveBackHandler above, both updating animX/animY.
-    val animConfig = LocalAnimationConfig.current
     val horizontalProgress = (abs(animX.value) / contentWidth).coerceIn(0f, 1f)
     val verticalProgress = (abs(animY.value) / contentHeight).coerceIn(0f, 1f)
     val (progress, isHorizontalPeek) = when (activeDirection) {
@@ -1736,7 +1736,7 @@ fun SwipeActionButton(
             .width(animConfig.sideSwipeMaxRevealDp.dp)
             .fillMaxHeight(),
         color = backgroundColor,
-        shape = RectangleShape
+        shape = RoundedCornerShape(0)
     ) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
             icon()

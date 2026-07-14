@@ -210,7 +210,6 @@ fun AnimationTuningCard(
                 Text("Small", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text("Large", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            }
 
             Spacer(Modifier.height(4.dp))
 
