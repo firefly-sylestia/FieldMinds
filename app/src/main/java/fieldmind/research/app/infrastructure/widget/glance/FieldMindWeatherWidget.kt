@@ -38,7 +38,6 @@ import androidx.glance.unit.ColorProvider
 import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
 
-private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7))
 private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC))
 private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4))
 
@@ -136,22 +135,10 @@ class FieldMindWeatherWidget : GlanceAppWidget() {
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
+                .background(WIDGET_SURFACE)
                 .cornerRadius(32.dp)
                 .clickable(actionStartActivity<MainActivity>())
         ) {
-            // ── Glassmorphic background with layered depth ──
-            Box(
-                modifier = GlanceModifier
-                    .fillMaxSize()
-                    .background(WIDGET_SURFACE_LOW)
-                    .cornerRadius(32.dp)
-            ) { }
-            Box(
-                modifier = GlanceModifier
-                    .fillMaxSize()
-                    .background(WIDGET_SURFACE)
-                    .cornerRadius(32.dp)
-            ) { }
             // ── Brand accent top bar (forest green) ──
             Box(
                 modifier = GlanceModifier

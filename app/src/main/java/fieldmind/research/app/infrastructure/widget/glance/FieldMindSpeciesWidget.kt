@@ -45,7 +45,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7))
 private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC))
 private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4))
 
@@ -114,11 +113,11 @@ class FieldMindSpeciesWidget : GlanceAppWidget() {
         val isWide = size.width.value >= 200
 
         Box(
-            modifier = GlanceModifier.fillMaxSize().cornerRadius(32.dp)
+            modifier = GlanceModifier.fillMaxSize()
+                .background(WIDGET_SURFACE)
+                .cornerRadius(32.dp)
                 .clickable(actionStartActivity<MainActivity>())
         ) {
-            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE_LOW).cornerRadius(32.dp)) { }
-            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE).cornerRadius(32.dp)) { }
             Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(ColorProvider(SPECIES_GREEN)).cornerRadius(1.5f.dp)) { }
 
             Box(modifier = GlanceModifier.fillMaxSize().padding(14.dp)) {
