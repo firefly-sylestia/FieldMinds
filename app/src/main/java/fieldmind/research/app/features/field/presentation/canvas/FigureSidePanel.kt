@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.canvas
 import fieldmind.research.app.ui.theme.CuteCardDefaults
+import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
