@@ -45,6 +45,51 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v3.0 — Design Overhaul, Animation Engine v2, Camera V2, Crash Recovery ──
+FieldMindChangelogEntry(
+    version = "3.0",
+    date = "2026-07-15",
+    title = "🎨 Design Overhaul, Animation Engine v2 & Stability",
+    importance = "Major",
+    tags = listOf("design-system", "animation", "camera", "crash-recovery", "compass", "performance"),
+    sections = listOf(
+        "🎨 Global design unification — 200+ files standardized" to listOf(
+            "✓ Every card, chip, button, and sheet now uses CuteCardDefaults design tokens — no more hardcoded corner radii",
+            "✓ Core shapes: Shape (32dp), ShapeCompact (24dp), ChipShape (18dp), ProgressBarShape (10dp) — rounder, cuter overall look",
+            "✓ All 4 journal styles unified around a single cohesive design language — color identity preserved via warmth tints",
+            "✓ Journal system fully purged: JournalCard.kt, JournalStyle.kt, and ~350 lines of dormant drawing code removed",
+        ),
+        "✨ Animation Engine v2 — Telegram-inspired springs & morphing" to listOf(
+            "✓ All animations rewritten with runtime-tunable spring physics — ~50% snappier defaults",
+            "✓ Graphics-shapes powered morph system: circle ↔ rounded rect, star ↔ hexagon, and more with spring interpolation",
+            "✓ Android 13+ predictive back with real previous-screen peek (not mock placeholders)",
+            "✓ Telegram-style side swipe actions for list items with configurable thresholds and reveal distance",
+            "✓ Six new motion effects: sideReveal, morphShape, shimmer, pulse, pageFlip, and ConfettiOverlay",
+            "✓ Live animation tuning sliders in Developer Settings — tweak damping and stiffness in real time",
+        ),
+        "📷 Camera V2 — complete rewrite" to listOf(
+            "✓ 6 bugs fixed: duplicate onPhotoCaptured calls, double-shadow, modifier duplication",
+            "✓ Clean Z-layering with unified cute rounded design language",
+            "✓ Full CameraX integration with capture, preview, and lifecycle management",
+        ),
+        "🧭 Compass & Level — liquid glass polish" to listOf(
+            "✓ Liquid glass bubble level with glassmorphic tilt gauge and hysteresis auto-mode",
+            "✓ Cardinal labels and chart axes rendered with Compose TextMeasurer instead of native Paint",
+        ),
+        "🛡️ Crash recovery — now reliable" to listOf(
+            "✓ Native Android Views replace Compose in crash process — no more painterResource failures",
+            "✓ Confirmation dialog before disabling security lock",
+            "✓ Crash recovery theme fully isolated from main UI theme",
+        ),
+        "🔧 UX & performance" to listOf(
+            "✓ AMOLED true-black dark mode with auto-detection",
+            "✓ NavBarStyle blob color now actually changes per selected style",
+            "✓ Sound effects system removed — ~700 KB APK savings",
+            "✓ Premium screen transitions with scale+fade",
+        ),
+    )
+),
+
         // ── v0.50.3 — Strip dormant per-style drawing code from JournalDecorations.kt ──
 FieldMindChangelogEntry(
     version = "0.50.3",
