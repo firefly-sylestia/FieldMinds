@@ -134,57 +134,46 @@ val LocalPeekContentHolder = compositionLocalOf { PeekContentHolder() }
  * to customize spring physics without recompiling.
  */
 data class AnimationConfig(
-    // ── Telegram-inspired spring physics ──
-    // Telegram uses slightly bouncy, snappy springs:
-    //   damping 0.55-0.75 = visible but fast-decaying bounce
-    //   stiffness 300-400 = fast completion without harshness
-    //
-    // Primary spring (used for most animations: entrances, presses, transitions)
-    val dampingRatio: Float = 0.65f,
-    val stiffness: Float = 350f,
+    // ── Organic Motion spring physics (nature-inspired) ──
+    // DewDrop: gentle ease with micro-overshoot, like water settling on a leaf
+    val dampingRatio: Float = 0.72f,
+    val stiffness: Float = 280f,
     // ── Predictive back (Android 13+ system back gesture) ──
     val predictiveBackEnabled: Boolean = true,
     val predictiveBackScaleMin: Float = 0.85f,
-    // Swipe-back / predictive back spring (slightly smoother for gesture-driven motion)
-    val swipeBackDampingRatio: Float = 0.72f,
-    val swipeBackStiffness: Float = 320f,
+    // Swipe-back spring
+    val swipeBackDampingRatio: Float = 0.75f,
+    val swipeBackStiffness: Float = 300f,
     // Swipe behavior
     val swipeThreshold: Float = 0.20f,
     val swipeScaleFactor: Float = 0.92f,
     // Transition slide stiffness
-    val slideStiffness: Float = 380f,
-    // Stagger delays for list choreography
-    val staggerItemDelayMs: Int = 35,
-    val staggerInitialDelayMs: Int = 40,
-    val staggerMaxDurationMs: Int = 300,
-    // ── Side swipe (item-level Telegram-style swipe actions) ──
+    val slideStiffness: Float = 350f,
+    // ── Side swipe (item-level swipe actions) ──
     val sideSwipeEnabled: Boolean = true,
     val sideSwipeThreshold: Float = 0.25f,
     val sideSwipeDampingRatio: Float = 0.62f,
     val sideSwipeStiffness: Float = 380f,
     val sideSwipeMaxRevealDp: Float = 80f,
-    // ── Shape morphing (graphics-shapes powered) ──
+    // ── Shape morphing ──
     val morphEnabled: Boolean = true,
-    val morphDampingRatio: Float = 0.72f,
-    val morphStiffness: Float = 220f,
-    // ── Feature toggles ──
-    val sideRevealDistanceDp: Float = 40f,
+    val morphDampingRatio: Float = 0.78f,
+    val morphStiffness: Float = 200f,
+    // ── Duration tokens ──
     val morphDurationMs: Int = 380,
     val shimmerSpeedMs: Int = 1200,
     val pulseDurationMs: Int = 1500,
-    val listChoreographyEnabled: Boolean = true,
-    val confettiEnabled: Boolean = true,
+    // ── Feature toggles ──
     val pageFlipEnabled: Boolean = true
 ) {
     companion object {
         val DEFAULT = AnimationConfig()
     }
 
-    // Convenience spring builders (used by callers for direct Animatable usage)
     fun spring() = spring<Float>(dampingRatio = dampingRatio, stiffness = stiffness)
     fun swipeBackSpring() = spring<Float>(dampingRatio = swipeBackDampingRatio, stiffness = swipeBackStiffness)
-    fun slideSpring() = spring<IntOffset>(dampingRatio = 0.85f, stiffness = slideStiffness)
-    fun bouncySpring() = spring<Float>(dampingRatio = 0.50f, stiffness = (stiffness * 0.55f).coerceAtLeast(60f))
+    fun slideSpring() = spring<IntOffset>(dampingRatio = 0.88f, stiffness = slideStiffness)
+    fun bouncySpring() = spring<Float>(dampingRatio = 0.45f, stiffness = 160f)
     fun morphSpring() = spring<Float>(dampingRatio = morphDampingRatio, stiffness = morphStiffness)
     fun sideSwipeSpring() = spring<Float>(dampingRatio = sideSwipeDampingRatio, stiffness = sideSwipeStiffness)
 }
@@ -201,59 +190,60 @@ val LocalAnimationsEnabled = compositionLocalOf { true }
  */
 object FieldMindMotion {
 
-    // ── Primary Spring (most animations) ──
-    // Uses the main damping/stiffness from AnimationConfig.
-    // Telegram-like: slightly bouncy (damping 0.65), snappy (stiffness 350).
+    // ── Organic Motion — Nature-Inspired Springs ──
+    // Each spring models a natural phenomenon for intuitive, elegant motion.
+
+    /** DewDrop — gentle rise-and-settle. Primary entrance spring. */
     val expressiveSpring
         @Composable get() = spring<Float>(
             dampingRatio = LocalAnimationConfig.current.dampingRatio,
             stiffness = LocalAnimationConfig.current.stiffness
         )
 
-    // Softer variant — same damping, ~22% less stiffness for gentler motions
+    /** LeafSway — soft oscillation for subtle layout changes. */
     val expressiveFloat
         @Composable get() = spring<Float>(
-            dampingRatio = LocalAnimationConfig.current.dampingRatio,
-            stiffness = (LocalAnimationConfig.current.stiffness * 0.78f).coerceAtLeast(60f)
+            dampingRatio = LocalAnimationConfig.current.dampingRatio + 0.04f,
+            stiffness = (LocalAnimationConfig.current.stiffness * 0.72f).coerceAtLeast(60f)
         )
 
-    // Even softer — for subtle layout/position changes
+    /** StoneDrop — gradual settle, no bounce. For heavy transitions. */
     val expressiveSoft
         @Composable get() = spring<Float>(
-            dampingRatio = LocalAnimationConfig.current.dampingRatio + 0.06f,
-            stiffness = (LocalAnimationConfig.current.stiffness * 0.45f).coerceAtLeast(40f)
+            dampingRatio = 0.84f,
+            stiffness = (LocalAnimationConfig.current.stiffness * 0.48f).coerceAtLeast(40f)
         )
 
-    // Snappy press response — same damping but slightly softer stiffness for smoother feel
+    /** FireflyFlicker — quick, responsive micro-bounce for press feedback. */
     val expressiveSnap
         @Composable get() = spring<Float>(
-            dampingRatio = (LocalAnimationConfig.current.dampingRatio + 0.08f).coerceIn(0.5f, 0.95f),
-            stiffness = (LocalAnimationConfig.current.stiffness * 0.95f).coerceAtLeast(70f)
+            dampingRatio = 0.68f,
+            stiffness = (LocalAnimationConfig.current.stiffness * 0.90f).coerceAtLeast(70f)
         )
 
     // ── Bouncy Springs ──
-    fun bouncySpring(dampingRatio: Float = 0.50f, stiffness: Float = 180f) =
+    fun bouncySpring(dampingRatio: Float = 0.48f, stiffness: Float = 170f) =
         spring<Float>(dampingRatio = dampingRatio, stiffness = stiffness)
 
     val bouncyEntrance
-        @Composable get() = bouncySpring(dampingRatio = 0.48f, stiffness = (LocalAnimationConfig.current.stiffness * 0.55f).coerceAtLeast(60f))
+        @Composable get() = bouncySpring(dampingRatio = 0.42f, stiffness = 150f)
 
     val bouncyPress
-        @Composable get() = bouncySpring(dampingRatio = 0.55f, stiffness = (LocalAnimationConfig.current.stiffness * 0.72f).coerceAtLeast(80f))
+        @Composable get() = bouncySpring(dampingRatio = 0.52f, stiffness = 200f)
 
-    val bouncyCelebration
-        @Composable get() = bouncySpring(dampingRatio = 0.40f, stiffness = 140f)
+    // ── Standard Springs ──
 
-    // ── Standard Springs (near-critical damping) ──
-
+    /** WindDrift — smooth directional ease for layout shifts. */
     val layoutSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.82f, stiffness = (LocalAnimationConfig.current.stiffness * 0.6f).coerceAtLeast(60f))
-
-    val pressSpring
-        @Composable get() = spring<Float>(dampingRatio = (LocalAnimationConfig.current.dampingRatio + 0.08f).coerceIn(0.6f, 0.95f), stiffness = (LocalAnimationConfig.current.stiffness * 0.92f).coerceAtLeast(70f))
-
-    val confirmSpring
         @Composable get() = spring<Float>(dampingRatio = 0.85f, stiffness = (LocalAnimationConfig.current.stiffness * 0.55f).coerceAtLeast(60f))
+
+    /** RootSnap — decisive, grounded press response. */
+    val pressSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.80f, stiffness = (LocalAnimationConfig.current.stiffness * 0.88f).coerceAtLeast(70f))
+
+    /** PebbleSettle — firm, satisfying confirmation settle. */
+    val confirmSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.88f, stiffness = (LocalAnimationConfig.current.stiffness * 0.52f).coerceAtLeast(60f))
 
     // ── Navigation Springs ──
 
@@ -261,24 +251,25 @@ object FieldMindMotion {
         @Composable get() = spring<Float>(dampingRatio = LocalAnimationConfig.current.swipeBackDampingRatio, stiffness = LocalAnimationConfig.current.swipeBackStiffness)
 
     val sharedElementSpring
-        @Composable get() = spring<Float>(dampingRatio = LocalAnimationConfig.current.dampingRatio, stiffness = (LocalAnimationConfig.current.stiffness * 0.7f).coerceAtLeast(80f))
+        @Composable get() = spring<Float>(dampingRatio = LocalAnimationConfig.current.dampingRatio, stiffness = (LocalAnimationConfig.current.stiffness * 0.6f).coerceAtLeast(80f))
 
     val slideSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.85f, stiffness = (LocalAnimationConfig.current.slideStiffness * 0.5f).coerceAtLeast(80f))
+        @Composable get() = spring<Float>(dampingRatio = 0.86f, stiffness = (LocalAnimationConfig.current.slideStiffness * 0.45f).coerceAtLeast(80f))
 
+    /** MistDrift — gentle fade transition between screens. */
     val fadeThroughSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.85f, stiffness = (LocalAnimationConfig.current.stiffness * 0.6f).coerceAtLeast(80f))
+        @Composable get() = spring<Float>(dampingRatio = 0.88f, stiffness = (LocalAnimationConfig.current.stiffness * 0.55f).coerceAtLeast(80f))
 
     val slideOffsetSpring
-        @Composable get() = spring<IntOffset>(dampingRatio = 0.85f, stiffness = LocalAnimationConfig.current.slideStiffness)
+        @Composable get() = spring<IntOffset>(dampingRatio = 0.86f, stiffness = LocalAnimationConfig.current.slideStiffness)
 
     // ── Shape Morphing ──
 
     val morphSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.82f, stiffness = (LocalAnimationConfig.current.stiffness * 0.65f).coerceAtLeast(70f))
+        @Composable get() = spring<Float>(dampingRatio = 0.84f, stiffness = (LocalAnimationConfig.current.stiffness * 0.58f).coerceAtLeast(70f))
 
     val cornerSpring
-        @Composable get() = spring<Float>(dampingRatio = 0.82f, stiffness = (LocalAnimationConfig.current.stiffness * 0.75f).coerceAtLeast(80f))
+        @Composable get() = spring<Float>(dampingRatio = 0.84f, stiffness = (LocalAnimationConfig.current.stiffness * 0.68f).coerceAtLeast(80f))
 
     // ── Duration Tokens (ms) ──
 
@@ -289,29 +280,14 @@ object FieldMindMotion {
     const val durationExpressive = 600
     const val countUpMs = 500
 
-    // ── Stagger Tokens ──
-
-    val staggerItemDelayMs
-        @Composable get() = LocalAnimationConfig.current.staggerItemDelayMs
-    val staggerInitialDelayMs
-        @Composable get() = LocalAnimationConfig.current.staggerInitialDelayMs
-    val staggerMaxDurationMs
-        @Composable get() = LocalAnimationConfig.current.staggerMaxDurationMs
-
     // ── Convenience Tween ──
 
     val fadeTween = tween<Float>(durationMillis = durationSubtle)
     val pressScaleTween = tween<Float>(durationMillis = durationMicro)
 
     // ── Predictive Back Constants ──
-    // These override the swipe-back values when the Android 13+ system
-    // predictive back gesture is active (vs. manual edge-swipe).
-    // The predictive back scale is applied to the current screen to reveal
-    // the previous one underneath, matching iOS/Telegram peek behavior.
 
-    /** Default minimum scale for the current screen during predictive back. */
     const val predictiveBackScaleMin = 0.85f
-    /** Default scrim alpha for predictive back. */
     const val predictiveBackScrimAlpha = 0.28f
 
     // ── Swipe-back Constants ──
@@ -351,9 +327,6 @@ object FieldMindMotion {
         } catch (_: Exception) { 1f }
         return animatorScale == 0f
     }
-
-    fun staggerDelay(index: Int, config: AnimationConfig = AnimationConfig.DEFAULT): Int =
-        (config.staggerInitialDelayMs + index * config.staggerItemDelayMs).coerceAtMost(config.staggerMaxDurationMs)
 }
 
 // -- Expressive Press Modifiers --
@@ -505,194 +478,8 @@ fun Modifier.pressCardScale(): Modifier = composed {
     this.pressScale(scaleDown = 0.97f)
 }
 
-// ── Staggered Entrance Animation (fadeIn + slideUp) ──
-
-/**
- * A [Modifier] that animates a composable's entrance with a fade-in and
- * upward slide, staggered by [index] for a delightful cascade reveal.
- *
- * When [animate] is true, the item starts invisible and slightly below its
- * final position, then fades in and slides up after a staggered delay.
- * Pass `animate = true` and the item's [index] when rendering cards in a
- * LazyColumn for a polished scroll-reveal effect.
- *
- * @param index  Zero-based position in the list; determines stagger delay.
- * @param animate  Whether to play the entrance animation. Default false.
- * @param offsetY  The vertical slide distance. Default 20dp.
- */
-fun Modifier.staggeredEntrance(
-    index: Int = 0,
-    animate: Boolean = false,
-    offsetY: Dp = 20.dp
-): Modifier = composed(
-    inspectorInfo = debugInspectorInfo {
-        name = "staggeredEntrance"
-        properties["index"] = index
-        properties["animate"] = animate
-    }
-) {
-    val reduceMotion = FieldMindMotion.isReduceMotion()
-    var hasAnimatedIn by remember { mutableStateOf(false) }
-    val density = LocalDensity.current
-    val shouldAnimate = animate && !reduceMotion
-    val animConfig = LocalAnimationConfig.current
-    val staggerMs = FieldMindMotion.staggerDelay(index, animConfig)
-
-    LaunchedEffect(animate, index, reduceMotion) {
-        if (shouldAnimate) {
-            delay(staggerMs.toLong())
-            hasAnimatedIn = true
-        } else {
-            // No animation — immediately visible
-            hasAnimatedIn = true
-        }
-    }
-
-    val targetAlpha = if (!shouldAnimate || hasAnimatedIn) 1f else 0f
-    val targetTranslationY = if (!shouldAnimate || hasAnimatedIn) 0f else with(density) { offsetY.toPx() }
-
-    val alpha by animateFloatAsState(
-        targetValue = targetAlpha,
-        animationSpec = FieldMindMotion.expressiveFloat,
-        label = "entranceAlpha_$index"
-    )
-    val translationY by animateFloatAsState(
-        targetValue = targetTranslationY,
-        animationSpec = FieldMindMotion.expressiveFloat,
-        label = "entranceSlide_$index"
-    )
-
-    this.graphicsLayer {
-        this.alpha = alpha
-        this.translationY = translationY
-    }
-}
-
-// ── Bouncy Entrance Animation (scale-pop + overshoot) ──
-
-/**
- * A [Modifier] that animates a composable's entrance with a playful scale-up
- * bounce, overshooting slightly above the target before settling.
- *
- * Items start at [initialScale] (e.g., 0.85 = 85% size), pop up past 1.0 with
- * a bouncy spring, then settle at 1.0. Works best on cards, buttons, and icons
- * that benefit from a lively "boing" reveal — use instead of [staggeredEntrance]
- * when you want attention-grabbing energy rather than smooth fade+slide.
- *
- * Respects system reduce-motion accessibility settings.
- *
- * @param index       Zero-based position; determines stagger delay.
- * @param animate     Whether to play the entrance animation. Default false.
- * @param initialScale  Starting scale (below 1.0). Default 0.85.
- * @param dampingRatio   Lower = more bounces. Default 0.62.
- * @param stiffness      Higher = faster. Default 140.
- */
-fun Modifier.bouncyEntrance(
-    index: Int = 0,
-    animate: Boolean = false,
-    initialScale: Float = 0.85f,
-    dampingRatio: Float = 0.62f,
-    stiffness: Float = 140f
-): Modifier = composed(
-    inspectorInfo = debugInspectorInfo {
-        name = "bouncyEntrance"
-        properties["index"] = index
-        properties["animate"] = animate
-    }
-) {
-    val reduceMotion = FieldMindMotion.isReduceMotion()
-    val shouldAnimate = animate && !reduceMotion
-    val scale = remember { Animatable(if (shouldAnimate) initialScale else 1f) }
-
-    val animConfigB = LocalAnimationConfig.current
-    val staggerMsB = FieldMindMotion.staggerDelay(index, animConfigB)
-
-    LaunchedEffect(animate, index, reduceMotion) {
-        if (shouldAnimate) {
-            scale.snapTo(initialScale)
-            delay(staggerMsB.toLong())
-            // Single animateTo(1f) — low dampingRatio naturally overshoots
-            scale.animateTo(1f, FieldMindMotion.bouncySpring(
-                dampingRatio = dampingRatio,
-                stiffness = stiffness
-            ))
-        } else {
-            scale.snapTo(1f)
-        }
-    }
-
-    this.graphicsLayer {
-        scaleX = scale.value
-        scaleY = scale.value
-        transformOrigin = TransformOrigin.Center
-    }
-}
-
-// ── Side Reveal Animation (slide in from a side) ──
-
-/**
- * A [Modifier] that animates a composable's entrance by sliding it in from
- * one of the four sides. The composable starts off-screen (or partially
- * offset) and slides into its final position with a spring.
- *
- * @param fromSide  Which side to slide from: [SideRevealDirection.Start],
- *                  [End], [Top], or [Bottom].
- * @param animate   Whether to play the entrance animation.
- * @param distance  How far to slide (in dp). Defaults to the config value.
- */
-fun Modifier.sideReveal(
-    fromSide: SideRevealDirection = SideRevealDirection.Start,
-    animate: Boolean = false,
-    distance: Dp? = null
-): Modifier = composed(
-    inspectorInfo = debugInspectorInfo {
-        name = "sideReveal"
-        properties["fromSide"] = fromSide
-        properties["animate"] = animate
-    }
-) {
-    val reduceMotion = FieldMindMotion.isReduceMotion()
-    val shouldAnimate = animate && !reduceMotion
-    var hasAnimatedIn by remember { mutableStateOf(false) }
-    val animConfig = LocalAnimationConfig.current
-    val density = LocalDensity.current
-    val slideDistance = with(density) { (distance ?: animConfig.sideRevealDistanceDp.dp).toPx() }
-
-    LaunchedEffect(animate, fromSide, reduceMotion) {
-        if (shouldAnimate) {
-            delay(animConfig.staggerInitialDelayMs.toLong())
-            hasAnimatedIn = true
-        } else {
-            hasAnimatedIn = true
-        }
-    }
-
-    val target = if (hasAnimatedIn) 0f else slideDistance
-    val offsetX by animateFloatAsState(
-        targetValue = when (fromSide) {
-            SideRevealDirection.Start -> if (hasAnimatedIn) 0f else slideDistance
-            SideRevealDirection.End -> if (hasAnimatedIn) 0f else -slideDistance
-            else -> 0f
-        },
-        animationSpec = FieldMindMotion.expressiveSpring,
-        label = "sideRevealX"
-    )
-    val offsetY by animateFloatAsState(
-        targetValue = when (fromSide) {
-            SideRevealDirection.Top -> if (hasAnimatedIn) 0f else slideDistance
-            SideRevealDirection.Bottom -> if (hasAnimatedIn) 0f else -slideDistance
-            else -> 0f
-        },
-        animationSpec = FieldMindMotion.expressiveSpring,
-        label = "sideRevealY"
-    )
-
-    this.graphicsLayer {
-        this.translationX = offsetX
-        this.translationY = offsetY
-        this.alpha = if (hasAnimatedIn) 1f else 0f
-    }
-}
+// ── Entrance animations removed: staggeredEntrance, bouncyEntrance, sideReveal ──
+// All items render instantly together. No staggered one-by-one reveals.
 
 enum class SideRevealDirection { Start, End, Top, Bottom }
 
@@ -1132,97 +919,7 @@ fun Modifier.pageFlip(
     }
 }
 
-// ── Confetti / Particle Celebration Overlay ──
-
-/**
- * Renders a burst of confetti particles over the full screen. Trigger by
- * toggling [trigger] to a new value. Particles respect reduce-motion and
- * the global animation toggle.
- *
- * @param trigger      Change this value to fire a new burst.
- * @param particleCount  Number of particles in the burst.
- * @param colors       Optional list of colors for the particles.
- */
-@Composable
-fun ConfettiOverlay(
-    trigger: Any,
-    modifier: Modifier = Modifier,
-    particleCount: Int = 60,
-    colors: List<Color> = emptyList()
-) {
-    val reduceMotion = FieldMindMotion.isReduceMotion()
-    val animConfig = LocalAnimationConfig.current
-    if (reduceMotion || !animConfig.confettiEnabled) return
-
-    val defaultColors = listOf(
-        MaterialTheme.colorScheme.primary,
-        MaterialTheme.colorScheme.secondary,
-        MaterialTheme.colorScheme.tertiary,
-        FieldMindTheme.colors.positive,
-        FieldMindTheme.colors.observation,
-        FieldMindTheme.colors.flashcard
-    )
-    val palette = colors.ifEmpty { defaultColors }
-    val density = LocalDensity.current
-
-    data class Particle(
-        val color: Color,
-        val startX: Float,
-        val startY: Float,
-        val angle: Float,
-        val velocity: Float,
-        val size: Float,
-        val rotation: Float,
-        val rotationSpeed: Float
-    )
-
-    var particles by remember { mutableStateOf<List<Particle>>(emptyList()) }
-    var burstKey by remember { mutableIntStateOf(0) }
-
-    LaunchedEffect(trigger) {
-        burstKey++
-        val newParticles = List(particleCount) {
-            Particle(
-                color = palette.random(),
-                startX = 0f,
-                startY = 0f,
-                angle = Random.nextDouble(0.0, 2 * PI).toFloat(),
-                velocity = Random.nextDouble(200.0, 600.0).toFloat(),
-                size = Random.nextDouble(4.0, 12.0).toFloat(),
-                rotation = Random.nextDouble(0.0, 360.0).toFloat(),
-                rotationSpeed = Random.nextDouble(-180.0, 180.0).toFloat()
-            )
-        }
-        particles = newParticles
-    }
-
-    if (particles.isEmpty()) return
-
-    Box(modifier = modifier.fillMaxSize()) {
-        particles.forEachIndexed { index, particle ->
-            val anim = remember(burstKey, index) { Animatable(0f) }
-            LaunchedEffect(burstKey) {
-                anim.animateTo(1f, animationSpec = tween(1200, easing = FastOutSlowInEasing))
-            }
-            val progress = anim.value
-            val x = with(density) { particle.startX + cos(particle.angle) * particle.velocity * progress }.dp
-            val y = with(density) { particle.startY + sin(particle.angle) * particle.velocity * progress + 200f * progress * progress }.dp
-            val rotation = particle.rotation + particle.rotationSpeed * progress
-            val alpha = 1f - progress
-
-            Box(
-                modifier = Modifier
-                    .offset(x = x, y = y)
-                    .size(with(density) { particle.size }.dp)
-                    .graphicsLayer {
-                        rotationZ = rotation
-                        this.alpha = alpha
-                    }
-                    .background(particle.color, RoundedCornerShape(2.dp))
-            )
-        }
-    }
-}
+// ── ConfettiOverlay removed — particles were jarring, not elegant ──
 
 // -- Swipe-back Gesture Host -- iOS-style with predictive peek --
 

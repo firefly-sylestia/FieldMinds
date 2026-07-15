@@ -500,7 +500,7 @@ private fun QuestionCardWithHypotheses(
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
+        modifier = Modifier.fillMaxWidth(),
         shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)

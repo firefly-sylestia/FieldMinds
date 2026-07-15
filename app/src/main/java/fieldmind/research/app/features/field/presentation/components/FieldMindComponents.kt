@@ -627,7 +627,6 @@ fun SectionHeader(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .staggeredEntrance(index = index, animate = animate)
             .cuteShadow(elevation = 2.dp, shape = shape),
         shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -884,7 +883,6 @@ fun EntityCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .staggeredEntrance(index = index, animate = animate)
             .then(
                 if (onClick != null) Modifier.expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 else Modifier
@@ -996,7 +994,6 @@ fun MetricTile(
 
     Card(
         modifier = modifier
-            .staggeredEntrance(index = index, animate = animate)
             .then(if (onClick != null) Modifier.expressivePress(scaleDown = 0.96f) else Modifier)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         shape = shape,

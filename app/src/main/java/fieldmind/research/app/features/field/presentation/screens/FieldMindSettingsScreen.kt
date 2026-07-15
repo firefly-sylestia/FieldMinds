@@ -129,7 +129,6 @@ fun FieldMindSettingsScreen(
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
     val settingsScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
-    var resetConfettiTrigger by remember { mutableIntStateOf(0) }
     Box(Modifier.fillMaxSize()) {
         LazyColumn(
         state = settingsScrollState,
@@ -242,7 +241,6 @@ fun FieldMindSettingsScreen(
         item {
             OutlinedButton(
                 onClick = {
-                    resetConfettiTrigger++
                     onResetOnboarding()
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -253,7 +251,6 @@ fun FieldMindSettingsScreen(
             Spacer(Modifier.height(40.dp))
         }
     }
-    ConfettiOverlay(trigger = resetConfettiTrigger, particleCount = 80)
     }
 }
 
@@ -271,12 +268,7 @@ private fun SettingsNavCard(title: String, subtitle: String, icon: MaterialSymbo
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .pressScale(scaleDown = 0.97f)
-            .sideReveal(
-                fromSide = SideRevealDirection.Start,
-                animate = listChoreography,
-                distance = animConfig.sideRevealDistanceDp.dp
-            ),
+            .pressScale(scaleDown = 0.97f),
         shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)

@@ -556,7 +556,7 @@ private fun TaskCard(
 
     Card(
         onClick = onTap,
-        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
+        modifier = Modifier.fillMaxWidth(),
         shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(
             containerColor = if (isChecked)
@@ -816,7 +816,6 @@ private fun SwipeToCompleteTaskCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .staggeredEntrance(index = index, animate = animate)
             .clip(CuteCardDefaults.Shape)
             .onGloballyPositioned { coords ->
                 contentWidthPx = coords.size.width.toFloat().coerceAtLeast(1f)

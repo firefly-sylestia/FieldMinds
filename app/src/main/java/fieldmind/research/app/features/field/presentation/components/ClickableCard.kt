@@ -60,7 +60,6 @@ fun ClickableCard(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = minHeight)
-            .staggeredEntrance(index = index, animate = animate)
             .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
         shape = effectiveShape,
         color = colors.containerColor,
@@ -98,8 +97,7 @@ fun InfoCard(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = minHeight)
-            .staggeredEntrance(index = index, animate = animate),
+            .heightIn(min = minHeight),
         shape = effectiveShape,
         color = colors.containerColor,
         contentColor = colors.contentColor,
