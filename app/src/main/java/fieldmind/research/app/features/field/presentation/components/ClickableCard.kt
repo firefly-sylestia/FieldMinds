@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.ui.theme.CuteCardDefaults
+import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.glassCard
 import fieldmind.research.app.ui.theme.gradientBorder
 
