@@ -2,7 +2,6 @@ package fieldmind.research.app.features.field.presentation.components
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -27,14 +26,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
@@ -43,7 +38,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
@@ -119,35 +113,9 @@ fun DelightfulEmptyState(
     else
         MaterialTheme.colorScheme.onSurfaceVariant
 
-    // Add a staggered delay for a more visible entrance animation
-    val reduceMotion = FieldMindMotion.isReduceMotion()
-    var hasAnimatedIn by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        if (!reduceMotion) {
-            delay(80)  // slight stagger for visible entrance
-            hasAnimatedIn = true
-        } else {
-            hasAnimatedIn = true
-        }
-    }
-    val entranceAlpha by animateFloatAsState(
-        targetValue = if (hasAnimatedIn) 1f else 0f,
-        animationSpec = FieldMindMotion.expressiveFloat,
-        label = "emptyStateEntrance"
-    )
-    val entranceOffset by animateFloatAsState(
-        targetValue = if (hasAnimatedIn) 0f else 16f,
-        animationSpec = FieldMindMotion.expressiveFloat,
-        label = "emptyStateOffset"
-    )
-
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .alpha(if (reduceMotion) 1f else entranceAlpha)
-            .graphicsLayer {
-                translationY = if (reduceMotion) 0f else entranceOffset
-            }
             .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = cardShape),
         shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
