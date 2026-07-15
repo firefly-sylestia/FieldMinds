@@ -129,7 +129,6 @@ fun AnimationStateCard() {
             SpecRow("Expressive snap", damping = "${FieldMindMotion.expressiveSnap.dampingRatio}", stiffness = "${FieldMindMotion.expressiveSnap.stiffness}")
             SpecRow("Expressive soft", damping = "${FieldMindMotion.expressiveSoft.dampingRatio}", stiffness = "${FieldMindMotion.expressiveSoft.stiffness}")
             SpecRow("Press spring", damping = "${FieldMindMotion.pressSpring.dampingRatio}", stiffness = "${FieldMindMotion.pressSpring.stiffness}")
-            SpecRow("Stagger", damping = "${FieldMindMotion.staggerInitialDelayMs}ms initial", stiffness = "${FieldMindMotion.staggerItemDelayMs}ms item")
 
             Spacer(Modifier.height(2.dp))
             Text(
