@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.navigation
 import fieldmind.research.app.ui.theme.CuteCardDefaults
+import fieldmind.research.app.ui.theme.premiumCard
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -536,17 +537,8 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                 // NavHost content behind the rail (captured via hazeSource() below);
                 // .liquidGlassRefraction() applies GPU displacement & specular.
                 if (!hideChrome) {                        Surface(
-                            shape = RoundedCornerShape(size = 38.dp),
-                            color = MaterialTheme.colorScheme.surfaceContainer,
-                            tonalElevation = 0.dp,
-                            shadowElevation = if (FieldMindTheme.colors.isDark) 14.dp else 8.dp,
-                            border = androidx.compose.foundation.BorderStroke(
-                                width = 0.6.dp,
-                                color = if (FieldMindTheme.colors.isDark)
-                                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.15f)
-                                else
-                                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.20f)
-                            ),
+                            shape = RoundedCornerShape(38.dp),
+                            color = Color.Transparent,
                             modifier = Modifier
                                 .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
                                 .width(IntrinsicSize.Min)
@@ -565,6 +557,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                                         )
                                     )
                                 )
+                                .premiumCard(shape = RoundedCornerShape(38.dp), elevation = 6.dp)
                                 .liquidGlassRefraction()
                         ) {
                             NavigationRail(
@@ -644,13 +637,10 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                         // Fresnel edge glow via the .liquidGlassRefraction() modifier.
                         Surface(
                             shape = RoundedCornerShape(50.dp),
-                            color = MaterialTheme.colorScheme.surfaceContainer,
-                            tonalElevation = 0.dp,
-                            shadowElevation = if (FieldMindTheme.colors.isDark) 14.dp else 8.dp,
+                            color = Color.Transparent,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(68.dp)
-                                .clip(RoundedCornerShape(50.dp))
                                 .hazeEffect(
                                     state = hazeState,
                                     style = HazeStyle(
@@ -666,6 +656,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                                         )
                                     )
                                 )
+                                .premiumCard(shape = RoundedCornerShape(50.dp), elevation = 8.dp)
                                 .liquidGlassRefraction()
                         ) {
                             LiquidNavRow(
