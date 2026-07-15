@@ -359,13 +359,11 @@ fun Modifier.expressivePress(
                     val down = awaitFirstDown(requireUnconsumed = false)
                     if (down.pressed) {
                         isPressed = true
-                        down.consume()
-                        // Wait for up or cancellation
+                        // Wait for up or cancellation (do NOT consume — let clickable/scrollable work)
                         var upEvent: PointerEvent
                         do {
                             upEvent = awaitPointerEvent()
                         } while (upEvent.changes.all { it.pressed })
-                        upEvent.changes.forEach { it.consume() }
                         isPressed = false
                     }
                 }
@@ -411,13 +409,11 @@ fun Modifier.expressiveCardPress(
                     val down = awaitFirstDown(requireUnconsumed = false)
                     if (down.pressed) {
                         isPressed = true
-                        down.consume()
-                        // Wait for up or cancellation
+                        // Wait for up or cancellation (do NOT consume — let clickable/scrollable work)
                         var upEvent: PointerEvent
                         do {
                             upEvent = awaitPointerEvent()
                         } while (upEvent.changes.all { it.pressed })
-                        upEvent.changes.forEach { it.consume() }
                         isPressed = false
                     }
                 }
@@ -459,13 +455,11 @@ fun Modifier.pressScale(
                     val down = awaitFirstDown(requireUnconsumed = false)
                     if (down.pressed) {
                         isPressed = true
-                        down.consume()
-                        // Wait for up or cancellation
+                        // Wait for up or cancellation (do NOT consume — let clickable/scrollable work)
                         var upEvent: PointerEvent
                         do {
                             upEvent = awaitPointerEvent()
                         } while (upEvent.changes.all { it.pressed })
-                        upEvent.changes.forEach { it.consume() }
                         isPressed = false
                     }
                 }
