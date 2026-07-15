@@ -1,13 +1,11 @@
 package fieldmind.research.app.features.field.presentation.components
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -25,38 +23,17 @@ import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeEffect
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
+import fieldmind.research.app.ui.theme.gradientBorder
 
-/**
- * CompositionLocal to provide a [HazeState] from a parent composable down to
- * child [GlassCard] composables. When set, [GlassCard] applies real backdrop
- * blur via Haze; when null, a visual-only glass effect is used.
- */
+/** CompositionLocal for Haze backdrop blur. */
 val LocalHazeState = staticCompositionLocalOf<HazeState?> { null }
 
 /**
- * A glassmorphism card with real backdrop blur via Haze.
+ * A glassmorphism card with real backdrop blur via Haze + luminous gradient border.
  *
- * When [LocalHazeState] is provided by a parent along with `.haze(state = hazeState)`
- * on the background content, this card renders with true GPU-accelerated backdrop blur.
- * Otherwise, it falls back to a visually similar semi-transparent style.
- *
- * Usage:
- * ```kotlin
- * // In parent:
- * val hazeState = remember { HazeState() }
- * Box {
- *     Content(modifier = Modifier.haze(state = hazeState))
- *     CompositionLocalProvider(LocalHazeState provides hazeState) {
- *         GlassCard { Text("Glass content") }
- *     }
- * }
- * ```
- *
- * @param modifier Modifier for the card.
- * @param shape Corner shape (defaults to 28dp rounded).
- * @param blurRadius Blur radius for the Haze effect (defaults to 24dp).
- * @param tintAlpha Background tint opacity (defaults to 0.78).
- * @param content The card content.
+ * When [LocalHazeState] is provided, renders with GPU-accelerated backdrop blur.
+ * Otherwise falls back to a semi-transparent frosted style.
+ * The [gradientBorder] adds a subtle luminous edge at the top-left corner.
  */
 @Composable
 fun GlassCard(
@@ -82,33 +59,24 @@ fun GlassCard(
                 style = HazeStyle(
                     blurRadius = blurRadius,
                     noiseFactor = 0.04f,
-                    tints = listOf(
-                        HazeTint(color = glassColor)
-                    )
+                    tints = listOf(HazeTint(color = glassColor))
                 )
             )
+            .gradientBorder(shape = shape)
     } else {
         modifier
             .fillMaxWidth()
             .clip(shape)
-            .background(glassColor, shape)
+            .gradientBorder(shape = shape)
     }
 
     Card(
         modifier = cardModifier,
         shape = shape,
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
-        )
+        colors = CardDefaults.cardColors(containerColor = glassColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
+        Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
             Column(content = content)
         }
     }
