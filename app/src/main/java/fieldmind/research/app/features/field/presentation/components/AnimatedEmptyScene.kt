@@ -105,8 +105,18 @@ fun AnimatedEmptyScene(
     )
 
     val isDark = isSystemInDarkTheme() || FieldMindTheme.colors.isDark
-    // Boost alpha in dark mode so the scene stays visible against dark surfaces
-    val alphaBoost = if (isDark) 1.6f else 1f
+    // Significantly boost alpha in dark mode so the scene stays visible against dark surfaces
+    val alphaBoost = if (isDark) 2.8f else 1f
+    // In dark mode use warmer, brighter accent variants for contrast
+    val darkAccent = if (isDark) {
+        // Lighten the accent for dark backgrounds — use pastel variants
+        Color(
+            ((accentColor.red * 0.6f + 1f * 0.4f)).coerceIn(0f, 1f),
+            ((accentColor.green * 0.6f + 1f * 0.4f)).coerceIn(0f, 1f),
+            ((accentColor.blue * 0.6f + 1f * 0.4f)).coerceIn(0f, 1f),
+            accentColor.alpha
+        )
+    } else accentColor
     // Use theme-aware surface tints for background elements so they adapt to light/dark
     val surfaceTint = MaterialTheme.colorScheme.onSurfaceVariant
 
@@ -125,18 +135,18 @@ fun AnimatedEmptyScene(
         when (variant) {
             EmptySceneVariant.MEADOW -> drawMeadow(
                 w, h, cx, groundY, grassPhase, bugProgress, sparkleGlow,
-                grassColor, accentColor, accentLight, surfaceTint, isDark, alphaBoost
+                grassColor, darkAccent, accentLight, surfaceTint, isDark, alphaBoost
             )
             EmptySceneVariant.GARDEN -> drawGarden(
                 w, h, cx, groundY, grassPhase, bugProgress, sparkleGlow,
-                accentColor, accentLight, surfaceTint, isDark, alphaBoost
+                darkAccent, accentLight, surfaceTint, isDark, alphaBoost
             )
             EmptySceneVariant.NIGHT -> drawNight(
-                w, h, cx, bugProgress, sparkleGlow, accentColor, surfaceTint, isDark, alphaBoost
+                w, h, cx, bugProgress, sparkleGlow, darkAccent, surfaceTint, isDark, alphaBoost
             )
             EmptySceneVariant.SEASIDE -> drawSeaside(
                 w, h, cx, groundY, grassPhase, bugProgress, wingPhase, sparkleGlow,
-                accentColor, accentLight, surfaceTint, isDark, alphaBoost
+                darkAccent, accentLight, surfaceTint, isDark, alphaBoost
             )
         }
     }
@@ -268,57 +278,58 @@ private fun DrawScope.drawNight(
     bugProgress: Float, glow: Float,
     accentColor: Color, surfaceTint: Color, isDark: Boolean, alphaBoost: Float
 ) {
-    val baseAlpha = (0.35f * alphaBoost).coerceAtMost(1f)
-    val starColor = if (isDark) Color(0xFFFFF176) else Color(0xFFFFB300)
+    val baseAlpha = (0.55f * alphaBoost).coerceAtMost(1f)
+    val starColor = if (isDark) Color(0xFFFFF9C4) else Color(0xFFFFB300)
 
-    // ── Crescent moon ──
+    // ── Crescent moon — much brighter in dark mode
     val moonX = w * 0.8f
     val moonY = h * 0.18f
+    val moonColor = if (isDark) Color(0xFFFFFDE7) else starColor
     drawCircle(
-        starColor.copy(alpha = baseAlpha * 1.5f * glow),
+        moonColor.copy(alpha = baseAlpha * 1.8f * glow),
         radius = 12f,
         center = Offset(moonX, moonY)
     )
     drawCircle(
-        starColor.copy(alpha = baseAlpha),
+        starColor.copy(alpha = baseAlpha * 1.2f),
         radius = 8f,
         center = Offset(moonX + 4f, moonY - 2f)
     )
 
-    // ── Stars ──
+    // ── Stars — brighter with larger glow halos in dark mode
     val starPositions = listOf(
         Pair(0.1f, 0.15f), Pair(0.25f, 0.08f), Pair(0.4f, 0.2f),
         Pair(0.55f, 0.1f), Pair(0.7f, 0.25f), Pair(0.15f, 0.35f),
         Pair(0.35f, 0.3f), Pair(0.6f, 0.35f)
     )
     starPositions.forEachIndexed { i, (sx, sy) ->
-        val starGlow = (glow * 0.5f + 0.3f + (i % 2) * 0.2f).coerceIn(0f, 1f)
+        val starGlow = (glow * 0.6f + 0.4f + (i % 2) * 0.3f).coerceIn(0f, 1f)
         drawCircle(
-            starColor.copy(alpha = starGlow * baseAlpha * 1.5f),
+            starColor.copy(alpha = starGlow * baseAlpha * 2.0f),
             radius = 2.5f,
             center = Offset(w * sx, h * sy)
         )
-        // Cross glow for brighter stars
+        // Cross glow for brighter stars — larger halo in dark mode
         if (i % 3 == 0) {
             drawCircle(
-                starColor.copy(alpha = starGlow * baseAlpha * 0.5f),
-                radius = 5f,
+                starColor.copy(alpha = starGlow * baseAlpha * 0.8f),
+                radius = if (isDark) 7f else 5f,
                 center = Offset(w * sx, h * sy)
             )
         }
     }
 
-    // ── Fireflies ──
+    // ── Fireflies — brighter in dark mode
     for (i in 0..3) {
         val fx = (bugProgress * 2.3f + i * 0.25f) % 1f * w
         val fy = h * 0.5f + sin(bugProgress * 2f + i * 1.5f) * h * 0.15f
         drawCircle(
-            starColor.copy(alpha = (glow * 0.35f * alphaBoost).coerceAtMost(1f)),
+            starColor.copy(alpha = (glow * 0.55f * alphaBoost).coerceAtMost(1f)),
             radius = 5f,
             center = Offset(fx, fy)
         )
         drawCircle(
-            starColor.copy(alpha = (glow * 0.9f * alphaBoost).coerceAtMost(1f)),
+            starColor.copy(alpha = (glow * 0.95f * alphaBoost).coerceAtMost(1f)),
             radius = 2.5f,
             center = Offset(fx, fy)
         )

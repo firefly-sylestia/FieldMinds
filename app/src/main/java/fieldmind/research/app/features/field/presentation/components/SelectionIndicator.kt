@@ -31,12 +31,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import fieldmind.research.app.shared.presentation.components.icons.Icon
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 
 /**
  * A cute, high-visibility checkbox with a soft pressed scale and theme-aware colors.
- * Use this instead of the bare [Checkbox] for list selection and settings rows.
+ * Uses a rounded chip shape for smooth edges — no hard rectangular borders.
  */
 @Composable
 fun FieldMindCheckbox(
@@ -63,11 +63,18 @@ fun FieldMindCheckbox(
             .scale(scale)
             .size(28.dp)
             .clip(CuteCardDefaults.ChipShape)
-            .background(if (checked) accentColor.copy(alpha = 0.12f) else Color.Transparent)
-            .border(
-                width = 2.dp,
-                color = checkedColor,
-                shape = CuteCardDefaults.ChipShape
+            .background(
+                if (checked) accentColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.24f else 0.12f)
+                else MaterialTheme.colorScheme.surfaceContainerHigh
+            )
+            .then(
+                if (!checked)
+                    Modifier.border(
+                        width = 1.5.dp,
+                        color = checkedColor,
+                        shape = CuteCardDefaults.ChipShape
+                    )
+                else Modifier
             )
             .clickable(
                 interactionSource = interactionSource,
@@ -171,7 +178,7 @@ fun FieldMindSwitch(
 
 /**
  * A complete selection row: label + optional description + selection control.
- * Use for settings and list items where a Checkbox/Radio/Switch is needed.
+ * Uses soft rounded card shape with subtle selection highlight — no hard rectangular edges.
  */
 @Composable
 fun SelectionRow(
@@ -185,17 +192,13 @@ fun SelectionRow(
 ) {
     Row(
         modifier = modifier
-            .clip(CuteCardDefaults.ShapeCompact)
+            .clip(CuteCardDefaults.OptionShape)
             .clickable { onSelectedChange(!selected) }
             .background(
-                if (selected) accentColor.copy(alpha = 0.08f)
+                if (selected) accentColor.copy(alpha = if (FieldMindTheme.colors.isDark) 0.14f else 0.08f)
                 else MaterialTheme.colorScheme.surfaceContainerLow
             )
-            .border(
-                width = 1.5.dp,
-                color = if (selected) accentColor.copy(alpha = 0.5f) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
-                shape = CuteCardDefaults.ShapeCompact
-            ),
+            .padding(horizontal = 14.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         when (mode) {

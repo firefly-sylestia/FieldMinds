@@ -106,12 +106,19 @@ fun DelightfulEmptyState(
 
     val cardShape = CuteCardDefaults.ShapeCompact
     val chipShape = CuteCardDefaults.ChipShape
+    val isDark = FieldMindTheme.colors.isDark
+    // Brighter text in dark mode for better readability
+    val bodyColor = if (isDark)
+        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f)
+    else
+        MaterialTheme.colorScheme.onSurfaceVariant
 
-    // Subtle entrance animation for the whole card
+    // Add a staggered delay for a more visible entrance animation
     val reduceMotion = FieldMindMotion.isReduceMotion()
     var hasAnimatedIn by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         if (!reduceMotion) {
+            delay(80)  // slight stagger for visible entrance
             hasAnimatedIn = true
         } else {
             hasAnimatedIn = true
@@ -182,7 +189,7 @@ fun DelightfulEmptyState(
                 Text(
                     text = body,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = bodyColor,
                     textAlign = TextAlign.Center,
                     lineHeight = MaterialTheme.typography.bodyMedium.lineHeight
                 )

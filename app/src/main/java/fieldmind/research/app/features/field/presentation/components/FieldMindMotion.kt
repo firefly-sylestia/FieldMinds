@@ -224,11 +224,11 @@ object FieldMindMotion {
             stiffness = (LocalAnimationConfig.current.stiffness * 0.45f).coerceAtLeast(40f)
         )
 
-    // Snappy press response — same damping but faster stiffness
+    // Snappy press response — same damping but slightly softer stiffness for smoother feel
     val expressiveSnap
         @Composable get() = spring<Float>(
-            dampingRatio = (LocalAnimationConfig.current.dampingRatio + 0.05f).coerceIn(0.5f, 0.95f),
-            stiffness = (LocalAnimationConfig.current.stiffness * 1.15f).coerceAtLeast(80f)
+            dampingRatio = (LocalAnimationConfig.current.dampingRatio + 0.08f).coerceIn(0.5f, 0.95f),
+            stiffness = (LocalAnimationConfig.current.stiffness * 0.95f).coerceAtLeast(70f)
         )
 
     // ── Bouncy Springs ──
@@ -250,7 +250,7 @@ object FieldMindMotion {
         @Composable get() = spring<Float>(dampingRatio = 0.82f, stiffness = (LocalAnimationConfig.current.stiffness * 0.6f).coerceAtLeast(60f))
 
     val pressSpring
-        @Composable get() = spring<Float>(dampingRatio = (LocalAnimationConfig.current.dampingRatio + 0.05f).coerceIn(0.6f, 0.95f), stiffness = (LocalAnimationConfig.current.stiffness * 1.15f).coerceAtLeast(80f))
+        @Composable get() = spring<Float>(dampingRatio = (LocalAnimationConfig.current.dampingRatio + 0.08f).coerceIn(0.6f, 0.95f), stiffness = (LocalAnimationConfig.current.stiffness * 0.92f).coerceAtLeast(70f))
 
     val confirmSpring
         @Composable get() = spring<Float>(dampingRatio = 0.85f, stiffness = (LocalAnimationConfig.current.stiffness * 0.55f).coerceAtLeast(60f))

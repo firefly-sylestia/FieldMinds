@@ -25,11 +25,16 @@ import androidx.compose.ui.unit.dp
 // ════════════════════════════════════════════════════════════════════════
 
 /**
- * Returns null — journal border strokes have been retired.
- * Kept as a no-op for backwards compatibility with all call sites.
+ * Returns a subtle 0.5dp outlineVariant border at very low opacity — just enough
+ * to define card shapes without harsh rectangular edges. Prevents shadow-rendering
+ * artifacts on cards that would otherwise have no visible edge definition.
  */
 @Composable
-fun journalBorderStroke(): BorderStroke? = null
+fun journalBorderStroke(): BorderStroke? =
+    BorderStroke(
+        width = 0.5.dp,
+        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.12f)
+    )
 
 /**
  * Simple styled divider. Delegates to [HorizontalDivider] with soft
