@@ -953,24 +953,17 @@ private fun categorizeRoute(route: String): RouteCategory = when (route) {
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransition(config: AnimationConfig): EnterTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransition(): EnterTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Elastic directional slide spring — beautiful full-width slides
-    val slideSpec = spring<IntOffset>(
-        dampingRatio = FieldMindMotion.swipeOvershootDamping,
-        stiffness = (config.stiffness * 0.7f).coerceAtLeast(120f)
-    )
-    val fadeSpec = spring<Float>(
-        dampingRatio = config.dampingRatio,
-        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
-    )
-    val bouncySpec = spring<Float>(
-        dampingRatio = 0.50f,
-        stiffness = (config.stiffness * 0.55f).coerceAtLeast(60f)
-    )
+    // Fixed, well-tuned nav transition springs — decoupled from animationConfig
+    // so nav slides are ALWAYS visible regardless of animation speed/disable settings.
+    // dampingRatio=0.78 + stiffness=220 → ~380ms gentle elastic settle
+    val slideSpec = spring<IntOffset>(dampingRatio = 0.78f, stiffness = 220f)
+    val fadeSpec = spring<Float>(dampingRatio = 0.72f, stiffness = 200f)
+    val bouncySpec = spring<Float>(dampingRatio = 0.50f, stiffness = 160f)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -1003,19 +996,14 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransition(config: AnimationConfig): ExitTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransition(): ExitTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val slideSpec = spring<IntOffset>(
-        dampingRatio = FieldMindMotion.swipeOvershootDamping,
-        stiffness = (config.stiffness * 0.7f).coerceAtLeast(120f)
-    )
-    val fadeSpec = spring<Float>(
-        dampingRatio = config.dampingRatio,
-        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
-    )
+    // Fixed nav transition springs — always visible
+    val slideSpec = spring<IntOffset>(dampingRatio = 0.78f, stiffness = 220f)
+    val fadeSpec = spring<Float>(dampingRatio = 0.72f, stiffness = 200f)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -1047,23 +1035,15 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTransition(config: AnimationConfig): EnterTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTransition(): EnterTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val slideSpec = spring<IntOffset>(
-        dampingRatio = FieldMindMotion.swipeOvershootDamping,
-        stiffness = (config.stiffness * 0.7f).coerceAtLeast(120f)
-    )
-    val fadeSpec = spring<Float>(
-        dampingRatio = config.dampingRatio,
-        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
-    )
-    val bouncySpec = spring<Float>(
-        dampingRatio = 0.50f,
-        stiffness = (config.stiffness * 0.55f).coerceAtLeast(60f)
-    )
+    // Fixed nav transition springs — always visible
+    val slideSpec = spring<IntOffset>(dampingRatio = 0.78f, stiffness = 220f)
+    val fadeSpec = spring<Float>(dampingRatio = 0.72f, stiffness = 200f)
+    val bouncySpec = spring<Float>(dampingRatio = 0.50f, stiffness = 160f)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -1087,19 +1067,14 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransition(config: AnimationConfig): ExitTransition {
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransition(): ExitTransition {
     val fromRoute = initialState.destination.route ?: ""
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    val slideSpec = spring<IntOffset>(
-        dampingRatio = FieldMindMotion.swipeOvershootDamping,
-        stiffness = (config.stiffness * 0.7f).coerceAtLeast(120f)
-    )
-    val fadeSpec = spring<Float>(
-        dampingRatio = config.dampingRatio,
-        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
-    )
+    // Fixed nav transition springs — always visible
+    val slideSpec = spring<IntOffset>(dampingRatio = 0.78f, stiffness = 220f)
+    val fadeSpec = spring<Float>(dampingRatio = 0.72f, stiffness = 200f)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
@@ -1195,10 +1170,10 @@ private fun FieldMindNavHost(
             navController = navController,
             startDestination = "field_tab_container",
             modifier = Modifier,
-            enterTransition = { routeEnterTransition(animConfig) },
-            exitTransition = { routeExitTransition(animConfig) },
-            popEnterTransition = { routePopEnterTransition(animConfig) },
-            popExitTransition = { routePopExitTransition(animConfig) }
+            enterTransition = { routeEnterTransition() },
+            exitTransition = { routeExitTransition() },
+            popEnterTransition = { routePopEnterTransition() },
+            popExitTransition = { routePopExitTransition() }
         ) {
             // ── Single tab container: all 5 tabs rendered simultaneously ──
             // Swipe gestures reveal the real adjacent tab content behind the current one.
