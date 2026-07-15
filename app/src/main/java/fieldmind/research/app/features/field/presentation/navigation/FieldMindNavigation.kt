@@ -998,8 +998,8 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation, RouteCategory.Other
         ) -> slideInHorizontally(slideSpec) { -it } + fadeIn(fadeSpec) +
             scaleIn(initialScale = 0.95f, animationSpec = bouncySpec)
-        else -> fadeIn(animationSpec = fadeSpec) +
-            scaleIn(initialScale = 0.97f, animationSpec = fadeSpec)
+        else -> slideInHorizontally(slideSpec) { it } + fadeIn(animationSpec = fadeSpec) +
+            scaleIn(initialScale = 0.95f, animationSpec = bouncySpec)
     }
 }
 
