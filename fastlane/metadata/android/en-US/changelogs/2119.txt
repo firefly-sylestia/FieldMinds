@@ -1,0 +1,7 @@
+v3.0 — Design overhaul, animation engine v2, and stability.
+
+🎨 200+ files unified under CuteCardDefaults design tokens — rounder, cuter, consistent everywhere. Journal system purged for a single cohesive look.
+
+✨ Telegram-inspired spring animations — snappier, bouncier, and runtime-tunable. Polygon morphing, predictive back peek, side-swipe actions, shimmer, pulse, and confetti effects.
+
+📷 Camera V2 rewrite with 6 bug fixes. 🧭 Liquid glass compass & bubble level. 🛡️ Crash recovery now reliable with native fallback UI. 🌑 AMOLED true-black dark mode.
