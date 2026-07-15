@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
-import android.graphics.Color
+import android.graphics.Color as AndroidColor
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
@@ -169,7 +169,7 @@ class FieldMindCrashActivity : ComponentActivity() {
         val d4 = dp(4); val d6 = dp(6); val d8 = dp(8); val d10 = dp(10); val d12 = dp(12)
         val d16 = dp(16); val d18 = dp(18); val d20 = dp(20); val d24 = dp(24)
         val d28 = dp(28); val d32 = dp(32); val d36 = dp(36); val d40 = dp(40)
-        val d48 = dp(48); val d52 = dp(52); val d56 = dp(56); val d64 = dp(64)
+        val d44 = dp(44); val d48 = dp(48); val d52 = dp(52); val d56 = dp(56); val d64 = dp(64)
 
         val navBarH = navBarHeight()
 
