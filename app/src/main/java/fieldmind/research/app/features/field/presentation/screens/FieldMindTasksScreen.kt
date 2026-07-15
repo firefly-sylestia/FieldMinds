@@ -579,14 +579,14 @@ private fun TaskCard(
             LaunchedEffect(isChecked) {
                 if (isChecked) {
                     checkBounce.snapTo(1.3f)
-                    checkBounce.animateTo(1f, FieldMindMotion.pressSpring)
+                    checkBounce.animateTo(1f, spring(dampingRatio = 0.80f, stiffness = 246f))
                 }
             }
             Surface(
                 onClick = {
                     scope.launch {
                         checkBounce.snapTo(1.3f)
-                        checkBounce.animateTo(1f, FieldMindMotion.expressiveSnap)
+                        checkBounce.animateTo(1f, spring(dampingRatio = 0.68f, stiffness = 252f))
                     }
                     onToggle()
                 },

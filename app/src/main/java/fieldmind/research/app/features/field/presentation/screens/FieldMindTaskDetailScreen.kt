@@ -422,7 +422,7 @@ fun TaskDetailScreen(
                             LaunchedEffect(isChecked) {
                                 if (isChecked) {
                                     checkBounce.snapTo(1.3f)
-                                    checkBounce.animateTo(1f, FieldMindMotion.pressSpring)
+                                    checkBounce.animateTo(1f, spring(dampingRatio = 0.80f, stiffness = 246f))
                                 }
                             }
                             Surface(
@@ -430,7 +430,7 @@ fun TaskDetailScreen(
                                     haptics.light()
                                     checklistScope.launch {
                                         checkBounce.snapTo(1.3f)
-                                        checkBounce.animateTo(1f, FieldMindMotion.expressiveSnap)
+                                        checkBounce.animateTo(1f, spring(dampingRatio = 0.68f, stiffness = 252f))
                                     }
                                     // Toggle item — read latest task data from ViewModel state directly
                                     checklistScope.launch {
