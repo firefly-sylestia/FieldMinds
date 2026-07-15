@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.ui.theme.CuteCardDefaults
@@ -108,6 +109,10 @@ fun DelightfulEmptyState(
     val chipShape = CuteCardDefaults.ChipShape
     val isDark = FieldMindTheme.colors.isDark
     // Brighter text in dark mode for better readability
+    val titleColor = if (isDark)
+        MaterialTheme.colorScheme.onSurface
+    else
+        MaterialTheme.colorScheme.onSurface
     val bodyColor = if (isDark)
         MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f)
     else
@@ -176,13 +181,14 @@ fun DelightfulEmptyState(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                // ── Title with warmth ──
+                // ── Title with warmth — brighter in dark mode ──
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center
+                    color = titleColor,
+                    textAlign = TextAlign.Center,
+                    lineHeight = MaterialTheme.typography.titleLarge.lineHeight
                 )
 
                 // ── Friendly body ──
