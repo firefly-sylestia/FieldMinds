@@ -263,7 +263,6 @@ private fun SettingsNavCard(title: String, subtitle: String, icon: MaterialSymbo
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradient = CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
     val animConfig = LocalAnimationConfig.current
-    val listChoreography = animConfig.listChoreographyEnabled
     Card(
         modifier = Modifier
             .fillMaxWidth()

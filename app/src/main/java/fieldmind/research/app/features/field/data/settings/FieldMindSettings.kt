@@ -803,18 +803,12 @@ class FieldMindSettings private constructor(context: Context) {
             swipeThreshold = _animSwipeThreshold.value,
             swipeScaleFactor = _animSwipeScaleFactor.value,
             slideStiffness = (_animEntranceStiffness.value * mult * 1.1f).coerceAtLeast(1f),
-            staggerItemDelayMs = (if (_animationsEnabled.value) (35f / mult).roundToInt() else 0).coerceIn(0, 300),
-            staggerInitialDelayMs = (if (_animationsEnabled.value) (40f / mult).roundToInt() else 0).coerceIn(0, 300),
-            staggerMaxDurationMs = (if (_animationsEnabled.value) (300f / mult).roundToInt() else 0).coerceIn(0, 500),
             morphEnabled = _animMorphEnabled.value,
             morphDampingRatio = _animMorphDamping.value,
             morphStiffness = (_animMorphStiffness.value * mult).coerceAtLeast(1f),
             morphDurationMs = _animMorphDurationMs.value,
-            sideRevealDistanceDp = _animSideRevealDistanceDp.value,
             shimmerSpeedMs = _animShimmerSpeedMs.value,
             pulseDurationMs = _animPulseDurationMs.value,
-            listChoreographyEnabled = _animListChoreographyEnabled.value,
-            confettiEnabled = _animConfettiEnabled.value,
             pageFlipEnabled = _animPageFlipEnabled.value
         )
     }
