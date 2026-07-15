@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
