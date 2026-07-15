@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
@@ -23,21 +22,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import fieldmind.research.app.features.field.data.settings.FieldMindSettings
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
-import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.ui.theme.CuteCardDefaults
-import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.glassCard
+import fieldmind.research.app.ui.theme.gradientBorder
 
 // ══════════════════════════════════════════════════════════════════════
 //  SettingsGroupCard — Card with gradient background
@@ -53,29 +50,18 @@ import fieldmind.research.app.ui.theme.CuteElevations
  */
 @Composable
 fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
-    val context = LocalContext.current
-    val gradientSettings = remember {  FieldMindSettings.getInstance(context) }
-    val gradientStyleName by gradientSettings.cardGradientStyle.collectAsState()
-    val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
-    val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
-    val userGradient = CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
     val shape = CuteCardDefaults.ShapeCompact
-    val effectiveBorder = journalBorderStroke()
     Card(
-        modifier = Modifier.fillMaxWidth().cuteShadow(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .cuteShadow()
+            .glassCard(shape = shape)
+            .gradientBorder(shape = shape),
         shape = shape,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
-        border = effectiveBorder
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = userGradient,
-                    shape = shape
-                )
-        ) { Column(content = content) }
+        Column(content = content)
     }
 }
 

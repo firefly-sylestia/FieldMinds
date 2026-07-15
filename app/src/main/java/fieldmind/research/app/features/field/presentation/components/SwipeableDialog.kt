@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.material3.MaterialTheme
@@ -37,12 +36,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.glassCard
+import fieldmind.research.app.ui.theme.gradientBorder
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -155,6 +155,8 @@ fun SwipeableAlertDialog(
                         scaleY = contentScale.coerceIn(0.7f, 1f)
                         this.alpha = contentAlpha.coerceIn(0.3f, 1f)
                     }
+                    .glassCard(shape = shape)
+                    .gradientBorder(shape = shape)
                     .then(
                         if (!reduceMotion) {
                             Modifier.pointerInput(Unit) {
@@ -186,9 +188,9 @@ fun SwipeableAlertDialog(
                         }
                     ),
                 shape = shape,
-                color = containerColor,
-                tonalElevation = tonalElevation,
-                shadowElevation = 8.dp
+                color = Color.Transparent,
+                tonalElevation = 0.dp,
+                shadowElevation = 0.dp
             ) {
                 Column(
                     modifier = Modifier
