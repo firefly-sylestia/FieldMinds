@@ -761,9 +761,7 @@ class MorphPolygonShape(
         layoutDirection: LayoutDirection,
         density: Density
     ): Outline {
-        val androidPath = android.graphics.Path()
-        morph.asPath(progress, androidPath)
-        val path = androidPath.asComposePath()
+        val path = morph.asPath(progress).asComposePath()
         // Scale to fill the available size (polygons are unit-centered)
         val scaleX = size.width / 2f
         val scaleY = size.height / 2f
