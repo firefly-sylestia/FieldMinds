@@ -208,13 +208,13 @@ fun FigureSidePanel(
                         animationSpec = spring<IntOffset>(dampingRatio = 0.84f, stiffness = 134f),
                         initialOffsetX = { fullWidth -> direction * fullWidth / 4 }
                     ) + fadeIn(
-                        animationSpec = FieldMindMotion.expressiveSoft
+                        animationSpec = spring<Float>(dampingRatio = 0.84f, stiffness = 134f)
                     )) togetherWith (
                         slideOutHorizontally(
                             animationSpec = spring<IntOffset>(dampingRatio = 0.84f, stiffness = 134f),
                             targetOffsetX = { fullWidth -> -direction * fullWidth / 4 }
                         ) + fadeOut(
-                            animationSpec = FieldMindMotion.expressiveSoft
+                            animationSpec = spring<Float>(dampingRatio = 0.84f, stiffness = 134f)
                         )
                     )
                 },
