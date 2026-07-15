@@ -64,7 +64,6 @@ fun DailyFieldJournalOverlay(
     val journalQuickCategory by settings.journalQuickCategory.collectAsState()
     val showChips by settings.journalShowCategoryChips.collectAsState()
     val context = LocalContext.current
-    val celebrationState = rememberCelebrationState()
 
     // Initial chip pre-selection follows the persisted preference;
     // falls back to the global default category when no preference is stored.
@@ -86,16 +85,6 @@ fun DailyFieldJournalOverlay(
         ),
         label = "journalOffset"
     )
-
-    // ── Streak milestone celebration ──
-    val isStreakMilestone = streakCount in setOf(1, 7, 14, 30, 60, 100, 365)
-    LaunchedEffect(streakCount) {
-        if (isStreakMilestone) {
-            // Small delay so the overlay animation plays first, then sparkles
-            kotlinx.coroutines.delay(400)
-            celebrationState.trigger(CelebrationVariant.GENTLE_SPARKLE)
-        }
-    }
 
     val greeting = getTimeBasedGreeting()
     val icon = getTimeBasedIcon()
@@ -119,9 +108,6 @@ fun DailyFieldJournalOverlay(
     Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.3f * offsetAnim))) {
         // Tap background to dismiss
         Box(Modifier.fillMaxSize().clickable { visible = false; onDismiss() })
-
-        // Celebration overlay for streak milestones
-        CelebrationOverlay(celebrationState = celebrationState)
 
         // Journal sheet slides up from bottom
         Box(
