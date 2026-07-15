@@ -757,7 +757,9 @@ class MorphPolygonShape(
         layoutDirection: LayoutDirection,
         density: Density
     ): Outline {
-        val path = morph.asPath(progress).asComposePath()
+        val androidPath = android.graphics.Path()
+        morph.asPath(progress, androidPath)
+        val path = androidPath.asComposePath()
         // Scale to fill the available size (polygons are unit-centered)
         val scaleX = size.width / 2f
         val scaleY = size.height / 2f
@@ -775,7 +777,9 @@ class MorphPolygonShape(
  */
 object MorphPolygons {
     /** Smooth circle (64 vertices for high-quality rendering). */
-    fun circle(radius: Float = 1f) = RoundedPolygon.circle(numVertices = 64, radius = radius)
+    fun circle(radius: Float = 1f) = RoundedPolygon.circle(
+        numVertices = 64, radius = radius, centerX = 0f, centerY = 0f
+    )
 
     /** Standard rounded rectangle with uniform corner rounding. */
     fun roundedRect(
@@ -783,8 +787,8 @@ object MorphPolygons {
         height: Float = 1f,
         cornerRadius: Float = 0.16f
     ) = RoundedPolygon.rectangle(
-        bounds = RectF(-width / 2f, -height / 2f, width / 2f, height / 2f),
-        cornerRadius = cornerRadius
+        rect = RectF(-width / 2f, -height / 2f, width / 2f, height / 2f),
+        rounding = CornerRounding(cornerRadius)
     )
 
     /** Rounded rectangle with different corner rounding per corner (superellipse-like). */
@@ -792,40 +796,52 @@ object MorphPolygons {
         width: Float = 1f,
         height: Float = 0.6f
     ) = RoundedPolygon.rectangle(
-        bounds = RectF(-width / 2f, -height / 2f, width / 2f, height / 2f),
-        cornerRadius = height / 2f
+        rect = RectF(-width / 2f, -height / 2f, width / 2f, height / 2f),
+        rounding = CornerRounding(height / 2f)
     )
+
+    /** Helper: creates a regular polygon with [numVertices] vertices of given [radius]. */
+    private fun regularPolygon(
+        numVertices: Int,
+        radius: Float,
+        rounding: CornerRounding
+    ): RoundedPolygon {
+        val vertices = FloatArray(numVertices * 2)
+        for (i in 0 until numVertices) {
+            val angle = 2.0 * PI * i / numVertices - PI / 2.0
+            vertices[i * 2] = (cos(angle) * radius).toFloat()
+            vertices[i * 2 + 1] = (sin(angle) * radius).toFloat()
+        }
+        return RoundedPolygon(
+            vertices = vertices,
+            perVertexRounding = List(numVertices) { rounding },
+            centerX = 0f,
+            centerY = 0f
+        )
+    }
 
     /** Hexagon shape (6 vertices). */
-    fun hexagon(radius: Float = 1f) = RoundedPolygon(
-        numVertices = 6,
-        radius = radius,
-        rounding = CornerRounding(0.08f)
-    )
+    fun hexagon(radius: Float = 1f) = regularPolygon(6, radius, CornerRounding(0.08f))
 
     /** Diamond/rhombus shape (4 vertices, rotated 45°). */
-    fun diamond(radius: Float = 1f) = RoundedPolygon(
-        numVertices = 4,
-        radius = radius,
-        rounding = CornerRounding(0.06f)
-    )
+    fun diamond(radius: Float = 1f) = regularPolygon(4, radius, CornerRounding(0.06f))
 
-    /** Star-like shape (5 vertices with inner/outer radius for star effect). */
+    /** Star-like shape (5 points with inner/outer radius for star effect). */
     fun star(
         outerRadius: Float = 1f,
         innerRadius: Float = 0.4f
     ) = RoundedPolygon.star(
-        numVertices = 5,
-        radius = outerRadius,
-        innerRadius = innerRadius
+        numVerticesPerRadius = 5,
+        innerRadius = innerRadius,
+        outerRadius = outerRadius,
+        centerX = 0f,
+        centerY = 0f,
+        innerRounding = CornerRounding(0.04f),
+        outerRounding = CornerRounding(0.08f)
     )
 
     /** Triangle (3 vertices). */
-    fun triangle(radius: Float = 1f) = RoundedPolygon(
-        numVertices = 3,
-        radius = radius,
-        rounding = CornerRounding(0.06f)
-    )
+    fun triangle(radius: Float = 1f) = regularPolygon(3, radius, CornerRounding(0.06f))
 }
 
 /**
