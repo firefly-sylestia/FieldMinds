@@ -559,6 +559,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                                 )
                                 .premiumCard(shape = RoundedCornerShape(38.dp), elevation = 6.dp)
                                 .liquidGlassRefraction()
+                                .clip(RoundedCornerShape(38.dp))
                         ) {
                             NavigationRail(
                                 header = {
@@ -658,6 +659,7 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                                 )
                                 .premiumCard(shape = RoundedCornerShape(50.dp), elevation = 8.dp)
                                 .liquidGlassRefraction()
+                                .clip(RoundedCornerShape(50.dp))
                         ) {
                             LiquidNavRow(
                                 visibleTabs = visibleTabs,
