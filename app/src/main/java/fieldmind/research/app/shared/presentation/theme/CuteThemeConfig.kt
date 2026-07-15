@@ -424,7 +424,7 @@ fun Modifier.cuteShadowAdaptive(
             shape = shape,
             ambientColor = shadowStyle.ambientColor,
             spotColor = shadowStyle.spotColor,
-            clip = false
+            clip = true
         )
     )
 }
