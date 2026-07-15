@@ -38,7 +38,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.ui.theme.glassCard
-import fieldmind.research.app.ui.theme.gradientBorder
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -201,7 +200,6 @@ fun FluidBottomSheet(
                         modifier = Modifier
                             .fillMaxWidth()
                             .glassCard(shape = sheetShape)
-                            .gradientBorder(shape = sheetShape)
                     ) {
                         Column {
                             // Grab handle

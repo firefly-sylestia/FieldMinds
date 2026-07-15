@@ -7,11 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
-import android.graphics.Color as AndroidColor
+import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RippleDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.StateListDrawable
@@ -33,13 +31,11 @@ import androidx.activity.ComponentActivity
 import kotlin.system.exitProcess
 
 /**
- * Premium Material Design 3 crash recovery UI.
+ * Clean, minimal crash recovery UI.
  *
  * Runs in :crash_process using plain Android Views — no Compose, no theme resources.
- *
- * Design follows M3 token roles with proper elevation (multi-layer shadows),
- * ripple/pressed-state feedback on all interactive elements, surface-color
- * hierarchy, and subtle entrance animations.
+ * Features a flowing single-surface design with no layered shadow boxes,
+ * soft rounded corners, and clean typography.
  */
 class FieldMindCrashActivity : ComponentActivity() {
 
@@ -50,29 +46,25 @@ class FieldMindCrashActivity : ComponentActivity() {
     }
 
     // ════════════════════════════════════════════════════════════════════
-    //  M3 Color Tokens
+    //  Color Palette
     // ════════════════════════════════════════════════════════════════════
 
-    private object M3 {
-        val primary          = 0xFF4355B9.toInt()
-        val onPrimary        = 0xFFFFFFFF.toInt() 
-        val primaryContainer = 0xFFDEE0FF.toInt()
-        val onPrimaryContainer = 0xFF001257.toInt()
-        val surface          = 0xFFFEFBFF.toInt()
-        val surfaceContainer = 0xFFF3EDF7.toInt()
-        val surfaceVariant   = 0xFFE7E0EC.toInt()
-        val onSurface        = 0xFF1C1B1F.toInt()
-        val onSurfaceVariant = 0xFF49454F.toInt()
-        val outline          = 0xFF79747E.toInt()
-        val outlineVariant   = 0xFFCAC4D0.toInt()
-        val error            = 0xFFBA1A1A.toInt()
-        val onError          = 0xFFFFFFFF.toInt()
-        val errorContainer   = 0xFFFFDAD6.toInt()
-        val onErrorContainer = 0xFF410002.toInt()
+    private object Pal {
+        val bg            = 0xFFF8F6F0.toInt()
+        val surface       = 0xFFFFFFFF.toInt()
+        val surfaceAlt    = 0xFFF0EDF4.toInt()
+        val onSurface     = 0xFF1C1B1F.toInt()
+        val onSurfaceVar  = 0xFF6B6478.toInt()
+        val primary       = 0xFF5B5FC7.toInt()
+        val onPrimary     = 0xFFFFFFFF.toInt()
+        val error         = 0xFFBA1A1A.toInt()
+        val errorSurface  = 0xFFFFF0EE.toInt()
+        val onErrorSurface = 0xFF8C001A.toInt()
+        val divider       = 0xFFE0DCE8.toInt()
     }
 
     // ════════════════════════════════════════════════════════════════════
-    //  Crash Category Detection + Metadata
+    //  Crash Category Detection
     // ════════════════════════════════════════════════════════════════════
 
     private enum class CrashCategory {
@@ -80,46 +72,44 @@ class FieldMindCrashActivity : ComponentActivity() {
     }
 
     private data class CatMeta(
-        val label: String, val recoveryDesc: String,
-        val chipText: String, val chipBg: Int, val chipTextColor: Int,
-        val isDestructive: Boolean
+        val label: String, val recoveryDesc: String, val isDestructive: Boolean
     )
 
     private fun catMeta(cat: CrashCategory): CatMeta = when (cat) {
         CrashCategory.LOCK_PIN -> CatMeta(
-            "The privacy lock or PIN system is causing this crash.",
-            "Disabling the privacy lock and PIN should let the app start normally. You can re-enable them later in Settings.",
-            "Security", M3.errorContainer, M3.onErrorContainer, true
+            "The privacy lock or PIN system caused a crash.",
+            "Disable the lock & PIN, then restart. You can re-enable them later in Settings.",
+            true
         )
         CrashCategory.DATABASE -> CatMeta(
-            "The local database or storage appears to be corrupted.",
-            "Try clearing the app cache. Your research data (observations, notes) is stored separately and will not be affected.",
-            "Storage", M3.errorContainer, M3.onErrorContainer, true
+            "The local database appears to be corrupted.",
+            "Clear the app cache and restart. Your research data is stored separately.",
+            true
         )
         CrashCategory.SETTINGS -> CatMeta(
-            "Corrupted app preferences are preventing FieldMind from starting.",
-            "Resetting all preferences to defaults should resolve this. Your field data is stored separately and preserved.",
-            "Settings", M3.errorContainer, M3.onErrorContainer, true
+            "Corrupted preferences are preventing startup.",
+            "Reset all preferences to defaults. Field data is preserved separately.",
+            true
         )
         CrashCategory.NETWORK -> CatMeta(
-            "A network or connectivity error occurred.",
-            "This is usually transient. Restarting should resolve it. If the issue persists, check your connection or API credentials.",
-            "Network", M3.primaryContainer, M3.onPrimaryContainer, false
+            "A network error occurred.",
+            "This is usually transient. Restarting should resolve it.",
+            false
         )
         CrashCategory.COMPOSE -> CatMeta(
-            "The user interface encountered a rendering error.",
-            "This is usually a one-time glitch. A restart should resolve it. Try disabling custom animations in Settings if it recurs.",
-            "UI", M3.primaryContainer, M3.onPrimaryContainer, false
+            "The UI encountered a rendering error.",
+            "A restart should fix this. Try disabling custom animations if it recurs.",
+            false
         )
         CrashCategory.OUT_OF_MEMORY -> CatMeta(
             "The device ran out of memory.",
-            "Close other apps and restart FieldMind. On older devices, reduce image quality in Capture Settings.",
-            "Memory", M3.errorContainer, M3.onErrorContainer, false
+            "Close other apps and restart. Reduce image quality in Capture Settings.",
+            false
         )
         CrashCategory.UNKNOWN -> CatMeta(
-            "The cause could not be automatically identified.",
-            "If FieldMind keeps crashing, the most common fixes are disabling the privacy lock/PIN or resetting app preferences.",
-            "Unknown", M3.surfaceVariant, M3.onSurfaceVariant, false
+            "The cause couldn't be automatically identified.",
+            "Try disabling the privacy lock/PIN or resetting app preferences.",
+            false
         )
     }
 
@@ -166,18 +156,6 @@ class FieldMindCrashActivity : ComponentActivity() {
         return "Unknown error"
     }
 
-    private fun extractExceptionMessage(crashLog: String): String {
-        for (line in crashLog.lines()) {
-            if (line.contains("Message:"))
-                return line.substringAfter("Message:").trim().ifBlank { "No details" }
-        }
-        for (line in crashLog.lines()) {
-            if (line.trimStart().startsWith("Caused by:") && line.contains(":"))
-                return line.substringAfter("Caused by:").trim()
-        }
-        return "No details available"
-    }
-
     // ════════════════════════════════════════════════════════════════════
     //  UI Renderer
     // ════════════════════════════════════════════════════════════════════
@@ -186,18 +164,18 @@ class FieldMindCrashActivity : ComponentActivity() {
         val cat = detectCrashCategory(crashLog)
         val meta = catMeta(cat)
         val excName = extractExceptionName(crashLog)
-        val excMsg = extractExceptionMessage(crashLog)
 
         fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
-        val d2 = dp(2); val d4 = dp(4); val d6 = dp(6); val d8 = dp(8); val d10 = dp(10)
-        val d12 = dp(12); val d16 = dp(16); val d20 = dp(20); val d24 = dp(24)
+        val d4 = dp(4); val d6 = dp(6); val d8 = dp(8); val d10 = dp(10); val d12 = dp(12)
+        val d16 = dp(16); val d18 = dp(18); val d20 = dp(20); val d24 = dp(24)
         val d28 = dp(28); val d32 = dp(32); val d36 = dp(36); val d40 = dp(40)
-        val d48 = dp(48); val d52 = dp(52); val d56 = dp(56); val d64 = dp(64); val d72 = dp(72)
+        val d48 = dp(48); val d52 = dp(52); val d56 = dp(56); val d64 = dp(64)
 
         val navBarH = navBarHeight()
 
+        // ── Root scroll container ──
         val scroll = ScrollView(this).apply {
-            setBackgroundColor(M3.surfaceContainer)
+            setBackgroundColor(Pal.bg)
             setPadding(0, statusBarH(), 0, 0)
             isVerticalScrollBarEnabled = false
             isFillViewport = true
@@ -205,229 +183,220 @@ class FieldMindCrashActivity : ComponentActivity() {
 
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(d16, d20, d16, d24 + navBarH)
+            setPadding(d20, d24, d20, d32 + navBarH)
         }
 
         // ═══════════════════════════════════════════════════════════════
-        //  1. HERO CARD
+        //  HERO SECTION — clean, centered, no card box
         // ═══════════════════════════════════════════════════════════════
-        val heroCard = m3ElevatedCard(M3.surface, d28, elevationDp = 6).apply {
+        val heroSection = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
-            setPadding(d24, d28, d24, d24)
         }
-        // Warning icon with gradient ring
+
+        // Warning icon — soft circular background, no shadow rings
         val iconContainer = LinearLayout(this).apply { gravity = Gravity.CENTER }
-        val iconSize = d72
-        iconContainer.addView(TextView(this).apply {
-            text = "\u26A0\uFE0F"
-            textSize = 32f; gravity = Gravity.CENTER
-            layoutParams = LinearLayout.LayoutParams(iconSize, iconSize)
-            background = iconCircleBg(M3.errorContainer)
+        iconContainer.addView(textView("\u26A0\uFE0F", 36f, Pal.onSurface, center = true).apply {
+            layoutParams = LinearLayout.LayoutParams(d64, d64)
+            gravity = Gravity.CENTER
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL; setColor(Pal.surfaceAlt)
+            }
         })
-        heroCard.addView(iconContainer)
-        heroCard.addView(spaceY(d16))
+        heroSection.addView(iconContainer)
+        heroSection.addView(spaceY(d16))
 
-        // Title
-        heroCard.addView(tv("FieldMind stopped unexpectedly", 22f, M3.onSurface, bold = true, center = true))
-        heroCard.addView(spaceY(d8))
+        // App name
+        heroSection.addView(textView("FieldMind", 28f, Pal.onSurface, bold = true, center = true))
+        heroSection.addView(spaceY(d6))
 
-        // Subtitle
-        heroCard.addView(tv(meta.label, 14f, M3.onSurfaceVariant, center = true).apply {
-            setPadding(d16, 0, d16, 0); setLineSpacing(4f, 1f)
-        })
-        heroCard.addView(spaceY(d12))
+        // Crash label
+        heroSection.addView(textView("Stopped unexpectedly", 16f, Pal.onSurfaceVar, center = true))
+        heroSection.addView(spaceY(d6))
 
-        // Category chip
-        val chipRow = LinearLayout(this).apply { gravity = Gravity.CENTER }
-        chipRow.addView(m3Chip(meta.chipText, meta.chipBg, meta.chipTextColor))
-        heroCard.addView(chipRow)
+        // Category label — soft pill chip
+        val catLabel = when (cat) {
+            CrashCategory.LOCK_PIN -> "Security"
+            CrashCategory.DATABASE -> "Storage"
+            CrashCategory.SETTINGS -> "Settings"
+            CrashCategory.NETWORK -> "Network"
+            CrashCategory.COMPOSE -> "UI"
+            CrashCategory.OUT_OF_MEMORY -> "Memory"
+            CrashCategory.UNKNOWN -> "Unknown"
+        }
+        heroSection.addView(chipView(catLabel, Pal.surfaceAlt, Pal.onSurfaceVar))
 
-        root.addView(heroCard)
-        root.addView(spaceY(d16))
+        root.addView(heroSection)
+        root.addView(spaceY(d28))
 
         // ═══════════════════════════════════════════════════════════════
-        //  2. DETAILS CARD
+        //  DETAILS SECTION — single clean surface, no shadow box
         // ═══════════════════════════════════════════════════════════════
-        val expanded = booleanArrayOf(false)
-        val detailsCard = m3ElevatedCard(M3.surface, d28, elevationDp = 3).apply {
+        val detailsSection = roundedSurface(Pal.surface, d28).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(d20, d20, d20, d20)
+            setPadding(d24, d20, d24, d20)
         }
 
-        // Header row with Copy button
-        val hdr = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-        hdr.addView(tv("Crash details", 16f, M3.onSurface, bold = true).apply {
-            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+        // Section title
+        detailsSection.addView(textView("What happened", 15f, Pal.onSurface, bold = true))
+        detailsSection.addView(spaceY(d8))
+
+        // Crash description
+        detailsSection.addView(textView(meta.label, 14f, Pal.onSurfaceVar).apply {
+            setLineSpacing(4f, 1f)
         })
-        hdr.addView(m3RippleTextBtn("Copy", M3.primary).apply {
+        detailsSection.addView(spaceY(d12))
+
+        // Exception name chip
+        detailsSection.addView(chipView(excName, Pal.surfaceAlt, Pal.primary))
+        detailsSection.addView(spaceY(d12))
+
+        // Divider
+        detailsSection.addView(dividerView())
+        detailsSection.addView(spaceY(d10))
+
+        // Action row: Copy + Share
+        val actionRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+        }
+        actionRow.addView(flatButton("Copy report").apply {
             setOnClickListener { copyCrashLog(crashLog) }
+            layoutParams = LinearLayout.LayoutParams(0, d48, 1f).apply { marginEnd = d8 }
         })
-        detailsCard.addView(hdr)
-        detailsCard.addView(spaceY(d12))
-
-        // Exception chip
-        detailsCard.addView(m3Chip(excName, M3.surfaceVariant, M3.onSurfaceVariant))
-        detailsCard.addView(spaceY(d8))
-
-        // Exception message
-        detailsCard.addView(tv(excMsg.ifBlank { "No additional details" }, 13f, M3.onSurfaceVariant).apply {
-            maxLines = 2; setLineSpacing(3f, 1f)
+        actionRow.addView(flatButton("Share").apply {
+            setOnClickListener { shareCrashLog(crashLog) }
+            layoutParams = LinearLayout.LayoutParams(0, d48, 1f)
         })
-        detailsCard.addView(spaceY(d8))
+        detailsSection.addView(actionRow)
+        detailsSection.addView(spaceY(d10))
 
-        // Divider + toggle
-        detailsCard.addView(m3Divider())
-        detailsCard.addView(spaceY(d6))
-
-        val toggle = m3RippleTextBtn("Show full report", M3.primary)
-        val fullLog = tv(crashLog, 11f, M3.onSurface).apply {
+        // Expandable full log
+        val expanded = booleanArrayOf(false)
+        val fullLog = textView(crashLog, 11f, Pal.onSurfaceVar).apply {
             typeface = Typeface.MONOSPACE; setLineSpacing(2f, 1f); setTextIsSelectable(true)
-            background = GradientDrawable().apply { setColor(M3.surfaceVariant); cornerRadius = d12.toFloat() }
+            background = GradientDrawable().apply { setColor(Pal.surfaceAlt); cornerRadius = d12.toFloat() }
             setPadding(d16, d16, d16, d16); visibility = View.GONE
         }
-        toggle.setOnClickListener {
-            expanded[0] = !expanded[0]
-            toggle.text = if (expanded[0]) "Hide full report" else "Show full report"
-            fullLog.visibility = if (expanded[0]) View.VISIBLE else View.GONE
+        val toggleBtn = textView("Show full report", 13f, Pal.primary, bold = true, center = true).apply {
+            setPadding(d12, d12, d12, d12)
+            background = rippleBg(d16, Pal.primary)
+            isClickable = true; isFocusable = true
+            setOnClickListener {
+                expanded[0] = !expanded[0]
+                text = if (expanded[0]) "Hide full report" else "Show full report"
+                fullLog.visibility = if (expanded[0]) View.VISIBLE else View.GONE
+            }
         }
-        val tglRow = LinearLayout(this).apply { gravity = Gravity.CENTER }
-        tglRow.addView(toggle)
-        detailsCard.addView(tglRow)
-        detailsCard.addView(fullLog)
-        detailsCard.addView(spaceY(d12))
+        detailsSection.addView(toggleBtn)
+        detailsSection.addView(fullLog)
 
-        // Share button
-        detailsCard.addView(m3OutlinedButton("Share report").apply {
-            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, d48)
-            setOnClickListener { shareCrashLog(crashLog) }
-        })
-
-        root.addView(detailsCard)
+        root.addView(detailsSection)
         root.addView(spaceY(d16))
 
         // ═══════════════════════════════════════════════════════════════
-        //  3. RECOVERY CARD
+        //  RECOVERY SECTION
         // ═══════════════════════════════════════════════════════════════
-        val recoveryCard = m3ElevatedCard(M3.surface, d28, elevationDp = 3).apply {
-            orientation = LinearLayout.VERTICAL; setPadding(d20, d20, d20, d20)
+        val recoverySection = roundedSurface(Pal.surface, d28).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(d24, d20, d24, d20)
         }
 
-        recoveryCard.addView(tv("Recovery options", 16f, M3.onSurface, bold = true))
-        recoveryCard.addView(spaceY(d8))
-        recoveryCard.addView(tv(meta.recoveryDesc, 13f, M3.onSurfaceVariant).apply {
-            setLineSpacing(4f, 1f); setPadding(0, 0, 0, d16)
+        recoverySection.addView(textView("Recovery", 15f, Pal.onSurface, bold = true))
+        recoverySection.addView(spaceY(d6))
+        recoverySection.addView(textView(meta.recoveryDesc, 14f, Pal.onSurfaceVar).apply {
+            setLineSpacing(4f, 1f); setPadding(0, 0, 0, d10)
         })
+        recoverySection.addView(spaceY(d8))
 
         // Primary action
         when (cat) {
             CrashCategory.LOCK_PIN ->
-                recoveryCard.addView(m3FilledButton("Disable lock & PIN, then restart", M3.error, M3.onError).apply {
-                    layoutParams = btnLp(d56, d10)
+                recoverySection.addView(pillButton("Disable lock & PIN, restart", Pal.error, Pal.onPrimary).apply {
+                    layoutParams = btnLp(d52, d10)
                     setOnClickListener { showLockDisableConfirmDialog() }
                 })
             CrashCategory.SETTINGS ->
-                recoveryCard.addView(m3FilledButton("Reset settings & restart", M3.error, M3.onError).apply {
-                    layoutParams = btnLp(d56, d10)
+                recoverySection.addView(pillButton("Reset settings & restart", Pal.error, Pal.onPrimary).apply {
+                    layoutParams = btnLp(d52, d10)
                     setOnClickListener { showSettingsResetConfirmDialog() }
                 })
             CrashCategory.DATABASE ->
-                recoveryCard.addView(m3FilledButton("Clear cache & restart", M3.error, M3.onError).apply {
-                    layoutParams = btnLp(d56, d10)
+                recoverySection.addView(pillButton("Clear cache & restart", Pal.error, Pal.onPrimary).apply {
+                    layoutParams = btnLp(d52, d10)
                     setOnClickListener { runCatching { cacheDir.deleteRecursively() }; restartApp() }
                 })
             else ->
-                recoveryCard.addView(m3FilledButton("Restart").apply {
-                    layoutParams = btnLp(d56, d10)
+                recoverySection.addView(pillButton("Restart app", Pal.primary, Pal.onPrimary).apply {
+                    layoutParams = btnLp(d52, d10)
                     setOnClickListener { restartApp() }
                 })
         }
 
-        // Secondary: disable lock
+        // Secondary actions
         if (cat != CrashCategory.LOCK_PIN) {
-            recoveryCard.addView(m3OutlinedButton("Disable lock & PIN, restart").apply {
-                layoutParams = btnLp(d52, d8)
+            recoverySection.addView(outlineButton("Disable lock & PIN, restart").apply {
+                layoutParams = btnLp(d48, d8)
                 setOnClickListener { showLockDisableConfirmDialog() }
             })
         }
-
-        // Tertiary: plain restart
         if (cat == CrashCategory.SETTINGS || cat == CrashCategory.DATABASE || cat == CrashCategory.LOCK_PIN) {
-            recoveryCard.addView(m3TextButton("Restart").apply {
-                layoutParams = btnLp(d48)
+            recoverySection.addView(textButton("Just restart").apply {
+                layoutParams = btnLp(d44, d6)
                 setOnClickListener { restartApp() }
             })
         }
 
-        root.addView(recoveryCard)
-        root.addView(spaceY(d24))
+        root.addView(recoverySection)
+        root.addView(spaceY(d28))
 
         // ═══════════════════════════════════════════════════════════════
-        //  4. FOOTER
+        //  FOOTER
         // ═══════════════════════════════════════════════════════════════
-        root.addView(tv("Your research data is safe \u2014 observations, notes, and projects are fully preserved.", 12f, M3.onSurfaceVariant, center = true).apply {
-            alpha = 0.65f; setPadding(d24, 0, d24, d6)
-        })
+        root.addView(textView(
+            "Your research data is safe — observations, notes, and projects are fully preserved.",
+            12f, Pal.onSurfaceVar, center = true
+        ).apply { alpha = 0.65f; setPadding(d24, 0, d24, d6) })
+
         val ver = runCatching { packageManager.getPackageInfo(packageName, 0).versionName }.getOrDefault("")
-        root.addView(tv("FieldMind \u2022 v$ver", 11f, M3.onSurfaceVariant, center = true).apply {
-            alpha = 0.45f; setPadding(0, 0, 0, d16)
+        root.addView(textView("FieldMind · v$ver", 11f, Pal.onSurfaceVar, center = true).apply {
+            alpha = 0.4f; setPadding(0, 0, 0, d16)
         })
 
         scroll.addView(root)
         setContentView(scroll)
 
-        // ── Entrance animations ──
-        animateCardEntrance(heroCard, 0)
-        animateCardEntrance(detailsCard, 80)
-        animateCardEntrance(recoveryCard, 160)
+        // Entrance animation
+        root.alpha = 0f
+        root.translationY = dp(20).toFloat()
+        root.animate()
+            .alpha(1f).translationY(0f)
+            .setDuration(300).setStartDelay(50)
+            .setInterpolator(DecelerateInterpolator(2f))
+            .start()
     }
 
     // ════════════════════════════════════════════════════════════════════
-    //  Premium M3 View Builders
+    //  View Builders — clean, minimal, no box shadows
     // ════════════════════════════════════════════════════════════════════
 
-    /** Multi-layer elevated card with realistic M3 shadow depth. */
-    private fun m3ElevatedCard(bg: Int, radius: Int, elevationDp: Int): LinearLayout {
-        val elev = dp(elevationDp)
-        val r = radius.toFloat()
-        return LinearLayout(this).apply {
-            background = LayerDrawable(arrayOf(
-                // Layer 0: ambient shadow (soft, wide)
-                GradientDrawable().apply {
-                    setColor(0x0A000000); cornerRadius = r
-                },
-                // Layer 1: penumbra shadow
-                GradientDrawable().apply {
-                    setColor(0x08000000); cornerRadius = r
-                },
-                // Layer 2: umbra shadow (tight, darkest)
-                GradientDrawable().apply {
-                    setColor(0x0C000000); cornerRadius = r
-                },
-                // Layer 3: surface
-                GradientDrawable().apply {
-                    setColor(bg); cornerRadius = r
-                }
-            )).apply {
-                // ambient shadow: fills full bounds at bottom
-                setLayerInset(0, 0, 0, 0, 0)
-                // penumbra: slightly inset all around
-                setLayerInset(1, 0, elev / 3, 0, elev / 3)
-                // umbra: tightest, darkest at bottom
-                setLayerInset(2, 0, elev / 2, 0, elev / 2)
-                // surface: shifted up to reveal layered shadows below
-                setLayerInset(3, 0, 0, 0, elev)
-            }
-            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    /** Simple rounded surface with solid background — no layered shadows. */
+    private fun roundedSurface(bg: Int, radius: Int): LinearLayout =
+        LinearLayout(this).apply {
+            background = GradientDrawable().apply { setColor(bg); cornerRadius = radius.toFloat() }
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            )
         }
-    }
 
-    /** Filled button with ripple and pressed-state feedback. */
-    private fun m3FilledButton(text: String, bg: Int = M3.primary, textColor: Int = M3.onPrimary): Button {
+    /** Pill-shaped filled button. */
+    private fun pillButton(text: String, bg: Int, textColor: Int): Button {
         val radius = dp(28).toFloat()
-        val rrs = RoundRectShape(floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius), null, null)
+        val rrs = RoundRectShape(
+            floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius), null, null
+        )
         val normal = GradientDrawable().apply { setColor(bg); cornerRadius = radius }
-        val pressed = GradientDrawable().apply { setColor(blendWithWhite(bg, 0.12f)); cornerRadius = radius }
+        val pressed = GradientDrawable().apply { setColor(blendBlack(bg, 0.15f)); cornerRadius = radius }
 
         return Button(this).apply {
             this.text = text; setTextColor(textColor); textSize = 14f
@@ -435,101 +404,121 @@ class FieldMindCrashActivity : ComponentActivity() {
             minHeight = 0; minimumHeight = 0
             setPadding(dp(24), dp(14), dp(24), dp(14))
             background = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                RippleDrawable(ColorStateList.valueOf(AndroidColor.WHITE), stateList(normal, pressed), ShapeDrawable(rrs))
-            } else {
-                stateList(normal, pressed)
-            }
+                RippleDrawable(
+                    ColorStateList.valueOf(AndroidColor.WHITE),
+                    stateListDrawable(normal, pressed),
+                    ShapeDrawable(rrs)
+                )
+            } else stateListDrawable(normal, pressed)
         }
     }
 
-    /** Outlined button with ripple and pressed-state feedback. */
-    private fun m3OutlinedButton(text: String, textColor: Int = M3.primary, borderColor: Int = M3.outline): Button {
+    /** Outlined pill button. */
+    private fun outlineButton(text: String): Button {
         val radius = dp(28).toFloat()
-        val rrs = RoundRectShape(floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius), null, null)
+        val rrs = RoundRectShape(
+            floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius), null, null
+        )
         val strokeW = dp(1)
-        val normal = GradientDrawable().apply { setColor(AndroidColor.TRANSPARENT); cornerRadius = radius; setStroke(strokeW, borderColor) }
-        val pressed = GradientDrawable().apply { setColor(textColor and 0x00FFFFFF or 0x0A000000); cornerRadius = radius; setStroke(strokeW, borderColor) }
+        val normal = GradientDrawable().apply {
+            setColor(AndroidColor.TRANSPARENT); cornerRadius = radius; setStroke(strokeW, Pal.divider)
+        }
+        val pressed = GradientDrawable().apply {
+            setColor(0x08000000); cornerRadius = radius; setStroke(strokeW, Pal.divider)
+        }
 
         return Button(this).apply {
-            this.text = text; setTextColor(textColor); textSize = 14f
+            this.text = text; setTextColor(Pal.onSurface); textSize = 14f
             typeface = Typeface.DEFAULT_BOLD; setAllCaps(false); gravity = Gravity.CENTER
             minHeight = 0; minimumHeight = 0
-            setPadding(dp(24), dp(14), dp(24), dp(14))
+            setPadding(dp(24), dp(12), dp(24), dp(12))
             background = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                RippleDrawable(ColorStateList.valueOf(textColor and 0x00FFFFFF or 0x20000000), stateList(normal, pressed), ShapeDrawable(rrs))
-            } else {
-                stateList(normal, pressed)
-            }
+                RippleDrawable(
+                    ColorStateList.valueOf(0x20000000.toInt()),
+                    stateListDrawable(normal, pressed),
+                    ShapeDrawable(rrs)
+                )
+            } else stateListDrawable(normal, pressed)
         }
     }
 
-    /** Text button with ripple and pressed-state feedback. */
-    private fun m3TextButton(text: String, color: Int = M3.primary): Button {
+    /** Text-only button. */
+    private fun textButton(text: String): Button {
         val radius = dp(20).toFloat()
-        val rrs = RoundRectShape(floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius), null, null)
-        val normal = ColorDrawable(AndroidColor.TRANSPARENT)
-        val pressed = ColorDrawable(color and 0x00FFFFFF or 0x0A000000)
+        val rrs = RoundRectShape(
+            floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius), null, null
+        )
+        val normal = GradientDrawable().apply { setColor(AndroidColor.TRANSPARENT) }
+        val pressed = GradientDrawable().apply { setColor(0x08000000) }
 
         return Button(this).apply {
-            this.text = text; setTextColor(color); textSize = 14f
+            this.text = text; setTextColor(Pal.primary); textSize = 13f
+            typeface = Typeface.DEFAULT_BOLD; setAllCaps(false); gravity = Gravity.CENTER
+            minHeight = 0; minimumHeight = 0
+            setPadding(dp(16), dp(8), dp(16), dp(8))
+            background = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                RippleDrawable(
+                    ColorStateList.valueOf(Pal.primary and 0x00FFFFFF or 0x1A000000),
+                    stateListDrawable(normal, pressed),
+                    ShapeDrawable(rrs)
+                )
+            } else stateListDrawable(normal, pressed)
+        }
+    }
+
+    /** Flat action button (outlined style, compact). */
+    private fun flatButton(text: String): Button {
+        val radius = dp(16).toFloat()
+        val rrs = RoundRectShape(
+            floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius), null, null
+        )
+        val normal = GradientDrawable().apply {
+            setColor(Pal.surfaceAlt); cornerRadius = radius
+        }
+        val pressed = GradientDrawable().apply {
+            setColor(Pal.divider); cornerRadius = radius
+        }
+
+        return Button(this).apply {
+            this.text = text; setTextColor(Pal.onSurface); textSize = 13f
             typeface = Typeface.DEFAULT_BOLD; setAllCaps(false); gravity = Gravity.CENTER
             minHeight = 0; minimumHeight = 0
             setPadding(dp(16), dp(10), dp(16), dp(10))
             background = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                RippleDrawable(ColorStateList.valueOf(color and 0x00FFFFFF or 0x1A000000), stateList(normal, pressed), ShapeDrawable(rrs))
-            } else {
-                stateList(normal, pressed)
-            }
+                RippleDrawable(
+                    ColorStateList.valueOf(Pal.primary and 0x00FFFFFF or 0x20000000),
+                    stateListDrawable(normal, pressed),
+                    ShapeDrawable(rrs)
+                )
+            } else stateListDrawable(normal, pressed)
         }
     }
 
-    /** Compact ripple-bg text button (used for Copy/Show full report). */
-    private fun m3RippleTextBtn(text: String, color: Int): TextView {
-        val radius = dp(16).toFloat()
-        val rrs = RoundRectShape(floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius), null, null)
-        val normal = GradientDrawable().apply { setColor(color and 0x00FFFFFF or 0x0A000000); cornerRadius = radius }
-        val pressed = GradientDrawable().apply { setColor(color and 0x00FFFFFF or 0x18000000); cornerRadius = radius }
-
-        return TextView(this).apply {
-            this.text = text; setTextColor(color); textSize = 13f
-            typeface = Typeface.DEFAULT_BOLD
-            setPadding(dp(12), dp(6), dp(12), dp(6))
-            isClickable = true; isFocusable = true
-            background = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                RippleDrawable(ColorStateList.valueOf(color and 0x00FFFFFF or 0x20000000), stateList(normal, pressed), ShapeDrawable(rrs))
-            } else {
-                stateList(normal, pressed)
-            }
+    /** Chip / badge label. */
+    private fun chipView(text: String, bg: Int, textColor: Int): TextView =
+        textView(text, 12f, textColor, bold = true, center = true).apply {
+            setPadding(dp(16), dp(6), dp(16), dp(6))
+            background = GradientDrawable().apply { setColor(bg); cornerRadius = dp(20).toFloat() }
         }
+
+    /** Thin divider. */
+    private fun dividerView(): View = View(this).apply {
+        layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(1))
+        setBackgroundColor(Pal.divider)
     }
 
-    /** Category chip with rounded background. */
-    private fun m3Chip(text: String, bg: Int, textColor: Int): TextView = TextView(this).apply {
-        this.text = text; setTextColor(textColor); textSize = 12f
-        typeface = Typeface.DEFAULT_BOLD; setPadding(dp(16), dp(6), dp(16), dp(6))
-        background = GradientDrawable().apply { setColor(bg); cornerRadius = dp(20).toFloat() }
-    }
+    /** Ripple background for text-like buttons. */
+    private fun rippleBg(radius: Int, color: Int): GradientDrawable =
+        GradientDrawable().apply { setColor(color and 0x00FFFFFF or 0x08000000); cornerRadius = radius.toFloat() }
 
-    /** Warning icon circle with subtle inner ring. */
-    private fun iconCircleBg(fillColor: Int): GradientDrawable = GradientDrawable().apply {
-        shape = GradientDrawable.OVAL; setColor(fillColor)
-        setStroke(dp(2), fillColor and 0x00FFFFFF or 0x30000000)
+    private fun textView(
+        text: String, size: Float, color: Int,
+        bold: Boolean = false, center: Boolean = false
+    ): TextView = TextView(this).apply {
+        this.text = text; setTextColor(color); textSize = size
+        if (bold) typeface = Typeface.DEFAULT_BOLD
+        if (center) gravity = Gravity.CENTER
     }
-
-    /** Thin M3 divider. */
-    private fun m3Divider(): View = View(this).apply {
-        layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(1)).apply {
-            topMargin = dp(4); bottomMargin = dp(4)
-        }
-        setBackgroundColor(M3.outlineVariant)
-    }
-
-    private fun tv(text: String, size: Float, color: Int, bold: Boolean = false, center: Boolean = false): TextView =
-        TextView(this).apply {
-            this.text = text; setTextColor(color); textSize = size
-            if (bold) typeface = Typeface.DEFAULT_BOLD
-            if (center) gravity = Gravity.CENTER
-        }
 
     private fun spaceY(h: Int): View = View(this).apply {
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, h)
@@ -538,36 +527,30 @@ class FieldMindCrashActivity : ComponentActivity() {
     private fun btnLp(btnH: Int, marginB: Int = 0) =
         LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, btnH).apply { bottomMargin = marginB }
 
-    /** StateListDrawable with pressed/unpressed states. */
-    private fun stateList(normal: android.graphics.drawable.Drawable, pressed: android.graphics.drawable.Drawable): StateListDrawable =
-        StateListDrawable().apply {
-            addState(intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled), pressed)
-            addState(intArrayOf(android.R.attr.state_enabled), normal)
-        }
-
-    /** Blend a color with white at a given ratio (0–1). */
-    private fun blendWithWhite(color: Int, ratio: Float): Int {
-        val r = ((color shr 16) and 0xFF) + ((255 - ((color shr 16) and 0xFF)) * ratio).toInt()
-        val g = ((color shr 8) and 0xFF) + ((255 - ((color shr 8) and 0xFF)) * ratio).toInt()
-        val b = (color and 0xFF) + ((255 - (color and 0xFF)) * ratio).toInt()
-        return (0xFF shl 24) or (r shl 16) or (g shl 8) or b
+    private fun stateListDrawable(
+        normal: android.graphics.drawable.Drawable,
+        pressed: android.graphics.drawable.Drawable
+    ): StateListDrawable = StateListDrawable().apply {
+        addState(intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled), pressed)
+        addState(intArrayOf(android.R.attr.state_enabled), normal)
     }
 
-    /** Animate a card view entrance: fade up from below. */
-    private fun animateCardEntrance(view: View, delayMs: Long) {
-        view.alpha = 0f; view.translationY = dp(24).toFloat()
-        view.animate()
-            .alpha(1f).translationY(0f)
-            .setDuration(350).setStartDelay(delayMs)
-            .setInterpolator(DecelerateInterpolator(2f))
-            .start()
+    private fun blendBlack(color: Int, ratio: Float): Int {
+        val r = ((color shr 16) and 0xFF) * (1f - ratio)
+        val g = ((color shr 8) and 0xFF) * (1f - ratio)
+        val b = (color and 0xFF) * (1f - ratio)
+        return (0xFF shl 24) or (r.toInt() shl 16) or (g.toInt() shl 8) or b.toInt()
     }
 
-    private fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
+    private fun dp(v: Int) = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics
+    ).toInt()
+
     private fun statusBarH(): Int {
         val id = resources.getIdentifier("status_bar_height", "dimen", "android")
         return if (id > 0) resources.getDimensionPixelSize(id) else dp(24)
     }
+
     private fun navBarHeight(): Int {
         val id = resources.getIdentifier("navigation_bar_height", "dimen", "android")
         return if (id > 0) resources.getDimensionPixelSize(id) else dp(48)
@@ -580,7 +563,7 @@ class FieldMindCrashActivity : ComponentActivity() {
     private fun showLockDisableConfirmDialog() {
         AlertDialog.Builder(this)
             .setTitle("Disable lock & PIN?")
-            .setMessage("This will disable the privacy lock, app PIN, decoy PIN, panic-lock, biometric settings, and export password protection.\n\nYour research data will NOT be affected. You can re-enable these in Settings after the app restarts.")
+            .setMessage("This will disable the privacy lock, app PIN, decoy PIN, panic-lock, biometric settings, and export password protection.\n\nYour research data will NOT be affected. You can re-enable these in Settings.")
             .setPositiveButton("Disable & restart") { _, _ -> disableSecurityAndRestart() }
             .setNegativeButton("Cancel", null).show()
     }
@@ -602,7 +585,11 @@ class FieldMindCrashActivity : ComponentActivity() {
     private fun shareCrashLog(crashLog: String) {
         runCatching {
             startActivity(Intent.createChooser(
-                Intent(Intent.ACTION_SEND).apply { type = "text/plain"; putExtra(Intent.EXTRA_SUBJECT, "FieldMind Crash Report"); putExtra(Intent.EXTRA_TEXT, crashLog) },
+                Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, "FieldMind Crash Report")
+                    putExtra(Intent.EXTRA_TEXT, crashLog)
+                },
                 "Share crash report"
             ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }.onFailure { copyCrashLog(crashLog) }
@@ -618,7 +605,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                 .putString(KEY_DECOY_PIN_LABEL, "").putString(KEY_EXPORT_PASSWORD_HASH, "")
                 .commit()
         }.onFailure { Log.e(TAG, "Failed to disable security", it) }
-        Toast.makeText(this, "Lock & PIN disabled. Restarting\u2026", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Lock & PIN disabled. Restarting…", Toast.LENGTH_SHORT).show()
         restartApp()
     }
 
@@ -628,7 +615,7 @@ class FieldMindCrashActivity : ComponentActivity() {
             getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
                 .putBoolean(KEY_PRIVACY_LOCK, false).putBoolean(KEY_APP_PIN_ENABLED, false).commit()
         }.onFailure { Log.e(TAG, "Failed to reset settings", it) }
-        Toast.makeText(this, "Settings reset. Restarting\u2026", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Settings reset. Restarting…", Toast.LENGTH_SHORT).show()
         restartApp()
     }
 

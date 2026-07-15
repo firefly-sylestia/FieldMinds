@@ -23,7 +23,6 @@ import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.glassCard
-import fieldmind.research.app.ui.theme.gradientBorder
 
 // ══════════════════════════════════════════════════════════════════════
 //  Species Detail Bottom Sheet — Full species info for observation form
@@ -57,8 +56,7 @@ fun SpeciesDetailSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .glassCard(shape = sheetShape)
-                    .gradientBorder(shape = sheetShape),
+                    .glassCard(shape = sheetShape),
                 shape = sheetShape,
                 color = Color.Transparent,
                 tonalElevation = 0.dp
@@ -148,7 +146,7 @@ fun SpeciesDetailSheet(
                                 shape = CuteCardDefaults.ShapeCompact,
                                 colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                modifier = Modifier.weight(1f).glassCard(shape = CuteCardDefaults.ShapeCompact).gradientBorder(shape = CuteCardDefaults.ShapeCompact)
+                                modifier = Modifier.weight(1f).glassCard(shape = CuteCardDefaults.ShapeCompact)
                             ) {
                                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                     Icon(FieldMindIcons.Nature, null, tint = accent, size = 20.dp)
@@ -162,7 +160,7 @@ fun SpeciesDetailSheet(
                                 shape = CuteCardDefaults.ShapeCompact,
                                 colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                modifier = Modifier.weight(1f).glassCard(shape = CuteCardDefaults.ShapeCompact).gradientBorder(shape = CuteCardDefaults.ShapeCompact)
+                                modifier = Modifier.weight(1f).glassCard(shape = CuteCardDefaults.ShapeCompact)
                             ) {
                                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                     Icon(FieldMindIcons.Water, null, tint = accent, size = 20.dp)
@@ -237,7 +235,7 @@ fun TaxonomySection(
         shape = CuteCardDefaults.OptionShape,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier.fillMaxWidth().glassCard(shape = CuteCardDefaults.OptionShape).gradientBorder(shape = CuteCardDefaults.OptionShape)
+        modifier = Modifier.fillMaxWidth().glassCard(shape = CuteCardDefaults.OptionShape)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(

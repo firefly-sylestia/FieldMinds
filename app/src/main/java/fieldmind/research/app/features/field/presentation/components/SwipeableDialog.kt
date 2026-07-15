@@ -42,7 +42,6 @@ import androidx.compose.ui.window.DialogProperties
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import fieldmind.research.app.ui.theme.glassCard
-import fieldmind.research.app.ui.theme.gradientBorder
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -156,7 +155,6 @@ fun SwipeableAlertDialog(
                         this.alpha = contentAlpha.coerceIn(0.3f, 1f)
                     }
                     .glassCard(shape = shape)
-                    .gradientBorder(shape = shape)
                     .then(
                         if (!reduceMotion) {
                             Modifier.pointerInput(Unit) {

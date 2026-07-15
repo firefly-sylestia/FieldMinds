@@ -23,17 +23,15 @@ import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeEffect
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
-import fieldmind.research.app.ui.theme.gradientBorder
 
 /** CompositionLocal for Haze backdrop blur. */
 val LocalHazeState = staticCompositionLocalOf<HazeState?> { null }
 
 /**
- * A glassmorphism card with real backdrop blur via Haze + luminous gradient border.
+ * A glassmorphism card with real backdrop blur via Haze.
  *
  * When [LocalHazeState] is provided, renders with GPU-accelerated backdrop blur.
  * Otherwise falls back to a semi-transparent frosted style.
- * The [gradientBorder] adds a subtle luminous edge at the top-left corner.
  */
 @Composable
 fun GlassCard(
@@ -62,12 +60,10 @@ fun GlassCard(
                     tints = listOf(HazeTint(color = glassColor))
                 )
             )
-            .gradientBorder(shape = shape)
     } else {
         modifier
             .fillMaxWidth()
             .clip(shape)
-            .gradientBorder(shape = shape)
     }
 
     val cardColor = if (hazeState != null) Color.Transparent else glassColor

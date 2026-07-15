@@ -34,7 +34,6 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.glassCard
-import fieldmind.research.app.ui.theme.gradientBorder
 
 // ══════════════════════════════════════════════════════════════════════
 //  SettingsGroupCard — Card with gradient background
@@ -55,8 +54,7 @@ fun SettingsGroupCard(content: @Composable ColumnScope.() -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .cuteShadow()
-            .glassCard(shape = shape)
-            .gradientBorder(shape = shape),
+            .glassCard(shape = shape),
         shape = shape,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)

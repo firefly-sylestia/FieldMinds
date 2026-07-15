@@ -79,7 +79,6 @@ import fieldmind.research.app.features.field.presentation.components.withPrivacy
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.glassCard
-import fieldmind.research.app.ui.theme.gradientBorder
 // JournalDecorations.kt lives in the same package: journalBorderStroke,
 // JournalDivider are all reachable without an import.
 // FieldMindIcons is in the same package (components.FieldMindIcons)
@@ -572,8 +571,7 @@ fun FieldScreenHeader(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .glassCard(shape = shape)
-            .gradientBorder(shape = shape),
+            .glassCard(shape = shape),
         shape = shape,
         color = Color.Transparent,
         tonalElevation = 0.dp,
@@ -689,8 +687,7 @@ fun StandardScreenHeader(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .glassCard(shape = shape)
-            .gradientBorder(shape = shape),
+            .glassCard(shape = shape),
         shape = shape,
         color = Color.Transparent,
         tonalElevation = 0.dp,

@@ -469,12 +469,10 @@ fun Modifier.glassCard(
     val isDark = FieldMindTheme.colors.isDark
     val surfaceColor = MaterialTheme.colorScheme.surface
     val glowColor = if (isDark) Color.White.copy(alpha = 0.08f) else Color.White.copy(alpha = 0.6f)
-    val borderColor = if (isDark) Color.White.copy(alpha = 0.10f) else Color.White.copy(alpha = 0.35f)
 
     this
         .clip(shape)
         .background(surfaceColor.copy(alpha = alpha), shape)
-        .border(0.5.dp, borderColor, shape)
         .background(
             Brush.linearGradient(
                 colors = listOf(glowColor, Color.Transparent),
@@ -528,4 +526,3 @@ fun Modifier.premiumCard(
 ): Modifier = this
     .cuteShadow(elevation = elevation, shape = shape)
     .glassCard(shape = shape)
-    .gradientBorder(shape = shape)

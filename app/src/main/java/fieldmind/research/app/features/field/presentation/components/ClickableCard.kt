@@ -18,13 +18,12 @@ import androidx.compose.ui.unit.dp
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.glassCard
-import fieldmind.research.app.ui.theme.gradientBorder
 
 /**
  * A clickable card with built-in [expressiveCardPress] animation (lift + scale),
- * glassmorphic frosted-glass surface, luminous gradient border, and soft shadow.
+ * glassmorphic frosted-glass surface and soft shadow.
  *
- * Uses [Surface] internally with [glassCard] + [gradientBorder] modifiers for
+ * Uses [Surface] internally with [glassCard] modifier for
  * a premium glass look that auto-adapts to dark/light mode.
  */
 @Composable
@@ -53,7 +52,6 @@ fun ClickableCard(
             .fillMaxWidth()
             .heightIn(min = minHeight)
             .glassCard(shape = effectiveShape)
-            .gradientBorder(shape = effectiveShape)
             .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
         shape = effectiveShape,
         color = Color.Transparent,
@@ -89,8 +87,7 @@ fun InfoCard(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = minHeight)
-            .glassCard(shape = effectiveShape)
-            .gradientBorder(shape = effectiveShape),
+            .glassCard(shape = effectiveShape),
         shape = effectiveShape,
         color = Color.Transparent,
         contentColor = colors.contentColor,
