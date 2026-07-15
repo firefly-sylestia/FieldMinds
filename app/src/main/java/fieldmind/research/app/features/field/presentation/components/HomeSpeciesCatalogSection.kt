@@ -19,6 +19,7 @@ import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.util.CrashReporter
 import kotlinx.coroutines.delay
 
 // ══════════════════════════════════════════════════════════════════════
@@ -37,7 +38,11 @@ fun HomeSpeciesCatalogSection(
 
     // Load total species count on first composition
     LaunchedEffect(Unit) {
-        totalCount = database.getTotalSpeciesCount()
+        try {
+            totalCount = database.getTotalSpeciesCount()
+        } catch (e: Exception) {
+            CrashReporter.recordNonFatal(e, "HomeSpeciesCatalog.getTotalSpeciesCount")
+        }
         isLoading = false
     }
 

@@ -13,6 +13,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -22,18 +23,17 @@ import androidx.activity.ComponentActivity
 import kotlin.system.exitProcess
 
 /**
- * Full-screen crash recovery UI.
+ * Full-screen crash recovery UI — redesigned with compact summary card,
+ * auto-detection of crash cause, and targeted recovery options.
  *
- * Renders when [fieldmind.research.app.util.CrashReporter] catches an uncaught
- * exception. The activity runs in :crash_process and uses plain Android Views
- * (no Compose, no Material3, no painterResource) so it cannot itself crash from
- * resource-loading failures, corrupted themes, or broken Compose state.
+ * Runs in :crash_process with plain Android Views (no Compose) so it
+ * cannot itself crash from resource-loading failures or broken themes.
  *
  * Layout:
- *  1. Header — large error icon, title, subtitle.
- *  2. Crash log — monospace selectable text area.
- *  3. Action buttons — Copy, Share, Disable lock & PIN + restart, Restart only.
- *  4. Footer note — explains data safety.
+ *  1. Error header — icon, title, auto-detected cause summary.
+ *  2. Compact crash card — exception type + message, expandable full log.
+ *  3. Targeted recovery — auto-detected fix button(s) + generic restart.
+ *  4. Footer — reassurance that data is safe.
  */
 class FieldMindCrashActivity : ComponentActivity() {
 
@@ -43,29 +43,36 @@ class FieldMindCrashActivity : ComponentActivity() {
         renderCrashUI(crashLog)
     }
 
-    // ── Primary UI: Native Android Views (no Compose, no painterResource) ──
+    // ── Primary UI ────────────────────────────────────────────────────
 
     private fun renderCrashUI(crashLog: String) {
-        val dp16 = dp(16)
-        val dp20 = dp(20)
-        val dp24 = dp(24)
-        val dp12 = dp(12)
-        val dp8 = dp(8)
-        val dp4 = dp(4)
-        val dp40 = dp(40)
-        val dp72 = dp(72)
-        val dp2 = dp(2)
+        val crashCategory = detectCrashCategory(crashLog)
 
-        // Colors — hardcoded, no theme attributes
+        // Density helpers
+        fun dp(v: Int) = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics
+        ).toInt()
+
+        val dp2 = dp(2); val dp4 = dp(4); val dp8 = dp(8); val dp10 = dp(10)
+        val dp12 = dp(12); val dp14 = dp(14); val dp16 = dp(16); val dp20 = dp(20)
+        val dp24 = dp(24); val dp28 = dp(28); val dp32 = dp(32); val dp36 = dp(36)
+        val dp48 = dp(48); val dp52 = dp(52)
+
+        // Hardcoded colors — no theme attributes
         val surfaceColor = 0xFFFAF7F2.toInt()
         val onSurfaceColor = 0xFF1B1B1B.toInt()
         val onSurfaceVariantColor = 0xFF5A5A5A.toInt()
+        val cardBgColor = 0xFFFFFFFF.toInt()
         val primaryColor = 0xFF2E7D32.toInt()
         val primaryContainerColor = 0xFFD7E8D8.toInt()
         val errorColor = 0xFFC62828.toInt()
+        val errorContainerColor = 0xFFFFEBEE.toInt()
+        val warningColor = 0xFFE65100.toInt()
+        val warningContainerColor = 0xFFFFF3E0.toInt()
+        val infoColor = 0xFF1565C0.toInt()
+        val infoContainerColor = 0xFFE3F2FD.toInt()
         val whiteColor = 0xFFFFFFFF.toInt()
         val outlineColor = 0xFF8B8680.toInt()
-        val cardBgColor = 0xFFFFFFFF.toInt()
 
         val scrollView = ScrollView(this).apply {
             setBackgroundColor(surfaceColor)
@@ -74,182 +81,327 @@ class FieldMindCrashActivity : ComponentActivity() {
 
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp20, dp24, dp20, dp24)
+            setPadding(dp20, dp20, dp20, dp24)
         }
 
-        // ── 1. Header Card ──
-        root.addView(roundedCard(
-            bgColor = primaryContainerColor,
-            cornerRadius = dp40
-        ).apply {
+        // ── 1. Header — compact error card ─────────────────────────
+        root.addView(roundedCard(errorContainerColor, dp32).apply {
             orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER
-            setPadding(dp24, dp24, dp24, dp24)
+            setPadding(dp20, dp20, dp20, dp20)
         }.also { card ->
-            // Error icon circle
-            card.addView(TextView(this).apply {
-                text = "!"
-                setTextColor(errorColor)
-                textSize = 36f
+            // Error icon + title row
+            val titleRow = LinearLayout(this@FieldMindCrashActivity).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+            }
+            titleRow.addView(TextView(this@FieldMindCrashActivity).apply {
+                text = "\u26A0"
+                textSize = 28f
                 gravity = Gravity.CENTER
-                val size = LinearLayout.LayoutParams(dp72, dp72)
+                val size = LinearLayout.LayoutParams(dp48, dp48)
                 layoutParams = size
                 background = GradientDrawable().apply {
                     shape = GradientDrawable.OVAL
-                    setColor(errorColor and 0x00FFFFFF or 0x28000000)
+                    setColor(errorColor and 0x00FFFFFF or 0x22000000)
                 }
             })
-
-            card.addView(space(dp16))
-
-            card.addView(TextView(this).apply {
-                text = "FieldMind crashed"
+            titleRow.addView(space(dp14, 0))
+            titleRow.addView(TextView(this@FieldMindCrashActivity).apply {
+                text = "FieldMind encountered an issue"
                 setTextColor(onSurfaceColor)
-                textSize = 22f
+                textSize = 18f
                 typeface = Typeface.DEFAULT_BOLD
-                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             })
+            card.addView(titleRow)
+            card.addView(space(dp10, 0))
 
-            card.addView(space(dp12))
-
-            card.addView(TextView(this).apply {
-                text = "Something unexpected went wrong. The crash report below has been saved " +
-                    "and can be shared with the developer to help fix the issue."
+            // Auto-detected cause
+            val causeText = when (crashCategory) {
+                CrashCategory.LOCK_PIN -> "This crash appears related to the privacy lock or PIN system."
+                CrashCategory.DATABASE -> "This crash appears related to the local database or storage."
+                CrashCategory.SETTINGS -> "This crash appears related to corrupted app settings."
+                CrashCategory.NETWORK -> "This crash appears related to a network or API call."
+                CrashCategory.COMPOSE -> "This crash appears related to the user interface rendering."
+                CrashCategory.OUT_OF_MEMORY -> "The app ran out of memory — this may happen on older devices."
+                CrashCategory.UNKNOWN -> "The cause could not be automatically determined from the crash report."
+            }
+            card.addView(TextView(this@FieldMindCrashActivity).apply {
+                text = causeText
                 setTextColor(onSurfaceVariantColor)
-                textSize = 14f
-                gravity = Gravity.CENTER
-                setLineSpacing(4f, 1f)
+                textSize = 13f
+                setLineSpacing(3f, 1f)
             })
         })
 
-        root.addView(space(dp20))
+        root.addView(space(dp16, 0))
 
-        // ── 2. Crash Log Card ──
-        root.addView(roundedCard(
-            bgColor = cardBgColor,
-            cornerRadius = dp24
-        ).apply {
+        // ── 2. Compact crash card with expandable details ──────────
+        val exceptionName = extractExceptionName(crashLog)
+        val exceptionMessage = extractExceptionMessage(crashLog)
+        val fullLogVisible = booleanArrayOf(false) // mutable via array wrapper
+
+        root.addView(roundedCard(cardBgColor, dp28).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp16, dp16, dp16, dp16)
         }.also { card ->
-            card.addView(TextView(this).apply {
-                text = "▸ Crash report"
+            // Title row
+            val titleRow = LinearLayout(this@FieldMindCrashActivity).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+            }
+            titleRow.addView(TextView(this@FieldMindCrashActivity).apply {
+                text = "\uD83D\uDCDD Crash details"
                 setTextColor(onSurfaceColor)
                 textSize = 15f
                 typeface = Typeface.DEFAULT_BOLD
-                setPadding(0, 0, 0, dp12)
+                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            })
+            // Copy button in title row
+            titleRow.addView(textButton("Copy", primaryColor).apply {
+                setOnClickListener { copyCrashLog(crashLog) }
+            })
+            card.addView(titleRow)
+            card.addView(space(dp12, 0))
+
+            // Exception type pill
+            val pillBg = when (crashCategory) {
+                CrashCategory.LOCK_PIN -> warningContainerColor
+                CrashCategory.DATABASE -> errorContainerColor
+                CrashCategory.SETTINGS -> warningContainerColor
+                CrashCategory.NETWORK -> infoContainerColor
+                CrashCategory.COMPOSE -> primaryContainerColor
+                CrashCategory.OUT_OF_MEMORY -> errorContainerColor
+                CrashCategory.UNKNOWN -> outlineColor and 0x00FFFFFF or 0x10000000
+            }
+            val pillTextColor = when (crashCategory) {
+                CrashCategory.LOCK_PIN -> warningColor
+                CrashCategory.DATABASE -> errorColor
+                CrashCategory.SETTINGS -> warningColor
+                CrashCategory.NETWORK -> infoColor
+                CrashCategory.COMPOSE -> primaryColor
+                CrashCategory.OUT_OF_MEMORY -> errorColor
+                CrashCategory.UNKNOWN -> onSurfaceVariantColor
+            }
+            card.addView(roundedCard(pillBg, dp16).apply {
+                setPadding(dp12, dp(6), dp12, dp(6))
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            }.also { pill ->
+                pill.addView(TextView(this@FieldMindCrashActivity).apply {
+                    text = exceptionName
+                    setTextColor(pillTextColor)
+                    textSize = 12f
+                    typeface = Typeface.MONOSPACE
+                })
             })
 
-            card.addView(TextView(this).apply {
+            card.addView(space(dp8, 0))
+
+            // Exception message (single line, truncated)
+            card.addView(TextView(this@FieldMindCrashActivity).apply {
+                text = exceptionMessage.ifBlank { "No additional details" }
+                setTextColor(onSurfaceVariantColor)
+                textSize = 12f
+                maxLines = 2
+                setLineSpacing(2f, 1f)
+            })
+
+            card.addView(space(dp10, 0))
+
+            // ── Expandable full report toggle ──
+            val toggleButton = textButton(
+                if (fullLogVisible[0]) "\u25B2 Hide full report" else "\u25BC Show full report",
+                primaryColor
+            )
+            val fullReportView = TextView(this@FieldMindCrashActivity).apply {
                 text = crashLog
                 setTextColor(onSurfaceColor)
-                textSize = 11f
+                textSize = 10f
                 typeface = Typeface.MONOSPACE
-                setLineSpacing(2f, 1f)
+                setLineSpacing(1f, 1f)
                 setTextIsSelectable(true)
                 setPadding(dp12, dp12, dp12, dp12)
                 background = GradientDrawable().apply {
-                    setColor(outlineColor and 0x00FFFFFF or 0x10000000) // ~0.06 alpha
+                    setColor(outlineColor and 0x00FFFFFF or 0x0C000000)
                     cornerRadius = dp12.toFloat()
                 }
-                minHeight = dp(200)
-            })
-
-            card.addView(space(dp12))
-
-            val buttonRow = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
+                visibility = View.GONE
             }
-            buttonRow.addView(styledButton(
-                text = "Copy",
+
+            toggleButton.setOnClickListener {
+                fullLogVisible[0] = !fullLogVisible[0]
+                toggleButton.text = if (fullLogVisible[0]) "\u25B2 Hide full report" else "\u25BC Show full report"
+                fullReportView.visibility = if (fullLogVisible[0]) View.VISIBLE else View.GONE
+            }
+            card.addView(toggleButton)
+            card.addView(fullReportView)
+
+            card.addView(space(dp10, 0))
+
+            // Share button
+            card.addView(styledButton(
+                text = "Share report",
                 bgColor = whiteColor,
                 textColor = onSurfaceColor,
                 borderColor = outlineColor,
                 cornerRadius = dp24
             ).apply {
-                val lp = LinearLayout.LayoutParams(0, dp(48), 1f)
-                lp.rightMargin = dp8
-                layoutParams = lp
-                setOnClickListener { copyCrashLog(crashLog) }
-            })
-            buttonRow.addView(styledButton(
-                text = "Share",
-                bgColor = primaryColor,
-                textColor = whiteColor,
-                borderColor = null,
-                cornerRadius = dp24
-            ).apply {
-                val lp = LinearLayout.LayoutParams(0, dp(48), 1f)
-                lp.leftMargin = dp8
-                layoutParams = lp
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, dp(44)
+                )
                 setOnClickListener { shareCrashLog(crashLog) }
             })
-            card.addView(buttonRow)
         })
 
-        root.addView(space(dp20))
+        root.addView(space(dp16, 0))
 
-        // ── 3. Recovery Card ──
-        root.addView(roundedCard(
-            bgColor = cardBgColor,
-            cornerRadius = dp24
-        ).apply {
+        // ── 3. Targeted Recovery card ──────────────────────────────
+        root.addView(roundedCard(cardBgColor, dp28).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp16, dp16, dp16, dp16)
         }.also { card ->
-            card.addView(TextView(this).apply {
-                text = "▸ Recovery options"
+            card.addView(TextView(this@FieldMindCrashActivity).apply {
+                text = "\uD83D\uDD27 Recovery"
                 setTextColor(onSurfaceColor)
                 textSize = 15f
                 typeface = Typeface.DEFAULT_BOLD
                 setPadding(0, 0, 0, dp8)
             })
 
-            card.addView(TextView(this).apply {
-                text = "If FieldMind keeps crashing on launch, the most common cause is a " +
-                    "corrupted lock or PIN setting. You can disable those settings and restart " +
-                    "to recover your data without losing any observations."
+            // Targeted recovery description
+            val recoveryDesc = when (crashCategory) {
+                CrashCategory.LOCK_PIN -> "The lock/PIN system appears to be causing this crash. " +
+                    "Disabling privacy lock and PIN will let the app start normally. " +
+                    "You can re-enable them in Settings afterwards."
+                CrashCategory.DATABASE -> "The local database may be corrupted. " +
+                    "You can try clearing the app cache or restarting. Your cloud-synced data is safe."
+                CrashCategory.SETTINGS -> "Some app settings may be corrupted. " +
+                    "Resetting to default settings should resolve this without losing your research data."
+                CrashCategory.NETWORK -> "A network or API error occurred. " +
+                    "Restart the app — if the issue persists, check your connection or API configuration."
+                CrashCategory.COMPOSE -> "The user interface encountered a rendering issue. " +
+                    "This is usually transient — a restart should resolve it."
+                CrashCategory.OUT_OF_MEMORY -> "The device ran out of memory. " +
+                    "Close other apps and restart FieldMind. If this recurs, try reducing image sizes in Settings."
+                CrashCategory.UNKNOWN -> "If FieldMind keeps crashing, the most common fixes are " +
+                    "disabling the privacy lock/PIN or resetting app settings."
+            }
+            card.addView(TextView(this@FieldMindCrashActivity).apply {
+                text = recoveryDesc
                 setTextColor(onSurfaceVariantColor)
                 textSize = 13f
                 setLineSpacing(3f, 1f)
                 setPadding(0, 0, 0, dp16)
             })
 
-            card.addView(styledButton(
-                text = "Disable lock & PIN, then restart",
-                bgColor = primaryColor,
-                textColor = whiteColor,
-                borderColor = null,
-                cornerRadius = dp24
-            ).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, dp(52)
-                ).apply { bottomMargin = dp12 }
-                setOnClickListener { showDisableConfirmDialog() }
-            })
+            // Primary targeted fix button
+            when (crashCategory) {
+                CrashCategory.LOCK_PIN -> {
+                    card.addView(styledButton(
+                        text = "\uD83D\uDD13 Disable lock & PIN, restart",
+                        bgColor = warningColor,
+                        textColor = whiteColor,
+                        borderColor = null,
+                        cornerRadius = dp28
+                    ).apply {
+                        layoutParams = LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, dp52
+                        ).apply { bottomMargin = dp10 }
+                        setOnClickListener { showLockDisableConfirmDialog() }
+                    })
+                }
+                CrashCategory.SETTINGS -> {
+                    card.addView(styledButton(
+                        text = "\u2699\uFE0F Reset settings & restart",
+                        bgColor = warningColor,
+                        textColor = whiteColor,
+                        borderColor = null,
+                        cornerRadius = dp28
+                    ).apply {
+                        layoutParams = LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, dp52
+                        ).apply { bottomMargin = dp10 }
+                        setOnClickListener { showSettingsResetConfirmDialog() }
+                    })
+                }
+                CrashCategory.DATABASE -> {
+                    card.addView(styledButton(
+                        text = "\uD83D\uDD04 Clear cache & restart",
+                        bgColor = errorColor,
+                        textColor = whiteColor,
+                        borderColor = null,
+                        cornerRadius = dp28
+                    ).apply {
+                        layoutParams = LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, dp52
+                        ).apply { bottomMargin = dp10 }
+                        setOnClickListener {
+                            runCatching { cacheDir.deleteRecursively() }
+                            restartApp()
+                        }
+                    })
+                }
+                else -> {
+                    // For network, compose, OOM, unknown — primary action is just restart
+                    card.addView(styledButton(
+                        text = "\uD83D\uDD04 Restart FieldMind",
+                        bgColor = primaryColor,
+                        textColor = whiteColor,
+                        borderColor = null,
+                        cornerRadius = dp28
+                    ).apply {
+                        layoutParams = LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, dp52
+                        ).apply { bottomMargin = dp10 }
+                        setOnClickListener { restartApp() }
+                    })
+                }
+            }
 
-            card.addView(styledButton(
-                text = "Restart FieldMind only",
-                bgColor = whiteColor,
-                textColor = onSurfaceColor,
-                borderColor = outlineColor,
-                cornerRadius = dp24
-            ).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, dp(52)
-                )
-                setOnClickListener { restartApp() }
-            })
+            // Secondary: always offer disable lock & PIN if not already the primary
+            if (crashCategory != CrashCategory.LOCK_PIN) {
+                card.addView(styledButton(
+                    text = "Disable lock & PIN, then restart",
+                    bgColor = whiteColor,
+                    textColor = onSurfaceColor,
+                    borderColor = outlineColor,
+                    cornerRadius = dp28
+                ).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, dp48
+                    ).apply { bottomMargin = dp8 }
+                    setOnClickListener { showLockDisableConfirmDialog() }
+                })
+            }
+
+            // Generic restart if a targeted fix was already shown
+            if (crashCategory != CrashCategory.UNKNOWN && crashCategory != CrashCategory.NETWORK &&
+                crashCategory != CrashCategory.COMPOSE && crashCategory != CrashCategory.OUT_OF_MEMORY) {
+                card.addView(styledButton(
+                    text = "Restart without changes",
+                    bgColor = whiteColor,
+                    textColor = onSurfaceColor,
+                    borderColor = outlineColor,
+                    cornerRadius = dp28
+                ).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, dp48
+                    )
+                    setOnClickListener { restartApp() }
+                })
+            }
         })
 
-        root.addView(space(dp24))
+        root.addView(space(dp20, 0))
 
-        // ── 4. Footer ──
-        root.addView(TextView(this).apply {
-            text = "Your research data is safe — only the lock and PIN settings will be disabled. " +
-                "You can re-enable them in Settings after the app restarts."
+        // ── 4. Footer ──────────────────────────────────────────────
+        root.addView(TextView(this@FieldMindCrashActivity).apply {
+            text = "\uD83D\uDCAB Your research data is safe. Observations, notes, and projects " +
+                "are preserved. Only the settings related to the detected issue will be affected."
             setTextColor(onSurfaceVariantColor)
-            textSize = 12f
+            textSize = 11f
             gravity = Gravity.CENTER
             setLineSpacing(3f, 1f)
             setPadding(dp8, 0, dp8, dp24)
@@ -259,7 +411,102 @@ class FieldMindCrashActivity : ComponentActivity() {
         setContentView(scrollView)
     }
 
-    // ── View Builders ──
+    // ── Crash Auto-Detection ────────────────────────────────────────
+
+    private enum class CrashCategory {
+        LOCK_PIN, DATABASE, SETTINGS, NETWORK, COMPOSE, OUT_OF_MEMORY, UNKNOWN
+    }
+
+    private fun detectCrashCategory(crashLog: String): CrashCategory {
+        val lowerLog = crashLog.lowercase()
+
+        // Check for lock/PIN related crashes
+        if (lowerLog.contains("cipher") || lowerLog.contains("keystore") ||
+            lowerLog.contains("fingerprint") || lowerLog.contains("biometric") ||
+            lowerLog.contains("pin") || lowerLog.contains("lock") ||
+            lowerLog.contains("encrypt") || lowerLog.contains("decrypt") ||
+            lowerLog.contains("crypto") || lowerLog.contains("security") ||
+            (lowerLog.contains("privacy") && lowerLog.contains("lock"))
+        ) return CrashCategory.LOCK_PIN
+
+        // Check for database/storage crashes
+        if (lowerLog.contains("room") || lowerLog.contains("sqlite") ||
+            lowerLog.contains("database") || lowerLog.contains("cursor") ||
+            lowerLog.contains("migration") || lowerLog.contains("dao") ||
+            lowerLog.contains("disk") || lowerLog.contains("storage") ||
+            lowerLog.contains("ioexception") || lowerLog.contains("file")
+        ) return CrashCategory.DATABASE
+
+        // Check for settings-related crashes
+        if (lowerLog.contains("sharedpreferences") || lowerLog.contains("settings") ||
+            lowerLog.contains("preference") || lowerLog.contains("configuration") ||
+            lowerLog.contains("datastore")
+        ) return CrashCategory.SETTINGS
+
+        // Check for network/API crashes
+        if (lowerLog.contains("http") || lowerLog.contains("socket") ||
+            lowerLog.contains("network") || lowerLog.contains("timeout") ||
+            lowerLog.contains("connect") || lowerLog.contains("api") ||
+            lowerLog.contains("retrofit") || lowerLog.contains("okhttp") ||
+            lowerLog.contains("volley") || lowerLog.contains("ssl")
+        ) return CrashCategory.NETWORK
+
+        // Check for Compose/UI crashes
+        if (lowerLog.contains("compose") || lowerLog.contains("recompose") ||
+            lowerLog.contains("modifier") || lowerLog.contains("graphics") ||
+            lowerLog.contains("layout") || lowerLog.contains("animation") ||
+            lowerLog.contains("drawable") || lowerLog.contains("canvas") ||
+            lowerLog.contains("ripple") || lowerLog.contains("surface")
+        ) return CrashCategory.COMPOSE
+
+        // OutOfMemoryError
+        if (lowerLog.contains("outofmemory") || lowerLog.contains("out of memory"))
+            return CrashCategory.OUT_OF_MEMORY
+
+        return CrashCategory.UNKNOWN
+    }
+
+    private fun extractExceptionName(crashLog: String): String {
+        // Look for "Exception: com.example.SomeException" or the class name
+        val lines = crashLog.lines()
+        for (line in lines) {
+            if (line.contains("Exception:")) {
+                val parts = line.substringAfter("Exception:").trim()
+                // Extract just the simple class name
+                return parts.substringAfterLast(".").ifBlank { parts }
+            }
+        }
+        // Fallback: look for the first line with a Java exception pattern
+        for (line in lines) {
+            val trimmed = line.trim()
+            if ((trimmed.contains("Exception") || trimmed.contains("Error")) &&
+                trimmed.contains(".")
+            ) {
+                val simpleName = trimmed.substringAfterLast(".").substringBefore(":")
+                    .substringBefore(" ").trim()
+                if (simpleName.isNotBlank()) return simpleName
+            }
+        }
+        return "Unknown error"
+    }
+
+    private fun extractExceptionMessage(crashLog: String): String {
+        val lines = crashLog.lines()
+        for (line in lines) {
+            if (line.contains("Message:")) {
+                return line.substringAfter("Message:").trim().ifBlank { "No details available" }
+            }
+        }
+        // Fallback: Caused by message
+        for (line in lines) {
+            if (line.trimStart().startsWith("Caused by:") && line.contains(":")) {
+                return line.substringAfter("Caused by:").trim()
+            }
+        }
+        return "No details available"
+    }
+
+    // ── View Builders ───────────────────────────────────────────────
 
     private fun roundedCard(bgColor: Int, cornerRadius: Int): LinearLayout {
         return LinearLayout(this).apply {
@@ -268,8 +515,8 @@ class FieldMindCrashActivity : ComponentActivity() {
                 this.cornerRadius = cornerRadius.toFloat()
             }
             layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
     }
@@ -284,7 +531,7 @@ class FieldMindCrashActivity : ComponentActivity() {
         return Button(this).apply {
             this.text = text
             setTextColor(textColor)
-            textSize = 14f
+            textSize = 13f
             typeface = Typeface.DEFAULT_BOLD
             setAllCaps(false)
             gravity = Gravity.CENTER
@@ -295,23 +542,36 @@ class FieldMindCrashActivity : ComponentActivity() {
                     setStroke(dp(2), borderColor)
                 }
             }
-            setPadding(dp(20), 0, dp(20), 0)
+            setPadding(dp(16), 0, dp(16), 0)
         }
     }
 
-    private fun space(heightDp: Int): View {
+    private fun textButton(text: String, color: Int): TextView {
+        return TextView(this).apply {
+            this.text = text
+            setTextColor(color)
+            textSize = 13f
+            typeface = Typeface.DEFAULT_BOLD
+            setPadding(dp(12), dp(6), dp(12), dp(6))
+            background = GradientDrawable().apply {
+                setColor(color and 0x00FFFFFF or 0x10000000)
+                cornerRadius = dp(16).toFloat()
+            }
+        }
+    }
+
+    private fun space(heightDp: Int, widthDp: Int): View {
         return View(this).apply {
             layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, heightDp
+                if (widthDp > 0) widthDp else ViewGroup.LayoutParams.MATCH_PARENT,
+                if (heightDp > 0) heightDp else ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
     }
 
     private fun dp(value: Int): Int {
         return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            value.toFloat(),
-            resources.displayMetrics
+            TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), resources.displayMetrics
         ).toInt()
     }
 
@@ -320,22 +580,36 @@ class FieldMindCrashActivity : ComponentActivity() {
         return if (resourceId > 0) resources.getDimensionPixelSize(resourceId) else dp(24)
     }
 
-    // ── Confirmation Dialog ──
+    // ── Confirmation Dialogs ────────────────────────────────────────
 
-    private fun showDisableConfirmDialog() {
+    private fun showLockDisableConfirmDialog() {
         AlertDialog.Builder(this)
             .setTitle("Disable lock & PIN?")
             .setMessage(
-                "Your research data and observations are safe. Only the privacy lock, app PIN, " +
-                    "decoy PIN, panic-lock setting, and export password will be turned off. " +
-                    "You can re-enable them in Settings after the restart."
+                "This will disable the privacy lock, app PIN, decoy PIN, panic-lock, " +
+                    "biometric settings, and export password protection.\n\n" +
+                    "Your research data will NOT be affected. You can re-enable these " +
+                    "in Settings after the app restarts."
             )
             .setPositiveButton("Disable & restart") { _, _ -> disableSecurityAndRestart() }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    // ── Actions ──
+    private fun showSettingsResetConfirmDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Reset settings?")
+            .setMessage(
+                "This will reset all app preferences to their defaults. " +
+                    "Your observations, notes, and research data will NOT be affected.\n\n" +
+                    "You'll need to reconfigure your preferences after the restart."
+            )
+            .setPositiveButton("Reset & restart") { _, _ -> resetSettingsAndRestart() }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    // ── Actions ─────────────────────────────────────────────────────
 
     private fun copyCrashLog(crashLog: String) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -377,7 +651,23 @@ class FieldMindCrashActivity : ComponentActivity() {
         }.onFailure {
             Log.e(TAG, "Failed to disable security settings before restart", it)
         }
-        Toast.makeText(this, "Lock & PIN disabled. Restarting…", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Lock & PIN disabled. Restarting\u2026", Toast.LENGTH_SHORT).show()
+        restartApp()
+    }
+
+    private fun resetSettingsAndRestart() {
+        runCatching {
+            val prefs: SharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.edit().clear().commit()
+            // Re-apply security defaults (disabled) for safe restart
+            prefs.edit()
+                .putBoolean(KEY_PRIVACY_LOCK, false)
+                .putBoolean(KEY_APP_PIN_ENABLED, false)
+                .commit()
+        }.onFailure {
+            Log.e(TAG, "Failed to reset settings before restart", it)
+        }
+        Toast.makeText(this, "Settings reset. Restarting\u2026", Toast.LENGTH_SHORT).show()
         restartApp()
     }
 
