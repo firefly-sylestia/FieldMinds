@@ -79,10 +79,7 @@ fun DailyFieldJournalOverlay(
     //            0f = hidden (alpha 0, slightly translated down). visible/true → 1f, visible/false → 0f.
     val offsetAnim by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
+        animationSpec = FieldMindMotion.expressiveFloat,
         label = "journalOffset"
     )
 

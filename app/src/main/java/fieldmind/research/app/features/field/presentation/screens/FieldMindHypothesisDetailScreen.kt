@@ -96,7 +96,7 @@ fun HypothesisDetailScreen(
     // ── Animated confidence bar ──
     val animatedConfidence by animateFloatAsState(
         targetValue = hypothesis.confidencePercent / 100f,
-        animationSpec = spring(stiffness = androidx.compose.animation.core.Spring.StiffnessMediumLow),
+        animationSpec = FieldMindMotion.expressiveSoft,
         label = "hypothesisConfidence"
     )
 

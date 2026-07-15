@@ -2048,7 +2048,7 @@ private fun EditChecklistDialog(entity: DataRecordEntity, viewModel: FieldMindVi
                         val wasDone = items[index].second; items = items.toMutableList().apply { this[index] = Pair(item, !wasDone) }
                         cb_scope.launch {
                             cb_bounce.snapTo(1.3f)
-                            cb_bounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                            cb_bounce.animateTo(1f, FieldMindMotion.expressiveSnap)
                         }
                     },
                     shape = CircleShape,

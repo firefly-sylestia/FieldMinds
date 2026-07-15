@@ -550,7 +550,7 @@ private fun TaskCard(
 
     val animatedCheck by animateFloatAsState(
         targetValue = if (isChecked) 1f else 0f,
-        animationSpec = spring(stiffness = androidx.compose.animation.core.Spring.StiffnessMediumLow),
+        animationSpec = FieldMindMotion.expressiveSoft,
         label = "taskCheck"
     )
 
@@ -579,14 +579,14 @@ private fun TaskCard(
             LaunchedEffect(isChecked) {
                 if (isChecked) {
                     checkBounce.snapTo(1.3f)
-                    checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 500f))
+                    checkBounce.animateTo(1f, FieldMindMotion.pressSpring)
                 }
             }
             Surface(
                 onClick = {
                     scope.launch {
                         checkBounce.snapTo(1.3f)
-                        checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                        checkBounce.animateTo(1f, FieldMindMotion.expressiveSnap)
                     }
                     onToggle()
                 },
@@ -807,7 +807,7 @@ private fun SwipeToCompleteTaskCard(
     // Animated offset with spring for smooth snap/spring-back
     val animatedOffset by animateFloatAsState(
         targetValue = swipeOffset,
-        animationSpec = spring(dampingRatio = 0.7f, stiffness = 400f),
+        animationSpec = FieldMindMotion.expressiveSoft,
         label = "swipeOffset"
     )
 

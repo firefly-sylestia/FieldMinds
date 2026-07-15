@@ -158,9 +158,9 @@ fun FieldMindSnackbarOverlay(
 
     // Bouncy spring for save/achievement, smooth for others
     val animSpec: FiniteAnimationSpec<Float> = if (style.isSave || style.isAchievement)
-        spring<Float>(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)
+        FieldMindMotion.expressiveFloat
     else
-        spring<Float>(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMedium)
+        FieldMindMotion.expressiveSoft
 
     val scale by animateFloatAsState(
         targetValue = if (hasData) 1f else 0.85f,
@@ -171,12 +171,8 @@ fun FieldMindSnackbarOverlay(
     AnimatedVisibility(
         visible = hasData,
         enter = slideInVertically(
-            initialOffsetY = { -it },
-            animationSpec = spring<IntOffset>(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
-            )
-        ) + fadeIn(animationSpec = tween(200)),
+            initialOffsetY = { -it },            animationSpec = spring<IntOffset>(dampingRatio = 0.76f, stiffness = 201f)
+            ) + fadeIn(animationSpec = tween(200)),
         exit = slideOutVertically(targetOffsetY = { -it / 2 }) + fadeOut(animationSpec = tween(150)),
         modifier = modifier
     ) {

@@ -77,9 +77,9 @@ fun SwipeToRevealActions(
     val animatedOffset by animateFloatAsState(
         targetValue = swipeOffset,
         animationSpec = if (revealed)
-            spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = 400f)
+            FieldMindMotion.expressiveFloat
         else
-            spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = 400f),
+            FieldMindMotion.expressiveSoft,
         label = "swipeReveal"
     )
 

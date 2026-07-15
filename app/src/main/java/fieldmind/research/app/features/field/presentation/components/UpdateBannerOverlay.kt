@@ -68,15 +68,12 @@ fun UpdateBannerOverlay(
     // 0f = fully off-screen above the top edge, 1f = docked at the top.
     val offsetProgress by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessMediumLow
-        ),
+        animationSpec = FieldMindMotion.expressiveFloat,
         label = "bannerOffset"
     )
     val alpha by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(durationMillis = 280, easing = FastOutSlowInEasing),
+        animationSpec = tween(durationMillis = FieldMindMotion.durationStandard, easing = FastOutSlowInEasing),
         label = "bannerAlpha"
     )
 

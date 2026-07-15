@@ -86,9 +86,9 @@ fun FluidBottomSheet(
             parentHeight - fullSheetHeight + sheetOffset
         },
         animationSpec = if (isDragging)
-            spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = 800f)
+            FieldMindMotion.expressiveSoft
         else
-            spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = 300f),
+            FieldMindMotion.expressiveFloat,
         label = "sheetY"
     )
 

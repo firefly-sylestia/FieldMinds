@@ -84,14 +84,14 @@ fun StickyNoteBlock(
     val currentColor = colors.getOrElse(colorIndex.coerceIn(0, colors.lastIndex)) { colors[0] }
     val bgColor by animateColorAsState(
         targetValue = Color(currentColor.first),
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        animationSpec = FieldMindMotion.expressiveFloat,
         label = "stickyColor"
     )
 
     // Animate shadow elevation on selection
     val elevation by animateFloatAsState(
         targetValue = if (isSelected) 8f else 3f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        animationSpec = FieldMindMotion.expressiveFloat,
         label = "stickyElevation"
     )
 
@@ -302,7 +302,7 @@ private fun ColorPickerRow(
                 val isSelected = index == selectedIndex
                 val colorCircleSize by animateFloatAsState(
                     targetValue = if (isSelected) 28f else 24f,
-                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+                    animationSpec = FieldMindMotion.expressiveFloat,
                     label = "colorCircleSize"
                 )
 

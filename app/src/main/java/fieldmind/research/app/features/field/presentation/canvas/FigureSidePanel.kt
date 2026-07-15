@@ -203,22 +203,16 @@ fun FigureSidePanel(
                 transitionSpec = {
                     val direction = if (targetState > initialState) 1 else -1
                     (slideInHorizontally(
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioNoBouncy,
-                            stiffness = Spring.StiffnessMediumLow
-                        ),
+                        animationSpec = spring<IntOffset>(dampingRatio = 0.84f, stiffness = 134f),
                         initialOffsetX = { fullWidth -> direction * fullWidth / 4 }
                     ) + fadeIn(
-                        animationSpec = spring(Spring.DampingRatioNoBouncy, Spring.StiffnessMedium)
+                        animationSpec = FieldMindMotion.expressiveSoft
                     )) togetherWith (
                         slideOutHorizontally(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioNoBouncy,
-                                stiffness = Spring.StiffnessMediumLow
-                            ),
+                            animationSpec = spring<IntOffset>(dampingRatio = 0.84f, stiffness = 134f),
                             targetOffsetX = { fullWidth -> -direction * fullWidth / 4 }
                         ) + fadeOut(
-                            animationSpec = spring(Spring.DampingRatioNoBouncy, Spring.StiffnessMedium)
+                            animationSpec = FieldMindMotion.expressiveSoft
                         )
                     )
                 },

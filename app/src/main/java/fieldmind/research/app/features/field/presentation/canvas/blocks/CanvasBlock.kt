@@ -74,10 +74,7 @@ fun CanvasBlock(
     // Animate selection elevation
     val elevation by animateFloatAsState(
         targetValue = if (isSelected) 8f else 2f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessMediumLow
-        ),
+        animationSpec = FieldMindMotion.expressiveFloat,
         label = "blockElevation"
     )
 
@@ -121,7 +118,7 @@ fun CanvasBlock(
         (TOOL_FADE_START_ZOOM - TOOL_FADE_END_ZOOM)).coerceIn(0f, 1f)
     val toolAlpha by animateFloatAsState(
         targetValue = if (isCollapsed) 0f else rawToolAlpha,
-        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        animationSpec = FieldMindMotion.expressiveSoft,
         label = "toolAlpha"
     )
 

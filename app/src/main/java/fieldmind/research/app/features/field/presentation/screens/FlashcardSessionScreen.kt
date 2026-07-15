@@ -222,7 +222,7 @@ private fun SessionCompleteCard(reviewed: Int, again: Int, good: Int, easy: Int,
             // Animated check icon
             var visible by remember { mutableStateOf(false) }
             LaunchedEffect(Unit) { visible = true }
-            AnimatedVisibility(visible = visible, enter = scaleIn(spring(dampingRatio = Spring.DampingRatioMediumBouncy)) + fadeIn()) {
+            AnimatedVisibility(visible = visible, enter = scaleIn(FieldMindMotion.expressiveFloat) + fadeIn()) {
                 Icon(icon = FieldMindIcons.Check, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, size = 44.dp)
             }
             Text("Reviewed $reviewed card${if (reviewed == 1) "" else "s"}", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
