@@ -1043,7 +1043,7 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
         ) -> {
             slideOutHorizontally(slideSpec) { it } + fadeOut(fadeSpec)
         }
-        else -> fadeOut(fadeSpec)
+        else -> slideOutHorizontally(slideSpec) { it } + fadeOut(fadeSpec)
     }
 }
 
@@ -1120,7 +1120,7 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
         ) -> {
             slideOutHorizontally(slideSpec) { it } + fadeOut(animationSpec = fadeSpec)
         }
-        else -> fadeOut(animationSpec = fadeSpec)
+        else -> slideOutHorizontally(slideSpec) { -it } + fadeOut(animationSpec = fadeSpec)
     }
 }
 
