@@ -292,14 +292,17 @@ object FieldMindMotion {
 
     // ── Swipe-back Constants ──
 
-    const val swipeEdgeWidthDp = 30f
-    const val swipeEdgeHeightDp = 30f
+    const val swipeEdgeWidthDp = 36f
+    const val swipeEdgeHeightDp = 36f
     const val swipeThreshold = 0.18f
     const val swipeScaleFactor = 0.90f
     const val swipeScrimAlpha = 0.28f
     const val swipeShadowElevationDp = 24f
     const val swipeCornerRadiusDp = 36f
     const val swipeBaseCornerRadiusDp = 20f
+    // Elastic overshoot for snap-back (Telegram-style)
+    const val swipeOvershootDamping = 0.82f
+    const val swipeOvershootStiffness = 220f
 
     // ── Utility ──
 
@@ -984,10 +987,10 @@ fun SwipeBackHost(
                 activeDirection = null
                 onBack()
             } catch (_: CancellationException) {
-                // Gesture cancelled → spring back to origin
+                // Gesture cancelled → elastic spring back to origin
                 activeDirection = null
-                animX.animateTo(0f, animConfig.swipeBackSpring())
-                animY.animateTo(0f, animConfig.swipeBackSpring())
+                animX.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
+                animY.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
             }
         }
     }
@@ -1202,16 +1205,16 @@ fun SwipeBackHost(
                                         }
                                     } else {
                                         scope.launch {
-                                            animX.animateTo(0f, animConfig.swipeBackSpring())
-                                            animY.animateTo(0f, animConfig.swipeBackSpring())
+                                            animX.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
+                                            animY.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
                                         }
                                     }
                                 } catch (_: CancellationException) {
                                     // ── onDragCancel equivalent ──
                                     activeDirection = null
                                     scope.launch {
-                                        animX.animateTo(0f, animConfig.swipeBackSpring())
-                                        animY.animateTo(0f, animConfig.swipeBackSpring())
+                                        animX.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
+                                        animY.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
                                     }
                                 }
                             }

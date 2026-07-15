@@ -1,6 +1,7 @@
 package fieldmind.research.app.ui.theme
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -14,11 +15,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
@@ -442,3 +446,86 @@ fun Modifier.screenBackground(gradientOpacity: Float = 0.75f): Modifier {
     val brush = CuteGradients.brushFor(CuteGradients.Style.ScreenBackground, opacity = gradientOpacity)
     return this.background(brush = brush)
 }
+
+// ════════════════════════════════════════════════════════════════════════
+//  ✨ Glass Card — soft frosted-glass effect with subtle border glow
+// ════════════════════════════════════════════════════════════════════════
+
+/**
+ * Applies a soft frosted-glass effect: semi-transparent surface background
+ * with a subtle white/glow border that catches light at the top-left.
+ * Works beautifully on both light and dark backgrounds.
+ */
+@Composable
+fun Modifier.glassCard(
+    shape: Shape = CuteCardDefaults.Shape,
+    alpha: Float = 0.85f
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "glassCard"
+        properties["alpha"] = alpha
+    }
+) {
+    val isDark = FieldMindTheme.colors.isDark
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val glowColor = if (isDark) Color.White.copy(alpha = 0.08f) else Color.White.copy(alpha = 0.6f)
+    val borderColor = if (isDark) Color.White.copy(alpha = 0.10f) else Color.White.copy(alpha = 0.35f)
+
+    this
+        .clip(shape)
+        .background(surfaceColor.copy(alpha = alpha), shape)
+        .border(0.5.dp, borderColor, shape)
+        .background(
+            Brush.linearGradient(
+                colors = listOf(glowColor, Color.Transparent),
+                start = Offset(0f, 0f),
+                end = Offset(400f, 300f)
+            ),
+            shape
+        )
+}
+
+/**
+ * Adds a subtle gradient border ring around a card —
+ * slightly brighter on top-left, fading to transparent on bottom-right,
+ * giving a soft luminous edge without harsh outlines.
+ */
+@Composable
+fun Modifier.gradientBorder(
+    shape: Shape = CuteCardDefaults.Shape,
+    width: Dp = 1.dp
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "gradientBorder"
+        properties["width"] = width
+    }
+) {
+    val isDark = FieldMindTheme.colors.isDark
+    val borderColors = if (isDark)
+        listOf(Color.White.copy(alpha = 0.14f), Color.White.copy(alpha = 0.04f), Color.Transparent)
+    else
+        listOf(Color.White.copy(alpha = 0.55f), Color.White.copy(alpha = 0.15f), Color.Transparent)
+
+    this.border(
+        width = width,
+        brush = Brush.linearGradient(
+            colors = borderColors,
+            start = Offset(0f, 0f),
+            end = Offset(600f, 600f)
+        ),
+        shape = shape
+    )
+}
+
+/**
+ * Combines [glassCard] + [gradientBorder] + [cuteShadow] into one premium
+ * card modifier. Use this for featured cards, hero sections, and elevated content.
+ */
+@Composable
+fun Modifier.premiumCard(
+    shape: Shape = CuteCardDefaults.Shape,
+    elevation: Dp = CuteElevations.clickableTier
+): Modifier = this
+    .cuteShadow(elevation = elevation, shape = shape)
+    .glassCard(shape = shape)
+    .gradientBorder(shape = shape)
