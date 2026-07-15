@@ -337,7 +337,7 @@ class FieldMindCrashActivity : ComponentActivity() {
                     setOnClickListener { runCatching { cacheDir.deleteRecursively() }; restartApp() }
                 })
             else ->
-                recoveryCard.addView(m3FilledButton("Restart FieldMind").apply {
+                recoveryCard.addView(m3FilledButton("Restart").apply {
                     layoutParams = btnLp(d56, d10)
                     setOnClickListener { restartApp() }
                 })
@@ -353,7 +353,7 @@ class FieldMindCrashActivity : ComponentActivity() {
 
         // Tertiary: plain restart
         if (cat == CrashCategory.SETTINGS || cat == CrashCategory.DATABASE || cat == CrashCategory.LOCK_PIN) {
-            recoveryCard.addView(m3TextButton("Restart without changes").apply {
+            recoveryCard.addView(m3TextButton("Restart").apply {
                 layoutParams = btnLp(d48)
                 setOnClickListener { restartApp() }
             })
