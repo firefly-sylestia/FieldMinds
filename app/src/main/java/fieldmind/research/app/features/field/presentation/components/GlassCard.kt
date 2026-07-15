@@ -70,10 +70,11 @@ fun GlassCard(
             .gradientBorder(shape = shape)
     }
 
+    val cardColor = if (hazeState != null) Color.Transparent else glassColor
     Card(
         modifier = cardModifier,
         shape = shape,
-        colors = CardDefaults.cardColors(containerColor = glassColor),
+        colors = CardDefaults.cardColors(containerColor = cardColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
