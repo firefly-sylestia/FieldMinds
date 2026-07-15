@@ -507,7 +507,7 @@ fun Modifier.morphShape(
     val animatedRadius by animateFloatAsState(
         targetValue = targetPx,
         animationSpec = if (animate && !reduceMotion) {
-            spring(dampingRatio = animConfig.dampingRatio, stiffness = animConfig.stiffness)
+            spring(dampingRatio = 0.72f, stiffness = 280f)
         } else {
             spring(stiffness = Spring.StiffnessMedium)
         },
@@ -683,7 +683,7 @@ fun Modifier.animateMorphPolygon(
     val progress by animateFloatAsState(
         targetValue = if (trigger) 1f else 0f,
         animationSpec = if (shouldAnimate) {
-            animConfig.morphSpring()
+            spring(dampingRatio = 0.78f, stiffness = 200f)
         } else {
             spring(stiffness = Spring.StiffnessMedium)
         },
@@ -733,7 +733,7 @@ fun MorphTransition(
     val progress by animateFloatAsState(
         targetValue = if (trigger) 1f else 0f,
         animationSpec = if (shouldAnimate) {
-            animConfig.morphSpring()
+            spring(dampingRatio = 0.78f, stiffness = 200f)
         } else {
             spring(stiffness = Spring.StiffnessMedium)
         },
@@ -898,7 +898,7 @@ fun Modifier.pageFlip(
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
         animationSpec = if (shouldAnimate) {
-            spring(dampingRatio = animConfig.dampingRatio, stiffness = animConfig.stiffness)
+            spring(dampingRatio = 0.72f, stiffness = 280f)
         } else {
             spring(stiffness = Spring.StiffnessMedium)
         },
@@ -1309,7 +1309,7 @@ fun SwipeActionHost(
     // ── Reset to neutral when resetTrigger changes ──
     LaunchedEffect(resetTrigger) {
         if (resetTrigger != null && offsetX.value != 0f) {
-            offsetX.animateTo(0f, animConfig.sideSwipeSpring())
+            offsetX.animateTo(0f,            spring(dampingRatio = 0.62f, stiffness = 380f))
         }
     }
 
@@ -1383,25 +1383,25 @@ fun SwipeActionHost(
                                     when {
                                         pointerUp && dragOffset > thresholdPx -> {
                                             scope.launch {
-                                                offsetX.animateTo(maxRevealPx, animConfig.sideSwipeSpring())
+                                                offsetX.animateTo(maxRevealPx,            spring(dampingRatio = 0.62f, stiffness = 380f))
                                                 onSwipe(SwipeActionResult.Left)
                                             }
                                         }
                                         pointerUp && dragOffset < -thresholdPx -> {
                                             scope.launch {
-                                                offsetX.animateTo(-maxRevealPx, animConfig.sideSwipeSpring())
+                                                offsetX.animateTo(-maxRevealPx,            spring(dampingRatio = 0.62f, stiffness = 380f))
                                                 onSwipe(SwipeActionResult.Right)
                                             }
                                         }
                                         else -> {
                                             scope.launch {
-                                                offsetX.animateTo(0f, animConfig.sideSwipeSpring())
+                                                offsetX.animateTo(0f,            spring(dampingRatio = 0.62f, stiffness = 380f))
                                             }
                                         }
                                     }
                                 } catch (_: CancellationException) {
                                     scope.launch {
-                                        offsetX.animateTo(0f, animConfig.sideSwipeSpring())
+                                        offsetX.animateTo(0f,            spring(dampingRatio = 0.62f, stiffness = 380f))
                                     }
                                 }
                             }
