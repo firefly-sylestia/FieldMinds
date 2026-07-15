@@ -30,6 +30,7 @@ import fieldmind.research.app.features.field.presentation.components.FieldMindIc
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.cuteShadow
+import fieldmind.research.app.util.CrashReporter
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
 import kotlinx.coroutines.delay
@@ -110,10 +111,14 @@ fun SpeciesBrowserScreen(
 
     // Load categories, continents, and initial species
     LaunchedEffect(Unit) {
-        categories = database.getCategories()
-        continents = database.getContinents()
-        totalCount = database.getTotalSpeciesCount()
-        species = database.search("", limit = 200)
+        try {
+            categories = database.getCategories()
+            continents = database.getContinents()
+            totalCount = database.getTotalSpeciesCount()
+            species = database.search("", limit = 200)
+        } catch (e: Exception) {
+            CrashReporter.recordNonFatal(e, "SpeciesBrowser.init")
+        }
         isLoading = false
     }
 
@@ -137,36 +142,39 @@ fun SpeciesBrowserScreen(
     LaunchedEffect(searchQuery, selectedCategory, selectedContinent, selectedSort) {
         delay(200) // 200ms debounce
         isLoading = true
-
-        // Get base results (by category or full search)
-        val cat = selectedCategory
-        val base = if (cat != null) {
-            val byCategory = database.getByCategory(cat)
-            if (searchQuery.isBlank()) byCategory
-            else byCategory.filter {
-                val q = searchQuery.lowercase()
-                it.commonName.lowercase().contains(q) ||
-                it.scientificName.lowercase().contains(q) ||
-                it.genus.lowercase().contains(q) ||
-                it.family.lowercase().contains(q) ||
-                it.order.lowercase().contains(q) ||
-                it.phylum.lowercase().contains(q) ||
-                it.kingdom.lowercase().contains(q) ||
-                it.tags.any { t -> t.lowercase().contains(q) } ||
-                it.habitat.lowercase().contains(q)
+        try {
+            // Get base results (by category or full search)
+            val cat = selectedCategory
+            val base = if (cat != null) {
+                val byCategory = database.getByCategory(cat)
+                if (searchQuery.isBlank()) byCategory
+                else byCategory.filter {
+                    val q = searchQuery.lowercase()
+                    it.commonName.lowercase().contains(q) ||
+                    it.scientificName.lowercase().contains(q) ||
+                    it.genus.lowercase().contains(q) ||
+                    it.family.lowercase().contains(q) ||
+                    it.order.lowercase().contains(q) ||
+                    it.phylum.lowercase().contains(q) ||
+                    it.kingdom.lowercase().contains(q) ||
+                    it.tags.any { t -> t.lowercase().contains(q) } ||
+                    it.habitat.lowercase().contains(q)
+                }
+            } else {
+                database.search(searchQuery, limit = 200)
             }
-        } else {
-            database.search(searchQuery, limit = 200)
-        }
 
-        // Apply continent filter
-        val filtered = if (selectedContinent != null) {
-            base.filter { it.continents.any { c -> c.equals(selectedContinent, ignoreCase = true) } }
-        } else {
-            base
-        }
+            // Apply continent filter
+            val filtered = if (selectedContinent != null) {
+                base.filter { it.continents.any { c -> c.equals(selectedContinent, ignoreCase = true) } }
+            } else {
+                base
+            }
 
-        species = filtered.sortedByOption(selectedSort)
+            species = filtered.sortedByOption(selectedSort)
+        } catch (e: Exception) {
+            CrashReporter.recordNonFatal(e, "SpeciesBrowser.search")
+        }
         isLoading = false
     }
 
@@ -583,16 +591,20 @@ fun SharedTransitionScope.SpeciesDetailScreen(
     var internalSpeciesId by remember { mutableStateOf(speciesId) }
 
     LaunchedEffect(internalSpeciesId) {
-        val record = database.getById(internalSpeciesId)
-        species = record
-        if (record != null && record.similarSpecies.isNotEmpty()) {
-            // Load similar species data
-            similarSpecies = record.similarSpecies.mapNotNull { name ->
-                // Look up by common name (fuzzy match)
-                database.search(name, limit = 1).firstOrNull { it.commonName.equals(name, ignoreCase = true) }
-                    ?: database.search(name, limit = 1).firstOrNull { it.commonName.contains(name, ignoreCase = true) }
-                    ?: database.search(name, limit = 1).firstOrNull { it.scientificName.contains(name, ignoreCase = true) }
+        try {
+            val record = database.getById(internalSpeciesId)
+            species = record
+            if (record != null && record.similarSpecies.isNotEmpty()) {
+                // Load similar species data
+                similarSpecies = record.similarSpecies.mapNotNull { name ->
+                    // Look up by common name (fuzzy match)
+                    database.search(name, limit = 1).firstOrNull { it.commonName.equals(name, ignoreCase = true) }
+                        ?: database.search(name, limit = 1).firstOrNull { it.commonName.contains(name, ignoreCase = true) }
+                        ?: database.search(name, limit = 1).firstOrNull { it.scientificName.contains(name, ignoreCase = true) }
+                }
             }
+        } catch (e: Exception) {
+            CrashReporter.recordNonFatal(e, "SpeciesDetail.load")
         }
         isLoading = false
     }
