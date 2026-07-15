@@ -78,6 +78,8 @@ import fieldmind.research.app.features.field.presentation.components.LocalPrivac
 import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.glassCard
+import fieldmind.research.app.ui.theme.gradientBorder
 // JournalDecorations.kt lives in the same package: journalBorderStroke,
 // JournalDivider are all reachable without an import.
 // FieldMindIcons is in the same package (components.FieldMindIcons)
@@ -568,12 +570,14 @@ fun FieldScreenHeader(
 ) {
     val shape = CuteCardDefaults.ShapeCompact
     Surface(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .glassCard(shape = shape)
+            .gradientBorder(shape = shape),
         shape = shape,
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-        tonalElevation = 2.dp,
-        shadowElevation = 2.dp,
-        border = journalBorderStroke()
+        color = Color.Transparent,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
     ) {
         Row(
             Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
@@ -684,12 +688,13 @@ fun StandardScreenHeader(
     val shape = CuteCardDefaults.ShapeCompact
     Surface(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .glassCard(shape = shape)
+            .gradientBorder(shape = shape),
         shape = shape,
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 3.dp,
-        shadowElevation = 3.dp,
-        border = journalBorderStroke()
+        color = Color.Transparent,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
     ) {
         Row(
             Modifier.padding(18.dp),
