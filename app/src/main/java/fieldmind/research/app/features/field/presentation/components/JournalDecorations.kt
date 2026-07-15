@@ -30,11 +30,7 @@ import androidx.compose.ui.unit.dp
  * artifacts on cards that would otherwise have no visible edge definition.
  */
 @Composable
-fun journalBorderStroke(): BorderStroke? =
-    BorderStroke(
-        width = 0.5.dp,
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.12f)
-    )
+fun journalBorderStroke(): BorderStroke? = null
 
 /**
  * Simple styled divider. Delegates to [HorizontalDivider] with soft
