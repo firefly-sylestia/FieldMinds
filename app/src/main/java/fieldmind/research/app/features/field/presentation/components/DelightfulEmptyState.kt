@@ -109,10 +109,6 @@ fun DelightfulEmptyState(
     val chipShape = CuteCardDefaults.ChipShape
     val isDark = FieldMindTheme.colors.isDark
     // Brighter text in dark mode for better readability
-    val titleColor = if (isDark)
-        MaterialTheme.colorScheme.onSurface
-    else
-        MaterialTheme.colorScheme.onSurface
     val bodyColor = if (isDark)
         MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f)
     else
@@ -181,12 +177,12 @@ fun DelightfulEmptyState(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                // ── Title with warmth — brighter in dark mode ──
+                // ── Title with warmth ──
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = titleColor,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     lineHeight = MaterialTheme.typography.titleLarge.lineHeight
                 )
