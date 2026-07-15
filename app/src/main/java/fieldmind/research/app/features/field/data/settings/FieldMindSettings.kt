@@ -349,7 +349,7 @@ class FieldMindSettings private constructor(context: Context) {
     // ── Predictive back settings ──
     private val _predictiveBackEnabled = MutableStateFlow(prefs.getBoolean(KEY_PREDICTIVE_BACK_ENABLED, true))
     val predictiveBackEnabled: StateFlow<Boolean> = _predictiveBackEnabled.asStateFlow()
-    private val _predictiveBackScaleMin = MutableStateFlow(prefs.getFloat(KEY_PREDICTIVE_BACK_SCALE_MIN, 0.85f))
+    private val _predictiveBackScaleMin = MutableStateFlow(prefs.getFloat(KEY_PREDICTIVE_BACK_SCALE_MIN, 0.88f))
     val predictiveBackScaleMin: StateFlow<Float> = _predictiveBackScaleMin.asStateFlow()
 
     // ── New expressive motion tunables ──
@@ -923,7 +923,7 @@ class FieldMindSettings private constructor(context: Context) {
         _animationsEnabled.value = true
         _animationSpeedPreset.value = "Normal"
         _predictiveBackEnabled.value = true
-        _predictiveBackScaleMin.value = 0.85f
+        _predictiveBackScaleMin.value = 0.88f
         _sideSwipeEnabled.value = true
         _sideSwipeThreshold.value = 0.25f
         _sideSwipeDamping.value = 0.62f

@@ -140,7 +140,7 @@ data class AnimationConfig(
     val stiffness: Float = 280f,
     // ── Predictive back (Android 13+ system back gesture) ──
     val predictiveBackEnabled: Boolean = true,
-    val predictiveBackScaleMin: Float = 0.85f,
+    val predictiveBackScaleMin: Float = 0.88f,
     // Swipe-back spring
     val swipeBackDampingRatio: Float = 0.75f,
     val swipeBackStiffness: Float = 300f,
@@ -287,8 +287,8 @@ object FieldMindMotion {
 
     // ── Predictive Back Constants ──
 
-    const val predictiveBackScaleMin = 0.85f
-    const val predictiveBackScrimAlpha = 0.28f
+    const val predictiveBackScaleMin = 0.88f
+    const val predictiveBackScrimAlpha = 0.20f
 
     // ── Swipe-back Constants ──
 
@@ -298,8 +298,8 @@ object FieldMindMotion {
     const val swipeScaleFactor = 0.90f
     const val swipeScrimAlpha = 0.28f
     const val swipeShadowElevationDp = 24f
-    const val swipeCornerRadiusDp = 28f
-    const val swipeBaseCornerRadiusDp = 12f
+    const val swipeCornerRadiusDp = 36f
+    const val swipeBaseCornerRadiusDp = 20f
 
     // ── Utility ──
 
@@ -1053,7 +1053,7 @@ fun SwipeBackHost(
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 36.dp),
+                        shape = RoundedCornerShape(topEnd = 40.dp, bottomEnd = 44.dp),
                         tonalElevation = 3.dp,
                         shadowElevation = 16.dp,
                         border = androidx.compose.foundation.BorderStroke(
@@ -1225,7 +1225,7 @@ fun SwipeBackHost(
             content()
 
             // ── Back arrow indicator ──
-            if (isHorizontalPeek && animX.value > contentWidth * 0.05f) {
+            if (isHorizontalPeek && animX.value > contentWidth * 0.10f) {
                 Box(
                     modifier = Modifier
                         .padding(start = 4.dp)
@@ -1240,7 +1240,7 @@ fun SwipeBackHost(
             }
 
             // ── Downward swipe indicator ──
-            if (!isHorizontalPeek && animY.value > contentHeight * 0.05f) {
+            if (!isHorizontalPeek && animY.value > contentHeight * 0.10f) {
                 Box(
                     modifier = Modifier
                         .padding(top = 4.dp)

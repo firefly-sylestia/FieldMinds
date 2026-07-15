@@ -195,23 +195,23 @@ object CuteShadows {
  */
 object CuteCardDefaults {
     /** Standard cute card shape — softly rounded, pill-like. */
-    val Shape: Shape = RoundedCornerShape(32.dp)
+    val Shape: Shape = RoundedCornerShape(36.dp)
     /** Slightly smaller card shape for inline / compact cards. */
-    val ShapeCompact: Shape = RoundedCornerShape(24.dp)
+    val ShapeCompact: Shape = RoundedCornerShape(28.dp)
     /** Large hero card shape. */
-    val ShapeHero: Shape = RoundedCornerShape(36.dp)
+    val ShapeHero: Shape = RoundedCornerShape(42.dp)
     /** Standard chip/badge shape — rounded pill. */
-    val ChipShape: Shape = RoundedCornerShape(16.dp)
+    val ChipShape: Shape = RoundedCornerShape(20.dp)
     /** Button / small interactive element shape. */
-    val ButtonShape: Shape = RoundedCornerShape(22.dp)
+    val ButtonShape: Shape = RoundedCornerShape(26.dp)
     /** Dialog / modal shape. */
-    val DialogShape: Shape = RoundedCornerShape(40.dp)
+    val DialogShape: Shape = RoundedCornerShape(44.dp)
     /** Option picker item shape. */
-    val OptionShape: Shape = RoundedCornerShape(28.dp)
+    val OptionShape: Shape = RoundedCornerShape(32.dp)
     /** Text field shape. */
-    val FieldShape: Shape = RoundedCornerShape(28.dp)
+    val FieldShape: Shape = RoundedCornerShape(32.dp)
     /** Progress bar shape — slightly rounded for a soft, glass-like look. */
-    val ProgressBarShape: Shape = RoundedCornerShape(8.dp)
+    val ProgressBarShape: Shape = RoundedCornerShape(12.dp)
 
     /**
      * Default card colours — uses surfaceContainerLowest so the card
