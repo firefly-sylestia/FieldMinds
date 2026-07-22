@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -16,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import fieldmind.research.app.shared.presentation.theme.LocalJournalStyle
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.glassCard
@@ -25,6 +23,7 @@ import fieldmind.research.app.ui.theme.glassCard
 //  INTERNAL IMPLEMENTATION — All public overloads delegate here.
 //  Named _ClickableCardImpl to avoid any Kotlin overload-resolution
 //  ambiguity that could cause infinite self-recursion (StackOverflowError).
+//  Uses CuteCardDefaults + glassCard + expressiveCardPress (existing APIs).
 // ══════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -46,24 +45,21 @@ private fun _ClickableCardImpl(
     animate: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val journal = LocalJournalStyle.current
-    val effectiveShape = shape ?: RoundedCornerShape(journal.cardCornerRadius)
-    val effectiveBorder = border ?: journalBorderStroke(journal)
-    val textureModifier = journalTextureModifier(journal)
+    val effectiveShape = shape ?: CuteCardDefaults.Shape
+    val effectiveBorder = border ?: journalBorderStroke()
     val effectiveModifier = if (applyFillMaxWidth) modifier.fillMaxWidth() else modifier
 
     Surface(
         onClick = onClick,
         modifier = effectiveModifier
             .heightIn(min = minHeight)
-            .staggeredEntrance(index = index, animate = animate)
-            .then(textureModifier)
+            .glassCard(shape = effectiveShape)
             .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
         shape = effectiveShape,
-        color = colors.containerColor,
+        color = Color.Transparent,
         contentColor = colors.contentColor,
-        tonalElevation = tonalElevation,
-        shadowElevation = shadowElevation,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
         border = effectiveBorder
     ) {
         Column(modifier = Modifier.fillMaxWidth(), content = content)
@@ -131,7 +127,7 @@ fun ClickableCard(
     modifier: Modifier = Modifier,
     fillMaxWidth: Boolean = true,
     minHeight: Dp = 68.dp,
-    shape: Shape = RoundedCornerShape(34.dp),
+    shape: Shape = CuteCardDefaults.Shape,
     colors: CardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ),
@@ -185,7 +181,7 @@ fun ClickableCard(
     modifier: Modifier = Modifier,
     tintStrength: Float = 0.08f,
     minHeight: Dp = 68.dp,
-    shape: Shape = RoundedCornerShape(34.dp),
+    shape: Shape = CuteCardDefaults.Shape,
     tonalElevation: Dp = CuteElevations.clickableTier,
     shadowElevation: Dp = CuteElevations.clickableTier,
     liftDp: Float = 1.5f,
