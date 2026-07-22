@@ -90,10 +90,10 @@ class FieldMindApplication : Application() {
         // ── Step 2: Initialize CrashReporter (must succeed) ──
         runCatching {
             CrashReporter.init(this)
+            Log.d(TAG, "✓ CrashReporter initialized")
         }.onFailure { e ->
             Log.e(TAG, "✗ FAILED to initialize CrashReporter", e)
         }
-        Log.d(TAG, "✓ CrashReporter initialized")
 
         // ── Step 3: Clear the fallback crash marker (now being handled) ──
         if (previousCrash != null) {
