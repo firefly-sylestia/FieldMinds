@@ -37,6 +37,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import fieldmind.research.app.ui.theme.glassCard
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -86,9 +87,9 @@ fun FluidBottomSheet(
             parentHeight - fullSheetHeight + sheetOffset
         },
         animationSpec = if (isDragging)
-            spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = 800f)
+            FieldMindMotion.expressiveSoft
         else
-            spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = 300f),
+            FieldMindMotion.expressiveFloat,
         label = "sheetY"
     )
 
@@ -190,27 +191,36 @@ fun FluidBottomSheet(
                             scaleY = contentScale
                             translationY = -animatedOffset * 0.02f
                         }
-                        .background(MaterialTheme.colorScheme.surface)
-                ) {
-                    Column {
-                        // Grab handle
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp),
-                            contentAlignment = Alignment.TopCenter
-                        ) {
+                    ) {
+                    val sheetShape = RoundedCornerShape(
+                        topStart = cornerRadius.dp,
+                        topEnd = cornerRadius.dp
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .glassCard(shape = sheetShape)
+                    ) {
+                        Column {
+                            // Grab handle
                             Box(
                                 modifier = Modifier
-                                    .width(40.dp)
-                                    .height(5.dp)
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
-                            )
-                        }
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .width(40.dp)
+                                        .height(5.dp)
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
+                                )
+                            }
 
-                        // Content
-                        content()
+                            // Content
+                            content()
+                        }
                     }
                 }
             }

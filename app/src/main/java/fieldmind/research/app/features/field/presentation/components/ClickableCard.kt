@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,21 +17,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.glassCard
 
 /**
  * A clickable card with built-in [expressiveCardPress] animation (lift + scale),
- * explicit [tonalElevation] for visible dark-mode depth (surfaceTint overlay),
- * and [shadowElevation] for the drop shadow.
+ * glassmorphic frosted-glass surface and soft shadow.
  *
- * Uses [Surface] internally (instead of [androidx.compose.material3.Card]) so that
- * [tonalElevation] and [shadowElevation] can be controlled separately.
- *
- * Defaults:
- * - [CuteCardDefaults.Shape] (32dp)
- * - surfaceContainerLow background
- * - tonalElevation = clickableTier (8dp) — produces visible primary-tint overlay on dark backgrounds
- * - shadowElevation = clickableTier (8dp)
- * - 1.5dp lift, 0.985 scale-down on press
+ * Uses [Surface] internally with [glassCard] modifier for
+ * a premium glass look that auto-adapts to dark/light mode.
  */
 @Composable
 fun ClickableCard(
@@ -53,29 +45,26 @@ fun ClickableCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     val effectiveShape = shape ?: CuteCardDefaults.Shape
-    val effectiveBorder = border ?: journalBorderStroke()
 
     Surface(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = minHeight)
-            .staggeredEntrance(index = index, animate = animate)
+            .glassCard(shape = effectiveShape)
             .expressiveCardPress(liftDp = liftDp, scaleDown = scaleDown),
         shape = effectiveShape,
-        color = colors.containerColor,
+        color = Color.Transparent,
         contentColor = colors.contentColor,
-        tonalElevation = tonalElevation,
-        shadowElevation = shadowElevation,
-        border = effectiveBorder
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
     ) {
         Column(modifier = Modifier.fillMaxWidth(), content = content)
     }
 }
 
 /**
- * A non-clickable information card with the same visual style as [ClickableCard].
- * Uses [Surface] with explicit [tonalElevation] / [shadowElevation] for dark-mode depth.
+ * A non-clickable information card with glassmorphic styling.
  */
 @Composable
 fun InfoCard(
@@ -93,19 +82,17 @@ fun InfoCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     val effectiveShape = shape ?: CuteCardDefaults.Shape
-    val effectiveBorder = border ?: journalBorderStroke()
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = minHeight)
-            .staggeredEntrance(index = index, animate = animate),
+            .glassCard(shape = effectiveShape),
         shape = effectiveShape,
-        color = colors.containerColor,
+        color = Color.Transparent,
         contentColor = colors.contentColor,
-        tonalElevation = tonalElevation,
-        shadowElevation = shadowElevation,
-        border = effectiveBorder
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
     ) {
         Column(modifier = Modifier.fillMaxWidth(), content = content)
     }
@@ -113,7 +100,6 @@ fun InfoCard(
 
 /**
  * Overload that controls whether [fillMaxWidth] is applied.
- * Pass `false` for inline or weighted layouts where the parent manages width.
  */
 @Composable
 fun ClickableCard(
@@ -154,7 +140,6 @@ fun ClickableCard(
 
 /**
  * Convenience overload with an [accentColor] parameter that tints the card container.
- * Use this for colorful, visually distinct cards across the UI.
  */
 @Composable
 fun ClickableCard(

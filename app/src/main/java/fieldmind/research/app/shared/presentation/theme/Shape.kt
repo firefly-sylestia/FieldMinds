@@ -11,19 +11,19 @@ val Shapes = Shapes(
     // Extra rounded corners for a friendly, approachable feel.
     
     // Extra small components (small chips, badges)
-    extraSmall = RoundedCornerShape(12.dp),
+    extraSmall = RoundedCornerShape(16.dp),
     
     // Small components (chips, small buttons)
-    small = RoundedCornerShape(16.dp),
+    small = RoundedCornerShape(20.dp),
     
     // Medium components (buttons, cards, FABs)
-    medium = RoundedCornerShape(20.dp),
+    medium = RoundedCornerShape(24.dp),
     
     // Large components (sheets, dialogs, large cards)
-    large = RoundedCornerShape(28.dp),
+    large = RoundedCornerShape(32.dp),
     
     // Extra large components (full-width modals, prominent surfaces)
-    extraLarge = RoundedCornerShape(36.dp)
+    extraLarge = RoundedCornerShape(40.dp)
 )
 
 

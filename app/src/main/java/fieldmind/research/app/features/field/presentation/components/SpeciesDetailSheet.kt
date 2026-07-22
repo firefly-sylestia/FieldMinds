@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,7 @@ import fieldmind.research.app.features.field.data.vision.SpeciesRecord
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.ui.theme.glassCard
 
 // ══════════════════════════════════════════════════════════════════════
 //  Species Detail Bottom Sheet — Full species info for observation form
@@ -49,11 +51,15 @@ fun SpeciesDetailSheet(
             )
 
             // Sheet content
+            val sheetShape = RoundedCornerShape(topStart = 36.dp, topEnd = 40.dp)
             Surface(
-                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                shape = RoundedCornerShape(topStart = 36.dp, topEnd = 40.dp),
-                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                tonalElevation = 4.dp
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .glassCard(shape = sheetShape),
+                shape = sheetShape,
+                color = Color.Transparent,
+                tonalElevation = 0.dp
             ) {
                 Column(
                     Modifier
@@ -138,9 +144,9 @@ fun SpeciesDetailSheet(
                         if (record.habitat.isNotBlank()) {
                             Card(
                                 shape = CuteCardDefaults.ShapeCompact,
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f).glassCard(shape = CuteCardDefaults.ShapeCompact)
                             ) {
                                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                     Icon(FieldMindIcons.Nature, null, tint = accent, size = 20.dp)
@@ -152,9 +158,9 @@ fun SpeciesDetailSheet(
                         if (record.diet.isNotBlank()) {
                             Card(
                                 shape = CuteCardDefaults.ShapeCompact,
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f).glassCard(shape = CuteCardDefaults.ShapeCompact)
                             ) {
                                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                     Icon(FieldMindIcons.Water, null, tint = accent, size = 20.dp)
@@ -227,9 +233,9 @@ fun TaxonomySection(
 
     Card(
         shape = CuteCardDefaults.OptionShape,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().glassCard(shape = CuteCardDefaults.OptionShape)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(

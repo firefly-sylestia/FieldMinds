@@ -109,7 +109,7 @@ fun TaskDetailScreen(
     // ── Animated progress ──
     val animatedProgress by animateFloatAsState(
         targetValue = progress / 100f,
-        animationSpec = spring(stiffness = androidx.compose.animation.core.Spring.StiffnessMediumLow),
+        animationSpec = FieldMindMotion.expressiveSoft,
         label = "taskProgress"
     )
 
@@ -422,7 +422,7 @@ fun TaskDetailScreen(
                             LaunchedEffect(isChecked) {
                                 if (isChecked) {
                                     checkBounce.snapTo(1.3f)
-                                    checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 500f))
+                                    checkBounce.animateTo(1f, spring(dampingRatio = 0.80f, stiffness = 246f))
                                 }
                             }
                             Surface(
@@ -430,7 +430,7 @@ fun TaskDetailScreen(
                                     haptics.light()
                                     checklistScope.launch {
                                         checkBounce.snapTo(1.3f)
-                                        checkBounce.animateTo(1f, spring(dampingRatio = 0.55f, stiffness = 350f))
+                                        checkBounce.animateTo(1f, spring(dampingRatio = 0.68f, stiffness = 252f))
                                     }
                                     // Toggle item — read latest task data from ViewModel state directly
                                     checklistScope.launch {

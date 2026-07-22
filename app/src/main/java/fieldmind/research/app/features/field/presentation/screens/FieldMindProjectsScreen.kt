@@ -457,7 +457,7 @@ private fun ProjectCard(
     val animatedVisibilityScope = LocalAnimatedVisibilityScope.current
 
     Card(
-        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate).expressivePress(scaleDown = 0.98f).clickable(onClick = onClick),
+        modifier = Modifier.fillMaxWidth().expressivePress(scaleDown = 0.98f).clickable(onClick = onClick),
         shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.clickableTier)

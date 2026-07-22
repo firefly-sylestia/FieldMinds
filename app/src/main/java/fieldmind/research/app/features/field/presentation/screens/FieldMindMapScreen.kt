@@ -649,7 +649,7 @@ private fun OfflineTilesTab(
             item { Text("Cached regions", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold) }
         itemsIndexed(cachedRegions) { i, region ->
             Card(
-                modifier = Modifier.fillMaxWidth().staggeredEntrance(index = i, animate = true),
+                modifier = Modifier.fillMaxWidth(),
                 shape = CuteCardDefaults.ShapeCompact,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
@@ -1220,7 +1220,7 @@ private fun TracksTab(
         }
         itemsIndexed(savedTracks.sortedByDescending { it.startedAt }) { i, track ->
             Card(
-                modifier = Modifier.fillMaxWidth().staggeredEntrance(index = i, animate = true),
+                modifier = Modifier.fillMaxWidth(),
                 shape = CuteCardDefaults.ShapeCompact,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
@@ -1290,7 +1290,7 @@ private fun GeofencesTab(
         }
         itemsIndexed(geofenceRegions) { i, region ->
             Card(
-                modifier = Modifier.fillMaxWidth().staggeredEntrance(index = i, animate = true),
+                modifier = Modifier.fillMaxWidth(),
                 shape = CuteCardDefaults.ShapeCompact,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             ) {

@@ -304,7 +304,7 @@ private fun OnboardingWelcomePage(
                     enter = fadeIn(FieldMindMotion.expressiveFloat) + slideInVertically { it / 4 }) {
                     Text("Your personal field research companion.",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
                 }
                 Spacer(Modifier.height(8.dp))
 
@@ -346,7 +346,8 @@ private fun OnboardingWelcomePage(
                 modifier = Modifier.padding(bottom = 16.dp)) {
                 Text("How often do you go out?",
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold)
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface)
                 Row(Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     frequencies.forEach { freq ->
@@ -408,7 +409,7 @@ private fun OnboardingInterestsPage(
                             fontWeight = FontWeight.ExtraBold)
                         Text("Select all that apply.",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
                     }
                 }
 
@@ -522,7 +523,7 @@ private fun OtherFieldsSection(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text("Other fields", style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.82f))
         val otherFields = listOf(
             Triple("Ecology", FieldMindIcons.Weather,
                 FieldMindTheme.colors.categorical[3]),
@@ -587,7 +588,7 @@ private fun CustomInterestSection(
         Text("Custom interests",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.82f))
         OutlinedTextField(value = customInput,
             onValueChange = onCustomInputChange,
             label = { Text("Add custom field") },
@@ -653,7 +654,7 @@ private fun OnboardingPermissionsPage(
                             fontWeight = FontWeight.ExtraBold)
                         Text("Grant later from Settings.",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
                     }
                 }
 
@@ -751,7 +752,7 @@ private fun PermissionCard(item: PermItem) {
                 }
                 Text(item.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
             }
             if (!item.granted) {
                 Button(onClick = item.onRequest,
@@ -806,7 +807,7 @@ private fun OnboardingThemePage(
                             fontWeight = FontWeight.ExtraBold)
                         Text("Choose your look, layout, and goal.",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
                     }
                 }
 
@@ -872,7 +873,7 @@ private fun OnboardingThemePage(
                                 fontWeight = FontWeight.SemiBold)
                             Text("Match your wallpaper palette",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
                         }
                         Switch(checked = useDynamicColors,
                             onCheckedChange = onDynamicColorsChange)
@@ -946,13 +947,25 @@ private fun ThemeSelector(selectedTheme: String,
                             "Light" -> FieldMindIcons.Weather
                             else -> FieldMindIcons.MoonFull
                         }, null,
-                            tint = if (sel) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.onSurfaceVariant,
+                            tint = if (sel) {
+                                when (theme) {
+                                    "Dark" -> Color.White
+                                    "Light" -> MaterialTheme.colorScheme.primary
+                                    else -> MaterialTheme.colorScheme.primary
+                                }
+                            } else MaterialTheme.colorScheme.onSurfaceVariant,
                             size = 24.dp)
                         Text(theme,
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = if (sel) FontWeight.Bold
-                                else FontWeight.Normal)
+                                else FontWeight.Normal,
+                            color = if (sel) {
+                                when (theme) {
+                                    "Dark" -> Color.White
+                                    "Light" -> MaterialTheme.colorScheme.onSurface
+                                    else -> MaterialTheme.colorScheme.onPrimaryContainer
+                                }
+                            } else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.82f))
                     }
                 }
             }
@@ -975,14 +988,14 @@ private fun UnitsSelector(
             Column(Modifier.weight(1f)) {
                 Text("Temperature",
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.82f))
                 SegBtn(listOf("Celsius", "Fahrenheit"),
                     tempUnit, onTempUnitChange)
             }
             Column(Modifier.weight(1f)) {
                 Text("Distance",
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.82f))
                 SegBtn(listOf("km", "mi"),
                     distanceUnit, onDistanceUnitChange)
             }
@@ -992,7 +1005,7 @@ private fun UnitsSelector(
             verticalAlignment = Alignment.CenterVertically) {
             Text("Time",
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.82f))
             SegBtn(listOf("24h", "12h"),
                 timeFormat, onTimeFormatChange)
         }
@@ -1013,7 +1026,7 @@ private fun SegBtn(options: List<String>, selected: String,
                         topStart = 16.dp, bottomStart = 20.dp)
                     else if (last) RoundedCornerShape(
                         topEnd = 16.dp, bottomEnd = 20.dp)
-                    else RoundedCornerShape(0.dp),
+                    else RoundedCornerShape(8.dp),
                 color = if (sel) MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.surfaceContainerHighest,
                 border = BorderStroke(0.5.dp,
@@ -1023,7 +1036,7 @@ private fun SegBtn(options: List<String>, selected: String,
                     fontWeight = if (sel) FontWeight.Bold
                         else FontWeight.Normal,
                     color = if (sel) MaterialTheme.colorScheme.onPrimary
-                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.82f),
                     modifier = Modifier.padding(
                         horizontal = 16.dp, vertical = 10.dp))
             }
@@ -1054,10 +1067,10 @@ private fun DailyGoalSlider(dailyGoal: Int,
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text("None",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
             Text("10/day",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
         }
     }
 }
@@ -1116,7 +1129,7 @@ private fun OnboardingReviewPage(
                             textAlign = TextAlign.Center)
                         Text("Your companion is ready.",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
                     }
                 }
 
@@ -1210,7 +1223,7 @@ private fun RevRow(label: String, value: String,
         Column(Modifier.weight(1f)) {
             Text(label,
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f))
             Text(value, style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold)
         }

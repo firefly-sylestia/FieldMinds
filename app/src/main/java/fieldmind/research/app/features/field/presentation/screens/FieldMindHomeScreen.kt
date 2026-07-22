@@ -396,7 +396,10 @@ fun SharedTransitionScope.HomeScreen(
             // ── Observations Timeline — Compact card, opens full page ──
             item {
                 val colors = FieldMindTheme.colors
-                JournalCard( // Journal-aware card styling
+                Surface(
+                    shape = CuteCardDefaults.ShapeCompact,
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    tonalElevation = CuteElevations.nonClickableTier,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -477,7 +480,10 @@ fun SharedTransitionScope.HomeScreen(
                     Triple("Weather Log", "Conditions record", FieldMindIcons.Weather) to FieldMindScreen.WeatherLogTool,
                     Triple("Species", "Quick observation", FieldMindIcons.Nature) to FieldMindScreen.SpeciesTool
                 )
-                JournalCard( // Journal-aware card styling
+                Surface(
+                    shape = CuteCardDefaults.ShapeCompact,
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    tonalElevation = CuteElevations.nonClickableTier,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -522,9 +528,14 @@ fun SharedTransitionScope.HomeScreen(
 
             // ── Field Map Card ──
             item {
-                JournalClickableCard(
+                Surface(
                     onClick = { onNavigate(FieldMindScreen.MapScreen) },
+                    shape = CuteCardDefaults.ShapeCompact,
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    tonalElevation = CuteElevations.clickableTier,
+                    shadowElevation = CuteElevations.clickableTier,
                     modifier = Modifier.fillMaxWidth()
+                        .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 ) {
                     Row(
                         Modifier.fillMaxWidth().padding(16.dp),
@@ -554,7 +565,10 @@ fun SharedTransitionScope.HomeScreen(
                     Triple("Bibliography", "Manage citations", MaterialSymbolIcon("book")) to FieldMindScreen.CitationManager,
                     Triple("Collaborate", "Share with others", MaterialSymbolIcon("share")) to FieldMindScreen.Collaboration
                 )
-                JournalCard(
+                Surface(
+                    shape = CuteCardDefaults.ShapeCompact,
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    tonalElevation = CuteElevations.nonClickableTier,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -1988,7 +2002,7 @@ private fun ReadingReviewCard(sources: List<SourceEntity>, flashcards: List<Flas
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradientStyle = remember(gradientStyleName) { fieldmind.research.app.ui.theme.CuteGradients.fromString(gradientStyleName) }
     val gradient = fieldmind.research.app.ui.theme.CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
-    JournalCard(
+    Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = CuteCardDefaults.Shape
     ) {

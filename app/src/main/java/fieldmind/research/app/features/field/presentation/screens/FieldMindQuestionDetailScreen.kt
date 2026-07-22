@@ -128,7 +128,7 @@ fun QuestionDetailScreen(
     // ── Animated confidence bar ──
     val animatedConfidence by animateFloatAsState(
         targetValue = confidenceLevel / 100f,
-        animationSpec = spring(stiffness = androidx.compose.animation.core.Spring.StiffnessMediumLow),
+        animationSpec = FieldMindMotion.expressiveSoft,
         label = "confidence"
     )
     val questionScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }

@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.screens
 import fieldmind.research.app.ui.theme.CuteCardDefaults
+import fieldmind.research.app.ui.theme.glassCard
 
 import android.content.Intent
 import android.net.Uri
@@ -53,10 +54,12 @@ import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbo
 import fieldmind.research.app.features.field.presentation.components.ColorSchemeSwatchPicker
 import fieldmind.research.app.features.field.presentation.components.pressScale
 import fieldmind.research.app.features.field.presentation.components.FieldMindLogo
+import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
+import fieldmind.research.app.features.field.presentation.components.SideRevealDirection
+import fieldmind.research.app.features.field.presentation.components.pulse
+import fieldmind.research.app.features.field.presentation.components.shimmer
+import fieldmind.research.app.features.field.presentation.components.morphShape
 
-import fieldmind.research.app.shared.presentation.theme.KeyedEnum
-import fieldmind.research.app.shared.presentation.theme.MicroDelightIntensity
-import fieldmind.research.app.shared.presentation.theme.NavBarStyle
 import fieldmind.research.app.features.field.presentation.screens.DevWeatherTestPanel
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.foundation.text.KeyboardOptions
@@ -127,7 +130,8 @@ fun FieldMindSettingsScreen(
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
     val settingsScrollState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
-    LazyColumn(
+    Box(Modifier.fillMaxSize()) {
+        LazyColumn(
         state = settingsScrollState,
         modifier = Modifier.fillMaxSize().statusBarsPadding(),
         contentPadding = PaddingValues(20.dp, 12.dp, 20.dp, 40.dp),
@@ -236,11 +240,18 @@ fun FieldMindSettingsScreen(
         item { SettingsNavCard("Developer options", "Debug tools, logging, performance stats, and test data", MaterialSymbolIcon("tune"), FieldMindTheme.colors.hypothesis) { onOpenDeveloper?.invoke() } }
 
         item {
-            OutlinedButton(onClick = onResetOnboarding, modifier = Modifier.fillMaxWidth(), shape = CuteCardDefaults.ShapeCompact) {
+            OutlinedButton(
+                onClick = {
+                    onResetOnboarding()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = CuteCardDefaults.ShapeCompact
+            ) {
                 Text("Reset onboarding")
             }
             Spacer(Modifier.height(40.dp))
         }
+    }
     }
 }
 
@@ -252,8 +263,12 @@ private fun SettingsNavCard(title: String, subtitle: String, icon: MaterialSymbo
     val gradientStyle = remember(gradientStyleName) { CuteGradients.fromString(gradientStyleName) }
     val gradientOpacity by gradientSettings.gradientOpacity.collectAsState()
     val gradient = CuteGradients.brushFor(gradientStyle, opacity = gradientOpacity)
+    val animConfig = LocalAnimationConfig.current
     Card(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).pressScale(scaleDown = 0.97f),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .pressScale(scaleDown = 0.97f),
         shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
@@ -552,7 +567,10 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
                                     Box(
                                         Modifier
                                             .size(32.dp)
-                                            .clip(CuteCardDefaults.ChipShape)
+                                            .morphShape(
+                                                targetCornerRadius = if (isSelected) 12.dp else 4.dp,
+                                                animate = isSelected
+                                            )
                                             .background(brush = previewBrush)
                                     )
                                     Text(
@@ -602,26 +620,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
             }
         }
 
-        // ╔══════════════════════════════════════════════════════════════╗
-        // ║  NAV BAR STYLE                                              ║
-        // ╚══════════════════════════════════════════════════════════════╝
-        item { SectionHeader("Navigation bar", "How the bottom navigation bar looks and animates") }
-        item {
-            val navBarStyleKey by settings.navBarStyle.collectAsState()
 
-            SettingsGroupCard {
-                PillRadioGroup(
-                    title = "Nav bar style",
-                    description = "How the active tab indicator animates across the bottom bar.",
-                    icon = MaterialSymbolIcon("dock_to_bottom"),
-                    options = NavBarStyle.entries.toList(),
-                    selectedKey = navBarStyleKey,
-                    onSelect = { settings.setNavBarStyle(it.key) }
-                )
-            }
-        }
-
-        // ── Map settings ──
         // ── Entity accent colors ──
         item { SectionHeader("Entity Colors", "Per-category accent color customization") }
         item {
@@ -642,7 +641,7 @@ fun AppearanceSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, on
             }
         }
         item {
-            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = Color.Transparent), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.glassCard(shape = CuteCardDefaults.Shape)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Map data", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("FieldMind uses OpenStreetMap tiles for map rendering. No map data is sent to any server beyond the tile request.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -664,66 +663,6 @@ private fun ThemeToggle(current: String, onSet: (String) -> Unit) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-//  PillRadioGroup — generic three-option radio row
-// ══════════════════════════════════════════════════════════════════════
-
-/**
- * Three-option horizontal radio row used by the Journal Aesthetic section.
- * Renders any [Enum] subtype of [KeyedEnum].
- *
- * @param title       short section title (labelLarge, semi-bold)
- * @param description subtitle describing the trade-off
- * @param icon        leading icon shown next to title
- * @param options     3 keyed enum entries to render as pills
- * @param selectedKey currently-active enum.key
- * @param onSelect    invoked with the chosen enum value
- */
-@Composable
-private fun <T> PillRadioGroup(
-    title: String,
-    description: String,
-    icon: MaterialSymbolIcon,
-    options: List<T>,
-    selectedKey: String,
-    onSelect: (T) -> Unit
-) where T : Enum<T>, T : KeyedEnum {
-    Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Box(
-                Modifier.size(28.dp).clip(CuteCardDefaults.ChipShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
-            }
-            Text(title, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        Text(description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Spacer(Modifier.height(2.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            options.forEach { option ->
-                val isSelected = option.key == selectedKey
-                Surface(
-                    onClick = { onSelect(option) },
-                    shape = MaterialTheme.shapes.medium,
-                    color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-                    border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
-                    modifier = Modifier.weight(1f).pressScale(scaleDown = 0.95f)
-                ) {
-                    Text(
-                        text = option.displayName,
-                        modifier = Modifier.padding(vertical = 10.dp, horizontal = 4.dp).fillMaxWidth(),
-                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                        textAlign = TextAlign.Center,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-        }
-    }
-}
 
 // ══════════════════════════════════════════════════════════════════════
 //  Capture Defaults Settings Page
@@ -812,7 +751,7 @@ fun NotificationsSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
             }
         }
         item {
-            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = Color.Transparent), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.glassCard(shape = CuteCardDefaults.Shape)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("How it works", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("Each notification type runs as a separate WorkManager periodic job. Toggling a notification off cancels its recurring schedule. Data is checked locally — no network calls are made for notifications.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -883,7 +822,7 @@ fun AiAssistantSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
         item {
-            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = Color.Transparent), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.glassCard(shape = CuteCardDefaults.Shape)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Privacy note", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("Nothing is sent to any AI provider without an explicit action. Your API key is stored only on this device.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -906,7 +845,7 @@ fun LocalModelSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
 
     SettingsSubPage("Study profiles", icon = FieldMindIcons.Sparkle, onBack = onBack) {
         item {
-            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = Color.Transparent), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.glassCard(shape = CuteCardDefaults.Shape)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Box(Modifier.size(36.dp).clip(CuteCardDefaults.ChipShape).background(FieldMindTheme.colors.flashcard.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
@@ -964,7 +903,7 @@ fun LocalModelSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
         item {
-            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = Color.Transparent), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.glassCard(shape = CuteCardDefaults.Shape)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("How it works", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text(
@@ -1082,7 +1021,7 @@ fun SecuritySettingsPage(
     SettingsSubPage("Privacy & Security", icon = FieldMindIcons.Lock, onBack = onBack) {
         // ── Security Status ──
         item {
-            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = Color.Transparent), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.glassCard(shape = CuteCardDefaults.Shape)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Column { Text("Security Status", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold); Text("$enabledCount of 5 protections enabled", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
@@ -1313,7 +1252,7 @@ fun SecuritySettingsPage(
 
         // ── Info card ──
         item {
-            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+            Card(shape = CuteCardDefaults.Shape, colors = CardDefaults.cardColors(containerColor = Color.Transparent), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), modifier = Modifier.glassCard(shape = CuteCardDefaults.Shape)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Your data stays on this device", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                     Text("FieldMind stores everything locally. No data is sent to any server unless you explicitly export or share it.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1426,12 +1365,18 @@ fun BackupImportSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit, 
 fun AboutPage(onBack: () -> Unit, onOpenChangelog: (() -> Unit)? = null) {
     val uriHandler = LocalUriHandler.current
 
+    var logoFlipProgress by remember { mutableFloatStateOf(0f) }
+    val aboutAnimConfig = LocalAnimationConfig.current
     SettingsSubPage("About", icon = FieldMindIcons.Info, onBack = onBack) {
         item {
             Card(
                 shape = CuteCardDefaults.Shape,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)
+                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { logoFlipProgress = if (logoFlipProgress == 0f) 1f else 0f }
+                    .pageFlip(progress = logoFlipProgress, enabled = aboutAnimConfig.pageFlipEnabled)
             ) {
                 Column(Modifier.padding(22.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     FieldMindLogo(
@@ -2051,9 +1996,9 @@ fun DataIntegritySettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit)
         }
         item {
             if (isRunning) {
-                Card(shape = CuteCardDefaults.ShapeCompact, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier)) {
+                Card(shape = CuteCardDefaults.ShapeCompact, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.nonClickableTier), modifier = Modifier.shimmer(enabled = true)) {
                     Row(Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                        CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                        CircularProgressIndicator(modifier = Modifier.size(20.dp).pulse(enabled = true, minScale = 0.9f, maxScale = 1.1f), strokeWidth = 2.dp)
                         Text("Running integrity check…", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     }
                 }
@@ -3235,18 +3180,8 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
         item {
             val showCloudAnimation by settings.weatherShowCloudAnimation.collectAsState()
             val weatherBackgroundAnimation by settings.weatherBackgroundAnimationEnabled.collectAsState()
-            val microDelightKey by settings.microDelightIntensity.collectAsState()
             SettingsGroupCard {
                 Column(Modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    PillRadioGroup(
-                        title = "Micro-delights",
-                        description = "Whimsical touches on captures, streaks, button presses, and celebrations.",
-                        icon = MaterialSymbolIcon("auto_awesome"),
-                        options = MicroDelightIntensity.entries.toList(),
-                        selectedKey = microDelightKey,
-                        onSelect = { settings.setMicroDelightIntensity(it.key) }
-                    )
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), modifier = Modifier.padding(horizontal = 16.dp))
                     ToggleItem(
                         "Background weather animation",
                         "Animated skybox, drifting clouds, fireflies, and atmospheric motion behind the weather widget. Turn off to render a static journal-themed gradient.",
@@ -3358,6 +3293,114 @@ fun AnimationSettingsPage(viewModel: FieldMindViewModel, onBack: () -> Unit) {
             }
         }
 
+
+        // ── Expressive Motion ──
+        item { SectionHeader("Expressive motion", "Side reveals, morphs, shimmer, pulse, and celebrations") }
+        item {
+            val morphDuration by settings.animMorphDurationMs.collectAsState()
+            val sideRevealDistance by settings.animSideRevealDistanceDp.collectAsState()
+            val shimmerSpeed by settings.animShimmerSpeedMs.collectAsState()
+            val pulseDuration by settings.animPulseDurationMs.collectAsState()
+            val listChoreography by settings.animListChoreographyEnabled.collectAsState()
+            val confetti by settings.animConfettiEnabled.collectAsState()
+            val pageFlip by settings.animPageFlipEnabled.collectAsState()
+
+            SettingsGroupCard {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text(
+                        "Toggle and tune the new expressive animation effects. These respect the master animation switch and speed preset above.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    ToggleItem(
+                        "List choreography",
+                        "Staggered, choreographed entrances for list and grid items.",
+                        listChoreography,
+                        settings::setAnimListChoreographyEnabled,
+                        MaterialSymbolIcon("view_list")
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    ToggleItem(
+                        "Celebration confetti",
+                        "Brief particle burst on achievements and completion moments.",
+                        confetti,
+                        settings::setAnimConfettiEnabled,
+                        MaterialSymbolIcon("celebration")
+                    )
+                    HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                    ToggleItem(
+                        "Page flip transitions",
+                        "3D card-flip style transitions for detail screens.",
+                        pageFlip,
+                        settings::setAnimPageFlipEnabled,
+                        MaterialSymbolIcon("flip")
+                    )
+
+                    HorizontalDivider(Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+
+                    // Morph duration
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Morph duration", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${morphDuration}ms", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(
+                            value = morphDuration.toFloat(),
+                            onValueChange = { settings.setAnimMorphDurationMs(it.toInt()) },
+                            valueRange = 100f..1000f,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary, activeTrackColor = MaterialTheme.colorScheme.primary)
+                        )
+                    }
+
+                    // Side reveal distance
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Side reveal distance", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${sideRevealDistance.toInt()}dp", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(
+                            value = sideRevealDistance,
+                            onValueChange = { settings.setAnimSideRevealDistanceDp(it) },
+                            valueRange = 16f..120f,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary, activeTrackColor = MaterialTheme.colorScheme.primary)
+                        )
+                    }
+
+                    // Shimmer speed
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Shimmer speed", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${shimmerSpeed}ms", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(
+                            value = shimmerSpeed.toFloat(),
+                            onValueChange = { settings.setAnimShimmerSpeedMs(it.toInt()) },
+                            valueRange = 400f..3000f,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary, activeTrackColor = MaterialTheme.colorScheme.primary)
+                        )
+                    }
+
+                    // Pulse duration
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text("Pulse duration", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("${pulseDuration}ms", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Slider(
+                            value = pulseDuration.toFloat(),
+                            onValueChange = { settings.setAnimPulseDurationMs(it.toInt()) },
+                            valueRange = 500f..3000f,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.primary, activeTrackColor = MaterialTheme.colorScheme.primary)
+                        )
+                    }
+                }
+            }
+        }
         // ── Interactive Animation Preview ──
         item { SectionHeader("Live preview", "See how each speed preset affects animation feel") }
         item {
@@ -3421,10 +3464,10 @@ private fun SpeedPresetAnimationPreview(
         offsetYAnim.snapTo(0f)
         rotationAnim.snapTo(0f)
         delay(150)
-        scaleAnim.animateTo(1f, animConfig.entranceSpring())
+        scaleAnim.animateTo(1f, animConfig.spring())
         delay(400)
-        scaleAnim.animateTo(0.95f, animConfig.entranceSpring())
-        scaleAnim.animateTo(1f, animConfig.entranceSpring())
+        scaleAnim.animateTo(0.95f, animConfig.spring())
+        scaleAnim.animateTo(1f, animConfig.spring())
         delay(200)
         scaleAnim.animateTo(0f, animConfig.swipeBackSpring())
         lastAction = "Ready"
@@ -3534,7 +3577,7 @@ private fun SpeedPresetAnimationPreview(
                         lastAction = "Entrance — scale spring"
                         scope.launch {
                             scaleAnim.snapTo(0f); offsetXAnim.snapTo(0f); offsetYAnim.snapTo(0f); rotationAnim.snapTo(0f)
-                            scaleAnim.animateTo(1f, animConfig.entranceSpring())
+                            scaleAnim.animateTo(1f, animConfig.spring())
                         }
                     },
                     enabled = animationsEnabled,
@@ -3563,7 +3606,7 @@ private fun SpeedPresetAnimationPreview(
                         lastAction = "Rotation — spinner"
                         scope.launch {
                             rotationAnim.snapTo(0f); scaleAnim.snapTo(1f); offsetXAnim.snapTo(0f); offsetYAnim.snapTo(0f)
-                            rotationAnim.animateTo(360f, animConfig.entranceSpring())
+                            rotationAnim.animateTo(360f, animConfig.spring())
                             rotationAnim.snapTo(0f)
                         }
                     },

@@ -59,31 +59,36 @@ val LocalAnimatedVisibilityScope: ProvidableCompositionLocal<AnimatedVisibilityS
  *   - `-1` → slides in from the left, out to the right
  *   - `0`  → uses a gentle fade + scale (no directional bias)
  *
- * Uses [FieldMindMotion.slideSpring] for smooth spring physics on the
- * slide offset and [FieldMindMotion.fadeThroughSpring] for the fade.
+ * Uses springs derived from the provided [AnimationConfig] for smooth
+ * slide offset and fade physics.
  */
 fun AnimatedContentTransitionScope<*>.sharedAxisHorizontal(
     direction: Int,
-    initialScale: Float = 0.97f
+    initialScale: Float = 0.97f,
+    config: AnimationConfig = AnimationConfig.DEFAULT
 ): ContentTransform {
-    val slideSpec = FieldMindMotion.slideOffsetSpring
+    val slideSpec = config.slideSpring()
+    val fadeSpec = spring<Float>(
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
+    )
 
     val enter: EnterTransition = if (direction != 0) {
         slideInHorizontally(slideSpec) { direction * it } +
-            fadeIn(animationSpec = FieldMindMotion.expressiveFloat)
+            fadeIn(animationSpec = fadeSpec)
     } else {
-        fadeIn(animationSpec = FieldMindMotion.expressiveFloat) +
+        fadeIn(animationSpec = fadeSpec) +
             scaleIn(
                 initialScale = initialScale,
-                animationSpec = FieldMindMotion.expressiveFloat
+                animationSpec = fadeSpec
             )
     }
 
     val exit: ExitTransition = if (direction != 0) {
         slideOutHorizontally(slideSpec) { -direction * it } +
-            fadeOut(animationSpec = FieldMindMotion.expressiveFloat)
+            fadeOut(animationSpec = fadeSpec)
     } else {
-        fadeOut(animationSpec = FieldMindMotion.expressiveFloat)
+        fadeOut(animationSpec = fadeSpec)
     }
 
     return enter togetherWith exit
@@ -93,10 +98,12 @@ fun AnimatedContentTransitionScope<*>.sharedAxisHorizontal(
  * A fade-through transition — the current screen fades out while the next
  * screen fades in, with a subtle cross-fade overlap.
  *
- * Uses [FieldMindMotion.expressiveFloat] for a smooth, non-bouncy fade.
+ * Uses a spring derived from the provided [AnimationConfig] for a
+ * smooth, non-bouncy fade.
  */
 fun AnimatedContentTransitionScope<*>.fadeThrough(
-    fadeDurationMs: Int = FieldMindMotion.durationEmphasized
+    fadeDurationMs: Int = 400,
+    config: AnimationConfig = AnimationConfig.DEFAULT
 ): ContentTransform {
     val spec = tween<Float>(durationMillis = fadeDurationMs, easing = FastOutSlowInEasing)
     val enter = fadeIn(animationSpec = spec)
@@ -110,16 +117,28 @@ fun AnimatedContentTransitionScope<*>.fadeThrough(
  */
 fun scaleEnter(
     initialScale: Float = 0.97f,
-    spec: FiniteAnimationSpec<Float> = FieldMindMotion.expressiveFloat
-): EnterTransition = fadeIn(animationSpec = spec) +
-    scaleIn(initialScale = initialScale, animationSpec = spec)
+    config: AnimationConfig = AnimationConfig.DEFAULT
+): EnterTransition {
+    val spec = spring<Float>(
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
+    )
+    return fadeIn(animationSpec = spec) +
+        scaleIn(initialScale = initialScale, animationSpec = spec)
+}
 
 /**
  * A simple fade-out exit transition.
  */
 fun fadeExit(
-    spec: FiniteAnimationSpec<Float> = FieldMindMotion.expressiveFloat
-): ExitTransition = fadeOut(animationSpec = spec)
+    config: AnimationConfig = AnimationConfig.DEFAULT
+): ExitTransition {
+    val spec = spring<Float>(
+        dampingRatio = config.dampingRatio,
+        stiffness = (config.stiffness * 0.78f).coerceAtLeast(60f)
+    )
+    return fadeOut(animationSpec = spec)
+}
 
 // ────────────────────────────────────────────────────────────────────────────
 //  Route Transition Spec Map

@@ -79,9 +79,9 @@ fun PullToRefreshBox(
     val animatedPull by animateFloatAsState(
         targetValue = pullOffset,
         animationSpec = if (pullOffset > 0f)
-            spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = 200f)
+            FieldMindMotion.expressiveSnap
         else
-            spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = 400f),
+            FieldMindMotion.expressiveSoft,
         label = "pullToRefresh"
     )
 

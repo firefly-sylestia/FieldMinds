@@ -18,6 +18,7 @@ import fieldmind.research.app.features.field.data.analysis.DetectedPattern
 import fieldmind.research.app.features.field.data.analysis.PatternDetectionEngine
 import fieldmind.research.app.features.field.data.flashcard.SmartFlashcardGenerator
 import fieldmind.research.app.features.field.data.question.QuestionGenerator
+import fieldmind.research.app.util.CrashReporter
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -76,26 +77,36 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         detectedPatterns = combine(
             observations, fieldSettings.autoPatternDetectionEnabled
         ) { obs, enabled ->
-            if (enabled && obs.isNotEmpty()) PatternDetectionEngine.detectAll(obs) else emptyList()
+            try {
+                if (enabled && obs.isNotEmpty()) PatternDetectionEngine.detectAll(obs) else emptyList()
+            } catch (e: Exception) {
+                CrashReporter.recordNonFatal(e, "ViewModel.patternDetection")
+                emptyList()
+            }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
         startAutoGeneration()
 
         // Push widget data on init and whenever any relevant StateFlow changes
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            // Collect all relevant flows — emits whenever any count changes
-            // Nested combines because combine() only supports up to 5 flows
-            combine(
-                combine(observations, notes) { _, _ -> Unit },
-                combine(questions, projects) { _, _ -> Unit },
-                combine(sources, reports) { _, _ -> Unit }
-            ) { _, _, _ -> Unit }.collect {
-                fieldmind.research.app.infrastructure.widget.glance.FieldMindDashboardWidget.updateData(getApplication())
+            try {
+                // Collect all relevant flows — emits whenever any count changes
+                // Nested combines because combine() only supports up to 5 flows
+                combine(
+                    combine(observations, notes) { _, _ -> Unit },
+                    combine(questions, projects) { _, _ -> Unit },
+                    combine(sources, reports) { _, _ -> Unit }
+                ) { _, _, _ -> Unit }.collect {
+                    fieldmind.research.app.infrastructure.widget.glance.FieldMindDashboardWidget.updateData(getApplication())
+                }
+            } catch (e: Exception) {
+                CrashReporter.recordNonFatal(e, "ViewModel.dashboardWidget")
             }
         }
 
         // Push research streak widget data whenever observations change
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            observations.collect { obsList ->
+            try {
+                observations.collect { obsList ->
                 val today = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
                 val prefs = getApplication<android.app.Application>()
                     .getSharedPreferences("fieldmind_streak", android.content.Context.MODE_PRIVATE)
@@ -111,23 +122,34 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                     totalSightings = totalSightings
                 )
             }
+            } catch (e: Exception) {
+                CrashReporter.recordNonFatal(e, "ViewModel.streakWidget")
+            }
         }
 
         // Push species widget data whenever observations change
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            observations.collect {
-                fieldmind.research.app.infrastructure.widget.glance.FieldMindSpeciesWidget.updateData(
-                    getApplication()
-                )
+            try {
+                observations.collect {
+                    fieldmind.research.app.infrastructure.widget.glance.FieldMindSpeciesWidget.updateData(
+                        getApplication()
+                    )
+                }
+            } catch (e: Exception) {
+                CrashReporter.recordNonFatal(e, "ViewModel.speciesWidget")
             }
         }
 
         // Push quickstats widget data whenever observations or projects change
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            combine(observations, projects) { _, _ -> Unit }.collect {
-                fieldmind.research.app.infrastructure.widget.glance.FieldMindQuickStatsWidget.updateData(
-                    getApplication()
-                )
+            try {
+                combine(observations, projects) { _, _ -> Unit }.collect {
+                    fieldmind.research.app.infrastructure.widget.glance.FieldMindQuickStatsWidget.updateData(
+                        getApplication()
+                    )
+                }
+            } catch (e: Exception) {
+                CrashReporter.recordNonFatal(e, "ViewModel.quickStatsWidget")
             }
         }
     }
@@ -1451,6 +1473,7 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
         var todayGenCount = 0
 
         viewModelScope.launch {
+            try {
             combine(
                 observations,
                 notes,
@@ -1544,6 +1567,9 @@ class FieldMindViewModel(application: Application) : AndroidViewModel(applicatio
                         android.util.Log.d("FieldMindVM", "Daily auto-generation cap ($AUTO_GEN_DAILY_CAP) reached — pausing until tomorrow")
                     }
                 }
+            } catch (e: Exception) {
+                CrashReporter.recordNonFatal(e, "ViewModel.autoGen")
+            }
         }
     }
 

@@ -180,7 +180,7 @@ private fun InAppLessonCard(
     val accent = FieldMindTheme.colors.accentFor(lesson.slug)
 
     Card(
-        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
+        modifier = Modifier.fillMaxWidth(),
         shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -392,7 +392,7 @@ private fun ActivityRecommendationCard(
     val accent = FieldMindTheme.colors.accentFor("learn")
 
     Card(
-        modifier = Modifier.fillMaxWidth().staggeredEntrance(index = index, animate = animate),
+        modifier = Modifier.fillMaxWidth(),
         shape = CuteCardDefaults.FieldShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -484,8 +484,7 @@ private fun LearnCategoryCardCompact(
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .staggeredEntrance(index = index, animate = animate),
+            .fillMaxWidth(),
         shape = CuteCardDefaults.Shape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)

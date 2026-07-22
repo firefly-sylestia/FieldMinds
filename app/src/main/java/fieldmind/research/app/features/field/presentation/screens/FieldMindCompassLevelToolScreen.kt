@@ -276,7 +276,7 @@ fun CompassToolScreen(
     // ── Smooth animated display azimuth ──
     val smoothDisplayAzimuth by animateFloatAsState(
         targetValue = displayAzimuth,
-        animationSpec = spring(dampingRatio = 0.7f, stiffness = 200f),
+        animationSpec = FieldMindMotion.expressiveSoft,
         label = "displayAzimuth"
     )
 
@@ -1734,8 +1734,8 @@ private fun CircularBubbleLevel(
     val maxTilt = 45f; val sensitivity = 0.84f
     val targetBubbleX = (roll.coerceIn(-maxTilt, maxTilt) / maxTilt * sensitivity)
     val targetBubbleY = (pitch.coerceIn(-maxTilt, maxTilt) / maxTilt * sensitivity)
-    val smoothBX by animateFloatAsState(targetBubbleX, spring(dampingRatio = 0.65f, stiffness = 220f), label = "bubbleX")
-    val smoothBY by animateFloatAsState(targetBubbleY, spring(dampingRatio = 0.65f, stiffness = 220f), label = "bubbleY")
+    val smoothBX by animateFloatAsState(targetBubbleX, FieldMindMotion.expressiveSoft, label = "bubbleX")
+    val smoothBY by animateFloatAsState(targetBubbleY, FieldMindMotion.expressiveSoft, label = "bubbleY")
 
     Box(modifier = Modifier.size(260.dp), contentAlignment = Alignment.Center) {
         val bubbleColor = accent

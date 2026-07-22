@@ -4,6 +4,8 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -84,14 +86,14 @@ fun StickyNoteBlock(
     val currentColor = colors.getOrElse(colorIndex.coerceIn(0, colors.lastIndex)) { colors[0] }
     val bgColor by animateColorAsState(
         targetValue = Color(currentColor.first),
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        animationSpec = tween(durationMillis = FieldMindMotion.durationStandard),
         label = "stickyColor"
     )
 
     // Animate shadow elevation on selection
     val elevation by animateFloatAsState(
         targetValue = if (isSelected) 8f else 3f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        animationSpec = FieldMindMotion.expressiveFloat,
         label = "stickyElevation"
     )
 
@@ -302,7 +304,7 @@ private fun ColorPickerRow(
                 val isSelected = index == selectedIndex
                 val colorCircleSize by animateFloatAsState(
                     targetValue = if (isSelected) 28f else 24f,
-                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+                    animationSpec = FieldMindMotion.expressiveFloat,
                     label = "colorCircleSize"
                 )
 

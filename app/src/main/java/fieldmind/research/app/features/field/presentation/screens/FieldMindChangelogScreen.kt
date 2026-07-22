@@ -1,7 +1,13 @@
 package fieldmind.research.app.features.field.presentation.screens
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +22,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -28,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
 import fieldmind.research.app.features.field.presentation.components.BackButton
@@ -45,6 +56,83 @@ internal data class FieldMindChangelogEntry(
     val tags: List<String>,
     val sections: List<Pair<String, List<String>>>
 )    private    val fieldMindChangelog = listOf(
+        // ── v3.3 — Seamless Glass Surfaces & Crash UI Redesign ──
+FieldMindChangelogEntry(
+    version = "3.3",
+    date = "2026-07-15",
+    title = "🫧 Seamless Glass Surfaces & Crash UI Redesign",
+    importance = "Patch",
+    tags = listOf("glass", "cards", "crash-ui", "border-removal", "design-system"),
+    sections = listOf(
+        "🫧 Rectangular box outlines removed from all cards" to listOf(
+            "✓ Removed gradientBorder() from all card surfaces globally — ClickableCard, InfoCard, GlassCard, SettingsGroupCard, StandardScreenHeader, FieldScreenHeader, FluidBottomSheet, SwipeableDialog, SpeciesDetailSheet, and all settings cards",
+            "✓ Removed explicit .border() from glassCard() modifier — cards now have truly seamless edges with no visible rectangular outlines",
+            "✓ premiumCard() no longer applies gradientBorder — navigation rail and floating pill have clean rounded shapes",
+            "✓ All cards and surfaces now blend smoothly with their backgrounds — no harsh box outlines anywhere",
+        ),
+        "🛡️ Crash UI completely redesigned" to listOf(
+            "✓ Removed multi-layer shadow boxes (LayerDrawable with ambient/penumbra/umbra layers) — replaced with clean single-surface layout",
+            "✓ Soft warm color palette (cream bg, clean white surfaces, subtle lavender accents)",
+            "✓ Hero section centered with app name + crash type label — no heavy card framing",
+            "✓ Pill-shaped buttons throughout for a softer, friendlier look",
+            "✓ Single entrance animation instead of three separate card animations",
+            "✓ Compact layout with flowing sections — crash details, copy/share actions, recovery options, and reassuring footer",
+            "✓ Full crash report expandable inline (tap to show/hide monospace log)",
+        ),
+        "🎨 What's New screen redesigned" to listOf(
+            "✓ All changelog entries now use compact collapsible cards — tap any header to expand/collapse",
+            "✓ Latest version entry expanded by default with a chevron indicator",
+            "✓ Tags, sections, and bullet points animate smoothly via AnimatedVisibility",
+            "✓ Cleaner visual hierarchy — version, date, importance badge, and title in a compact row",
+        ),
+    )
+),
+
+        // ── v3.0 — Design Overhaul, Animation Engine v2, Camera V2, Crash Recovery ──
+FieldMindChangelogEntry(
+    version = "3.0",
+    date = "2026-07-15",
+    title = "🎨 Design Overhaul, Animation Engine v2 & Stability",
+    importance = "Major",
+    tags = listOf("design-system", "animation", "camera", "crash-recovery", "compass", "performance"),
+    sections = listOf(
+        "🎨 Global design unification — 200+ files standardized" to listOf(
+            "✓ Every card, chip, button, and sheet now uses CuteCardDefaults design tokens — no more hardcoded corner radii",
+            "✓ Core shapes: Shape (32dp), ShapeCompact (24dp), ChipShape (18dp), ProgressBarShape (10dp) — rounder, cuter overall look",
+            "✓ All 4 journal styles unified around a single cohesive design language — color identity preserved via warmth tints",
+            "✓ Journal system fully purged: JournalCard.kt, JournalStyle.kt, and ~350 lines of dormant drawing code removed",
+        ),
+        "✨ Animation Engine v2 — Telegram-inspired springs & morphing" to listOf(
+            "✓ All animations rewritten with runtime-tunable spring physics — ~50% snappier defaults",
+            "✓ Graphics-shapes powered morph system: circle ↔ rounded rect, star ↔ hexagon, and more with spring interpolation",
+            "✓ Android 13+ predictive back with real previous-screen peek (not mock placeholders)",
+            "✓ Telegram-style side swipe actions for list items with configurable thresholds and reveal distance",
+            "✓ Six new motion effects: sideReveal, morphShape, shimmer, pulse, pageFlip, and ConfettiOverlay",
+            "✓ Live animation tuning sliders in Developer Settings — tweak damping and stiffness in real time",
+        ),
+        "📷 Camera V2 — complete rewrite" to listOf(
+            "✓ 6 bugs fixed: duplicate onPhotoCaptured calls, double-shadow, modifier duplication",
+            "✓ Clean Z-layering with unified cute rounded design language",
+            "✓ Full CameraX integration with capture, preview, and lifecycle management",
+        ),
+        "🧭 Compass & Level — liquid glass polish" to listOf(
+            "✓ Liquid glass bubble level with glassmorphic tilt gauge and hysteresis auto-mode",
+            "✓ Cardinal labels and chart axes rendered with Compose TextMeasurer instead of native Paint",
+        ),
+        "🛡️ Crash recovery — now reliable" to listOf(
+            "✓ Native Android Views replace Compose in crash process — no more painterResource failures",
+            "✓ Confirmation dialog before disabling security lock",
+            "✓ Crash recovery theme fully isolated from main UI theme",
+        ),
+        "🔧 UX & performance" to listOf(
+            "✓ AMOLED true-black dark mode with auto-detection",
+            "✓ NavBarStyle blob color now actually changes per selected style",
+            "✓ Sound effects system removed — ~700 KB APK savings",
+            "✓ Premium screen transitions with scale+fade",
+        ),
+    )
+),
+
         // ── v0.50.3 — Strip dormant per-style drawing code from JournalDecorations.kt ──
 FieldMindChangelogEntry(
     version = "0.50.3",
@@ -1359,11 +1447,11 @@ fun FieldMindChangelogScreen(onBack: () -> Unit) {
         state = changelogScrollState,
         modifier = Modifier.fillMaxSize().statusBarsPadding(),
         contentPadding = PaddingValues(20.dp, 20.dp, 20.dp, 40.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {    item {
             StandardScreenHeader(
                 title = "What's New",
-                subtitle = "Complete field research redesign with 12 phases of new features",
+                subtitle = "Every update, one tap to expand — tap any version header to see details",
                 icon = FieldMindIcons.Info,
                 heroColor = FieldMindTheme.colors.observation,
                 trailing = { BackButton(onClick = onBack) }
@@ -1416,187 +1504,215 @@ private fun ChangelogEntryCard(entry: FieldMindChangelogEntry) {
         entry.importance == "Major" -> MaterialTheme.colorScheme.error
         else -> MaterialTheme.colorScheme.tertiary
     }
-    
+    var expanded by remember { mutableStateOf(isLatest) }
+
     Card(
-        shape = CuteCardDefaults.ShapeHero,
+        shape = CuteCardDefaults.ShapeCompact,
         colors = CardDefaults.cardColors(
-            containerColor = if (isLatest) MaterialTheme.colorScheme.primaryContainer 
+            containerColor = if (isLatest) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                           else MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (isLatest) 4.dp else 0.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isLatest) 2.dp else 0.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            // Header with version badge
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+        Column {
+            // ── Compact header — always visible, tap to toggle ──
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { expanded = !expanded }
+                    .padding(horizontal = 16.dp, vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // Version badge
                 Box(
-                    Modifier.size(56.dp)
-                        .clip(CuteCardDefaults.FieldShape)
-                        .background(accentColor.copy(alpha = 0.15f)),
+                    Modifier
+                        .size(40.dp)
+                        .clip(CuteCardDefaults.ChipShape)
+                        .background(accentColor.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        if (isLatest) FieldMindIcons.Sparkle else FieldMindIcons.Info,
-                        null,
-                        tint = accentColor,
-                        size = 32.dp
+                    Text(
+                        entry.version,
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = accentColor
                     )
                 }
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+
+                // Title + date
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     Text(
                         entry.title,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(FieldMindIcons.Calendar, null, size = 14.dp, 
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text(
                             entry.date,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Text("•", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(
-                            entry.version,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-                // Importance badge
-                Box(
-                    Modifier.clip(MaterialTheme.shapes.medium)
-                        .background(
-                            when (entry.importance) {
-                                "Major" -> MaterialTheme.colorScheme.errorContainer
-                                else -> MaterialTheme.colorScheme.tertiaryContainer
-                            }
-                        )
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        entry.importance,
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        color = when (entry.importance) {
-                            "Major" -> MaterialTheme.colorScheme.onErrorContainer
-                            else -> MaterialTheme.colorScheme.onTertiaryContainer
-                        }
-                    )
-                }
-            }
-
-            // Tags with icons
-            if (entry.tags.isNotEmpty()) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    entry.tags.forEach { tag ->
                         Box(
-                            Modifier.clip(CuteCardDefaults.ChipShape)
-                                .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f))
-                                .padding(horizontal = 10.dp, vertical = 5.dp),
-                            contentAlignment = Alignment.Center
+                            Modifier.size(3.dp).clip(RoundedCornerShape(2.dp))
+                                .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+                        )
+                        // Importance mini badge
+                        Box(
+                            Modifier
+                                .clip(CuteCardDefaults.ChipShape)
+                                .background(
+                                    when (entry.importance) {
+                                        "Major" -> MaterialTheme.colorScheme.errorContainer
+                                        else -> MaterialTheme.colorScheme.tertiaryContainer
+                                    }
+                                )
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
                         ) {
                             Text(
-                                tag,
+                                entry.importance,
                                 style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Medium,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                                fontWeight = FontWeight.SemiBold,
+                                color = when (entry.importance) {
+                                    "Major" -> MaterialTheme.colorScheme.onErrorContainer
+                                    else -> MaterialTheme.colorScheme.onTertiaryContainer
+                                }
                             )
                         }
                     }
                 }
+
+                // Expand/collapse chevron
+                Icon(
+                    if (expanded) FieldMindIcons.Up else FieldMindIcons.Down,
+                    contentDescription = if (expanded) "Collapse" else "Expand",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                    size = 20.dp
+                )
             }
 
-            // Divider
-            Spacer(
-                Modifier.fillMaxWidth().height(1.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-            )
-
-            // Feature sections with icons
-            entry.sections.forEach { (heading, bullets) ->
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    // Section heading with icon
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Box(
-                            Modifier.size(6.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(accentColor)
-                        )
-                        Text(
-                            heading,
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.SemiBold,
-                            color = accentColor,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                    
-                    // Feature bullets with improved spacing
-                    bullets.forEach { bullet ->
+            // ── Expandable body ──
+            AnimatedVisibility(
+                visible = expanded,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                Column(
+                    Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    // Tags
+                    if (entry.tags.isNotEmpty()) {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            verticalAlignment = Alignment.Top,
-                            modifier = Modifier.fillMaxWidth()
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            entry.tags.take(8).forEach { tag ->
+                                Box(
+                                    Modifier
+                                        .clip(CuteCardDefaults.ChipShape)
+                                        .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
+                                        .padding(horizontal = 8.dp, vertical = 3.dp)
+                                ) {
+                                    Text(
+                                        tag,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Medium,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                        maxLines = 1
+                                    )
+                                }
+                            }
+                            if (entry.tags.size > 8) {
+                                Text(
+                                    "+${entry.tags.size - 8}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+
+                    // Divider
+                    Spacer(
+                        Modifier.fillMaxWidth().height(1.dp)
+                            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                    )
+
+                    // Sections
+                    entry.sections.forEach { (heading, bullets) ->
+                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Box(
+                                    Modifier.size(5.dp)
+                                        .clip(RoundedCornerShape(3.dp))
+                                        .background(accentColor)
+                                )
+                                Text(
+                                    heading,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = accentColor,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                            bullets.forEach { bullet ->
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    verticalAlignment = Alignment.Top
+                                ) {
+                                    Text(
+                                        "•",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = accentColor.copy(alpha = 0.5f)
+                                    )
+                                    Text(
+                                        bullet,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // Latest badge
+                    if (isLatest) {
+                        Spacer(Modifier.height(4.dp))
+                        Row(
+                            Modifier.fillMaxWidth()
+                                .clip(CuteCardDefaults.ChipShape)
+                                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
+                                .padding(horizontal = 12.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                FieldMindIcons.Check,
+                                FieldMindIcons.Sparkle,
                                 null,
-                                size = 18.dp,
-                                tint = accentColor.copy(alpha = 0.7f),
-                                modifier = Modifier.padding(top = 2.dp)
+                                size = 14.dp,
+                                tint = MaterialTheme.colorScheme.primary
                             )
                             Text(
-                                bullet,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.weight(1f)
+                                "You're on the latest version",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Medium
                             )
                         }
-                    }
-                }
-            }
-            
-            // Latest badge for current version
-            if (isLatest) {
-                Spacer(Modifier.height(4.dp))
-                Box(
-                    Modifier.fillMaxWidth()
-                        .clip(CuteCardDefaults.ButtonShape)
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
-                        .padding(12.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            FieldMindIcons.Sparkle,
-                            null,
-                            size = 16.dp,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            "Latest version with comprehensive research features",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
                     }
                 }
             }

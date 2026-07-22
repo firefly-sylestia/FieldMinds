@@ -3,9 +3,14 @@ package fieldmind.research.app.features.field.presentation.components
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -25,13 +30,27 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.util.lerp
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.random.Random
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,9 +65,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Matrix
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -56,13 +82,25 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
+import androidx.graphics.shapes.CornerRounding
+import androidx.graphics.shapes.Morph
+import androidx.graphics.shapes.RoundedPolygon
+import androidx.graphics.shapes.toPath
+import androidx.graphics.shapes.circle
+import androidx.graphics.shapes.rectangle
+import androidx.graphics.shapes.star
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -96,158 +134,144 @@ val LocalPeekContentHolder = compositionLocalOf { PeekContentHolder() }
  * to customize spring physics without recompiling.
  */
 data class AnimationConfig(
-    // — Smooth, responsive spring defaults —
-    // These power the tunable sliders in Developer settings.
-    // Moderate stiffness for snappy-but-smooth motion.
-    // High damping (close to 1.0) = no bounce, pure smoothness.
-    val entranceDampingRatio: Float = 0.92f,
-    val entranceStiffness: Float = 110f,
-    val swipeBackDampingRatio: Float = 0.90f,
-    val swipeBackStiffness: Float = 140f,
-    val cancelDampingRatio: Float = 0.93f,
-    val cancelStiffness: Float = 160f,
-    val tabEntranceDampingRatio: Float = 0.92f,
-    val tabEntranceStiffness: Float = 160f,
+    // ── Organic Motion spring physics (nature-inspired) ──
+    // DewDrop: gentle ease with micro-overshoot, like water settling on a leaf
+    val dampingRatio: Float = 0.72f,
+    val stiffness: Float = 280f,
+    // ── Predictive back (Android 13+ system back gesture) ──
+    val predictiveBackEnabled: Boolean = true,
+    val predictiveBackScaleMin: Float = 0.88f,
+    // Swipe-back spring
+    val swipeBackDampingRatio: Float = 0.75f,
+    val swipeBackStiffness: Float = 300f,
+    // Swipe behavior
     val swipeThreshold: Float = 0.20f,
-    val swipeScaleFactor: Float = 0.92f
+    val swipeScaleFactor: Float = 0.92f,
+    // Transition slide stiffness
+    val slideStiffness: Float = 350f,
+    // ── Side swipe (item-level swipe actions) ──
+    val sideSwipeEnabled: Boolean = true,
+    val sideSwipeThreshold: Float = 0.25f,
+    val sideSwipeDampingRatio: Float = 0.62f,
+    val sideSwipeStiffness: Float = 380f,
+    val sideSwipeMaxRevealDp: Float = 80f,
+    // ── Shape morphing ──
+    val morphEnabled: Boolean = true,
+    val morphDampingRatio: Float = 0.78f,
+    val morphStiffness: Float = 200f,
+    // ── Duration tokens ──
+    val morphDurationMs: Int = 380,
+    val shimmerSpeedMs: Int = 1200,
+    val pulseDurationMs: Int = 1500,
+    // ── Feature toggles ──
+    val pageFlipEnabled: Boolean = true
 ) {
     companion object {
-        /** Default config used when no LocalAnimationConfig is provided. */
         val DEFAULT = AnimationConfig()
     }
 
-    fun entranceSpring() = spring<Float>(
-        dampingRatio = entranceDampingRatio,
-        stiffness = entranceStiffness
-    )
-
-    fun swipeBackSpring() = spring<Float>(
-        dampingRatio = swipeBackDampingRatio,
-        stiffness = swipeBackStiffness
-    )
-
-    fun cancelSpring() = spring<Float>(
-        dampingRatio = cancelDampingRatio,
-        stiffness = cancelStiffness
-    )
-
-    fun tabEntranceSpring() = spring<Float>(
-        dampingRatio = tabEntranceDampingRatio,
-        stiffness = tabEntranceStiffness
-    )
+    fun spring() = spring<Float>(dampingRatio = dampingRatio, stiffness = stiffness)
+    fun swipeBackSpring() = spring<Float>(dampingRatio = swipeBackDampingRatio, stiffness = swipeBackStiffness)
+    fun slideSpring() = spring<IntOffset>(dampingRatio = 0.88f, stiffness = slideStiffness)
+    fun bouncySpring() = spring<Float>(dampingRatio = 0.45f, stiffness = 160f)
+    fun morphSpring() = spring<Float>(dampingRatio = morphDampingRatio, stiffness = morphStiffness)
+    fun sideSwipeSpring() = spring<Float>(dampingRatio = sideSwipeDampingRatio, stiffness = sideSwipeStiffness)
 }
 
 val LocalAnimationConfig = compositionLocalOf { AnimationConfig.DEFAULT }
 
+/** CompositionLocal controlling whether animations are globally enabled. */
+val LocalAnimationsEnabled = compositionLocalOf { true }
+
 /**
  * Material expressive motion specifications for FieldMind.
+ * All spring specs now read from [LocalAnimationConfig] for runtime tuning.
+ * Simplified to fewer, better-named springs with Telegram-inspired defaults.
  */
 object FieldMindMotion {
 
-    // — Smooth, responsive spring defaults —
-    // Every spring throughout the app uses these specs.
-    // Moderate stiffness (~150-300) = snappy but not jarring.
-    // High damping (≥0.88) = smooth glide, minimal bounce.
+    // ── Organic Motion — Nature-Inspired Springs ──
+    // Each spring models a natural phenomenon for intuitive, elegant motion.
 
-    val expressiveSpring = spring<Float>(
-        dampingRatio = 0.90f,
-        stiffness = 180f
-    )
+    /** DewDrop — gentle rise-and-settle. Primary entrance spring. */
+    val expressiveSpring
+        @Composable get() = spring<Float>(
+            dampingRatio = LocalAnimationConfig.current.dampingRatio,
+            stiffness = LocalAnimationConfig.current.stiffness
+        )
 
-    val expressiveSoft = spring<Float>(
-        dampingRatio = 0.93f,
-        stiffness = 110f
-    )
+    /** LeafSway — soft oscillation for subtle layout changes. */
+    val expressiveFloat
+        @Composable get() = spring<Float>(
+            dampingRatio = LocalAnimationConfig.current.dampingRatio + 0.04f,
+            stiffness = (LocalAnimationConfig.current.stiffness * 0.72f).coerceAtLeast(60f)
+        )
 
-    val expressiveElastic = spring<Float>(
-        dampingRatio = 0.91f,
-        stiffness = 160f
-    )
+    /** StoneDrop — gradual settle, no bounce. For heavy transitions. */
+    val expressiveSoft
+        @Composable get() = spring<Float>(
+            dampingRatio = 0.84f,
+            stiffness = (LocalAnimationConfig.current.stiffness * 0.48f).coerceAtLeast(40f)
+        )
 
-    val expressiveFloat = spring<Float>(
-        dampingRatio = 0.85f,
-        stiffness = 220f
-    )
+    /** FireflyFlicker — quick, responsive micro-bounce for press feedback. */
+    val expressiveSnap
+        @Composable get() = spring<Float>(
+            dampingRatio = 0.68f,
+            stiffness = (LocalAnimationConfig.current.stiffness * 0.90f).coerceAtLeast(70f)
+        )
 
-    val expressiveSnap = spring<Float>(
-        dampingRatio = 0.90f,
-        stiffness = 240f
-    )
+    // ── Bouncy Springs ──
+    fun bouncySpring(dampingRatio: Float = 0.48f, stiffness: Float = 170f) =
+        spring<Float>(dampingRatio = dampingRatio, stiffness = stiffness)
 
-    val expressiveDramatic = spring<Float>(
-        dampingRatio = 0.91f,
-        stiffness = 150f
-    )
+    val bouncyEntrance
+        @Composable get() = bouncySpring(dampingRatio = 0.42f, stiffness = 150f)
 
-    // -- Bouncy Springs (visible overshoot) --
+    val bouncyPress
+        @Composable get() = bouncySpring(dampingRatio = 0.52f, stiffness = 200f)
 
-    /**
-     * A lively spring with low damping that produces visible overshoot bounce.
-     * Defaults to ~2-3 bounce cycles before settling. Animations end quickly
-     * but overshoot the target, creating a playful "boing" feel.
-     *
-     * @param dampingRatio  Lower = more bounces. Default 0.65 gives ~2-3 cycles.
-     * @param stiffness     Controls speed. Default 120 is moderately snappy.
-     */
-    fun bouncySpring(
-        dampingRatio: Float = 0.65f,
-        stiffness: Float = 120f
-    ) = spring<Float>(dampingRatio = dampingRatio, stiffness = stiffness)
+    // ── Standard Springs ──
 
-    /** Entrance bounce: soft, playful, 2-3 overshoots before settling. */
-    val bouncyEntrance = bouncySpring(dampingRatio = 0.60f, stiffness = 110f)
+    /** WindDrift — smooth directional ease for layout shifts. */
+    val layoutSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.85f, stiffness = (LocalAnimationConfig.current.stiffness * 0.55f).coerceAtLeast(60f))
 
-    /** Press release bounce: quick, tight bounce-back when released. */
-    val bouncyPress = bouncySpring(dampingRatio = 0.70f, stiffness = 180f)
+    /** RootSnap — decisive, grounded press response. */
+    val pressSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.80f, stiffness = (LocalAnimationConfig.current.stiffness * 0.88f).coerceAtLeast(70f))
 
-    /** Celebration bounce: exaggerated, many cycles for rewards/success. */
-    val bouncyCelebration = bouncySpring(dampingRatio = 0.50f, stiffness = 90f)
+    /** PebbleSettle — firm, satisfying confirmation settle. */
+    val confirmSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.88f, stiffness = (LocalAnimationConfig.current.stiffness * 0.52f).coerceAtLeast(60f))
 
-    // -- Standard Springs (no overshoot) --
+    // ── Navigation Springs ──
 
-    val layoutSpring = spring<Float>(
-        dampingRatio = 0.92f,
-        stiffness = 140f
-    )
+    val swipeBackSpring
+        @Composable get() = spring<Float>(dampingRatio = LocalAnimationConfig.current.swipeBackDampingRatio, stiffness = LocalAnimationConfig.current.swipeBackStiffness)
 
-    val pressSpring = spring<Float>(
-        dampingRatio = 0.90f,
-        stiffness = 200f
-    )
+    val sharedElementSpring
+        @Composable get() = spring<Float>(dampingRatio = LocalAnimationConfig.current.dampingRatio, stiffness = (LocalAnimationConfig.current.stiffness * 0.6f).coerceAtLeast(80f))
 
-    val confirmSpring = spring<Float>(
-        dampingRatio = 0.93f,
-        stiffness = 140f
-    )
+    val slideSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.86f, stiffness = (LocalAnimationConfig.current.slideStiffness * 0.45f).coerceAtLeast(80f))
 
-    // -- Navigation Springs --
+    /** MistDrift — gentle fade transition between screens. */
+    val fadeThroughSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.88f, stiffness = (LocalAnimationConfig.current.stiffness * 0.55f).coerceAtLeast(80f))
 
-    val swipeBackSpring = spring<Float>(
-        dampingRatio = 0.88f,
-        stiffness = 320f
-    )
+    val slideOffsetSpring
+        @Composable get() = spring<IntOffset>(dampingRatio = 0.86f, stiffness = LocalAnimationConfig.current.slideStiffness)
 
-    val sharedElementSpring = spring<Float>(
-        dampingRatio = 0.91f,
-        stiffness = 160f
-    )
+    // ── Shape Morphing ──
 
-    val slideSpring = spring<Float>(
-        dampingRatio = 0.90f,
-        stiffness = 160f
-    )
+    val morphSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.84f, stiffness = (LocalAnimationConfig.current.stiffness * 0.58f).coerceAtLeast(70f))
 
-    val fadeThroughSpring = spring<Float>(
-        dampingRatio = 0.92f,
-        stiffness = 160f
-    )
+    val cornerSpring
+        @Composable get() = spring<Float>(dampingRatio = 0.84f, stiffness = (LocalAnimationConfig.current.stiffness * 0.68f).coerceAtLeast(80f))
 
-    val slideOffsetSpring = spring<IntOffset>(
-        dampingRatio = 0.90f,
-        stiffness = 350f
-    )
-
-    // -- Duration Tokens (ms) --
+    // ── Duration Tokens (ms) ──
 
     const val durationMicro = 80
     const val durationSubtle = 150
@@ -256,46 +280,37 @@ object FieldMindMotion {
     const val durationExpressive = 600
     const val countUpMs = 500
 
-    // -- Stagger & Delay Tokens --
-
-    const val staggerItemDelayMs = 20
-    const val staggerInitialDelayMs = 30
-    const val staggerMaxDurationMs = 250
-
-    // -- Shape Morphing --
-
-    val morphSpring = spring<Float>(
-        dampingRatio = 0.91f,
-        stiffness = 160f
-    )
-
-    val cornerSpring = spring<Float>(
-        dampingRatio = 0.92f,
-        stiffness = 200f
-    )
-
-    // -- Convenience Tween --
+    // ── Convenience Tween ──
 
     val fadeTween = tween<Float>(durationMillis = durationSubtle)
     val pressScaleTween = tween<Float>(durationMillis = durationMicro)
 
-    // -- Swipe-back Constants --
+    // ── Predictive Back Constants ──
 
-    const val swipeEdgeWidthDp = 30f
-    const val swipeEdgeHeightDp = 30f
+    const val predictiveBackScaleMin = 0.88f
+    const val predictiveBackScrimAlpha = 0.20f
+
+    // ── Swipe-back Constants ──
+
+    const val swipeEdgeWidthDp = 36f
+    const val swipeEdgeHeightDp = 36f
     const val swipeThreshold = 0.18f
     const val swipeScaleFactor = 0.90f
-    const val swipeScrimAlpha = 0.30f
+    const val swipeScrimAlpha = 0.28f
     const val swipeShadowElevationDp = 24f
-    const val swipeCornerRadiusDp = 28f
-    const val swipeBaseCornerRadiusDp = 8f
+    const val swipeCornerRadiusDp = 36f
+    const val swipeBaseCornerRadiusDp = 20f
+    // Elastic overshoot for snap-back (Telegram-style)
+    const val swipeOvershootDamping = 0.82f
+    const val swipeOvershootStiffness = 220f
 
-    // -- Utility --
+    // ── Utility ──
 
+    @Composable
     fun entranceSpec(emphasis: Emphasis = Emphasis.Standard): AnimationSpec<Float> = when (emphasis) {
-        Emphasis.Expressive -> expressiveDramatic
-        Emphasis.Emphasized -> expressiveSpring
-        Emphasis.Standard -> expressiveFloat
+        Emphasis.Expressive -> expressiveSpring
+        Emphasis.Emphasized -> expressiveFloat
+        Emphasis.Standard -> expressiveSoft
         Emphasis.Snap -> expressiveSnap
         Emphasis.Bouncy -> bouncyEntrance
     }
@@ -305,6 +320,7 @@ object FieldMindMotion {
     @Composable
     fun isReduceMotion(): Boolean {
         if (LocalInspectionMode.current) return false
+        if (!LocalAnimationsEnabled.current) return true
         val context = LocalContext.current
         val animatorScale = try {
             android.provider.Settings.Global.getFloat(
@@ -314,9 +330,6 @@ object FieldMindMotion {
         } catch (_: Exception) { 1f }
         return animatorScale == 0f
     }
-
-    fun staggerDelay(index: Int): Int =
-        (staggerInitialDelayMs + index * staggerItemDelayMs).coerceAtMost(staggerMaxDurationMs)
 }
 
 // -- Expressive Press Modifiers --
@@ -343,10 +356,19 @@ fun Modifier.expressivePress(
 
     this
         .pointerInput(enabled) {
+            if (!enabled) return@pointerInput
             awaitPointerEventScope {
                 while (true) {
-                    val event = awaitPointerEvent()
-                    isPressed = event.changes.any { it.pressed }
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    if (down.pressed) {
+                        isPressed = true
+                        // Wait for up or cancellation (do NOT consume — let clickable/scrollable work)
+                        var upEvent: PointerEvent
+                        do {
+                            upEvent = awaitPointerEvent()
+                        } while (upEvent.changes.all { it.pressed })
+                        isPressed = false
+                    }
                 }
             }
         }
@@ -384,10 +406,19 @@ fun Modifier.expressiveCardPress(
 
     this
         .pointerInput(enabled) {
+            if (!enabled) return@pointerInput
             awaitPointerEventScope {
                 while (true) {
-                    val event = awaitPointerEvent()
-                    isPressed = event.changes.any { it.pressed }
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    if (down.pressed) {
+                        isPressed = true
+                        // Wait for up or cancellation (do NOT consume — let clickable/scrollable work)
+                        var upEvent: PointerEvent
+                        do {
+                            upEvent = awaitPointerEvent()
+                        } while (upEvent.changes.all { it.pressed })
+                        isPressed = false
+                    }
                 }
             }
         }
@@ -421,10 +452,19 @@ fun Modifier.pressScale(
 
     this
         .pointerInput(enabled) {
+            if (!enabled) return@pointerInput
             awaitPointerEventScope {
                 while (true) {
-                    val event = awaitPointerEvent()
-                    isPressed = event.changes.any { it.pressed }
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    if (down.pressed) {
+                        isPressed = true
+                        // Wait for up or cancellation (do NOT consume — let clickable/scrollable work)
+                        var upEvent: PointerEvent
+                        do {
+                            upEvent = awaitPointerEvent()
+                        } while (upEvent.changes.all { it.pressed })
+                        isPressed = false
+                    }
                 }
             }
         }
@@ -435,123 +475,448 @@ fun Modifier.pressCardScale(): Modifier = composed {
     this.pressScale(scaleDown = 0.97f)
 }
 
-// ── Staggered Entrance Animation (fadeIn + slideUp) ──
+// ── Entrance animations removed: staggeredEntrance, bouncyEntrance, sideReveal ──
+// All items render instantly together. No staggered one-by-one reveals.
+
+enum class SideRevealDirection { Start, End, Top, Bottom }
+
+// ── Morph Shape Animation (corner radius / shape morph) ──
 
 /**
- * A [Modifier] that animates a composable's entrance with a fade-in and
- * upward slide, staggered by [index] for a delightful cascade reveal.
+ * A [Modifier] that animates the corner radius of a composable between two
+ * values. Useful for morphing chips into cards, or buttons into pills.
  *
- * When [animate] is true, the item starts invisible and slightly below its
- * final position, then fades in and slides up after a staggered delay.
- * Pass `animate = true` and the item's [index] when rendering cards in a
- * LazyColumn for a polished scroll-reveal effect.
- *
- * @param index  Zero-based position in the list; determines stagger delay.
- * @param animate  Whether to play the entrance animation. Default false.
- * @param offsetY  The vertical slide distance. Default 20dp.
+ * @param targetCornerRadius  Target corner radius in dp.
+ * @param animate             Whether to animate the change.
  */
-fun Modifier.staggeredEntrance(
-    index: Int = 0,
-    animate: Boolean = false,
-    offsetY: Dp = 20.dp
+fun Modifier.morphShape(
+    targetCornerRadius: Dp,
+    animate: Boolean = true
 ): Modifier = composed(
     inspectorInfo = debugInspectorInfo {
-        name = "staggeredEntrance"
-        properties["index"] = index
+        name = "morphShape"
+        properties["targetCornerRadius"] = targetCornerRadius
         properties["animate"] = animate
     }
 ) {
     val reduceMotion = FieldMindMotion.isReduceMotion()
-    var hasAnimatedIn by remember { mutableStateOf(false) }
+    val animConfig = LocalAnimationConfig.current
     val density = LocalDensity.current
-    val shouldAnimate = animate && !reduceMotion
+    val targetPx = with(density) { targetCornerRadius.toPx() }
 
-    LaunchedEffect(animate, index, reduceMotion) {
-        if (shouldAnimate) {
-            delay(FieldMindMotion.staggerDelay(index).toLong())
-            hasAnimatedIn = true
+    val animatedRadius by animateFloatAsState(
+        targetValue = targetPx,
+        animationSpec = if (animate && !reduceMotion) {
+            spring(dampingRatio = 0.72f, stiffness = 280f)
         } else {
-            // No animation — immediately visible
-            hasAnimatedIn = true
-        }
-    }
-
-    val targetAlpha = if (!shouldAnimate || hasAnimatedIn) 1f else 0f
-    val targetTranslationY = if (!shouldAnimate || hasAnimatedIn) 0f else with(density) { offsetY.toPx() }
-
-    val alpha by animateFloatAsState(
-        targetValue = targetAlpha,
-        animationSpec = FieldMindMotion.expressiveFloat,
-        label = "entranceAlpha_$index"
-    )
-    val translationY by animateFloatAsState(
-        targetValue = targetTranslationY,
-        animationSpec = FieldMindMotion.expressiveFloat,
-        label = "entranceSlide_$index"
+            spring(stiffness = Spring.StiffnessMedium)
+        },
+        label = "morphShape"
     )
 
-    this.graphicsLayer {
-        this.alpha = alpha
-        this.translationY = translationY
+    this.clip(RoundedCornerShape(animatedRadius))
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Polygon Morph Shape — graphics-shapes powered morphing between
+//  arbitrary RoundedPolygons (circle ↔ rounded rect, etc.)
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * A [Shape] implementation powered by [androidx.graphics.shapes.Morph]
+ * that interpolates between two [RoundedPolygon] instances based on a
+ * [progress] value (0f = start polygon, 1f = end polygon).
+ *
+ * Use with [Modifier.clip] + [Modifier.background] to clip any composable
+ * (image, text, gradient) to a smoothly morphing shape.
+ *
+ * @param morph   Pre-computed [Morph] between two [RoundedPolygon]s.
+ * @param progress  0f → start shape, 1f → end shape.
+ */
+class MorphPolygonShape(
+    private val morph: Morph,
+    private val progress: Float
+) : Shape {
+    private val matrix = Matrix()
+
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        val path = morph.toPath(progress).asComposePath()
+        // Scale to fill the available size (polygons are unit-centered)
+        val scaleX = size.width / 2f
+        val scaleY = size.height / 2f
+        matrix.reset()
+        matrix.scale(scaleX, scaleY)
+        matrix.translate(size.width / 2f, size.height / 2f)
+        path.transform(matrix)
+        return Outline.Generic(path)
     }
 }
 
-// ── Bouncy Entrance Animation (scale-pop + overshoot) ──
+/**
+ * Predefined [RoundedPolygon] shapes available for morphing.
+ * Each factory creates a unit-sized polygon suitable for use with [Morph].
+ */
+object MorphPolygons {
+    /** Smooth circle (64 vertices for high-quality rendering). */
+    fun circle(radius: Float = 1f) = RoundedPolygon.circle(
+        numVertices = 64, radius = radius, centerX = 0f, centerY = 0f
+    )
+
+    /** Standard rounded rectangle with uniform corner rounding. */
+    fun roundedRect(
+        width: Float = 1f,
+        height: Float = 1f,
+        cornerRadius: Float = 0.16f
+    ) = RoundedPolygon.rectangle(
+        width = width, height = height,
+        rounding = CornerRounding(cornerRadius),
+        centerX = 0f, centerY = 0f
+    )
+
+    /** Rounded rectangle with different corner rounding per corner (superellipse-like). */
+    fun pillRect(
+        width: Float = 1f,
+        height: Float = 0.6f
+    ) = RoundedPolygon.rectangle(
+        width = width, height = height,
+        rounding = CornerRounding(height / 2f),
+        centerX = 0f, centerY = 0f
+    )
+
+    /** Hexagon shape (6 vertices). */
+    fun hexagon(radius: Float = 1f) = RoundedPolygon(
+        numVertices = 6, radius = radius,
+        rounding = CornerRounding(0.08f),
+        centerX = 0f, centerY = 0f
+    )
+
+    /** Diamond/rhombus shape (4 vertices, rotated 45°). */
+    fun diamond(radius: Float = 1f) = RoundedPolygon(
+        numVertices = 4, radius = radius,
+        rounding = CornerRounding(0.06f),
+        centerX = 0f, centerY = 0f
+    )
+
+    /** Star-like shape (5 points with inner/outer radius for star effect). */
+    fun star(
+        outerRadius: Float = 1f,
+        innerRadius: Float = 0.4f
+    ) = RoundedPolygon.star(
+        numVerticesPerRadius = 5,
+        radius = outerRadius,
+        innerRadius = innerRadius,
+        rounding = CornerRounding(0.08f),
+        innerRounding = CornerRounding(0.04f),
+        centerX = 0f, centerY = 0f
+    )
+
+    /** Triangle (3 vertices). */
+    fun triangle(radius: Float = 1f) = RoundedPolygon(
+        numVertices = 3, radius = radius,
+        rounding = CornerRounding(0.06f),
+        centerX = 0f, centerY = 0f
+    )
+}
 
 /**
- * A [Modifier] that animates a composable's entrance with a playful scale-up
- * bounce, overshooting slightly above the target before settling.
+ * A [Modifier] that clips the composable using a morphing polygon shape,
+ * animating between [startPolygon] and [endPolygon] driven by [progress].
  *
- * Items start at [initialScale] (e.g., 0.85 = 85% size), pop up past 1.0 with
- * a bouncy spring, then settle at 1.0. Works best on cards, buttons, and icons
- * that benefit from a lively "boing" reveal — use instead of [staggeredEntrance]
- * when you want attention-grabbing energy rather than smooth fade+slide.
+ * Uses [androidx.graphics.shapes.Morph] for smooth, hardware-accelerated
+ * shape interpolation. Combine with [animateFloatAsState] for smooth progress
+ * animation, or use [Modifier.morphPolygon] with [trigger] for declarative
+ * toggling.
  *
- * Respects system reduce-motion accessibility settings.
- *
- * @param index       Zero-based position; determines stagger delay.
- * @param animate     Whether to play the entrance animation. Default false.
- * @param initialScale  Starting scale (below 1.0). Default 0.85.
- * @param dampingRatio   Lower = more bounces. Default 0.62.
- * @param stiffness      Higher = faster. Default 140.
+ * @param startPolygon  The shape at progress=0f.
+ * @param endPolygon    The shape at progress=1f.
+ * @param progress      0f → [startPolygon], 1f → [endPolygon].
  */
-fun Modifier.bouncyEntrance(
-    index: Int = 0,
-    animate: Boolean = false,
-    initialScale: Float = 0.85f,
-    dampingRatio: Float = 0.62f,
-    stiffness: Float = 140f
+fun Modifier.morphPolygon(
+    startPolygon: RoundedPolygon,
+    endPolygon: RoundedPolygon,
+    progress: Float
 ): Modifier = composed(
     inspectorInfo = debugInspectorInfo {
-        name = "bouncyEntrance"
-        properties["index"] = index
-        properties["animate"] = animate
+        name = "morphPolygon"
+        properties["progress"] = progress
+    }
+) {
+    val morph = remember(startPolygon, endPolygon) {
+        Morph(startPolygon, endPolygon)
+    }
+    this.clip(MorphPolygonShape(morph, progress.coerceIn(0f, 1f)))
+}
+
+/**
+ * A [Modifier] that morphs between two [RoundedPolygon] shapes triggered by
+ * a togglable boolean [trigger]. When [trigger] is true, the shape animates
+ * from [startPolygon] to [endPolygon] (and back when false).
+ *
+ * Uses the [AnimationConfig.morphSpring] for smooth, tunable spring physics.
+ *
+ * @param trigger       Toggle state (true=end shape, false=start shape).
+ * @param startPolygon  The shape at trigger=false.
+ * @param endPolygon    The shape at trigger=true.
+ * @param enabled       Whether the morph animation is enabled.
+ */
+@Composable
+fun Modifier.animateMorphPolygon(
+    trigger: Boolean,
+    startPolygon: RoundedPolygon,
+    endPolygon: RoundedPolygon,
+    enabled: Boolean = true
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "animateMorphPolygon"
+        properties["trigger"] = trigger
+        properties["enabled"] = enabled
     }
 ) {
     val reduceMotion = FieldMindMotion.isReduceMotion()
-    val shouldAnimate = animate && !reduceMotion
-    val scale = remember { Animatable(if (shouldAnimate) initialScale else 1f) }
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion && animConfig.morphEnabled
 
-    LaunchedEffect(animate, index, reduceMotion) {
-        if (shouldAnimate) {
-            scale.snapTo(initialScale)
-            delay(FieldMindMotion.staggerDelay(index).toLong())
-            // Single animateTo(1f) — low dampingRatio naturally overshoots
-            scale.animateTo(1f, FieldMindMotion.bouncySpring(
-                dampingRatio = dampingRatio,
-                stiffness = stiffness
-            ))
+    val progress by animateFloatAsState(
+        targetValue = if (trigger) 1f else 0f,
+        animationSpec = if (shouldAnimate) {
+            spring(dampingRatio = 0.78f, stiffness = 200f)
         } else {
-            scale.snapTo(1f)
-        }
+            spring(stiffness = Spring.StiffnessMedium)
+        },
+        label = "animateMorphPolygon"
+    )
+
+    this.morphPolygon(startPolygon, endPolygon, progress)
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  MorphTransition Composable — full stateful morph between shapes
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * A composable that wraps any content in a container whose shape smoothly
+ * morphs between [startPolygon] and [endPolygon] with a spring animation.
+ *
+ * Call [onTrigger] (e.g., `onClick`) to toggle between the two shapes.
+ * The backing shape is pre-computed with [Morph] for efficient rendering.
+ *
+ * Provides a beautiful, interactive shape-transition effect for cards,
+ * buttons, avatars, and any content — especially striking with gradients
+ * or images as children.
+ *
+ * @param trigger       External toggle state.
+ * @param onTrigger     Called when the user wants to toggle the shape.
+ * @param startPolygon  The shape at trigger=false.
+ * @param endPolygon    The shape at trigger=true.
+ * @param modifier      Modifier applied to the outer container.
+ * @param enabled       Whether morph animation is active.
+ * @param content       The composable content inside the morphing shape.
+ */
+@Composable
+fun MorphTransition(
+    trigger: Boolean,
+    onTrigger: () -> Unit,
+    startPolygon: RoundedPolygon = MorphPolygons.roundedRect(),
+    endPolygon: RoundedPolygon = MorphPolygons.circle(),
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion && animConfig.morphEnabled
+
+    val progress by animateFloatAsState(
+        targetValue = if (trigger) 1f else 0f,
+        animationSpec = if (shouldAnimate) {
+            spring(dampingRatio = 0.78f, stiffness = 200f)
+        } else {
+            spring(stiffness = Spring.StiffnessMedium)
+        },
+        label = "MorphTransition"
+    )
+
+    val shapeMorph = remember(startPolygon, endPolygon) {
+        Morph(startPolygon, endPolygon)
     }
 
-    this.graphicsLayer {
-        scaleX = scale.value
-        scaleY = scale.value
-        transformOrigin = TransformOrigin.Center
+    Box(
+        modifier = modifier
+            .clip(MorphPolygonShape(shapeMorph, progress))
+            .then(
+                if (shouldAnimate) {
+                    Modifier.clickable(
+                        indication = null,
+                        interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+                    ) { onTrigger() }
+                } else {
+                    Modifier
+                }
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        content()
     }
 }
+
+// ── Shimmer Loading Effect ──
+
+/**
+ * A [Modifier] that applies a shimmering sweep effect over the composable.
+ * Ideal for loading placeholders. Respects reduce-motion and the global
+ * animation toggle.
+ *
+ * @param enabled  Whether the shimmer is active.
+ * @param baseColor  Base color of the shimmer; defaults to surface variant.
+ * @param highlightColor  Highlight color; defaults to a lighter variant.
+ */
+fun Modifier.shimmer(
+    enabled: Boolean = true,
+    baseColor: Color? = null,
+    highlightColor: Color? = null
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "shimmer"
+        properties["enabled"] = enabled
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion
+
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val shimmerProgress by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(animConfig.shimmerSpeedMs, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "shimmerProgress"
+    )
+
+    val colorBase = baseColor ?: MaterialTheme.colorScheme.surfaceVariant
+    val colorHighlight = highlightColor ?: MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+
+    if (shouldAnimate) {
+        this.drawWithCache {
+            val gradientWidth = size.width * 1.5f
+            onDrawWithContent {
+                drawContent()
+                val offsetX = (shimmerProgress * (size.width + gradientWidth)) - gradientWidth
+                val brush = Brush.linearGradient(
+                    0f to colorBase,
+                    0.5f to colorHighlight,
+                    1f to colorBase,
+                    start = Offset(offsetX, 0f),
+                    end = Offset(offsetX + gradientWidth, 0f)
+                )
+                drawRect(brush = brush, alpha = 0.6f)
+            }
+        }
+    } else {
+        this
+    }
+}
+
+// ── Pulse / Breathe Animation ──
+
+/**
+ * A [Modifier] that applies a gentle pulsing/breathing scale animation to a
+ * composable. Great for attention badges, recording indicators, or live
+ * status dots.
+ *
+ * @param enabled  Whether the pulse is active.
+ * @param minScale Minimum scale during the pulse.
+ * @param maxScale Maximum scale during the pulse.
+ */
+fun Modifier.pulse(
+    enabled: Boolean = true,
+    minScale: Float = 0.95f,
+    maxScale: Float = 1.05f
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "pulse"
+        properties["enabled"] = enabled
+        properties["minScale"] = minScale
+        properties["maxScale"] = maxScale
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion
+
+    val transition = rememberInfiniteTransition(label = "pulse")
+    val scale by transition.animateFloat(
+        initialValue = minScale,
+        targetValue = maxScale,
+        animationSpec = infiniteRepeatable(
+            animation = tween(animConfig.pulseDurationMs / 2, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulseScale"
+    )
+
+    if (shouldAnimate) {
+        this.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            transformOrigin = TransformOrigin.Center
+        }
+    } else {
+        this
+    }
+}
+
+// ── Page Flip / 3D Card Rotation ──
+
+/**
+ * A [Modifier] that applies a 3D page-flip rotation around the Y axis.
+ * Useful for card flip reveals or dramatic transitions.
+ *
+ * @param progress  0f = front face, 1f = back face (180 degrees).
+ * @param enabled   Whether to apply the flip transform.
+ */
+fun Modifier.pageFlip(
+    progress: Float,
+    enabled: Boolean = true
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "pageFlip"
+        properties["progress"] = progress
+        properties["enabled"] = enabled
+    }
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val shouldAnimate = enabled && !reduceMotion
+
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress,
+        animationSpec = if (shouldAnimate) {
+            spring(dampingRatio = 0.72f, stiffness = 280f)
+        } else {
+            spring(stiffness = Spring.StiffnessMedium)
+        },
+        label = "pageFlip"
+    )
+
+    if (shouldAnimate) {
+        this.graphicsLayer {
+            rotationY = animatedProgress * 180f
+            cameraDistance = 36f
+            transformOrigin = TransformOrigin.Center
+        }
+    } else {
+        this
+    }
+}
+
+// ── ConfettiOverlay removed — particles were jarring, not elegant ──
 
 // -- Swipe-back Gesture Host -- iOS-style with predictive peek --
 
@@ -580,6 +945,7 @@ private fun PeekPreviewContent(
 fun SwipeBackHost(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    swipeFromCenter: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val reduceMotion = FieldMindMotion.isReduceMotion()
@@ -598,18 +964,40 @@ fun SwipeBackHost(
     val isImeVisible = imeBottom > 0
 
     // ── BackHandler for hardware button press (innermost wins priority) ──
-    // This replaces PredictiveBackHandler which caused double-fire issues
-    // during navigation transitions when two SwipeBackHost instances
-    // (outgoing and incoming screen) were simultaneously active.
-    // The manual detectDragGestures below handles swipe gesture animations.
     BackHandler(enabled = !isImeVisible) {
         onBack()
     }
 
-    // ── Unified progress computation ──
-    // Only manual drag drives animX (PredictiveBackHandler was removed to
-    // prevent nested SwipeBackHost conflicts during nav transitions).
+    // ── PredictiveBackHandler: Android 13+ system back gesture ──
+    // Drives the same peek/scrim/scale transforms as manual edge-swipe,
+    // giving a unified iOS/Telegram-style peek experience for both
+    // the system back gesture and manual drag-from-edge.
+    // Disabled when keyboard is visible or predictive back is turned off.
     val animConfig = LocalAnimationConfig.current
+    val predictiveBackEnabled = animConfig.predictiveBackEnabled && !isImeVisible
+    if (predictiveBackEnabled && !reduceMotion) {
+        PredictiveBackHandler(enabled = true) { backEventFlow ->
+            try {
+                backEventFlow.collect { event ->
+                    activeDirection = SwipeDirection.Horizontal
+                    animX.snapTo(event.progress * contentWidth)
+                }
+                // Flow completed → gesture committed
+                haptics.confirm()
+                activeDirection = null
+                onBack()
+            } catch (_: CancellationException) {
+                // Gesture cancelled → elastic spring back to origin
+                activeDirection = null
+                animX.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
+                animY.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
+            }
+        }
+    }
+
+    // ── Unified progress computation ──
+    // Progress is driven by both manual edge-swipe (detectDragGestures)
+    // and the PredictiveBackHandler above, both updating animX/animY.
     val horizontalProgress = (abs(animX.value) / contentWidth).coerceIn(0f, 1f)
     val verticalProgress = (abs(animY.value) / contentHeight).coerceIn(0f, 1f)
     val (progress, isHorizontalPeek) = when (activeDirection) {
@@ -617,8 +1005,8 @@ fun SwipeBackHost(
         SwipeDirection.Vertical -> Pair(verticalProgress, false)
         null -> Pair(horizontalProgress.coerceAtLeast(verticalProgress), horizontalProgress >= verticalProgress)
     }
-    val scrimAlpha = progress * FieldMindMotion.swipeScrimAlpha
-    val contentScale = 1f - progress * (1f - animConfig.swipeScaleFactor)
+    val scrimAlpha = progress * (if (predictiveBackEnabled && activeDirection == SwipeDirection.Horizontal) FieldMindMotion.predictiveBackScrimAlpha else FieldMindMotion.swipeScrimAlpha)
+    val contentScale = 1f - progress * (1f - if (predictiveBackEnabled && activeDirection == SwipeDirection.Horizontal) animConfig.predictiveBackScaleMin else animConfig.swipeScaleFactor)
     val swipeElevation = progress * FieldMindMotion.swipeShadowElevationDp
     val swipeCornerRadius = (FieldMindMotion.swipeBaseCornerRadiusDp + progress * (FieldMindMotion.swipeCornerRadiusDp - FieldMindMotion.swipeBaseCornerRadiusDp)).dp
 
@@ -668,7 +1056,7 @@ fun SwipeBackHost(
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 36.dp),
+                        shape = RoundedCornerShape(topEnd = 40.dp, bottomEnd = 44.dp),
                         tonalElevation = 3.dp,
                         shadowElevation = 16.dp,
                         border = androidx.compose.foundation.BorderStroke(
@@ -744,19 +1132,28 @@ fun SwipeBackHost(
                         Modifier.pointerInput(isImeVisible) {
                             if (isImeVisible) return@pointerInput
                             awaitEachGesture {
-                                val down = awaitFirstDown(requireUnconsumed = false)
+                                // requireUnconsumed = true: only handle touches NOT consumed
+                                // by child composables (e.g., clickable cards, buttons, sliders).
+                                // This fixes the settings navigation bug where taps on cards
+                                // produced visual feedback but didn't navigate.
+                                val down = awaitFirstDown(requireUnconsumed = true)
                                 val isAtLeftEdge = down.position.x <= FieldMindMotion.swipeEdgeWidthDp
                                 val isAtTopEdge = down.position.y <= FieldMindMotion.swipeEdgeHeightDp
 
-                                // NOT near any edge — release the gesture and let children
-                                // (e.g. LazyColumn in settings) process it normally.
-                                if (!isAtLeftEdge && !isAtTopEdge) {
-                                    return@awaitEachGesture
+                                // When swipeFromCenter is enabled, any horizontal drag triggers back.
+                                // When false (default), only edge swipes trigger back.
+                                if (!swipeFromCenter) {
+                                    if (!isAtLeftEdge && !isAtTopEdge) {
+                                        return@awaitEachGesture
+                                    }
+                                    // Near edge — consume the down event and handle drag
+                                    down.consume()
+                                    activeDirection = if (isAtLeftEdge) SwipeDirection.Horizontal else SwipeDirection.Vertical
+                                } else {
+                                    // Center swipe: only horizontal, ignore vertical
+                                    down.consume()
+                                    activeDirection = SwipeDirection.Horizontal
                                 }
-
-                                // Near edge — consume the down event and handle drag
-                                down.consume()
-                                activeDirection = if (isAtLeftEdge) SwipeDirection.Horizontal else SwipeDirection.Vertical
 
                                 try {
                                     var pointerUp = false
@@ -808,16 +1205,16 @@ fun SwipeBackHost(
                                         }
                                     } else {
                                         scope.launch {
-                                            animX.animateTo(0f, animConfig.swipeBackSpring())
-                                            animY.animateTo(0f, animConfig.swipeBackSpring())
+                                            animX.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
+                                            animY.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
                                         }
                                     }
                                 } catch (_: CancellationException) {
                                     // ── onDragCancel equivalent ──
                                     activeDirection = null
                                     scope.launch {
-                                        animX.animateTo(0f, animConfig.swipeBackSpring())
-                                        animY.animateTo(0f, animConfig.swipeBackSpring())
+                                        animX.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
+                                        animY.animateTo(0f, spring(dampingRatio = FieldMindMotion.swipeOvershootDamping, stiffness = FieldMindMotion.swipeOvershootStiffness))
                                     }
                                 }
                             }
@@ -831,7 +1228,7 @@ fun SwipeBackHost(
             content()
 
             // ── Back arrow indicator ──
-            if (isHorizontalPeek && animX.value > contentWidth * 0.05f) {
+            if (isHorizontalPeek && animX.value > contentWidth * 0.10f) {
                 Box(
                     modifier = Modifier
                         .padding(start = 4.dp)
@@ -846,7 +1243,7 @@ fun SwipeBackHost(
             }
 
             // ── Downward swipe indicator ──
-            if (!isHorizontalPeek && animY.value > contentHeight * 0.05f) {
+            if (!isHorizontalPeek && animY.value > contentHeight * 0.10f) {
                 Box(
                     modifier = Modifier
                         .padding(top = 4.dp)
@@ -859,6 +1256,192 @@ fun SwipeBackHost(
                     Icon(FieldMindIcons.ChevronDown, "Swipe down to dismiss", size = 22.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  SwipeActionHost — Telegram-style item-level swipe actions
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Result of a swipe action — which side was activated (if any).
+ */
+enum class SwipeActionResult { Left, Right, None }
+
+/**
+ * A composable that wraps a list item or card and provides Telegram-style
+ * horizontal swipe-to-reveal actions. Drag from anywhere on the item to
+ * reveal action buttons behind.
+ *
+ * Uses spring-animated snap-to-actions: swipe past the threshold and release
+ * to snap to the revealed state; swipe less and it springs back to neutral.
+ *
+ * @param onSwipe        Called with [SwipeActionResult] AFTER the snap animation completes.
+ * @param resetTrigger   Change this value to programmatically snap back to neutral.
+ * @param modifier       Modifier for the outer container.
+ * @param leftActions    Composable rendered behind the content on the left side.
+ * @param rightActions   Composable rendered behind the content on the right side.
+ * @param enabled        Whether swipe actions are enabled.
+ * @param content        The main item content.
+ */
+@Composable
+fun SwipeActionHost(
+    onSwipe: (SwipeActionResult) -> Unit,
+    resetTrigger: Any? = null,
+    modifier: Modifier = Modifier,
+    leftActions: @Composable (androidx.compose.foundation.layout.RowScope.() -> Unit)? = null,
+    rightActions: @Composable (androidx.compose.foundation.layout.RowScope.() -> Unit)? = null,
+    enabled: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val reduceMotion = FieldMindMotion.isReduceMotion()
+    val animConfig = LocalAnimationConfig.current
+    val scope = rememberCoroutineScope()
+    val density = LocalDensity.current
+    val shouldAnimate = enabled && !reduceMotion && animConfig.sideSwipeEnabled
+
+    val offsetX = remember { Animatable(0f) }
+
+    // Compute the max reveal distance in pixels
+    val maxRevealPx = with(density) { animConfig.sideSwipeMaxRevealDp.dp.toPx() }
+
+    // ── Reset to neutral when resetTrigger changes ──
+    LaunchedEffect(resetTrigger) {
+        if (resetTrigger != null && offsetX.value != 0f) {
+            offsetX.animateTo(0f,            spring(dampingRatio = 0.62f, stiffness = 380f))
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        // ── Layer 1: Action buttons (behind content) ──
+        val leftAlpha = (offsetX.value / maxRevealPx).coerceIn(0f, 1f)
+        val rightAlpha = (-offsetX.value / maxRevealPx).coerceIn(0f, 1f)
+
+        Row(modifier = Modifier.fillMaxSize()) {
+            // Left action area
+            if (leftActions != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .graphicsLayer { alpha = leftAlpha },
+                    content = leftActions
+                )
+            }
+            Spacer(Modifier.weight(1f))
+            // Right action area
+            if (rightActions != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .graphicsLayer { alpha = rightAlpha },
+                    content = rightActions
+                )
+            }
+        }
+
+        // ── Layer 2: Content (slides to reveal actions) ──
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    translationX = offsetX.value
+                }
+                .then(
+                    if (shouldAnimate) {
+                        Modifier.pointerInput(Unit) {
+                            awaitEachGesture {
+                                val down = awaitFirstDown(requireUnconsumed = false)
+                                down.consume()
+
+                                try {
+                                    // Track cumulative drag offset locally to avoid
+                                    // race conditions from reading stale offsetX.value
+                                    var dragOffset = offsetX.value
+                                    var lastPosition = down.position
+                                    var pointerUp = false
+                                    do {
+                                        val event = awaitPointerEvent()
+                                        val change = event.changes.firstOrNull() ?: break
+                                        if (change.isConsumed || !change.pressed) {
+                                            pointerUp = !change.pressed
+                                            break
+                                        }
+                                        change.consume()
+                                        val deltaX = change.position.x - lastPosition.x
+                                        lastPosition = change.position
+                                        dragOffset = (dragOffset + deltaX)
+                                            .coerceIn(-maxRevealPx, maxRevealPx)
+                                        scope.launch { offsetX.snapTo(dragOffset) }
+                                    } while (true)
+
+                                    // ── onDragEnd: snap to nearest anchor ──
+                                    val thresholdPx = maxRevealPx * animConfig.sideSwipeThreshold
+                                    when {
+                                        pointerUp && dragOffset > thresholdPx -> {
+                                            scope.launch {
+                                                offsetX.animateTo(maxRevealPx,            spring(dampingRatio = 0.62f, stiffness = 380f))
+                                                onSwipe(SwipeActionResult.Left)
+                                            }
+                                        }
+                                        pointerUp && dragOffset < -thresholdPx -> {
+                                            scope.launch {
+                                                offsetX.animateTo(-maxRevealPx,            spring(dampingRatio = 0.62f, stiffness = 380f))
+                                                onSwipe(SwipeActionResult.Right)
+                                            }
+                                        }
+                                        else -> {
+                                            scope.launch {
+                                                offsetX.animateTo(0f,            spring(dampingRatio = 0.62f, stiffness = 380f))
+                                            }
+                                        }
+                                    }
+                                } catch (_: CancellationException) {
+                                    scope.launch {
+                                        offsetX.animateTo(0f,            spring(dampingRatio = 0.62f, stiffness = 380f))
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        Modifier
+                    }
+                ),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            content()
+        }
+    }
+}
+
+// ── Convenience: side swipe action buttons ──
+
+/**
+ * A styled action button for use inside [SwipeActionHost]'s [leftActions]
+ * or [rightActions]. Renders an icon slot with a colored background, sized to
+ * the swipe reveal distance.
+ */
+@Composable
+fun SwipeActionButton(
+    icon: @Composable () -> Unit,
+    backgroundColor: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val animConfig = LocalAnimationConfig.current
+    Surface(
+        onClick = onClick,
+        modifier = modifier
+            .width(animConfig.sideSwipeMaxRevealDp.dp)
+            .fillMaxHeight(),
+        color = backgroundColor,
+        shape = RoundedCornerShape(0)
+    ) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            icon()
         }
     }
 }

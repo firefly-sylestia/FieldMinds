@@ -227,7 +227,6 @@ fun InsightsScreen(
 
     val scope = rememberCoroutineScope()
     val snackbarState = remember { SnackbarHostState() }
-    val celebrationState = rememberCelebrationState()
 
     // ── Calculate today's daily calendar map ──
     val calendarData = remember(observations) {
@@ -471,7 +470,7 @@ fun InsightsScreen(
 
             // ═══════════ SECTION 8: Achievements ═══════════
             item { SectionHeader("Achievements", "${achievements.count { it.unlocked }}/${achievements.size} unlocked") }
-            item { CollapsibleAchievements(items = achievements, snackbarState = snackbarState, scope = scope, celebrationState = celebrationState) }
+            item { CollapsibleAchievements(items = achievements, snackbarState = snackbarState, scope = scope) }
 
             // ═══════════ SECTION 9: Open Questions & Active Projects ═══════════
             if (questions.isNotEmpty()) {
@@ -504,8 +503,7 @@ fun InsightsScreen(
                     .padding(top = 8.dp, start = 16.dp, end = 16.dp)
             )
 
-            // ── Celebration overlay for achievement unlocks ──
-            CelebrationOverlay(celebrationState = celebrationState)
+
         }
     }
 }
@@ -671,8 +669,7 @@ data class ResearchAchievement(
 private fun CollapsibleAchievements(
     items: List<ResearchAchievement>,
     snackbarState: SnackbarHostState,
-    scope: kotlinx.coroutines.CoroutineScope,
-    celebrationState: CelebrationState? = null
+    scope: kotlinx.coroutines.CoroutineScope
 ) {
     var expanded by remember { mutableStateOf(false) }
     val unlockedCount = items.count { it.unlocked }
@@ -684,11 +681,6 @@ private fun CollapsibleAchievements(
             val prefs = context.getSharedPreferences("fieldmind_achievements_v2", 0)
             val newlyUnlocked = items.filter { it.unlocked && !prefs.getBoolean(it.title, false) }
             if (newlyUnlocked.isNotEmpty()) {
-                // Trigger celebration for newly unlocked achievements
-                val isMajor = newlyUnlocked.any { it.target >= 10 }
-                celebrationState?.trigger(
-                    if (isMajor) CelebrationVariant.MIXED else CelebrationVariant.CONFETTI_BURST
-                )
                 newlyUnlocked.forEach { a ->
                     showFastSnackbar(snackbarState, scope, "🏆 ${a.title} unlocked!")
                     prefs.edit().putBoolean(a.title, true).apply()

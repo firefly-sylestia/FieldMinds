@@ -1,5 +1,6 @@
 package fieldmind.research.app.features.field.presentation.navigation
 import fieldmind.research.app.ui.theme.CuteCardDefaults
+import fieldmind.research.app.ui.theme.premiumCard
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -65,11 +66,11 @@ import fieldmind.research.app.features.field.presentation.components.LocalPrivac
 import fieldmind.research.app.features.field.presentation.components.PrivacyTextInputWrapper
 import fieldmind.research.app.features.field.presentation.components.liquidGlassRefraction
 import fieldmind.research.app.features.field.presentation.components.SwipeableAlertDialog
-import fieldmind.research.app.shared.presentation.theme.LocalNavBarStyle
-import fieldmind.research.app.shared.presentation.theme.NavBarStyle
+
 import fieldmind.research.app.features.field.presentation.components.PeekContentHolder
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import fieldmind.research.app.features.field.presentation.components.LocalAnimationConfig
+import fieldmind.research.app.features.field.presentation.components.LocalAnimationsEnabled
 import fieldmind.research.app.features.field.presentation.components.LocalPeekContentHolder
 import fieldmind.research.app.features.field.presentation.components.FieldMindAnimatedSplash
 import androidx.activity.compose.BackHandler
@@ -536,17 +537,8 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                 // NavHost content behind the rail (captured via hazeSource() below);
                 // .liquidGlassRefraction() applies GPU displacement & specular.
                 if (!hideChrome) {                        Surface(
-                            shape = RoundedCornerShape(size = 38.dp),
-                            color = MaterialTheme.colorScheme.surfaceContainer,
-                            tonalElevation = 0.dp,
-                            shadowElevation = if (FieldMindTheme.colors.isDark) 14.dp else 8.dp,
-                            border = androidx.compose.foundation.BorderStroke(
-                                width = 0.6.dp,
-                                color = if (FieldMindTheme.colors.isDark)
-                                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.15f)
-                                else
-                                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.20f)
-                            ),
+                            shape = RoundedCornerShape(38.dp),
+                            color = Color.Transparent,
                             modifier = Modifier
                                 .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
                                 .width(IntrinsicSize.Min)
@@ -565,7 +557,9 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                                         )
                                     )
                                 )
+                                .premiumCard(shape = RoundedCornerShape(38.dp), elevation = 6.dp)
                                 .liquidGlassRefraction()
+                                .clip(RoundedCornerShape(38.dp))
                         ) {
                             NavigationRail(
                                 header = {
@@ -644,13 +638,10 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                         // Fresnel edge glow via the .liquidGlassRefraction() modifier.
                         Surface(
                             shape = RoundedCornerShape(50.dp),
-                            color = MaterialTheme.colorScheme.surfaceContainer,
-                            tonalElevation = 0.dp,
-                            shadowElevation = if (FieldMindTheme.colors.isDark) 14.dp else 8.dp,
+                            color = Color.Transparent,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(68.dp)
-                                .clip(RoundedCornerShape(50.dp))
                                 .hazeEffect(
                                     state = hazeState,
                                     style = HazeStyle(
@@ -666,7 +657,9 @@ fun FieldMindNavigation(viewModel: FieldMindViewModel, appSettings: AppSettings,
                                         )
                                     )
                                 )
+                                .premiumCard(shape = RoundedCornerShape(50.dp), elevation = 8.dp)
                                 .liquidGlassRefraction()
+                                .clip(RoundedCornerShape(50.dp))
                         ) {
                             LiquidNavRow(
                                 visibleTabs = visibleTabs,
@@ -721,35 +714,10 @@ private fun LiquidNavRow(
     // Arrangement.SpaceEvenly inter-item gaps.
     val tabBounds = remember { mutableStateListOf<TabBounds>() }
 
-    // ── NavBarStyle visuals ──
-    val navBarStyle = LocalNavBarStyle.current
+    // ── Nav bar blob color — uses theme primary ──
     val isDark = FieldMindTheme.colors.isDark
     val primary = MaterialTheme.colorScheme.primary
-    val blobColor = when (navBarStyle) {
-        NavBarStyle.Nature -> {
-            // Warm golden-green blended with theme primary for scheme cohesion
-            val natureBase = if (isDark) Color(0xFF7DCDA0) else Color(0xFF2E7D32)
-            Color(
-                red = (natureBase.red + primary.red) / 2f,
-                green = (natureBase.green + primary.green) / 2f,
-                blue = (natureBase.blue + primary.blue) / 2f,
-                alpha = 0.18f
-            )
-        }
-        NavBarStyle.Journal -> {
-            // Warm paper/cream blended with theme primary
-            val journalBase = if (isDark) Color(0xFFD4B896) else Color(0xFF8D6E63)
-            Color(
-                red = (journalBase.red + primary.red) / 2f,
-                green = (journalBase.green + primary.green) / 2f,
-                blue = (journalBase.blue + primary.blue) / 2f,
-                alpha = 0.16f
-            )
-        }
-        NavBarStyle.Modern -> {
-            primary.copy(alpha = 0.15f)
-        }
-    }
+    val blobColor = primary.copy(alpha = 0.15f)
 
     Box(
         modifier = Modifier
@@ -983,37 +951,41 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeEnterTransiti
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Spring-based sliding and fading — smooth, responsive feel
-    val slideSpec = FieldMindMotion.slideOffsetSpring
-    val fadeSpec = FieldMindMotion.expressiveFloat
+    // Fixed, well-tuned nav transition springs — decoupled from animationConfig
+    // so nav slides are ALWAYS visible regardless of animation speed/disable settings.
+    // dampingRatio=0.78 + stiffness=220 → ~380ms gentle elastic settle
+    val slideSpec = spring<IntOffset>(dampingRatio = 0.78f, stiffness = 220f)
+    val fadeSpec = spring<Float>(dampingRatio = 0.72f, stiffness = 200f)
+    val bouncySpec = spring<Float>(dampingRatio = 0.50f, stiffness = 160f)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
             val direction = primaryTabDirection(fromRoute, toRoute)
             if (direction == 0)
-                fadeIn(animationSpec = FieldMindMotion.expressiveFloat) +
-                scaleIn(initialScale = 0.96f, animationSpec = FieldMindMotion.expressiveFloat)
+                fadeIn(animationSpec = fadeSpec) +
+                scaleIn(initialScale = 0.96f, animationSpec = fadeSpec)
             else
-                slideInHorizontally(slideSpec) { direction * it / 5 } + fadeIn(fadeSpec) +
-                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+                // Direction-aware full-width slide: next tab slides from right, prev from left
+                slideInHorizontally(slideSpec) { direction * it } + fadeIn(fadeSpec) +
+                scaleIn(initialScale = 0.94f, animationSpec = bouncySpec)
         }
         fromCat == RouteCategory.Tab && toCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
-        ) -> slideInHorizontally(slideSpec) { it / 5 } + fadeIn(fadeSpec) +
-            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+        ) -> slideInHorizontally(slideSpec) { it } + fadeIn(fadeSpec) +
+            scaleIn(initialScale = 0.95f, animationSpec = bouncySpec)
         fromCat == RouteCategory.SettingsHub && toCat == RouteCategory.SettingsSubPage ->
-            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = FieldMindMotion.expressiveFloat)
+            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = fadeSpec)
         fromCat == RouteCategory.SettingsSubPage && toCat == RouteCategory.SettingsHub ->
-            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = FieldMindMotion.expressiveFloat)
+            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = fadeSpec)
         toCat == RouteCategory.Tab && fromCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation, RouteCategory.Other
-        ) -> slideInHorizontally(slideSpec) { -it / 5 } + fadeIn(fadeSpec) +
-            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
-        else -> fadeIn(animationSpec = fadeSpec) +
-            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.expressiveFloat)
+        ) -> slideInHorizontally(slideSpec) { -it } + fadeIn(fadeSpec) +
+            scaleIn(initialScale = 0.95f, animationSpec = bouncySpec)
+        else -> slideInHorizontally(slideSpec) { it } + fadeIn(animationSpec = fadeSpec) +
+            scaleIn(initialScale = 0.95f, animationSpec = bouncySpec)
     }
 }
 
@@ -1022,16 +994,17 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Spring-based sliding and fading — smooth, responsive feel
-    val slideSpec = FieldMindMotion.slideOffsetSpring
-    val fadeSpec = FieldMindMotion.expressiveFloat
+    // Fixed nav transition springs — always visible
+    val slideSpec = spring<IntOffset>(dampingRatio = 0.78f, stiffness = 220f)
+    val fadeSpec = spring<Float>(dampingRatio = 0.72f, stiffness = 200f)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
             val direction = primaryTabDirection(fromRoute, toRoute)
             if (direction == 0) fadeOut(fadeSpec)
             else {
-                slideOutHorizontally(slideSpec) { -direction * it / 8 } + fadeOut(fadeSpec)
+                // Old page exits opposite to direction: next tab → exit left, prev tab → exit right
+                slideOutHorizontally(slideSpec) { -direction * it } + fadeOut(fadeSpec)
             }
         }
         fromCat == RouteCategory.Tab && toCat in listOf(
@@ -1039,7 +1012,7 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
         ) -> {
-            slideOutHorizontally(slideSpec) { -it / 8 } + fadeOut(fadeSpec)
+            slideOutHorizontally(slideSpec) { -it } + fadeOut(fadeSpec)
         }
         fromCat == RouteCategory.SettingsHub && toCat == RouteCategory.SettingsSubPage ->
             fadeOut(fadeSpec)
@@ -1049,9 +1022,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routeExitTransitio
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation, RouteCategory.Other
         ) -> {
-            slideOutHorizontally(slideSpec) { it / 8 } + fadeOut(fadeSpec)
+            slideOutHorizontally(slideSpec) { it } + fadeOut(fadeSpec)
         }
-        else -> fadeOut(fadeSpec)
+        else -> slideOutHorizontally(slideSpec) { it } + fadeOut(fadeSpec)
     }
 }
 
@@ -1060,30 +1033,30 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopEnterTrans
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Spring-based sliding and fading — smooth, responsive feel
-    val slideSpec = FieldMindMotion.slideOffsetSpring
-    val fadeSpec = FieldMindMotion.expressiveFloat
+    // Fixed nav transition springs — always visible
+    val slideSpec = spring<IntOffset>(dampingRatio = 0.78f, stiffness = 220f)
+    val fadeSpec = spring<Float>(dampingRatio = 0.72f, stiffness = 200f)
+    val bouncySpec = spring<Float>(dampingRatio = 0.50f, stiffness = 160f)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
             val direction = primaryTabDirection(toRoute, fromRoute)
-            // Full-width slide from the opposite side
+            // Pop enter: reverse direction — slide back from opposite side
             slideInHorizontally(slideSpec) { -direction * it } + fadeIn(animationSpec = fadeSpec) +
-                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+                scaleIn(initialScale = 0.94f, animationSpec = bouncySpec)
         }
         toCat == RouteCategory.Tab && fromCat in listOf(
             RouteCategory.SettingsHub, RouteCategory.SettingsSubPage,
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
         ) -> {
-            // Previous screen (tab) slides in from the left at full width — iOS predictive peek
             slideInHorizontally(slideSpec) { -it } + fadeIn(animationSpec = fadeSpec) +
-                scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+                scaleIn(initialScale = 0.95f, animationSpec = bouncySpec)
         }
         toCat == RouteCategory.SettingsHub && fromCat == RouteCategory.SettingsSubPage ->
-            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = FieldMindMotion.expressiveFloat)
+            fadeIn(animationSpec = fadeSpec) + scaleIn(initialScale = 0.98f, animationSpec = fadeSpec)
         else -> slideInHorizontally(slideSpec) { -it } + fadeIn(animationSpec = fadeSpec) +
-            scaleIn(initialScale = 0.97f, animationSpec = FieldMindMotion.bouncyEntrance)
+            scaleIn(initialScale = 0.95f, animationSpec = bouncySpec)
     }
 }
 
@@ -1092,14 +1065,13 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
     val toRoute = targetState.destination.route ?: ""
     val fromCat = categorizeRoute(fromRoute)
     val toCat = categorizeRoute(toRoute)
-    // Spring-based sliding and fading — smooth, responsive feel
-    val slideSpec = FieldMindMotion.slideOffsetSpring
-    val fadeSpec = FieldMindMotion.expressiveFloat
+    // Fixed nav transition springs — always visible
+    val slideSpec = spring<IntOffset>(dampingRatio = 0.78f, stiffness = 220f)
+    val fadeSpec = spring<Float>(dampingRatio = 0.72f, stiffness = 200f)
 
     return when {
         fromCat == RouteCategory.Tab && toCat == RouteCategory.Tab -> {
             val direction = primaryTabDirection(toRoute, fromRoute)
-            // Full-width slide out in the direction of the pop
             slideOutHorizontally(slideSpec) { direction * it } + fadeOut(animationSpec = fadeSpec)
         }
         fromCat == RouteCategory.Tab && toCat in listOf(
@@ -1107,7 +1079,6 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
         ) -> {
-            // Current screen (tab) slides out to the right at full width
             slideOutHorizontally(slideSpec) { it } + fadeOut(animationSpec = fadeSpec)
         }
         toCat == RouteCategory.Tab && fromCat in listOf(
@@ -1115,10 +1086,9 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.routePopExitTransi
             RouteCategory.Tool, RouteCategory.Detail, RouteCategory.Creation,
             RouteCategory.Other
         ) -> {
-            // Current screen (sub-screen) slides out to the right at full width — iOS predictive
             slideOutHorizontally(slideSpec) { it } + fadeOut(animationSpec = fadeSpec)
         }
-        else -> fadeOut(animationSpec = fadeSpec)
+        else -> slideOutHorizontally(slideSpec) { -it } + fadeOut(animationSpec = fadeSpec)
     }
 }
 
@@ -1179,13 +1149,15 @@ private fun FieldMindNavHost(
     // animation parameter changes (set via animation tuning sliders).
     // collectAsState() ensures the CompositionLocal reactively updates.
     val animConfig by viewModel.fieldSettings.animationConfig.collectAsState(AnimationConfig.DEFAULT)
+    val animationsEnabled by viewModel.fieldSettings.animationsEnabled.collectAsState()
 
     SharedTransitionLayout(modifier = modifier) {
         val composableScope = this
         CompositionLocalProvider(
             LocalSharedTransitionScope provides composableScope,
             LocalPeekContentHolder provides peekHolder,
-            LocalAnimationConfig provides animConfig
+            LocalAnimationConfig provides animConfig,
+            LocalAnimationsEnabled provides animationsEnabled
         ) {
             NavHost(
             navController = navController,
@@ -1722,7 +1694,7 @@ private fun AllTabScreen(
                 tabEntranceProgress.snapTo(0f)
                 tabEntranceProgress.animateTo(
                     1f,
-                    animationSpec = animConfig.tabEntranceSpring()
+                    animationSpec = animConfig.spring()
                 )
             }
         }
@@ -1807,7 +1779,10 @@ private fun AllTabScreen(
                                     scope.launch {
                                         animX.animateTo(
                                             0f,
-                                            animationSpec = FieldMindMotion.expressiveFloat
+                                            animationSpec = spring<Float>(
+                                                dampingRatio = animConfig.dampingRatio,
+                                                stiffness = (animConfig.stiffness * 0.78f).coerceAtLeast(60f)
+                                            )
                                         )
                                     }
                                 }
@@ -1817,7 +1792,10 @@ private fun AllTabScreen(
                                 scope.launch {
                                     animX.animateTo(
                                         0f,
-                                        animationSpec = FieldMindMotion.expressiveFloat
+                                        animationSpec = spring<Float>(
+                                            dampingRatio = animConfig.dampingRatio,
+                                            stiffness = (animConfig.stiffness * 0.78f).coerceAtLeast(60f)
+                                        )
                                     )
                                 }
                             }

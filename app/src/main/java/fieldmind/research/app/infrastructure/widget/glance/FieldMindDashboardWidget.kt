@@ -41,7 +41,6 @@ import fieldmind.research.app.activities.MainActivity
 import fieldmind.research.app.R
 import kotlinx.coroutines.flow.first
 
-private val WIDGET_SURFACE_LOW = ColorProvider(Color(0xFFF7FBF7))
 private val WIDGET_SURFACE = ColorProvider(Color(0xFFEAF3EC))
 private val WIDGET_SURFACE_HIGH = ColorProvider(Color(0xFFE1ECE4))
 
@@ -129,12 +128,10 @@ class FieldMindDashboardWidget : GlanceAppWidget() {
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
+                .background(WIDGET_SURFACE)
                 .cornerRadius(32.dp)
                 .clickable(actionStartActivity<MainActivity>())
         ) {
-            // ── Glassmorphic layered background ──
-            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE_LOW).cornerRadius(32.dp)) { }
-            Box(modifier = GlanceModifier.fillMaxSize().background(WIDGET_SURFACE).cornerRadius(32.dp)) { }
             // ── Brand accent top bar ──
             Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(ColorProvider(BRAND_PRIMARY)).cornerRadius(1.5f.dp)) { }
 

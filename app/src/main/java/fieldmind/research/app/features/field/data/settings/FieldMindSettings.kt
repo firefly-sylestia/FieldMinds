@@ -3,6 +3,7 @@ package fieldmind.research.app.features.field.data.settings
 import android.content.Context
 import androidx.compose.animation.core.Spring
 import com.google.gson.Gson
+import kotlin.math.roundToInt
 import fieldmind.research.app.features.field.data.background.FieldMindBackgroundScheduler
 import fieldmind.research.app.features.field.presentation.components.AnimationConfig
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -315,14 +316,14 @@ class FieldMindSettings private constructor(context: Context) {
     fun setAnimationSpeedPreset(value: String) = edit(KEY_ANIMATION_SPEED_PRESET, value) { _animationSpeedPreset.value = value; refreshAnimationConfig() }
 
     // ── Animation tuning settings (elegant, slow defaults) ──
-    private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.95f))
+    private val _animEntranceDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_DAMPING, 0.65f))
     val animEntranceDamping: StateFlow<Float> = _animEntranceDamping.asStateFlow()
-    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, 80f))
+    private val _animEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_ENTRANCE_STIFFNESS, 350f))
     val animEntranceStiffness: StateFlow<Float> = _animEntranceStiffness.asStateFlow()
 
-    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.93f))
+    private val _animSwipeBackDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_DAMPING, 0.72f))
     val animSwipeBackDamping: StateFlow<Float> = _animSwipeBackDamping.asStateFlow()
-    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 80f))
+    private val _animSwipeBackStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_BACK_STIFFNESS, 320f))
     val animSwipeBackStiffness: StateFlow<Float> = _animSwipeBackStiffness.asStateFlow()
     private val _animSwipeThreshold = MutableStateFlow(prefs.getFloat(KEY_ANIM_SWIPE_THRESHOLD, 0.20f))
     val animSwipeThreshold: StateFlow<Float> = _animSwipeThreshold.asStateFlow()
@@ -333,19 +334,48 @@ class FieldMindSettings private constructor(context: Context) {
     private val _animTabEntranceStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, 120f))
     val animTabEntranceStiffness: StateFlow<Float> = _animTabEntranceStiffness.asStateFlow()
 
+    // ── Side swipe settings ──
+    private val _sideSwipeEnabled = MutableStateFlow(prefs.getBoolean(KEY_SIDE_SWIPE_ENABLED, true))
+    val sideSwipeEnabled: StateFlow<Boolean> = _sideSwipeEnabled.asStateFlow()
+    private val _sideSwipeThreshold = MutableStateFlow(prefs.getFloat(KEY_SIDE_SWIPE_THRESHOLD, 0.25f))
+    val sideSwipeThreshold: StateFlow<Float> = _sideSwipeThreshold.asStateFlow()
+    private val _sideSwipeDamping = MutableStateFlow(prefs.getFloat(KEY_SIDE_SWIPE_DAMPING, 0.62f))
+    val sideSwipeDamping: StateFlow<Float> = _sideSwipeDamping.asStateFlow()
+    private val _sideSwipeStiffness = MutableStateFlow(prefs.getFloat(KEY_SIDE_SWIPE_STIFFNESS, 380f))
+    val sideSwipeStiffness: StateFlow<Float> = _sideSwipeStiffness.asStateFlow()
+    private val _sideSwipeMaxRevealDp = MutableStateFlow(prefs.getFloat(KEY_SIDE_SWIPE_MAX_REVEAL_DP, 80f))
+    val sideSwipeMaxRevealDp: StateFlow<Float> = _sideSwipeMaxRevealDp.asStateFlow()
+
+    // ── Predictive back settings ──
+    private val _predictiveBackEnabled = MutableStateFlow(prefs.getBoolean(KEY_PREDICTIVE_BACK_ENABLED, true))
+    val predictiveBackEnabled: StateFlow<Boolean> = _predictiveBackEnabled.asStateFlow()
+    private val _predictiveBackScaleMin = MutableStateFlow(prefs.getFloat(KEY_PREDICTIVE_BACK_SCALE_MIN, 0.88f))
+    val predictiveBackScaleMin: StateFlow<Float> = _predictiveBackScaleMin.asStateFlow()
+
+    // ── New expressive motion tunables ──
+    private val _animMorphEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIM_MORPH_ENABLED, true))
+    val animMorphEnabled: StateFlow<Boolean> = _animMorphEnabled.asStateFlow()
+    private val _animMorphDamping = MutableStateFlow(prefs.getFloat(KEY_ANIM_MORPH_DAMPING, 0.72f))
+    val animMorphDamping: StateFlow<Float> = _animMorphDamping.asStateFlow()
+    private val _animMorphStiffness = MutableStateFlow(prefs.getFloat(KEY_ANIM_MORPH_STIFFNESS, 220f))
+    val animMorphStiffness: StateFlow<Float> = _animMorphStiffness.asStateFlow()
+    private val _animMorphDurationMs = MutableStateFlow(prefs.getInt(KEY_ANIM_MORPH_DURATION_MS, 400))
+    val animMorphDurationMs: StateFlow<Int> = _animMorphDurationMs.asStateFlow()
+    private val _animSideRevealDistanceDp = MutableStateFlow(prefs.getFloat(KEY_ANIM_SIDE_REVEAL_DISTANCE_DP, 40f))
+    val animSideRevealDistanceDp: StateFlow<Float> = _animSideRevealDistanceDp.asStateFlow()
+    private val _animShimmerSpeedMs = MutableStateFlow(prefs.getInt(KEY_ANIM_SHIMMER_SPEED_MS, 1200))
+    val animShimmerSpeedMs: StateFlow<Int> = _animShimmerSpeedMs.asStateFlow()
+    private val _animPulseDurationMs = MutableStateFlow(prefs.getInt(KEY_ANIM_PULSE_DURATION_MS, 1500))
+    val animPulseDurationMs: StateFlow<Int> = _animPulseDurationMs.asStateFlow()
+    private val _animListChoreographyEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIM_LIST_CHOREOGRAPHY_ENABLED, true))
+    val animListChoreographyEnabled: StateFlow<Boolean> = _animListChoreographyEnabled.asStateFlow()
+    private val _animConfettiEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIM_CONFETTI_ENABLED, true))
+    val animConfettiEnabled: StateFlow<Boolean> = _animConfettiEnabled.asStateFlow()
+    private val _animPageFlipEnabled = MutableStateFlow(prefs.getBoolean(KEY_ANIM_PAGE_FLIP_ENABLED, true))
+    val animPageFlipEnabled: StateFlow<Boolean> = _animPageFlipEnabled.asStateFlow()
+
     // ── Reactive combined AnimationConfig flow (reacts to any parameter change) ──
-    private val _animationConfig = MutableStateFlow(
-        AnimationConfig(
-            entranceDampingRatio = _animEntranceDamping.value,
-            entranceStiffness = _animEntranceStiffness.value,
-            swipeBackDampingRatio = _animSwipeBackDamping.value,
-            swipeBackStiffness = _animSwipeBackStiffness.value,
-            swipeThreshold = _animSwipeThreshold.value,
-            swipeScaleFactor = _animSwipeScaleFactor.value,
-            tabEntranceDampingRatio = _animTabEntranceDamping.value,
-            tabEntranceStiffness = _animTabEntranceStiffness.value
-        )
-    )
+    private val _animationConfig = MutableStateFlow(currentAnimationConfig())
     /**
      * Reactive [StateFlow] of the current [AnimationConfig], re-emitted whenever
      * any individual animation parameter changes. Use [collectAsState] in Compose
@@ -475,19 +505,6 @@ class FieldMindSettings private constructor(context: Context) {
 
     fun setSeasonalColorsEnabled(value: Boolean) = edit(KEY_SEASONAL_COLORS, value) { _seasonalColorsEnabled.value = value }
 
-    private val _microDelightIntensity = MutableStateFlow(
-        prefs.getString(KEY_MICRO_DELIGHT_INTENSITY, "normal") ?: "normal"
-    )
-    /** Micro-delight intensity: minimal, normal, or maximum. */
-    val microDelightIntensity: StateFlow<String> = _microDelightIntensity.asStateFlow()
-
-
-    private val _navBarStyle = MutableStateFlow(
-        prefs.getString(KEY_NAV_BAR_STYLE, "modern") ?: "modern"
-    )
-    /** Navigation bar style: modern, nature, or journal. */
-    val navBarStyle: StateFlow<String> = _navBarStyle.asStateFlow()
-
     // ── Card gradient style (Phase 5) ──
     private val _cardGradientStyle = MutableStateFlow(
         prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
@@ -497,8 +514,6 @@ class FieldMindSettings private constructor(context: Context) {
 
     fun setCardGradientStyle(value: String) = edit(KEY_CARD_GRADIENT_STYLE, value) { _cardGradientStyle.value = value }
 
-    fun setMicroDelightIntensity(value: String) = edit(KEY_MICRO_DELIGHT_INTENSITY, value) { _microDelightIntensity.value = value }
-    fun setNavBarStyle(value: String) = edit(KEY_NAV_BAR_STYLE, value) { _navBarStyle.value = value }
 
     private val _entityColors = MutableStateFlow(parseEntityColorsJson(prefs.getString(KEY_ENTITY_COLORS, null)))
     /** Map of entity type → hex color Long (e.g. "observation" → 0xFF2E7D32). Empty = use defaults. */
@@ -774,14 +789,27 @@ class FieldMindSettings private constructor(context: Context) {
     fun currentAnimationConfig(): AnimationConfig {
         val mult = if (_animationsEnabled.value) speedMultiplier() else 100_000f
         return AnimationConfig(
-            entranceDampingRatio = _animEntranceDamping.value,
-            entranceStiffness = (_animEntranceStiffness.value * mult).coerceAtLeast(1f),
+            predictiveBackEnabled = _predictiveBackEnabled.value,
+            predictiveBackScaleMin = _predictiveBackScaleMin.value,
+            sideSwipeEnabled = _sideSwipeEnabled.value,
+            sideSwipeThreshold = _sideSwipeThreshold.value,
+            sideSwipeDampingRatio = _sideSwipeDamping.value,
+            sideSwipeStiffness = (_sideSwipeStiffness.value * mult).coerceAtLeast(1f),
+            sideSwipeMaxRevealDp = _sideSwipeMaxRevealDp.value,
+            dampingRatio = _animEntranceDamping.value,
+            stiffness = (_animEntranceStiffness.value * mult).coerceAtLeast(1f),
             swipeBackDampingRatio = _animSwipeBackDamping.value,
             swipeBackStiffness = (_animSwipeBackStiffness.value * mult).coerceAtLeast(1f),
             swipeThreshold = _animSwipeThreshold.value,
             swipeScaleFactor = _animSwipeScaleFactor.value,
-            tabEntranceDampingRatio = _animTabEntranceDamping.value,
-            tabEntranceStiffness = (_animTabEntranceStiffness.value * mult).coerceAtLeast(1f)
+            slideStiffness = (_animEntranceStiffness.value * mult * 1.1f).coerceAtLeast(1f),
+            morphEnabled = _animMorphEnabled.value,
+            morphDampingRatio = _animMorphDamping.value,
+            morphStiffness = (_animMorphStiffness.value * mult).coerceAtLeast(1f),
+            morphDurationMs = _animMorphDurationMs.value,
+            shimmerSpeedMs = _animShimmerSpeedMs.value,
+            pulseDurationMs = _animPulseDurationMs.value,
+            pageFlipEnabled = _animPageFlipEnabled.value
         )
     }
 
@@ -794,6 +822,29 @@ class FieldMindSettings private constructor(context: Context) {
     fun setAnimSwipeScaleFactor(value: Float) = edit(KEY_ANIM_SWIPE_SCALE, value) { _animSwipeScaleFactor.value = value; refreshAnimationConfig() }
     fun setAnimTabEntranceDamping(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_DAMPING, value) { _animTabEntranceDamping.value = value; refreshAnimationConfig() }
     fun setAnimTabEntranceStiffness(value: Float) = edit(KEY_ANIM_TAB_ENTRANCE_STIFFNESS, value) { _animTabEntranceStiffness.value = value; refreshAnimationConfig() }
+
+    // ── Side swipe setters ──
+    fun setSideSwipeEnabled(value: Boolean) = edit(KEY_SIDE_SWIPE_ENABLED, value) { _sideSwipeEnabled.value = value; refreshAnimationConfig() }
+    fun setSideSwipeThreshold(value: Float) = edit(KEY_SIDE_SWIPE_THRESHOLD, value) { _sideSwipeThreshold.value = value; refreshAnimationConfig() }
+    fun setSideSwipeDamping(value: Float) = edit(KEY_SIDE_SWIPE_DAMPING, value) { _sideSwipeDamping.value = value; refreshAnimationConfig() }
+    fun setSideSwipeStiffness(value: Float) = edit(KEY_SIDE_SWIPE_STIFFNESS, value) { _sideSwipeStiffness.value = value; refreshAnimationConfig() }
+    fun setSideSwipeMaxRevealDp(value: Float) = edit(KEY_SIDE_SWIPE_MAX_REVEAL_DP, value) { _sideSwipeMaxRevealDp.value = value; refreshAnimationConfig() }
+
+    // ── Predictive back setters ──
+    fun setPredictiveBackEnabled(value: Boolean) = edit(KEY_PREDICTIVE_BACK_ENABLED, value) { _predictiveBackEnabled.value = value; refreshAnimationConfig() }
+    fun setPredictiveBackScaleMin(value: Float) = edit(KEY_PREDICTIVE_BACK_SCALE_MIN, value) { _predictiveBackScaleMin.value = value; refreshAnimationConfig() }
+
+    // ── New expressive motion tunable setters ──
+    fun setAnimMorphEnabled(value: Boolean) = edit(KEY_ANIM_MORPH_ENABLED, value) { _animMorphEnabled.value = value; refreshAnimationConfig() }
+    fun setAnimMorphDamping(value: Float) = edit(KEY_ANIM_MORPH_DAMPING, value) { _animMorphDamping.value = value; refreshAnimationConfig() }
+    fun setAnimMorphStiffness(value: Float) = edit(KEY_ANIM_MORPH_STIFFNESS, value) { _animMorphStiffness.value = value; refreshAnimationConfig() }
+    fun setAnimMorphDurationMs(value: Int) = edit(KEY_ANIM_MORPH_DURATION_MS, value) { _animMorphDurationMs.value = value; refreshAnimationConfig() }
+    fun setAnimSideRevealDistanceDp(value: Float) = edit(KEY_ANIM_SIDE_REVEAL_DISTANCE_DP, value) { _animSideRevealDistanceDp.value = value; refreshAnimationConfig() }
+    fun setAnimShimmerSpeedMs(value: Int) = edit(KEY_ANIM_SHIMMER_SPEED_MS, value) { _animShimmerSpeedMs.value = value; refreshAnimationConfig() }
+    fun setAnimPulseDurationMs(value: Int) = edit(KEY_ANIM_PULSE_DURATION_MS, value) { _animPulseDurationMs.value = value; refreshAnimationConfig() }
+    fun setAnimListChoreographyEnabled(value: Boolean) = edit(KEY_ANIM_LIST_CHOREOGRAPHY_ENABLED, value) { _animListChoreographyEnabled.value = value; refreshAnimationConfig() }
+    fun setAnimConfettiEnabled(value: Boolean) = edit(KEY_ANIM_CONFETTI_ENABLED, value) { _animConfettiEnabled.value = value; refreshAnimationConfig() }
+    fun setAnimPageFlipEnabled(value: Boolean) = edit(KEY_ANIM_PAGE_FLIP_ENABLED, value) { _animPageFlipEnabled.value = value; refreshAnimationConfig() }
 
     fun verifyAppPin(input: String): Boolean {
         val hash = _appPinHash.value
@@ -871,6 +922,17 @@ class FieldMindSettings private constructor(context: Context) {
         _bugReportsAttachCrashLog.value = true
         _animationsEnabled.value = true
         _animationSpeedPreset.value = "Normal"
+        _predictiveBackEnabled.value = true
+        _predictiveBackScaleMin.value = 0.88f
+        _sideSwipeEnabled.value = true
+        _sideSwipeThreshold.value = 0.25f
+        _sideSwipeDamping.value = 0.62f
+        _sideSwipeStiffness.value = 380f
+        _sideSwipeMaxRevealDp.value = 80f
+        _animMorphEnabled.value = true
+        _animMorphDamping.value = 0.72f
+        _animMorphStiffness.value = 220f
+        _animMorphDurationMs.value = 400
         prefs.edit().clear().apply()
         // Reset all StateFlow backing fields to defaults
         _dailyObservationGoal.value = 1
@@ -983,8 +1045,6 @@ class FieldMindSettings private constructor(context: Context) {
         _cardGradientStyle.value = fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = 0.75f
         _seasonalColorsEnabled.value = true
-        _microDelightIntensity.value = "normal"
-        _navBarStyle.value = "modern"
     }
 
     // ── Species identification setters ──
@@ -1116,8 +1176,6 @@ class FieldMindSettings private constructor(context: Context) {
         put(KEY_CARD_GRADIENT_STYLE, _cardGradientStyle.value)
         put(KEY_GRADIENT_OPACITY, _gradientOpacity.value)
         put(KEY_SEASONAL_COLORS, _seasonalColorsEnabled.value)
-        put(KEY_MICRO_DELIGHT_INTENSITY, _microDelightIntensity.value)
-        put(KEY_NAV_BAR_STYLE, _navBarStyle.value)
         put(KEY_ANIMATIONS_ENABLED, _animationsEnabled.value)
         put(KEY_ANIMATION_SPEED_PRESET, _animationSpeedPreset.value)
     }.toString(2)
@@ -1259,8 +1317,6 @@ class FieldMindSettings private constructor(context: Context) {
         applyInt(KEY_DAILY_GOAL)
         applyString(KEY_CARD_GRADIENT_STYLE)
         applyBoolean(KEY_SEASONAL_COLORS)
-        applyString(KEY_MICRO_DELIGHT_INTENSITY)
-        applyString(KEY_NAV_BAR_STYLE)
         applyFloat(KEY_GRADIENT_OPACITY)
         applyBoolean(KEY_ANIMATIONS_ENABLED, true)
         applyString(KEY_ANIMATION_SPEED_PRESET)
@@ -1359,8 +1415,6 @@ class FieldMindSettings private constructor(context: Context) {
         _cardGradientStyle.value = prefs.getString(KEY_CARD_GRADIENT_STYLE, fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE) ?: fieldmind.research.app.ui.theme.CuteGradients.DEFAULT_STYLE
         _gradientOpacity.value = prefs.getFloat(KEY_GRADIENT_OPACITY, 0.55f)
         _seasonalColorsEnabled.value = prefs.getBoolean(KEY_SEASONAL_COLORS, true)
-        _microDelightIntensity.value = prefs.getString(KEY_MICRO_DELIGHT_INTENSITY, "normal") ?: "normal"
-        _navBarStyle.value = prefs.getString(KEY_NAV_BAR_STYLE, "modern") ?: "modern"
         _animationsEnabled.value = prefs.getBoolean(KEY_ANIMATIONS_ENABLED, true)
         _animationSpeedPreset.value = prefs.getString(KEY_ANIMATION_SPEED_PRESET, "Normal") ?: "Normal"
         _journalQuickCategory.value = prefs.getString(KEY_JOURNAL_QUICK_CATEGORY, "") ?: ""
@@ -1505,9 +1559,6 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_GRADIENT_OPACITY = "gradient_opacity"
 
         private const val KEY_SEASONAL_COLORS = "seasonal_colors_enabled"
-        // ── Journal style keys ──
-        private const val KEY_MICRO_DELIGHT_INTENSITY = "micro_delight_intensity"
-        private const val KEY_NAV_BAR_STYLE = "nav_bar_style"
         // ── Per-category entity color overrides ──
         private const val KEY_ENTITY_COLORS = "entity_colors"
         // ── Animation tuning keys ──
@@ -1519,6 +1570,26 @@ class FieldMindSettings private constructor(context: Context) {
         private const val KEY_ANIM_SWIPE_SCALE = "anim_swipe_scale"
         private const val KEY_ANIM_TAB_ENTRANCE_DAMPING = "anim_tab_entrance_damping"
         private const val KEY_ANIM_TAB_ENTRANCE_STIFFNESS = "anim_tab_entrance_stiffness"
+        // ── Predictive back keys ──
+        // ── Side swipe keys ──
+        private const val KEY_SIDE_SWIPE_ENABLED = "side_swipe_enabled"
+        private const val KEY_SIDE_SWIPE_THRESHOLD = "side_swipe_threshold"
+        private const val KEY_SIDE_SWIPE_DAMPING = "side_swipe_damping"
+        private const val KEY_SIDE_SWIPE_STIFFNESS = "side_swipe_stiffness"
+        private const val KEY_SIDE_SWIPE_MAX_REVEAL_DP = "side_swipe_max_reveal_dp"
+        private const val KEY_PREDICTIVE_BACK_ENABLED = "predictive_back_enabled"
+        private const val KEY_PREDICTIVE_BACK_SCALE_MIN = "predictive_back_scale_min"
+        // ── New expressive motion keys ──
+        private const val KEY_ANIM_MORPH_ENABLED = "anim_morph_enabled"
+        private const val KEY_ANIM_MORPH_DAMPING = "anim_morph_damping"
+        private const val KEY_ANIM_MORPH_STIFFNESS = "anim_morph_stiffness"
+        private const val KEY_ANIM_MORPH_DURATION_MS = "anim_morph_duration_ms"
+        private const val KEY_ANIM_SIDE_REVEAL_DISTANCE_DP = "anim_side_reveal_distance_dp"
+        private const val KEY_ANIM_SHIMMER_SPEED_MS = "anim_shimmer_speed_ms"
+        private const val KEY_ANIM_PULSE_DURATION_MS = "anim_pulse_duration_ms"
+        private const val KEY_ANIM_LIST_CHOREOGRAPHY_ENABLED = "anim_list_choreography_enabled"
+        private const val KEY_ANIM_CONFETTI_ENABLED = "anim_confetti_enabled"
+        private const val KEY_ANIM_PAGE_FLIP_ENABLED = "anim_page_flip_enabled"
         // ── Animation master toggle & speed preset ──
         private const val KEY_ANIMATIONS_ENABLED = "animations_enabled"
         private const val KEY_ANIMATION_SPEED_PRESET = "animation_speed_preset"

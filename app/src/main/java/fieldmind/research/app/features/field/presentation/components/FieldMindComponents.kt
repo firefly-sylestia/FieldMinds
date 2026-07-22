@@ -78,6 +78,7 @@ import fieldmind.research.app.features.field.presentation.components.LocalPrivac
 import fieldmind.research.app.features.field.presentation.components.withPrivacyTyping
 import fieldmind.research.app.ui.theme.CuteCardDefaults
 import fieldmind.research.app.ui.theme.CuteElevations
+import fieldmind.research.app.ui.theme.glassCard
 // JournalDecorations.kt lives in the same package: journalBorderStroke,
 // JournalDivider are all reachable without an import.
 // FieldMindIcons is in the same package (components.FieldMindIcons)
@@ -568,12 +569,13 @@ fun FieldScreenHeader(
 ) {
     val shape = CuteCardDefaults.ShapeCompact
     Surface(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .glassCard(shape = shape),
         shape = shape,
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-        tonalElevation = 2.dp,
-        shadowElevation = 2.dp,
-        border = journalBorderStroke()
+        color = Color.Transparent,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
     ) {
         Row(
             Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
@@ -627,7 +629,6 @@ fun SectionHeader(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .staggeredEntrance(index = index, animate = animate)
             .cuteShadow(elevation = 2.dp, shape = shape),
         shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -685,12 +686,12 @@ fun StandardScreenHeader(
     val shape = CuteCardDefaults.ShapeCompact
     Surface(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .glassCard(shape = shape),
         shape = shape,
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 3.dp,
-        shadowElevation = 3.dp,
-        border = journalBorderStroke()
+        color = Color.Transparent,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
     ) {
         Row(
             Modifier.padding(18.dp),
@@ -884,7 +885,6 @@ fun EntityCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .staggeredEntrance(index = index, animate = animate)
             .then(
                 if (onClick != null) Modifier.expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 else Modifier
@@ -996,7 +996,6 @@ fun MetricTile(
 
     Card(
         modifier = modifier
-            .staggeredEntrance(index = index, animate = animate)
             .then(if (onClick != null) Modifier.expressivePress(scaleDown = 0.96f) else Modifier)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         shape = shape,

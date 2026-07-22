@@ -1446,10 +1446,10 @@ private fun LibraryFlashcard(
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 // Selection checkbox in select mode
                 if (onSelect != null) {
-                    Checkbox(
+                    FieldMindCheckbox(
                         checked = selected,
                         onCheckedChange = { onSelect() },
-                        modifier = Modifier.size(24.dp)
+                        accentColor = accent
                     )
                 }
                 Box(

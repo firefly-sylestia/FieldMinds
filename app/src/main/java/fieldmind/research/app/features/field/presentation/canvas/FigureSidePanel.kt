@@ -1,9 +1,11 @@
 package fieldmind.research.app.features.field.presentation.canvas
 import fieldmind.research.app.ui.theme.CuteCardDefaults
+import fieldmind.research.app.features.field.presentation.components.FieldMindMotion
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -203,22 +205,16 @@ fun FigureSidePanel(
                 transitionSpec = {
                     val direction = if (targetState > initialState) 1 else -1
                     (slideInHorizontally(
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioNoBouncy,
-                            stiffness = Spring.StiffnessMediumLow
-                        ),
+                        animationSpec = spring<IntOffset>(dampingRatio = 0.84f, stiffness = 134f),
                         initialOffsetX = { fullWidth -> direction * fullWidth / 4 }
                     ) + fadeIn(
-                        animationSpec = spring(Spring.DampingRatioNoBouncy, Spring.StiffnessMedium)
+                        animationSpec = spring<Float>(dampingRatio = 0.84f, stiffness = 134f)
                     )) togetherWith (
                         slideOutHorizontally(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioNoBouncy,
-                                stiffness = Spring.StiffnessMediumLow
-                            ),
+                            animationSpec = spring<IntOffset>(dampingRatio = 0.84f, stiffness = 134f),
                             targetOffsetX = { fullWidth -> -direction * fullWidth / 4 }
                         ) + fadeOut(
-                            animationSpec = spring(Spring.DampingRatioNoBouncy, Spring.StiffnessMedium)
+                            animationSpec = spring<Float>(dampingRatio = 0.84f, stiffness = 134f)
                         )
                     )
                 },

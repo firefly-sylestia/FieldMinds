@@ -38,6 +38,7 @@ workRuntimeKtx = "2.11.2"
 leakcanary = "2.14"
 uiUnit = "1.11.2"
 osmdroid = "6.1.18"
+graphicsShapes = "1.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -97,6 +98,7 @@ androidx-compose-material-icons-core = { group = "androidx.compose.material", na
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-ui-unit = { group = "androidx.compose.ui", name = "ui-unit", version.ref = "uiUnit" }
 osmdroid-android = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroid" }
+androidx-graphics-shapes = { group = "androidx.graphics", name = "graphics-shapes", version.ref = "graphicsShapes" }
 
 # Haze - Real backdrop blur for glassmorphism effects
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }

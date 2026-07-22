@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.activity.compose.BackHandler
 import fieldmind.research.app.features.field.data.vision.SpeciesDatabase
 import fieldmind.research.app.features.field.data.vision.SpeciesRecord
+import fieldmind.research.app.util.CrashReporter
 import kotlinx.coroutines.launch
 import fieldmind.research.app.features.field.presentation.components.ClickableCard
 import fieldmind.research.app.features.field.presentation.components.FieldMindIcons
@@ -99,42 +100,66 @@ fun TaxonomicBrowserScreen(
         when (currentLevel) {
             TaxoLevel.Kingdom -> {
                 scope.launch {
-                    siblings = database.getKingdoms()
+                    try {
+                        siblings = database.getKingdoms()
+                    } catch (e: Exception) {
+                        CrashReporter.recordNonFatal(e, "TaxonomicBrowser.getKingdoms")
+                    }
                     isLoading = false
                 }
             }
             TaxoLevel.Phylum -> {
                 val kingdom = breadcrumbs.firstOrNull { it.level == TaxoLevel.Kingdom }?.value ?: return
                 scope.launch {
-                    siblings = database.getPhyla(kingdom)
+                    try {
+                        siblings = database.getPhyla(kingdom)
+                    } catch (e: Exception) {
+                        CrashReporter.recordNonFatal(e, "TaxonomicBrowser.getPhyla")
+                    }
                     isLoading = false
                 }
             }
             TaxoLevel.Class -> {
                 val phylum = breadcrumbs.firstOrNull { it.level == TaxoLevel.Phylum }?.value ?: return
                 scope.launch {
-                    siblings = database.getClasses(phylum)
+                    try {
+                        siblings = database.getClasses(phylum)
+                    } catch (e: Exception) {
+                        CrashReporter.recordNonFatal(e, "TaxonomicBrowser.getClasses")
+                    }
                     isLoading = false
                 }
             }
             TaxoLevel.Order -> {
                 val clss = breadcrumbs.firstOrNull { it.level == TaxoLevel.Class }?.value ?: return
                 scope.launch {
-                    siblings = database.getOrders(clss)
+                    try {
+                        siblings = database.getOrders(clss)
+                    } catch (e: Exception) {
+                        CrashReporter.recordNonFatal(e, "TaxonomicBrowser.getOrders")
+                    }
                     isLoading = false
                 }
             }
             TaxoLevel.Family -> {
                 val order = breadcrumbs.firstOrNull { it.level == TaxoLevel.Order }?.value ?: return
                 scope.launch {
-                    siblings = database.getFamilies(order)
+                    try {
+                        siblings = database.getFamilies(order)
+                    } catch (e: Exception) {
+                        CrashReporter.recordNonFatal(e, "TaxonomicBrowser.getFamilies")
+                    }
                     isLoading = false
                 }
             }
             TaxoLevel.Genus -> {
                 val family = breadcrumbs.firstOrNull { it.level == TaxoLevel.Family }?.value ?: return
                 scope.launch {
-                    siblings = database.getGenera(family)
+                    try {
+                        siblings = database.getGenera(family)
+                    } catch (e: Exception) {
+                        CrashReporter.recordNonFatal(e, "TaxonomicBrowser.getGenera")
+                    }
                     isLoading = false
                 }
             }
@@ -146,14 +171,18 @@ fun TaxonomicBrowserScreen(
                 val order = breadcrumbs.firstOrNull { it.level == TaxoLevel.Order }?.value
                 val family = breadcrumbs.firstOrNull { it.level == TaxoLevel.Family }?.value
                 scope.launch {
-                    speciesList = database.getSpeciesByTaxonomy(
-                        kingdom = kingdom,
-                        phylum = phylum,
-                        category = clss,
-                        order = order,
-                        family = family,
-                        genus = genus
-                    )
+                    try {
+                        speciesList = database.getSpeciesByTaxonomy(
+                            kingdom = kingdom,
+                            phylum = phylum,
+                            category = clss,
+                            order = order,
+                            family = family,
+                            genus = genus
+                        )
+                    } catch (e: Exception) {
+                        CrashReporter.recordNonFatal(e, "TaxonomicBrowser.getSpecies")
+                    }
                     isLoading = false
                 }
             }

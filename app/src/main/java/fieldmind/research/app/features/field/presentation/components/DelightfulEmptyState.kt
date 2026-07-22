@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import fieldmind.research.app.shared.presentation.components.icons.Icon
 import fieldmind.research.app.shared.presentation.components.icons.MaterialSymbolIcon
+import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.cuteShadow
 import fieldmind.research.app.ui.theme.CuteCardDefaults
@@ -101,15 +102,24 @@ fun DelightfulEmptyState(
 
     val cardShape = CuteCardDefaults.ShapeCompact
     val chipShape = CuteCardDefaults.ChipShape
+    val isDark = FieldMindTheme.colors.isDark
+    // Brighter text in dark mode for better readability
+    val titleColor = if (isDark)
+        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.92f)
+    else
+        MaterialTheme.colorScheme.onSurface
+    val bodyColor = if (isDark)
+        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f)
+    else
+        MaterialTheme.colorScheme.onSurfaceVariant
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            
             .cuteShadow(elevation = CuteElevations.nonClickableTier, shape = cardShape),
         shape = cardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        border = journalBorderStroke()
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier
@@ -117,7 +127,7 @@ fun DelightfulEmptyState(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            accentColor.copy(alpha = 0.03f),
+                            accentColor.copy(alpha = 0.04f),
                             Color.Transparent,
                             MaterialTheme.colorScheme.surface
                         )
@@ -140,25 +150,26 @@ fun DelightfulEmptyState(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                // ── Title with warmth ──
+                // ── Title with warmth — boosted contrast in dark mode ──
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center
+                    color = titleColor,
+                    textAlign = TextAlign.Center,
+                    lineHeight = MaterialTheme.typography.titleLarge.lineHeight
                 )
 
                 // ── Friendly body ──
                 Text(
                     text = body,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = bodyColor,
                     textAlign = TextAlign.Center,
                     lineHeight = MaterialTheme.typography.bodyMedium.lineHeight
                 )
 
-                // ── Helpful tip ──
+                // ── Helpful tip (inline, no box) ──
                 if (tip.isNotBlank()) {
                     Spacer(Modifier.height(4.dp))
                     Row(
@@ -166,22 +177,18 @@ fun DelightfulEmptyState(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(
-                                accentColor.copy(alpha = 0.06f),
-                                chipShape
-                            )
-                            .padding(horizontal = 14.dp, vertical = 8.dp)
+                            .padding(horizontal = 4.dp)
                     ) {
                         Icon(
                             MaterialSymbolIcon("lightbulb"),
                             contentDescription = null,
-                            tint = accentColor.copy(alpha = 0.7f),
+                            tint = accentColor.copy(alpha = 0.85f),
                             size = 16.dp
                         )
                         Text(
                             text = tip,
                             style = MaterialTheme.typography.bodySmall,
-                            color = accentColor.copy(alpha = 0.8f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.Medium,
                             maxLines = 2
                         )
