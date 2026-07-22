@@ -395,10 +395,14 @@ fun SharedTransitionScope.HomeScreen(
             item {
                 val colors = FieldMindTheme.colors
                 Surface(
-                    shape = CuteCardDefaults.ShapeCompact,
+                    onClick = { onNavigate(FieldMindScreen.FieldLog) },
+                    shape = CuteCardDefaults.Shape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
-                    tonalElevation = CuteElevations.nonClickableTier,
+                    tonalElevation = CuteElevations.clickableTier,
+                    shadowElevation = CuteElevations.clickableTier,
+                    border = journalBorderStroke(),
                     modifier = Modifier.fillMaxWidth()
+                        .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 ) {
                     Row(
                         Modifier.fillMaxWidth().padding(16.dp),
@@ -412,7 +416,7 @@ fun SharedTransitionScope.HomeScreen(
                         ) {
                             Icon(FieldMindIcons.Calendar, null, tint = colors.project, size = 24.dp)
                         }
-                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Column(Modifier.weight(1f)) {
                             Text("Observation timeline", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                             Text(
                                 if (observations.isNotEmpty()) "${observations.size} observations • View, filter, and explore"
@@ -421,17 +425,7 @@ fun SharedTransitionScope.HomeScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
-                        FilledTonalButton(
-                            onClick = { onNavigate(FieldMindScreen.FieldLog) },
-                            shape = CuteCardDefaults.ShapeCompact,
-                            colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = colors.project.copy(alpha = 0.12f)
-                            )
-                        ) {
-                            Text("Open", fontWeight = FontWeight.SemiBold)
-                            Spacer(Modifier.size(4.dp))
-                            Icon(FieldMindIcons.Forward, null, size = 16.dp)
-                        }
+                        Icon(FieldMindIcons.Forward, null, tint = colors.project, size = 20.dp)
                     }
                 }
             }
@@ -479,10 +473,14 @@ fun SharedTransitionScope.HomeScreen(
                     Triple("Species", "Quick observation", FieldMindIcons.Nature) to FieldMindScreen.SpeciesTool
                 )
                 Surface(
-                    shape = CuteCardDefaults.ShapeCompact,
+                    onClick = { onNavigate(FieldMindScreen.DataTools) },
+                    shape = CuteCardDefaults.Shape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
-                    tonalElevation = CuteElevations.nonClickableTier,
+                    tonalElevation = CuteElevations.clickableTier,
+                    shadowElevation = CuteElevations.clickableTier,
+                    border = journalBorderStroke(),
                     modifier = Modifier.fillMaxWidth()
+                        .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(
@@ -500,15 +498,7 @@ fun SharedTransitionScope.HomeScreen(
                                 Text("Data tools", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                                 Text("Quick tools for field observations", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-                            FilledTonalButton(
-                                onClick = { onNavigate(FieldMindScreen.DataTools) },
-                                shape = CuteCardDefaults.ShapeCompact,
-                                colors = ButtonDefaults.filledTonalButtonColors(containerColor = FieldMindTheme.colors.data.copy(alpha = 0.12f))
-                            ) {
-                                Text("All tools", fontWeight = FontWeight.SemiBold)
-                                Spacer(Modifier.size(4.dp))
-                                Icon(FieldMindIcons.Forward, null, size = 16.dp)
-                            }
+                            Icon(FieldMindIcons.Forward, null, tint = FieldMindTheme.colors.data, size = 20.dp)
                         }
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             dataToolsCards.take(2).forEach { (info, screen) ->
@@ -528,10 +518,11 @@ fun SharedTransitionScope.HomeScreen(
             item {
                 Surface(
                     onClick = { onNavigate(FieldMindScreen.MapScreen) },
-                    shape = CuteCardDefaults.ShapeCompact,
+                    shape = CuteCardDefaults.Shape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
                     tonalElevation = CuteElevations.clickableTier,
                     shadowElevation = CuteElevations.clickableTier,
+                    border = journalBorderStroke(),
                     modifier = Modifier.fillMaxWidth()
                         .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 ) {
@@ -564,10 +555,14 @@ fun SharedTransitionScope.HomeScreen(
                     Triple("Collaborate", "Share with others", MaterialSymbolIcon("share")) to FieldMindScreen.Collaboration
                 )
                 Surface(
-                    shape = CuteCardDefaults.ShapeCompact,
+                    onClick = { onNavigate(FieldMindScreen.MediaGallery) },
+                    shape = CuteCardDefaults.Shape,
                     color = MaterialTheme.colorScheme.surfaceContainerLow,
-                    tonalElevation = CuteElevations.nonClickableTier,
+                    tonalElevation = CuteElevations.clickableTier,
+                    shadowElevation = CuteElevations.clickableTier,
+                    border = journalBorderStroke(),
                     modifier = Modifier.fillMaxWidth()
+                        .expressiveCardPress(liftDp = 1.5f, scaleDown = 0.985f)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(
@@ -585,6 +580,7 @@ fun SharedTransitionScope.HomeScreen(
                                 Text("Media & sharing", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                                 Text("Voice memos, photos, citations, and collaboration", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
+                            Icon(FieldMindIcons.Forward, null, tint = FieldMindTheme.colors.note, size = 20.dp)
                         }
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             mediaToolsCards.take(2).forEach { (info, screen) ->

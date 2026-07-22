@@ -107,8 +107,16 @@ fun ProjectDetailScreen(
     var showRenameDialog by remember { mutableStateOf(false) }
     var showObservationPicker by remember { mutableStateOf(false) }
     var showSourcePicker by remember { mutableStateOf(false) }
+    var showNotePicker by remember { mutableStateOf(false) }
+    var showQuestionPicker by remember { mutableStateOf(false) }
+    var showTaskPicker by remember { mutableStateOf(false) }
+    var showFolderPicker by remember { mutableStateOf(false) }
     var obsPickerSearch by remember { mutableStateOf("") }
     var srcPickerSearch by remember { mutableStateOf("") }
+    var notePickerSearch by remember { mutableStateOf("") }
+    var questionPickerSearch by remember { mutableStateOf("") }
+    var taskPickerSearch by remember { mutableStateOf("") }
+    var folderPickerSearch by remember { mutableStateOf("") }
     var showAllTasksInline by remember { mutableStateOf(false) }
 
     // ── Dialog states ──
@@ -120,6 +128,7 @@ fun ProjectDetailScreen(
     var showNewAttachment by remember { mutableStateOf(false) }
     var showNewFolder by remember { mutableStateOf(false) }
     var showNewHypothesis by remember { mutableStateOf(false) }
+    var showFolderDetailDialog by remember { mutableStateOf<FolderEntity?>(null) }
 
     val colors = FieldMindTheme.colors
     val context = LocalContext.current
@@ -471,7 +480,10 @@ fun ProjectDetailScreen(
                         "question" -> onOpenDetail("question", item.id)
                         "source" -> onOpenDetail("source", item.id)
                         "task" -> onOpenDetail("task", item.id)
-                        "folder" -> onOpenDetail("folder", item.id)
+                        "folder" -> {
+                        val folder = relatedFolders.firstOrNull { it.id == item.id }
+                        if (folder != null) showFolderDetailDialog = folder
+                    }
                     }
                 })
             }
@@ -527,6 +539,35 @@ fun ProjectDetailScreen(
                 Icon(MaterialSymbolIcon("add"), null, size = 20.dp)
                 Spacer(Modifier.size(8.dp))
                 Text("+ Add Record", fontWeight = FontWeight.Bold)
+            }
+        }
+
+        // ════════════════════════════════════════════════════════════════
+        //  Link Existing Records — picer buttons for each entity type
+        // ════════════════════════════════════════════════════════════════
+        item {
+            Surface(
+                shape = CuteCardDefaults.Shape,
+                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                tonalElevation = 0.dp,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Icon(MaterialSymbolIcon("link"), null, tint = colors.info, size = 18.dp)
+                        Text("Link existing records", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    }
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        LinkChip("Observation", colors.observation, Modifier.weight(1f)) { haptics.light(); showObservationPicker = true }
+                        LinkChip("Note", colors.note, Modifier.weight(1f)) { haptics.light(); showNotePicker = true }
+                        LinkChip("Question", colors.question, Modifier.weight(1f)) { haptics.light(); showQuestionPicker = true }
+                    }
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        LinkChip("Source", colors.source, Modifier.weight(1f)) { haptics.light(); showSourcePicker = true }
+                        LinkChip("Task", colors.task, Modifier.weight(1f)) { haptics.light(); showTaskPicker = true }
+                        LinkChip("Folder", colors.hypothesis, Modifier.weight(1f)) { haptics.light(); showFolderPicker = true }
+                    }
+                }
             }
         }
 
@@ -606,7 +647,7 @@ fun ProjectDetailScreen(
     }
 
     // ══════════════════════════════════════════════════════════════════
-    //  Observation Picker
+    //  Entity Pickers — Link existing items to this project
     // ══════════════════════════════════════════════════════════════════
     if (showObservationPicker) {
         EntityPickerDialog(
@@ -633,6 +674,177 @@ fun ProjectDetailScreen(
             itemSecondaryText = { "${it.type} • ${it.readingStatus}" },
             onSelect = { src -> haptics.confirm(); viewModel.updateSourceEntity(src.copy(relatedProjectId = project.id)); showSourcePicker = false; srcPickerSearch = "" }
         )
+    }
+    if (showNotePicker) {
+        EntityPickerDialog(
+            title = "Link Note to Project",
+            searchQuery = notePickerSearch,
+            onSearchChange = { notePickerSearch = it },
+            onDismiss = { showNotePicker = false; notePickerSearch = "" },
+            items = notes.filter { n -> n.deletedAt == null && n.projectId != project.id && (notePickerSearch.isBlank() || n.title.contains(notePickerSearch, ignoreCase = true) || n.body.contains(notePickerSearch, ignoreCase = true)) },
+            itemIcon = { Icon(FieldMindIcons.Note, null, tint = colors.note, size = 16.dp) },
+            itemPrimaryText = { it.title.ifBlank { "Note #${it.id}" } },
+            itemSecondaryText = { "${it.category}" },
+            onSelect = { note -> haptics.confirm(); viewModel.updateNoteEntity(note.copy(projectId = project.id)); showNotePicker = false; notePickerSearch = "" }
+        )
+    }
+    if (showQuestionPicker) {
+        EntityPickerDialog(
+            title = "Link Question to Project",
+            searchQuery = questionPickerSearch,
+            onSearchChange = { questionPickerSearch = it },
+            onDismiss = { showQuestionPicker = false; questionPickerSearch = "" },
+            items = questions.filter { q -> q.deletedAt == null && q.relatedProjectId != project.id && (questionPickerSearch.isBlank() || q.questionText.contains(questionPickerSearch, ignoreCase = true)) },
+            itemIcon = { Icon(FieldMindIcons.Question, null, tint = colors.question, size = 16.dp) },
+            itemPrimaryText = { it.questionText.take(60).ifBlank { "Question #${it.id}" } },
+            itemSecondaryText = { "${it.category} • ${it.status}" },
+            onSelect = { q -> haptics.confirm(); viewModel.updateQuestionEntity(q.copy(relatedProjectId = project.id)); showQuestionPicker = false; questionPickerSearch = "" }
+        )
+    }
+    if (showTaskPicker) {
+        EntityPickerDialog(
+            title = "Link Task to Project",
+            searchQuery = taskPickerSearch,
+            onSearchChange = { taskPickerSearch = it },
+            onDismiss = { showTaskPicker = false; taskPickerSearch = "" },
+            items = tasks.filter { t -> t.deletedAt == null && t.projectId != project.id && (taskPickerSearch.isBlank() || t.title.contains(taskPickerSearch, ignoreCase = true) || t.description.contains(taskPickerSearch, ignoreCase = true)) },
+            itemIcon = { Icon(MaterialSymbolIcon("checklist"), null, tint = colors.task, size = 16.dp) },
+            itemPrimaryText = { it.title.ifBlank { "Task #${it.id}" } },
+            itemSecondaryText = { "${it.priority} • ${it.status}" },
+            onSelect = { t -> haptics.confirm(); viewModel.updateTaskEntity(t.copy(projectId = project.id)); showTaskPicker = false; taskPickerSearch = "" }
+        )
+    }
+    if (showFolderPicker) {
+        EntityPickerDialog(
+            title = "Link Folder to Project",
+            searchQuery = folderPickerSearch,
+            onSearchChange = { folderPickerSearch = it },
+            onDismiss = { showFolderPicker = false; folderPickerSearch = "" },
+            items = folders.filter { f -> f.deletedAt == null && f.projectId != project.id && (folderPickerSearch.isBlank() || f.name.contains(folderPickerSearch, ignoreCase = true)) },
+            itemIcon = { Icon(MaterialSymbolIcon("folder"), null, tint = colors.hypothesis, size = 16.dp) },
+            itemPrimaryText = { it.name.ifBlank { "Folder #${it.id}" } },
+            itemSecondaryText = { "${it.status}" },
+            onSelect = { f -> haptics.confirm(); viewModel.updateFolderEntity(f.copy(projectId = project.id)); showFolderPicker = false; folderPickerSearch = "" }
+        )
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  Folder Detail Dialog — browse folder info and related items
+    // ══════════════════════════════════════════════════════════════════
+    if (showFolderDetailDialog != null) {
+        val folder = showFolderDetailDialog!!
+        val folderColor = Color(folder.color.toInt())
+        // Items that could logically belong to this folder (same project)
+        val folderObservations = relatedObs.take(5)
+        val folderNotes = relatedNotes.take(5)
+        val folderTasks = relatedTasks.take(5)
+
+        Dialog(
+            onDismissRequest = { showFolderDetailDialog = null },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Card(
+                shape = CuteCardDefaults.Shape,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                elevation = CardDefaults.cardElevation(defaultElevation = CuteElevations.plushTier4),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).heightIn(max = 500.dp)
+            ) {
+                Column(
+                    Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    // Header
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Box(Modifier.size(44.dp).clip(CuteCardDefaults.ShapeCompact).background(folderColor.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
+                            Icon(MaterialSymbolIcon("folder"), null, tint = folderColor, size = 24.dp)
+                        }
+                        Column(Modifier.weight(1f)) {
+                            Text(folder.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            Text("Folder", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Surface(
+                            onClick = { showFolderDetailDialog = null },
+                            shape = CuteCardDefaults.ButtonShape,
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(MaterialSymbolIcon("close"), "Close", size = 18.dp)
+                            }
+                        }
+                    }
+
+                    if (folder.description.isNotBlank()) {
+                        Text(folder.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+
+                    // Related items list
+                    Text("Project records", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+
+                    if (folderObservations.isEmpty() && folderNotes.isEmpty() && folderTasks.isEmpty()) {
+                        Text("No items yet. Add observations, notes, or tasks to this project.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                    } else {
+                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            folderObservations.forEach { obs ->
+                                FolderItemRow(
+                                    icon = FieldMindIcons.Observation,
+                                    text = obs.subject.ifBlank { "Observation" },
+                                    subtitle = obs.category,
+                                    accent = colors.observation,
+                                    onClick = { showFolderDetailDialog = null; onOpenDetail("observation", obs.id) }
+                                )
+                            }
+                            folderNotes.forEach { note ->
+                                FolderItemRow(
+                                    icon = FieldMindIcons.Note,
+                                    text = note.title.ifBlank { "Note" },
+                                    subtitle = note.category,
+                                    accent = colors.note,
+                                    onClick = { showFolderDetailDialog = null; onOpenDetail("note", note.id) }
+                                )
+                            }
+                            folderTasks.forEach { task ->
+                                FolderItemRow(
+                                    icon = MaterialSymbolIcon("checklist"),
+                                    text = task.title,
+                                    subtitle = "${task.priority} • ${task.status}",
+                                    accent = colors.task,
+                                    onClick = { showFolderDetailDialog = null; onOpenDetail("task", task.id) }
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(4.dp))
+
+                    // Actions
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(
+                            onClick = {
+                                showFolderDetailDialog = null
+                                showCreateSheet = true
+                            },
+                            shape = CuteCardDefaults.ButtonShape,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(MaterialSymbolIcon("add"), null, size = 16.dp)
+                            Spacer(Modifier.size(4.dp))
+                            Text("Add item", fontWeight = FontWeight.SemiBold)
+                        }
+                        OutlinedButton(
+                            onClick = { showFolderDetailDialog = null },
+                            shape = CuteCardDefaults.ButtonShape
+                        ) {
+                            Text("Close", fontWeight = FontWeight.Medium)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // ══════════════════════════════════════════════════════════════════
@@ -746,6 +958,58 @@ private val colors: FieldMindColors
     @Composable
     @ReadOnlyComposable
     get() = FieldMindTheme.colors
+
+// ══════════════════════════════════════════════════════════════════════
+//  Link Chip — small tappable button for linking existing records
+// ══════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun FolderItemRow(icon: MaterialSymbolIcon, text: String, subtitle: String, accent: Color, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            Modifier.fillMaxWidth().padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Box(
+                Modifier.size(32.dp).clip(CuteCardDefaults.ChipShape)
+                    .background(accent.copy(alpha = 0.14f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon, null, tint = accent, size = 16.dp)
+            }
+            Column(Modifier.weight(1f)) {
+                Text(text, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Icon(MaterialSymbolIcon("chevron_right"), null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f), size = 16.dp)
+        }
+    }
+}
+
+@Composable
+private fun LinkChip(label: String, accent: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = CuteCardDefaults.ChipShape,
+        color = accent.copy(alpha = 0.08f),
+        modifier = modifier
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = accent,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+            maxLines = 1
+        )
+    }
+}
 
 // ══════════════════════════════════════════════════════════════════════
 //  Project Create Sheet V2 — COLLECT / ANALYZE / EVIDENCE / PLAN

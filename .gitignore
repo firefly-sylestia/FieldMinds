@@ -42,6 +42,7 @@ private.properties.base64
 release.keystore
 keystore_base64.txt
 result/
+logcat.txt
 .idx/
 .vscode/
 node_modules/
