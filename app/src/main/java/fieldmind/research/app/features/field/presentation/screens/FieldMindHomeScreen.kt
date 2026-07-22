@@ -55,7 +55,6 @@ import fieldmind.research.app.features.field.data.stats.FieldMindStreaks
 import fieldmind.research.app.features.field.presentation.components.*
 import fieldmind.research.app.features.field.presentation.navigation.FieldMindScreen
 import fieldmind.research.app.ui.theme.CuteCardDefaults
-import fieldmind.research.app.ui.theme.CuteElevations
 import fieldmind.research.app.ui.theme.CuteGradients
 import fieldmind.research.app.features.field.presentation.theme.FieldMindTheme
 import fieldmind.research.app.features.field.presentation.viewmodel.DraftEvidenceAttachment
