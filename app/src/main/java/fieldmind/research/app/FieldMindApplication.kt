@@ -36,7 +36,7 @@ class FieldMindApplication : Application() {
     
     override fun onCreate() {
         super.onCreate()
-        
+
         instance = this
 
         // ── Crash-process guard ────────────────────────────────────────────
@@ -59,21 +59,77 @@ class FieldMindApplication : Application() {
         Log.d(TAG, "Build Type: ${BuildConfig.BUILD_TYPE}")
         Log.d(TAG, "Version: ${BuildConfig.VERSION_NAME}")
         Log.d(TAG, "═══════════════════════════════════════════════════")
-        
-        AppSettings.getInstance(applicationContext)
-        Log.d(TAG, "✓ AppSettings initialized")
-        
-        CrashReporter.init(this)
-        Log.d(TAG, "✓ CrashReporter initialized")
-        
-        // NetworkClient initialization removed — music-player network layer deleted
-        
-        if (BuildConfig.DEBUG) {
-            configureLeakCanary()
-            startANRWatchdog()
+
+        // ── Startup crash detection ──
+        // Check if the PREVIOUS app session ended with an uncaught crash.
+        // Must run before any initialization that could itself crash.
+        val previousCrash = runCatching {
+            val fallbackPrefs = getSharedPreferences("fieldmind_crash_fallback", 0)
+            fallbackPrefs.getString("last_fallback_crash", null)
+        }.getOrNull()
+        if (previousCrash != null) {
+            Log.w(TAG, "⚠ Previous session ended with an uncaught crash (not viewed by user)")
+            Log.w(TAG, "Crash (first 500 chars): ${previousCrash.take(500)}")
         }
-        
+
+        // ── Step 1: Initialize AppSettings (must succeed for crash reporting) ──
+        runCatching {
+            AppSettings.getInstance(applicationContext)
+            Log.d(TAG, "✓ AppSettings initialized")
+        }.onFailure { e ->
+            Log.e(TAG, "✗ FAILED to initialize AppSettings", e)
+            // Try one more time — sometimes the first call fails during process start
+            runCatching {
+                AppSettings.getInstance(applicationContext)
+                Log.d(TAG, "✓ AppSettings initialized (retry)")
+            }.onFailure { e2 ->
+                Log.e(TAG, "✗ AppSettings init failed twice — crash reporting may be degraded", e2)
+            }
+        }
+
+        // ── Step 2: Initialize CrashReporter (must succeed) ──
+        runCatching {
+            CrashReporter.init(this)
+            Log.d(TAG, "✓ CrashReporter initialized")
+        }.onFailure { e ->
+            Log.e(TAG, "✗ FAILED to initialize CrashReporter", e)
+        }
+
+        // ── Step 3: Clear the fallback crash marker (now being handled) ──
+        if (previousCrash != null) {
+            runCatching {
+                val fbPrefs = getSharedPreferences("fieldmind_crash_fallback", 0)
+                fbPrefs.edit().remove("last_fallback_crash").apply()
+                Log.d(TAG, "✓ Cleared previous session crash marker")
+            }
+            // Also record a startup indicator so the user knows the previous run crashed
+            if (CrashReporter.isInitialized) {
+                CrashReporter.recordNonFatal(
+                    RuntimeException("Previous session ended with uncaught crash (not viewed)"),
+                    "StartupCrashDetector"
+                )
+            }
+        }
+
+        // ── Step 4: Start ANR Watchdog (all builds) ──
+        runCatching {
+            startANRWatchdog()
+            Log.d(TAG, "✓ ANR Watchdog started")
+        }.onFailure { e ->
+            Log.e(TAG, "✗ FAILED to start ANR Watchdog", e)
+        }
+
+        // ── Step 5: LeakCanary (debug builds only) ──
+        if (BuildConfig.DEBUG) {
+            runCatching {
+                configureLeakCanary()
+            }.onFailure { e ->
+                Log.e(TAG, "✗ FAILED to configure LeakCanary", e)
+            }
+        }
+
         Log.d(TAG, "FieldMindApplication initialization complete")
+        Log.d(TAG, "CrashReporter ready: ${CrashReporter.isInitialized}")
     }
 
     /**

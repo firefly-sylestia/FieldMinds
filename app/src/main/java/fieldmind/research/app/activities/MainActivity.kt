@@ -27,6 +27,7 @@ import fieldmind.research.app.features.field.presentation.viewmodel.FieldMindVie
 import fieldmind.research.app.shared.data.model.AppSettings
 import fieldmind.research.app.shared.presentation.viewmodel.ThemeViewModel
 import fieldmind.research.app.ui.theme.RhythmTheme
+import fieldmind.research.app.util.ComposeErrorBoundary
 import android.content.ClipboardManager
 
 class MainActivity : FragmentActivity() {
@@ -63,53 +64,63 @@ class MainActivity : FragmentActivity() {
         AppLifecycleManager.initialize(this)
 
         setContent {
-            val useSystemTheme by themeViewModel.useSystemTheme.collectAsState()
-            val darkMode by themeViewModel.darkMode.collectAsState()
-            val amoledTheme by appSettings.amoledTheme.collectAsState()
-            val useDynamicColors by themeViewModel.useDynamicColors.collectAsState()
-            val customColorScheme by appSettings.customColorScheme.collectAsState()
-            val customFont by appSettings.customFont.collectAsState()
-            val fontSource by appSettings.fontSource.collectAsState()
-            val customFontPath by appSettings.customFontPath.collectAsState()
-            val colorSource by appSettings.colorSource.collectAsState()
-            val extractedAlbumColors by appSettings.extractedAlbumColors.collectAsState()
-            val fieldThemeMode by fieldMindViewModel.fieldSettings.themeMode.collectAsState()
-            val isDarkTheme = when (fieldThemeMode) {
-                "Light" -> false
-                "Dark" -> true
-                else -> if (useSystemTheme) isSystemInDarkTheme() else darkMode
-            }
-
-            // FieldMind owns the active surface: apply FieldMind's brand palette directly
-            // without wrapping in RhythmTheme to avoid color conflicts
-            val fieldDynamicColor by fieldMindViewModel.fieldSettings.dynamicColorEnabled.collectAsState()
-            val fieldEntityColors by fieldMindViewModel.fieldSettings.entityColors.collectAsState()
-            val screenCaptureProtection by fieldMindViewModel.fieldSettings.screenCaptureProtectionEnabled.collectAsState()
-            val appPreviewMode by fieldMindViewModel.fieldSettings.appPreviewMode.collectAsState()
-            val alwaysOnScreen by fieldMindViewModel.fieldSettings.alwaysOnScreenEnabled.collectAsState()
-
-            // Apply FLAG_SECURE only for the explicit screenshot-blocking setting.
-            // Preview modes must not silently keep screenshots blocked after the user
-            // turns screenshot blocking off.
-            val shouldSecure = shouldApplySecureFlag(screenCaptureProtection, appPreviewMode)
-            LaunchedEffect(shouldSecure) {
-                SecureFlagController.setReason(window, SecureFlagReason.GlobalScreenshotSetting, shouldSecure)
-            }
-
-            LaunchedEffect(alwaysOnScreen) {
-                if (alwaysOnScreen) {
-                    window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                } else {
-                    window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            // ── Root-level Compose error boundary ──
+            // Catches composition-time and rendering crashes that would otherwise
+            // bypass Thread.setDefaultUncaughtExceptionHandler (Compose's internal
+            // error handling swallows many exceptions silently).
+            // The boundary records the crash via CrashReporter.recordNonFatal and
+            // shows a recovery UI so the user isn't left on a blank/white screen.
+            ComposeErrorBoundary(
+                tag = "MainActivity.setContent"
+            ) {
+                val useSystemTheme by themeViewModel.useSystemTheme.collectAsState()
+                val darkMode by themeViewModel.darkMode.collectAsState()
+                val amoledTheme by appSettings.amoledTheme.collectAsState()
+                val useDynamicColors by themeViewModel.useDynamicColors.collectAsState()
+                val customColorScheme by appSettings.customColorScheme.collectAsState()
+                val customFont by appSettings.customFont.collectAsState()
+                val fontSource by appSettings.fontSource.collectAsState()
+                val customFontPath by appSettings.customFontPath.collectAsState()
+                val colorSource by appSettings.colorSource.collectAsState()
+                val extractedAlbumColors by appSettings.extractedAlbumColors.collectAsState()
+                val fieldThemeMode by fieldMindViewModel.fieldSettings.themeMode.collectAsState()
+                val isDarkTheme = when (fieldThemeMode) {
+                    "Light" -> false
+                    "Dark" -> true
+                    else -> if (useSystemTheme) isSystemInDarkTheme() else darkMode
                 }
-            }
 
-            FieldMindTheme(darkTheme = isDarkTheme, dynamicColor = fieldDynamicColor, amoledTheme = amoledTheme, customColorScheme = customColorScheme, entityColorOverrides = fieldEntityColors) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    FieldMindApp(appSettings = appSettings, viewModel = fieldMindViewModel, requestedDestination = requestedFieldMindDestination.value)
+                // FieldMind owns the active surface: apply FieldMind's brand palette directly
+                // without wrapping in RhythmTheme to avoid color conflicts
+                val fieldDynamicColor by fieldMindViewModel.fieldSettings.dynamicColorEnabled.collectAsState()
+                val fieldEntityColors by fieldMindViewModel.fieldSettings.entityColors.collectAsState()
+                val screenCaptureProtection by fieldMindViewModel.fieldSettings.screenCaptureProtectionEnabled.collectAsState()
+                val appPreviewMode by fieldMindViewModel.fieldSettings.appPreviewMode.collectAsState()
+                val alwaysOnScreen by fieldMindViewModel.fieldSettings.alwaysOnScreenEnabled.collectAsState()
+
+                // Apply FLAG_SECURE only for the explicit screenshot-blocking setting.
+                // Preview modes must not silently keep screenshots blocked after the user
+                // turns screenshot blocking off.
+                val shouldSecure = shouldApplySecureFlag(screenCaptureProtection, appPreviewMode)
+                LaunchedEffect(shouldSecure) {
+                    SecureFlagController.setReason(window, SecureFlagReason.GlobalScreenshotSetting, shouldSecure)
+                }
+
+                LaunchedEffect(alwaysOnScreen) {
+                    if (alwaysOnScreen) {
+                        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    } else {
+                        window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    }
+                }
+
+                FieldMindTheme(darkTheme = isDarkTheme, dynamicColor = fieldDynamicColor, amoledTheme = amoledTheme, customColorScheme = customColorScheme, entityColorOverrides = fieldEntityColors) {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        FieldMindApp(appSettings = appSettings, viewModel = fieldMindViewModel, requestedDestination = requestedFieldMindDestination.value)
+                    }
                 }
             }
         }
