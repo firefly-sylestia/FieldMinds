@@ -24,6 +24,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.layout.onSizeChanged
@@ -58,45 +59,34 @@ import kotlin.math.PI
 
 // ── Color lerp helpers ───────────────────────────────────────────────
 
-/** Linearly interpolate between two Colors (component-wise). */
-private fun lerpColor(a: Color, b: Color, fraction: Float): Color {
-    val f = fraction.coerceIn(0f, 1f)
-    return Color(
-        red = a.red + (b.red - a.red) * f,
-        green = a.green + (b.green - a.green) * f,
-        blue = a.blue + (b.blue - a.blue) * f,
-        alpha = a.alpha + (b.alpha - a.alpha) * f
-    )
-}
-
 /** Linearly interpolate between two lists of Colors (pairs elements). */
 private fun lerpColorList(a: List<Color>, b: List<Color>, fraction: Float): List<Color> {
     val maxSize = maxOf(a.size, b.size)
     return List(maxSize) { i ->
         val ca = a.getOrElse(i) { a.lastOrNull() ?: Color.Black }
         val cb = b.getOrElse(i) { b.lastOrNull() ?: Color.Black }
-        lerpColor(ca, cb, fraction)
+        lerp(ca, cb, fraction.coerceIn(0f, 1f))
     }
 }
 
-/** Linearly interpolate between two WeatherPalettes. */
+/** Linearly interpolate between two WeatherPalettes using Compose's built-in lerp. */
 private fun lerpPalette(from: WeatherPalette, to: WeatherPalette, fraction: Float): WeatherPalette {
     val f = fraction.coerceIn(0f, 1f)
     return WeatherPalette(
-        primary = lerpColor(from.primary, to.primary, f),
-        secondary = lerpColor(from.secondary, to.secondary, f),
-        tertiary = lerpColor(from.tertiary, to.tertiary, f),
-        accent = lerpColor(from.accent, to.accent, f),
+        primary = lerp(from.primary, to.primary, f),
+        secondary = lerp(from.secondary, to.secondary, f),
+        tertiary = lerp(from.tertiary, to.tertiary, f),
+        accent = lerp(from.accent, to.accent, f),
         background = lerpColorList(from.background, to.background, f),
-        sunColor = lerpColor(from.sunColor, to.sunColor, f),
-        sunGlowColor = lerpColor(from.sunGlowColor, to.sunGlowColor, f),
-        sunFlareColor = lerpColor(from.sunFlareColor, to.sunFlareColor, f),
-        moonColor = lerpColor(from.moonColor, to.moonColor, f),
-        moonGlowColor = lerpColor(from.moonGlowColor, to.moonGlowColor, f),
-        cloudBaseColor = lerpColor(from.cloudBaseColor, to.cloudBaseColor, f),
-        hazeColor = lerpColor(from.hazeColor, to.hazeColor, f),
-        groundColor = lerpColor(from.groundColor, to.groundColor, f),
-        groundDetailColor = lerpColor(from.groundDetailColor, to.groundDetailColor, f)
+        sunColor = lerp(from.sunColor, to.sunColor, f),
+        sunGlowColor = lerp(from.sunGlowColor, to.sunGlowColor, f),
+        sunFlareColor = lerp(from.sunFlareColor, to.sunFlareColor, f),
+        moonColor = lerp(from.moonColor, to.moonColor, f),
+        moonGlowColor = lerp(from.moonGlowColor, to.moonGlowColor, f),
+        cloudBaseColor = lerp(from.cloudBaseColor, to.cloudBaseColor, f),
+        hazeColor = lerp(from.hazeColor, to.hazeColor, f),
+        groundColor = lerp(from.groundColor, to.groundColor, f),
+        groundDetailColor = lerp(from.groundDetailColor, to.groundDetailColor, f)
     )
 }
 
@@ -320,7 +310,6 @@ fun AnimatedWeatherScene(
     }
 
     val progress = transitionProgress.value
-    val isTransitioning = progress < 0.999f
 
     // Blend flags (smooth boolean interpolation via progress threshold)
     val showRain = if (isTransitioning) {
@@ -352,6 +341,9 @@ fun AnimatedWeatherScene(
     val isDaytime = !isNight && timeOfDay != TimeOfDay.Dawn
     val isDawnDusk = timeOfDay == TimeOfDay.Dawn || timeOfDay == TimeOfDay.Twilight ||
                      timeOfDay == TimeOfDay.Sunrise || timeOfDay == TimeOfDay.Sunset
+
+    // Use Animatable.isRunning for transition detection (more accurate than float threshold)
+    val isTransitioning = transitionProgress.isRunning || transitionProgress.value < 0.95f
 
     // Initialize/reset systems when weather changes
     LaunchedEffect(weatherCode, sceneWidth, sceneHeight) {
@@ -463,14 +455,10 @@ fun AnimatedWeatherScene(
         }
     }
 
-    // ── Sun/Moon twinkle animation ──
+    // ── Sun/Moon glow pulse ──
     val infiniteTransition = rememberInfiniteTransition(label = "weatherTransition")
     val glow by infiniteTransition.animateFloat(0.6f, 1f,
         infiniteRepeatable(tween(5000, easing = LinearEasing), RepeatMode.Reverse), label = "sceneGlow")
-    val drift by infiniteTransition.animateFloat(0f, 1f,
-        infiniteRepeatable(tween(6000, easing = LinearEasing), RepeatMode.Restart), label = "sceneDrift")
-    val drift2 by infiniteTransition.animateFloat(0f, 1f,
-        infiniteRepeatable(tween(8500, easing = LinearEasing), RepeatMode.Restart), label = "sceneDrift2")
 
     // ── Main render surface ──
     Box(modifier = modifier.fillMaxSize()) {
