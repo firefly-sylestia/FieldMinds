@@ -625,7 +625,9 @@ class LightningSystem(
         repeat(2 + rng.nextInt(2)) {
             val splitT = 0.2f + rng.nextFloat() * 0.5f
             val splitIdx = (splitT * segments.size).toInt().coerceIn(1, segments.size - 1)
-            val (sx, sy) = segments[splitIdx]
+            val splitPoint = segments[splitIdx].first
+            val sx = splitPoint.x
+            val sy = splitPoint.y
             val bx = sx + (rng.nextFloat() - 0.5f) * physics.width * 0.15f
             val by = sy + rng.nextFloat() * physics.height * 0.2f
             branches.add(generateBoltPath(sx, sy, bx, by, 3))
