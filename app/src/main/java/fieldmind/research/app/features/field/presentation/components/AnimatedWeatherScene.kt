@@ -260,8 +260,6 @@ fun AnimatedWeatherScene(
     remember(compact) { starSystem.initialize(if (compact) 20 else 60) }
 
     // Initialize wind streamlines
-    remember { windStreamlineSystem.initialize() }
-
     // ── Transition system ──────────────────────────────────────────────
     // Holds the previous weather state as a snapshot so we can blend during transitions.
     // Uses a spring-driven Animatable for smooth, frame-independent interpolation.
@@ -315,6 +313,9 @@ fun AnimatedWeatherScene(
 
     val progress = transitionProgress.value
 
+    // Use Animatable.isRunning for transition detection (more accurate than float threshold)
+    val isTransitioning = transitionProgress.isRunning || transitionProgress.value < 0.95f
+
     // Blend flags (smooth boolean interpolation via progress threshold)
     val showRain = if (isTransitioning) {
         // Cross-fade: show rain from either snapshot if progress is in the right range
@@ -347,8 +348,6 @@ fun AnimatedWeatherScene(
                      timeOfDay == TimeOfDay.Sunrise || timeOfDay == TimeOfDay.Sunset
 
     // Use Animatable.isRunning for transition detection (more accurate than float threshold)
-    val isTransitioning = transitionProgress.isRunning || transitionProgress.value < 0.95f
-
     // Initialize/reset systems when weather changes
     LaunchedEffect(weatherCode, sceneWidth, sceneHeight) {
         physics.resize(sceneWidth.coerceAtLeast(1f), sceneHeight.coerceAtLeast(1f))
@@ -369,6 +368,11 @@ fun AnimatedWeatherScene(
                 cloudSystem.clear()
                 lightningSystem.clear()
             }
+        }
+
+        // Re-initialize wind streamlines at actual canvas size
+        if (sceneWidth > 10f && sceneHeight > 10f) {
+            windStreamlineSystem.initialize()
         }
     }
 
