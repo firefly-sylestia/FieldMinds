@@ -416,7 +416,9 @@ fun AnimatedWeatherScene(
     }
 
     // ── Frame loop: physics simulation runs at draw-frame rate ──
-    LaunchedEffect(Unit) {
+    // Keyed on weatherCode so closures (cloudIntensity, windSpeed, palette, etc.)
+    // refresh when weather changes — preventing stale-capture bugs.
+    LaunchedEffect(weatherCode) {
         while (isActive) {
             withFrameNanos { frameNanos ->
                 val dt = physics.clock.tick(frameNanos)
