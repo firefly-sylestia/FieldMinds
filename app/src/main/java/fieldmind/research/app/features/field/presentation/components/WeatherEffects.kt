@@ -856,6 +856,233 @@ class StarSystem {
     }
 }
 
+// ── Wind Streamline System ───────────────────────────────────────────
+
+/**
+ * Renders animated wind flow lines that visualize wind direction and speed.
+ * Uses a vector field influenced by wind parameters + Perlin noise to create
+ * organic, continuously-flowing streamline curves across the scene.
+ */
+class WindStreamlineSystem(
+    private val physics: PhysicsScene
+) {
+    private val streamlines = mutableListOf<Streamline>()
+    private var rng = Random(555)
+
+    data class Streamline(
+        val points: MutableList<Pair<Float, Float>>,
+        var age: Float = 0f,
+        val maxAge: Float = 3f,
+        var alive: Boolean = true,
+        val seed: Float
+    )
+
+    data class WindStreamlineConfig(
+        val density: Float = 0.4f,       // 0-1: how many streamlines
+        val speed: Float = 0.5f,          // How fast streamlines flow
+        val color: Color = Color(0xFFB0BEC5),
+        val width: Float = 1.2f,          // Stroke width
+        val fadeEdges: Boolean = true,     // Fade at start/end of line
+        val particleMode: Boolean = false   // Show as particles vs lines
+    )
+
+    fun initialize() {
+        streamlines.clear()
+        val lineCount = (physics.poolSize * 0.15f).toInt().coerceIn(8, 40)
+        val spacingX = physics.width / (sqrt(lineCount.toFloat()) * 1.5f)
+        val spacingY = physics.height / (sqrt(lineCount.toFloat()) * 2f)
+        val cols = (physics.width / spacingX).toInt().coerceAtLeast(4)
+        val rows = (physics.height / spacingY).toInt().coerceAtLeast(3)
+
+        for (row in 0 until rows) {
+            for (col in 0 until cols) {
+                val sx = col * spacingX + rng.nextFloat() * spacingX * 0.3f
+                val sy = row * spacingY + rng.nextFloat() * spacingY * 0.3f + physics.height * 0.1f
+                streamlines.add(createStreamline(sx, sy))
+            }
+        }
+    }
+
+    private fun createStreamline(startX: Float, startY: Float): Streamline {
+        val points = mutableListOf<Pair<Float, Float>>()
+        val segmentCount = (6 + rng.nextInt(8))
+        var px = startX
+        var py = startY
+        val seed = rng.nextFloat() * 100f
+
+        for (i in 0 until segmentCount) {
+            points.add(Pair(px, py))
+            // Advance in wind direction with noise perturbation
+            val noiseAngle = layeredStreamNoise(px * 0.005f, py * 0.005f, seed)
+            val advanceX = physics.forces.windDirection * 40f
+            val advanceY = noiseAngle * 15f - 5f // Slight downward tendency
+            px += advanceX
+            py += advanceY
+        }
+
+        return Streamline(points = points, seed = seed)
+    }
+
+    /**
+     * Update streamline positions by advancing along the wind vector field.
+     * Dead segments are recycled into new streamlines at the upwind edge.
+     */
+    fun update(dt: Float, config: WindStreamlineConfig, windDir: Float, windSpeed: Float) {
+        val advanceRate = windSpeed * config.speed * dt * 60f
+
+        for (line in streamlines) {
+            line.age += dt
+
+            // Advance each point along the wind field
+            val points = line.points
+            if (points.isNotEmpty()) {
+                // Remove tail point
+                points.removeAt(0)
+
+                // Add new head point (advanced along wind + noise)
+                val lastPt = points.last()
+                val noiseAngle = layeredStreamNoise(lastPt.first * 0.005f, lastPt.second * 0.005f, line.seed + physics.time * 0.1f)
+                val headX = lastPt.first + windDir * advanceRate
+                val headY = lastPt.second + noiseAngle * advanceRate * 0.4f
+                points.add(Pair(headX, headY))
+
+                // Kill if off screen or too old
+                val headOffscreen = headX < -50f || headX > physics.width + 50f ||
+                                    headY < -50f || headY > physics.height + 50f
+                if (headOffscreen || line.age > line.maxAge) {
+                    line.alive = false
+                }
+            }
+        }
+
+        // Respawn dead streamlines at the upwind edge
+        val deadCount = streamlines.count { !it.alive }
+        if (deadCount > 0) {
+            val spawnEdgeX = if (windDir > 0) -20f else physics.width + 20f
+            for (line in streamlines) {
+                if (!line.alive) {
+                    val sy = rng.nextFloat() * physics.height * 0.7f + physics.height * 0.1f
+                    val replacement = createStreamline(spawnEdgeX, sy)
+                    line.points.clear()
+                    line.points.addAll(replacement.points)
+                    line.age = 0f
+                    line.alive = true
+                    line.seed += 1f
+                }
+            }
+        }
+    }
+
+    fun draw(scope: DrawScope, config: WindStreamlineConfig, alpha: Float) {
+        val dir = physics.forces.windDirection
+        val speed = physics.forces.windSpeed
+        val windStrength = (speed * 0.5f + 0.3f).coerceIn(0f, 1f)
+
+        for (line in streamlines) {
+            if (!line.alive || line.points.size < 2) continue
+            val points = line.points
+
+            // Build path from points with subtle curve
+            val path = Path().apply {
+                val (sx, sy) = points.first()
+                moveTo(sx, sy)
+                for (i in 1 until points.size) {
+                    val (px, py) = points[i]
+                    // Use quadratic curves for smooth flow
+                    val (ppx, ppy) = points[i - 1]
+                    val midX = (px + ppx) / 2f
+                    val midY = (py + ppy) / 2f
+                    quadraticBezierTo(ppx, ppy, midX, midY)
+                }
+            }
+
+            // Line alpha: higher when wind is stronger
+            val ageFade = if (config.fadeEdges) {
+                (1f - (line.age / line.maxAge)).coerceIn(0.2f, 1f)
+            } else 1f
+            val windAlpha = (0.3f + windStrength * 0.7f) * alpha * ageFade
+
+            if (config.particleMode) {
+                // Particle dots along the streamline
+                for (i in points.indices step 2) {
+                    val (px, py) = points[i]
+                    val t = i.toFloat() / points.size
+                    val dotAlpha = windAlpha * (0.3f + t * 0.7f)
+                    scope.drawCircle(
+                        color = config.color.copy(alpha = dotAlpha),
+                        radius = config.width * (0.5f + t * 0.5f),
+                        center = Offset(px, py)
+                    )
+                }
+            } else {
+                // Continuous curving line
+                scope.drawPath(
+                    path,
+                    color = config.color.copy(alpha = windAlpha),
+                    style = Stroke(
+                        width = config.width * (0.5f + windStrength * 0.5f),
+                        cap = StrokeCap.Round
+                    )
+                )
+            }
+        }
+    }
+
+    /**
+     * Apply a wind gust impulse from a swipe gesture, creating visible
+     * wind particles that burst in the swipe direction.
+     */
+    fun applySwipeGust(startX: Float, startY: Float, endX: Float, endY: Float) {
+        val dx = endX - startX
+        val dy = endY - startY
+        val dist = sqrt(dx * dx + dy * dy)
+        if (dist < 20f) return
+
+        val normDx = dx / dist
+        val normDy = dy / dist
+        val intensity = (dist / 300f).coerceIn(0.3f, 1.5f)
+
+        // Spawn visible wind particles along the swipe path
+        val particleCount = (intensity * 15).toInt()
+        physics.spawnBurst(
+            x = startX, y = startY,
+            count = particleCount,
+            speedMin = dist * 0.5f, speedMax = dist * 1.5f,
+            sizeMin = 1f, sizeMax = 3f,
+            depth = DepthLayer.FOREGROUND
+        )
+
+        // Additional particles along the swipe path
+        for (t in 0 until particleCount) {
+            val body = physics.pool.borrow() ?: continue
+            val frac = t.toFloat() / particleCount
+            body.x = startX + dx * frac + (rng.nextFloat() - 0.5f) * 30f
+            body.y = startY + dy * frac + (rng.nextFloat() - 0.5f) * 30f
+            body.vx = normDx * dist * (0.3f + rng.nextFloat() * 0.5f)
+            body.vy = normDy * dist * (0.3f + rng.nextFloat() * 0.5f)
+            body.mass = 0.5f
+            body.size = 1.5f + rng.nextFloat() * 2f
+            body.lifespan = 1f + rng.nextFloat() * 1.5f
+            body.depth = DepthLayer.FOREGROUND
+            body.temperature = 25f
+        }
+    }
+
+    fun clear() {
+        streamlines.clear()
+    }
+
+    companion object {
+        /** Layered noise that creates smooth, organic flow patterns. */
+        private fun layeredStreamNoise(x: Float, y: Float, seed: Float): Float {
+            val n1 = sin(x * 1.7f + y * 0.3f + seed * 0.5f) * 0.5f
+            val n2 = sin(x * 0.5f - y * 1.2f + seed * 0.3f) * 0.3f
+            val n3 = sin((x + y) * 0.8f + seed) * 0.2f
+            return (n1 + n2 + n3)
+        }
+    }
+}
+
 // ── Ground System ────────────────────────────────────────────────────
 
 class GroundSystem {

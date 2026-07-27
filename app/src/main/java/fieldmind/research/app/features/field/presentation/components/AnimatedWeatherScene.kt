@@ -253,10 +253,14 @@ fun AnimatedWeatherScene(
     val lightningSystem = remember { LightningSystem(physics) }
     val rainbowSystem = remember { RainbowSystem() }
     val starSystem = remember { StarSystem() }
+    val windStreamlineSystem = remember { WindStreamlineSystem(physics) }
     val groundSystem = remember { GroundSystem() }
 
     // Initialize star field once
     remember(compact) { starSystem.initialize(if (compact) 20 else 60) }
+
+    // Initialize wind streamlines
+    remember { windStreamlineSystem.initialize() }
 
     // ── Transition system ──────────────────────────────────────────────
     // Holds the previous weather state as a snapshot so we can blend during transitions.
@@ -470,33 +474,96 @@ fun AnimatedWeatherScene(
                     sceneHeight = size.height.toFloat()
                 }
                 .pointerInput(Unit) {
+                    // Wind swipe state
+                    var swipeStartX = 0f
+                    var swipeStartY = 0f
+                    var isSwiping = false
+                    var cumulativeDx = 0f
+
                     awaitPointerEventScope {
                         while (true) {
                             val event = awaitPointerEvent()
                             val change = event.changes.firstOrNull() ?: continue
-                            if (change.pressed) {
-                                change.consume()
-                                val tapX = change.position.x
-                                val tapY = change.position.y
-                                when {
-                                    showRain || showSnow -> {
+
+                            when {
+                                // Press down — start tracking
+                                change.pressed && !isSwiping -> {
+                                    change.consume()
+                                    swipeStartX = change.position.x
+                                    swipeStartY = change.position.y
+                                    cumulativeDx = 0f
+                                    isSwiping = true
+                                }
+                                // Drag — accumulate horizontal displacement
+                                change.pressed && isSwiping -> {
+                                    change.consume()
+                                    val dx = change.position.x - swipeStartX
+                                    cumulativeDx += dx
+                                    swipeStartX = change.position.x
+                                    swipeStartY = change.position.y
+
+                                    // Apply real-time wind direction based on swipe
+                                    if (abs(cumulativeDx) > 10f) {
+                                        val swipeDir = if (cumulativeDx > 0) 1f else -1f
+                                        val swipeIntensity = (abs(cumulativeDx) / 500f).coerceIn(0.2f, 1.5f)
+                                        physics.windTargetDirection = swipeDir
+                                        physics.windTargetSpeed = swipeIntensity
+                                    }
+                                }
+                                // Release
+                                !change.pressed && isSwiping -> {
+                                    isSwiping = false
+                                    val swipeDx = cumulativeDx
+
+                                    // On significant swipe: apply gust + spawn wind particles
+                                    if (abs(swipeDx) > 60f) {
+                                        // Wind gust in swipe direction
+                                        val swipeDir = if (swipeDx > 0) 1f else -1f
+                                        val intensity = (abs(swipeDx) / 300f).coerceIn(0.3f, 1.5f)
+                                        physics.windTargetDirection = swipeDir
+                                        physics.windTargetSpeed = intensity
+                                        physics.forces.windGust = intensity.coerceAtMost(1f)
+
+                                        // Spawn visible wind particles along swipe
+                                        windStreamlineSystem.applySwipeGust(
+                                            swipeStartX, swipeStartY,
+                                            swipeStartX + swipeDx,
+                                            change.position.y
+                                        )
+
+                                        // Also trigger burst at end of swipe
                                         physics.spawnBurst(
-                                            tapX, tapY,
-                                            count = 8, speedMin = 30f, speedMax = 150f,
+                                            change.position.x, change.position.y,
+                                            count = (intensity * 10).toInt(),
+                                            speedMin = 50f, speedMax = 300f,
                                             sizeMin = 1f, sizeMax = 3f
                                         )
+                                    } else {
+                                        // Short tap — existing behavior
+                                        val tapX = change.position.x
+                                        val tapY = change.position.y
+                                        when {
+                                            showRain || showSnow -> {
+                                                physics.spawnBurst(
+                                                    tapX, tapY,
+                                                    count = 8, speedMin = 30f, speedMax = 150f,
+                                                    sizeMin = 1f, sizeMax = 3f
+                                                )
+                                            }
+                                            showThunder -> {
+                                                lightningSystem.triggerBolt(
+                                                    tapX, tapY * 0.2f,
+                                                    tapX + (Random.nextFloat() - 0.5f) * 200f,
+                                                    sceneHeight * 0.85f,
+                                                    LightningSystem.LightningConfig()
+                                                )
+                                            }
+                                            else -> {
+                                                physics.forces.windGust = 1f
+                                            }
+                                        }
                                     }
-                                    showThunder -> {
-                                        lightningSystem.triggerBolt(
-                                            tapX, tapY * 0.2f,
-                                            tapX + (Random.nextFloat() - 0.5f) * 200f,
-                                            sceneHeight * 0.85f,
-                                            LightningSystem.LightningConfig()
-                                        )
-                                    }
-                                    else -> {
-                                        physics.forces.windGust = 1f
-                                    }
+                                    cumulativeDx = 0f
                                 }
                             }
                         }
@@ -610,15 +677,32 @@ fun AnimatedWeatherScene(
                 ))
             }
 
-            // ── 10. Rainbow ──
-            if (tgtIsRain && isDaytime && !isTransitioning) {
-                rainbowSystem.draw(this, RainbowSystem.RainbowConfig(
-                    probability = 0.3f, intensity = 0.5f
-                ), sin(PI.toFloat() / 2f - abs(hour - 12).toFloat() / 12f * PI.toFloat()),
-                true, 0.6f)
-            }
+            // ── 10. Rainbow ──                if (tgtIsRain && isDaytime && !isTransitioning) {
+                    rainbowSystem.draw(this, RainbowSystem.RainbowConfig(
+                        probability = 0.3f, intensity = 0.5f
+                    ), sin(PI.toFloat() / 2f - abs(hour - 12).toFloat() / 12f * PI.toFloat()),
+                    true, 0.6f)
+                }
 
-            // ── 11. Terrain ground ──
+                // ── 11. Wind streamlines ──
+                {
+                    val windAlpha = (if (isNight) 0.15f else 0.25f) *
+                        (physics.forces.windSpeed * 0.5f + 0.3f).coerceIn(0f, 1f)
+                    if (windAlpha > 0.02f) {
+                        windStreamlineSystem.draw(this, WindStreamlineSystem.WindStreamlineConfig(
+                            density = 0.4f,
+                            speed = 0.5f,
+                            color = palette.hazeColor.let {
+                                if (it.alpha > 0.01f) it else Color(0xFFB0BEC5)
+                            },
+                            width = 1.2f,
+                            fadeEdges = true,
+                            particleMode = compact
+                        ), windAlpha)
+                    }
+                }
+
+                // ── 12. Terrain ground ──
             groundSystem.draw(this, GroundSystem.GroundConfig(
                 color = palette.groundColor,
                 detailColor = palette.groundDetailColor,
