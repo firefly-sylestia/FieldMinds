@@ -856,6 +856,190 @@ class StarSystem {
     }
 }
 
+// ── Hail System ──────────────────────────────────────────────────────
+
+/**
+ * Hailstones — dense, high-mass ice particles that fall fast and bounce.
+ * Uses the physics body's [mass], [size], and [temperature] fields for
+ * distinct behavior vs. rain (high mass, low drag, bounce restitution).
+ *
+ * Physics:
+ * • Mass 0.8–2.5 (vs rain ~0.5–1.0) — falls faster, pushes through wind
+ * • Temperature –5°C to –15°C — stays frozen
+ * • Quadratic drag reduced by 70% — smooth spherical shape
+ * • Ground bounce with restitution 0.3–0.5 — hailstones bounce
+ * • Rotation visible during fall for visual realism
+ *
+ * Rendering:
+ * • Multi-layer: translucent ice shell → darker core → specular highlight
+ * • Motion-blur streak for fast-falling stones
+ * • Splash particles on impact with debris fragments
+ */
+class HailSystem(
+    private val physics: PhysicsScene
+) {
+    private var rng = Random(888)
+    private var lastSpawn: Float = 0f
+
+    data class HailConfig(
+        val density: Float = 0.2f,        // 0-1: sparser than rain
+        val maxSize: Float = 12f,          // Max hail radius (px)
+        val minSize: Float = 4f,           // Min hail radius (px)
+        val bounceRestitution: Float = 0.4f, // Energy retained on bounce
+        val debrisProbability: Float = 0.5f, // Chance of debris on impact
+        val iceColor: Color = Color(0xFFE8F4F8),
+        val coreColor: Color = Color(0xFFB0BEC5),
+        val debrisColor: Color = Color(0xFF90A4AE),
+        val temperature: Float = -10f      // °C — frozen
+    )
+
+    fun update(dt: Float, config: HailConfig) {
+        // High gravity, low drag for hail
+        physics.forces.gravity = 30f
+        physics.forces.airDensity = 0.4f // Reduced drag (smooth sphere)
+        physics.forces.turbulence = 0.1f  // Hail cuts through turbulence
+
+        val targetCount = (config.density * physics.poolSize * 0.25f).toInt().coerceAtLeast(3)
+        val currentCount = physics.pool.activeCount()
+
+        lastSpawn += dt
+        val spawnInterval = 0.08f / (config.density + 0.1f)
+        while (lastSpawn > spawnInterval && currentCount < targetCount) {
+            val body = physics.pool.borrow() ?: break
+            body.x = rng.nextFloat() * physics.width * 1.2f - physics.width * 0.1f
+            body.y = -body.size - rng.nextFloat() * 30f
+
+            // High velocity, high mass, low drag
+            body.vy = 400f + rng.nextFloat() * 300f
+            body.vx = physics.forces.windDirection * physics.forces.windSpeed * 40f +
+                      (rng.nextFloat() - 0.5f) * 50f
+            body.size = config.minSize + rng.nextFloat() * (config.maxSize - config.minSize)
+            body.mass = 0.8f + rng.nextFloat() * 1.7f // Heavy
+            body.lifespan = 4f + rng.nextFloat() * 3f
+            body.depth = DepthLayer.PRECIPITATION
+            body.rotationSpeed = (rng.nextFloat() - 0.5f) * 10f
+            body.phase = rng.nextFloat() * PI.toFloat() * 2f
+            body.temperature = config.temperature
+            lastSpawn = 0f
+        }
+
+        // Ground bounce: reflect vertical velocity with energy loss
+        physics.pool.forEachActive { stone ->
+            if (stone.depth != DepthLayer.PRECIPITATION) return@forEachActive
+            val groundY = physics.height * 0.85f
+            if (stone.y > groundY && stone.vy > 20f) {
+                stone.y = groundY
+                stone.vy = -stone.vy * config.bounceRestitution
+                stone.vx *= 0.85f // Friction on contact
+
+                // Small debris fragments on impact
+                if (rng.nextFloat() < config.debrisProbability) {
+                    val debrisCount = 1 + rng.nextInt(3)
+                    for (i in 0 until debrisCount) {
+                        val frag = physics.pool.borrow() ?: break
+                        frag.x = stone.x + (rng.nextFloat() - 0.5f) * 20f
+                        frag.y = groundY
+                        frag.vx = stone.vx * 0.3f + (rng.nextFloat() - 0.5f) * 100f
+                        frag.vy = -rng.nextFloat() * 80f - 30f
+                        frag.size = 1f + rng.nextFloat() * 3f
+                        frag.mass = 0.1f
+                        frag.lifespan = 0.5f + rng.nextFloat() * 0.5f
+                        frag.depth = DepthLayer.FOREGROUND
+                        frag.temperature = config.temperature
+                    }
+                }
+
+                // Second small bounce if still fast enough
+                if (abs(stone.vy) > 50f && rng.nextFloat() < 0.3f) {
+                    // Already reflected, spawn more debris
+                }
+            }
+
+            // Melt check: fade out if temperature is too warm
+            if (stone.temperature > 5f && stone.age > 1f) {
+                stone.size *= 0.995f // Gradual melting
+                if (stone.size < 1f) stone.alive = false
+            }
+        }
+    }
+
+    fun draw(scope: DrawScope, config: HailConfig, alpha: Float) {
+        physics.pool.forEachActive { stone ->
+            if (stone.depth == DepthLayer.FOREGROUND) {
+                // Draw debris fragments
+                val fade = 1f - (stone.age / stone.lifespan).coerceIn(0f, 1f)
+                scope.drawCircle(
+                    color = config.debrisColor.copy(alpha = alpha * fade * 0.5f),
+                    radius = stone.size,
+                    center = Offset(stone.x, stone.y)
+                )
+                return@forEachActive
+            }
+
+            if (stone.y > scope.size.height + stone.size) return@forEachActive
+            val stoneAlpha = alpha * (0.7f + (1f - (stone.age / stone.lifespan).coerceIn(0f, 1f)) * 0.3f)
+            if (stoneAlpha < 0.01f) return@forEachActive
+
+            val cx = stone.x
+            val cy = stone.y
+            val r = stone.size
+
+            // 1. Motion-blur streak (for fast fall)
+            val speed = sqrt(stone.vx * stone.vx + stone.vy * stone.vy)
+            if (speed > 200f) {
+                val streakLen = (speed * 0.04f).coerceAtMost(r * 3f)
+                val angle = kotlin.math.atan2(stone.vy, stone.vx)
+                scope.drawLine(
+                    color = config.iceColor.copy(alpha = stoneAlpha * 0.15f),
+                    start = Offset(cx, cy),
+                    end = Offset(
+                        cx - cos(angle) * streakLen,
+                        cy - sin(angle) * streakLen
+                    ),
+                    strokeWidth = r * 0.6f,
+                    cap = StrokeCap.Round
+                )
+            }
+
+            // 2. Outer ice shell (translucent)
+            scope.drawCircle(
+                color = config.iceColor.copy(alpha = stoneAlpha * 0.6f),
+                radius = r,
+                center = Offset(cx, cy)
+            )
+
+            // 3. Darker inner core
+            scope.drawCircle(
+                color = config.coreColor.copy(alpha = stoneAlpha * 0.5f),
+                radius = r * 0.65f,
+                center = Offset(cx, cy)
+            )
+
+            // 4. Specular highlight (ice reflection)
+            val hlOffset = r * 0.3f
+            scope.drawCircle(
+                color = Color.White.copy(alpha = stoneAlpha * 0.4f),
+                radius = r * 0.35f,
+                center = Offset(cx - hlOffset, cy - hlOffset)
+            )
+
+            // 5. Small secondary highlight
+            scope.drawCircle(
+                color = Color.White.copy(alpha = stoneAlpha * 0.15f),
+                radius = r * 0.15f,
+                center = Offset(cx - hlOffset * 0.5f, cy - hlOffset * 0.8f)
+            )
+
+            // 6. Frost halo (subtle glow)
+            scope.drawCircle(
+                color = config.iceColor.copy(alpha = stoneAlpha * 0.1f),
+                radius = r * 1.5f,
+                center = Offset(cx, cy)
+            )
+        }
+    }
+}
+
 // ── Wind Streamline System ───────────────────────────────────────────
 
 /**

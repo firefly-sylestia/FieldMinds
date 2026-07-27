@@ -99,7 +99,9 @@ private data class WeatherTransitionSnapshot(
     val isRain: Boolean,
     val isSnow: Boolean,
     val isFog: Boolean,
-    val isThunder: Boolean
+    val isThunder: Boolean,
+    val isHail: Boolean,
+    val isSleet: Boolean
 )
 
 // ── Time-of-day enum (kept for backward compatibility) ───────────────
@@ -168,20 +170,27 @@ private fun moonVerticalY(timeOfDay: TimeOfDay, height: Float): Float = height *
 
 // ── Weather flag helpers ─────────────────────────────────────────────
 
-private fun isRainCode(code: Int) = code in 51..67 || code in 80..82
+private fun isRainCode(code: Int) = code in 51..65 || code in 80..82
 private fun isSnowCode(code: Int) = code in 71..77 || code in 85..86
 private fun isFogCode(code: Int) = code in 45..48
 private fun isThunderCode(code: Int) = code >= 95
+
+/** Freezing rain / rain + snow mixed — sleet. */
+private fun isSleetCode(code: Int) = code in 66..67 || code in 83..84
+
+/** Hail from thunderstorm or standalone hail. */
+private fun isHailCode(code: Int) = code == 89 || code == 96 || code == 99
+
 private fun cloudIntensityFor(code: Int, showAnim: Boolean): Float = when {
     code in 2..3 -> 0.85f
-    code in 51..67 -> 0.9f
-    code >= 95 -> 1.0f
+    code in 51..67 || code in 83..84 -> 0.9f
+    code >= 95 || code == 89 -> 1.0f
     showAnim && code in 0..1 -> 0.25f
     else -> 0f
 }
 private fun windSpeedFor(code: Int): Float = when {
-    isThunderCode(code) -> 0.6f
-    isRainCode(code) -> 0.4f
+    isThunderCode(code) || isHailCode(code) -> 0.6f
+    isRainCode(code) || isSleetCode(code) -> 0.4f
     isSnowCode(code) -> 0.2f
     else -> 0.1f
 }
@@ -248,6 +257,7 @@ fun AnimatedWeatherScene(
     val physics = remember { PhysicsScene(1f, 1f) }
     val rainSystem = remember { RainSystem(physics) }
     val snowSystem = remember { SnowSystem(physics) }
+    val hailSystem = remember { HailSystem(physics) }
     val cloudSystem = remember { CloudSystem(physics) }
     val fogSystem = remember { FogSystem() }
     val lightningSystem = remember { LightningSystem(physics) }
@@ -272,6 +282,8 @@ fun AnimatedWeatherScene(
     val tgtIsSnow = isSnowCode(weatherCode)
     val tgtIsFog = isFogCode(weatherCode)
     val tgtIsThunder = isThunderCode(weatherCode)
+    val tgtIsHail = isHailCode(weatherCode) || (tgtIsRain && temperature != null && temperature < -2.0)
+    val tgtIsSleet = isSleetCode(weatherCode) || (tgtIsRain && temperature != null && temperature in -2.0..3.0)
     val tgtCloudIntensity = cloudIntensityFor(weatherCode, showCloudAnimation)
     val tgtWindSpeed = windSpeedFor(weatherCode)
 
@@ -295,7 +307,9 @@ fun AnimatedWeatherScene(
             isRain = isRainCode(oldCode),
             isSnow = isSnowCode(oldCode),
             isFog = isFogCode(oldCode),
-            isThunder = isThunderCode(oldCode)
+            isThunder = isThunderCode(oldCode),
+            isHail = isHailCode(oldCode) || (isRainCode(oldCode) && temperature != null && temperature < -2.0),
+            isSleet = isSleetCode(oldCode) || (isRainCode(oldCode) && temperature != null && temperature in -2.0..3.0)
         )
     }
 
@@ -318,12 +332,13 @@ fun AnimatedWeatherScene(
 
     // Blend flags (smooth boolean interpolation via progress threshold)
     val showRain = if (isTransitioning) {
-        // Cross-fade: show rain from either snapshot if progress is in the right range
         prevPalette.isRain || tgtIsRain
-    } else tgtIsRain
+    } else tgtIsRain && !tgtIsSleet // Don't show rain when it's sleet
     val showSnow = if (isTransitioning) prevPalette.isSnow || tgtIsSnow else tgtIsSnow
     val showFog = if (isTransitioning) prevPalette.isFog || tgtIsFog else tgtIsFog
     val showThunder = if (isTransitioning) prevPalette.isThunder || tgtIsThunder else tgtIsThunder
+    val showHail = if (isTransitioning) prevPalette.isHail || tgtIsHail else tgtIsHail
+    val showSleet = if (isTransitioning) prevPalette.isSleet || tgtIsSleet else tgtIsSleet
 
     // Blended cloud intensity
     val cloudIntensity = if (isTransitioning && prevPalette.cloudIntensity != tgtCloudIntensity) {
@@ -381,6 +396,7 @@ fun AnimatedWeatherScene(
     // which reads them each frame — avoiding stale closure issues.
     val currentRainDensity = remember { mutableFloatStateOf(0f) }
     val currentSnowDensity = remember { mutableFloatStateOf(0f) }
+    val currentHailDensity = remember { mutableFloatStateOf(0f) }
     val currentLtngFreq = remember { mutableFloatStateOf(0.025f) }
 
     // Update effect densities reactively when weatherCode or transition progress changes
@@ -401,6 +417,14 @@ fun AnimatedWeatherScene(
                 isTrans && prevPalette.isSnow != tgtIsSnow ->
                     if (tgtIsSnow) prog * 0.5f else (1f - prog) * 0.5f
                 tgtIsSnow -> 0.5f
+                else -> 0f
+            }
+
+            // Hail density
+            currentHailDensity.floatValue = when {
+                isTrans && prevPalette.isHail != tgtIsHail ->
+                    if (tgtIsHail) prog * 0.25f else (1f - prog) * 0.25f
+                tgtIsHail -> 0.25f
                 else -> 0f
             }
 
@@ -439,6 +463,15 @@ fun AnimatedWeatherScene(
                         density = if (compact) sd * 0.6f else sd,
                         windDrift = 0.5f,
                         color = Color.White
+                    ))
+                }
+
+                val hd = currentHailDensity.floatValue
+                if (hd > 0.01f) {
+                    hailSystem.update(dt, HailSystem.HailConfig(
+                        density = if (compact) hd * 0.5f else hd,
+                        maxSize = if (compact) 8f else 12f,
+                        minSize = if (compact) 3f else 4f
                     ))
                 }
 
@@ -547,7 +580,7 @@ fun AnimatedWeatherScene(
                                         val tapX = change.position.x
                                         val tapY = change.position.y
                                         when {
-                                            showRain || showSnow -> {
+                                            showRain || showSnow || showHail || showSleet -> {
                                                 physics.spawnBurst(
                                                     tapX, tapY,
                                                     count = 8, speedMin = 30f, speedMax = 150f,
@@ -653,6 +686,51 @@ fun AnimatedWeatherScene(
                         windDrift = 0.5f,
                         color = Color.White
                     ), snowAlpha)
+                }
+            }
+
+            // ── 7b. Hail (ice stones — dense, high-mass, bounce) ──
+            if (showHail) {
+                val hailAlpha = (if (isNight) 0.5f else 0.65f) *
+                    if (isTransitioning) {
+                        if (tgtIsHail) progress else 1f - progress
+                    } else 1f
+                if (hailAlpha > 0.01f) {
+                    hailSystem.draw(this, HailSystem.HailConfig(
+                        density = if (compact) 0.15f else 0.25f,
+                        maxSize = if (compact) 8f else 12f,
+                        minSize = if (compact) 3f else 4f,
+                        iceColor = Color(0xFFE8F4F8),
+                        coreColor = Color(0xFFB0BEC5),
+                        debrisColor = Color(0xFF90A4AE)
+                    ), hailAlpha)
+                }
+            }
+
+            // ── 7c. Sleet (freezing rain — rain+snow hybrid at low temps) ──
+            if (showSleet) {
+                val sleetAlpha = (if (isNight) 0.3f else 0.4f) *
+                    if (isTransitioning) {
+                        if (tgtIsSleet) progress else 1f - progress
+                    } else 1f
+                if (sleetAlpha > 0.01f) {
+                    // Sleet = freezing rain drops (icy blue, smaller) + wet snow
+                    rainSystem.draw(this, RainSystem.RainConfig(
+                        density = if (compact) 0.15f else 0.25f,
+                        windShear = 0.2f,
+                        dropSizeMin = 1f, dropSizeMax = 2.5f, // Smaller, freezing drops
+                        splashProbability = 0.15f,
+                        color = Color(0xFFB0D4F1) // Icy blue
+                    ), sleetAlpha * 0.7f)
+
+                    // Mix in a bit of heavy wet snow
+                    snowSystem.draw(this, SnowSystem.SnowConfig(
+                        density = if (compact) 0.1f else 0.2f,
+                        windDrift = 0.3f,
+                        flakeSizeMin = 1f, flakeSizeMax = 4f, // Smaller, wet flakes
+                        wobbleAmplitude = 1f, wobbleFrequency = 1.5f,
+                        color = Color(0xFFE0E8EF) // Grey-white
+                    ), sleetAlpha * 0.5f)
                 }
             }
 
