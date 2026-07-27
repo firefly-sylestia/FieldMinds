@@ -1,11 +1,13 @@
 package fieldmind.research.app.features.field.presentation.components
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
@@ -26,12 +29,15 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.isActive
 import kotlin.random.Random
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.abs
 import kotlin.math.PI
+import kotlin.math.roundToInt
 
 /**
  * ════════════════════════════════════════════════════════════════════════
@@ -46,10 +52,66 @@ import kotlin.math.PI
  *  • Frame-rate independent deltaTime simulation (via withFrameNanos loop)
  *  • 3D parallax depth layers for immersive depth perception
  *  • Touch interaction (tap for ripples/sparkles/wind gusts)
- *  • Adaptive performance detection
+ *  • Smooth weather transitions — cross-fading colors, gradual cloud/precip ramping
  *  • Chemistry-based sky colors derived from solar position and temperature
  * ════════════════════════════════════════════════════════════════════════
  */
+
+// ── Color lerp helpers ───────────────────────────────────────────────
+
+/** Linearly interpolate between two Colors (component-wise). */
+private fun lerpColor(a: Color, b: Color, fraction: Float): Color {
+    val f = fraction.coerceIn(0f, 1f)
+    return Color(
+        red = a.red + (b.red - a.red) * f,
+        green = a.green + (b.green - a.green) * f,
+        blue = a.blue + (b.blue - a.blue) * f,
+        alpha = a.alpha + (b.alpha - a.alpha) * f
+    )
+}
+
+/** Linearly interpolate between two lists of Colors (pairs elements). */
+private fun lerpColorList(a: List<Color>, b: List<Color>, fraction: Float): List<Color> {
+    val maxSize = maxOf(a.size, b.size)
+    return List(maxSize) { i ->
+        val ca = a.getOrElse(i) { a.lastOrNull() ?: Color.Black }
+        val cb = b.getOrElse(i) { b.lastOrNull() ?: Color.Black }
+        lerpColor(ca, cb, fraction)
+    }
+}
+
+/** Linearly interpolate between two WeatherPalettes. */
+private fun lerpPalette(from: WeatherPalette, to: WeatherPalette, fraction: Float): WeatherPalette {
+    val f = fraction.coerceIn(0f, 1f)
+    return WeatherPalette(
+        primary = lerpColor(from.primary, to.primary, f),
+        secondary = lerpColor(from.secondary, to.secondary, f),
+        tertiary = lerpColor(from.tertiary, to.tertiary, f),
+        accent = lerpColor(from.accent, to.accent, f),
+        background = lerpColorList(from.background, to.background, f),
+        sunColor = lerpColor(from.sunColor, to.sunColor, f),
+        sunGlowColor = lerpColor(from.sunGlowColor, to.sunGlowColor, f),
+        sunFlareColor = lerpColor(from.sunFlareColor, to.sunFlareColor, f),
+        moonColor = lerpColor(from.moonColor, to.moonColor, f),
+        moonGlowColor = lerpColor(from.moonGlowColor, to.moonGlowColor, f),
+        cloudBaseColor = lerpColor(from.cloudBaseColor, to.cloudBaseColor, f),
+        hazeColor = lerpColor(from.hazeColor, to.hazeColor, f),
+        groundColor = lerpColor(from.groundColor, to.groundColor, f),
+        groundDetailColor = lerpColor(from.groundDetailColor, to.groundDetailColor, f)
+    )
+}
+
+// ── Snapshot of weather state for transition blending ────────────────
+
+private data class WeatherTransitionSnapshot(
+    val palette: WeatherPalette,
+    val cloudIntensity: Float,
+    val windSpeed: Float,
+    val isRain: Boolean,
+    val isSnow: Boolean,
+    val isFog: Boolean,
+    val isThunder: Boolean
+)
 
 // ── Time-of-day enum (kept for backward compatibility) ───────────────
 
@@ -115,11 +177,35 @@ private fun moonVerticalY(timeOfDay: TimeOfDay, height: Float): Float = height *
     TimeOfDay.Twilight -> 0.42f; TimeOfDay.Night -> 0.15f
 }
 
+// ── Weather flag helpers ─────────────────────────────────────────────
+
+private fun isRainCode(code: Int) = code in 51..67 || code in 80..82
+private fun isSnowCode(code: Int) = code in 71..77 || code in 85..86
+private fun isFogCode(code: Int) = code in 45..48
+private fun isThunderCode(code: Int) = code >= 95
+private fun cloudIntensityFor(code: Int, showAnim: Boolean): Float = when {
+    code in 2..3 -> 0.85f
+    code in 51..67 -> 0.9f
+    code >= 95 -> 1.0f
+    showAnim && code in 0..1 -> 0.25f
+    else -> 0f
+}
+private fun windSpeedFor(code: Int): Float = when {
+    isThunderCode(code) -> 0.6f
+    isRainCode(code) -> 0.4f
+    isSnowCode(code) -> 0.2f
+    else -> 0.1f
+}
+
 // ── Public API — AnimatedWeatherScene ────────────────────────────────
 
 /**
- * Physics-based animated weather scene.
+ * Physics-based animated weather scene with smooth transitions.
  * Maintains the same public API as the original for backward compatibility.
+ *
+ * When [weatherCode] changes, the scene transitions smoothly over ~1.5 seconds:
+ * sky colors cross-fade, cloud coverage/dissipates gradually, and precipitation
+ * ramps up/down instead of appearing/disappearing instantly.
  *
  * @param weatherCode WMO weather code (0=clear, 1=mainly clear, 2=partly cloudy,
  *                    3=overcast, 45-48=fog, 51-67=rain, 71-86=snow, 95+=thunderstorm)
@@ -150,8 +236,8 @@ fun AnimatedWeatherScene(
     }
     val hour = timeOfDayToHour(timeOfDay)
 
-    // Generate chemistry-based palette once per weather/temperature/time change
-    val palette = remember(weatherCode, temperature, hour) {
+    // Generate target palette for current weather
+    val targetPalette = remember(weatherCode, temperature, hour) {
         WeatherPaletteGenerator.generate(
             weatherCode = weatherCode,
             temperature = temperature,
@@ -161,7 +247,7 @@ fun AnimatedWeatherScene(
 
     // Preview/inspection mode: static rendering
     if (LocalInspectionMode.current) {
-        StaticWeatherFrame(weatherCode, palette, modifier)
+        StaticWeatherFrame(weatherCode, targetPalette, modifier)
         return
     }
 
@@ -183,28 +269,84 @@ fun AnimatedWeatherScene(
     // Initialize star field once
     remember(compact) { starSystem.initialize(if (compact) 20 else 60) }
 
-    // Weather condition flags (derived from weatherCode)
-    val isClear = weatherCode <= 1
-    val isCloudy = weatherCode in 2..3 || weatherCode == -1
-    val isRain = weatherCode in 51..67 || weatherCode in 80..82
-    val isSnow = weatherCode in 71..77 || weatherCode in 85..86
-    val isFog = weatherCode in 45..48
-    val isThunder = weatherCode >= 95
+    // ── Transition system ──────────────────────────────────────────────
+    // Holds the previous weather state as a snapshot so we can blend during transitions.
+    // Uses a spring-driven Animatable for smooth, frame-independent interpolation.
 
-    val cloudIntensity = when {
-        weatherCode in 2..3 -> 0.85f
-        weatherCode in 51..67 -> 0.9f
-        weatherCode >= 95 -> 1.0f
-        showCloudAnimation && weatherCode in 0..1 -> 0.25f
-        else -> 0f
+    val transitionProgress = remember { Animatable(1f) } // 1 = fully at target, 0 = fully at previous
+    var prevWeatherCode by remember { mutableStateOf(weatherCode) }
+
+    // Current target flags (computed from weatherCode)
+    val tgtIsRain = isRainCode(weatherCode)
+    val tgtIsSnow = isSnowCode(weatherCode)
+    val tgtIsFog = isFogCode(weatherCode)
+    val tgtIsThunder = isThunderCode(weatherCode)
+    val tgtCloudIntensity = cloudIntensityFor(weatherCode, showCloudAnimation)
+    val tgtWindSpeed = windSpeedFor(weatherCode)
+
+    // Snapshot of the previous weather state (captured when weatherCode changes)
+    val prevPalette = remember(weatherCode) {
+        val oldCode = prevWeatherCode
+        val oldPalette = if (oldCode != weatherCode) {
+            WeatherPaletteGenerator.generate(
+                weatherCode = oldCode,
+                temperature = temperature,
+                hour = hour
+            )
+        } else targetPalette
+
+        prevWeatherCode = weatherCode
+
+        WeatherTransitionSnapshot(
+            palette = oldPalette,
+            cloudIntensity = cloudIntensityFor(oldCode, showCloudAnimation),
+            windSpeed = windSpeedFor(oldCode),
+            isRain = isRainCode(oldCode),
+            isSnow = isSnowCode(oldCode),
+            isFog = isFogCode(oldCode),
+            isThunder = isThunderCode(oldCode)
+        )
     }
 
-    val windSpeed = when {
-        isThunder -> 0.6f
-        isRain -> 0.4f
-        isSnow -> 0.2f
-        else -> 0.1f
+    // Trigger the transition animation when weatherCode changes
+    LaunchedEffect(weatherCode) {
+        transitionProgress.snapTo(0f)
+        transitionProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = spring(
+                dampingRatio = 0.75f,
+                stiffness = 120f   // ~1.5 second transition
+            )
+        )
     }
+
+    val progress = transitionProgress.value
+    val isTransitioning = progress < 0.999f
+
+    // Blend flags (smooth boolean interpolation via progress threshold)
+    val showRain = if (isTransitioning) {
+        // Cross-fade: show rain from either snapshot if progress is in the right range
+        prevPalette.isRain || tgtIsRain
+    } else tgtIsRain
+    val showSnow = if (isTransitioning) prevPalette.isSnow || tgtIsSnow else tgtIsSnow
+    val showFog = if (isTransitioning) prevPalette.isFog || tgtIsFog else tgtIsFog
+    val showThunder = if (isTransitioning) prevPalette.isThunder || tgtIsThunder else tgtIsThunder
+
+    // Blended cloud intensity
+    val cloudIntensity = if (isTransitioning && prevPalette.cloudIntensity != tgtCloudIntensity) {
+        prevPalette.cloudIntensity + (tgtCloudIntensity - prevPalette.cloudIntensity) * progress
+    } else tgtCloudIntensity
+
+    // Blended wind speed
+    val windSpeed = if (isTransitioning && prevPalette.windSpeed != tgtWindSpeed) {
+        prevPalette.windSpeed + (tgtWindSpeed - prevPalette.windSpeed) * progress
+    } else tgtWindSpeed
+
+    // Blended palette (cross-fade colors)
+    val palette = if (isTransitioning) {
+        lerpPalette(prevPalette.palette, targetPalette, progress)
+    } else targetPalette
+
     val windDir = 1f
 
     val isNight = timeOfDay == TimeOfDay.Night || timeOfDay == TimeOfDay.Twilight
@@ -219,10 +361,10 @@ fun AnimatedWeatherScene(
         physics.windTargetDirection = windDir
 
         when {
-            isRain || isSnow -> {
+            tgtIsRain || tgtIsSnow -> {
                 // Precipitation uses physics pool — no cloud initialization needed
             }
-            cloudIntensity > 0f && !isFog -> {
+            cloudIntensity > 0f && !tgtIsFog -> {
                 cloudSystem.initialize(
                     physics.width, physics.height,
                     count = if (compact) 3 else 6
@@ -235,34 +377,72 @@ fun AnimatedWeatherScene(
         }
     }
 
+    // ── Reactive effect densities (updated via snapshotFlow on transition progress) ──
+    // These mutable state objects are shared with the frame loop LaunchedEffect,
+    // which reads them each frame — avoiding stale closure issues.
+    val currentRainDensity = remember { mutableFloatStateOf(0f) }
+    val currentSnowDensity = remember { mutableFloatStateOf(0f) }
+    val currentLtngFreq = remember { mutableFloatStateOf(0.025f) }
+
+    // Update effect densities reactively when weatherCode or transition progress changes
+    LaunchedEffect(weatherCode) {
+        snapshotFlow { transitionProgress.value }.collect { prog ->
+            val isTrans = prog < 0.999f
+
+            // Rain density — ramps up when transitioning TO rain, down when FROM rain
+            currentRainDensity.floatValue = when {
+                isTrans && prevPalette.isRain != tgtIsRain ->
+                    if (tgtIsRain) prog * 0.6f else (1f - prog) * 0.6f
+                tgtIsRain -> 0.6f
+                else -> 0f
+            }
+
+            // Snow density
+            currentSnowDensity.floatValue = when {
+                isTrans && prevPalette.isSnow != tgtIsSnow ->
+                    if (tgtIsSnow) prog * 0.5f else (1f - prog) * 0.5f
+                tgtIsSnow -> 0.5f
+                else -> 0f
+            }
+
+            // Lightning frequency
+            currentLtngFreq.floatValue = when {
+                isTrans && prevPalette.isThunder != tgtIsThunder ->
+                    prog * 0.025f
+                tgtIsThunder -> 0.025f
+                else -> 0f
+            }
+        }
+    }
+
     // ── Frame loop: physics simulation runs at draw-frame rate ──
-    // DeltaTime is sourced from physics.clock ONCE per frame and shared
-    // across all subsystems to keep the simulation coherent.
     LaunchedEffect(Unit) {
         while (isActive) {
             withFrameNanos { frameNanos ->
-                // 1. Tick the clock once — this is the single source of dt
                 val dt = physics.clock.tick(frameNanos)
-
-                // 2. Update physics (integrates all active bodies)
                 physics.update(dt)
 
-                // 3. Update effects with the same deltaTime
-                if (isRain) {
+                // Read reactive densities (updated by snapshotFlow LaunchedEffect above)
+                val rd = currentRainDensity.floatValue
+                if (rd > 0.01f) {
                     rainSystem.update(dt, RainSystem.RainConfig(
-                        density = if (compact) 0.3f else 0.6f,
+                        density = if (compact) rd * 0.5f else rd,
                         windShear = 0.3f,
                         color = Color(0xFF90CAF9)
                     ))
                 }
-                if (isSnow) {
+
+                val sd = currentSnowDensity.floatValue
+                if (sd > 0.01f) {
                     snowSystem.update(dt, SnowSystem.SnowConfig(
-                        density = if (compact) 0.3f else 0.5f,
+                        density = if (compact) sd * 0.6f else sd,
                         windDrift = 0.5f,
                         color = Color.White
                     ))
                 }
-                if (cloudIntensity > 0f && !isFog) {
+
+                // Cloud intensity and wind are computed in composable body (fresh each frame)
+                if (cloudIntensity > 0f && !tgtIsFog) {
                     cloudSystem.update(dt, CloudSystem.CloudConfig(
                         coverage = cloudIntensity,
                         baseColor = palette.cloudBaseColor,
@@ -270,9 +450,11 @@ fun AnimatedWeatherScene(
                         isDark = isNight
                     ), windSpeed, windDir)
                 }
-                if (isThunder) {
+
+                val lf = currentLtngFreq.floatValue
+                if (lf > 0.001f) {
                     lightningSystem.update(dt, LightningSystem.LightningConfig(
-                        frequency = if (compact) 0.01f else 0.025f,
+                        frequency = if (compact) lf * 0.5f else lf,
                         intensity = 0.9f
                     ), sceneHeight * 0.2f)
                 }
@@ -280,7 +462,7 @@ fun AnimatedWeatherScene(
         }
     }
 
-    // ── Sun/Moon twinkle animation (used by draw helpers) ──
+    // ── Sun/Moon twinkle animation ──
     val infiniteTransition = rememberInfiniteTransition(label = "weatherTransition")
     val glow by infiniteTransition.animateFloat(0.6f, 1f,
         infiniteRepeatable(tween(5000, easing = LinearEasing), RepeatMode.Reverse), label = "sceneGlow")
@@ -299,7 +481,6 @@ fun AnimatedWeatherScene(
                     sceneHeight = size.height.toFloat()
                 }
                 .pointerInput(Unit) {
-                    // Touch interaction: tap to create ripples / wind gusts
                     awaitPointerEventScope {
                         while (true) {
                             val event = awaitPointerEvent()
@@ -309,14 +490,14 @@ fun AnimatedWeatherScene(
                                 val tapX = change.position.x
                                 val tapY = change.position.y
                                 when {
-                                    isRain || isSnow -> {
+                                    showRain || showSnow -> {
                                         physics.spawnBurst(
                                             tapX, tapY,
                                             count = 8, speedMin = 30f, speedMax = 150f,
                                             sizeMin = 1f, sizeMax = 3f
                                         )
                                     }
-                                    isThunder -> {
+                                    showThunder -> {
                                         lightningSystem.triggerBolt(
                                             tapX, tapY * 0.2f,
                                             tapX + (Random.nextFloat() - 0.5f) * 200f,
@@ -333,7 +514,7 @@ fun AnimatedWeatherScene(
                     }
                 }
         ) {
-            // ── 1. Sky background (chemistry-based gradient) ──
+            // ── 1. Sky background (blended palette gradient) ──
             val bgColors = when {
                 palette.background.size >= 3 -> palette.background
                 palette.background.size == 2 -> listOf(palette.background[0], palette.tertiary, palette.background[1])
@@ -374,8 +555,8 @@ fun AnimatedWeatherScene(
                 drawMoon(palette, timeOfDay, glow, compact)
             }
 
-            // ── 5. Clouds (drawn during frame loop, render here) ──
-            if (cloudIntensity > 0f && !isFog) {
+            // ── 5. Clouds (blended coverage) ──
+            if (cloudIntensity > 0.01f && !tgtIsFog) {
                 val cloudAlpha = if (isNight) 0.25f * cloudIntensity else 0.38f * cloudIntensity
                 cloudSystem.draw(this, CloudSystem.CloudConfig(
                     coverage = cloudIntensity,
@@ -385,45 +566,63 @@ fun AnimatedWeatherScene(
                 ), cloudAlpha)
             }
 
-            // ── 6. Rain ──
-            if (isRain) {
-                val rainAlpha = if (isNight) 0.35f else 0.28f
-                rainSystem.draw(this, RainSystem.RainConfig(
-                    density = if (compact) 0.3f else 0.6f,
-                    windShear = 0.3f,
-                    color = Color(0xFF90CAF9)
-                ), rainAlpha)
+            // ── 6. Rain (ramped density) ──
+            if (showRain) {
+                val rainAlpha = (if (isNight) 0.35f else 0.28f) *
+                    if (isTransitioning) {
+                        if (tgtIsRain) progress else 1f - progress
+                    } else 1f
+                if (rainAlpha > 0.01f) {
+                    rainSystem.draw(this, RainSystem.RainConfig(
+                        density = if (compact) 0.3f else 0.6f,
+                        windShear = 0.3f,
+                        color = Color(0xFF90CAF9)
+                    ), rainAlpha)
+                }
             }
 
-            // ── 7. Snow ──
-            if (isSnow) {
-                val snowAlpha = if (isNight) 0.7f else 0.55f
-                snowSystem.draw(this, SnowSystem.SnowConfig(
-                    density = if (compact) 0.3f else 0.5f,
-                    windDrift = 0.5f,
-                    color = Color.White
-                ), snowAlpha)
+            // ── 7. Snow (ramped density) ──
+            if (showSnow) {
+                val snowAlpha = (if (isNight) 0.7f else 0.55f) *
+                    if (isTransitioning) {
+                        if (tgtIsSnow) progress else 1f - progress
+                    } else 1f
+                if (snowAlpha > 0.01f) {
+                    snowSystem.draw(this, SnowSystem.SnowConfig(
+                        density = if (compact) 0.3f else 0.5f,
+                        windDrift = 0.5f,
+                        color = Color.White
+                    ), snowAlpha)
+                }
             }
 
             // ── 8. Fog ──
-            if (isFog) {
-                val fogAlpha = if (isNight) 0.25f else 0.30f
-                fogSystem.draw(this, FogSystem.FogConfig(
-                    density = 0.4f,
-                    baseColor = palette.cloudBaseColor
-                ), physics.time, windSpeed, windDir, fogAlpha)
+            if (showFog) {
+                val fogAlpha = (if (isNight) 0.25f else 0.30f) *
+                    if (isTransitioning) {
+                        if (tgtIsFog) progress else 1f - progress
+                    } else 1f
+                if (fogAlpha > 0.01f) {
+                    fogSystem.draw(this, FogSystem.FogConfig(
+                        density = 0.4f,
+                        baseColor = palette.cloudBaseColor
+                    ), physics.time, windSpeed, windDir, fogAlpha)
+                }
             }
 
-            // ── 9. Lightning & Thunder ──
-            if (isThunder) {
+            // ── 9. Lightning & Thunder (ramped) ──
+            if (showThunder) {
+                val thunderAlpha = if (isTransitioning && prevPalette.isThunder != tgtIsThunder) {
+                    if (tgtIsThunder) progress else 1f - progress
+                } else 1f
                 lightningSystem.draw(this, LightningSystem.LightningConfig(
                     frequency = if (compact) 0.01f else 0.025f,
-                    intensity = 0.9f
+                    intensity = 0.9f * thunderAlpha
                 ))
             }
 
             // ── 10. Rainbow ──
-            if (isRain && isDaytime) {
+            if (tgtIsRain && isDaytime && !isTransitioning) {
                 rainbowSystem.draw(this, RainbowSystem.RainbowConfig(
                     probability = 0.3f, intensity = 0.5f
                 ), sin(PI.toFloat() / 2f - abs(hour - 12).toFloat() / 12f * PI.toFloat()),
@@ -434,7 +633,7 @@ fun AnimatedWeatherScene(
             groundSystem.draw(this, GroundSystem.GroundConfig(
                 color = palette.groundColor,
                 detailColor = palette.groundDetailColor,
-                isSnow = isSnow,
+                isSnow = tgtIsSnow || (isTransitioning && prevPalette.isSnow),
                 isDark = isNight,
                 alpha = palette.groundColor.alpha
             ), physics.time)
@@ -452,11 +651,9 @@ private fun DrawScope.drawSun(
     if (cy > size.height) return
     val r = if (compact) size.minDimension * 0.07f else size.minDimension * 0.06f
 
-    // Outer glow layers
     drawCircle(palette.sunGlowColor.copy(alpha = 0.12f * glow), r * 2f, Offset(cx, cy))
     drawCircle(Color.White.copy(alpha = 0.06f * glow), r * 3f, Offset(cx, cy))
 
-    // Solar corona rays (subtle radial lines)
     val coronaRays = 12
     for (i in 0 until coronaRays) {
         val angle = i * PI.toFloat() * 2f / coronaRays
@@ -469,7 +666,6 @@ private fun DrawScope.drawSun(
         )
     }
 
-    // Sun disk
     drawCircle(palette.sunColor, r, Offset(cx, cy))
     drawCircle(Color.White.copy(alpha = 0.35f), r * 0.55f, Offset(cx, cy))
 }
@@ -484,18 +680,13 @@ private fun DrawScope.drawMoon(
     if (cy > size.height) return
     val r = if (compact) size.minDimension * 0.07f else size.minDimension * 0.06f
 
-    // Glow layers
     drawCircle(palette.moonGlowColor.copy(alpha = 0.10f * glow), r * 2f, Offset(cx, cy))
     drawCircle(palette.moonGlowColor.copy(alpha = 0.04f * glow), r * 3.5f, Offset(cx, cy))
 
-    // Moon disk
     drawCircle(palette.moonColor, r, Offset(cx, cy))
-
-    // Terminator shadow (phase effect)
     drawCircle(palette.secondary.copy(alpha = 0.65f), r * 0.85f,
         Offset(cx + r * 0.35f, cy - r * 0.1f))
 
-    // Subtle crater texture
     for (i in 0..3) {
         val ca = i * 1.7f + 0.5f
         val cr = r * (0.1f + i * 0.04f)
