@@ -129,8 +129,45 @@ object CurioCategories {
         )
     )
 
-    /** Returns the category for [id], or null if the id is unknown. */
-    fun byId(id: CategoryId): CurioCategory? = all.firstOrNull { it.id == id }
+    init {
+        // Fail at app startup (not deep inside a screen mid-session) if the
+        // data layer drifts out of sync with the CategoryId enum. Without
+        // this, a new CategoryId value added without a matching entry in
+        // `all` would scatter NoSuchElementExceptions across every screen.
+        check(all.size == CategoryId.values().size) {
+            "CurioCategories.all has ${all.size} entries but CategoryId " +
+            "has ${CategoryId.values().size} values; keep them in sync."
+        }
+    }
+
+    /**
+     * Returns the category for [id].
+     *
+     * The return type is non-nullable because [CategoryId.values()] is
+     * 1:1 covered by [all] (verify at startup via the [init] block) — no
+     * valid [CategoryId] can be missing a category entry. An unknown id is
+     * a bug (new enum value added without a matching entry in `all`), and
+     * we want to crash LOUDLY with a descriptive message rather than
+     * silently render an unstyled UI or scatter opaque
+     * `NoSuchElementException`s across screens.
+     *
+     * **Maintenance contract (important):** when adding a new [CategoryId]
+     * value, you MUST also add a matching entry to `all` in the SAME commit.
+     * The [init] check above will turn this from a runtime crash into a
+     * startup-time crash message that names the mismatch directly.
+     *
+     * If you genuinely need "unknown id" handling (e.g. when parsing a route
+     * slug from user input or external JSON), use [byRouteSlug] instead —
+     * it stays nullable for that reason.
+     */
+    fun byId(id: CategoryId): CurioCategory =
+        all.firstOrNull { it.id == id }
+            ?: error(
+                "CurioCategories.all has no entry for CategoryId.${id.name}. " +
+                "Add a matching CurioCategory(...) to `all` so the count " +
+                "matches CategoryId.values().size (currently " +
+                "${CategoryId.values().size})."
+            )
 
     /** Returns the category whose routeSlug matches [slug], or null. */
     fun byRouteSlug(slug: String): CurioCategory? =
