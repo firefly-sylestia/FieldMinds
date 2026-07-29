@@ -77,6 +77,14 @@
     <path android:fillColor="#FFD97D"
           android:pathData="M 42,32 L 66,32 A 4,4 0 0,1 70,36 L 70,56 A 4,4 0 0,1 66,60 L 42,60 A 4,4 0 0,1 38,56 L 38,36 A 4,4 0 0,1 42,32 Z" />
 
+    <!-- ── Title bar halo (Cream White, 1dp frame) — reviewer NIT #1:
+         insulates the Coral Blush title bar from the warm-pink-to-purple
+         Lilac Card 2 backdrop so the two don't visually merge at small
+         adaptive-icon sizes (48dp). Halo drawn FIRST so coral paints over
+         it; 1-unit cream border remains visible on all 4 sides. ──── -->
+    <path android:fillColor="#FFFBF5"
+          android:pathData="M 37,64 L 63,64 L 63,71 L 37,71 Z" />
+
     <!-- ── Title bar (Coral Blush — BRAND accent, 5dp thick) ──────── -->
     <path android:fillColor="#FF8FA3"
           android:pathData="M 38,65 L 62,65 L 62,70 L 38,70 Z" />
