@@ -132,13 +132,21 @@ dependencies {
 // ── Topic data validation (CURIO_DATA_PLAN.md §5.2 step 3) ─────────────────
 //
 // Validates every JSON file under app/src/main/assets/topics/*.json against
-// the §2 schema. Asserts:
-//   - root has categoryId, version, curatedDate, topics
-//   - topics array non-empty
-//   - all `id`s unique within the file
-//   - every topic has id/subtype/name/teaser/imageUrl/actionPrompt
-//   - every actionPrompt has verb/targetName/durationMinutes/instruction
+// the §2 schema. The root is a BARE JSON ARRAY of topic objects (see
+// SCHEMA.md in this directory — there is no wrapper). Asserts:
+//   - root IS a JSON array (wrapper format is a hard error)
+//   - every topic has id (unique cross-file) + categoryId (matches filename)
+//   - every topic has subtype/name/teaser/imageUrl/exploreAction
+//   - every exploreAction has verb/targetName/durationMinutes/instruction
 //   - every instruction <= 280 chars
+//   - tier, if present, is in 1..3
+//
+// Note: empty arrays are ACCEPTED with a warning (placeholder-empty is OK
+// during the build-out phase — categories ship one-per-PR cadence per
+// CURIO_DATA_PLAN.md §5.1, so a freshly-created category will sit at [] for
+// a PR or two before content lands). Schema errors (malformed field,
+// duplicate cross-file id, bad categoryId, instruction > 280 chars, tier
+// out of range) are still hard fails — they're real bugs, not placeholders.
 //
 // When assets/topics/ contains any JSON files, this task is wired into
 // preBuild so a malformed entry fails the assemble. When the directory is
@@ -165,18 +173,20 @@ tasks.register("validateTopics") {
         // Collect every id across all files first so we can assert global
         // uniqueness (cross-file collisions would break the Room FK on `id`).
         val seenIds = mutableMapOf<String, String>()  // id -> first filename
+        var populatedFileCount = 0
         jsonFiles.forEach { json ->
+            val expectedCategoryId = json.nameWithoutExtension.uppercase()
             @Suppress("UNCHECKED_CAST")
-            val root = parser.parse(json) as Map<String, Any?>
-            val categoryId = root["categoryId"] as? String
-                ?: throw GradleException("${json.name}: missing or non-string `categoryId`")
-            require(categoryId == json.nameWithoutExtension.uppercase()) {
-                "${json.name}: categoryId '$categoryId' does not match filename '${json.nameWithoutExtension.uppercase()}'"
+            val topics = parser.parse(json) as? List<Map<String, Any?>>
+                ?: throw GradleException(
+                    "${json.name}: root must be a bare JSON array of topic objects " +
+                    "(see SCHEMA.md — the wrapper `{categoryId, version, curatedDate, topics}` format was retired)"
+                )
+            if (topics.isEmpty()) {
+                logger.warn("⚠️  ${json.name}: 0 topics (placeholder — content not yet shipped for $expectedCategoryId)")
+                return@forEach
             }
-            @Suppress("UNCHECKED_CAST")
-            val topics = root["topics"] as? List<Map<String, Any?>>
-                ?: throw GradleException("${json.name}: missing or non-array `topics`")
-            require(topics.isNotEmpty()) { "${json.name}: `topics` array is empty" }
+            populatedFileCount++
             topics.forEachIndexed { idx, t ->
                 val id = t["id"] as? String
                     ?: throw GradleException("${json.name}: topic #$idx missing or non-string `id`")
@@ -187,26 +197,43 @@ tasks.register("validateTopics") {
                     )
                 }
                 seenIds[id] = json.name
-                listOf("subtype", "name", "teaser", "imageUrl", "actionPrompt").forEach { f ->
+                val categoryId = t["categoryId"] as? String
+                    ?: throw GradleException("${json.name}: topic '$id' missing or non-string `categoryId`")
+                require(categoryId == expectedCategoryId) {
+                    "${json.name}: topic '$id' categoryId '$categoryId' " +
+                    "does not match filename '$expectedCategoryId'"
+                }
+                listOf("subtype", "name", "teaser", "imageUrl", "exploreAction").forEach { f ->
                     require(t.containsKey(f)) {
                         throw GradleException("${json.name}: topic '$id' missing required field `$f`")
                     }
                 }
                 @Suppress("UNCHECKED_CAST")
-                val prompt = t["actionPrompt"] as Map<String, Any?>
+                val action = t["exploreAction"] as Map<String, Any?>
                 listOf("verb", "targetName", "durationMinutes", "instruction").forEach { f ->
-                    require(prompt.containsKey(f)) {
-                        throw GradleException("${json.name}: topic '$id' actionPrompt missing required field `$f`")
+                    require(action.containsKey(f)) {
+                        throw GradleException("${json.name}: topic '$id' exploreAction missing required field `$f`")
                     }
                 }
-                val instruction = prompt["instruction"] as? String
-                    ?: throw GradleException("${json.name}: topic '$id' actionPrompt.instruction missing or non-string")
+                val instruction = action["instruction"] as? String
+                    ?: throw GradleException("${json.name}: topic '$id' exploreAction.instruction missing or non-string")
                 require(instruction.length <= 280) {
                     throw GradleException("${json.name}: topic '$id' instruction is ${instruction.length} chars (max 280)")
                 }
+                if (t.containsKey("tier")) {
+                    val tier = t["tier"]
+                    require(tier is Number && tier.toInt() in 1..3) {
+                        throw GradleException("${json.name}: topic '$id' tier must be 1, 2, or 3 (got $tier)")
+                    }
+                }
             }
-            logger.lifecycle("✓ ${json.name}: $categoryId, ${topics.size} topics validated")
+            logger.lifecycle("✓ ${json.name}: $expectedCategoryId, ${topics.size} topics validated")
         }
+        logger.lifecycle(
+            "── validateTopics: $populatedFileCount of ${jsonFiles.size} files have content " +
+            "(${jsonFiles.size - populatedFileCount} placeholder). " +
+            "Schema errors (if any) are listed above.)"
+        )
     }
 }
 
