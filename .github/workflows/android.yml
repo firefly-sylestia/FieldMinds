@@ -22,7 +22,7 @@ jobs:
 
       - name: Run Lint
         run: ./gradlew lint
-      
+
       - name: Upload lint results
         if: always()
         uses: actions/upload-artifact@v4
@@ -38,72 +38,80 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-java@v4
-      with:
-        java-version: 17
-        distribution: 'zulu'
-        cache: gradle
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'zulu'
+          cache: gradle
 
-  
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      # Reuses the legacy FieldMind keystore via the existing
+      # KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD secrets.
+      # app/build.gradle.kts reads these env vars at build time and signs release
+      # APKs with them when all four are present; otherwise the release buildType
+      # falls back to debug signing so local dev builds remain installable.
 
-    # NOTE: release-key signing configuration is deliberately deferred until
-    # Phase 4+ when Curio's distribution-channel logic lands. The legacy
-    # KeyStoreBase64 + KEYSTORE_* env-var pipeline lived only in
-    # app-legacy/build.gradle.kts and is not carried over.
+      - name: Decode keystore from secrets
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '[:space:]' | base64 -d > release.keystore
 
-    - name: Build installable APKs for PR preview
-      run: ./gradlew assembleDebug assembleRelease --stacktrace
+      - name: Build installable APKs for PR preview
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleDebug assembleRelease --stacktrace
 
-    - name: Verify installable APK outputs (unsigned APKs are treated as a build failure)
-      run: |
-        set -uo pipefail
-        echo "=== APK outputs ==="
-        find app/build/outputs/apk -type f -name '*.apk' -print || true
-        debug_apk=$(find app/build/outputs/apk/debug   -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
-        release_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
-        if [ -z "$debug_apk" ] && [ -z "$release_apk" ]; then
-          unsigned_found=$(find app/build/outputs/apk -type f -name '*-unsigned.apk' 2>/dev/null | head -1 || true)
-          if [ -n "$unsigned_found" ]; then
-            echo "::error::Found an unsigned APK at $unsigned_found but no signed APK. The release build's signing fallback failed \u2014 add a signing config to app/build.gradle.kts."
-          else
-            echo "::error::No APKs found at all. Build may have failed."
+      - name: Verify installable APK outputs (unsigned APKs are treated as a build failure)
+        run: |
+          set -uo pipefail
+          echo "=== APK outputs ==="
+          find app/build/outputs/apk -type f -name '*.apk' -print || true
+          debug_apk=$(find app/build/outputs/apk/debug   -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
+          release_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
+          if [ -z "$debug_apk" ] && [ -z "$release_apk" ]; then
+            unsigned_found=$(find app/build/outputs/apk -type f -name '*-unsigned.apk' 2>/dev/null | head -1 || true)
+            if [ -n "$unsigned_found" ]; then
+              echo "::error::Found an unsigned APK at $unsigned_found but no signed APK. The release build's signing fallback failed - add a signing config to app/build.gradle.kts."
+            else
+              echo "::error::No APKs found at all. Build may have failed."
+            fi
+            exit 1
           fi
-          exit 1
-        fi
-        if [ -n "$debug_apk" ]; then echo "✅ Debug APK: $debug_apk"; fi
-        if [ -n "$release_apk" ]; then echo "✅ Release APK: $release_apk"; fi
+          if [ -n "$debug_apk" ]; then echo "✅ Debug APK: $debug_apk"; fi
+          if [ -n "$release_apk" ]; then echo "✅ Release APK: $release_apk"; fi
 
-    - name: Collect installable APK release bundle
-      run: |
-        set -euo pipefail
-        artifact_dir="artifact-installable-apks"
-        rm -rf "$artifact_dir"
-        mkdir -p "$artifact_dir"
+      - name: Collect installable APK release bundle
+        run: |
+          set -euo pipefail
+          artifact_dir="artifact-installable-apks"
+          rm -rf "$artifact_dir"
+          mkdir -p "$artifact_dir"
 
-        echo "Build completed at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" > "$artifact_dir/build_info.txt"
-        echo "Event: ${{ github.event_name }}" >> "$artifact_dir/build_info.txt"
-        echo "Commit: ${{ github.sha }}" >> "$artifact_dir/build_info.txt"
-        echo "Branch: ${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}" >> "$artifact_dir/build_info.txt"
+          echo "Build completed at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" > "$artifact_dir/build_info.txt"
+          echo "Event: ${{ github.event_name }}" >> "$artifact_dir/build_info.txt"
+          echo "Commit: ${{ github.sha }}" >> "$artifact_dir/build_info.txt"
+          echo "Branch: ${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}" >> "$artifact_dir/build_info.txt"
 
-        mapfile -t apks < <(find app/build/outputs/apk -type f -name '*.apk' | sort)
-        if [ "${#apks[@]}" -eq 0 ]; then
-          echo "::error::No APKs found to upload. Expected outputs under app/build/outputs/apk."
-          exit 1
-        fi
-        printf 'APK files:\n' >> "$artifact_dir/build_info.txt"
-        for apk in "${apks[@]}"; do
-          cp "$apk" "$artifact_dir/"
-          printf -- '- %s\n' "$apk" >> "$artifact_dir/build_info.txt"
-        done
+          mapfile -t apks < <(find app/build/outputs/apk -type f -name '*.apk' | sort)
+          if [ "${#apks[@]}" -eq 0 ]; then
+            echo "::error::No APKs found to upload. Expected outputs under app/build/outputs/apk."
+            exit 1
+          fi
+          printf 'APK files:\n' >> "$artifact_dir/build_info.txt"
+          for apk in "${apks[@]}"; do
+            cp "$apk" "$artifact_dir/"
+            printf -- '- %s\n' "$apk" >> "$artifact_dir/build_info.txt"
+          done
 
-    - name: Upload installable APK release bundle
-      uses: actions/upload-artifact@v4
-      with:
-        name: fieldmind-${{ github.event_name }}-${{ github.run_number }}-installable-apks
-        path: artifact-installable-apks/*
-        if-no-files-found: error
-        retention-days: 14
+      - name: Upload installable APK release bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: fieldmind-${{ github.event_name }}-${{ github.run_number }}-installable-apks
+          path: artifact-installable-apks/*
+          if-no-files-found: error
+          retention-days: 14

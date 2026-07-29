@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Curio launcher icon — foreground layer.
+    Transparent background; the foreground elements all live within the 66dp
+    adaptive-icon "safe zone" (centered at 54,54 with 33dp radius).
+
+    Composition (see CURIO_SPEC.md §13.1 + §0.2 + §5):
+      1. Roulette dial — 6 pie segments forming a circular wheel.
+         Each segment uses one of the 6 category accent colors from
+         CurioColors:
+           - Wedge at top (12–2 o'clock,  the most prominent slot):
+             Wildcard — multi-stop linear gradient (the ONLY place in the
+             app a gradient appears — see spec §0.2).
+           - Wedge 2 (2–4 o'clock):  Movies / DustyBlue #9BB8E8
+           - Wedge 3 (4–6 o'clock):  Books   / Sage        #A8C99A
+           - Wedge 4 (6–8 o'clock):  Art     / Peach       #FFB585
+           - Wedge 5 (8–10 o'clock): Science / Teal        #6FC7BE
+           - Wedge 6 (10–12 o'clock): Music  / Lilac       #C9A6F2
+         Music and Wildcard are visually adjacent — the gradient sweep
+         visually "swallows" Music's solid purple at the wrap point, which
+         reinforces the rainbow-as-special pattern.
+      2. Center sparkle (4-point star, deep plum) — references the
+         spec's logomark "auto_awesome" motif at §13.1.
+      3. Pointer/needle at top (deep plum triangle) — the roulette prize
+         wheel's classic visual cue from CURIO_SPEC.md §5.
+
+    Geometry: dial center = (54,54); dial radius = 28dp (so segments span
+    r=0 to r=28). Sparkle cardinals at r=12 from center. Pointer apex at
+    (54, 22) — 32dp from center, just inside the safe-zone edge at 33dp.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Wedge 1 (top, 12-2 o'clock): WILDCARD — the one gradient in the app.
+         Sweep from lilac (top-end of segment) to teal (right-end of segment)
+         to hint at the full 5-color rainbow. -->
+    <path android:pathData="M 54,54 L 54,26 A 28,28 0 0,1 78.25,40 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="54.00"  android:startY="26.00"
+                android:endX="78.25"    android:endY="40.00"
+                android:startColor="#C9A6F2"
+                android:centerColor="#A8C99A"
+                android:endColor="#6FC7BE" />
+        </aapt:attr>
+    </path>
+
+    <!-- Wedge 2 (2-4 o'clock): Movies · DustyBlue -->
+    <path android:fillColor="#9BB8E8"
+          android:pathData="M 54,54 L 78.25,40 A 28,28 0 0,1 78.25,68 Z" />
+
+    <!-- Wedge 3 (4-6 o'clock): Books · Sage -->
+    <path android:fillColor="#A8C99A"
+          android:pathData="M 54,54 L 78.25,68 A 28,28 0 0,1 54,82 Z" />
+
+    <!-- Wedge 4 (6-8 o'clock): Visual Art · Peach -->
+    <path android:fillColor="#FFB585"
+          android:pathData="M 54,54 L 54,82 A 28,28 0 0,1 29.75,68 Z" />
+
+    <!-- Wedge 5 (8-10 o'clock): Science · Teal -->
+    <path android:fillColor="#6FC7BE"
+          android:pathData="M 54,54 L 29.75,68 A 28,28 0 0,1 29.75,40 Z" />
+
+    <!-- Wedge 6 (10-12 o'clock): Music · Lilac (visually adjacent to Wildcard
+         gradient — the gradient sweep continues into the lilac solid) -->
+    <path android:fillColor="#C9A6F2"
+          android:pathData="M 54,54 L 29.75,40 A 28,28 0 0,1 54,26 Z" />
+
+    <!-- Center sparkle (4-point star, deep plum #3B0A17).
+         Cardinal points at radius 12 from (54,54); concave indents at radius
+         ~3 from center, at the 45° diagonals. -->
+    <path android:fillColor="#3B0A17"
+          android:pathData="M 54,42 L 56.12,51.88 L 66,54 L 56.12,56.12 L 54,66 L 51.88,56.12 L 42,54 L 51.88,51.88 Z" />
+
+    <!-- Pointer / needle at top of dial (deep plum triangle).
+         Apex at (54,24) - 3dp inside the 33dp safe-zone edge (radius 30 from
+         center) so aggressive launcher masks don't clip the tip. Base rests
+         on the dial's top edge (54±6, 28). -->
+    <path android:fillColor="#3B0A17"
+          android:pathData="M 54,24 L 60,28 L 48,28 Z" />
+</vector>

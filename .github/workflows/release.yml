@@ -36,12 +36,25 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      # NOTE: release-key signing configuration is deliberately deferred until
-      # Phase 4+ when Curio's distribution-channel logic lands. The legacy
-      # KeyStoreBase64 + KEYSTORE_* env-var pipeline lived only in
-      # app-legacy/build.gradle.kts and is not carried over.
+      # Reuses the legacy FieldMind keystore via the existing
+      # KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD secrets.
+      # app/build.gradle.kts reads these env vars at build time and signs the
+      # release APK with them when all four are present; otherwise falls back
+      # to debug signing.
+
+      - name: Decode keystore from secrets
+        run: |
+          # Strip whitespace before base64-decode in case the secret was
+          # pasted with line breaks — base64 ignores whitespace but some
+          # implementations refuse mid-pipeline newlines.
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '[:space:]' | base64 -d > release.keystore
 
       - name: Build release universal APK
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease --stacktrace
 
       - name: Verify APK outputs (unsigned APKs are treated as a build failure)

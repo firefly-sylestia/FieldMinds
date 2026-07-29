@@ -3,6 +3,25 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+// ── Release signing wiring ───────────────────────────────────────────────────
+//
+// Curio consumes the existing KEYSTORE_* secrets that were carried over from
+// the legacy fieldmind build's android.yml CI pipeline (KEYSTORE_BASE64 +
+// KEYSTORE_PASSWORD + KEY_ALIAS + KEY_PASSWORD). The CI workflow decodes the
+// base64-encoded keystore to ./release.keystore and exports KEYSTORE_PATH etc.
+// as env vars at build time, which we read here.
+//
+// Local dev (no env vars set): falls back to the default debug signing config,
+// so `gradlew assembleRelease` still produces an installable-but-debug-keyed
+// APK. CI: produces a properly-signed release APK.
+val keyStorePath: String? = System.getenv("KEYSTORE_PATH")
+val keyStorePassword: String? = System.getenv("KEYSTORE_PASSWORD")
+val keyAlias: String? = System.getenv("KEY_ALIAS")
+val keyPassword: String? = System.getenv("KEY_PASSWORD")
+val hasReleaseSigningMaterial: Boolean =
+    keyStorePath != null && keyStorePassword != null &&
+    keyAlias != null && keyPassword != null
+
 android {
     namespace = "com.curio.app"
     compileSdk = 37
@@ -20,9 +39,29 @@ android {
         androidResources.localeFilters.add("en")
     }
 
+    signingConfigs {
+        // Only create the release signing config when ALL four env vars are
+        // present. When any are missing (e.g. local dev), we skip — the
+        // release buildType falls back to the default debug signing below so
+        // local `gradlew assembleRelease` still works for testing.
+        if (hasReleaseSigningMaterial) {
+            create("release") {
+                storeFile = file(keyStorePath!!)
+                storePassword = keyStorePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = if (hasReleaseSigningMaterial) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
         debug {
             applicationIdSuffix = ".debug"
