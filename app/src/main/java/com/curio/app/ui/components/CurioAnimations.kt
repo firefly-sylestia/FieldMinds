@@ -113,6 +113,7 @@ fun MorphingContainer(
     animationSpec: androidx.compose.animation.core.SpringSpec<Float> = CurioMotion.Springs.Morph,
     content: @Composable () -> Unit
 ) {
+    @Suppress("UnusedContentLambdaTargetStateParameter")
     androidx.compose.animation.AnimatedContent(
         targetState = trigger,
         modifier = modifier,
@@ -129,7 +130,7 @@ fun MorphingContainer(
                     )
         },
         label = "morph"
-    ) { _ -> content() }
+    ) { content() }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
