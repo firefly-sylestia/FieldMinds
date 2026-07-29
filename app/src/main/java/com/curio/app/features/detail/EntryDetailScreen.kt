@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,8 +40,8 @@ import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
-import com.curio.app.data.MockEntry
-import com.curio.app.data.MockTopics
+import com.curio.app.data.CurioEntry
+import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ScreenEntrance
 import com.curio.app.ui.theme.CurioColors
@@ -59,18 +59,30 @@ import com.curio.app.ui.theme.CurioIcons
  *     with back-arrow + overflow menu floating over the top edge
  *   - Topic name + category chip + "Xd ago"
  *   - Format-specific render body
+ *
+ * Entry lookup is async via produceState + TopicCatalog.sampleEntries.
+ * If the entry can't be found, the screen pops back gracefully (rather
+ * than crashing) — common when navigating from a stale route.
  */
 @Composable
 fun EntryDetailScreen(entryId: String, navController: NavController) {
-    val entry = remember(entryId) {
-        MockTopics.sampleEntries.find { it.id == entryId }
-    }
-    if (entry == null) {
-        LaunchedEffect(Unit) { navController.popBackStack() }
-        return
+    // ── Async entry lookup (loader-backed) ──────────────────────────────────
+    val entry by produceState<CurioEntry?>(initialValue = null, entryId) {
+        value = TopicCatalog.sampleEntries().find { it.id == entryId }
     }
 
-    val cat = CurioCategories.byId(entry.topic.categoryId)
+    // Pop back if the entry can't be found (stale route, or empty cabinet).
+    LaunchedEffect(entry) {
+        if (entry == null) {
+            // Give the loader a moment; only pop if still null after.
+            kotlinx.coroutines.delay(300)
+            if (entry == null) navController.popBackStack()
+        }
+    }
+
+    val resolvedEntry = entry ?: return  // loader still working → leave screen
+
+    val cat = CurioCategories.byId(resolvedEntry.topic.categoryId)
     var menuExpanded by remember { mutableStateOf(false) }
     var deleteDialogVisible by remember { mutableStateOf(false) }
 
@@ -144,7 +156,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             onClick = {
                                 menuExpanded = false
                                 navController.navigate(
-                                    CurioRoutes.captureFor(cat.id.routeSlug, entry.topic.name)
+                                    CurioRoutes.captureFor(cat.id.routeSlug, resolvedEntry.topic.name)
                                 )
                             },
                             leadingIcon = {
@@ -201,7 +213,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = entry.topic.name,
+                    text = resolvedEntry.topic.name,
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -235,10 +247,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                         }
                     }
                     Text(
-                        text = when (entry.capturedAtDaysAgo) {
+                        text = when (resolvedEntry.capturedAtDaysAgo) {
                             0    -> "Captured today"
                             1    -> "Captured yesterday"
-                            else -> "Captured ${entry.capturedAtDaysAgo}d ago"
+                            else -> "Captured ${resolvedEntry.capturedAtDaysAgo}d ago"
                         },
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -255,7 +267,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     vertical = 8.dp
                 )
             ) {
-                FormatBody(entry = entry, category = cat)
+                FormatBody(entry = resolvedEntry, category = cat)
             }
         }
 
@@ -297,7 +309,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 // state, NOT the same editable widgets from Save/Capture.
 
 @Composable
-private fun FormatBody(entry: MockEntry, category: CurioCategory) {
+private fun FormatBody(entry: CurioEntry, category: CurioCategory) {
     when (entry.format) {
         CaptureFormat.SoundBite    -> SoundBitePlayback(entry, category)
         CaptureFormat.ReelNotes    -> ReelNotesRender(entry, category)
@@ -309,7 +321,7 @@ private fun FormatBody(entry: MockEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun SoundBitePlayback(entry: MockEntry, category: CurioCategory) {
+private fun SoundBitePlayback(entry: CurioEntry, category: CurioCategory) {
     Surface(
         shape = RoundedCornerShape(20.dp),
         color = category.tint,
@@ -359,7 +371,7 @@ private fun SoundBitePlayback(entry: MockEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun ReelNotesRender(entry: MockEntry, category: CurioCategory) {
+private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             repeat(4) {
@@ -386,7 +398,7 @@ private fun ReelNotesRender(entry: MockEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun MarginaliaRender(entry: MockEntry, category: CurioCategory) {
+private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Surface(
             shape = RoundedCornerShape(20.dp),
@@ -420,7 +432,7 @@ private fun MarginaliaRender(entry: MockEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun GalleryWallRender(entry: MockEntry, category: CurioCategory) {
+private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Box(
@@ -461,7 +473,7 @@ private fun GalleryWallRender(entry: MockEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun FieldNotesRender(entry: MockEntry, category: CurioCategory) {
+private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
             text = "Observations",
@@ -479,7 +491,7 @@ private fun FieldNotesRender(entry: MockEntry, category: CurioCategory) {
 }
 
 @Composable
-private fun OpenNotebookRender(entry: MockEntry, category: CurioCategory) {
+private fun OpenNotebookRender(entry: CurioEntry, category: CurioCategory) {
     Text(
         text = entry.bodyContent,
         style = MaterialTheme.typography.bodyLarge,

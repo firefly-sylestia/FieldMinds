@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,16 +24,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
-import com.curio.app.data.MockTopics
+import com.curio.app.data.CurioTopic
+import com.curio.app.data.TopicCatalog
+import com.curio.app.data.TopicJsonLoader
 import com.curio.app.features.capture.formats.FieldNotesFormat
 import com.curio.app.features.capture.formats.GalleryWallFormat
 import com.curio.app.features.capture.formats.MarginaliaFormat
@@ -51,15 +55,19 @@ import kotlinx.coroutines.delay
 /**
  * Save / Capture — see CURIO_SPEC.md §8.
  *
- * Shared outer shell (consistent across all 6 formats) + format-specific
+ * Shared outer shell (consistent across all formats) + format-specific
  * body dispatched from the active category. Each format body lives in
  * its own file under `formats/` and owns its own state; the screen
  * just hosts the shell, the format body, and the bottom Save CTA.
  *
+ * Format dispatch uses [CurioCategory.defaultFormat] so the 11
+ * categories map cleanly onto the 6 reusable format bodies — no
+ * per-category `when` block needed. See the doc comment on
+ * [CurioCategories] for the mapping table.
+ *
  * Flow:
  *   1. Resolve category from routeSlug
- *   2. Look up a topic from MockTopics (Phase 4 swaps for Room-backed
- *      CurioTopic)
+ *   2. Async-load the topic (Loader-backed) via [produceState]
  *   3. Render shell: top bar + topic reminder strip + format body +
  *      sticky Save CTA
  *   4. Each format body calls [FormatBodyForCategory]'s onCanSaveChange
@@ -77,9 +85,20 @@ fun SaveCaptureScreen(
         CurioCategories.byRouteSlug(categorySlug)
             ?: CurioCategories.byId(CategoryId.WILDCARD)
     }
-    val topic = remember(topicName) {
-        MockTopics.samplePool.find { it.name == topicName }
-            ?: MockTopics.samplePool.first()
+
+    // ── Async topic lookup (loader-backed) ─────────────────────────────────
+    //
+    // Produces a non-null topic whenever the loader resolves the name. While
+    // loading, falls back to the first topic in the category pool so the
+    // shell has something to display.
+    val topic by produceState<CurioTopic?>(initialValue = null, topicName, cat.id) {
+        val cached = TopicCatalog.findByName(topicName)
+        if (cached != null) {
+            value = cached
+            return@produceState
+        }
+        val pool = TopicJsonLoader.load(cat.id)
+        value = pool.firstOrNull { it.name == topicName } ?: pool.firstOrNull()
     }
 
     // ── Format-specific save-ability (driven by format body callback) ─────
@@ -146,14 +165,14 @@ fun SaveCaptureScreen(
                     size = 20.dp
                 )
                 Text(
-                    text = "${topic.name} \u00B7 ${cat.displayName}",
+                    text = "${topic?.name ?: "Loading…"} · ${cat.displayName}",
                     style = MaterialTheme.typography.titleSmall,
                     color = cat.accent
                 )
             }
         }
 
-        // ── Format body (dispatched from category) ──────────────────────────
+        // ── Format body (dispatched from category.defaultFormat) ────────────
         ScreenEntrance {
             Column(
                 modifier = Modifier
@@ -199,7 +218,7 @@ fun SaveCaptureScreen(
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = "Saving\u2026",
+                            text = "Saving…",
                             style = MaterialTheme.typography.titleMedium
                         )
                     } else {
@@ -241,29 +260,28 @@ fun SaveCaptureScreen(
 }
 
 /**
- * Dispatch the right format body based on the active category.
+ * Dispatch the right format body based on the active category's
+ * [CurioCategory.defaultFormat]. With 11 categories mapping onto 6
+ * format bodies, this single `when` covers the whole matrix; adding
+ * a new category just means adding it to [CurioCategories] with the
+ * appropriate defaultFormat, not editing this function.
  *
- * Each format owns its own state and notifies [onCanSaveChange] when its
- * internal save-ability flips. The shell (SaveCaptureScreen) tracks the
- * latest value and uses it to enable/disable the bottom Save CTA.
+ * Each format owns its own state and notifies [onCanSaveChange] when
+ * its internal save-ability flips. The shell (SaveCaptureScreen)
+ * tracks the latest value and uses it to enable/disable the bottom
+ * Save CTA.
  */
 @Composable
 private fun FormatBodyForCategory(
     category: CurioCategory,
     onCanSaveChange: (Boolean) -> Unit
 ) {
-    when (category.id) {
-        CategoryId.MUSIC ->
-            SoundBiteFormat(category.accent, category.tint, onCanSaveChange)
-        CategoryId.MOVIES ->
-            ReelNotesFormat(category.accent, category.tint, onCanSaveChange)
-        CategoryId.BOOKS ->
-            MarginaliaFormat(category.accent, category.tint, onCanSaveChange)
-        CategoryId.VISUAL_ART ->
-            GalleryWallFormat(category.accent, category.tint, onCanSaveChange)
-        CategoryId.SCIENCE ->
-            FieldNotesFormat(category.accent, category.tint, onCanSaveChange)
-        CategoryId.WILDCARD ->
-            OpenNotebookFormat(category.accent, category.tint, onCanSaveChange)
+    when (category.defaultFormat) {
+        CaptureFormat.SoundBite    -> SoundBiteFormat(category.accent, category.tint, onCanSaveChange)
+        CaptureFormat.ReelNotes    -> ReelNotesFormat(category.accent, category.tint, onCanSaveChange)
+        CaptureFormat.Marginalia   -> MarginaliaFormat(category.accent, category.tint, onCanSaveChange)
+        CaptureFormat.GalleryWall  -> GalleryWallFormat(category.accent, category.tint, onCanSaveChange)
+        CaptureFormat.FieldNotes   -> FieldNotesFormat(category.accent, category.tint, onCanSaveChange)
+        CaptureFormat.OpenNotebook -> OpenNotebookFormat(category.accent, category.tint, onCanSaveChange)
     }
 }

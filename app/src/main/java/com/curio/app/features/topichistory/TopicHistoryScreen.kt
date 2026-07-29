@@ -205,10 +205,10 @@ private data class HistoryEntry(
 )
 
 private fun mockHistoryProvider(): List<HistoryEntry> = listOf(
-    HistoryEntry("h1", "Frida Kahlo", CategoryId.VISUAL_ART, "20 min ago", "Today"),
-    HistoryEntry("h2", "Tame Impala", CategoryId.MUSIC, "2 hr ago", "Today"),
-    HistoryEntry("h3", "Hikaru Utada", CategoryId.MUSIC, "yesterday", "Yesterday"),
-    HistoryEntry("h4", "Akira Kurosawa", CategoryId.MOVIES, "yesterday", "Yesterday"),
-    HistoryEntry("h5", "Ursula K. Le Guin", CategoryId.BOOKS, "3 days ago", "This week"),
-    HistoryEntry("h6", "Black Holes", CategoryId.SCIENCE, "5 days ago", "This week")
+    HistoryEntry("h1", "Frida Kahlo",        CategoryId.PAINTERS,    "20 min ago", "Today"),
+    HistoryEntry("h2", "Tame Impala",        CategoryId.ALBUMS,      "2 hr ago",   "Today"),
+    HistoryEntry("h3", "Hikaru Utada",       CategoryId.ARTISTS,     "yesterday",  "Yesterday"),
+    HistoryEntry("h4", "Akira Kurosawa",     CategoryId.DIRECTORS,   "yesterday",  "Yesterday"),
+    HistoryEntry("h5", "Ursula K. Le Guin",  CategoryId.AUTHORS,     "3 days ago", "This week"),
+    HistoryEntry("h6", "Black Holes",        CategoryId.DISCOVERIES, "5 days ago", "This week")
 )

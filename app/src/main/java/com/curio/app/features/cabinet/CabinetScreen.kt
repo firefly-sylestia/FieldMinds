@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,7 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
-import com.curio.app.data.MockTopics
+import com.curio.app.data.CurioEntry
+import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.CurioEntryCard
@@ -46,20 +48,30 @@ import com.curio.app.ui.theme.CurioIcons
  *
  * Layout:
  *   - Top bar: "The Cabinet" title + search icon (Phase 4 wires search)
- *   - Filter chip row (All + 6 categories)
+ *   - Filter chip row (All + 11 categories)
  *   - 2-col grid of CurioEntryCard, or empty state if filtered-empty
  *
  * Two empty states per §13.7:
  *   - Overall empty (no entries at all): "Your Cabinet is empty" → Spin CTA
  *   - Filtered empty: "No {Category} captures yet" → Spin-for-{Category} CTA
+ *
+ * Entries come from [TopicCatalog.sampleEntries], which is loader-backed.
+ * produceState loads the entries asynchronously; while loading we show
+ * an empty grid (entries.isEmpty()) that immediately renders the
+ * overall-empty state — acceptable for the placeholder phase.
  */
 @Composable
 fun CabinetScreen(navController: NavController) {
     var selectedFilter by remember { mutableStateOf<CategoryId?>(null) }
 
-    val entries = remember(selectedFilter) {
-        if (selectedFilter == null) MockTopics.sampleEntries
-        else MockTopics.sampleEntries.filter { it.topic.categoryId == selectedFilter }
+    // ── Async-loaded sample entries (loader-backed) ────────────────────────
+    val entries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
+        value = TopicCatalog.sampleEntries()
+    }
+
+    val visibleEntries = remember(entries, selectedFilter) {
+        if (selectedFilter == null) entries
+        else entries.filter { it.topic.categoryId == selectedFilter }
     }
 
     Column(
@@ -98,7 +110,7 @@ fun CabinetScreen(navController: NavController) {
             }
         }
 
-        // ── Filter chip row ────────────────────────────────────────────────
+        // ── Filter chip row (All + 11 categories — LazyRow handles overflow) ─
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -127,7 +139,7 @@ fun CabinetScreen(navController: NavController) {
         Spacer(Modifier.height(8.dp))
 
         // ── Grid or empty state ────────────────────────────────────────────
-        if (entries.isEmpty()) {
+        if (visibleEntries.isEmpty()) {
             if (selectedFilter == null) {
                 CurioEmptyState(
                     glyph = CurioIcons.Inventory2,
@@ -160,7 +172,7 @@ fun CabinetScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(entries, key = { it.id }) { entry ->
+                items(visibleEntries, key = { it.id }) { entry ->
                     CurioEntryCard(
                         entry = entry,
                         onClick = {

@@ -4,17 +4,85 @@ import androidx.compose.ui.graphics.Color
 import com.curio.app.ui.theme.CurioColors
 
 /**
- * Curio's 6 content categories — see CURIO_SPEC.md §0.2.
+ * Curio's 11 content categories — see CURIO_SPEC.md §0.2.
  *
- * The 6th category (Wildcard) uses a rainbow gradient rather than a flat tint,
- * so [CurioCategory.accent] is nullable for it. Wildcard-colored code paths
- * should look up the gradient from [com.curio.app.ui.theme.CurioGradients].
+ * Each "domain" (Music / Movies / Books / Visual Art / Science) is split
+ * into TWO first-class categories so the user has granular control over
+ * the kind of exploration:
  *
- * The id enum uses UPPER_SNAKE so it survives serialization later (we don't
- * have a real DB yet, but this lets us swap to Room/DataStore cleanly when
- * logic lands in the next phase).
+ *   Music          →  ARTISTS, ALBUMS
+ *   Movies         →  DIRECTORS, FILMS
+ *   Books          →  AUTHORS, BOOKS
+ *   Visual Art     →  PAINTERS, ARTWORKS
+ *   Science        →  SCIENTISTS, DISCOVERIES
+ *   (standalone)   →  WILDCARD
+ *
+ * Total = 11 top-level chips. The Wildcard category uses a rainbow
+ * gradient rather than a flat tint, so [CurioCategory.accent] is nullable
+ * for it. Wildcard-colored code paths should look up the gradient from
+ * [com.curio.app.ui.theme.CurioGradients].
+ *
+ * The id enum uses UPPER_SNAKE so it survives serialization later
+ * (we don't have a real DB yet, but this lets us swap to Room/DataStore
+ * cleanly when logic lands in the next phase).
+ *
+ * Per-category routeSlug (used in navigation routes like
+ * `spin/artists` or `reveal/authors/{name}`) is declared in [routeSlug]
+ * below.
  */
 enum class CategoryId {
+    ARTISTS,
+    ALBUMS,
+    DIRECTORS,
+    FILMS,
+    AUTHORS,
+    BOOKS,
+    PAINTERS,
+    ARTWORKS,
+    SCIENTISTS,
+    DISCOVERIES,
+    WILDCARD;
+
+    companion object {
+        fun fromRoute(slug: String): CategoryId? =
+            values().firstOrNull { it.routeSlug == slug }
+
+        /** Default chip order on Home + Category Picker. Wildcard stays last. */
+        val defaultOrder: List<CategoryId> = listOf(
+            ARTISTS, ALBUMS,
+            DIRECTORS, FILMS,
+            AUTHORS, BOOKS,
+            PAINTERS, ARTWORKS,
+            SCIENTISTS, DISCOVERIES,
+            WILDCARD
+        )
+    }
+
+    /** URL-safe slug used in navigation routes (`spin/artists`, `picker/from-home`). */
+    val routeSlug: String get() = when (this) {
+        ARTISTS     -> "artists"
+        ALBUMS      -> "albums"
+        DIRECTORS   -> "directors"
+        FILMS       -> "films"
+        AUTHORS     -> "authors"
+        BOOKS       -> "books"
+        PAINTERS    -> "painters"
+        ARTWORKS    -> "artworks"
+        SCIENTISTS  -> "scientists"
+        DISCOVERIES -> "discoveries"
+        WILDCARD    -> "wildcard"
+    }
+}
+
+/**
+ * A logical "family" for grouping the 11 categories into 6 visual
+ * themes (used for color tinting + Wildcard pool composition).
+ *
+ * Within a family, sub-categories share the same accent color (e.g.
+ * Artists + Albums both use Lilac) so the user intuitively reads them
+ * as "related domains" even though they're independent chips.
+ */
+enum class CategoryFamily {
     MUSIC,
     MOVIES,
     BOOKS,
@@ -23,22 +91,14 @@ enum class CategoryId {
     WILDCARD;
 
     companion object {
-        fun fromRoute(slug: String): CategoryId? =
-            values().firstOrNull { it.routeSlug == slug }
-
-        val defaultOrder: List<CategoryId> = listOf(
-            MUSIC, MOVIES, BOOKS, VISUAL_ART, SCIENCE, WILDCARD
-        )
-    }
-
-    /** URL-safe slug used in navigation routes (`spin/music`, `picker/from-home`). */
-    val routeSlug: String get() = when (this) {
-        MUSIC      -> "music"
-        MOVIES     -> "movies"
-        BOOKS      -> "books"
-        VISUAL_ART -> "visual_art"
-        SCIENCE    -> "science"
-        WILDCARD   -> "wildcard"
+        fun of(id: CategoryId): CategoryFamily = when (id) {
+            CategoryId.ARTISTS, CategoryId.ALBUMS -> MUSIC
+            CategoryId.DIRECTORS, CategoryId.FILMS -> MOVIES
+            CategoryId.AUTHORS, CategoryId.BOOKS -> BOOKS
+            CategoryId.PAINTERS, CategoryId.ARTWORKS -> VISUAL_ART
+            CategoryId.SCIENTISTS, CategoryId.DISCOVERIES -> SCIENCE
+            CategoryId.WILDCARD -> WILDCARD
+        }
     }
 }
 
@@ -63,6 +123,13 @@ enum class CategoryId {
  *
  * The two flags are independent — a category can be `isReady = true` (data
  * shipped) and `isHidden = true` (user hid it) at the same time.
+ *
+ * @property family Which logical family this category belongs to (drives
+ *   Wildcard pool composition + visual grouping).
+ * @property defaultFormat Which capture body to render on Save/Capture
+ *   for this category. The 6 format bodies (Sound Bite / Reel Notes /
+ *   Marginalia / Gallery Wall / Field Notes / Open Notebook) are reused
+ *   across categories — see [CaptureFormat].
  */
 data class CurioCategory(
     val id: CategoryId,
@@ -70,62 +137,140 @@ data class CurioCategory(
     val accent: Color,
     val tint: Color,
     val iconGlyph: String,
+    val family: CategoryFamily,
+    val defaultFormat: CaptureFormat,
     val isHidden: Boolean = false,
     val isReady: Boolean = false
 )
 
 /**
- * The canonical 6 Curio categories in the default order.
+ * The canonical 11 Curio categories in the default order.
  *
  * Display names are resolved by the calling screen from string resources so
  * they can be localised; this list uses English placeholders so the
  * placeholder-phase previews have something to render. Once a string resource
  * pass lands these will become resource IDs.
+ *
+ * Capture format mapping:
+ *   ARTISTS     → SoundBite    (voice note about the artist / one track)
+ *   ALBUMS      → ReelNotes    (review + tracklist + optional rating)
+ *   DIRECTORS   → ReelNotes    (review of a director's body of work)
+ *   FILMS       → Marginalia   (film journal + favorite quote/scene cards)
+ *   AUTHORS     → Marginalia   (author bio + favorite quote from their work)
+ *   BOOKS       → Marginalia   (book journal + quote cards)
+ *   PAINTERS    → GalleryWall  (moodboard of paintings)
+ *   ARTWORKS    → GalleryWall  (single artwork deep-dive)
+ *   SCIENTISTS  → FieldNotes   (observed / surprised / next)
+ *   DISCOVERIES → FieldNotes   (what was discovered + why it matters)
+ *   WILDCARD    → OpenNotebook (pick your own format from the 5 above)
  */
 object CurioCategories {
 
     val all: List<CurioCategory> = listOf(
+        // ── Music family (Lilac) ────────────────────────────────────────
         CurioCategory(
-            id           = CategoryId.MUSIC,
-            displayName  = "Music",
-            accent       = CurioColors.Lilac,
-            tint         = CurioColors.LilacTint,
-            iconGlyph    = "album"
+            id            = CategoryId.ARTISTS,
+            displayName   = "Artists",
+            accent        = CurioColors.Lilac,
+            tint          = CurioColors.LilacTint,
+            iconGlyph     = "person",
+            family        = CategoryFamily.MUSIC,
+            defaultFormat = CaptureFormat.SoundBite
         ),
         CurioCategory(
-            id           = CategoryId.MOVIES,
-            displayName  = "Movies",
-            accent       = CurioColors.DustyBlue,
-            tint         = CurioColors.DustyBlueTint,
-            iconGlyph    = "movie"
+            id            = CategoryId.ALBUMS,
+            displayName   = "Albums",
+            accent        = CurioColors.Lilac,
+            tint          = CurioColors.LilacTint,
+            iconGlyph     = "album",
+            family        = CategoryFamily.MUSIC,
+            defaultFormat = CaptureFormat.ReelNotes
+        ),
+        // ── Movies family (Dusty Blue) ──────────────────────────────────
+        CurioCategory(
+            id            = CategoryId.DIRECTORS,
+            displayName   = "Directors",
+            accent        = CurioColors.DustyBlue,
+            tint          = CurioColors.DustyBlueTint,
+            iconGlyph     = "videocam",
+            family        = CategoryFamily.MOVIES,
+            defaultFormat = CaptureFormat.ReelNotes
         ),
         CurioCategory(
-            id           = CategoryId.BOOKS,
-            displayName  = "Books",
-            accent       = CurioColors.Sage,
-            tint         = CurioColors.SageTint,
-            iconGlyph    = "menu_book"
+            id            = CategoryId.FILMS,
+            displayName   = "Films",
+            accent        = CurioColors.DustyBlue,
+            tint          = CurioColors.DustyBlueTint,
+            iconGlyph     = "movie",
+            family        = CategoryFamily.MOVIES,
+            defaultFormat = CaptureFormat.Marginalia
+        ),
+        // ── Books family (Sage) ─────────────────────────────────────────
+        CurioCategory(
+            id            = CategoryId.AUTHORS,
+            displayName   = "Authors",
+            accent        = CurioColors.Sage,
+            tint          = CurioColors.SageTint,
+            iconGlyph     = "edit_note",
+            family        = CategoryFamily.BOOKS,
+            defaultFormat = CaptureFormat.Marginalia
         ),
         CurioCategory(
-            id           = CategoryId.VISUAL_ART,
-            displayName  = "Visual Art",
-            accent       = CurioColors.Peach,
-            tint         = CurioColors.PeachTint,
-            iconGlyph    = "palette"
+            id            = CategoryId.BOOKS,
+            displayName   = "Books",
+            accent        = CurioColors.Sage,
+            tint          = CurioColors.SageTint,
+            iconGlyph     = "menu_book",
+            family        = CategoryFamily.BOOKS,
+            defaultFormat = CaptureFormat.Marginalia
+        ),
+        // ── Visual Art family (Peach) ───────────────────────────────────
+        CurioCategory(
+            id            = CategoryId.PAINTERS,
+            displayName   = "Painters",
+            accent        = CurioColors.Peach,
+            tint          = CurioColors.PeachTint,
+            iconGlyph     = "brush",
+            family        = CategoryFamily.VISUAL_ART,
+            defaultFormat = CaptureFormat.GalleryWall
         ),
         CurioCategory(
-            id           = CategoryId.SCIENCE,
-            displayName  = "Science",
-            accent       = CurioColors.Teal,
-            tint         = CurioColors.TealTint,
-            iconGlyph    = "science"
+            id            = CategoryId.ARTWORKS,
+            displayName   = "Artworks",
+            accent        = CurioColors.Peach,
+            tint          = CurioColors.PeachTint,
+            iconGlyph     = "palette",
+            family        = CategoryFamily.VISUAL_ART,
+            defaultFormat = CaptureFormat.GalleryWall
+        ),
+        // ── Science family (Teal) ───────────────────────────────────────
+        CurioCategory(
+            id            = CategoryId.SCIENTISTS,
+            displayName   = "Scientists",
+            accent        = CurioColors.Teal,
+            tint          = CurioColors.TealTint,
+            iconGlyph     = "science",
+            family        = CategoryFamily.SCIENCE,
+            defaultFormat = CaptureFormat.FieldNotes
         ),
         CurioCategory(
-            id           = CategoryId.WILDCARD,
-            displayName  = "Wildcard",
-            accent       = CurioColors.CoralBlush,    // fallback; UI uses the gradient
-            tint         = CurioColors.CoralBlush.copy(alpha = 0.20f),
-            iconGlyph    = "casino"
+            id            = CategoryId.DISCOVERIES,
+            displayName   = "Discoveries",
+            accent        = CurioColors.Teal,
+            tint          = CurioColors.TealTint,
+            iconGlyph     = "lightbulb",
+            family        = CategoryFamily.SCIENCE,
+            defaultFormat = CaptureFormat.FieldNotes
+        ),
+        // ── Wildcard (rainbow) ──────────────────────────────────────────
+        CurioCategory(
+            id            = CategoryId.WILDCARD,
+            displayName   = "Wildcard",
+            accent        = CurioColors.CoralBlush,    // fallback; UI uses the gradient
+            tint          = CurioColors.CoralBlush.copy(alpha = 0.20f),
+            iconGlyph     = "casino",
+            family        = CategoryFamily.WILDCARD,
+            defaultFormat = CaptureFormat.OpenNotebook
         )
     )
 
@@ -175,4 +320,8 @@ object CurioCategories {
 
     /** Visible-only list — for Home/Cabinet chip rows. Once §13.4 Manage Categories lands, this filters by isHidden. */
     val visible: List<CurioCategory> = all.filterNot { it.isHidden }
+
+    /** Returns all categories in the given [family], in default order. */
+    fun byFamily(family: CategoryFamily): List<CurioCategory> =
+        all.filter { it.family == family }
 }

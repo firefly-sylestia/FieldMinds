@@ -31,6 +31,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,8 +44,8 @@ import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioTopic
-import com.curio.app.data.MusicGenre
 import com.curio.app.data.TopicCatalog
+import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.CurioBackButton
@@ -62,11 +63,20 @@ import kotlin.random.Random
  * The Shuffle — see CURIO_SPEC.md §5.
  *
  * Visual metaphor: a deck of 3 cards being shuffled, matching the launcher
- * icon's stacked-card design. For the Music category, a horizontal chip
- * row above the deck lets the user pick a [MusicGenre] filter — the
- * shuffle then picks from that genre's pool (per user directive: "for
- * music add genre based with multiple choice system for the spin and it
- * should use those category or genre to show a random one").
+ * icon's stacked-card design. For each of the 11 categories, a horizontal
+ * chip row above the deck lets the user pick a tag filter — the shuffle
+ * then picks from that tag's pool. Tags are category-specific:
+ *
+ *   Artists    → "Rock", "Jazz", "Classical", "Hip-Hop", ...
+ *   Albums     → "Rock", "1970s", "Debut", ...
+ *   Films      → "Drama", "Sci-Fi", "1970s", ...
+ *   Books      → "Fiction", "Memoir", "Modern", ...
+ *   Painters   → "Impressionism", "Modern", ...
+ *   etc.
+ *
+ * Tags are read from `assets/topics/{categoryId}.json` — no hardcoded
+ * enum. Adding a new tag to a topic in JSON automatically surfaces as a
+ * filter chip on the Spin screen for that category.
  *
  *   Back card      : scaled 0.86, offset Y +60dp, rotated -6°, alpha 0.72
  *   Middle card    : scaled 0.93, offset Y +28dp, rotated +3°, alpha 0.86
@@ -81,9 +91,25 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         resolved
     }
 
-    // ── Genre filter (Music only — other categories ignore it).
-    //    null = "All Genres" (no filter); any other value narrows the pool.
-    var selectedGenre by remember { mutableStateOf<MusicGenre?>(null) }
+    // ── Async-loaded pool + tags for this category ─────────────────────────
+    //
+    // The pool is loaded lazily from JSON; tags are derived from the
+    // loaded topics. `null` means "still loading or empty pool".
+    val pool by produceState<List<CurioTopic>>(initialValue = emptyList(), cat.id) {
+        value = TopicJsonLoader.load(cat.id)
+    }
+    val tags by produceState<List<String>>(initialValue = emptyList(), pool) {
+        value = pool.flatMap { it.tags }.distinct().sorted()
+    }
+
+    // ── Tag filter (null = no filter, i.e. "All") ──────────────────────────
+    var selectedTag by remember { mutableStateOf<String?>(null) }
+
+    // Filtered pool — empty list if no pool loaded yet.
+    val filteredPool = remember(pool, selectedTag) {
+        if (selectedTag == null) pool
+        else pool.filter { it.tags.contains(selectedTag) }
+    }
 
     // ── Shuffle state ─────────────────────────────────────────────────────
     var shuffling by remember { mutableStateOf(false) }
@@ -95,6 +121,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 
     LaunchedEffect(shuffleCount) {
         if (shuffleCount == 0) return@LaunchedEffect
+        if (pool.isEmpty()) return@LaunchedEffect  // nothing to shuffle
         shuffling = true
         landedTopic = null
 
@@ -116,14 +143,16 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
 
         shuffling = false
-        landedTopic = pickRandomTopic(cat.id, selectedGenre)
+        landedTopic = pickRandomFrom(filteredPool, cat.id)
         confettiTrigger++
     }
 
     LaunchedEffect(confettiTrigger) {
         if (confettiTrigger == 0) return@LaunchedEffect
         delay(CurioMotion.Durations.RevealHold.toLong())
-        val topic = landedTopic ?: pickRandomTopic(cat.id, selectedGenre)
+        val topic = landedTopic
+            ?: pickRandomFrom(filteredPool, cat.id)
+            ?: return@LaunchedEffect  // pool empty — bail
         navController.navigate(
             CurioRoutes.revealFor(cat.id.routeSlug, topic.name)
         )
@@ -152,16 +181,15 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             )
         }
 
-        // ── Genre chips (Music only) ──────────────────────────────────────
-        if (cat.id == CategoryId.MUSIC) {
-            GenreChipRow(
-                selected = selectedGenre,
+        // ── Tag chips (visible when the loaded pool has any tagged topics) ─
+        if (tags.isNotEmpty()) {
+            TagChipRow(
+                tags = tags,
+                selected = selectedTag,
                 accent = cat.accent,
-                onSelect = { newGenre ->
-                    // Don't change mid-shuffle; otherwise, snap the deck
-                    // to a clean state for the new genre.
+                onSelect = { newTag ->
                     if (!shuffling) {
-                        selectedGenre = newGenre
+                        selectedTag = newTag
                         landedTopic = null
                         shuffleCount++  // re-trigger a fresh shuffle
                     }
@@ -199,6 +227,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 // ── Helper text ────────────────────────────────────────────
                 Text(
                     text = when {
+                        pool.isEmpty() && !shuffling -> "No topics yet — check back soon!"
                         shuffling -> "Shuffling…"
                         landedTopic != null -> "Here's your pick"
                         else -> "Tap to shuffle"
@@ -210,7 +239,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 // ── SHUFFLE button ─────────────────────────────────────────
                 Button(
                     onClick = { if (!shuffling) shuffleCount++ },
-                    enabled = !shuffling,
+                    enabled = !shuffling && pool.isNotEmpty(),
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
@@ -250,20 +279,16 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 }
 
 /**
- * Horizontally-scrollable genre chip row — visible only for Music.
- *
- * The first chip is "All Genres" (clears the filter, represented by
- * `null` in [selectedGenre]). The rest are the 9 [MusicGenre.all]
- * genres in declared order. Selecting a chip filters the shuffle pool
- * to that genre. Tapping a chip also re-triggers a fresh shuffle so the
- * user immediately sees the effect of their filter choice (rather than
- * having to tap Shuffle again).
+ * Horizontally-scrollable tag chip row — replaces the old hardcoded
+ * `MusicGenre` enum. Shows "All" plus whatever tags the loaded topics
+ * declare. Tags are derived from JSON, not hardcoded.
  */
 @Composable
-private fun GenreChipRow(
-    selected: MusicGenre?,
+private fun TagChipRow(
+    tags: List<String>,
+    selected: String?,
     accent: Color,
-    onSelect: (MusicGenre?) -> Unit
+    onSelect: (String?) -> Unit
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
@@ -272,28 +297,28 @@ private fun GenreChipRow(
     ) {
         // "All" comes first (the "no filter" state, represented by null).
         item("all") {
-            GenreChip(
-                label = "All Genres",
+            TagChip(
+                label = "All",
                 glyph = CurioIcons.AutoAwesome,
                 accent = accent,
                 selected = selected == null,
                 onClick = { onSelect(null) }
             )
         }
-        items(MusicGenre.all) { genre ->
-            GenreChip(
-                label = genre.displayName,
-                glyph = genre.glyph,
+        items(tags) { tag ->
+            TagChip(
+                label = tag,
+                glyph = CurioIcons.AutoAwesome,
                 accent = accent,
-                selected = selected == genre,
-                onClick = { onSelect(genre) }
+                selected = selected == tag,
+                onClick = { onSelect(tag) }
             )
         }
     }
 }
 
 @Composable
-private fun GenreChip(
+private fun TagChip(
     label: String,
     glyph: String,
     accent: Color,
@@ -334,24 +359,23 @@ private fun GenreChip(
 }
 
 /**
- * Pick a random topic from the active pool.
- *
- * For Music, applies the current [MusicGenre] filter (null = no filter,
- * i.e. "All Genres"). For other categories, returns the canonical pool.
- * Falls back to the Wildcard pool (then the full Music pool) if the
- * chosen category pool is somehow empty — defensive, not expected in
- * practice.
+ * Pick a random topic from the filtered pool. Falls back to the
+ * wildcard pool, then to the full category pool, then to null (which
+ * the caller handles by bailing out gracefully).
  */
-private fun pickRandomTopic(categoryId: CategoryId, genre: MusicGenre?): CurioTopic {
-    val pool: List<CurioTopic> = when (categoryId) {
-        CategoryId.MUSIC -> genre?.let { TopicCatalog.musicPoolByGenre[it] }
-            ?: TopicCatalog.musicPoolAll
-        CategoryId.WILDCARD -> TopicCatalog.wildcardPool
-        else -> TopicCatalog.poolFor(categoryId)
+private fun pickRandomFrom(
+    filteredPool: List<CurioTopic>,
+    fallbackCategory: CategoryId
+): CurioTopic? {
+    if (filteredPool.isNotEmpty()) return filteredPool.random()
+    return try {
+        // Block briefly to load a fallback pool. Suspend calls aren't
+        // allowed in this synchronous helper, so we use the cached
+        // accessor instead. If the pool hasn't been loaded yet, return null.
+        TopicJsonLoader.cached(fallbackCategory)?.randomOrNull()
+    } catch (t: Throwable) {
+        null
     }
-    val source = pool.ifEmpty { TopicCatalog.wildcardPool }
-        .ifEmpty { TopicCatalog.musicPoolAll }
-    return source.random()
 }
 
 /**

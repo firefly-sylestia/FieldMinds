@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
-import com.curio.app.data.MockEntry
+import com.curio.app.data.CurioEntry
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -42,7 +42,7 @@ import com.curio.app.ui.theme.CurioIcons
  */
 @Composable
 fun CurioEntryCard(
-    entry: MockEntry,
+    entry: CurioEntry,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

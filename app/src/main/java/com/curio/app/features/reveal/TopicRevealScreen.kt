@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -32,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
-import com.curio.app.data.MockTopics
+import com.curio.app.data.CurioTopic
+import com.curio.app.data.TopicCatalog
+import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ScreenEntrance
 import com.curio.app.ui.theme.CurioColors
@@ -82,9 +84,21 @@ fun TopicRevealScreen(
             ?: CurioCategories.byId(CategoryId.WILDCARD)
     }
 
-    val topic = remember(topicName) {
-        MockTopics.samplePool.find { it.name == topicName }
-            ?: MockTopics.samplePool.first()
+    // ── Async topic lookup (loader-backed) ─────────────────────────────────
+    //
+    // Produces the topic once the loader resolves the name. While loading,
+    // produces null and the UI shows a brief loading state. If no topic
+    // matches across the entire category pool, the screen still renders
+    // (with a graceful fallback to the category display name) so a stale
+    // route doesn't crash the back stack.
+    val topic by produceState<CurioTopic?>(initialValue = null, topicName, cat.id) {
+        val cached = TopicCatalog.findByName(topicName)
+        if (cached != null) {
+            value = cached
+            return@produceState
+        }
+        val pool = TopicJsonLoader.load(cat.id)
+        value = pool.firstOrNull { it.name == topicName } ?: pool.firstOrNull()
     }
 
     Column(
@@ -103,17 +117,9 @@ fun TopicRevealScreen(
         ) {
             Surface(
                 onClick = {
-                    // Discard topic, exit all the way back to Home. Uses the
-                    // standard "clear back stack + navigate to target" pattern
-                    // so the user lands on a fresh HOME (no stale SPIN /
-                    // PICKER / REVEAL screens behind it). Without the
-                    // popUpTo(graph.id), `navigate(HOME)` would just push
-                    // HOME on top of the current stack and the back button
-                    // would take the user back into Reveal.
+                    // Discard topic, exit all the way back to Home.
                     navController.navigate(CurioRoutes.HOME) {
-                        popUpTo(navController.graph.id) {
-                            inclusive = true
-                        }
+                        popUpTo(navController.graph.id) { inclusive = true }
                         launchSingleTop = true
                     }
                 },
@@ -165,7 +171,7 @@ fun TopicRevealScreen(
 
                 // ── Topic name ────────────────────────────────────────────────
                 Text(
-                    text = topic.name,
+                    text = topic?.name ?: cat.displayName,
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
@@ -202,19 +208,21 @@ fun TopicRevealScreen(
                             )
                         }
                     }
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant
-                    ) {
-                        Text(
-                            text = topic.subtype,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(
-                                horizontal = 10.dp,
-                                vertical = 6.dp
+                    if (topic?.subtype?.isNotBlank() == true) {
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = MaterialTheme.colorScheme.surfaceVariant
+                        ) {
+                            Text(
+                                text = topic!!.subtype,
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(
+                                    horizontal = 10.dp,
+                                    vertical = 6.dp
+                                )
                             )
-                        )
+                        }
                     }
                 }
                 Spacer(Modifier.height(24.dp))
@@ -229,7 +237,7 @@ fun TopicRevealScreen(
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = topic.teaser,
+                    text = topic?.teaser ?: "Loading topic…",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
@@ -237,34 +245,36 @@ fun TopicRevealScreen(
                 Spacer(Modifier.height(32.dp))
 
                 // ── Action prompt card ────────────────────────────────────────
-                Surface(
-                    shape = RoundedCornerShape(20.dp),
-                    color = MaterialTheme.colorScheme.surfaceVariant
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            CurioIcon(
-                                name = CurioIcons.AutoAwesome,
-                                contentDescription = null,
-                                tint = cat.accent,
-                                size = 18.dp
-                            )
+                if (topic != null) {
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                CurioIcon(
+                                    name = CurioIcons.AutoAwesome,
+                                    contentDescription = null,
+                                    tint = cat.accent,
+                                    size = 18.dp
+                                )
+                                Text(
+                                    text = "${topic!!.exploreAction.verb} " +
+                                           "${topic!!.exploreAction.targetName}",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                            Spacer(Modifier.height(6.dp))
                             Text(
-                                text = "${topic.actionPrompt.verb} " +
-                                       "${topic.actionPrompt.targetName}",
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onSurface
+                                text = topic!!.exploreAction.instruction,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
-                        Spacer(Modifier.height(6.dp))
-                        Text(
-                            text = topic.actionPrompt.instruction,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
                     }
                 }
 
@@ -273,10 +283,12 @@ fun TopicRevealScreen(
                 // ── Primary CTA: Start exploring → ────────────────────────────
                 Button(
                     onClick = {
+                        val topicNameResolved = topic?.name ?: return@Button
                         navController.navigate(
-                            CurioRoutes.captureFor(cat.id.routeSlug, topic.name)
+                            CurioRoutes.captureFor(cat.id.routeSlug, topicNameResolved)
                         )
                     },
+                    enabled = topic != null,
                     shape = RoundedCornerShape(28.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,

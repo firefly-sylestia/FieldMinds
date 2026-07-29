@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
@@ -70,6 +71,12 @@ fun SplashScreen(navController: NavHostController) {
     }
 
     LaunchedEffect(Unit) {
+        // Eagerly load all 11 category JSON files so the first
+        // CategoryPicker / Spin / Cabinet render is instant (no
+        // visible loader for the user). preloadAll() runs on
+        // Dispatchers.IO internally; ~100-300ms on mid-range hardware.
+        TopicJsonLoader.preloadAll()
+
         // Spec: max 800ms before auto-dismiss. Phase 3+ replaces this with
         // the real init logic.
         delay(800)

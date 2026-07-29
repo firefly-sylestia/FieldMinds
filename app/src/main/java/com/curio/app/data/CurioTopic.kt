@@ -3,21 +3,27 @@ package com.curio.app.data
 /**
  * The unified Curio topic schema.
  *
- * Backwards-compatible with the legacy `MockTopic` (same field names +
- * types). The only additive field is [musicGenre], which is non-null
- * ONLY for Music topics (the genre-picker filtering on SpinScreen reads
- * this) and `null` for every other category. Adding a Music topic
- * without a genre is a data-layer bug; the [TopicCatalog] enforces it
- * at construction time.
+ * Topics are loaded from `assets/topics/{categoryId}.json` at runtime via
+ * [TopicJsonLoader]. The JSON schema mirrors this data class 1:1 — see
+ * [TopicJsonLoader] for the deserialization code.
  *
- * Lifecycle:
- *  - Phase 0 (placeholder): TopicCatalog holds hardcoded topics.
- *  - Phase 4 (data layer):  Topics get loaded from `assets/topics/{id}.json`
- *                           via the JSON-driven pipeline; the schema
- *                           stays identical so consumers don't change.
+ * The previous `musicGenre` field (an enum) has been replaced with a generic
+ * `tags: List<String>` field. This lets the Spin screen dynamically
+ * generate filter chips for *any* category (e.g. genres for Artists,
+ * eras for Films, mediums for Painters) without hardcoding enums. The
+ * quality of curation lives in the JSON, not in code.
  *
- * Consumers: SpinScreen, TopicRevealScreen, SaveCaptureScreen, CabinetScreen,
- * EntryDetailScreen, TopicHistoryScreen, LightboxScreen.
+ * Consumers: SpinScreen, TopicRevealScreen, SaveCaptureScreen,
+ * CabinetScreen, EntryDetailScreen, TopicHistoryScreen, LightboxScreen.
+ *
+ * @property tags Free-form string tags for the Spin screen's dynamic
+ *   filter chip row. Tags are category-specific: Artists might use
+ *   ["Rock", "1970s"], Films might use ["Drama", "1990s"], Painters
+ *   might use ["Impressionism", "Oil"]. Empty list = no filters.
+ * @property tier Quality tier for the random picker. 1 = human-curated
+ *   marquee (highest quality, surfaces most often). 2+ = AI-generated
+ *   long tail (still good, just less hand-tended). Default = 1 so all
+ *   loaded topics are presumed marquee unless tagged otherwise.
  */
 data class CurioTopic(
     val id: String,
@@ -30,16 +36,17 @@ data class CurioTopic(
     /** Future image URL — empty string for placeholder phase. */
     val imageUrl: String,
     val exploreAction: ExploreAction,
-    /** Only set when [categoryId] is [CategoryId.MUSIC]; required for that case. */
-    val musicGenre: MusicGenre? = null
+    /** Free-form tags for dynamic Spin filter chips. Empty = no filters. */
+    val tags: List<String> = emptyList(),
+    /** Quality tier (1 = marquee, 2+ = long tail). */
+    val tier: Int = 1
 ) {
     init {
-        require(categoryId != CategoryId.MUSIC || musicGenre != null) {
-            "Music topic '$name' (id=$id) must declare a non-null musicGenre."
-        }
-        require(categoryId == CategoryId.MUSIC || musicGenre == null) {
-            "Non-Music topic '$name' (id=$id) must NOT declare a musicGenre " +
-            "(got ${musicGenre?.name})."
+        require(id.isNotBlank()) { "CurioTopic id must not be blank." }
+        require(name.isNotBlank()) { "CurioTopic name must not be blank." }
+        require(teaser.isNotBlank()) { "CurioTopic teaser must not be blank for '$id'." }
+        require(tier in 1..3) {
+            "CurioTopic tier must be 1, 2, or 3 (got $tier for '$id')."
         }
     }
 }
@@ -83,12 +90,20 @@ data class CurioEntry(
     val bodyContent: String
 )
 
-/** The six capture formats from CURIO_SPEC.md section 8. */
+/**
+ * The six capture formats from CURIO_SPEC.md section 8.
+ *
+ * 11 categories map onto these 6 format bodies — see
+ * [CurioCategories] for the mapping. Two categories from the same
+ * family share a format when the capture experience is similar
+ * (Artists → SoundBite, Albums → ReelNotes; Films + Authors + Books
+ * all share Marginalia since reading journals work the same way).
+ */
 enum class CaptureFormat {
-    SoundBite,    // Music: voice note
-    ReelNotes,    // Movies: review + collage
-    Marginalia,   // Books: journal + quotes
-    GalleryWall,  // Visual Art: moodboard
-    FieldNotes,   // Science: 3-section report
-    OpenNotebook  // Wildcard: pick your format
+    SoundBite,    // Voice note
+    ReelNotes,    // Review + collage
+    Marginalia,   // Journal + quotes
+    GalleryWall,  // Moodboard
+    FieldNotes,   // 3-section report
+    OpenNotebook  // Wildcard: pick your own format
 }

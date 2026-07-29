@@ -97,10 +97,10 @@ fun CategoryPickerScreen(navController: NavController) {
 
         Spacer(Modifier.height(16.dp))
 
-        // ── 2-col tile grid ────────────────────────────────────────────────
+        // ── Tile grid (3-col for 11 categories — 4 rows, more breathing room) ─
         ScreenEntrance {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Fixed(3),
                 contentPadding = PaddingValues(vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
