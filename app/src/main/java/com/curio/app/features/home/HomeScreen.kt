@@ -37,10 +37,10 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioCategoryChip
 import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.CurioHeroSpinCard
-import com.curio.app.ui.components.CurioIcon
-import com.curio.app.ui.components.CurioIcons
 import com.curio.app.ui.components.CurioStreakPill
 import com.curio.app.ui.components.CurioWildcardChip
+import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.CurioIcons
 import java.util.Calendar
 
 /**

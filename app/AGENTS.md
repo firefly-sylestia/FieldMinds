@@ -100,6 +100,7 @@ app/src/main/java/com/curio/app/
 - Add to `ui/theme/` (colors → `CurioColors.kt`, glyphs → `CurioIcons.kt`, etc.).
 - New colors must be justified against `CURIO_SPEC.md` §0.2. If the spec doesn't mention it, push back and update the spec first.
 - New icons must be declared in the `CurioIcons` object (snake_case ligature names) — do NOT inline glyph names in screens.
+- **All design-system primitives (the `CurioIcon` composable + `CurioIcons` glyph constants object) live under `ui/theme/`.** Components in `ui/components/` consume them via import — they do not re-export them. Wrong-package imports (e.g. `import com.curio.app.ui.components.CurioIcon`) compile silently against an empty package and only fail in CI's `compileDebugKotlin`. Always import from `ui.theme.*`.
 
 ### Phase plan (current & next)
 - **Phase 2 (current)**: Design-system + NavHost + Home/Splash screens + 11 placeholder stub screens. CI gate verifies compilation. No business logic, no Room, no DataStore wiring yet.
