@@ -56,7 +56,7 @@ enum class CategoryId {
  *   the category. Defaults to `false`.
  *
  * - `isReady` — **data-layer-controlled**, set when 100+ topics are authored
- *   + reviewed per CURIO_DATA_PLAN.md §1 + §5.2 step 5. When false, the
+ *   + reviewed per the category visibility spec. When false, the
  *   category is filtered out of the chip row + Picker and surfaces as a
  *   "Coming soon" empty-state slot. Defaults to `false`; never flip to
  *   `true` without a corresponding data drop in `assets/topics/{id}.json`.

@@ -3,6 +3,7 @@ package com.curio.app.features.spin
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,13 +11,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -39,8 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
-import com.curio.app.data.MockTopic
-import com.curio.app.data.MockTopics
+import com.curio.app.data.CurioTopic
+import com.curio.app.data.MusicGenre
+import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.CurioBackButton
@@ -55,31 +59,19 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 /**
- * The Shuffle — see CURIO_SPEC.md §5 (replaces the original roulette-wheel
- * design per the user's directive: "the spin wheel should be differnt with
- * like a cards with proper animations with the topics shuffling style").
+ * The Shuffle — see CURIO_SPEC.md §5.
  *
  * Visual metaphor: a deck of 3 cards being shuffled, matching the launcher
- * icon's stacked-card design (Card 1 back rotated -6°, Card 2 middle
- * rotated +3°, Card 3 front upright). The cards "breathe" with small
- * translate + rotation oscillations during the shuffle to feel physical,
- * then the front card lands face-up revealing the chosen topic.
+ * icon's stacked-card design. For the Music category, a horizontal chip
+ * row above the deck lets the user pick a [MusicGenre] filter — the
+ * shuffle then picks from that genre's pool (per user directive: "for
+ * music add genre based with multiple choice system for the spin and it
+ * should use those category or genre to show a random one").
  *
  *   Back card      : scaled 0.86, offset Y +60dp, rotated -6°, alpha 0.72
  *   Middle card    : scaled 0.93, offset Y +28dp, rotated +3°, alpha 0.86
  *   Front card     : scaled 1.00, offset Y 0,     rotation 0°,  alpha 1.0
  *                    (reveals chosen topic + category tag on landing)
- *
- * Behavior:
- *   - Tap "Shuffle" button OR tap the deck to start
- *   - Single Animatable drives a 0 → N progress over 2.5–3.5s with a
- *     decelerating cubic-bezier; the 3 cards each oscillate at different
- *     phase offsets using `sin(progress * 6 + phase)` so the deck
- *     "shuffles" instead of just swaying in unison
- *   - On landing: front card settles and reveals the chosen topic,
- *     confetti burst fires in the category accent, ~400ms hold,
- *     auto-navigate to Topic Reveal
- *   - Cannot re-trigger mid-shuffle (button disabled, deck inert)
  */
 @Composable
 fun SpinScreen(categorySlug: String?, navController: NavController) {
@@ -89,14 +81,16 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         resolved
     }
 
+    // ── Genre filter (Music only — other categories ignore it).
+    //    null = "All Genres" (no filter); any other value narrows the pool.
+    var selectedGenre by remember { mutableStateOf<MusicGenre?>(null) }
+
+    // ── Shuffle state ─────────────────────────────────────────────────────
     var shuffling by remember { mutableStateOf(false) }
     var shuffleCount by remember { mutableIntStateOf(0) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
-    var landedTopic by remember { mutableStateOf<MockTopic?>(null) }
+    var landedTopic by remember { mutableStateOf<CurioTopic?>(null) }
 
-    // One Animatable per shuffle (keyed on shuffleCount). Animates from 0
-    // to (3-5) over 2.5-3.5s; each card's phase offsets derive from
-    // progress so the deck feels like cards cycling past each other.
     val shuffleProgress = remember(shuffleCount) { Animatable(0f) }
 
     LaunchedEffect(shuffleCount) {
@@ -122,15 +116,14 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
 
         shuffling = false
-        landedTopic = MockTopics.randomPick()
+        landedTopic = pickRandomTopic(cat.id, selectedGenre)
         confettiTrigger++
     }
 
-    // After landing: pause then auto-navigate to Topic Reveal.
     LaunchedEffect(confettiTrigger) {
         if (confettiTrigger == 0) return@LaunchedEffect
         delay(CurioMotion.Durations.RevealHold.toLong())
-        val topic = landedTopic ?: MockTopics.randomPick()
+        val topic = landedTopic ?: pickRandomTopic(cat.id, selectedGenre)
         navController.navigate(
             CurioRoutes.revealFor(cat.id.routeSlug, topic.name)
         )
@@ -159,6 +152,24 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             )
         }
 
+        // ── Genre chips (Music only) ──────────────────────────────────────
+        if (cat.id == CategoryId.MUSIC) {
+            GenreChipRow(
+                selected = selectedGenre,
+                accent = cat.accent,
+                onSelect = { newGenre ->
+                    // Don't change mid-shuffle; otherwise, snap the deck
+                    // to a clean state for the new genre.
+                    if (!shuffling) {
+                        selectedGenre = newGenre
+                        landedTopic = null
+                        shuffleCount++  // re-trigger a fresh shuffle
+                    }
+                }
+            )
+            Spacer(Modifier.height(8.dp))
+        }
+
         ScreenEntrance {
             Column(
                 modifier = Modifier
@@ -167,7 +178,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                // ── Card stack (shuffle visual) ────────────────────────────────
+                // ── Card stack (shuffle visual) ────────────────────────────
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -185,7 +196,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                     )
                 }
 
-                // ── Helper text ─────────────────────────────────────────────
+                // ── Helper text ────────────────────────────────────────────
                 Text(
                     text = when {
                         shuffling -> "Shuffling…"
@@ -196,7 +207,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                // ── SHUFFLE button ──────────────────────────────────────────
+                // ── SHUFFLE button ─────────────────────────────────────────
                 Button(
                     onClick = { if (!shuffling) shuffleCount++ },
                     enabled = !shuffling,
@@ -239,6 +250,111 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 }
 
 /**
+ * Horizontally-scrollable genre chip row — visible only for Music.
+ *
+ * The first chip is "All Genres" (clears the filter, represented by
+ * `null` in [selectedGenre]). The rest are the 9 [MusicGenre.all]
+ * genres in declared order. Selecting a chip filters the shuffle pool
+ * to that genre. Tapping a chip also re-triggers a fresh shuffle so the
+ * user immediately sees the effect of their filter choice (rather than
+ * having to tap Shuffle again).
+ */
+@Composable
+private fun GenreChipRow(
+    selected: MusicGenre?,
+    accent: Color,
+    onSelect: (MusicGenre?) -> Unit
+) {
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        // "All" comes first (the "no filter" state, represented by null).
+        item("all") {
+            GenreChip(
+                label = "All Genres",
+                glyph = CurioIcons.AutoAwesome,
+                accent = accent,
+                selected = selected == null,
+                onClick = { onSelect(null) }
+            )
+        }
+        items(MusicGenre.all) { genre ->
+            GenreChip(
+                label = genre.displayName,
+                glyph = genre.glyph,
+                accent = accent,
+                selected = selected == genre,
+                onClick = { onSelect(genre) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun GenreChip(
+    label: String,
+    glyph: String,
+    accent: Color,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        color = if (selected) accent.copy(alpha = 0.20f)
+                else MaterialTheme.colorScheme.surface,
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (selected) accent
+                    else MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
+        )
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            CurioIcon(
+                name = glyph,
+                contentDescription = null,
+                tint = if (selected) accent
+                       else MaterialTheme.colorScheme.onSurfaceVariant,
+                size = 16.dp
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelLarge,
+                color = if (selected) accent
+                        else MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+/**
+ * Pick a random topic from the active pool.
+ *
+ * For Music, applies the current [MusicGenre] filter (null = no filter,
+ * i.e. "All Genres"). For other categories, returns the canonical pool.
+ * Falls back to the Wildcard pool (then the full Music pool) if the
+ * chosen category pool is somehow empty — defensive, not expected in
+ * practice.
+ */
+private fun pickRandomTopic(categoryId: CategoryId, genre: MusicGenre?): CurioTopic {
+    val pool: List<CurioTopic> = when (categoryId) {
+        CategoryId.MUSIC -> genre?.let { TopicCatalog.musicPoolByGenre[it] }
+            ?: TopicCatalog.musicPoolAll
+        CategoryId.WILDCARD -> TopicCatalog.wildcardPool
+        else -> TopicCatalog.poolFor(categoryId)
+    }
+    val source = pool.ifEmpty { TopicCatalog.wildcardPool }
+        .ifEmpty { TopicCatalog.musicPoolAll }
+    return source.random()
+}
+
+/**
  * The 3-card shuffle stack — matches the launcher icon's deck-of-cards
  * metaphor (see `app/src/main/res/drawable/ic_launcher_foreground.xml`
  * and `curio-icon.svg`).
@@ -247,14 +363,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
  * scale all animate on the GPU. During a shuffle (progress > 0), each
  * card oscillates with its own phase offset so the deck feels like
  * cards cycling past each other rather than swaying in unison.
- *
- * Card layers (back-to-front in z-order, last drawn = topmost):
- *   1. Back card    — accent @ 0.20 alpha  (the tint), scaled 0.86, rotated -6°, offset +60dp Y
- *   2. Middle card  — accent @ 0.55 alpha         scaled 0.93, rotated +3°, offset +28dp Y
- *   3. Front card   — accent full                  scaled 1.00, rotation 0°,   offset 0
- *                     → reveals chosen topic name on landing
- *
- * Tap target is the whole stack (any card tap = shuffle).
  */
 @Composable
 private fun ShuffleStack(
@@ -263,7 +371,7 @@ private fun ShuffleStack(
     glyph: String,
     progress: Float,
     shuffling: Boolean,
-    landedTopic: MockTopic?,
+    landedTopic: CurioTopic?,
     onTap: () -> Unit
 ) {
     Box(
@@ -277,8 +385,6 @@ private fun ShuffleStack(
             modifier = Modifier
                 .size(width = 240.dp, height = 300.dp)
                 .graphicsLayer {
-                    // Always-on position offset (the deck offset); plus a
-                    // small breathing oscillation during shuffle.
                     translationY = 60.dp.toPx() + sin(progress * 6f) * 6f
                     translationX = -16.dp.toPx() + cos(progress * 5f) * 3f
                     rotationZ = -6f + sin(progress * 4f) * 1.5f
@@ -329,10 +435,8 @@ private fun ShuffleStack(
                 }
         ) {
             if (landedTopic != null) {
-                // ── Landed: reveal the chosen topic face-up ─────────────
                 LandedCard(accent = accent, glyph = glyph, topic = landedTopic)
             } else {
-                // ── Idle / shuffling: just the card back design ─────────
                 CardSurface(
                     color = CurioColors.CreamWhite,
                     borderColor = accent.copy(alpha = 0.5f),
@@ -360,7 +464,7 @@ private fun CardSurface(
         shape = RoundedCornerShape(24.dp),
         color = color,
         tonalElevation = 2.dp,
-        border = androidx.compose.foundation.BorderStroke(
+        border = BorderStroke(
             width = 1.5.dp,
             color = borderColor
         ),
@@ -386,21 +490,18 @@ private fun CardSurface(
  * title bar (the topic name) + deep-plum subtitle bar (the category
  * subtype, e.g. "Album" / "Artist" / "Book") + a sparkle + the
  * category glyph on the image area.
- *
- * Used by EntryDetail / TopicReveal too — see those screens for the
- * editorial rendering.
  */
 @Composable
 private fun LandedCard(
     accent: Color,
     glyph: String,
-    topic: MockTopic
+    topic: CurioTopic
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = CurioColors.CreamWhite,
         tonalElevation = 6.dp,
-        border = androidx.compose.foundation.BorderStroke(
+        border = BorderStroke(
             width = 2.dp,
             color = accent
         ),
@@ -485,4 +586,3 @@ private fun LandedCard(
         }
     }
 }
-
