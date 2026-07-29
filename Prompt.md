@@ -1,3 +1,45 @@
+# Shuffle Animation Major Upgrade — Completion Summary
+
+## Task
+
+Upgrade SpinScreen's shuffle animation to show real topic names cycling during the shuffle (slot-machine style), with flying particle spray, animated glow halo, intensity bars, and a glorious landing sequence.
+
+## What changed
+
+### ShuffleStack — Topic name cycler
+- **CyclingTopicCard** (NEW): Front card now uses `AnimatedContent` with vertical slide transition to rapidly cycle through real topic names during the shuffle — like a slot machine
+- **Display pool**: Extracts up to 25 random topics from the filtered pool for visible cycling
+- **Decelerating cycler coroutine**: Runs concurrently with the main shuffle animation, starting fast (~8ms per tick) and slowing to ~150ms near the end
+- **Landed card glow**: Radial gradient border glow that intensifies during shuffle and settles on landing
+
+### ShuffleParticleSpray (NEW)
+- Canvas-based particle system spraying 22 tiny accent-color chips outward from the card stack during shuffle
+- Sawtooth-cycled particle lifetimes (~800ms) with staggered phase offsets for continuous spray
+- Particles have gravity, upward bias, rotation, and fade-out
+
+### ShuffleGlowHalo (NEW)
+- Radial gradient glow behind the card stack that pulses with a breathing rhythm
+- Alpha ramps from 0.06 (idle) → 0.22×pulse (shuffling) via bouncy spring
+- Guarded: Canvas only renders when glow would be visible
+
+### ShuffleIntensityBars (NEW)
+- Row of 7 small accent-colored bars that pulse in a sine-wave rhythm during shuffle
+- Alpha transitions between idle (0.12) and active (0.50)
+
+### Landing enhancements
+- 3-color confetti burst (accent + tint + ButterYellow)
+- Slam scale via `animateFloatAsState` + elastic spring
+- Sparkle ring over landed card
+- Border width increased to 2.5dp on landed state
+- Tonal elevation 8dp on landed state for deeper shadow
+
+### Reviewer fixes
+- Removed 5 unused imports: `SizeTransform`, `Path`, `DrawScope`, `TextAlign`, `sp`
+- Removed redundant `.height(barHeight)` modifier in `ShuffleIntensityBars`
+- Added idle guard to `ShuffleGlowHalo` to skip Canvas rendering when glow invisible
+
+---
+
 # Animation System Upgrade — Completion Summary
 
 ## Task
