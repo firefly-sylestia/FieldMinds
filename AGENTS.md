@@ -142,7 +142,10 @@ Do **not** update design docs: `WHATS_NEW_STRUCTURE.md`, `WHATS_NEW_IMPLEMENTATI
 
 ## Child DOX Index
 
-- [app/AGENTS.md](app/AGENTS.md) — Android app module: FieldMind features, architecture, conventions
+- [app/AGENTS.md](app/AGENTS.md) — Active Android app module under rebuild (placeholder)
+- [app-legacy/AGENTS.md](app-legacy/AGENTS.md) — Frozen legacy Android app source (not built, not shipped)
+- [REVAMP_PLAN.md](REVAMP_PLAN.md) — Revamp phase plan, decisions, and architecture invariants
+- [REVAMP_GUARDRAILS.md](REVAMP_GUARDRAILS.md) — Preserve-only contract for `app-legacy/`
 - [web/AGENTS.md](web/AGENTS.md) — Web landing page: Next.js, Tailwind, Vercel deployment
 - [gradle/AGENTS.md](gradle/AGENTS.md) — Gradle build system: version catalog, plugin versions
 - [wiki/AGENTS.md](wiki/AGENTS.md) — Wiki documentation: user/contributor docs
