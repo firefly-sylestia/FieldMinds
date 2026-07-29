@@ -18,9 +18,31 @@ val keyStorePath: String? = System.getenv("KEYSTORE_PATH")
 val keyStorePassword: String? = System.getenv("KEYSTORE_PASSWORD")
 val keyAlias: String? = System.getenv("KEY_ALIAS")
 val keyPassword: String? = System.getenv("KEY_PASSWORD")
+
+// isNullOrBlank() catches BOTH "env var not set" (null) AND "secret is
+// configured but empty" ("" — which is how GitHub Actions exports a
+// missing ${{ secrets.X }} reference). Without the blank check, an
+// empty secret passes != null, the release signingConfig is created
+// with blank values, and AGP rejects it at packaging with
+// "SigningConfig release is missing required property keyPassword".
+// Falling back to debug signing lets the build go green; to get a
+// properly-signed release APK, populate the 4 KEYSTORE_* secrets in
+// repo Settings > Secrets and variables > Actions.
 val hasReleaseSigningMaterial: Boolean =
-    keyStorePath != null && keyStorePassword != null &&
-    keyAlias != null && keyPassword != null
+    !keyStorePath.isNullOrBlank() &&
+    !keyStorePassword.isNullOrBlank() &&
+    !keyAlias.isNullOrBlank() &&
+    !keyPassword.isNullOrBlank()
+
+if (!hasReleaseSigningMaterial) {
+    logger.warn(
+        "Curio release signing material not configured " +
+        "(KEYSTORE_PATH / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD). " +
+        "Falling back to debug signing for this build. For a properly-" +
+        "signed release APK, populate the 4 secrets in repo Settings > " +
+        "Secrets and variables > Actions."
+    )
+}
 
 android {
     namespace = "com.curio.app"
