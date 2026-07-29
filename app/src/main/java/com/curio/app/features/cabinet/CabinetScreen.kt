@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -40,31 +40,24 @@ import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.CurioEntryCard
+import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.StaggeredEntrance
+import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.CurioMotion
 
 /**
  * The Cabinet — see CURIO_SPEC.md §9. Library of saved captures.
  *
- * Layout:
- *   - Top bar: "The Cabinet" title + search icon (Phase 4 wires search)
- *   - Filter chip row (All + 11 categories)
- *   - 2-col grid of CurioEntryCard, or empty state if filtered-empty
- *
- * Two empty states per §13.7:
- *   - Overall empty (no entries at all): "Your Cabinet is empty" → Spin CTA
- *   - Filtered empty: "No {Category} captures yet" → Spin-for-{Category} CTA
- *
- * Entries come from [TopicCatalog.sampleEntries], which is loader-backed.
- * produceState loads the entries asynchronously; while loading we show
- * an empty grid (entries.isEmpty()) that immediately renders the
- * overall-empty state — acceptable for the placeholder phase.
+ * Upgraded with:
+ *  - StaggeredEntrance for entry cards in the grid
+ *  - MorphEntrance for empty state content
  */
 @Composable
 fun CabinetScreen(navController: NavController) {
     var selectedFilter by remember { mutableStateOf<CategoryId?>(null) }
 
-    // ── Async-loaded sample entries (loader-backed) ────────────────────────
     val entries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
         value = TopicCatalog.sampleEntries()
     }
@@ -110,7 +103,7 @@ fun CabinetScreen(navController: NavController) {
             }
         }
 
-        // ── Filter chip row (All + 11 categories — LazyRow handles overflow) ─
+        // ── Filter chip row ─────────────────────────────────────────────────
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -140,29 +133,31 @@ fun CabinetScreen(navController: NavController) {
 
         // ── Grid or empty state ────────────────────────────────────────────
         if (visibleEntries.isEmpty()) {
-            if (selectedFilter == null) {
-                CurioEmptyState(
-                    glyph = CurioIcons.Inventory2,
-                    headline = "Your Cabinet is empty",
-                    subtext = "Everything you save will live here. Spin to find your first one.",
-                    tint = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f),
-                    ctaLabel = "Discover something",
-                    onCtaClick = { navController.navigate(CurioRoutes.SPIN) }
-                )
-            } else {
-                val cat = CurioCategories.byId(selectedFilter!!)
-                CurioEmptyState(
-                    glyph = CurioIcons.SearchOff,
-                    headline = "No ${cat.displayName} captures yet",
-                    subtext = "Spin for ${cat.displayName} to find your first one.",
-                    tint = cat.accent.copy(alpha = 0.4f),
-                    ctaLabel = "Spin for ${cat.displayName}",
-                    onCtaClick = {
-                        navController.navigate(
-                            CurioRoutes.spinWithCategory(cat.id.routeSlug)
-                        )
-                    }
-                )
+            MorphEntrance {
+                if (selectedFilter == null) {
+                    CurioEmptyState(
+                        glyph = CurioIcons.Inventory2,
+                        headline = "Your Cabinet is empty",
+                        subtext = "Everything you save will live here. Spin to find your first one.",
+                        tint = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f),
+                        ctaLabel = "Discover something",
+                        onCtaClick = { navController.navigate(CurioRoutes.SPIN) }
+                    )
+                } else {
+                    val cat = CurioCategories.byId(selectedFilter!!)
+                    CurioEmptyState(
+                        glyph = CurioIcons.SearchOff,
+                        headline = "No ${cat.displayName} captures yet",
+                        subtext = "Spin for ${cat.displayName} to find your first one.",
+                        tint = cat.accent.copy(alpha = 0.4f),
+                        ctaLabel = "Spin for ${cat.displayName}",
+                        onCtaClick = {
+                            navController.navigate(
+                                CurioRoutes.spinWithCategory(cat.id.routeSlug)
+                            )
+                        }
+                    )
+                }
             }
         } else {
             LazyVerticalGrid(
@@ -172,26 +167,23 @@ fun CabinetScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(visibleEntries, key = { it.id }) { entry ->
-                    CurioEntryCard(
-                        entry = entry,
-                        onClick = {
-                            navController.navigate(
-                                CurioRoutes.entryDetail(entry.id)
-                            )
-                        }
-                    )
+                itemsIndexed(visibleEntries, key = { _, entry -> entry.id }) { index, entry ->
+                    StaggeredItem(index = index, staggerDelayMs = CurioMotion.Stagger.Fast) {
+                        CurioEntryCard(
+                            entry = entry,
+                            onClick = {
+                                navController.navigate(
+                                    CurioRoutes.entryDetail(entry.id)
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-/**
- * Lightweight filter chip used in the Cabinet row — separate from
- * CurioCategoryChip because this one is filter-only (no category glyph
- * required) and uses just text + accent color.
- */
 @Composable
 private fun FilterChipLite(
     label: String,

@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -39,26 +40,31 @@ import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.navigation.CurioRoutes
-import com.curio.app.ui.components.ScreenEntrance
+import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.StaggeredEntrance
+import com.curio.app.ui.components.StaggeredItem
+import com.curio.app.ui.components.rememberBreathingScale
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.CurioMotion
 
 /**
- * Full-screen Category Picker — see CURIO_SPEC.md §4 (v2 — was a bottom
- * sheet in v1, now its own back-stack page for more breathing room).
+ * Full-screen Category Picker — see CURIO_SPEC.md §4 (v2).
  *
- * Layout:
- *   - Top bar: ← "What are we exploring?"
- *   - 2-col grid of 6 category tiles, each 120dp tall
- *   - "Manage categories" text button at bottom
- *
- * Each tile scales to 0.96 then springs back to 1.0 on tap, the screen
- * pops after a brief moment, and the app navigates to The Spin pre-loaded.
+ * Upgraded with:
+ *  - Staggered tile entrance: each tile fades + slides in with delay
+ *  - Press morph: tile scales down with bouncy spring on tap
+ *  - Breathing wildcard gradient: the wildcard tile's gradient gently
+ *    shifts hue over time
+ *  - MorphEntrance wrapper for the whole grid
  */
 @Composable
 fun CategoryPickerScreen(navController: NavController) {
     val categories = remember { CurioCategories.visible }
+
+    // Wildcard gradient animation
+    val wildcardShift = rememberBreathingScale(active = true, amplitude = 0.02f)
 
     Column(
         modifier = Modifier
@@ -97,8 +103,8 @@ fun CategoryPickerScreen(navController: NavController) {
 
         Spacer(Modifier.height(16.dp))
 
-        // ── Tile grid (3-col for 11 categories — 4 rows, more breathing room) ─
-        ScreenEntrance {
+        // ── Tile grid (staggered entrance) ──────────────────────────────────
+        MorphEntrance {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 contentPadding = PaddingValues(vertical = 8.dp),
@@ -106,15 +112,18 @@ fun CategoryPickerScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.weight(1f)
             ) {
-                items(categories) { cat ->
-                    CategoryTile(
-                        category = cat,
-                        onClick = {
-                            navController.navigate(
-                                CurioRoutes.spinWithCategory(cat.id.routeSlug)
-                            )
-                        }
-                    )
+                itemsIndexed(categories) { index, cat ->
+                    StaggeredItem(index = index, staggerDelayMs = CurioMotion.Stagger.Fast) {
+                        CategoryTile(
+                            category = cat,
+                            wildcardShift = wildcardShift,
+                            onClick = {
+                                navController.navigate(
+                                    CurioRoutes.spinWithCategory(cat.id.routeSlug)
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -140,12 +149,13 @@ fun CategoryPickerScreen(navController: NavController) {
 @Composable
 private fun CategoryTile(
     category: CurioCategory,
+    wildcardShift: Float,
     onClick: () -> Unit
 ) {
     var pressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.96f else 1f,
-        animationSpec = spring(dampingRatio = 0.55f, stiffness = 600f),
+        targetValue = if (pressed) 0.92f else 1f,
+        animationSpec = CurioMotion.Springs.Press,
         label = "tileScale"
     )
 
@@ -168,6 +178,10 @@ private fun CategoryTile(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .graphicsLayer {
+                        scaleX = 1f + wildcardShift * 0.3f
+                        scaleY = 1f + wildcardShift * 0.3f
+                    }
                     .background(
                         Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
                     )

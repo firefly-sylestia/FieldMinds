@@ -43,44 +43,35 @@ import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
-import com.curio.app.ui.components.ScreenEntrance
+import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.StaggeredEntrance
+import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 
 /**
- * Entry Detail — see CURIO_SPEC.md §10. Framed presentation of a saved
- * capture. Renders each format in its most "finished" presentational state
- * — NOT the same editable widgets from Save/Capture.
+ * Entry Detail — see CURIO_SPEC.md §10. Framed presentation of a saved capture.
  *
- * Layout:
- *   - Hero image placeholder (full-width, 260dp tall, category gradient)
- *     with back-arrow + overflow menu floating over the top edge
- *   - Topic name + category chip + "Xd ago"
- *   - Format-specific render body
- *
- * Entry lookup is async via produceState + TopicCatalog.sampleEntries.
- * If the entry can't be found, the screen pops back gracefully (rather
- * than crashing) — common when navigating from a stale route.
+ * Upgraded with:
+ *  - MorphEntrance for the hero image area
+ *  - StaggeredEntrance for metadata + body sections
  */
 @Composable
 fun EntryDetailScreen(entryId: String, navController: NavController) {
-    // ── Async entry lookup (loader-backed) ──────────────────────────────────
     val entry by produceState<CurioEntry?>(initialValue = null, entryId) {
         value = TopicCatalog.sampleEntries().find { it.id == entryId }
     }
 
-    // Pop back if the entry can't be found (stale route, or empty cabinet).
     LaunchedEffect(entry) {
         if (entry == null) {
-            // Give the loader a moment; only pop if still null after.
             kotlinx.coroutines.delay(300)
             if (entry == null) navController.popBackStack()
         }
     }
 
-    val resolvedEntry = entry ?: return  // loader still working → leave screen
+    val resolvedEntry = entry ?: return
 
     val cat = CurioCategories.byId(resolvedEntry.topic.categoryId)
     var menuExpanded by remember { mutableStateOf(false) }
@@ -111,7 +102,6 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 size = 96.dp
             )
 
-            // Top bar overlay (back + overflow)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -159,46 +149,21 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                                     CurioRoutes.captureFor(cat.id.routeSlug, resolvedEntry.topic.name)
                                 )
                             },
-                            leadingIcon = {
-                                CurioIcon(
-                                    name = CurioIcons.Edit,
-                                    contentDescription = null,
-                                    size = 20.dp
-                                )
-                            }
+                            leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
                         )
                         DropdownMenuItem(
                             text = { Text("Share") },
-                            onClick = {
-                                menuExpanded = false
-                                // TODO Phase 4: render share card + Intent.ACTION_SEND
-                            },
-                            leadingIcon = {
-                                CurioIcon(
-                                    name = CurioIcons.Share,
-                                    contentDescription = null,
-                                    size = 20.dp
-                                )
-                            }
+                            onClick = { menuExpanded = false },
+                            leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, size = 20.dp) }
                         )
                         DropdownMenuItem(
-                            text = {
-                                Text(
-                                    "Delete",
-                                    color = MaterialTheme.colorScheme.error
-                                )
-                            },
+                            text = { Text("Delete", color = MaterialTheme.colorScheme.error) },
                             onClick = {
                                 menuExpanded = false
                                 deleteDialogVisible = true
                             },
                             leadingIcon = {
-                                CurioIcon(
-                                    name = CurioIcons.Delete,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.error,
-                                    size = 20.dp
-                                )
+                                CurioIcon(name = CurioIcons.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.error, size = 20.dp)
                             }
                         )
                     }
@@ -206,50 +171,29 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             }
         }
 
-        // ── Topic name + meta ───────────────────────────────────────────────
-        ScreenEntrance {
-            Column(
-                modifier = Modifier.padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+        // ── Topic meta (staggered entrance) ─────────────────────────────────
+        MorphEntrance {
+            Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
                     text = resolvedEntry.topic.name,
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = cat.tint
-                    ) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Surface(shape = RoundedCornerShape(12.dp), color = cat.tint) {
                         Row(
-                            modifier = Modifier.padding(
-                                horizontal = 10.dp,
-                                vertical = 6.dp
-                            ),
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            CurioIcon(
-                                name = cat.iconGlyph,
-                                contentDescription = null,
-                                tint = cat.accent,
-                                size = 14.dp
-                            )
-                            Text(
-                                text = cat.displayName,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = cat.accent
-                            )
+                            CurioIcon(name = cat.iconGlyph, contentDescription = null, tint = cat.accent, size = 14.dp)
+                            Text(text = cat.displayName, style = MaterialTheme.typography.labelMedium, color = cat.accent)
                         }
                     }
                     Text(
                         text = when (resolvedEntry.capturedAtDaysAgo) {
-                            0    -> "Captured today"
-                            1    -> "Captured yesterday"
+                            0 -> "Captured today"
+                            1 -> "Captured yesterday"
                             else -> "Captured ${resolvedEntry.capturedAtDaysAgo}d ago"
                         },
                         style = MaterialTheme.typography.bodyMedium,
@@ -259,15 +203,12 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             }
         }
 
-        // ── Format-specific render body ─────────────────────────────────────
-        ScreenEntrance {
-            Box(
-                modifier = Modifier.padding(
-                    horizontal = 20.dp,
-                    vertical = 8.dp
-                )
-            ) {
-                FormatBody(entry = resolvedEntry, category = cat)
+        // ── Format body (staggered entrance) ────────────────────────────────
+        StaggeredEntrance {
+            StaggeredItem(index = 0) {
+                Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+                    FormatBody(entry = resolvedEntry, category = cat)
+                }
             }
         }
 
@@ -278,94 +219,46 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
         AlertDialog(
             onDismissRequest = { deleteDialogVisible = false },
             title = { Text("Delete this entry?") },
-            text = {
-                Text(
-                    "This capture will be permanently removed from your Cabinet."
-                )
-            },
+            text = { Text("This capture will be permanently removed from your Cabinet.") },
             confirmButton = {
                 TextButton(onClick = {
                     deleteDialogVisible = false
-                    // TODO Phase 4: actual Room delete
                     navController.popBackStack()
-                }) {
-                    Text(
-                        "Delete",
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
+                }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
             },
             dismissButton = {
-                TextButton(onClick = { deleteDialogVisible = false }) {
-                    Text("Cancel")
-                }
+                TextButton(onClick = { deleteDialogVisible = false }) { Text("Cancel") }
             }
         )
     }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// Format-specific renders — each format in its "finished" presentational
-// state, NOT the same editable widgets from Save/Capture.
-
 @Composable
 private fun FormatBody(entry: CurioEntry, category: CurioCategory) {
     when (entry.format) {
-        CaptureFormat.SoundBite    -> SoundBitePlayback(entry, category)
-        CaptureFormat.ReelNotes    -> ReelNotesRender(entry, category)
-        CaptureFormat.Marginalia   -> MarginaliaRender(entry, category)
-        CaptureFormat.GalleryWall  -> GalleryWallRender(entry, category)
-        CaptureFormat.FieldNotes   -> FieldNotesRender(entry, category)
+        CaptureFormat.SoundBite -> SoundBitePlayback(entry, category)
+        CaptureFormat.ReelNotes -> ReelNotesRender(entry, category)
+        CaptureFormat.Marginalia -> MarginaliaRender(entry, category)
+        CaptureFormat.GalleryWall -> GalleryWallRender(entry, category)
+        CaptureFormat.FieldNotes -> FieldNotesRender(entry, category)
         CaptureFormat.OpenNotebook -> OpenNotebookRender(entry, category)
     }
 }
 
 @Composable
 private fun SoundBitePlayback(entry: CurioEntry, category: CurioCategory) {
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = category.tint,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Surface(
-                    onClick = { /* TODO Phase 4: playback */ },
-                    shape = RoundedCornerShape(50),
-                    color = category.accent
-                ) {
-                    CurioIcon(
-                        name = CurioIcons.PlayArrow,
-                        contentDescription = "Play",
-                        tint = CurioColors.DeepPlum,
-                        size = 32.dp,
-                        modifier = Modifier.padding(8.dp)
-                    )
+    Surface(shape = RoundedCornerShape(20.dp), color = category.tint, modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Surface(onClick = { /* TODO Phase 4 */ }, shape = RoundedCornerShape(50), color = category.accent) {
+                    CurioIcon(name = CurioIcons.PlayArrow, contentDescription = "Play", tint = CurioColors.DeepPlum, size = 32.dp, modifier = Modifier.padding(8.dp))
                 }
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Voice note",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = entry.bodyPreview,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Text(text = "Voice note", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = entry.bodyPreview, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-            Text(
-                text = entry.bodyContent,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
@@ -374,60 +267,24 @@ private fun SoundBitePlayback(entry: CurioEntry, category: CurioCategory) {
 private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            repeat(4) {
-                CurioIcon(
-                    name = CurioIcons.Star,
-                    contentDescription = null,
-                    tint = category.accent,
-                    size = 20.dp
-                )
-            }
-            CurioIcon(
-                name = CurioIcons.StarOutline,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.outline,
-                size = 20.dp
-            )
+            repeat(4) { CurioIcon(name = CurioIcons.Star, contentDescription = null, tint = category.accent, size = 20.dp) }
+            CurioIcon(name = CurioIcons.StarOutline, contentDescription = null, tint = MaterialTheme.colorScheme.outline, size = 20.dp)
         }
-        Text(
-            text = entry.bodyContent,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
 @Composable
 private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Surface(
-            shape = RoundedCornerShape(20.dp),
-            color = category.tint,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 12.dp)
-        ) {
+        Surface(shape = RoundedCornerShape(20.dp), color = category.tint, modifier = Modifier.fillMaxWidth().padding(start = 12.dp)) {
             Column(modifier = Modifier.padding(20.dp)) {
-                Text(
-                    text = "From the entry",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = category.accent
-                )
+                Text(text = "From the entry", style = MaterialTheme.typography.labelMedium, color = category.accent)
                 Spacer(Modifier.height(8.dp))
-                Text(
-                    text = entry.bodyPreview,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontStyle = FontStyle.Italic
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                Text(text = entry.bodyPreview, style = MaterialTheme.typography.titleMedium.copy(fontStyle = FontStyle.Italic), color = MaterialTheme.colorScheme.onSurface)
             }
         }
-        Text(
-            text = entry.bodyContent,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -435,66 +292,26 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
 private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(120.dp)
-                    .background(category.accent, RoundedCornerShape(16.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(
-                    name = CurioIcons.Image,
-                    contentDescription = null,
-                    tint = Color.White,
-                    size = 32.dp
-                )
+            Box(modifier = Modifier.weight(1f).height(120.dp).background(category.accent, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
+                CurioIcon(name = CurioIcons.Image, contentDescription = null, tint = Color.White, size = 32.dp)
             }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(120.dp)
-                    .background(category.tint, RoundedCornerShape(16.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(
-                    name = CurioIcons.Image,
-                    contentDescription = null,
-                    tint = category.accent,
-                    size = 32.dp
-                )
+            Box(modifier = Modifier.weight(1f).height(120.dp).background(category.tint, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
+                CurioIcon(name = CurioIcons.Image, contentDescription = null, tint = category.accent, size = 32.dp)
             }
         }
-        Text(
-            text = entry.bodyContent,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
 @Composable
 private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text(
-            text = "Observations",
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = category.accent
-        )
-        Text(
-            text = entry.bodyContent,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        Text(text = "Observations", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+        Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
 @Composable
 private fun OpenNotebookRender(entry: CurioEntry, category: CurioCategory) {
-    Text(
-        text = entry.bodyContent,
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.onSurface
-    )
+    Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
 }

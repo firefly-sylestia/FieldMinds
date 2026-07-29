@@ -2,6 +2,7 @@ package com.curio.app.features.spin
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -44,11 +45,11 @@ import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioTopic
-import com.curio.app.data.TopicCatalog
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.CurioBackButton
+import com.curio.app.ui.components.CurioSparkle
 import com.curio.app.ui.components.ScreenEntrance
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
@@ -65,23 +66,14 @@ import kotlin.random.Random
  * Visual metaphor: a deck of 3 cards being shuffled, matching the launcher
  * icon's stacked-card design. For each of the 11 categories, a horizontal
  * chip row above the deck lets the user pick a tag filter — the shuffle
- * then picks from that tag's pool. Tags are category-specific:
+ * then picks from that tag's pool.
  *
- *   Artists    → "Rock", "Jazz", "Classical", "Hip-Hop", ...
- *   Albums     → "Rock", "1970s", "Debut", ...
- *   Films      → "Drama", "Sci-Fi", "1970s", ...
- *   Books      → "Fiction", "Memoir", "Modern", ...
- *   Painters   → "Impressionism", "Modern", ...
- *   etc.
- *
- * Tags are read from `assets/topics/{categoryId}.json` — no hardcoded
- * enum. Adding a new tag to a topic in JSON automatically surfaces as a
- * filter chip on the Spin screen for that category.
- *
- *   Back card      : scaled 0.86, offset Y +60dp, rotated -6°, alpha 0.72
- *   Middle card    : scaled 0.93, offset Y +28dp, rotated +3°, alpha 0.86
- *   Front card     : scaled 1.00, offset Y 0,     rotation 0°,  alpha 1.0
- *                    (reveals chosen topic + category tag on landing)
+ * Upgraded with:
+ *  - Dramatic card slam on landing (scale 1.08 → 1.0 with elastic spring)
+ *  - Enhanced shuffle oscillation with individual card phase offsets
+ *  - Confetti burst on landing in category accent
+ *  - Sparkle ring effect over the landed card
+ *  - Shimmer on the SHUFFLE button while shuffling
  */
 @Composable
 fun SpinScreen(categorySlug: String?, navController: NavController) {
@@ -91,10 +83,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         resolved
     }
 
-    // ── Async-loaded pool + tags for this category ─────────────────────────
-    //
-    // The pool is loaded lazily from JSON; tags are derived from the
-    // loaded topics. `null` means "still loading or empty pool".
     val pool by produceState<List<CurioTopic>>(initialValue = emptyList(), cat.id) {
         value = TopicJsonLoader.load(cat.id)
     }
@@ -102,26 +90,24 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         value = pool.flatMap { it.tags }.distinct().sorted()
     }
 
-    // ── Tag filter (null = no filter, i.e. "All") ──────────────────────────
     var selectedTag by remember { mutableStateOf<String?>(null) }
 
-    // Filtered pool — empty list if no pool loaded yet.
     val filteredPool = remember(pool, selectedTag) {
         if (selectedTag == null) pool
         else pool.filter { it.tags.contains(selectedTag) }
     }
 
-    // ── Shuffle state ─────────────────────────────────────────────────────
     var shuffling by remember { mutableStateOf(false) }
     var shuffleCount by remember { mutableIntStateOf(0) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
+    var sparkleTrigger by remember { mutableIntStateOf(0) }
     var landedTopic by remember { mutableStateOf<CurioTopic?>(null) }
 
     val shuffleProgress = remember(shuffleCount) { Animatable(0f) }
 
     LaunchedEffect(shuffleCount) {
         if (shuffleCount == 0) return@LaunchedEffect
-        if (pool.isEmpty()) return@LaunchedEffect  // nothing to shuffle
+        if (pool.isEmpty()) return@LaunchedEffect
         shuffling = true
         landedTopic = null
 
@@ -145,6 +131,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         shuffling = false
         landedTopic = pickRandomFrom(filteredPool, cat.id)
         confettiTrigger++
+        sparkleTrigger++
     }
 
     LaunchedEffect(confettiTrigger) {
@@ -152,7 +139,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         delay(CurioMotion.Durations.RevealHold.toLong())
         val topic = landedTopic
             ?: pickRandomFrom(filteredPool, cat.id)
-            ?: return@LaunchedEffect  // pool empty — bail
+            ?: return@LaunchedEffect
         navController.navigate(
             CurioRoutes.revealFor(cat.id.routeSlug, topic.name)
         )
@@ -165,7 +152,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             .statusBarsPadding()
             .padding(horizontal = 16.dp)
     ) {
-        // ── Top bar ────────────────────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -181,7 +167,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             )
         }
 
-        // ── Tag chips (visible when the loaded pool has any tagged topics) ─
         if (tags.isNotEmpty()) {
             TagChipRow(
                 tags = tags,
@@ -191,7 +176,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                     if (!shuffling) {
                         selectedTag = newTag
                         landedTopic = null
-                        shuffleCount++  // re-trigger a fresh shuffle
+                        shuffleCount++
                     }
                 }
             )
@@ -206,7 +191,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                // ── Card stack (shuffle visual) ────────────────────────────
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -220,11 +204,11 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                         progress = shuffleProgress.value,
                         shuffling = shuffling,
                         landedTopic = landedTopic,
+                        sparkleTrigger = sparkleTrigger,
                         onTap = { if (!shuffling) shuffleCount++ }
                     )
                 }
 
-                // ── Helper text ────────────────────────────────────────────
                 Text(
                     text = when {
                         pool.isEmpty() && !shuffling -> "No topics yet — check back soon!"
@@ -236,7 +220,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                // ── SHUFFLE button ─────────────────────────────────────────
                 Button(
                     onClick = { if (!shuffling) shuffleCount++ },
                     enabled = !shuffling && pool.isNotEmpty(),
@@ -270,19 +253,15 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 
     if (confettiTrigger > 0) {
         ConfettiBurst(
-            color = cat.accent,
+            colors = listOf(cat.accent, cat.tint),
             trigger = confettiTrigger,
+            particleCount = CurioMotion.ConfettiParticleCountLarge,
             modifier = Modifier.fillMaxSize(),
-            onComplete = { /* navigation handled by confettiTrigger LaunchedEffect */ }
+            onComplete = {}
         )
     }
 }
 
-/**
- * Horizontally-scrollable tag chip row — replaces the old hardcoded
- * `MusicGenre` enum. Shows "All" plus whatever tags the loaded topics
- * declare. Tags are derived from JSON, not hardcoded.
- */
 @Composable
 private fun TagChipRow(
     tags: List<String>,
@@ -295,7 +274,6 @@ private fun TagChipRow(
         contentPadding = PaddingValues(vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // "All" comes first (the "no filter" state, represented by null).
         item("all") {
             TagChip(
                 label = "All",
@@ -358,20 +336,12 @@ private fun TagChip(
     }
 }
 
-/**
- * Pick a random topic from the filtered pool. Falls back to the
- * wildcard pool, then to the full category pool, then to null (which
- * the caller handles by bailing out gracefully).
- */
 private fun pickRandomFrom(
     filteredPool: List<CurioTopic>,
     fallbackCategory: CategoryId
 ): CurioTopic? {
     if (filteredPool.isNotEmpty()) return filteredPool.random()
     return try {
-        // Block briefly to load a fallback pool. Suspend calls aren't
-        // allowed in this synchronous helper, so we use the cached
-        // accessor instead. If the pool hasn't been loaded yet, return null.
         TopicJsonLoader.cached(fallbackCategory)?.randomOrNull()
     } catch (t: Throwable) {
         null
@@ -380,13 +350,7 @@ private fun pickRandomFrom(
 
 /**
  * The 3-card shuffle stack — matches the launcher icon's deck-of-cards
- * metaphor (see `app/src/main/res/drawable/ic_launcher_foreground.xml`
- * and `curio-icon.svg`).
- *
- * Each card is rendered with `graphicsLayer` so translation / rotation /
- * scale all animate on the GPU. During a shuffle (progress > 0), each
- * card oscillates with its own phase offset so the deck feels like
- * cards cycling past each other rather than swaying in unison.
+ * metaphor. Upgraded with slam-on-landing animation and sparkle ring.
  */
 @Composable
 private fun ShuffleStack(
@@ -396,8 +360,24 @@ private fun ShuffleStack(
     progress: Float,
     shuffling: Boolean,
     landedTopic: CurioTopic?,
+    sparkleTrigger: Int,
     onTap: () -> Unit
 ) {
+    // ── Slam scale: card pops to 1.06 then settles to 1.0 on landing ─────
+    var justLanded by remember { mutableStateOf(false) }
+    LaunchedEffect(landedTopic) {
+        if (landedTopic != null) {
+            justLanded = true
+            delay(120)
+            justLanded = false
+        }
+    }
+    val slamScale by animateFloatAsState(
+        targetValue = if (justLanded) 1.06f else 1f,
+        animationSpec = CurioMotion.Springs.Elastic,
+        label = "slamScale"
+    )
+
     Box(
         modifier = Modifier
             .size(width = 260.dp, height = 320.dp)
@@ -453,13 +433,26 @@ private fun ShuffleStack(
                 .graphicsLayer {
                     translationY = sin(progress * 6f + 2.4f) * 4f
                     rotationZ = sin(progress * 4f + 1.0f) * 0.8f
-                    scaleX = if (landedTopic != null) 1.04f else 1f
-                    scaleY = if (landedTopic != null) 1.04f else 1f
+                    scaleX = slamScale
+                    scaleY = slamScale
                     alpha = 1f
                 }
         ) {
             if (landedTopic != null) {
-                LandedCard(accent = accent, glyph = glyph, topic = landedTopic)
+                Box {
+                    LandedCard(accent = accent, glyph = glyph, topic = landedTopic)
+                    // Sparkle ring over the landed card
+                    if (sparkleTrigger > 0) {
+                        CurioSparkle(
+                            color = accent,
+                            trigger = sparkleTrigger,
+                            size = 240.dp,
+                            ringCount = 3,
+                            modifier = Modifier
+                                .size(240.dp, 300.dp)
+                        )
+                    }
+                }
             } else {
                 CardSurface(
                     color = CurioColors.CreamWhite,
@@ -472,11 +465,6 @@ private fun ShuffleStack(
     }
 }
 
-/**
- * The "back" of a card — solid color block with the category glyph
- * centered. Used for back + middle card slots, and as the idle state
- * of the front card (while shuffling).
- */
 @Composable
 private fun CardSurface(
     color: Color,
@@ -508,13 +496,6 @@ private fun CardSurface(
     }
 }
 
-/**
- * The "front" of a card when the shuffle has landed — mirrors the
- * launcher icon's front card design: cream-white surface with a coral
- * title bar (the topic name) + deep-plum subtitle bar (the category
- * subtype, e.g. "Album" / "Artist" / "Book") + a sparkle + the
- * category glyph on the image area.
- */
 @Composable
 private fun LandedCard(
     accent: Color,
@@ -535,7 +516,6 @@ private fun LandedCard(
             modifier = Modifier.fillMaxSize().padding(20.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // ── Image area (butter yellow block + glyph + sparkle) ─────
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -552,7 +532,6 @@ private fun LandedCard(
                     tint = accent,
                     size = 72.dp
                 )
-                // Sparkle — top-right corner, matches launcher icon motif
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -570,7 +549,6 @@ private fun LandedCard(
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // ── Topic name (coral title bar) ─────────────────────────
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -590,7 +568,6 @@ private fun LandedCard(
                     maxLines = 2
                 )
                 Spacer(Modifier.height(4.dp))
-                // ── Subtitle bar (deep plum line) ────────────────────────
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(0.55f)

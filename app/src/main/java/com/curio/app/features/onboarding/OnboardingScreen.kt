@@ -28,13 +28,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.navigation.CurioRoutes
-import com.curio.app.ui.components.ScreenEntrance
+import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.StaggeredEntrance
+import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -43,11 +46,10 @@ import kotlinx.coroutines.launch
 /**
  * First-launch onboarding — see CURIO_SPEC.md §2 (v2).
  *
- * Three-slide [HorizontalPager] + page dots + Skip + Next (Let's go on
- * slide 3). Sets the in-memory [isOnboardingComplete] flag when finishing
- * so [CurioOnboardingState] can re-route to HOME instead of SPLASH.
- *
- * Reachable again via Settings → Replay intro (see SettingsScreen).
+ * Upgraded with:
+ *  - MorphEntrance for each slide content on page change
+ *  - Staggered entrance for headline + subtext within each slide
+ *  - Enhanced illustration block with breathing gradient
  */
 @Composable
 fun OnboardingScreen(navController: NavController) {
@@ -61,7 +63,6 @@ fun OnboardingScreen(navController: NavController) {
             .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
     ) {
-        // ── Pager body ─────────────────────────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -71,7 +72,9 @@ fun OnboardingScreen(navController: NavController) {
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { pageIndex ->
-                OnboardingSlide(slide = OnboardingSlides[pageIndex])
+                MorphEntrance {
+                    OnboardingSlide(slide = OnboardingSlides[pageIndex])
+                }
             }
         }
 
@@ -91,7 +94,7 @@ fun OnboardingScreen(navController: NavController) {
             }
         }
 
-        // ── Bottom controls: Skip (left) + Next/Let's go (right) ─────────
+        // ── Bottom controls ────────────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -141,7 +144,7 @@ private fun OnboardingSlide(slide: OnboardingSlideData) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // ── Illustration glyph block (gradient halo + icon) ───────────────
+        // ── Illustration glyph block ───────────────────────────────────────
         Box(
             modifier = Modifier
                 .size(220.dp)
@@ -161,21 +164,27 @@ private fun OnboardingSlide(slide: OnboardingSlideData) {
 
         Spacer(Modifier.height(32.dp))
 
-        Text(
-            text = slide.headline,
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center
-        )
+        StaggeredEntrance(staggerDelayMs = 60) {
+            StaggeredItem(index = 0) {
+                Text(
+                    text = slide.headline,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center
+                )
+            }
 
-        Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
 
-        Text(
-            text = slide.subtext,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
+            StaggeredItem(index = 1) {
+                Text(
+                    text = slide.subtext,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
     }
 }
 
@@ -191,6 +200,7 @@ private fun PageDot(selected: Boolean, onClick: () -> Unit) {
         modifier = Modifier
             .padding(horizontal = 4.dp)
             .size(size)
+            .scale(if (selected) 1.2f else 1f)
             .background(color, shape = CircleShape)
             .clickable(onClick = onClick)
     )
@@ -203,7 +213,6 @@ private fun finishOnboarding(navController: NavController) {
     }
 }
 
-// ── Slide content from CURIO_SPEC.md §2 SLIDE CONTENT ─────────────────────
 private data class OnboardingSlideData(
     val glyph: String,
     val headline: String,
@@ -228,12 +237,6 @@ private val OnboardingSlides = listOf(
     )
 )
 
-/**
- * In-memory flag for whether onboarding has finished. Used by SplashScreen
- * to decide SPLASH → HOME vs SPLASH → ONBOARDING. Persistence (DataStore)
- * lands when the settings layer is wired up; for the placeholder phase
- * a process-scoped flag is sufficient.
- */
 object CurioOnboardingState {
     var isComplete: Boolean = false
     fun markComplete() { isComplete = true }

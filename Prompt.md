@@ -1,4 +1,100 @@
-# Phase 1 Cleanup — Plan docs removed (per user instruction)
+# Animation System Upgrade — Completion Summary
+
+## Task
+
+Upgrade Curio's entire animation system to a premium level with morphing transitions, staggered entrances, breathing animations, enhanced confetti/ember particle physics, and rich micro-interactions across all screens.
+
+## Foundation (3 files)
+
+### CurioMotion.kt — Extended motion tokens
+- New spring specs: `Morph` (water-droplet organic settle), `Elastic` (extreme bouncy overshoot), `Press` (quick snap-back)
+- New durations: `Morph` (700ms), `Reveal` (900ms), `ConfettiLong` (1200ms), `SparkleTrail` (400ms), `Shimmer` (1500ms), `Breathe` (3200ms)
+- New stagger delays: `Stagger.Base` (50ms), `Fast` (30ms), `Slow` (80ms)
+- New particle count: `ConfettiParticleCountLarge` (18)
+
+### CurioAnimations.kt — New animation primitives
+- `MorphEntrance` — scale-up from 0.85 with fade + elastic spring for dramatic screen reveals
+- `MorphingContainer` — `AnimatedContent` with morph springs for smooth state transitions
+- `StaggeredEntrance` + `StaggeredItem` — staggered fade+slide for lists/grids with per-child delay
+- `rememberBreathingScale` — slow ambient pulse (0.97–1.03) for "living" elements
+- `rememberShimmerBrush` — animated gradient sweep for premium loading/hover states
+- `rememberRotatingReveal` — rotation + pulse for decorative sparkle motifs
+- `rememberAnimatedScaleOnPress` — interactive scale-down with spring snap-back
+- Retained: `ScreenEntrance`, `rememberPulseScale`, `LiveWaveform`, `formatRecordingTime`
+
+### CurioConfetti.kt — Richer particle system
+- `ConfettiBurst` upgraded: accepts `List<Color>` for palette bursts, 6 shape types (Circle, Star4, Star5, Ribbon, Diamond, Heart)
+- `EmberBurst` NEW: floating upward particle cloud (like fireflies/sparks), slow drift + sine-wave sway
+- `CurioSparkle` upgraded: multi-ring ripple effect (configurable ring count)
+
+## Screen-level upgrades (13 files)
+
+### CurioNavHost.kt — Animated screen transitions
+- Morph spring transitions: slide left/right + fade for forward/back navigation
+- Special elastic fade for Splash → Home exit
+
+### SplashScreen.kt — Premium launch experience
+- Morph entrance: logo scales 0→1 with elastic spring
+- Animated background gradient halo
+- Shimmer sweep across logo icon
+- Smoothly animated dot loader with scale transitions
+
+### CurioHeroCard.kt — Living hero card
+- Breathing glyph: background auto_awesome icon gently pulses
+- Shimmer overlay: subtle light pass across card surface
+- Press scale animation (0.96 snap-back)
+- `MorphingContainer` for category label transitions
+
+### HomeScreen.kt — Staggered content
+- `MorphEntrance` wrapping hero card
+- `StaggeredEntrance` for chip row + recently explored section
+
+### SpinScreen.kt — Enhanced shuffle
+- Animated slam scale on card landing (1.06→1.0 with elastic spring via `animateFloatAsState`)
+- Confetti burst with larger particle count + dual colors
+- Sparkle ring effect over landed card
+
+### TopicRevealScreen.kt — Dramatic reveal
+- `MorphEntrance` wrapper with delay
+- `StaggeredEntrance` for all content sections (image, name, chips, teaser, action card, CTA)
+- Enhanced sparkle motif with multi-ring sparkle burst on entrance
+
+### CategoryPickerScreen.kt — Bouncy grid
+- `StaggeredEntrance` for tile grid items
+- Press morph with `CurioMotion.Springs.Press`
+- Breathing wildcard gradient
+
+### SaveCaptureScreen.kt — Dual celebration
+- `ConfettiBurst` + `EmberBurst` fire together on save success
+- `MorphEntrance` for format body
+
+### OnboardingScreen.kt — Morphing slides
+- `MorphEntrance` per slide on page change
+- `StaggeredEntrance` for headline + subtext within each slide
+
+### CabinetScreen.kt
+- `StaggeredEntrance` for grid items + `MorphEntrance` for empty states
+
+### EntryDetailScreen.kt
+- `MorphEntrance` for hero area + `StaggeredEntrance` for metadata
+
+### CurioEmptyState.kt
+- `StaggeredEntrance` + breathing scale on glyph
+
+### CurioTopicCard.kt
+- Press scale animation with reset on navigation return
+
+## Reviewer fix round
+- CurioTopicCard: Added `LaunchedEffect` press-state reset
+- TopicRevealScreen: Added `LaunchedEffect` to trigger sparkle ring
+- SpinScreen: Replaced instant `slamScale` with `animateFloatAsState` + elastic spring
+- SplashScreen: Replaced instant dot scale with `animateFloatAsState`
+- CurioNavHost: Removed 3 unused imports
+- CurioEmptyState: Moved `if (ctaLabel != null)` outside `StaggeredItem`
+
+---
+
+
 
 The following plan files were deleted per user instruction *"remove the plan .md files which isnt needed specially outisde of app legacy and also inside docs direc"*:
 

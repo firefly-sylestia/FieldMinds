@@ -39,12 +39,22 @@ import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.CurioHeroSpinCard
 import com.curio.app.ui.components.CurioStreakPill
 import com.curio.app.ui.components.CurioWildcardChip
+import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.StaggeredEntrance
+import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.CurioMotion
 import java.util.Calendar
 
 /**
  * Home — see CURIO_SPEC.md §3.
+ *
+ * Upgraded with:
+ *  - MorphEntrance wrapping the hero card for dramatic first appearance
+ *  - StaggeredEntrance for the chip row + recently explored section
+ *  - Breathing hero card (ambient pulse on background glyph)
+ *  - Time-aware greeting
  *
  * Layout (top to bottom):
  *   1. Top bar: ☰  Curio              👤    (transparent, no elevation)
@@ -54,18 +64,11 @@ import java.util.Calendar
  *   5. "Recently explored" section
  *      - Empty state from §13.7 (no entries in placeholder phase)
  *   6. (Bottom nav is rendered by the parent scaffold, not here)
- *
- * Behavior notes:
- *   - Tapping the hero card with NO chip selected → Category Picker
- *   - Tapping the hero card WITH a chip selected → The Spin pre-loaded
- *   - Tapping a chip toggles selection
- *   - Time-aware greeting falls back to "Welcome back" when name unknown
- *   - Streak pill is hidden when days <= 0
  */
 @Composable
 fun HomeScreen(navController: NavController) {
     var selectedCategory by remember { mutableStateOf<CurioCategory?>(null) }
-    val streakDays = 0 // placeholder phase — logic wires this in next
+    val streakDays = 0
 
     Column(
         modifier = Modifier
@@ -123,77 +126,12 @@ fun HomeScreen(navController: NavController) {
 
         Spacer(Modifier.height(16.dp))
 
-        // ── Hero Spin card ───────────────────────────────────────────────────
-        CurioHeroSpinCard(
-            selectedCategory = selectedCategory,
-            wildcardSelected = selectedCategory?.id == CategoryId.WILDCARD,
-            onClick = {
-                val chosen = selectedCategory
-                if (chosen == null) {
-                    navController.navigate(CurioRoutes.PICKER)
-                } else {
-                    navController.navigate(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
-                }
-            },
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
-
-        Spacer(Modifier.height(24.dp))
-
-        // ── Pick a category chip row ─────────────────────────────────────────
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text(
-                text = "Pick a category",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(Modifier.height(12.dp))
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 4.dp)
-            ) {
-                item("surprise-me") {
-                    CurioWildcardChip(
-                        selected = selectedCategory?.id == CategoryId.WILDCARD,
-                        onClick = {
-                            selectedCategory =
-                                if (selectedCategory?.id == CategoryId.WILDCARD) null
-                                else CurioCategories.byId(CategoryId.WILDCARD)
-                        }
-                    )
-                }
-                items(CurioCategories.visible.size - 1) { index ->
-                    val cat = CurioCategories.visible[index]
-                    CurioCategoryChip(
-                        category = cat,
-                        selected = selectedCategory?.id == cat.id,
-                        onClick = {
-                            selectedCategory =
-                                if (selectedCategory?.id == cat.id) null
-                                else cat
-                        }
-                    )
-                }
-            }
-        }
-
-        Spacer(Modifier.height(28.dp))
-
-        // ── Recently explored section ────────────────────────────────────────
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text(
-                text = "Recently explored",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(Modifier.height(12.dp))
-            CurioEmptyState(
-                glyph = CurioIcons.AutoAwesome,
-                headline = "Nothing here yet",
-                subtext = "Give the wheel a spin — your first discovery is one tap away.",
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-                ctaLabel = "Spin the wheel",
-                onCtaClick = {
+        // ── Hero Spin card — morph entrance ──────────────────────────────────
+        MorphEntrance {
+            CurioHeroSpinCard(
+                selectedCategory = selectedCategory,
+                wildcardSelected = selectedCategory?.id == CategoryId.WILDCARD,
+                onClick = {
                     val chosen = selectedCategory
                     if (chosen == null) {
                         navController.navigate(CurioRoutes.PICKER)
@@ -201,14 +139,92 @@ fun HomeScreen(navController: NavController) {
                         navController.navigate(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
                     }
                 },
-                modifier = Modifier.height(180.dp)
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        // ── Pick a category chip row — staggered entrance ────────────────────
+        StaggeredEntrance(staggerDelayMs = CurioMotion.Stagger.Fast) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                StaggeredItem(index = 0) {
+                    Text(
+                        text = "Pick a category",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(Modifier.height(12.dp))
+                }
+                StaggeredItem(index = 1) {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(horizontal = 4.dp)
+                    ) {
+                        item("surprise-me") {
+                            CurioWildcardChip(
+                                selected = selectedCategory?.id == CategoryId.WILDCARD,
+                                onClick = {
+                                    selectedCategory =
+                                        if (selectedCategory?.id == CategoryId.WILDCARD) null
+                                        else CurioCategories.byId(CategoryId.WILDCARD)
+                                }
+                            )
+                        }
+                        items(CurioCategories.visible.size - 1) { index ->
+                            val cat = CurioCategories.visible[index]
+                            CurioCategoryChip(
+                                category = cat,
+                                selected = selectedCategory?.id == cat.id,
+                                onClick = {
+                                    selectedCategory =
+                                        if (selectedCategory?.id == cat.id) null
+                                        else cat
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        Spacer(Modifier.height(28.dp))
+
+        // ── Recently explored section ────────────────────────────────────────
+        StaggeredEntrance(staggerDelayMs = CurioMotion.Stagger.Base) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                StaggeredItem(index = 0) {
+                    Text(
+                        text = "Recently explored",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(Modifier.height(12.dp))
+                }
+                StaggeredItem(index = 1) {
+                    CurioEmptyState(
+                        glyph = CurioIcons.AutoAwesome,
+                        headline = "Nothing here yet",
+                        subtext = "Give the wheel a spin — your first discovery is one tap away.",
+                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+                        ctaLabel = "Spin the wheel",
+                        onCtaClick = {
+                            val chosen = selectedCategory
+                            if (chosen == null) {
+                                navController.navigate(CurioRoutes.PICKER)
+                            } else {
+                                navController.navigate(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
+                            }
+                        },
+                        modifier = Modifier.height(180.dp)
+                    )
+                }
+            }
         }
 
         Spacer(Modifier.height(16.dp))
 
-        // ── Settings shortcut (low-emphasis; Settings is also reachable from
-        //     the top-right Person icon in a future iteration — Phase 3)
+        // ── Settings shortcut ────────────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()

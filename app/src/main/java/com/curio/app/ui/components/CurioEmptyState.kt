@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.theme.CurioIcon
@@ -24,23 +26,16 @@ import com.curio.app.ui.theme.CurioIcon
 /**
  * Curio's universal empty-state skeleton — see CURIO_SPEC.md §13.7.
  *
- * Used by:
- *  - Home (no captures yet)
- *  - Cabinet (no entries at all / filtered empty)
- *  - Topic History (no spins yet)
- *  - Cabinet search (no results)
+ * Upgraded with staggered entrance and gentle breathing scale on the glyph
+ * for a living, breathing feel even on empty screens.
  *
  * Layout (centered column):
  *  ```
- *      [ glyph @ 96dp in category accent tint ]
+ *      [ glyph @ 96dp in category accent tint, gentle breathing pulse ]
  *      Headline (geom, 24sp heavy)
  *      Subtext (Inter neutral, 16sp muted, 1-2 lines, centered)
  *      [ optional Primary CTA — full-width pill ]
  *  ```
- *
- * The glyph receives a [tint] parameter (typically the category accent at
- * 20% alpha) so it can match the surrounding category surface. If null,
- * it falls back to onSurfaceVariant.
  */
 @Composable
 fun CurioEmptyState(
@@ -52,55 +47,72 @@ fun CurioEmptyState(
     ctaLabel: String? = null,
     onCtaClick: () -> Unit = {}
 ) {
+    // Breathing scale for the glyph
+    val breatheScale = rememberBreathingScale(active = true, amplitude = 0.025f)
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .padding(32.dp),
         contentAlignment = Alignment.Center
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Box(
-                modifier = Modifier.size(120.dp),
-                contentAlignment = Alignment.Center
+        StaggeredEntrance(staggerDelayMs = 60) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                CurioIcon(
-                    name = glyph,
-                    contentDescription = null,
-                    tint = tint ?: MaterialTheme.colorScheme.onSurfaceVariant,
-                    size = 96.dp
-                )
-            }
+                StaggeredItem(index = 0) {
+                    Box(
+                        modifier = Modifier
+                            .size(120.dp)
+                            .scale(breatheScale),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CurioIcon(
+                            name = glyph,
+                            contentDescription = null,
+                            tint = tint ?: MaterialTheme.colorScheme.onSurfaceVariant,
+                            size = 96.dp
+                        )
+                    }
+                }
 
-            Text(
-                text = headline,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = subtext,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-            if (ctaLabel != null) {
-                Spacer(Modifier.height(8.dp))
-                Button(
-                    onClick = onCtaClick,
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    ),
-                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
-                ) {
+                StaggeredItem(index = 1) {
                     Text(
-                        text = ctaLabel,
-                        style = MaterialTheme.typography.labelLarge
+                        text = headline,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center
                     )
+                }
+
+                StaggeredItem(index = 2) {
+                    Text(
+                        text = subtext,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                if (ctaLabel != null) {
+                    StaggeredItem(index = 3) {
+                        Spacer(Modifier.height(8.dp))
+                        Button(
+                            onClick = onCtaClick,
+                            shape = RoundedCornerShape(24.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+                        ) {
+                            Text(
+                                text = ctaLabel,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.curio.app.ui.theme
 
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.spring
 
@@ -10,7 +9,7 @@ import androidx.compose.animation.core.spring
  * Centralizes the spring specs + duration constants that the rest of the app
  * uses for animations, so every transition uses the same easing vocabulary.
  *
- * Three named spring presets (per M3 expressive motion spec):
+ * Spring presets (per M3 expressive motion spec + Curio morph extensions):
  *
  *  - [Springs.Snappy] — high stiffness, no overshoot. For small UI changes
  *    that should feel decisive (chip selection, drawer toggles, modal
@@ -25,15 +24,31 @@ import androidx.compose.animation.core.spring
  *    bigger elements moving larger distances (screen transitions, sheet
  *    mounts). Slower than Snappy but more controlled than Bouncy.
  *
+ *  - [Springs.Morph] — very low stiffness, high damping for organic
+ *    shape/size morphing. Like a water droplet settling — slow, smooth,
+ *    no bounce. Use for morphing transitions between screen states.
+ *
+ *  - [Springs.Elastic] — extreme overshoot, very bouncy. For dramatic
+ *    entrances (hero cards, reward moments, the splash → home transition).
+ *    Use sparingly — it's the "show-off" spring.
+ *
  * Duration tokens in milliseconds:
  *
- *  - [Durations.Quick]      — 150ms (chip toggles, button presses)
- *  - [Durations.Standard]   — 300ms (default transitions)
- *  - [Durations.Deliberate] — 500ms (larger movements)
- *  - [Durations.SpinMin]    — 2500ms (low end of The Spin rotation)
- *  - [Durations.SpinMax]    — 3500ms (high end of The Spin rotation)
- *  - [Durations.Confetti]   — 600ms (reward burst lifetime)
- *  - [Durations.RevealHold] — 400ms (pause after landing before nav to Reveal)
+ *  - [Durations.Quick]        — 150ms (chip toggles, button presses)
+ *  - [Durations.Standard]     — 300ms (default transitions)
+ *  - [Durations.Deliberate]   — 500ms (larger movements)
+ *  - [Durations.Morph]        — 700ms (shape morphing transitions)
+ *  - [Durations.Reveal]       — 900ms (dramatic reveal moments)
+ *  - [Durations.SpinMin]      — 2500ms (low end of The Spin rotation)
+ *  - [Durations.SpinMax]      — 3500ms (high end of The Spin rotation)
+ *  - [Durations.Confetti]     — 600ms (reward burst lifetime)
+ *  - [Durations.ConfettiLong] — 1200ms (extended burst for save success)
+ *  - [Durations.RevealHold]   — 400ms (pause after landing before nav to Reveal)
+ *
+ * Stagger delays for list/group entrances:
+ *  - [Stagger.Base]           — 50ms per-child delay
+ *  - [Stagger.Fast]           — 30ms per-child delay (quick lists)
+ *  - [Stagger.Slow]           — 80ms per-child delay (dramatic reveals)
  */
 object CurioMotion {
 
@@ -61,12 +76,48 @@ object CurioMotion {
             dampingRatio = 0.40f,
             stiffness = 80f
         )
+
+        /**
+         * Organic morph spring — very low stiffness, high damping.
+         * Like a water droplet settling; slow, smooth, no bounce.
+         * Use for shape/size morphing, screen-to-screen transitions.
+         *  ~200ms to 95% settled, ~700ms to full rest.
+         */
+        val Morph: SpringSpec<Float> = spring(
+            dampingRatio = 0.92f,
+            stiffness = 120f
+        )
+
+        /**
+         * Extreme bouncy overshoot for dramatic entrances.
+         * The splash → home transition, hero card appearances, reward
+         * moments that deserve the "wow" treatment.
+         */
+        val Elastic: SpringSpec<Float> = spring(
+            dampingRatio = 0.35f,
+            stiffness = 200f
+        )
+
+        /**
+         * Gentle press-down — scale to 0.94 with a quick snap-back.
+         * Used by interactive cards and buttons for tactile feedback.
+         */
+        val Press: SpringSpec<Float> = spring(
+            dampingRatio = 0.65f,
+            stiffness = 800f
+        )
     }
 
     object Durations {
         const val Quick: Int = 150
         const val Standard: Int = 300
         const val Deliberate: Int = 500
+
+        /** Shape morphing transitions — longer to let curves flow. */
+        const val Morph: Int = 700
+
+        /** Dramatic reveal moments (splash → home, topic landing). */
+        const val Reveal: Int = 900
 
         /** The Spin rotation window (per section 5: 2.5 to 3.5 seconds). */
         const val SpinMin: Int = 2500
@@ -75,12 +126,40 @@ object CurioMotion {
         /** Confetti / sparkle burst lifetime (per section 0.5: ~600ms total). */
         const val Confetti: Int = 600
 
+        /** Extended confetti for big moments (save success). */
+        const val ConfettiLong: Int = 1200
+
+        /** Sparkle trail particle lifetime. */
+        const val SparkleTrail: Int = 400
+
         /** Pause between Spin landing and auto-navigation to Topic Reveal. */
         const val RevealHold: Int = 400
+
+        /** Shimmer sweep duration. */
+        const val Shimmer: Int = 1500
+
+        /** Breathing / ambient pulse cycle. */
+        const val Breathe: Int = 3200
+    }
+
+    /**
+     * Staggered entrance delays — applied per-child-index.
+     * Multiplied by index to give each child its own start time.
+     */
+    object Stagger {
+        /** Default per-child delay (50ms) — good for most lists. */
+        const val Base: Int = 50
+        /** Quick per-child delay (30ms) — tight lists, chips, tags. */
+        const val Fast: Int = 30
+        /** Slow per-child delay (80ms) — dramatic reveals. */
+        const val Slow: Int = 80
     }
 
     /** Particle count for the confetti burst (per section 0.5: 6 to 10 tiny shapes). */
     const val ConfettiParticleCount: Int = 8
+
+    /** Extended particle count for big reward moments. */
+    const val ConfettiParticleCountLarge: Int = 18
 
     /** Default dial wedge count (per section 5: 6 to 8 visual segments). */
     const val DialWedgeCount: Int = 6

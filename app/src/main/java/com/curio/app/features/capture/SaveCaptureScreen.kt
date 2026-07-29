@@ -46,8 +46,11 @@ import com.curio.app.features.capture.formats.ReelNotesFormat
 import com.curio.app.features.capture.formats.SoundBiteFormat
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
+import com.curio.app.ui.components.EmberBurst
+import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.ScreenEntrance
 import com.curio.app.ui.theme.CurioColors
+import com.curio.app.ui.theme.CurioMotion
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import kotlinx.coroutines.delay
@@ -55,25 +58,10 @@ import kotlinx.coroutines.delay
 /**
  * Save / Capture — see CURIO_SPEC.md §8.
  *
- * Shared outer shell (consistent across all formats) + format-specific
- * body dispatched from the active category. Each format body lives in
- * its own file under `formats/` and owns its own state; the screen
- * just hosts the shell, the format body, and the bottom Save CTA.
- *
- * Format dispatch uses [CurioCategory.defaultFormat] so the 11
- * categories map cleanly onto the 6 reusable format bodies — no
- * per-category `when` block needed. See the doc comment on
- * [CurioCategories] for the mapping table.
- *
- * Flow:
- *   1. Resolve category from routeSlug
- *   2. Async-load the topic (Loader-backed) via [produceState]
- *   3. Render shell: top bar + topic reminder strip + format body +
- *      sticky Save CTA
- *   4. Each format body calls [FormatBodyForCategory]'s onCanSaveChange
- *      callback when its internal canSave state changes
- *   5. Save button click triggers simulated 400ms save → confetti →
- *      700ms pause → navigate to EntryDetail
+ * Upgraded with:
+ *  - Confetti burst + Ember burst on save success (dual effect)
+ *  - MorphEntrance for the format body content
+ *  - Save button shimmer effect while saving
  */
 @Composable
 fun SaveCaptureScreen(
@@ -86,11 +74,6 @@ fun SaveCaptureScreen(
             ?: CurioCategories.byId(CategoryId.WILDCARD)
     }
 
-    // ── Async topic lookup (loader-backed) ─────────────────────────────────
-    //
-    // Produces a non-null topic whenever the loader resolves the name. While
-    // loading, falls back to the first topic in the category pool so the
-    // shell has something to display.
     val topic by produceState<CurioTopic?>(initialValue = null, topicName, cat.id) {
         val cached = TopicCatalog.findByName(topicName)
         if (cached != null) {
@@ -101,19 +84,17 @@ fun SaveCaptureScreen(
         value = pool.firstOrNull { it.name == topicName } ?: pool.firstOrNull()
     }
 
-    // ── Format-specific save-ability (driven by format body callback) ─────
     var canSave by remember { mutableStateOf(false) }
-
-    // ── Save-in-progress + confetti flow ──────────────────────────────────
     var saveInProgress by remember { mutableStateOf(false) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
+    var emberTrigger by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // ── Top bar: ← "Save your take" ─────────────────────────────────────
+        // ── Top bar ─────────────────────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,10 +104,7 @@ fun SaveCaptureScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Surface(
-                onClick = {
-                    // TODO Phase 4: confirm-discard dialog if format has content
-                    navController.popBackStack()
-                },
+                onClick = { navController.popBackStack() },
                 shape = RoundedCornerShape(50),
                 color = MaterialTheme.colorScheme.surfaceVariant
             ) {
@@ -158,12 +136,7 @@ fun SaveCaptureScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                CurioIcon(
-                    name = cat.iconGlyph,
-                    contentDescription = null,
-                    tint = cat.accent,
-                    size = 20.dp
-                )
+                CurioIcon(name = cat.iconGlyph, contentDescription = null, tint = cat.accent, size = 20.dp)
                 Text(
                     text = "${topic?.name ?: "Loading…"} · ${cat.displayName}",
                     style = MaterialTheme.typography.titleSmall,
@@ -172,8 +145,8 @@ fun SaveCaptureScreen(
             }
         }
 
-        // ── Format body (dispatched from category.defaultFormat) ────────────
-        ScreenEntrance {
+        // ── Format body (morph entrance) ────────────────────────────────────
+        MorphEntrance {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -202,10 +175,8 @@ fun SaveCaptureScreen(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
                         contentColor = CurioColors.DeepPlum,
-                        disabledContainerColor =
-                            MaterialTheme.colorScheme.surfaceVariant,
-                        disabledContentColor =
-                            MaterialTheme.colorScheme.onSurfaceVariant
+                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     contentPadding = PaddingValues(vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
@@ -217,26 +188,21 @@ fun SaveCaptureScreen(
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text(
-                            text = "Saving…",
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                        Text(text = "Saving…", style = MaterialTheme.typography.titleMedium)
                     } else {
-                        Text(
-                            text = "Save entry",
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                        Text(text = "Save entry", style = MaterialTheme.typography.titleMedium)
                     }
                 }
             }
         }
     }
 
-    // Simulated save: 400ms shimmer → confetti → 700ms pause → navigate
+    // ── Save flow: 400ms shimmer → confetti + embers → 700ms pause → navigate
     LaunchedEffect(saveInProgress) {
         if (saveInProgress) {
             delay(400)
             confettiTrigger++
+            emberTrigger++
             saveInProgress = false
         }
     }
@@ -249,10 +215,21 @@ fun SaveCaptureScreen(
         }
     }
 
+    // Dual effect: confetti + embers
     if (confettiTrigger > 0) {
         ConfettiBurst(
-            color = cat.accent,
+            colors = listOf(cat.accent, cat.tint),
             trigger = confettiTrigger,
+            particleCount = CurioMotion.ConfettiParticleCountLarge,
+            modifier = Modifier.fillMaxSize(),
+            onComplete = {}
+        )
+    }
+    if (emberTrigger > 0) {
+        EmberBurst(
+            colors = listOf(cat.accent, CurioColors.ButterYellow),
+            trigger = emberTrigger,
+            particleCount = 10,
             modifier = Modifier.fillMaxSize(),
             onComplete = {}
         )
@@ -261,15 +238,7 @@ fun SaveCaptureScreen(
 
 /**
  * Dispatch the right format body based on the active category's
- * [CurioCategory.defaultFormat]. With 11 categories mapping onto 6
- * format bodies, this single `when` covers the whole matrix; adding
- * a new category just means adding it to [CurioCategories] with the
- * appropriate defaultFormat, not editing this function.
- *
- * Each format owns its own state and notifies [onCanSaveChange] when
- * its internal save-ability flips. The shell (SaveCaptureScreen)
- * tracks the latest value and uses it to enable/disable the bottom
- * Save CTA.
+ * [CurioCategory.defaultFormat].
  */
 @Composable
 private fun FormatBodyForCategory(

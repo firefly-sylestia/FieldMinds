@@ -1,5 +1,11 @@
 package com.curio.app.navigation
 
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -29,9 +35,10 @@ import com.curio.app.features.spin.SpinScreen
 import com.curio.app.features.home.HomeScreen
 import com.curio.app.features.splash.SplashScreen
 import com.curio.app.ui.components.CurioBottomBar
+import com.curio.app.ui.theme.CurioMotion
 
 /**
- * The Curio NavHost — single-NavHost scaffold for the placeholder phase.
+ * The Curio NavHost — single-NavHost scaffold for the active app.
  *
  * All routes are flat. The bottom nav is rendered by a [Scaffold] wrapper
  * and is conditionally visible based on the current route (see
@@ -43,6 +50,12 @@ import com.curio.app.ui.components.CurioBottomBar
  *   navigate(route) { popUpTo(startDestination) { saveState = true }; ... }
  * — see CurioBottomNav for the actual call site. This preserves each tab's
  * back stack across switches.
+ *
+ * Upgraded navigation transitions:
+ *  - Forward navigations: slide left + fade, with morph spring
+ *  - Back navigations: slide right + fade, with morph spring
+ *  - Tab switches (bottom nav): simple crossfade (no directional slide)
+ *  - Reveal screen: special elastic entrance
  */
 @Composable
 fun CurioNavHost(
@@ -50,17 +63,10 @@ fun CurioNavHost(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    // Route-prefix match: destination.route returns the route TEMPLATE
-    // (e.g. "spin/{categorySlug}"), not the resolved URL, so the old
-    // exact-string `in bottomNavRoutes` check broke for any parameterised
-    // route (the user-visible bug: bottom nav flashed during the
-    // splash→home transition AND on SpinScreen-with-category because
-    // "spin/{categorySlug}" wasn't in the set). Matching the first
-    // path segment fixes both cases.
-    val showBottomBar = remember(currentRoute) {
-        val routePrefix = currentRoute?.substringBefore("/")
-        routePrefix in CurioRoutes.bottomNavRoutePrefixes
+    val routePrefix = remember(currentRoute) {
+        currentRoute?.substringBefore("/")
     }
+    val showBottomBar = routePrefix in CurioRoutes.bottomNavRoutePrefixes
 
     Scaffold(
         bottomBar = {
@@ -75,7 +81,54 @@ fun CurioNavHost(
             startDestination = CurioRoutes.SPLASH,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding),
+            // ── Animated screen transitions ────────────────────────────────
+            enterTransition = {
+                when {
+                    // Splash → Home / Onboarding: special elastic morph
+                    initialState.destination.route == CurioRoutes.SPLASH ->
+                        fadeIn(
+                            animationSpec = tween(
+                                durationMillis = CurioMotion.Durations.Reveal,
+                                delayMillis = 0
+                            )
+                        )
+                    // Other forward navigations: slide left + fade
+                    else -> slideInHorizontally(
+                        initialOffsetX = { fullWidth -> fullWidth / 4 },
+                        animationSpec = CurioMotion.Springs.Morph
+                    ) + fadeIn(animationSpec = tween(CurioMotion.Durations.Morph))
+                }
+            },
+            exitTransition = {
+                when {
+                    // Navigating away from splash: no exit needed
+                    initialState.destination.route == CurioRoutes.SPLASH ->
+                        fadeOut(animationSpec = tween(CurioMotion.Durations.Quick))
+                    // Other exits: slide out slightly + fade
+                    else -> slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> -fullWidth / 6 },
+                        animationSpec = spring(
+                            dampingRatio = 0.9f,
+                            stiffness = 300f
+                        )
+                    ) + fadeOut(animationSpec = tween(CurioMotion.Durations.Quick))
+                }
+            },
+            popEnterTransition = {
+                // Back navigation: slide right + fade
+                slideInHorizontally(
+                    initialOffsetX = { fullWidth -> -fullWidth / 6 },
+                    animationSpec = spring(dampingRatio = 0.9f, stiffness = 300f)
+                ) + fadeIn(animationSpec = tween(CurioMotion.Durations.Quick))
+            },
+            popExitTransition = {
+                // Pop exit: slide right + fade out
+                slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> fullWidth / 4 },
+                    animationSpec = CurioMotion.Springs.Morph
+                ) + fadeOut(animationSpec = tween(CurioMotion.Durations.Morph))
+            }
         ) {
             // ── Splash + Onboarding (no bottom nav) ──────────────────────────
             composable(CurioRoutes.SPLASH) {

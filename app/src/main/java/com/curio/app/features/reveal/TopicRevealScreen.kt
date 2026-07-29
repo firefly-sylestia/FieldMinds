@@ -32,8 +32,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -50,14 +53,25 @@ import com.curio.app.data.CurioTopic
 import com.curio.app.data.TopicCatalog
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.ui.components.CurioSparkle
+import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.ScreenEntrance
+import com.curio.app.ui.components.StaggeredEntrance
+import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import com.curio.app.ui.theme.CurioMotion
 
 /**
  * Topic Reveal — see CURIO_SPEC.md §6. The payoff screen.
+ *
+ * Upgraded with:
+ *  - Morph entrance: content scales up from 0.85 with elastic spring
+ *  - Staggered reveal: sparkle → image → name → chips → teaser → CTA
+ *  - Enhanced sparkle motif: rotating + pulsing auto_awesome glyph
+ *  - Sparkle ring burst when the screen first appears
  *
  * Layout (top to bottom):
  *   - ✕ close (top-right) → discards topic, exits all the way to Home
@@ -69,10 +83,6 @@ import com.curio.app.ui.theme.CurioIcons
  *   - Action prompt card (the "what to do" reminder)
  *   - "Start exploring →" primary filled button → Save/Capture (§8)
  *   - "Spin again instead" text button → back to Spin
- *
- * Per CURIO_SPEC.md v2: "Start exploring" routes directly to Save/Capture
- * (Exploration Hub was removed from the flow; scratchpad state preserved
- * for a possible v3, see §13.6).
  */
 @Composable
 fun TopicRevealScreen(
@@ -85,13 +95,6 @@ fun TopicRevealScreen(
             ?: CurioCategories.byId(CategoryId.WILDCARD)
     }
 
-    // ── Async topic lookup (loader-backed) ─────────────────────────────────
-    //
-    // Produces the topic once the loader resolves the name. While loading,
-    // produces null and the UI shows a brief loading state. If no topic
-    // matches across the entire category pool, the screen still renders
-    // (with a graceful fallback to the category display name) so a stale
-    // route doesn't crash the back stack.
     val topic by produceState<CurioTopic?>(initialValue = null, topicName, cat.id) {
         val cached = TopicCatalog.findByName(topicName)
         if (cached != null) {
@@ -100,6 +103,13 @@ fun TopicRevealScreen(
         }
         val pool = TopicJsonLoader.load(cat.id)
         value = pool.firstOrNull { it.name == topicName } ?: pool.firstOrNull()
+    }
+
+    // Sparkle ring trigger on first appearance (fires after morph entrance)
+    var sparkleTrigger by remember { mutableIntStateOf(0) }
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(400)
+        sparkleTrigger++
     }
 
     Column(
@@ -118,7 +128,6 @@ fun TopicRevealScreen(
         ) {
             Surface(
                 onClick = {
-                    // Discard topic, exit all the way back to Home.
                     navController.navigate(CurioRoutes.HOME) {
                         popUpTo(navController.graph.id) { inclusive = true }
                         launchSingleTop = true
@@ -137,201 +146,188 @@ fun TopicRevealScreen(
             }
         }
 
-        ScreenEntrance {
+        MorphEntrance(delayMs = 100) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // ── Sparkle motif (slowly rotating + pulsing) ─────────────────
-                SparkleMotif(color = cat.accent)
+                // ── Enhanced sparkle motif ─────────────────────────────────────
+                EnhancedSparkleMotif(color = cat.accent, trigger = sparkleTrigger)
+
                 Spacer(Modifier.height(16.dp))
 
-                // ── Topic image placeholder ───────────────────────────────────
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(280.dp)
-                        .background(
-                            brush = if (cat.id == CategoryId.WILDCARD)
-                                Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
-                            else Brush.verticalGradient(listOf(cat.accent, cat.tint)),
-                            shape = RoundedCornerShape(28.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CurioIcon(
-                        name = cat.iconGlyph,
-                        contentDescription = null,
-                        tint = Color.White.copy(alpha = 0.9f),
-                        size = 120.dp
-                    )
-                }
-                Spacer(Modifier.height(24.dp))
-
-                // ── Topic name ────────────────────────────────────────────────
-                Text(
-                    text = topic?.name ?: cat.displayName,
-                    style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(Modifier.height(8.dp))
-
-                // ── Category chip + subtype chip ──────────────────────────────
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = cat.tint
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(
-                                horizontal = 10.dp,
-                                vertical = 6.dp
-                            ),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                // ── Staggered content ──────────────────────────────────────────
+                StaggeredEntrance {
+                    // ── Topic image placeholder ────────────────────────────────
+                    StaggeredItem(index = 0) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(280.dp)
+                                .background(
+                                    brush = if (cat.id == CategoryId.WILDCARD)
+                                        Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
+                                    else Brush.verticalGradient(listOf(cat.accent, cat.tint)),
+                                    shape = RoundedCornerShape(28.dp)
+                                ),
+                            contentAlignment = Alignment.Center
                         ) {
                             CurioIcon(
                                 name = cat.iconGlyph,
                                 contentDescription = null,
-                                tint = cat.accent,
-                                size = 14.dp
-                            )
-                            Text(
-                                text = cat.displayName,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = cat.accent
+                                tint = Color.White.copy(alpha = 0.9f),
+                                size = 120.dp
                             )
                         }
                     }
-                    if (topic?.subtype?.isNotBlank() == true) {
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = MaterialTheme.colorScheme.surfaceVariant
+                    Spacer(Modifier.height(24.dp))
+
+                    // ── Topic name ────────────────────────────────────────────
+                    StaggeredItem(index = 1) {
+                        Text(
+                            text = topic?.name ?: cat.displayName,
+                            style = MaterialTheme.typography.displaySmall,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
+
+                    // ── Category chip + subtype chip ──────────────────────────
+                    StaggeredItem(index = 2) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = cat.tint
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    CurioIcon(name = cat.iconGlyph, contentDescription = null, tint = cat.accent, size = 14.dp)
+                                    Text(text = cat.displayName, style = MaterialTheme.typography.labelMedium, color = cat.accent)
+                                }
+                            }
+                            if (topic?.subtype?.isNotBlank() == true) {
+                                Surface(
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = MaterialTheme.colorScheme.surfaceVariant
+                                ) {
+                                    Text(
+                                        text = topic!!.subtype,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Spacer(Modifier.height(24.dp))
+
+                    // ── Teaser ────────────────────────────────────────────────
+                    StaggeredItem(index = 3) {
+                        Text(
+                            text = "One quirky fact to get you curious...",
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                            color = cat.accent
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = topic?.teaser ?: "Loading topic…",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    Spacer(Modifier.height(32.dp))
+
+                    // ── Action prompt card ────────────────────────────────────
+                    StaggeredItem(index = 4) {
+                        if (topic != null) {
+                            Surface(
+                                shape = RoundedCornerShape(20.dp),
+                                color = MaterialTheme.colorScheme.surfaceVariant
+                            ) {
+                                Column(modifier = Modifier.padding(16.dp)) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        CurioIcon(name = CurioIcons.AutoAwesome, contentDescription = null, tint = cat.accent, size = 18.dp)
+                                        Text(
+                                            text = "${topic!!.exploreAction.verb} ${topic!!.exploreAction.targetName}",
+                                            style = MaterialTheme.typography.titleSmall,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+                                    Spacer(Modifier.height(6.dp))
+                                    Text(
+                                        text = topic!!.exploreAction.instruction,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Spacer(Modifier.height(32.dp))
+
+                    // ── Primary CTA ───────────────────────────────────────────
+                    StaggeredItem(index = 5) {
+                        Button(
+                            onClick = {
+                                val topicNameResolved = topic?.name ?: return@Button
+                                navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, topicNameResolved))
+                            },
+                            enabled = topic != null,
+                            shape = RoundedCornerShape(28.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = cat.accent,
+                                contentColor = CurioColors.DeepPlum
+                            ),
+                            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp),
+                            modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = topic!!.subtype,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(
-                                    horizontal = 10.dp,
-                                    vertical = 6.dp
-                                )
+                                text = "Start exploring  \u2192",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                             )
                         }
                     }
-                }
-                Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(8.dp))
 
-                // ── Teaser ────────────────────────────────────────────────────
-                Text(
-                    text = "One quirky fact to get you curious...",
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    color = cat.accent
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = topic?.teaser ?: "Loading topic…",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(Modifier.height(32.dp))
-
-                // ── Action prompt card ────────────────────────────────────────
-                if (topic != null) {
-                    Surface(
-                        shape = RoundedCornerShape(20.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                CurioIcon(
-                                    name = CurioIcons.AutoAwesome,
-                                    contentDescription = null,
-                                    tint = cat.accent,
-                                    size = 18.dp
-                                )
-                                Text(
-                                    text = "${topic!!.exploreAction.verb} " +
-                                           "${topic!!.exploreAction.targetName}",
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                            Spacer(Modifier.height(6.dp))
+                    StaggeredItem(index = 6) {
+                        TextButton(
+                            onClick = { navController.popBackStack() },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
                             Text(
-                                text = topic!!.exploreAction.instruction,
-                                style = MaterialTheme.typography.bodyMedium,
+                                text = "Spin again instead",
+                                style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
+                    Spacer(Modifier.height(24.dp))
                 }
-
-                Spacer(Modifier.height(32.dp))
-
-                // ── Primary CTA: Start exploring → ────────────────────────────
-                Button(
-                    onClick = {
-                        val topicNameResolved = topic?.name ?: return@Button
-                        navController.navigate(
-                            CurioRoutes.captureFor(cat.id.routeSlug, topicNameResolved)
-                        )
-                    },
-                    enabled = topic != null,
-                    shape = RoundedCornerShape(28.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = cat.accent,
-                        contentColor = CurioColors.DeepPlum
-                    ),
-                    contentPadding = PaddingValues(
-                        horizontal = 32.dp,
-                        vertical = 16.dp
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Start exploring  \u2192",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    )
-                }
-                Spacer(Modifier.height(8.dp))
-                TextButton(
-                    onClick = { navController.popBackStack() },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Spin again instead",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                Spacer(Modifier.height(24.dp))
             }
         }
     }
 }
 
 /**
- * Decorative accent — slow rotation + gentle pulse. Replaces the emoji
- * sparkle motif that v1 had; uses the Material Symbols `auto_awesome`
- * glyph in the category accent.
+ * Enhanced decorative accent — slow rotation + pulsing + sparkle ring
+ * on initial appearance.
  */
 @Composable
-private fun SparkleMotif(color: Color) {
+private fun EnhancedSparkleMotif(color: Color, trigger: Int) {
     val transition = rememberInfiniteTransition(label = "sparkle")
     val rotation by transition.animateFloat(
         initialValue = 0f,
@@ -352,17 +348,29 @@ private fun SparkleMotif(color: Color) {
     )
 
     Box(
-        modifier = Modifier
-            .size(64.dp)
-            .scale(pulse)
-            .rotate(rotation),
+        modifier = Modifier.size(72.dp),
         contentAlignment = Alignment.Center
     ) {
-        CurioIcon(
-            name = CurioIcons.AutoAwesome,
-            contentDescription = null,
-            tint = color,
-            size = 56.dp
+        // Sparkle ring background
+        CurioSparkle(
+            color = color.copy(alpha = 0.3f),
+            trigger = trigger,
+            size = 72.dp,
+            ringCount = 2
         )
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .scale(pulse)
+                .rotate(rotation),
+            contentAlignment = Alignment.Center
+        ) {
+            CurioIcon(
+                name = CurioIcons.AutoAwesome,
+                contentDescription = null,
+                tint = color,
+                size = 56.dp
+            )
+        }
     }
 }
