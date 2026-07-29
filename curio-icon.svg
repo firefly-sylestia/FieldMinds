@@ -3,14 +3,14 @@
     Curio app icon — reference SVG.
     Archive-quality source-of-truth for the launcher design. The Android
     launcher actually consumes the VectorDrawable XML in
-    app/src/main/res/drawable/ic_launcher_foreground.xml + ic_launcher_background.xml,
-    but this .svg mirrors that composition in portable SVG for design-tool
-    preview (Figma/Illustrator), web previews, and as a regression-check
-    against future VisualDesignSystem refactors.
+    app/src/main/res/drawable/ic_launcher_foreground.xml +
+    ic_launcher_background.xml, but this .svg mirrors that composition in
+    portable SVG for design-tool preview (Figma/Illustrator), web previews,
+    and as a regression-check against future VisualDesignSystem refactors.
 
-    Redesigned: replaces the 6-wedge wheel from commit ac9a0742 with a
-    cleaner 3-wedge design on a coral background. See the corresponding
-    XML files for the full design rationale.
+    Latest redesign: replaces the wheel-with-pointer design (commit
+    0d5e6b2b) with a stacked-card deck metaphor. The user asked for "a
+    shuffle between the topics in a beautiful way" — not a roulette wheel.
 
     See:
       - CURIO_SPEC.md section 13.1 (splash/icon logomark)
@@ -19,17 +19,20 @@
       - app/src/main/res/drawable/ic_launcher_background.xml (compiled form)
 
     Coordinate system: 108x108 viewBox (matches Android adaptive-icon).
-    Safe zone: 66dp diameter centered at (54,54).
+    Safe zone: 66dp diameter centered at (54,54) — front card content stays
+    well inside; back card edges intentionally extend outside so launcher
+    masks crop them into the "stack silhouette".
 
     Layer order (back to front):
       1. coral rectangle (background, gets cropped by launcher mask)
-      2. cream wheel circle (r=30 at 54,54)
-      3. 3 roulette wedges (clockwise from 12 o'clock)
-         - W1 (12-4):   butter yellow
-         - W2 (4-8):    sky mint
-         - W3 (8-12):   lilac
-      4. pointer (deep plum triangle, apex at wheel top edge)
-      5. sparkle (butter yellow 4-point star, top-left at 24,24)
+      2. Card 1 (back):   lilac 56x64 with rx=6 at (4,16)
+      3. Card 2 (middle): sky mint 56x64 with rx=6 at (16,20)
+      4. Card 3 (front):  cream 56x64 with rx=6 at (26,24)
+      5. inside front card:
+         a. image placeholder: butter yellow 32x28 with rx=4 at (38,32)
+         b. title bar:         deep plum 24x3 at (38,65)
+         c. subtitle bar:      soft sand 16x2 at (38,72)
+         d. sparkle:           deep plum 4-point star at (74,30)
 -->
 <svg xmlns="http://www.w3.org/2000/svg"
      viewBox="0 0 108 108" width="108" height="108">
@@ -37,25 +40,25 @@
   <!-- ── Background ─────────────────────────────────────────────────── -->
   <rect x="0" y="0" width="108" height="108" fill="#FF8FA3" />
 
-  <!-- ── Wheel body (cream circle) ──────────────────────────────────── -->
-  <circle cx="54" cy="54" r="30" fill="#FFFBF5" />
+  <!-- ── Card 1 (back): Lilac, peeks out top-left ─────────────────── -->
+  <rect x="4" y="16" width="56" height="64" rx="6" ry="6" fill="#C9A6F2" />
 
-  <!-- ── Wedge 1 (12→4 o'clock) : Butter Yellow ─────────────────────── -->
-  <path d="M 54 54 L 54 24 A 30 30 0 0 1 79.98 69 Z"
-        fill="#FFD97D" />
+  <!-- ── Card 2 (middle): Sky Mint, peeks out top-left ───────────── -->
+  <rect x="16" y="20" width="56" height="64" rx="6" ry="6" fill="#8FE3CF" />
 
-  <!-- ── Wedge 2 (4→8 o'clock) : Sky Mint ─────────────────────────── -->
-  <path d="M 54 54 L 79.98 69 A 30 30 0 0 1 28.02 69 Z"
-        fill="#8FE3CF" />
+  <!-- ── Card 3 (front): Cream, the "current topic" ──────────────── -->
+  <rect x="26" y="24" width="56" height="64" rx="6" ry="6" fill="#FFFBF5" />
 
-  <!-- ── Wedge 3 (8→12 o'clock) : Lilac ────────────────────────────── -->
-  <path d="M 54 54 L 28.02 69 A 30 30 0 0 1 54 24 Z"
-        fill="#C9A6F2" />
+  <!-- ── Image placeholder (butter yellow) ─────────────────────────── -->
+  <rect x="38" y="32" width="32" height="28" rx="4" ry="4" fill="#FFD97D" />
 
-  <!-- ── Pointer at top of dial (deep plum triangle) ────────────────── -->
-  <path d="M 54 24 L 50 14 L 58 14 Z" fill="#3B0A17" />
+  <!-- ── Title bar (deep plum) ──────────────────────────────────────── -->
+  <rect x="38" y="65" width="24" height="3" fill="#3B0A17" />
 
-  <!-- ── Sparkle (butter yellow 4-point star, top-left) ─────────────── -->
-  <path d="M 24 18 L 26 22 L 30 24 L 26 26 L 24 30 L 22 26 L 18 24 L 22 22 Z"
-        fill="#FFD97D" />
+  <!-- ── Subtitle bar (soft sand) ─────────────────────────────────── -->
+  <rect x="38" y="72" width="16" height="2" fill="#F6EFE4" />
+
+  <!-- ── Sparkle: deep plum 4-point star on the image area ─────────── -->
+  <path d="M 74,26 L 76,28 L 78,30 L 76,32 L 74,34 L 72,32 L 70,30 L 72,28 Z"
+        fill="#3B0A17" />
 </svg>
