@@ -1,1 +1,1488 @@
-[]
+[
+  {
+    "id": "artist-bowie",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "David Bowie",
+    "teaser": "Sold 140M records by never sounding like himself twice. The Berlin trilogy alone rewired three decades of pop.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Heroes\" (1977) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen for Eno's production trick where the drums get pushed so far back in the mix they're almost geological. Track 2 (\"Hang on to Yourself\") and the title track are the spine; everything around them is weather."
+    },
+    "tags": [
+      "Glam Rock",
+      "Art Rock",
+      "British",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-beatles",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Beatles",
+    "teaser": "Four working-class Liverpool kids who wrote the playbook modern pop hasn't fully left. The studio albums start in 1963 and end in 1970 — every year sounds different.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Revolver (1966) and Abbey Road (1969) back-to-back",
+      "durationMinutes": 75,
+      "instruction": "Don't shuffle. Notice that Revolver still pretends to be a singles band and Abbey Road pretends not to be. The seam where that shifts is rock history."
+    },
+    "tags": [
+      "Rock",
+      "British",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-radiohead",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Radiohead",
+    "teaser": "Five Oxford schoolmates who turned the late-90s mood of dread into a chart-topping art-rock exercise. Kid A broke their own rulebook and sent them further out.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Kid A (2000) end-to-end",
+      "durationMinutes": 50,
+      "instruction": "Notice the first track has no guitar for 90 seconds. That absence is the entire album's argument. Then listen again with the lights off; the production only fully opens in the dark."
+    },
+    "tags": [
+      "Alternative Rock",
+      "Electronic",
+      "British",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-billie-holiday",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Billie Holiday",
+    "teaser": "Sang with a fractured throat and an autobiography you can hear in every breath. She's the line through which every pop vocalist since traces a hand.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Lady in Satin (1958) end-to-end",
+      "durationMinutes": 45,
+      "instruction": "Hit pause if you can. The voice on this album is breaking — that is the point, not a flaw. Imagine her knowing she's dying and singing anyway."
+    },
+    "tags": [
+      "Jazz",
+      "Vocal",
+      "American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-miles-davis",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Miles Davis",
+    "teaser": "Invented a different jazz every decade for forty years. The trumpet was almost incidental — what he actually did was rearrange a room.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Kind of Blue (1959) end-to-end",
+      "durationMinutes": 46,
+      "instruction": "Put it on once as soundtrack and once as the only sound in the room. The opening of \"So What\" is a modal scale you'd never guess from the chord chart."
+    },
+    "tags": [
+      "Jazz",
+      "Trumpet",
+      "American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-joni-mitchell",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Joni Mitchell",
+    "teaser": "Taught herself guitar in an open tuning she'd retune every song, then wrote the 1970s as a journal nobody realized was peer-reviewed. She quit touring at the top of her game.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Blue (1971) end-to-end",
+      "durationMinutes": 36,
+      "instruction": "She wrote most of these songs on a guitar in a hospital bed. Don't play it loud — let the room do the reverb."
+    },
+    "tags": [
+      "Folk",
+      "Singer-Songwriter",
+      "Canadian",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-kraftwerk",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Kraftwerk",
+    "teaser": "Four Düsseldorf engineers treated pop as a laboratory and accidentally invented techno, hip-hop, synth-pop, and EDM in the same eight-year stretch.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Trans-Europe Express (1977) and The Man-Machine (1978) back-to-back",
+      "durationMinutes": 75,
+      "instruction": "Listen for the trains. The sampled clickety-clack isn't decoration — Kraftwerk believed the rhythm of rail travel was the rhythm of postwar Europe. The whole album is that thesis."
+    },
+    "tags": [
+      "Electronic",
+      "German",
+      "Synth",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-mf-doom",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "MF DOOM",
+    "teaser": "A Londoner raised in the Bronx who rapped in a metal-mask persona, made beats that sound like soap operas, and never once in 25 years told you his real name on a record.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Madvillainy (2004) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Rap along once. The verses scan in clever ways but the syllable counts are unpredictable; that's the joke. Madlib's beats drop things you expect to come back and never do."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Underground",
+      "American-British",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-nina-simone",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Nina Simone",
+    "teaser": "Trained as the sixth Black student at Juilliard, refused to play classical, and weaponized her piano training against American racism for fifty years.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Pastel Blues (1965) end-to-end",
+      "durationMinutes": 42,
+      "instruction": "Listen to \"Sinnerman\" once for the performance, once for the arrangement, once for the audience. You can hear them respond. It's a recording of a congregation in real time."
+    },
+    "tags": [
+      "Soul",
+      "Jazz",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-fela-kuti",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Fela Kuti",
+    "teaser": "Nigerian bandleader who spent 27 months in prison for writing a song about it, and declared his compound the \"Kalakuta Republic\" outside Nigeria's jurisdiction.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Expensive Shit (1975) end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Pick a 10-minute span and let it loop in your head for a week. Fela's grooves are deliberately long enough to overtake your attention span; that's how he made politics feel like a trance."
+    },
+    "tags": [
+      "Afrobeat",
+      "Nigerian",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-prince",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Prince",
+    "teaser": "Self-produced twenty albums before MTV noticed him, wrote hits for everyone else under names no one tracked, and renamed himself an unpronounceable symbol in protest of his own label.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Purple Rain (1984) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Play the title track twice; the guitar solo on the second version is being rebuilt in real time, and you can hear the new arrangement step on the old one."
+    },
+    "tags": [
+      "Pop",
+      "Funk",
+      "R&B",
+      "American",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-la-monte-young",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "La Monte Young",
+    "teaser": "Held one drone note for seven hours in his New York loft for an audience of nine people. That sound is the seam at which minimalism, drone metal, and modern ambient all begin.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Well-Tuned Piano (1987) — any single 30-min segment",
+      "durationMinutes": 30,
+      "instruction": "Don't listen for melody. Listen for the room. By minute 20 the overtones of his piano have set up a chord that isn't in any keyboard manual."
+    },
+    "tags": [
+      "Minimalism",
+      "Drone",
+      "American",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-ravi-shankar",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Ravi Shankar",
+    "teaser": "Geetar teacher who brought the sitar to Woodstock, taught John Lennon a chord progression that became \"Norwegian Wood,\" and spent his 90s teaching Anoushka.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Ragas (1968) — Raga Jogiya",
+      "durationMinutes": 30,
+      "instruction": "Listen for the moment where Shankar pulls the tempo out of time. The raga is built around a deliberate descent; Western ears try to follow a melody and lose the architecture."
+    },
+    "tags": [
+      "Indian Classical",
+      "Sitar",
+      "Indian",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-stevie-wonder",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Stevie Wonder",
+    "teaser": "Signed to Motown at 11, took over his own production at 21, and released five albums in five years that no Black artist has ever equaled on a single label.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Songs in the Key of Life (1976) — Side A only",
+      "durationMinutes": 25,
+      "instruction": "Side A opens with a song that's 6 minutes long and ends with a song about a piece of bird poop. That's the album's confidence. Listen in order."
+    },
+    "tags": [
+      "Soul",
+      "Funk",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-tupac",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Tupac Shakur",
+    "teaser": "Read Maya Angelou at the Baltimore School for the Arts, was disowned by the Black Panthers, and made the most-quoted hip-hop verse of his generation between touring and court dates.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Me Against the World (1995), tracks 5-7 only",
+      "durationMinutes": 15,
+      "instruction": "Listen to \"Dear Mama,\" then immediately to \"So Many Tears,\" then \"Temptations.\" Three songs, three tones: love letter, eulogy, flex. The seams between them are the album."
+    },
+    "tags": [
+      "Hip-Hop",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-tatsuro-yamashita",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Tatsuro Yamashita",
+    "teaser": "Defined Japanese city pop in 1980 before the genre had a name. His basslines are sampled so often now that most neo-soul producers don't know they're quoting him.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "For You (1982) end-to-end",
+      "durationMinutes": 38,
+      "instruction": "Listen to the bass. Then to the drums refusing to land on the obvious beat. Then to Tatsuro singing at the top of his range for an entire song without ever sounding strained."
+    },
+    "tags": [
+      "City Pop",
+      "Japanese",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-fugazi",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Fugazi",
+    "teaser": "DC punk band that refused every major label, charged $5 for tickets, and accidentally invented the post-hardcore genre their city still exports.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "13 Songs (1989), side A",
+      "durationMinutes": 18,
+      "instruction": "Notice that none of the seven songs on this side run longer than three minutes. That's a stance, not a budget."
+    },
+    "tags": [
+      "Post-Hardcore",
+      "Punk",
+      "American",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-rosalia",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Rosalía",
+    "teaser": "Flamenco student from Barcelona who fused flamenco with reggaeton and trap, became the first Spanish-language artist to headline Coachella, and learned production by accident.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "El Mal Querer (2018), tracks 4-6",
+      "durationMinutes": 15,
+      "instruction": "Rosalía recorded these with El Guincho on a single laptop in a flat in Barcelona. The drum programming is doing 70% of the work; the flamenco vocals are doing 30%. Try to hear that ratio live."
+    },
+    "tags": [
+      "Flamenco",
+      "Pop",
+      "Spanish",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-pharoah-sanders",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Pharoah Sanders",
+    "teaser": "Free-jazz saxophonist hired as a sideman by John Coltrane, then spent 50 years on his own clock — running a tea shop in Oakland in the 2000s while still recording.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Thembi (1971) end-to-end",
+      "durationMinutes": 45,
+      "instruction": "Listen for what the saxophone isn't playing. Sanders's discipline in 1971 was knowing when to leave a note in the air. That's what the album is teaching you to hear."
+    },
+    "tags": [
+      "Jazz",
+      "Free Jazz",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-john-coltrane",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "John Coltrane",
+    "teaser": "Beat heroin cold turkey on the bandstand, recorded A Love Supreme a year later, then spent his final four years chasing a sound that some musicians still don't believe exists.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "A Love Supreme (1965) end-to-end",
+      "durationMinutes": 33,
+      "instruction": "Listen to \"Resolution\" twice. The first time, follow the saxophone. The second time, follow the bass. The album does both, and most people only ever hear half."
+    },
+    "tags": [
+      "Jazz",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-bob-marley",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Bob Marley",
+    "teaser": "Jamaican who turned ska into reggae, was shot at twice for his politics, and built a global audience that still doesn't always realize they're listening to Rasta theology.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Natty Dread (1974) end-to-end",
+      "durationMinutes": 38,
+      "instruction": "Ignore the lyrics for the first listen. Notice the guitar playing off the beat instead of on it. That's the entire reggae rhythm in one example."
+    },
+    "tags": [
+      "Reggae",
+      "Jamaican",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-patti-smith",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Patti Smith",
+    "teaser": "Working-class New Jersey girl who moved to NYC, hung out with William Burroughs, and then accidentally wrote the song that invented punk rock in 1975.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Horses (1975), opening track \"Gloria\"",
+      "durationMinutes": 5,
+      "instruction": "She sings about a boy who picks up a girl named Gloria. Then she sings AS Gloria. Then she sings AS the boy talking about himself. Three vocal positions in five minutes."
+    },
+    "tags": [
+      "Punk",
+      "Poetry",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-leonard-cohen",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Leonard Cohen",
+    "teaser": "Published novelist who at 33 decided to become a folk singer, spent his 60s in a Zen monastery, and wrote his best song at 70 because he had nothing left to lose.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Hallelujah\" (1984) — the live 1988 version",
+      "durationMinutes": 7,
+      "instruction": "He wrote 80 verses for this song and only ever sings a handful. Pick one verse you don't fully understand and listen to it three times. He's leaving the rest up to you."
+    },
+    "tags": [
+      "Folk",
+      "Singer-Songwriter",
+      "Canadian",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-taylor-swift",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Taylor Swift",
+    "teaser": "Country-teen to stadium-pop to indie-folk to pandemic-synth arc, the most-listened artist of the 2010s, and the only living songwriter whose rerecordings are economic events.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Folklore (2020), \"Cardigan\" and \"August\" back-to-back",
+      "durationMinutes": 10,
+      "instruction": "Both songs tell a love triangle from a different seat. She doesn't say who's right. The arrangement changes before the perspective does — that's where the truth is hiding."
+    },
+    "tags": [
+      "Pop",
+      "Singer-Songwriter",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-mitski",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Mitski",
+    "teaser": "Wrote her first album while living in a motel, refuses to tour more than 9 months a year, and writes two-minute songs about feelings most artists use four minutes to soften.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"I Bet on Losing Dogs\" (2016)",
+      "durationMinutes": 4,
+      "instruction": "She refuses to resolve the chord. End on a single note that isn't the tonic of the key. The song's title is the explanation."
+    },
+    "tags": [
+      "Indie Rock",
+      "Art Pop",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-billie-eilish",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Billie Eilish",
+    "teaser": "Wrote her debut album with her brother in a bedroom at 17, became the first artist born after 2000 to win all four major Grammys, and produces every song herself on a laptop.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Everything I Wanted\" (2019) — single front-to-back",
+      "durationMinutes": 4,
+      "instruction": "It's a song about dreaming she's on a car roof with her brother and the dream is also a nightmare. Listen for the synth chord that drops at 2:45. That's where she wakes up."
+    },
+    "tags": [
+      "Pop",
+      "Alternative",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-bad-bunny",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Bad Bunny",
+    "teaser": "Puerto Rican trap singer who learned bag-of-tricks from YouTube, became the most-streamed Spotify artist for three years running, and reshaped Latin Grammy politics by not attending.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "YHLQMDLG (2020), \"Yo Perreo Sola\"",
+      "durationMinutes": 3,
+      "instruction": "Listen to the second beat of every bar. The bass lands ON the second beat, not on the downbeat — a reggaeton tic, but here turned into a feminist statement."
+    },
+    "tags": [
+      "Reggaeton",
+      "Latin",
+      "Puerto Rican",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-youssou-ndour",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Youssou N'Dour",
+    "teaser": "Senegalese singer who fused mbalax with rock on Peter Gabriel's \"In Your Eyes,\" became Senegal's Minister of Culture in 2012, and runs one of West Africa's biggest studios.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Immigrés (1989), track 1 \"Immigrés\"",
+      "durationMinutes": 8,
+      "instruction": "Listen to the talking drum in the right channel. It's having a real conversation with the voice in the left. The song is built around the sound of two people talking past each other in the same language."
+    },
+    "tags": [
+      "West African",
+      "Mbalax",
+      "Senegalese",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-jaco-pastorius",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Jaco Pastorius",
+    "teaser": "Self-taught Florida bass prodigy who taught the instrument a new vocabulary in 1976, then drank it away by 35 in a Fort Lauderdale brawl.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Jaco Pastorius (1976), \"Portrait of Tracy\"",
+      "durationMinutes": 2,
+      "instruction": "He plays harmonics that sound like a flute. Most bass players have to bend the pitch up to reach them; Jaco was born with the long fingers."
+    },
+    "tags": [
+      "Jazz",
+      "Bass",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-sunn-o",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Sunn O)))",
+    "teaser": "Two guitarists in robes playing eight-string guitars tuned so low you feel them as much as hear them. The first metal band to get a MoMA sound installation.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Monoliths & Dimensions (2009)\", end-to-end",
+      "durationMinutes": 45,
+      "instruction": "Pick a track and find a frequency your headphones can barely reproduce. The song is built around that band — feel it in your ear canals before you hear it."
+    },
+    "tags": [
+      "Drone Metal",
+      "Doom",
+      "American",
+      "2000s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-carlos-gardel",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Carlos Gardel",
+    "teaser": "French-born Uruguayan raised in Buenos Aires who invented tango canción in the 1920s. Died in a Medellín plane crash and Argentina shut down for a day.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Mi Último Fracaso\" (1935)",
+      "durationMinutes": 3,
+      "instruction": "He recorded this in the same year he died. Listen to the breath before the chorus — the pause is the entire feeling of tango in one breath."
+    },
+    "tags": [
+      "Tango",
+      "Argentine",
+      "1920s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-celia-cruz",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Celia Cruz",
+    "teaser": "Cuban singer who fled to NYC after Castro, recorded 37 studio albums, and made \"Azúcar!\" the only Latin music exclamation that non-Spanish speakers still shout at concerts.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Celia & Tito (1966), any single track",
+      "durationMinutes": 4,
+      "instruction": "Listen to her scat. She's not improvising — she's talking to Tito Puente's rhythm section, asking questions. The horn answers back."
+    },
+    "tags": [
+      "Salsa",
+      "Cuban",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-bjork",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Björk",
+    "teaser": "Icelandic 12-year-old pop star, then a Sugarcubes guitarist, then a solo producer who turned breathing into a beat and released 11 albums that rearranged her own genre.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Homogenic (1997) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "She recorded this album across two studios 800 miles apart, in part during an Icelandic winter. The string arrangements sound frozen, on purpose."
+    },
+    "tags": [
+      "Art Pop",
+      "Electronic",
+      "Icelandic",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-stan-getz",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Stan Getz",
+    "teaser": "American jazz saxophonist who stumbled into the 1962 Bossa Nova hit \"Desafinado\" and accidentally turned Jobim into an American chart act overnight.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Getz/Gilberto (1964), \"The Girl from Ipanema\"",
+      "durationMinutes": 5,
+      "instruction": "Listen to João Gilberto's guitar in the left channel and Getz's sax in the right. They're spaced exactly far enough apart to feel like a conversation across a Rio sidewalk."
+    },
+    "tags": [
+      "Jazz",
+      "Bossa Nova",
+      "American",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-syd-barrett",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Syd Barrett",
+    "teaser": "Founder of Pink Floyd, left after two albums due to mental illness, then recorded two solo records in 1970 that nobody has yet figured out whether to love or grieve.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Madcap Laughs (1970), \"Late Night\"",
+      "durationMinutes": 3,
+      "instruction": "He's singing a lullaby to a guitar that won't stay in tune, and he's clearly aware of it. The song is built around that awareness — not pretending it's okay."
+    },
+    "tags": [
+      "Psychedelic",
+      "British",
+      "1970s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-johann-sebastian-bach",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Johann Sebastian Bach",
+    "teaser": "German court composer who died thinking he was just a craftsperson. 100 years later Mendelssohn resurrected him, and the entire Western music canon pivoted around his output.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Goldberg Variations (BWV 988) — Glenn Gould 1981 recording, Aria only",
+      "durationMinutes": 4,
+      "instruction": "Listen as if it were environmental sound. The aria is 32 bars of slow chords. The whole 80-minute piece repeats that aria 31 times, each time transformed. That's the entire project."
+    },
+    "tags": [
+      "Baroque",
+      "Classical",
+      "German",
+      "1700s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-bela-bartok",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Béla Bartók",
+    "teaser": "Hungarian who spent six years in Transylvania with a wax-cylinder recorder documenting peasant songs, then used those recordings to secretly build the most modern European classical music of the early 20th century.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Music for Strings, Percussion and Celesta (1936) — III. Adagio",
+      "durationMinutes": 7,
+      "instruction": "Listen for the open fifth at the start. That interval — no third — is taken straight from Hungarian folk music. The rest of modernist dissonance in the 20th century runs downstream of that decision."
+    },
+    "tags": [
+      "Classical",
+      "Modernist",
+      "Hungarian",
+      "1930s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-ella-fitzgerald",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Ella Fitzgerald",
+    "teaser": "Won a Harlem Amateur Night at 17, sang for a decade without a stable band, and then out-scat-categorized every other vocalist on earth, including her own.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"How High the Moon\" — Newport 1957 live version",
+      "durationMinutes": 6,
+      "instruction": "She sings the melody once, then never returns to it. She turns the song into a 6-minute vocalise, and the bassline is the only thing holding us to a structure."
+    },
+    "tags": [
+      "Jazz",
+      "Vocal",
+      "American",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-pj-harvey",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "PJ Harvey",
+    "teaser": "English songwriter who released two albums with different instruments, costumes, and gender expressions within one year and won the Mercury Prize for both.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Stories from the City, Stories from the Sea (2000) end-to-end",
+      "durationMinutes": 38,
+      "instruction": "She wrote most of these in NYC after Tom Waits told her to come visit. Listen to \"A Perfect Day Elise\" three times. The melody keeps almost resolving and never quite does."
+    },
+    "tags": [
+      "Alternative Rock",
+      "British",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-iggy-pop",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Iggy Pop",
+    "teaser": "Stooges frontman who pre-dated punk by five years, then moved to Berlin with Bowie, recorded two solo albums of cracked-glass howl, and has still never retired.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Lust for Life\" (1977) — title track",
+      "durationMinutes": 6,
+      "instruction": "David Bowie sings backing on this. Wait for the chorus. Listen to the kick drum hit on the wrong beat — that's the whole song's attitude compressed into a single percussion note."
+    },
+    "tags": [
+      "Punk",
+      "Proto-Punk",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-bjork-biografia",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Björk Guðmundsdóttir",
+    "teaser": "Released her first solo album at 11 in 1977, left the Sugarcubes in 1992, then made nine solo records that redefined what pop vocals could sound like.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Debut (1993), \"Army of Me\"",
+      "durationMinutes": 5,
+      "instruction": "She wrote this after a conversation with a film director. The drum programming is by Graham Massey — the same engineer who worked on Tricky's first album. Listen to what they did with the snare."
+    },
+    "tags": [
+      "Art Pop",
+      "Icelandic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-mary-j-blige",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Mary J. Blige",
+    "teaser": "Bronx housing-project kid who invented hip-hop soul in 1992, has been nominated for nine Grammys in a single year (more than anyone in 2012), and treats every album like a therapy session.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "My Life (1994), \"I'm Goin' Down\"",
+      "durationMinutes": 4,
+      "instruction": "Listen to how her voice thickens on the words \"going down.\" She's using her vocal cords as an emotional instrument — the melody is the lyric."
+    },
+    "tags": [
+      "Hip-Hop Soul",
+      "R&B",
+      "American",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-jimi-hendrix",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Jimi Hendrix",
+    "teaser": "Right-handed guitarist who flipped his guitar upside down to play because his dad taught him left-handed, turned the national anthem into a forked tongue, and died at 27 with a thousand recordings in the can.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Star-Spangled Banner\" — Woodstock 1969",
+      "durationMinutes": 4,
+      "instruction": "Listen for crowd noise at the very end. He plays through the anthem like a war report. Notice the moment around 1:15 where the dissonance becomes a physical shock — that's where single-note lines become political text."
+    },
+    "tags": [
+      "Rock",
+      "Psychedelic",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-bob-dylan",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Bob Dylan",
+    "teaser": "Hibbing Minnesota to Greenwich Village to Newport 1965 to Nashville Skyline to Time Out of Mind to Rough and Rowdy Ways, and almost no two consecutive albums agree on what he's doing.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Blonde on Blonde (1966), \"Visions of Johanna\"",
+      "durationMinutes": 7,
+      "instruction": "Listen for the line \"the ghost of electricity howls in the bones of her face.\" That's not a metaphor; that's the lyric trying to apologize for itself."
+    },
+    "tags": [
+      "Folk",
+      "Rock",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-nick-drake",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Nick Drake",
+    "teaser": "British folk singer who released three albums in three years, sold almost nothing, died at 26 of an overdose, then was canonized by Volkswagen advertisements in 2000.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Pink Moon (1972) end-to-end",
+      "durationMinutes": 28,
+      "instruction": "Eleven songs, no overdubs, recorded in two nights. He plays worse piano than he could — listen to the keys hunting on the lowest register. That's grief fastening the song shut."
+    },
+    "tags": [
+      "Folk",
+      "British",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-thelonious-monk",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Thelonious Monk",
+    "teaser": "Manhattan pianist who used 88 keys to invent a strange new harmonic vocabulary, barely spoke in his later life, and won a Pulitzer at the end.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Round Midnight\" (1947 original 78rpm)",
+      "durationMinutes": 3,
+      "instruction": "Monk's left hand trails his right by half a beat. The whole style is built on that gap. Most jazz piano is built on the absence of it; listen for what Monk is doing differently."
+    },
+    "tags": [
+      "Jazz",
+      "Piano",
+      "American",
+      "1940s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-arcade-fire",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Arcade Fire",
+    "teaser": "Montreal indie rock collective that built a brass-and-accordion wall of sound in their mother's church, then turned the funeral album into the most anthemic record of the 2000s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Funeral (2004), \"Wake Up\"",
+      "durationMinutes": 5,
+      "instruction": "Listen for what enters around 1:30 — the timpani, the church organ, the children's choir. The whole song is structured like a theatrical finale. Listen to it twice: once for sound, once for architecture."
+    },
+    "tags": [
+      "Indie Rock",
+      "Canadian",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-sufjan-stevens",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Sufjan Stevens",
+    "teaser": "Michigan singer-songwriter who announced a 50-state album project (delivered two), recorded a 25-track electronic opus about roadkill, and writes devotional music that doesn't pretend to be either religious or secular.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Illinois (2005), \"Casimir Pulaski Day\"",
+      "durationMinutes": 5,
+      "instruction": "He wrote it about his friend who died of cancer. Listen past the brightness of the arrangement. The lyrics are unbearably sad and the orchestration refuses to acknowledge it."
+    },
+    "tags": [
+      "Indie Folk",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-genesis-p-orridge",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Genesis P-Orridge",
+    "teaser": "Throbbing Gristle founder who declared war on industrial music by creating industrial music, then spent 30 years becoming the same person by marriage.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Second Annual Report (1977), \"Slug Bait\"",
+      "durationMinutes": 3,
+      "instruction": "Listen once for the absence of music. Throbbing Gristle's earliest work is the absence itself used as content. Turn it down — you'll hear more."
+    },
+    "tags": [
+      "Industrial",
+      "Avant-Garde",
+      "British",
+      "1970s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-wu-tang-clan",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Wu-Tang Clan",
+    "teaser": "Nine Staten Island rappers who pooled a single record advance to make a debut, then negotiated contracts as a unit so they could splinter into a $500M franchise.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Enter the Wu-Tang (36 Chambers) (1993), \"C.R.E.A.M.\"",
+      "durationMinutes": 7,
+      "instruction": "Method Man's verse is the last one. He uses no internal rhyme in the second half. He's just talking. That's why it works — most of the album is jokes; \"C.R.E.A.M.\" is the truth."
+    },
+    "tags": [
+      "Hip-Hop",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "artist-portishead",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Portishead",
+    "teaser": "Bristol band that married 1960s spy-film soundtracks with 1990s hip-hop beats, then disappeared for 11 years and came back with a stark record that sounds hungry.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Dummy (1994), \"Wandering Star\"",
+      "durationMinutes": 5,
+      "instruction": "Listen to the strings. Beth Gibbons sings with her hairline a half-step flat. The strings tune to her, not the other way around."
+    },
+    "tags": [
+      "Trip-Hop",
+      "British",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-nusrat-fateh-ali-khan",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Nusrat Fateh Ali Khan",
+    "teaser": "Pakistani qawwali singer who stretched a single improvised song to 30 minutes, sold 6M records in death, and introduced Sufi music to Western film soundtracks.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Mustt Mustt (1990), \"Mustt Mustt\"",
+      "durationMinutes": 7,
+      "instruction": "Listen to the four hand-claps at the start — that's the meter. The vocals improvise on top of it until you can't tell where the rhythm stops. That hand-clap never moves."
+    },
+    "tags": [
+      "Qawwali",
+      "Sufi",
+      "Pakistani",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-laura-nyro",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Laura Nyro",
+    "teaser": "Bronx teenager who wrote \"Stoned Soul Picnic\" and \"Wedding Bell Blues\" before she turned 20, then quit touring at 24 and never came back.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Eli and the Thirteenth Confession (1968), \"Stoned Soul Picnic\"",
+      "durationMinutes": 6,
+      "instruction": "She's singing about a picnic where the food is real and the people are not. Listen to the bridge — it shifts key for two bars. That's where the song becomes a memory."
+    },
+    "tags": [
+      "Soul",
+      "Singer-Songwriter",
+      "American",
+      "1960s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-patti-page",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Patti Page",
+    "teaser": "Sold 100M records, the first female artist to reach that number, with a 1950 novelty called \"Tennessee Waltz\" — then quietly kept recording for four more decades.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Tennessee Waltz\" (1950)",
+      "durationMinutes": 3,
+      "instruction": "She doesn't take a breath. The whole song is one continuous line. Try to count where she takes a breath — she barely does."
+    },
+    "tags": [
+      "Country Pop",
+      "American",
+      "1950s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-grimes",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Grimes",
+    "teaser": "Vancouver DIY producer who recorded her debut in a garage with cracked software, became a fashion-industry fixture, and named her child an emoji.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Visions (2012), \"Oblivion\"",
+      "durationMinutes": 4,
+      "instruction": "Listen to the chorus. The drum programming lands on a beat most pop songs wouldn't touch. That's the whole genre of 2010s avant-pop in one bar."
+    },
+    "tags": [
+      "Pop",
+      "Electronic",
+      "Canadian",
+      "2010s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-wesley-williams",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Wesley \"Wise\" Willis",
+    "teaser": "Chicago schizophrenic who self-released 50+ albums, sang about McDonald's,Band-Aids, and video games, and was signed to a major label for one record before he died.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Rock and Roll with Wesley Willis (1995), \"Rock and Roll McDonald's\"",
+      "durationMinutes": 3,
+      "instruction": "He says \"rock\" at the end of every line. Every. Single. Line. The song is structured around that single word doing everything."
+    },
+    "tags": [
+      "Outsider",
+      "Rock",
+      "American",
+      "1990s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-yma-sumac",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Yma Sumac",
+    "teaser": "Peruvian mountain singer whose four-octave range won a Capitol Records contract in 1950, became a Vegas fixture, and turned Peruvian folk into the most exotic American pop of the decade.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Voice of the Xtabay (1950), \"Tumpa\"",
+      "durationMinutes": 3,
+      "instruction": "Listen to her lowest note. Then to her highest note. They're six seconds apart. Most singers have to switch registers; she has four voices to switch between."
+    },
+    "tags": [
+      "Exotica",
+      "Peruvian",
+      "1950s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-j-balvin",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "J Balvin",
+    "teaser": "Colombian reggaeton singer cosigned by Beyoncé on \"Mi Gente,\" helped make Spanish-language music a Billboard fixture, and recorded with Cardi B while wearing neon Crocs.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Vibras (2018), \"Mi Gente\"",
+      "durationMinutes": 3,
+      "instruction": "Listen to the heartbeat rhythm in the kick drum. Reggaeton's distinctive bounce is built from a half-timed kick over a quarter-timed snare. That's what you're hearing when you feel the song is leaning."
+    },
+    "tags": [
+      "Reggaeton",
+      "Colombian",
+      "2010s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-rakim",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Rakim",
+    "teaser": "Long Island kid who turned the rhyme into a multisyllabic flow in 1987, taught every MC since how to scan a bar, and barely recorded for the next 25 years.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Paid in Full (1987), \"Paid in Full\"",
+      "durationMinutes": 5,
+      "instruction": "Listen to how he ends a bar. Most rappers rhymed at the ends of lines — Rakim goes internal. The rhyme is hidden one word before the line break, every time."
+    },
+    "tags": [
+      "Hip-Hop",
+      "American",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-shoji-tabuchi",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Shoji Tabuchi",
+    "teaser": "Osaka-born virtuoso violinist who moved to Branson Missouri in 1984, became the only Japanese country-and-bluegrass star in America, and still sells out 3,000-seat theaters weekly.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Live from Branson (2001), \"Orange Blossom Special\"",
+      "durationMinutes": 4,
+      "instruction": "He plays the violin lick in thirds, not single notes — that's why it sounds like two violins. Most bluegrass fiddlers play single lines; he plays chords."
+    },
+    "tags": [
+      "Country",
+      "Japanese-American",
+      "Live",
+      "2000s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-iggy-and-the-stooges",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Iggy and the Stooges",
+    "teaser": "Ann Arbor proto-punk who released three albums between 1969 and 1973, sold none, and then invented the entire post-punk genre from the wreckage.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Fun House (1970), \"Dirt\"",
+      "durationMinutes": 7,
+      "instruction": "Listen to Steve Mackay's saxophone solo. It doesn't leave the room — it stays in the same key the whole time. That's why it sounds like a punch."
+    },
+    "tags": [
+      "Proto-Punk",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-tom-waits",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Tom Waits",
+    "teaser": "Pomona California songwriter who sang like a 1940s cabaret drunk in his 30s, then became a gravel-voiced beat poet in his 40s, then a Captain Beefheart-style howler in his 50s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Rain Dogs (1985), \"9th & Hennepin\"",
+      "durationMinutes": 5,
+      "instruction": "Listen to the marimba. It's slightly out of tune with the vocal. That's not a mistake — that's the song being honest about being recorded in a church basement."
+    },
+    "tags": [
+      "Singer-Songwriter",
+      "Beat",
+      "American",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-elza-soares",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Elza Soares",
+    "teaser": "Brazilian samba singer who, at 91, released an album sampling her own voice from 60 years earlier. Sao Paulo declared her the most important woman in the city's history.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "A Mulher do Fim do Mundo (2015), \"Coração de Levi\"",
+      "durationMinutes": 4,
+      "instruction": "She was 78 when she recorded this. The voice is no longer a singer's voice — it's a witness's voice. Listen for the moments when she stops using melody."
+    },
+    "tags": [
+      "Samba",
+      "Brazilian",
+      "Contemporary"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-yo-yo-ma",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Yo-Yo Ma",
+    "teaser": "Cellist who at 7 performed for Eisenhower, at 15 went to Juilliard, and has since spent 50 years playing Bach in war zones from Baghdad to the Mexican border.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Unaccompanied Cello Suite No.1 in G (Bach)",
+      "durationMinutes": 17,
+      "instruction": "Listen to the way a single phrase gets passed between the four strings. He treats the instrument like four voices. The dance forms (allemande, courante) are social dances; he plays them as if at a party."
+    },
+    "tags": [
+      "Classical",
+      "Cello",
+      "American",
+      "Live"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-chic",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Chic",
+    "teaser": "Late-70s disco band whose guitarist Nile Rodgers went on to produce Bowie, Madonna, Daft Punk, and the largest hit of Pharrell's career.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "C'est Chic (1978), \"Le Freak\"",
+      "durationMinutes": 6,
+      "instruction": "Listen to Rodgers' guitar — he's playing the same diminished chord progression in every other bar. That's the disco hit formula in 3 notes."
+    },
+    "tags": [
+      "Disco",
+      "Funk",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-standards-art-tatum",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Art Tatum",
+    "teaser": "Toledo-born pianist who lost one eye as a child, played with a dexterity that most classical pianists gave up trying to match, and rerouted the entire jazz piano tradition.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Tea for Two\" (1939 any solo recording)",
+      "durationMinutes": 4,
+      "instruction": "He's playing a stride standard. Listen to the right hand alone — it's almost impossible. Now listen to the left hand. It runs at half the tempo with twice the jazz. They're doing two different songs at once."
+    },
+    "tags": [
+      "Jazz",
+      "Piano",
+      "American",
+      "1930s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-ryuichi-sakamoto",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Ryuichi Sakamoto",
+    "teaser": "Tokyo-born composer who co-founded Yellow Magic Orchestra in 1978, won an Oscar for The Last Emperor in 1988, and spent his final decade making solo records about mortality.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "async (2017) end-to-end",
+      "durationMinutes": 45,
+      "instruction": "He was being treated for cancer. Listen to \"stakra.\" The piano is tuned slightly flat. The whole album is tuned slightly flat. He was tuning toward a place he'd be leaving soon."
+    },
+    "tags": [
+      "Electronic",
+      "Japanese",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-bjork-vespertine-bg",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Björk (Vespertine engineering insight)",
+    "teaser": "Bonus: see how Vespertine's beats were recorded using a single-close mic setup on Björk's breath — Mark Bell of LFO built the rhythm from her exhales.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Vespertine (2001), \"Hidden Place\"",
+      "durationMinutes": 5,
+      "instruction": "Listen to the rhythm section. None of those beats are drum machines — they're processed chamber music samples, then re-tuned to mimic heartbeat under headphones."
+    },
+    "tags": [
+      "Art Pop",
+      "Icelandic",
+      "2000s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-omara-portuondo",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Omara Portuondo",
+    "teaser": "Cuban singer who performed with the Buena Vista Social Club and then recorded for Buena Vista Social Club at 67, becoming the most unlikely late-career star in world music.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Buena Vista Social Club (1997), \"Veinte Años\"",
+      "durationMinutes": 4,
+      "instruction": "Listen to the way she leans into syllables. She's Cuban — the song stretches out longer than Spanish would technically allow. That's the genre: the song has room."
+    },
+    "tags": [
+      "Son",
+      "Cuban",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-andrew-bird",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Andrew Bird",
+    "teaser": "Chicago violinist who whistles through three octaves, loops his own voice in real-time, and writes lyrics that read like puzzles he hands you mid-sentence.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Noble Beast (2007), \"Anonanimal\"",
+      "durationMinutes": 3,
+      "instruction": "Listen for how he layers his own voice whistling over his own violin. He builds a 4-voice choir out of one person's breath by the time the chorus arrives."
+    },
+    "tags": [
+      "Indie Rock",
+      "American",
+      "2000s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "artist-isaac-hayes",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Isaac Hayes",
+    "teaser": "Memphis songwriter who wrote \"Soul Man\" for Sam & Dave, then went on to record Shaft — the first Black composer to win an Academy Award for film music.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Shaft (1971), \"Theme from Shaft\"",
+      "durationMinutes": 4,
+      "instruction": "Listen to the wah-wah guitar pedal. Hayes pioneered it in pop — the pedal was invented for guitar but he made it THE voice in the radio."
+    },
+    "tags": [
+      "Soul",
+      "Funk",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artist-shakti",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Shakti",
+    "teaser": "John McLaughlin acoustic ensemble with three Indian musicians that recorded only four studio records across twenty years and changed the meaning of \"world music.\"",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "A Handful of Beauty (1977), \"A Handful of Beauty\"",
+      "durationMinutes": 6,
+      "instruction": "Listen to the violin and the mandolin duet. They're tuned to two different scale systems — one European, one Carnatic. The song is the place where those systems almost touch."
+    },
+    "tags": [
+      "World Fusion",
+      "British-Indian",
+      "1970s"
+    ],
+    "tier": 3
+  }
+]

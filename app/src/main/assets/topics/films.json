@@ -1,1 +1,822 @@
-[]
+[
+  {
+    "id": "film-citizen-kane-1941",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Citizen Kane (1941)",
+    "teaser": "26-year-old Welles made it; it cost $800K; it won one Oscar; it changed cinema's grammar. Five reporters chasing one word — \"Rosebud\" — and missing what's actually in the frame.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Citizen Kane (1941) end-to-end",
+      "durationMinutes": 119,
+      "instruction": "Watch the breakfast montage. Five years compressed into two minutes, three tables drifting apart slowly. The film isn't about Kane; it's about how memory edits itself when you describe someone who's dead."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "1940s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-vertigo-1958",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Vertigo (1958)",
+    "teaser": "Hitchcock lost the Best Picture Oscar to Gigi for this; 24 years later Sight & Sound voters ranked it greatest film ever. Scottie's not a detective — he's a man unable to look.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Vertigo (1958) end-to-end",
+      "durationMinutes": 128,
+      "instruction": "Watch the rooftop scene. Then watch the bell tower scene. The film tells you twice that this is a story about height. Then watch Kim Novak and try to figure out which scene is the real one — Hitchcock hid his secret in plain sight."
+    },
+    "tags": [
+      "Thriller",
+      "American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-2001-a-space-odyssey",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "2001: A Space Odyssey (1968)",
+    "teaser": "Warner Bros. wanted it cut by 40 minutes; Kubrick locked the director's cut in a vault and walked away. The film's first 25 minutes have no dialogue. The last 25 have almost none either.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "2001: A Space Odyssey (1968) — first 30 minutes",
+      "durationMinutes": 30,
+      "instruction": "Watch the opening with no headphones on first viewing. Then watch it again with the music louder than you think wise. The bone-to-satellite cut is the film's thesis — and the cut lasts under one second."
+    },
+    "tags": [
+      "Sci-Fi",
+      "British-American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-casablanca-1942",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Casablanca (1942)",
+    "teaser": "Shot in 1942 with an unfinished script; cast didn't know how it ended. Bogart's famous line \"Here's looking at you, kid\" was an ad-lib. The film is a string of unfinishings.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Casablanca (1942) end-to-end",
+      "durationMinutes": 102,
+      "instruction": "Watch the airport scene. Several characters arrive at the airport and each makes a different choice. The film isn't about choosing love or duty; it's about waiting — watching a plane leave."
+    },
+    "tags": [
+      "Romance",
+      "American",
+      "1940s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-godfather-1972",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Godfather (1972)",
+    "teaser": "Paramount didn't want Brando; he got the role by stuffing tissues in his jowls during the audition. Coppolla was 31. The film taught Hollywood that cinema-book fidelity wasn't necessary.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Godfather (1972) end-to-end",
+      "durationMinutes": 175,
+      "instruction": "Watch the wedding scene at the start. Don't skip it — every character is introduced and most of the film's threads are put in motion. Then watch the restaurant scene: that one shot of Connie's unspoken conversation is the film's pivot."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-godfather-part-ii-1974",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Godfather Part II (1974)",
+    "teaser": "Coppola restructured the sequel as two parallel timelines, neither a flashback to the original. It's the first major American film to run two narratives simultaneously without telling the audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Godfather Part II (1974) end-to-end",
+      "durationMinutes": 202,
+      "instruction": "Watch the young Vito storyline first (it's in Italian). Watch the Michael storyline last. The film is going to demand you remember how Vito started in order to understand how Michael ends."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-apocalypse-now-1979",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Apocalypse Now (1979)",
+    "teaser": "Coppola shot in the Philippines during a typhoon, Martin Sheen had a heart attack, Brando arrived overweight and unprepared. Final cost: $30M on a $12M budget. The film opened to a 6-minute ovation at Cannes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Apocalypse Now (1979) — the Kilgore sequence, end-to-end",
+      "durationMinutes": 20,
+      "instruction": "Watch the napalm. Listen to the helicopters. The score is Wagner. The film argues that Wagner is what happens to soldiers when the rules of war stop applying. Then notice the surf — they're surfing while the war surrounds them."
+    },
+    "tags": [
+      "War",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-raging-bull-1980",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Raging Bull (1980)",
+    "teaser": "Scorsese shot it in black and white because color tests looked 'wrong.' De Niro gained 60 pounds to play the older LaMotta. Editing is by Thelma Schoonmaker, who'd stay his editor for 40 years.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Raging Bull (1980) — ring entrances, two opening fights",
+      "durationMinutes": 25,
+      "instruction": "Watch the fight scenes without audio. The in-ring footage is shot documentary-style, the out-of-ring footage is stylized. Scorsese is showing you two different men: the one who performs and the one who can't."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-taxi-driver-1976",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Taxi Driver (1976)",
+    "teaser": "Scorsese award-winning screenplay, then-unknown Jodie Foster, Bernard Herrmann's last film score. It opens with legalized prostitution and ends with a vigilante shootout — the same loneliness throughout.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Taxi Driver (1976) — \"Are you talkin' to me?\" sequence",
+      "durationMinutes": 6,
+      "instruction": "Watch the mirror scene. Travis Bickle talks to the mirror. The camera moves with his fist. The film is built around the moment when a character rehearses becoming someone — and acts on the rehearsal. This is where the film turns."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-goodfellas-1990",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Goodfellas (1990)",
+    "teaser": "The film Scorsese killed two characters inside the first 20 minutes — Henry Hill said the test of a mob movie is whether the protagonist dies by the end. He's the narrator, not the protagonist.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Goodfellas (1990) — Copacabana long take (3 min)",
+      "durationMinutes": 6,
+      "instruction": "Watch the back door to the front. There's one cut interruption (a quick close-up of the maître d') but the rest is unbroken. Scorsese takes you from outside the club to the VIP booth in a single voyeuristic arc — and ends it on a punchline."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-pulp-fiction-1994",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Pulp Fiction (1994)",
+    "teaser": "Tarantino wrote 500 pages of script and shot a film with 9 chapters in non-chronological order. Travolta was 'washed up' by the studio when he was cast; the film revived his career and the studio never had the same control.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pulp Fiction (1994) end-to-end",
+      "durationMinutes": 154,
+      "instruction": "Watch in this order: Vincent & Jules → Mia Wallace → Butch. Tarantino opens with the diner scene and then unwinds. The diner is the film's actual first beat — but it took him three more features to teach Hollywood that you can structure by character, not by time."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-bicycle-thieves-1948",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Bicycle Thieves (1948)",
+    "teaser": "Italian neorealist masterpiece shot on the streets of Rome with nonprofessional actors. The bike is stolen two hours in; the rest of the film is just a father chasing it.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Bicycle Thieves (1948) end-to-end",
+      "durationMinutes": 89,
+      "instruction": "Watch the alley scene. The father chases a bike thief and we see for the first time what desperation looks like when it's dressed up as pursuit. The film was banned from the first Cannes for being 'anti-Italian' — that's how stark it was."
+    },
+    "tags": [
+      "Drama",
+      "Italian",
+      "1940s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-eight-and-a-half-1963",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "8½ (1963)",
+    "teaser": "Fellini's 8.5th film: a director who can't finish a film makes a film about not being able to finish a film. The opening credits roll over a traffic jam.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "8½ (1963) — the opening credits sequence (8 min)",
+      "durationMinutes": 8,
+      "instruction": "Watch his hands on the steering wheel. He's stuck in traffic. Then he floats out of the car and is suddenly in a sky docking. The film asks you to accept the same logic it asks the protagonist to live in."
+    },
+    "tags": [
+      "Drama",
+      "Italian",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-la-dolce-vita-1960",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "La Dolce Vita (1960)",
+    "teaser": "Marcello is a gossip columnist in Rome; Fellini casts Anita Ekberg in a Trevi Fountain scene that became one of cinema's most quoted single shots.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "La Dolce Vita (1960) — Trevi Fountain sequence (5 min)",
+      "durationMinutes": 5,
+      "instruction": "Watch Anita Ekberg turn around in the water. She's been walking away from Marcello for 30 seconds. The film calls her back with a single gesture; the gesture is what the film is about."
+    },
+    "tags": [
+      "Drama",
+      "Italian",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-tokyo-story-1953",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Tokyo Story (1953)",
+    "teaser": "Ozu made a film about a family that doesn't really think much of each other. His camera sits on a tatami mat; nothing dramatic happens for an hour; then it ends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Tokyo Story (1953) — first 30 min only",
+      "durationMinutes": 30,
+      "instruction": "Don't expect drama. The camera doesn't move. Watch the meals. Each meal is more important than each conversation. Ozu said so himself — the meals are the actual scenes."
+    },
+    "tags": [
+      "Drama",
+      "Japanese",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-seven-samurai-1954",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Seven Samurai (1954)",
+    "teaser": "Toshiro Mifune improvised half his performance. Kurosawa's film changed the western (and the superhero team-up film) on contact. The opening 30 minutes alone became a teaching tool for action cinema decades later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Seven Samurai (1954) — opening farmer-marshal scene (15 min)",
+      "durationMinutes": 15,
+      "instruction": "Watch how they choose the samurai. The film is about seven professionals vetting each other — it's the original superhero-team-up film and the original heist film at the same time. The scene structure became Hollywood's template for 50 years."
+    },
+    "tags": [
+      "Samurai",
+      "Japanese",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-persona-1966",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Persona (1966)",
+    "teaser": "Bergman's two-woman film about two faces gradually merging. The famous 'fused-face' shot is one of cinema's strangest — and one of cinema's earliest uses of a split-screen mirror.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Persona (1966) — final 30 min",
+      "durationMinutes": 30,
+      "instruction": "The two women's faces combine on screen. By the end, it's impossible to tell which face is whose. Bergman forced the audience to feel the merger before understanding it. Don't try to explain. Just watch."
+    },
+    "tags": [
+      "Drama",
+      "Swedish",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-stalker-1979",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Stalker (1979)",
+    "teaser": "Tarkovsky shot it on the same Estonian peat-bog location over and over for two years until the moss was right. Three men looking for a room that grants wishes — but mostly sitting around waiting.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Stalker (1979) — opening (30 min)",
+      "durationMinutes": 30,
+      "instruction": "Turn off your phone. The film expects an unhurried attention span. Tarkovsky's near-black palette changes hour by hour as the Zone shifts. Notice how the light on water is the film's main character."
+    },
+    "tags": [
+      "Sci-Fi",
+      "Russian",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-breathless-1960",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Breathless (À bout de souffle) (1960)",
+    "teaser": "Godard's first feature shot on location in Paris with a borrowed camera. The jump cuts weren't errors — they were a deliberate break with cinema's promise of continuity.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Breathless (À bout de souffle) (1960) end-to-end",
+      "durationMinutes": 90,
+      "instruction": "Watch the jump cuts. They're pronounced — same angle, sudden ellipsis. Godard refused to honor cinema's claim that what's on screen is continuous. Watch the last ten minutes: she doesn't say the line the film has been waiting for."
+    },
+    "tags": [
+      "French New Wave",
+      "French",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-the-400-blows-1959",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The 400 Blows (1959)",
+    "teaser": "Truffaut's first film — shot on real street in Paris with a 14-year-old lead who had been in juvenile detention. The famous last shot is a freeze-frame at the sea, the first freeze frame in cinema history.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The 400 Blows (1959) end-to-end",
+      "durationMinutes": 99,
+      "instruction": "Watch the school scene — it's shot documentary style. Then watch the family apartment at night. The film calibrates an adult's disappointment versus a kid's literal burglary. The final shot: Antoine runs to the sea. Then stops. The film ends there."
+    },
+    "tags": [
+      "Coming-of-Age",
+      "French",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-annie-hall-1977",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Annie Hall (1977)",
+    "teaser": "Woody Allen's romantic comedy was structurally set in a therapy session. The most-quoted 'Chick Manhattan' scene was a last-minute re-write Allen and his co-writer agreed to because the original wasn't funny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Annie Hall (1977) — opening split-screen scene (5 min)",
+      "durationMinutes": 5,
+      "instruction": "Watch the opening. Two men waiting in line for a movie, talking past each other, then turning to face the camera. The split-screen is two realities side by side. The film's whole approach is structured around the gap between inner monologue and outer speech."
+    },
+    "tags": [
+      "Romance",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-jaws-1975",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Jaws (1975)",
+    "teaser": "The mechanical shark barely worked; Spielberg shot much of the film without showing the shark at all. The film's title card — a single note of John Williams's theme — invented the modern summer-blockbuster.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Jaws (1975) — \"Here's to swimming with bow-legged women\" scene (5 min)",
+      "durationMinutes": 5,
+      "instruction": "Watch the first time the shark is supposed to appear. Spielberg's solution: pretend you're a viewer in 1975 who hasn't been told the shark exists. Then watch the famous line — it's a drinking toast. The film isn't serious about anything for the first hour."
+    },
+    "tags": [
+      "Thriller",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-start-wars-1977",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Star Wars (1977)",
+    "teaser": "20th Century Fox didn't want to release it; theaters hated it; the merchandising contract was sold for $500K to a small toy company. The film opened to $1.6M opening weekend, then kept earning money for 18 months.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Star Wars (1977) — opening crawl and Mos Eisley sequence (15 min)",
+      "durationMinutes": 15,
+      "instruction": "Watch the cantina scene. Notice the casting: every alien is a different costume, but almost none is in focus longer than three seconds. Lucas trusted the audience. They wanted to see more. The franchise revenue model was birthed in those 90 seconds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-monty-python-1975",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Monty Python and the Holy Grail (1975)",
+    "teaser": "Originally funded by Led Zeppelin and Atlantic Records, with no film budget for the on-screen violence, the Pythons used coconut halves as horse hooves. Shot on a relative's estate in Scotland.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Monty Python and the Holy Grail (1975) end-to-end",
+      "durationMinutes": 92,
+      "instruction": "Watch the Black Knight scene. He refuses to admit defeat. Then watch the Knights Who Say Ni. The film doesn't keep the same joke running long enough to exhaust — it pivots. That's the trick Python comedy taught 50 years of American comedy."
+    },
+    "tags": [
+      "Comedy",
+      "British",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-the-third-man-1949",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Third Man (1949)",
+    "teaser": "Reed shot in post-war Vienna. The famous cuckoo-clock speech is one monologue; the famous zither score (Anton Karas) was the only film score for years that outsold the film outside Europe.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Third Man (1949) end-to-end",
+      "durationMinutes": 93,
+      "instruction": "Watch the introduction. Lime-lit streets, German dialogue, a kid named Harry appears in the shadows. The film is a postwar-noir mood-piece before it's a thriller. The zither plays throughout — pick out the moment when you hear it disappear and re-enter."
+    },
+    "tags": [
+      "Thriller",
+      "British",
+      "1940s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-jules-and-jim-1962",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Jules and Jim (1962)",
+    "teaser": "Truffaut's triangular love story set across two world wars, with Truffaut's own narration. Jeanne Moreau's voiceover defines the film as much as her eyes — the film doesn't show you her face often until it matters.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Jules and Jim (1962) end-to-end",
+      "durationMinutes": 105,
+      "instruction": "Watch the opening. Three characters walk along a bridge. Twenty years later, nothing about them is the same. The film expects you to remember that two men loved the same woman and never coordinated their love."
+    },
+    "tags": [
+      "Romance",
+      "French",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-uhiroshima-mon-amour-1959",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Hiroshima Mon Amour (1959)",
+    "teaser": "Resnais shot a documentary-style love story between a French actress and a Japanese architect in post-war Hiroshima. The screenplay was by Marguerite Duras; it's the first French film to show a woman having a sexual response on screen.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Hiroshima Mon Amour (1959) — opening (10 min) + closing (10 min)",
+      "durationMinutes": 20,
+      "instruction": "Watch the first five minutes and the last five minutes. The film tells you 70% of what it's about in those 10 minutes. The middle is the woman deciding if she has anything left to say."
+    },
+    "tags": [
+      "Drama",
+      "French",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-spirited-away-2001",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Spirited Away (2001)",
+    "teaser": "Miyazaki's Studio Ghibli film became the highest-grossing film in Japanese history, beating Titanic in Japan. Joe Hisaishi's score is one of the most-rewatched film scores in existence.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Spirited Away (2001) — train sequence (5 min)",
+      "durationMinutes": 5,
+      "instruction": "Watch the train scene. No dialogue. Joe Hisaishi's score. Six passengers, water outside the window. The film trusts the audience for 5 minutes — the longest short scene in animated cinema. Now rewatch the opening with this pacing in mind."
+    },
+    "tags": [
+      "Animation",
+      "Japanese",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-my-neighbor-totoro-1988",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "My Neighbor Totoro (1988)",
+    "teaser": "Miyazaki made a children's film about a sick mother and a family waiting at a hospital. No villain appears. The forest creature is mostly invisible. The film is what a childhood should feel like.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "My Neighbor Totoro (1988) end-to-end with a child if possible",
+      "durationMinutes": 86,
+      "instruction": "Watch with a child if you can. The film explains almost nothing. There is no plot to follow — there's only what's happening right now. Watch how Satsuki's father responds when Mei says there's something in the forest. He just goes to look."
+    },
+    "tags": [
+      "Animation",
+      "Japanese",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-princess-mononoke-1997",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Princess Mononoke (1997)",
+    "teaser": "Made on a 4-year production schedule during Japan's economic recession; became the highest-grossing film of 1997 in Japan. A masterclass in narrative density under animation studio limits.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Princess Mononoke (1997) — the ironworks arrival sequence (10 min)",
+      "durationMinutes": 10,
+      "instruction": "Watch Lady Eboshi run her ironworks. She's a woman, ex-prostitute, employing women, smelting iron, killing the forest. The film asks you to admire her and fear her at the same time. That's the moral balance that Japanese animation sometimes achieves."
+    },
+    "tags": [
+      "Animation",
+      "Japanese",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-wall-e-2008",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "WALL-E (2008)",
+    "teaser": "Pixar made a feature with the first 40 minutes having no dialogue. The opening is a 40-minute love story between two robots and a cockroach. The film won Pixar its second Best Picture nomination.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "WALL-E (2008) — first 40 minutes",
+      "durationMinutes": 40,
+      "instruction": "Watch with no commentary. The first 40 minutes is gesture, sound, and the machines' reading of human artifacts. Pixar was betting that cinema can sustain a feature without dialogue — and they were right."
+    },
+    "tags": [
+      "Animation",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-up-2009",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Up (2009)",
+    "teaser": "Pixar's opening montage is the most-deconstructed 9 minutes in animation history. They tested it on the toughest crowd they had and still made it 20 seconds longer. Children sat silently for the whole thing.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Up (2009) — opening montage to end of opening credits (11 min)",
+      "durationMinutes": 11,
+      "instruction": "Watch carefully. The opening montage tells a 60-year love story in 9 minutes without a single line of dialogue. They tested this with the most distracted audience at Pixar — children — and the kids sat still for the whole thing."
+    },
+    "tags": [
+      "Animation",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-parasite-2019",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Parasite (2019)",
+    "teaser": "Bong Joon-ho's Korean social satire won Palme d'Or, Best Picture, Best Director, and Best Original Screenplay — first non-English-language film to win Best Picture in the Academy's 90-year history.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Parasite (2019) end-to-end",
+      "durationMinutes": 132,
+      "instruction": "Watch the rain. Bong uses a flood as social metaphor — the basement gets soaked while the family upstairs watches on their phones. The smell is the film's through-line. Notice how the family keeps lying about their smells."
+    },
+    "tags": [
+      "Thriller",
+      "Korean",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-oldboy-2003",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Oldboy (2003)",
+    "teaser": "Park Chan-wook's Korean revenge film won the Grand Prix at Cannes 2004. The famous hallway fight is shot in a single take — a real hallway, hand-to-hand, real injuries, real time.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Oldboy (2003) — hallway fight (3 min)",
+      "durationMinutes": 3,
+      "instruction": "Watch the fight. Three minutes, one take, no edits. Park insisted on it and the lead got real injuries during filming. The shot turned the film into a choreography landmark. Now watch the rest of the film knowing that Park is willing to do this for one fight."
+    },
+    "tags": [
+      "Thriller",
+      "Korean",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-pather-panchali-1955",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Pather Panchali (1955)",
+    "teaser": "Satyajit Ray sold his wife's wedding jewelry to fund a 40-second shot of a train coming through trees. It became the first Indian film at a major Western festival (Cannes) — and launched Indian art cinema.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pather Panchali (1955) end-to-end",
+      "durationMinutes": 125,
+      "instruction": "Watch the train sequence. The family is Ray's own extended family; the child actor (Apu) was discovered in Ray's uncle's social circle. He shot the film over 4 years with no funding. Watch how few words the elderly aunt speaks; she's the film's quietest argument."
+    },
+    "tags": [
+      "Drama",
+      "Indian-Bengali",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-rome-open-city-1945",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Rome, Open City (1945)",
+    "teaser": "Rossellini shot the film clandestinely during the German occupation of Rome, using real locations, real partisans, and the eventual reality that several cast members were killed by the Nazis during filming.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Rome, Open City (1945) end-to-end",
+      "durationMinutes": 103,
+      "instruction": "Watch the torture scene. Anna Magnani plays a pregnant woman being tortured. It's a documentary-real sequence, the sound design is by real Rome street-recordings, and most of the cast is gone before the film's first anniversary."
+    },
+    "tags": [
+      "War",
+      "Italian",
+      "1940s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-ikiru-1952",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Ikiru (1952)",
+    "teaser": "Kurosawa's most human film: a Tokyo bureaucrat with terminal cancer spends his remaining days trying to build a playground. The film flips the question of dying from 'how long' to 'what for.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ikiru (1952) — the playground scene (5 min)",
+      "durationMinutes": 5,
+      "instruction": "Watch the playground scene at the end. The bureaucrat is dead before he sees children playing. Then the funeral scene — none of his colleagues understand what he did. The film asks you to notice that building one thing matters more than it looks."
+    },
+    "tags": [
+      "Drama",
+      "Japanese",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "film-rome-2018",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Roma (2018)",
+    "teaser": "Cuarón filmed in his childhood neighborhood with a nonprofessional cast, in Spanish and Mixtec, for Netflix. He won Best Director — and told the Academy, on stage, that he'd share his Oscar with a domestic worker he'd grown up with.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Roma (2018) — opening long take (3 min)",
+      "durationMinutes": 5,
+      "instruction": "Watch the opening. The camera flies over a Mexican suburb then lands on a paved courtyard. A woman washes the floor with a hose. The soap water settles into a mirror of the sky. The film is all in this image: women's labor turning a home into a cinematic frame."
+    },
+    "tags": [
+      "Drama",
+      "Mexican",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-moonlight-2016",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Moonlight (2016)",
+    "teaser": "Barry Jenkins's first studio film won Best Picture after a presentation-card mishap at the 89th Oscars. The film is shot in three triptychs — childhood, adolescence, adulthood — about one Black young man's three lives.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Moonlight (2016) end-to-end",
+      "durationMinutes": 111,
+      "instruction": "Watch the diner reunion scene at the end. Mahershala Ali plays a drug dealer; he's watching a childhood friend sit down across from him. Notice the camera stays mostly tight on faces. Every silence is the film's argument."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-portrait-of-a-lady-on-fire-2019",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Portrait of a Lady on Fire (2019)",
+    "teaser": "Sciamma's French period film about a painter and her subject. The film won Best Screenplay at Cannes, has no men with speaking roles, and the last shot is the only direct gaze the painter gives the woman she loves.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Portrait of a Lady on Fire (2019) — final scene (8 min)",
+      "durationMinutes": 8,
+      "instruction": "Watch the opera scene. The painter is in the audience; her lover is on stage. The painter avoids looking directly at her. The film has been avoiding this direct gaze the whole film. Watch for the one moment she finally looks."
+    },
+    "tags": [
+      "Drama",
+      "French",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-there-will-be-blood-2007",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "There Will Be Blood (2007)",
+    "teaser": "PTA's American oil epic has Daniel Day-Lewis in his breakout performance. Jonny Greenwood's score (from Radiohead) is discordant enough that he refused to give the score a title — it never got an album title.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "There Will Be Blood (2007) — bowling alley scene (last 15 min)",
+      "durationMinutes": 15,
+      "instruction": "Watch the bowling alley — Daniel Plainview has built a bowling alley in his ranch so he doesn't have to see the church. The film hasn't done that for you. Listen to Greenwood's score - the string bowing is irregular, off-balance, and never quite resolves."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  }
+]

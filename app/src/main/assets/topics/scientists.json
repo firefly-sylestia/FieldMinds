@@ -1,1 +1,997 @@
-[]
+[
+  {
+    "id": "scientist-aristotle",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Philosopher",
+    "name": "Aristotle",
+    "teaser": "Macedonian who studied under Plato, tutored Alexander the Great at 13, founded the Lyceum in Athens at 49 — and left behind a body of work that defined biology and formal logic for 2,000 years (most of it wrong, but the framework persisted).",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Aristotle's \"Nicomachean Ethics,\" Book I + Book X (10–13)",
+      "durationMinutes": 60,
+      "instruction": "Read the first book slowly. Aristotle's argument is that happiness (eudaimonia) is activity in accordance with virtue. Then read book X — the famous 'contemplative' chapters. Note that book I and book X argue in slightly different directions and Aristotle never fully..."
+    },
+    "tags": [
+      "Ancient",
+      "Greek",
+      "Philosophy"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-euclid",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Euclid",
+    "teaser": "Hellenistic-Egyptian (possibly) who wrote 13 books of geometry around 300 BCE that were THE geometry textbook until the 19th century. We don't know what he looked like or where he was born.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Euclid's \"Elements,\" Book I (first 23 propositions)",
+      "durationMinutes": 60,
+      "instruction": "Read the first 23 propositions. The opening defines the 'parallel postulate.' Then the famous Proposition 1 — constructing an equilateral triangle with compass and straightedge. The book was used as a Cambridge undergraduate textbook until 1900."
+    },
+    "tags": [
+      "Ancient",
+      "Hellenistic-Egyptian",
+      "Mathematics"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-archimedes",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Archimedes",
+    "teaser": "Syracusan Greek who calculated π to 4 decimal places without calculus, killed a Roman soldier with a bronze mirror focused sun, ran naked from his bath shouting 'Eureka,' and was killed by a Roman soldier during the sack of Syracuse.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Archimedes' \"On the Measurement of a Circle\" + \"On Floating Bodies\" I",
+      "durationMinutes": 60,
+      "instruction": "Read \"Measurement of a Circle.\" Archimedes bound π between 3 10/71 and 3 1/7 — both bounds correct to 4 decimal places without positional arithmetic. Then read \"Floating Bodies I\" — this is where Archimedes' principle (a body in fluid loses weight equal to the..."
+    },
+    "tags": [
+      "Ancient",
+      "Greek",
+      "Mathematics"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-ptolemy",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Astronomer",
+    "name": "Claudius Ptolemy",
+    "teaser": "2nd-century Roman-Egyptian astronomer whose Almagest was the standard reference for the western night sky for 1,400 years. We still call it the almamgest. His model of the universe was wrong, but his observations were accurate enough to time navies.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ptolemy's \"Almagest\" Books I & III (intro + table of solar positions)",
+      "durationMinutes": 60,
+      "instruction": "Read Book I (mathematical preliminaries). Then Book III (solar positions). Ptolemy's model placed the Earth at center. The model is wrong, but his tables were accurate to within 1°. For 1,400 years, European navigators used his tables without improving them."
+    },
+    "tags": [
+      "Ancient",
+      "Roman-Egyptian",
+      "Astronomy"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-hypatia",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Hypatia of Alexandria",
+    "teaser": "4th-century Alexandrian philosopher mathematician who edited Ptolemy's Almagest, taught at the Museum, and was murdered by a Christian mob in 415 CE. Her death is often cited as the symbolic end of Hellenistic science.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Read the entries about Hypatia in the Suda (10th-century Byzantine encyclopedia) and Damascius' \"Life of Isidore\" (6th century)",
+      "durationMinutes": 60,
+      "instruction": "Hypatia herself left no surviving original writing — only edited commentaries attributed to her. Her reputation comes from one hostile contemporary source (Socrates Scholasticus) and one late one (Damascius). Both are part polemic."
+    },
+    "tags": [
+      "Ancient",
+      "Egyptian-Greek",
+      "Philosophy"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-copernicus",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Astronomer",
+    "name": "Nicolaus Copernicus",
+    "teaser": "Polish canon who published his heliocentric model in 1543 on his deathbed — a model 1,400 years more accurate than Ptolemy's, but with no evidence yet. He delayed publishing by 30 years.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Copernicus's \"On the Revolutions of the Heavenly Spheres\" Book I, Chapters 1–10",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter — about the spherical Universe. Then read chapters 7–10 where Copernicus changes the center of everything. Copernicus and Galileo are 100 years apart. Read the preface to the work — it was added by a later editor claiming Copernicus was being..."
+    },
+    "tags": [
+      "Renaissance",
+      "Polish",
+      "Astronomy"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-kepler",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Astronomer",
+    "name": "Johannes Kepler",
+    "teaser": "German astronomer who derived the three laws of planetary motion from Tycho Brahe's data, with no microscope and no calculus. He published almost no other discoveries.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Kepler's \"Astronomia Nova\" (1609) — chapters 22–28",
+      "durationMinutes": 60,
+      "instruction": "Read chapters 22–28. Kepler uses Tycho Brahe's observation data — the most accurate naked-eye data ever — and struggles for 5 years to find a curve that fits Mars's orbit. He eventually finds the ellipse. Read the chapter where he realizes the orbit is a circle with..."
+    },
+    "tags": [
+      "Renaissance",
+      "German",
+      "Astronomy"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-galileo",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Astronomer",
+    "name": "Galileo Galilei",
+    "teaser": "Italian polymath who improved the telescope, sold it to the Venetian Senate as a military instrument, observed Jupiter's moons with it, ran afoul of the Inquisition, and was sentenced to house arrest where he published two further books.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Galileo's \"Sidereus Nuncius\" (\"Starry Messenger,\") 1610, full text",
+      "durationMinutes": 60,
+      "instruction": "Read the first 30 pages. Galileo publishes the Moons of Jupiter within weeks of making the observation, seeking priority. The book's style is revolutionary: he wrote in Italian instead of Latin, addressed lay people, and explained how to build a telescope."
+    },
+    "tags": [
+      "Renaissance",
+      "Italian",
+      "Astronomy"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-newton",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Physicist",
+    "name": "Isaac Newton",
+    "teaser": "English polymath who at 26 was Lucasian Professor of Mathematics, hid from the plague for 18 months and invented calculus, optics, and gravitation in those 18 months. Died at 84 after years as Master of the Mint.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Newton's \"Principia Mathematica\" (1687) — Definitions + Laws of Motion + Book I Section I",
+      "durationMinutes": 90,
+      "instruction": "Read the Definitions and the three Laws. Then read the first Section of Book I — Newton's proof of Kepler's elliptical orbits from inverse-square attraction. The book is dense and uses elementary geometry throughout."
+    },
+    "tags": [
+      "Scientific Revolution",
+      "British",
+      "Physics"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-leibniz",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Gottfried Wilhelm Leibniz",
+    "teaser": "German polymath who invented calculus at 33 (publishing it first), spent the rest of his life arguing Newton stole it, served the Hanoverian house, and wrote philosophical papers that became digital logic through Boole and Frege.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Leibniz's \"Nova Methodus\" (1684) — full text",
+      "durationMinutes": 60,
+      "instruction": "Six pages. The first paragraph explains the entire theory. He uses dx and dy for the first time. Then read how Newton deferred, publishing his version years later with the same notation we still use. The Newton-Leibniz priority argument continued until both were dead."
+    },
+    "tags": [
+      "Scientific Revolution",
+      "German",
+      "Mathematics"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-lavoisier",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Chemist",
+    "name": "Antoine Lavoisier",
+    "teaser": "French chemist who at 28 began systematically weighing all substances before and after reactions; was beheaded by the French Revolution at 50, by which point he had convinced the world that 'phlogiston' was the wrong model of chemistry.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lavoisier, \"Traité Élémentaire de Chimie\" — first 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read it slowly. The book presents the list of elements: oxygen, hydrogen, nitrogen, sulfur, phosphorus. Lavoisier's contribution was the systematic approach: measure everything in and out. He renamed the language of chemistry entirely — oxygène (acid-former), hydrogène..."
+    },
+    "tags": [
+      "Chemistry",
+      "French",
+      "18th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-priestley",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Chemist",
+    "name": "Joseph Priestley",
+    "teaser": "English nonconformist minister who isolated oxygen by accident in 1774, named it 'dephlogisticated air,' and was driven out of England by the Birmingham Riot of 1791, settling in Pennsylvania.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Priestley's 1774 paper \"An Account of a New Kind of Air\" (Experiments and Observations, vol. 2)",
+      "durationMinutes": 60,
+      "instruction": "Read the opening. Priestley uses the phlogiston theory Lavoisier is about to disprove. Priestley is the only major chemist who held onto phlogiston for his entire career. His isolation of oxygen is the most important mistake in chemistry — he found something he didn't..."
+    },
+    "tags": [
+      "Chemistry",
+      "British",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-faraday",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Physicist",
+    "name": "Michael Faraday",
+    "teaser": "London bookbinder's apprentice who became the most influential experimental physicist of the 19th century. Self-taught — never went to university. Electromagnetic induction was his 1831 finding; it became every modern motor.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Faraday's 1831 paper \"Experimental Researches in Electricity, Series I\" (read the abstract + first 5 paragraphs)",
+      "durationMinutes": 30,
+      "instruction": "Read the opening. Faraday reports that moving a magnet near a wire produces current. The phenomenon is the foundation of every modern electric generator and motor. Read his plain-language style — he was self-taught and wrote as a shopkeeper would."
+    },
+    "tags": [
+      "Physics",
+      "British",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-maxwell",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Physicist",
+    "name": "James Clerk Maxwell",
+    "teaser": "Scottish physicist who unified electricity, magnetism, and light into 4 equations that he died believing would someday be rejected. By 1888, Hertz had confirmed light was electromagnetic waves. Einstein later cited this achievement as the most important transformation of 19th-century physics.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Maxwell's 1865 paper \"A Dynamical Theory of the Electromagnetic Field\" — read Sections I, II, and VI",
+      "durationMinutes": 60,
+      "instruction": "Read carefully. The opening is dated 1865. Maxwell's argument is that the equations of Faraday, Gauss, and Ampère can be combined into 20 equations in 20 variables (he later reduced them to 4). Then read Section VI — that's where he predicts electromagnetic waves..."
+    },
+    "tags": [
+      "Physics",
+      "Scottish",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-mendeleev",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Chemist",
+    "name": "Dmitri Mendeleev",
+    "teaser": "Russian chemist who in 1869 arranged the known elements on a card table, left gaps for undiscovered ones, predicted their properties, and was right about every one for the next 50 years.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mendeleev's 1869 paper \"On the Relation between the Properties and Atomic Weights of the Elements\"",
+      "durationMinutes": 30,
+      "instruction": "Four pages. Read the table. The empty cells are not laziness — they're predictions. Read the sentence about 'eka-silicon.' That element was discovered 17 years later and called germanium, in the exact spot Mendeleev predicted, with nearly the exact predicted properties."
+    },
+    "tags": [
+      "Chemistry",
+      "Russian",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-marie-curie",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Chemist",
+    "name": "Marie Curie",
+    "teaser": "Polish physicist who coined the word 'radioactivity,' isolated radium and polonium, won two Nobel prizes in two different sciences (only person ever), and died of aplastic anemia at 66 from decades of exposure to radioactive isotopes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Curie's 1898 paper \"Rays emitted by uranium and thorium compounds\" + 1902 Radium Isolation paper",
+      "durationMinutes": 60,
+      "instruction": "Read these two papers. The first introduced the word 'radioactivity.' Curie wrote it as 'radioactivité' — she disapproved of the term at first and later admitted it stuck. The second is the 4-year isolation of radium from tons of pitchblende tailings."
+    },
+    "tags": [
+      "Chemistry",
+      "Polish-French",
+      "Physics"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-rutherford",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Physicist",
+    "name": "Ernest Rutherford",
+    "teaser": "New Zealand physicist who discovered the nucleus by firing alpha particles at gold foil, identifying the proton, and winning the 1908 Nobel in Chemistry for these discoveries.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Rutherford's 1911 paper \"The Scattering of α and β Particles by Matter and the Structure of the Atom\"",
+      "durationMinutes": 60,
+      "instruction": "Seven pages. Read the opening. Rutherford lists what he expected to find. Then read the conclusion. He tells you the atom has a 'central charge' with almost the whole mass of the atom concentrated in a tiny region. Today we call it the nucleus."
+    },
+    "tags": [
+      "Physics",
+      "New Zealand-British",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-einstein",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Physicist",
+    "name": "Albert Einstein",
+    "teaser": "German-Swiss-American who at 26 wrote four papers in 1905 that broke time, mass, and energy apart — special relativity, photoelectric effect, Brownian motion, mass-energy equivalence. He became a celebrity for refusing to think like one.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Einstein's 1905 \"On the Electrodynamics of Moving Bodies\" — first 4 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first four pages. Then skip to the end. The middle is the math, which is intimidating, but the arg in plain language up front is clear. The famous E = mc² is in a follow-up paper later that year, almost a throwaway."
+    },
+    "tags": [
+      "Physics",
+      "German",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-bohr-niels",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Physicist",
+    "name": "Niels Bohr",
+    "teaser": "Danish physicist who built the first quantum model of the atom (1913), won the 1922 Nobel, hid Jewish colleagues in Copenhagen during WWII, and died of a heart attack in 1962 with a draft of a lecture in his pocket.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Bohr's 1913 trilogy — \"On the Constitution of Atoms and Molecules\" — Part I",
+      "durationMinutes": 60,
+      "instruction": "Read Part I carefully. Bohr combines Rutherford's nuclear atom with Planck's quantum to model hydrogen's spectrum. He places electrons in fixed orbits — they can absorb or emit energy only by jumping from one orbit to another."
+    },
+    "tags": [
+      "Physics",
+      "Danish",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-dirac",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Physicist",
+    "name": "Paul Dirac",
+    "teaser": "English physicist who combined quantum mechanics with relativity in 1928, produced the equation that predicted the existence of antimatter, won the 1933 Nobel, and spent the rest of his life saying 'Physical interpretation should be done later.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Dirac's 1928 paper \"The Quantum Theory of the Electron\"",
+      "durationMinutes": 60,
+      "instruction": "Read the introduction. Dirac predicts an electron's positive counterpart — that's the positron, discovered 4 years later. The equation itself is dense, but the introduction states the result. Dirac's later career was as much a philosopher as a physicist — he refused..."
+    },
+    "tags": [
+      "Physics",
+      "British",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-feynman",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Physicist",
+    "name": "Richard Feynman",
+    "teaser": "American physicist who at 27 married his first wife (Arline Greenbaum), won the Nobel 18 months after she died, and turned her name into a tattoo, a sketchpad drawing, and a thread through every book he wrote.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Feynman Lectures on Physics, Volume I, Chapters 1–3",
+      "durationMinutes": 60,
+      "instruction": "Read three chapters. Feynman writes as if the reader is in front of him and there is no urgency to be impressive. The first chapter is about atoms. The second is about the conservation of energy. The third is about the relation of physics to other sciences."
+    },
+    "tags": [
+      "Physics",
+      "American",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-oppenheimer",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Physicist",
+    "name": "J. Robert Oppenheimer",
+    "teaser": "American physicist who led the Manhattan Project's Los Alamos laboratory (1943–45), shipped the first nuclear bombs to Hiroshima and Nagasaki, and was later stripped of his security clearance for past Communist associations.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Oppenheimer's 1947 paper \"Physics in the Contemporary World\" + the 1948 Eisenhower-Lilienthal report he co-wrote",
+      "durationMinutes": 60,
+      "instruction": "Read both. The paper outlines nuclear-fission physics for legislators. The report suggests international civilian control of atomic energy. Notice the second document is dated two years after Hiroshima; Oppenheimer is asking that the bomb's materials be denationalized."
+    },
+    "tags": [
+      "Physics",
+      "American",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-darwin",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Naturalist",
+    "name": "Charles Darwin",
+    "teaser": "English naturalist who on a 5-year voyage around the world collected finches in the Galápagos, rode cross-Andean in Chile, returned to a country house and spent 20 years building the theory of natural selection.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Darwin's \"On the Origin of Species\" — Chapter IV (Natural Selection)",
+      "durationMinutes": 60,
+      "instruction": "Read Chapter IV. The argument is dense and full of his Beagle diary examples. Note Darwin's measured style — he marshals facts because he's afraid of being 'decried.' He held the manuscript back 20 years waiting for Wallace's 1858 letter to push him into publishing."
+    },
+    "tags": [
+      "Biology",
+      "British",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-wallace",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Naturalist",
+    "name": "Alfred Russel Wallace",
+    "teaser": "Welsh naturalist who independently discovered natural selection while delirious with fever on the Malay archipelago in 1858, sent a letter to Darwin describing it, and split credit for the most important biological theory ever with him.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wallace's 1855 paper \"On the Law which has regulated the Introduction of New Species\" + the 1858 Ternate paper",
+      "durationMinutes": 60,
+      "instruction": "Read the 1855 paper first. Wallace calls it 'the Sarawak Law' and lays the groundwork without naming natural selection specifically. Then read the 1858 paper — the Ternate essay — which becomes the joint Linnean Society presentation with Darwin."
+    },
+    "tags": [
+      "Biology",
+      "Welsh-British",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-mendel",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Geneticist",
+    "name": "Gregor Mendel",
+    "teaser": "Austrian monk who bred 29,000 pea plants in his monastery garden, articulated the math of inherited traits in 1865, then died before anyone in the scientific community paid attention. His work was rediscovered in 1900.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mendel's 1865 paper \"Versuche über Pflanzenhybriden\" (\"Experiments on Plant Hybrids\")",
+      "durationMinutes": 60,
+      "instruction": "Mendel presents the ratio 3:1 in F2 pea plants. Read that table. It's the foundation of genetics. Then notice that 'gene' isn't named in the paper — he called them 'factors.' The terms came later. Mendel died in 1884 knowing his work had not been understood."
+    },
+    "tags": [
+      "Biology",
+      "Austrian",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-pasteur",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Microbiologist",
+    "name": "Louis Pasteur",
+    "teaser": "French chemist who proved that germs cause disease, not 'miasmas,' revolutionized surgery with antiseptic technique, and developed the first vaccine for rabies in 1885 by growing the virus in rabbit spinal cords.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Pasteur's 1861 lecture \"On the organized bodies which exist in the atmosphere\" (a public lecture — part of his swan-necked flask demo)",
+      "durationMinutes": 60,
+      "instruction": "It's a public lecture — Pasteur wrote it as a lecture because no journal would publish his experiments. Read the part where he boils broth in swan-necked flasks. The flask alone disproves spontaneous generation."
+    },
+    "tags": [
+      "Biology",
+      "French",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-lister",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Surgeon",
+    "name": "Joseph Lister",
+    "teaser": "British surgeon who read Pasteur's germ theory, decided to wash everything in carbolic acid, and saw surgical mortality drop from 50% to near zero — saving surgery.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lister's 1867 paper \"On the Antiseptic Principle in the Practice of Surgery\" (Lancet)",
+      "durationMinutes": 60,
+      "instruction": "Read the before-and-after hospital ward mortality numbers in table 1. The amputation ward mortality went from near-50% to near-zero. That's a 50% statistical effect on a working hospital ward, with no drugs involved. Just washing."
+    },
+    "tags": [
+      "Medicine",
+      "British",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-koch",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Microbiologist",
+    "name": "Robert Koch",
+    "teaser": "German microbiologist who proved that specific germs cause specific diseases — anthrax (1876), tuberculosis (1882), cholera (1883). Pasteur's better-known rival; won the 1905 Nobel.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Koch's 1882 paper \"Die Aetiologie der Tuberculose\" (\"The Etiology of Tuberculosis\") — read the abstract + first 4 pages",
+      "durationMinutes": 30,
+      "instruction": "Koch announces the discovery of M. tuberculosis in 1882. Read the abstract — he lays out the four postulates that are still the standard for proving a causal relationship. The postulates: (1) organism present in every case, (2) isolated and grown, (3) causes disease..."
+    },
+    "tags": [
+      "Biology",
+      "German",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-curie-repeat",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Bacteriologist",
+    "name": "Robert Watson-Watt",
+    "teaser": "Scottish physicist whose memo on radio direction-finding prompted the British government to fund radar — the technology that won the 1940 Battle of Britain.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Watson-Watt's 1935 internal memo to the Air Ministry, \"The Detection of Aircraft by Radio Methods\"",
+      "durationMinutes": 30,
+      "instruction": "Two pages. It proposes that the interference from aircraft (a moving object) is detectable by radio. By 1940 this became the Chain Home radar network. Read the memo — it says nothing about microwaves yet. Notice the relationship to the klystron."
+    },
+    "tags": [
+      "Engineering",
+      "Scottish-British",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-carson",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Biologist",
+    "name": "Rachel Carson",
+    "teaser": "American marine biologist whose Silent Spring (1962) documented DDT's effect on bird populations and invented modern environmentalism. She died at 56 of breast cancer after years of corporate and government harassment.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Carson's \"Silent Spring,\" Chapter 2 (\"The Obligation to Endure\") + Chapter 14",
+      "durationMinutes": 60,
+      "instruction": "Read both chapters. Carson argues that we cannot release substances into the world they have never been in, expecting they stay where we put them. Chapter 14 ('A Population of One') describes how DDT persists through birth and breast milk."
+    },
+    "tags": [
+      "Biology",
+      "American",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-goodall",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Primatologist",
+    "name": "Jane Goodall",
+    "teaser": "British primatologist who went to Tanzania at 26 without a degree, was sent to study chimpanzees by Louis Leakey, did her PhD at Cambridge later in life, and has spent 60 years observing chimps in Gombe Stream National Park.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Goodall's 1968 paper \"Tool-Using in Primates\" (in Current Anthropology) + her first book \"In the Shadow of Man\" — introduction",
+      "durationMinutes": 60,
+      "instruction": "Read the 1968 paper first. Goodall gives chimps names instead of numbers. The scientific establishment tried to bury the paper; it survives because the naming was prophetic. Then read the In the Shadow of Man intro."
+    },
+    "tags": [
+      "Biology",
+      "British",
+      "20th-21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-mcclintock",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Geneticist",
+    "name": "Barbara McClintock",
+    "teaser": "American geneticist who discovered 'jumping genes' (transposons) in maize in 1951 — and spent 30 years with her work ignored, before the 1983 Nobel Prize.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "McClintock's 1951 paper \"The Origin and Behavior of Mutable Loci in Maize\"",
+      "durationMinutes": 60,
+      "instruction": "It's a long paper — 156 pages in PNAS. Read the abstract and the first 10 pages. She proposes that genes move around the genome; this 'jumping' controls color patterns in maize kernels. Geneticists of the 1950s couldn't fit the idea to Mendelian genetics."
+    },
+    "tags": [
+      "Biology",
+      "American",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-franklin-rosalind",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Biophysicist",
+    "name": "Rosalind Franklin",
+    "teaser": "British biophysicist whose X-ray photograph of DNA — Photo 51, taken by her graduate student Raymond Gosling — provided the data Watson and Crick used to model the double helix. She died of ovarian cancer at 37.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "King's College London archive Photo 51 — also reproduced in major textbooks; otherwise read Brenda Maddox's \"Rosalind Franklin: The Dark Lady of DNA\" (2002)",
+      "durationMinutes": 60,
+      "instruction": "Note that Franklin's Photograph 51 is held at King's College London archive. The image is the X-ray diffraction pattern that produced the helix idea. Watson admitted in 1968 that he was shown Franklin's photograph without her permission in January 1953, and he and..."
+    },
+    "tags": [
+      "Biology",
+      "British",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-sanger",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Biochemist",
+    "name": "Frederick Sanger",
+    "teaser": "British biochemist who is the only person to win two Nobel Prizes in Chemistry — for sequencing insulin (1958) and for developing DNA sequencing (1980). He refused a knighthood, citing 'rather not.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Sanger's 1980 paper (with Coulson) \"A Rapid Method for Determining Sequences in DNA by Primer Extension with Chain-Terminating Inhibitors\"",
+      "durationMinutes": 60,
+      "instruction": "Four pages. Sanger's 'chain-termination' method is the basis of all DNA sequencing at scale (including the human genome project, 2003). The method uses dideoxynucleotides that stop the chain, generating ladder-like fragments."
+    },
+    "tags": [
+      "Biology",
+      "British",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-doudna",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Biochemist",
+    "name": "Jennifer Doudna",
+    "teaser": "American biochemist who with Emmanuelle Charpentier published the 2012 paper describing CRISPR gene-editing, winning the 2020 Nobel Prize. Her memoir A Crack in Creation was the most-cited popular science book of 2017.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Jinek et al. 2012 paper \"A Programmable Dual-RNA–Guided DNA Endonuclease in Adaptive Bacterial Immunity\" (Science)",
+      "durationMinutes": 60,
+      "instruction": "Six pages. Read the first figure — two RNA molecules find and cut a DNA strand. Then read the conclusion. The first time a non-scientist sits down to read it, they understand the future of biology changed in 2012. They won the Nobel 8 years later."
+    },
+    "tags": [
+      "Biology",
+      "American",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-euler",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Leonhard Euler",
+    "teaser": "Swiss mathematician who wrote 92 volumes worth of mathematics, lost his sight in one eye in his 30s and then the other in his 60s, and kept producing mathematics after going completely blind.",
+    "imageUrl": "",
+    "explart": "_",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Euler's \"Introductio in analysin infinitorum\" (1748) — first 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read it slowly. Euler introduces the modern language of functions: f(x), and the first rigorous treatment of e, sin, cos, and logarithms. Euler's notation was so clear that it persisted — by 1900 his notation was taught in every continental European university."
+    },
+    "tags": [
+      "Mathematics",
+      "Swiss",
+      "18th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-gauss",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Carl Friedrich Gauss",
+    "teaser": "German mathematician whose 1801 Disquisitiones Arithmeticae at age 24 made number theory a discipline, whose normal distribution theorem at 25 made statistics quantifiable, who famously summed 1 to 100 instantly as an elementary school story.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Gauss's \"Disquisitiones Arithmeticae,\" first 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read this slowly. It's written in Latin. The book introduces modular arithmetic — the core of modern cryptography. Gauss's notation is heavy; he used the symbol ≤ for the first time. He also invented the word 'mod' that we still use today."
+    },
+    "tags": [
+      "Mathematics",
+      "German",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-gauss-anecdote",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Emmy Noether",
+    "teaser": "German mathematician whose 1915 'Noether's Theorem' revealed that every conservation law in physics corresponds to a symmetry of the laws. Einstein called her 'the most significant creative mathematical genius thus far produced since the beginning of higher education for women.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Noether's 1918 paper \"Invariante Variationsprobleme\" (Invariant Variation Problems)",
+      "durationMinutes": 60,
+      "instruction": "Read the first 6 pages. Noether's theorem says: every differentiable symmetry of the action of a physical system has a corresponding conservation law. Conservation of energy → time symmetry. Conservation of momentum → space symmetry."
+    },
+    "tags": [
+      "Mathematics",
+      "German",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-ramanujan",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Srinivasa Ramanujan",
+    "teaser": "Indian autodidact who at 27 mailed an unsolicited letter to GH Hardy at Cambridge containing 120 theorems, most of which Hardy had never seen before. Hardy invited him to England. They collaborated for 5 years until Ramanujan's death at 32.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ramanujan's 1911 paper in the Journal of the Indian Mathematical Society (\"Some properties of Bernoulli's numbers\") + his letters to Hardy",
+      "durationMinutes": 60,
+      "instruction": "Read the 1911 paper — it's reproducible without their partnership at Cambridge. Then read Ramanujan's 1913 letter to Hardy. Ramanujan had no formal training beyond high school. Most of his theorems were true; some are still being proved in 2024."
+    },
+    "tags": [
+      "Mathematics",
+      "Indian",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-noether",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "G. H. Hardy",
+    "teaser": "English mathematician who partnered with Ramanujan, was a militant pacifist during WWI, and wrote 'A Mathematician's Apology' at 64 that is the most-quoted layman accessible mathematics essay ever written.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Hardy's \"A Mathematician's Apology\" — first 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read it slowly. Hardy wrote it in the last year of his life believing his mathematical creativity had passed. It's a meditation on what mathematics is for, who mathematicians are, and what their work costs. Hardy refused to dispute that some mathematics is 'useless' —..."
+    },
+    "tags": [
+      "Mathematics",
+      "British",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-erdos",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Paul Erdős",
+    "teaser": "Hungarian mathematician who published more papers than any mathematician in history except Cauchy — with over 500 collaborators. Lived out of a suitcase, owned no home, died at 83 while collaborating at a Warsaw conference.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Erdős's papers in analytic number theory — e.g. with Kac \"On the number of prime factors of n\" (1940), or with Selberg the elementary proof of the prime number theorem (1949)",
+      "durationMinutes": 60,
+      "instruction": "Pick one of his 1,500+ papers. Read the abstract and the introduction. Notice the spare, direct style — no preamble, no apology. Erdős wrote like he talked: in proofs, not in prose. If you finish one, look for the \"Erdős number\" — your distance from him through co-authorship."
+    }
+  },
+  {
+    "id": "scientist-chan-shih-ho",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Cryptographer",
+    "name": "Whitfield Diffie",
+    "teaser": "American cryptographer who with Martin Hellman published the 1976 paper on public-key cryptography, breaking 4,000 years of symmetric cryptography and making modern commerce possible. He was largely self-taught.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Diffie & Hellman's 1976 paper \"New Directions in Cryptography\" (IEEE Transactions on Information Theory)",
+      "durationMinutes": 60,
+      "instruction": "Read pages 644–654 first. The paper introduces public-key cryptography, the foundation of internet banking, secure HTTP, and Bitcoin. Notice: the paper doesn't propose a working algorithm — RSA came a year later. The paper is a manifest for a new field."
+    },
+    "tags": [
+      "Computer Science",
+      "American",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-ada-lovelace",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Ada Lovelace",
+    "teaser": "English mathematician and Lord Byron's daughter who wrote what is generally considered the first algorithm intended for a machine — and described a future where machines go beyond calculation.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lovelace's 1843 'Notes' on Babbage's Analytical Engine (Translation of Menabrea, with annotations by AAL)",
+      "durationMinutes": 60,
+      "instruction": "Read Note A — Lovelace's longest. Her argument is that the Analytical Engine can compose music, draw pictures, and do useful science — because it's processing symbols, not just numbers. This is the first recorded proposal of a general-purpose computer, 100 years before..."
+    },
+    "tags": [
+      "Mathematics",
+      "British",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-turing",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Alan Turing",
+    "teaser": "British mathematician who broke the Enigma code in 1941 (with a team) and published in 1936 a paper describing a kind of machine that could compute all computable functions. He died at 41 by eating a cyanide-laced apple.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Turing's 1936 paper \"On Computable Numbers\" + 1950 paper \"Computing Machinery and Intelligence\" (the 'Turing Test' paper)",
+      "durationMinutes": 60,
+      "instruction": "Read both. The 1936 paper invented the universal computer. It asks: is there a machine that can compute anything computable? His answer was yes — and he spent the rest of his paper showing what such a machine could not decide (the Halting Problem)."
+    },
+    "tags": [
+      "Mathematics",
+      "British",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-von-neumann",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "John von Neumann",
+    "teaser": "Hungarian-American mathematician whose 1945 'First Draft of a Report on the EDVAC' is the founding document of the stored-program computer architecture used in every computer since.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "von Neumann's \"First Draft of a Report on the EDVAC\" (1945) — read sections 1–4",
+      "durationMinutes": 60,
+      "instruction": "Read sections 1–4. The document establishes the idea that the program's instructions are stored in the same memory as the data — the 'von Neumann architecture.' The report was never published formally — it was distributed as a mimeographed document and shaped how..."
+    },
+    "tags": [
+      "Mathematics",
+      "Hungarian-American",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-shannon",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Claude Shannon",
+    "teaser": "American mathematician whose 1948 paper \"A Mathematical Theory of Communication\" founded information theory, gave us the bit (\"the binary digit\"), and analyzed Disney's chess-playing mechanical mouse at Bell Labs.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Shannon's 1948 paper \"A Mathematical Theory of Communication\"",
+      "durationMinutes": 60,
+      "instruction": "Read the introduction. This paper defined the 'bit' — 'a binary digit.' Shannon's argument is that information has a mathematical measure, that increasing noise reduces the channel's capacity, and that redundancy in encoding can correct errors."
+    },
+    "tags": [
+      "Mathematics",
+      "American",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-knuth",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Computer Scientist",
+    "name": "Donald Knuth",
+    "teaser": "American computer scientist who has spent 60 years writing The Art of Computer Programming, the book series that taught 4 generations of programmers how to think about efficiency and correctness.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Knuth's \"The Art of Computer Programming,\" Volume 1, Section 1.1 (Algorithms) — first 8 pages",
+      "durationMinutes": 60,
+      "instruction": "Read it slowly. Knuth defined the modern sense of 'algorithm analysis.' He introduced the big-O notation that we still use to evaluate algorithmic performance. Then notice the recursive worked example in 1.2 (Euclid's algorithm)."
+    },
+    "tags": [
+      "Computer Science",
+      "American",
+      "20th-21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-ricci-curvature",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Mathematician",
+    "name": "Bernhard Riemann",
+    "teaser": "German mathematician whose 1854 'On the Hypotheses which lie at the Foundation of Geometry' invented the mathematics of curved space — a tool Einstein would use 60 years later for general relativity.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Riemann's 1854 habilitation lecture \"On the Hypotheses which Lie at the Foundations of Geometry\"",
+      "durationMinutes": 90,
+      "instruction": "It's 30 pages. Riemann opens with a critique of the parallel postulate and proposes a geometry that depends on a chosen 'manifold.' Read the section on n-dimensional manifolds. Riemann died of tuberculosis at 39, having published little."
+    },
+    "tags": [
+      "Mathematics",
+      "German",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "scientist-leverrier",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Astronomer",
+    "name": "Urbain Le Verrier",
+    "teaser": "French astronomer who in 1846 predicted Neptune's existence by calculating where it should be from perturbations of Uranus's orbit. He sent the coordinates to a Berlin observatory that observed it within hours.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Le Verrier's 1859 paper \"Recherches sur les mouvements de la planète Herschel\" (dédicated to Neptune)",
+      "durationMinutes": 60,
+      "instruction": "Read the introduction to his Uranus analysis. Le Verrier was single-handedly trying to explain the discrepancy between predicted and observed Uranus's orbit. By 1846 the discrepancy was 1 arcsecond per year. He tested the hypothesis of an unknown perturbing planet."
+    },
+    "tags": [
+      "Astronomy",
+      "French",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scientist-monet-brush",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Anthropologist",
+    "name": "Margaret Mead",
+    "teaser": "American anthropologist whose 1928 'Coming of Age in Samoa' argued Pacific adolescent cultures were less stressful than American ones. The book sold 8 million copies before her death in 1978.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mead's 1928 \"Coming of Age in Samoa,\" Chapters I & VI",
+      "durationMinutes": 90,
+      "instruction": "Read Chapter I (Ta'u Island background and methodology) and Chapter VI (conclusion on adolescent stress). Mead's 1970s critics (most famously Derek Freeman) argued her Samoa fieldwork was thin and interpretation was wrong."
+    },
+    "tags": [
+      "Anthropology",
+      "American",
+      "20th Century"
+    ],
+    "tier": 2
+  }
+]

@@ -1,1 +1,703 @@
-[]
+[
+  {
+    "id": "discovery-penicillin",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Penicillin (1928)",
+    "teaser": "Alexander Fleming left a window open over a Petri dish on vacation. By the time he came back, a mold had killed every bacterium in the dish — the most consequential accident of the 20th century.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Howard Florey & Ernst Chain's 1940 paper on penicillin",
+      "durationMinutes": 30,
+      "instruction": "It's a short medical paper with eleven authors. Read the first paragraph and the last: between them is the most cited clinical trial of the early 20th century. Then look at the references — half of the most cited papers in medicine are referenced just in this paper."
+    },
+    "tags": [
+      "Antibiotics",
+      "Medicine",
+      "British",
+      "1920s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-dna-structure",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "DNA Double Helix (1953)",
+    "teaser": "Watson and Crick solved the structure of life from a card table without doing an experiment. The data came from Rosalind Franklin's X-ray photograph, taken in a King's College hallway by a student who did not get the credit.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Watson & Crick's 1953 Nature paper, \"A Structure for Deoxyribose Nucleic Acid\" (one page)",
+      "durationMinutes": 20,
+      "instruction": "It's just one page. It is the single most cited paper in biology. Read the second paragraph — \"It has not escaped our notice...\" — and see what the famous undertone is. Then read the citation to Franklin's unpublished work and ask why."
+    },
+    "tags": [
+      "Biology",
+      "British",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-gravitational-waves",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Gravitational Waves (2015)",
+    "teaser": "Einstein predicted them in 1916 and wrote that he'd bet a year of his life we'd never detect them. 99 years and $1B later, an instrument in Louisiana heard two black holes collide.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "LIGO's 2016 detection paper (Phys. Rev. Lett.)",
+      "durationMinutes": 30,
+      "instruction": "Look at the data plots on page 2. The signal is visible to your eye — a 0.2-second chirp rising in frequency. Then read the timing: the signal was detected 7 milliseconds before the Louisiana detector and the Washington detector independently confirmed it."
+    },
+    "tags": [
+      "Physics",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-higgs-boson",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Higgs Boson (2012)",
+    "teaser": "A theoretical particle proposed in 1964 to explain why matter has mass, then sought by 30,000 physicists for 48 years and finally confirmed at the LHC on July 4, 2012.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "CMS + ATLAS simultaneous 2012 announcement papers",
+      "durationMinutes": 45,
+      "instruction": "Read the abstract of both papers. They give a 5-sigma confidence — that's a 1 in 3.4 million chance the signal is noise. Then read the figures: each dot in the chart is one particle collision, and the bump at 125 GeV is the Higgs."
+    },
+    "tags": [
+      "Physics",
+      "CERN",
+      "European",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-relativity",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Special and General Relativity (1905, 1915)",
+    "teaser": "Einstein at 26 wrote four papers in 1905 that broke time, mass, and energy apart and patched them back together. Ten years later he added gravity as geometry.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Einstein's 1905 paper \"On the Electrodynamics of Moving Bodies\" — first 4 pages",
+      "durationMinutes": 45,
+      "instruction": "Read the first four pages. Then skip to the end. The middle is the math, which is intimidating, but the argue in plain language up front. The famous E = mc² is in part 5 of a follow-up paper later that year — a throwaway bonus in a paper on something else."
+    },
+    "tags": [
+      "Physics",
+      "German",
+      "1900s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-quantum-mechanics",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Quantum Mechanics (1925–27)",
+    "teaser": "Six European physicists in three years invented a new kind of physics where particles are also waves and measurements change the thing being measured. None of them finished the work, all of them were right.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Heisenberg's 1927 paper \"Über den anschaulichen Inhalt der quantentheoretischen Kinematik und Mechanik\"",
+      "durationMinutes": 30,
+      "instruction": "It's 27 pages. The famous uncertainty principle is at the bottom of page 3 of a footnote. Read it. Then notice the phrasing — Heisenberg is offended by his own conclusion, not triumphant."
+    },
+    "tags": [
+      "Physics",
+      "German",
+      "1920s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-evolution-natural-selection",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Evolution by Natural Selection (1858)",
+    "teaser": "Two Englishmen and a Malay archipelago letter exchange published the same idea on the same day — Darwin and Wallace — and Darwin got the credit because he'd been working on it longer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Darwin & Wallace, 1858 Linnean Society joint presentation (transcript)",
+      "durationMinutes": 30,
+      "instruction": "It's two papers side by side. Read Wallace's first. Read Darwin's second. They say almost exactly the same thing in different dialects. That the same theory appeared twice in different minds is itself the proof of evolution."
+    },
+    "tags": [
+      "Biology",
+      "British",
+      "1850s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-periodic-table",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Periodic Table (1869)",
+    "teaser": "Mendeleev arranged the known elements on a card table in two weeks, then realized the gaps he'd left unfilled predicted eight elements that hadn't been discovered yet.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mendeleev's 1869 paper \"On the Relation between the Properties and Atomic Weights of the Elements\"",
+      "durationMinutes": 20,
+      "instruction": "It's four pages. Read the table. The empty cells are not laziness — they're predictions. Read the sentence about 'eka-silicon.' That element was discovered 17 years later and called germanium, exactly where Mendeleev said it would be."
+    },
+    "tags": [
+      "Chemistry",
+      "Russian",
+      "1860s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-photosynthesis",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Photosynthesis (1770s–1800s)",
+    "teaser": "Joseph Priestley burned a candle in a sealed jar, then put mint in; the mint resurrected the air. He had no idea he'd found the only thing keeping animals alive.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Jan Ingenhousz's 1779 paper \"Experiments upon Vegetables\"",
+      "durationMinutes": 30,
+      "instruction": "Most of it is botanical observation. Read carefully for the moment where he describes that plants only \"restore\" air in light, not in darkness. That single observation tells you plants are doing light-driven chemistry — which is exactly photosynthesis."
+    },
+    "tags": [
+      "Biology",
+      "British-Dutch",
+      "1770s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-radioactivity",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Radioactivity (1896)",
+    "teaser": "Becquerel put uranium salts in a drawer next to photographic plates. When he developed the plates he found fog — and that fog was energy that no chemistry of the time could explain.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Marie Curie's 1898 paper \"Rays emitted by uranium and thorium compounds\"",
+      "durationMinutes": 25,
+      "instruction": "She uses the word \"radioactivity\" for the first time in history. Read the closing paragraph where she suggests the rays are an atomic phenomenon. She was right, and the term stuck."
+    },
+    "tags": [
+      "Physics",
+      "French",
+      "1890s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-germ-theory",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Germ Theory of Disease (1860s–80s)",
+    "teaser": "Pasteur, Koch and Lister transformed medicine by proving most disease came from microorganisms — and that washing your hands with soap was a cure.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Pasteur's 1861 paper \"On the organized bodies which exist in the atmosphere\"",
+      "durationMinutes": 30,
+      "instruction": "It's a public lecture — Pasteur wrote it as a lecture because no journal would publish his experiments at the time. Read the part where he boils broth in swan-necked flasks. The flask alone disproves spontaneous generation."
+    },
+    "tags": [
+      "Medicine",
+      "French",
+      "1860s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-big-bang",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Big Bang Cosmology (1927)",
+    "teaser": "Lemaître reasoned backward from Einstein's equations to a single point of origin — and Einstein told him his math was wrong before relenting 12 years later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lemaître's 1927 paper \"A homogeneous universe of constant mass and increasing radius\" (English translation)",
+      "durationMinutes": 25,
+      "instruction": "It's 7 pages. The conclusion is hidden in plain text — there's no fanfare. He writes: \"We may conceive of the beginning of the universe in the form of a unique atom.\" Then asks if it was. The answer of \"yes\" arrived in 1964."
+    },
+    "tags": [
+      "Cosmology",
+      "Belgian",
+      "1920s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-cmb",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Cosmic Microwave Background (1964)",
+    "teaser": "Two Bell Labs engineers trying to calibrate a radio antenna heard a low hiss that wouldn't go away. They spent a year ruling out pigeon droppings before publishing.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Penzias and Wilson's 1965 paper \"A Measurement of Excess Antenna Temperature at 4080 Mc/s\"",
+      "durationMinutes": 20,
+      "instruction": "Two pages. There is no cosmology in it. It's an antenna temperature paper. Read the appendix — there's a footnote about 'dielectric bird excreta'. The Nobel committee cited them anyway because that hiss turned out to be the universe at age 380,000 years."
+    },
+    "tags": [
+      "Cosmology",
+      "American",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-plate-tectonics",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Plate Tectonics (1960s)",
+    "teaser": "A handful of oceanographers and geophysicists noticed mid-ocean ridges and matching coastlines in the 1950s, refused to give up on a ridiculed theory for a decade, then reshaped geology.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Tuzo Wilson's 1965 paper \"A new class of faults and their bearing on continental drift\"",
+      "durationMinutes": 25,
+      "instruction": "It's only 7 pages. Read the third figure. Wilson proposes transform faults simply by looking at a seafloor map. The whole field hesitates for another 3 years before agreeing; in those 3 years, every geology textbook in the world is rewritten."
+    },
+    "tags": [
+      "Geology",
+      "Canadian",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-calculus",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Calculus (1665–1676)",
+    "teaser": "Newton invented it during the plague years in his Lincolnshire home. Leibniz published it first. The two became Europe's longest-running scientific argument.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Leibniz's 1684 paper \"Nova Methodus pro Maximis et Minimis\" (Latin translated)",
+      "durationMinutes": 30,
+      "instruction": "It's six pages. The first paragraph explains the entire theory. He uses dx and dy for the first time. Then read how Newton deferred — published his version years later with the same notation we still use."
+    },
+    "tags": [
+      "Mathematics",
+      "1660s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-godel-incompleteness",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Gödel's Incompleteness Theorems (1931)",
+    "teaser": "Austrian mathematician working alone in Vienna proved that any arithmetic system rich enough to be useful is also rich enough to be inconsistent. Hilbert said it couldn't be done.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Gödel's 1931 paper \"Über formal unentscheidbare Sätze der Principia Mathematica\"",
+      "durationMinutes": 45,
+      "instruction": "It's dense. Don't try to follow the proof. Read the introduction — he lists the previous assumptions carefully. Then look at the page where he writes 'Satz XI' and understand that's the heart of his finding. The result is anyway intuitively graspable: any formal system..."
+    },
+    "tags": [
+      "Mathematics",
+      "Austrian",
+      "1930s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "discovery-transistor",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Invention",
+    "name": "Transistor (1947)",
+    "teaser": "Bell Labs physicists trying to make a better amplifier accidentally invented the device that gave us every computer since, then won the Nobel six years later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Bardeen, Brattain, and Shockley's 1948 papers in Phys. Rev.",
+      "durationMinutes": 30,
+      "instruction": "Read Bardeen & Brattain's 1948 paper first. It's a two-page experimental note. Then Shockley's — he had tried to suppress it, then published his own theory three days later. Between them is the entire history of the patent dispute that runs to 1956."
+    },
+    "tags": [
+      "Electronics",
+      "American",
+      "1940s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-integrated-circuit",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Invention",
+    "name": "Integrated Circuit (1959)",
+    "teaser": "Kilby at Texas Instruments put two transistors on one germanium sliver by hand, then filed a patent six months before Noyce at Fairchild did the same thing with silicon.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Kilby's 1959 patent (US 3,138,743)",
+      "durationMinutes": 30,
+      "instruction": "It's a patent, so the language islegalistic. Read the first figure — hand-drawn from 1959. Then read the second figure and the third. By claim 4, you've seen what every chip in your phone still resembles."
+    },
+    "tags": [
+      "Electronics",
+      "American",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-laser",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Invention",
+    "name": "Laser (1960)",
+    "teaser": "Theoretically predicted by Einstein in 1917, the first working laser was built by Maiman in 1960 from a ruby rod, a flashlamp, and the insight that pink rubies could amplify light.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Maiman's 1960 paper \"Stimulated Optical Radiation in Ruby\" (Nature)",
+      "durationMinutes": 15,
+      "instruction": "Two pages. Maiman was told by theorists the ruby would never work. The paper shows otherwise. Then read the editor's note — he had to fight Nature twice to get it published."
+    },
+    "tags": [
+      "Optics",
+      "American",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-internet",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Invention",
+    "name": "Internet (ARPANET, 1969)",
+    "teaser": "Four US university computers sent the first packet on October 29, 1969. The intended message was \"LOGIN.\" The first two letters got through before the system crashed.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Cerf's 1974 paper \"A Protocol for Packet Network Intercommunication\"",
+      "durationMinutes": 30,
+      "instruction": "It's a clear 26-page paper. Read the introduction for why you need TCP. Then look at the figures. The diagrams of \"TCP headers\" still describe the spirit of every packet on your phone."
+    },
+    "tags": [
+      "Computing",
+      "American",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-world-wide-web",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Invention",
+    "name": "World Wide Web (1989)",
+    "teaser": "CERN physicist Tim Berners-Lee proposed a global hypertext system on a notepad in March 1989. He built the first browser and server by Christmas.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Berners-Lee's 1989 proposal, \"Information Management: A Proposal\"",
+      "durationMinutes": 20,
+      "instruction": "It's two pages. Written as a memo to his manager at CERN. The phrase 'vague but exciting' is the boss's margin note. Read the remaining figure of the network diagram — it's a child of the 80s and it became the web we use every day."
+    },
+    "tags": [
+      "Computing",
+      "British",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-crispr",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "CRISPR Gene Editing (2012)",
+    "teaser": "Doudna and Charpentier figured out that bacteria were using a piece of viral RNA as a programmable knife. Five years later it won the Nobel.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Jinek et al., 2012 paper \"A programmable dual-RNA-guided DNA endonuclease in adaptive bacterial immunity\" (Science)",
+      "durationMinutes": 30,
+      "instruction": "It's six pages. Read the first figure. It's a cartoon of two RNA molecules finding a strand of DNA — and cutting it. Then read the conclusion. The first time a human sits down to read it, they understand the future of biology changed in 2012."
+    },
+    "tags": [
+      "Biology",
+      "American-French",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-mri",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Magnetic Resonance Imaging (1977)",
+    "teaser": "Lauterbur took a snapshot of two test tubes of water inside a magnet by varying the magnetic field, and got the first MRI image. The hospital where he worked then refused to file the patent.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lauterbur's 1973 paper \"Image Formation by Induced Local Interactions: Examples Employing Nuclear Magnetic Resonance\" (Nature)",
+      "durationMinutes": 30,
+      "instruction": "One page. Read the second figure — it's a fuzzy image of two tubes. That image is the one that made Lauterbur realize you could see inside a body without X-rays."
+    },
+    "tags": [
+      "Medicine",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-helicobacter-pylori",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Helicobacter pylori (1982)",
+    "teaser": "Australian pathologist Barry Marshall drank a flask of bacteria to prove ulcers were caused by infection, not stress. He and his partner won the 2005 Nobel.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Marshall & Warren's 1984 paper \"Unidentified curved bacilli in the stomach of patients with gastritis and peptic ulceration\" (Lancet)",
+      "durationMinutes": 20,
+      "instruction": "It's a 9-page clinical note. Read the patient descriptions on the third page. Then read the closing — Marshall says he'll now treat patients with antibiotics and see. The next year he tests himself by drinking the bacterium, getting gastritis, and curing himself with..."
+    },
+    "tags": [
+      "Medicine",
+      "Australian",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-fire-domestication",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Control of Fire (~1 million years ago)",
+    "teaser": "Pre-homo erectus hominids at Wonderwerk Cave, South Africa, left the earliest known ash layer from a controlled fire 1.5M years ago — the first time anything on Earth burned on purpose.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Berna et al., 2012 paper \"Early use of controlled fire in Wonderwerk Cave, South Africa\" (PNAS)",
+      "durationMinutes": 45,
+      "instruction": "Read the figures. The ash layers are 20cm deep, with bone tools at the same level. Read the dating method — they used micromagnetostratigraphy because the sediments were too old for radiocarbon. The age is contested but the fire isn't."
+    },
+    "tags": [
+      "Archaeology",
+      "South African",
+      "Prehistoric"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "discovery-wheel",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Invention",
+    "name": "Wheel (~3500 BCE)",
+    "teaser": "Mesopotamian potters who had already invented the turntable also invented wheels for transport within a few centuries — then it took another thousand years to bolt the two together and make the chariot.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Vorderasiatisches Museum Berlin (Mesopotamian collection)",
+      "durationMinutes": 45,
+      "instruction": "Look at the wheel-shaped clay tokens from the Uruk period (~4000 BCE). They're not transport — they're counters. The first 'wheel' was a step in writing; the second was for transport. The order is what makes this hard to believe."
+    },
+    "tags": [
+      "Invention",
+      "Mesopotamian",
+      "Prehistoric"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "discovery-printing-press",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Invention",
+    "name": "Printing Press (c. 1440)",
+    "teaser": "Johannes Gutenberg invented the movable-type printing press in Mainz, and within 50 years there were 20M books in Europe — more than all the scribes of the previous millennium combined.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Gutenberg Museum, Mainz",
+      "durationMinutes": 60,
+      "instruction": "Look at the two-page Gutenberg Bible on display. Each letter was hand-set, hand-inked, hand-pressed. The shop could produce 250 pages a day. Now try to imagine being a 1455 reader seeing one for the first time — the world had no reference for moving text."
+    },
+    "tags": [
+      "Invention",
+      "German",
+      "1440s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-lightning-as-electricity",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Lightning is Electricity (1752)",
+    "teaser": "Benjamin Franklin flew a kite in a thunderstorm, with a metal key tied to the string. The key sparked. The entire scientific community decided not to repeat the experiment.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Franklin's 1751 letter to Peter Collinson on electrical experiments",
+      "durationMinutes": 30,
+      "instruction": "It's a popular-audience letter, so it reads well. Read the second paragraph — he proposes the experiment. He never writes that he did it himself; only that the experiment was performed. We're not even sure he flew the kite."
+    },
+    "tags": [
+      "Electricity",
+      "American",
+      "1750s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-antibiotics-streptomycin",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Streptomycin (1943)",
+    "teaser": "Waksman's graduate student Albert Schatz isolated streptomycin from a soil sample in 1943. Waksman took the patent credit. Schatz sued and eventually won a settlement.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "instruction": "Two-page paper. The first author is Schatz — the graduate student. The third is Waksman, who took the patent credit. The medical import is in the last paragraph: it works against the tuberculosis bacillus.",
+      "targetName": "Schatz, Bugie, and Waksman, 1944 paper (Proc. Soc. Exp. Biol. Med.)",
+      "durationMinutes": 30
+    },
+    "tags": [
+      "Antibiotics",
+      "American",
+      "1940s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "discovery-antiseptic-surgery",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Antiseptic Surgery (1867)",
+    "teaser": "Joseph Lister read Pasteur's germ theory papers and decided that the secret to saving surgical patients was washing everything in carbolic acid — including the surgeons' hands.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lister's 1867 paper \"On the Antiseptic Principle in the Practice of Surgery\" (Lancet)",
+      "durationMinutes": 30,
+      "instruction": "Read the before-and-after hospital ward mortality numbers in table 1. The amputation ward mortality went from near-50% to near-zero. That's a 50% statistical effect on a working hospital ward, with no drugs involved. Just washing."
+    },
+    "tags": [
+      "Medicine",
+      "British",
+      "1860s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-mendel-genetics",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Mendel's Laws of Inheritance (1865)",
+    "teaser": "An Austrian monk bred 29,000 pea plants in his monastery garden, articulated the math of inherited traits in 1865, then died before anyone in the scientific community paid attention.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mendel's 1865 paper \"Versuche über Pflanzenhybriden\" (trans. Experiments on Plant Hybrids)",
+      "durationMinutes": 30,
+      "instruction": "Mendel presents the ratio 3:1 in F2 pea plants. Read that table. It's the foundation of genetics. Then notice that 'gen' isn't named in the paper — he called them 'factors.' The terms came later."
+    },
+    "tags": [
+      "Biology",
+      "Austrian",
+      "1860s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-oxygen-lavoisier",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Oxygen and Combustion Chemistry (1770s)",
+    "teaser": "Lavoisier weighed everything. He weighed water before and after burning it through a gun barrel, and showed it gained mass — and weighed the air that lost it — and chemistry was born.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lavoisier, 1789 \"Traité Élémentaire de Chimie\" — first chapter",
+      "durationMinutes": 30,
+      "instruction": "It reads like a textbook chapter. Read the part where he describes 'oxygen' for the first time. He renamed it 'oxygène' — 'acid-former.' His previous term was 'deflogisticated air.' Within a generation, chemistry textbooks globally dropped the old language."
+    },
+    "tags": [
+      "Chemistry",
+      "French",
+      "1770s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "discovery-viviani-theorem",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Viviani's Theorem (1659)",
+    "teaser": "Italian mathematician who computed the area of a partial sphere's surface by balancing a cube against the curve of a half-circle.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Viviani's letters to Leibniz and Michelangelo Ricci (1659)",
+      "durationMinutes": 20,
+      "instruction": "The letters are mostly in Italian and short. Read the one to Leibniz — it describes the theorem in two pages. Now draw what he describes on a piece of paper. The proof you see in two minutes took him weeks; that's the difference between writing and re-discovering..."
+    },
+    "tags": [
+      "Mathematics",
+      "Italian",
+      "1650s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "discovery-fibonacci-sequence",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Theory",
+    "name": "Fibonacci / Hindu-Arabic Numerals in Europe (1202)",
+    "teaser": "Leonardo of Pisa spent his childhood in North African markets, brought Hindu-Arabic numerals back to Europe in 1202, and changed how the world does arithmetic.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Fibonacci's \"Liber Abaci\" — opening chapter",
+      "durationMinutes": 30,
+      "instruction": "European merchants in 1202 still used Roman numerals. They couldn't do real arithmetic. Read the first three pages of Liber Abaci — Fibonacci explains why 'IX × IX' as Roman arithmetic is harder than '9 × 9' as positional arithmetic."
+    },
+    "tags": [
+      "Mathematics",
+      "Italian",
+      "1200s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "discovery-protons-rutherford",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Atomic Nucleus / Proton (1911)",
+    "teaser": "Rutherford fired alpha particles at gold foil in his Manchester lab. He expected them to pass through. A few bounced back. His assistant Marsden reportedly said it was like firing a 15-inch shell at tissue paper and having it come back.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Rutherford, 1911 paper \"The Scattering of α and β Particles by Matter and the Structure of the Atom\" (Phil. Mag.)",
+      "durationMinutes": 30,
+      "instruction": "It's seven pages. Read the opening — he lists what he expected to find. Then read the conclusion. He tells you the atom has a 'central charge' almost the whole mass of the atom concentrated in a tiny region. Today we call it the nucleus."
+    },
+    "tags": [
+      "Physics",
+      "British",
+      "1910s"
+    ],
+    "tier": 2
+  }
+]

@@ -1,1 +1,702 @@
-[]
+[
+  {
+    "id": "author-homer",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Homer",
+    "teaser": "Greek oral poet, possibly one person, possibly many. The Iliad and Odyssey were composed orally over centuries before they were written down — the first European literature is a transcription tradition.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Odyssey, Books 5–8 (Calypso to Alcinoüs)",
+      "durationMinutes": 90,
+      "instruction": "Listen to the rhythm. Read aloud if you can — the long 'ī-thén ē kél-e-thi' phrasing is built for breath. The Odyssey was a song before it was a book. Section by section you'll feel the seams where the formulaic phrases meet a particular story."
+    },
+    "tags": [
+      "Ancient",
+      "Greek",
+      "Epic"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-dante",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Dante Alighieri",
+    "teaser": "Florentine poet exiled from his own city at 35, wrote the Divine Comedy over 20 years, the first major literary work in Italian vernacular — and probably the most quoted single book in the Western canon.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Inferno, Cantos I–V",
+      "durationMinutes": 60,
+      "instruction": "Read each canto aloud. The terza rima (ABA BCB CDC) is a syllable count disguised as rhyme. Notice how the poem slips into editorializing when Dante doesn't agree with the souls he meets. That's the poet telling you what's at stake."
+    },
+    "tags": [
+      "Medieval",
+      "Italian",
+      "Poetry"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-shakespeare",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "William Shakespeare",
+    "teaser": "Stratford-upon-Avon glove-maker's son. Wrote 39 plays (or maybe 38, or maybe 40 — nobody agrees on the count). Invented 1,700+ English words, more than any single author before or since.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Hamlet (the 1604 Second Quarto, Act III scene 1)",
+      "durationMinutes": 60,
+      "instruction": "Read the soliloquies aloud. \"To be or not to be\" is a meditation on whether existing is preferable to dying — and it's the most quoted line ever written in English because Hamlet doesn't actually answer it. The play keeps going."
+    },
+    "tags": [
+      "Elizabethan",
+      "British",
+      "Drama"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-cervantes",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Miguel de Cervantes",
+    "teaser": "Spanish soldier captured by Barbary pirates, held captive 5 years, ransomed when his family couldn't pay. Started writing Don Quixote at 57 — and his book invented the modern novel.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Don Quixote, Part I, Chapters 1–8",
+      "durationMinutes": 90,
+      "instruction": "Notice how quickly Cervantes pulls the rug. The novel starts as a parody of chivalric romance; by chapter 8, the protagonist is already beaten up and dragged home. Then read a 19th-century Russian novel, then return — you'll see Don Quixote's DNA in every narration of..."
+    },
+    "tags": [
+      "Spanish Golden Age",
+      "Spanish",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-jane-austen",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Jane Austen",
+    "teaser": "English clergyman's daughter who wrote six novels that became the template for English comic fiction, then died at 41 before the last two were published. Her books revised the marriage plot by making it a question of conscience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Pride and Prejudice, Volume I (Chapters 1–23)",
+      "durationMinutes": 90,
+      "instruction": "Read the first 50 pages aloud. Austen's free indirect style is the medium: she writes 'she felt' as if Darcy's nerves are inside Elizabeth's body. The plot is told not by what people say, but by what the narrator chooses not to say."
+    },
+    "tags": [
+      "Regency",
+      "British",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-the-bronte-sisters",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "The Brontë Sisters",
+    "teaser": "Three Yorkshire parsonage daughters (Charlotte, Emily, Anne) who wrote six novels that became the first literary feminism. They had to publish them under male pseudonyms (Currer, Ellis, Acton Bell) to be reviewed at all.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wuthering Heights, Chapters 1–9",
+      "durationMinutes": 60,
+      "instruction": "Read through the first nine chapters. Emily writes in second-person voice from inside a tenant's mind. The 'voice-over' is so violent that some critics still think the novel is unreadable. That critique is itself the point."
+    },
+    "tags": [
+      "Victorian",
+      "British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-mary-shelley",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Mary Shelley",
+    "teaser": "Wrote Frankenstein at 19 on a bet with Byron and Percy Shelley during a summer storm in Geneva. The novel invented both science fiction and the recurring motif of hubristic scientists failing at their own creations.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Frankenstein, Volume I (Letters + first 4 chapters)",
+      "durationMinutes": 90,
+      "instruction": "Skip the famous horror scenes. Read the framing structure: a polar explorer named Walton writes letters home, and the novel you're reading is one long letter he sends his sister. Walton's ambition — and the monster's revenge — are both inside that frame."
+    },
+    "tags": [
+      "Romantic",
+      "British",
+      "Gothic"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-dickens",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Charles Dickens",
+    "teaser": "Worked in a blacking factory at age 12 to support his family in debtors' prison. Wrote 15 novels that became the first mass-market literature. Invented the 'Christmas story' as a genre.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Great Expectations, Chapters 1–8",
+      "durationMinutes": 60,
+      "instruction": "Read the opening. A child on a graveyard looks at his parents' headstone. He'd rather not be there. Dickens's voice is pure in those first few pages — the magic of his novels lives in how much detail he gives childhood tasks."
+    },
+    "tags": [
+      "Victorian",
+      "British",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-tolstoy",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Leo Tolstoy",
+    "teaser": "Russian aristocrat who after 50 became a Christian anarchist, gave up his copyrights, was excommunicated by the Russian Orthodox Church, and died fleeing his family at 82.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "War and Peace, Book I (first 50 pages)",
+      "durationMinutes": 90,
+      "instruction": "Read the first 30 pages. Then pages 100–150 (the hunt scene). The novel trains you to read two scales of time: Napoleon's movements across Europe, and a young woman explaining why she won't marry. Tolstoy is doing this on purpose — he wants you to feel his philosophy."
+    },
+    "tags": [
+      "Russian",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-dostoevsky",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Fyodor Dostoevsky",
+    "teaser": "Russian novelist arrested by the Czar in 1849, sentenced to death, pardoned at the last minute after a mock execution. Wrote Notes from Underground and Crime and Punishment in his 40s and 50s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Crime and Punishment, Part I (the murder scene only)",
+      "durationMinutes": 60,
+      "instruction": "Read just the murder scene. The axe. The room. The footsteps from the upstairs tenant. Dostoevsky decides to show you the murder from inside the killer's mind — he's showing you how a murderer thinks in advance, not in cold blood."
+    },
+    "tags": [
+      "Russian",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-flaubert",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Gustave Flaubert",
+    "teaser": "French novelist who spent five years writing Madame Bovary and the rest of his life arguing that prose is not about stories — it's about rhythm. Trialed in court for offending public morals.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Madame Bovary, Part I, Chapter 9 (the agricultural fair)",
+      "durationMinutes": 30,
+      "instruction": "Read the agricultural fair. Emma Bovary is sitting with her husband while a politician gives a long speech. Then she meets Léon — a stranger at another table. The scene shifts to them. Read both paragraphs as if you were blindfolded — Flaubert's rhythm section is the..."
+    },
+    "tags": [
+      "French",
+      "Realism",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-emily-dickinson",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Emily Dickinson",
+    "teaser": "Amherst recluse who published fewer than 10 poems in life and left 1,800 in a locked bureau at her death. The first authoritative edition came out more than 30 years after she died — by then the modernist poets had already learned from her.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Dickinson poems #280 (\"I felt a Funeral\"), #315 (\"He fumbles at your Spirit\"), #501 (\"This World is not Conclusion\")",
+      "durationMinutes": 45,
+      "instruction": "Read three poems. Notice how often she uses italics — they pace the breath of the line. She said in a letter that her poems all began as letters to her sister-in-law. Read them as letters that became compressed into verse."
+    },
+    "tags": [
+      "American",
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-walt-whitman",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Walt Whitman",
+    "teaser": "Brooklyn printer and self-taught journalist who published Leaves of Grass at 35, paid for the first printing himself, and reinvented the American line in poetry. Self-described 'roughs' and 'barbaric yawps' became lawyer language overnight.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Song of Myself, Section 5 (\"I believe in you my soul...\") and Section 51 (\"I am large, I contain multitudes\")",
+      "durationMinutes": 30,
+      "instruction": "Read these two sections aloud. Whitman taught himself that verse could be a list. The lists in these sections are not 'transcendental' — they're tactile, physical. Notice the repeated use of the word 'and'. He's building a Long sentence."
+    },
+    "tags": [
+      "American",
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-melville",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Herman Melville",
+    "teaser": "American whaler-steward who wrote Typee and Omoo as adventure books for popular sale, then wrote Moby-Dick as metaphysical epic — and died with his novels unread for 30 years.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Moby-Dick, Chapter 1 (Loomings) and Chapter 42 (\"The Whiteness of the Whale\")",
+      "durationMinutes": 90,
+      "instruction": "Read the opening chapter. Then jump straight to chapter 42. The novel's voice is established in the first — Ishmael decides that everyone who goes to sea becomes 'insane.' The middle chapter turns whiteness into an existential problem."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-virginia-woolf",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Virginia Woolf",
+    "teaser": "British novelist who at 42 wrote Mrs Dalloway — the first major novel to host the entire action inside one day in one mind. She invented stream-of-consciousness for the modernist novel.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mrs Dalloway, first 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read aloud. Woolf's sentences are doing two things at once: giving you the time of day and showing you what's inside one woman's mind. By the end of the first chapter you've been on a London street and inside a thought of suicide without being told there was a..."
+    },
+    "tags": [
+      "Modernist",
+      "British",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-james-joyce",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "James Joyce",
+    "teaser": "Irish novelist exiled from Ireland who wrote Ulysses in 7 years, full of puns nobody else could read, and then spent 17 more writing the 'Work in Progress' that became Finnegans Wake.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ulysses, Episode 3 (\"Proteus\") and Episode 18 (\"Penelope\")",
+      "durationMinutes": 90,
+      "instruction": "Skip the first two episodes and start at \"Proteus.\" Joyce writes Stephen Dedalus thinking by rolling his mind over language — that's the modernist twist. Then jump to the last episode — Molly Bloom's monologue."
+    },
+    "tags": [
+      "Modernist",
+      "Irish",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-kafka",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Franz Kafka",
+    "teaser": "Prague insurance lawyer who wrote The Trial and The Castle while employed full-time, never saw his works published together in life, instructed his friend Max Brod to burn them after his death — Brod disobeyed.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Trial, Chapter 1 (\"Someone must have slandered Josef K...\")",
+      "durationMinutes": 30,
+      "instruction": "Read the first 10 pages. K is arrested on his 30th birthday by officials who tell him to keep working. He's never told what he's accused of. The novel's pre-WWII German-language nightmare ended up as prophecy. Read another Kafka work in the same week — the metaphor..."
+    },
+    "tags": [
+      "Modernist",
+      "Austrian-Czech",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-proust",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Marcel Proust",
+    "teaser": "French semi-invalid who wrote In Search of Lost Time from his cork-lined bedroom for 13 years (1909–1922). The novel's opening sentence — 'I drank a spoonful of tea in which I had let a piece of madeleine soak' — became the most quoted 200 words in literature.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Swann's Way, \"Combray\" opening 30 pages",
+      "durationMinutes": 90,
+      "instruction": "Read the madeleine passage. Then read the passage on falling in love. Proust's gift is that he shows you how memory isn't a recording — it's a state. The same madeleine tastes different to the same man in different decades."
+    },
+    "tags": [
+      "Modernist",
+      "French",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-jorge-luis-borges",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Jorge Luis Borges",
+    "teaser": "Argentine writer, blind by his 50s, who spent his career writing 60-page fiction pieces that looked like essays. The 20th-century novel owes him the 'is this real?' question that became pulp sci-fi and high theory.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ficciones, \"Tlön, Uqbar, Orbis Tertius\" + \"The Library of Babel\"",
+      "durationMinutes": 75,
+      "instruction": "Read both stories in one sitting. The first imagines a world in which all knowledge is fictional; the second imagines an infinite library that contains every possible book. Both end with a question Borges doesn't answer."
+    },
+    "tags": [
+      "Modernist",
+      "Argentine",
+      "Short Fiction"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-marquez",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Gabriel García Márquez",
+    "teaser": "Colombian who spent years as a journalist, then in exile in Mexico, and wrote One Hundred Years of Solitude in 18 months — the most famous work of magical realism and one of the bestselling novels of all time.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "One Hundred Years of Solitude, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening: a man faces a firing squad, goes back in memory to his village, and his grandfather takes him to see ice. The novel's time-machine is the family. Márquez wrote it in nine months while living in Mexico City."
+    },
+    "tags": [
+      "Magical Realism",
+      "Colombian",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-toni-morrison",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Toni Morrison",
+    "teaser": "American editor at Random House who quit in her 50s to write full-time, won the Nobel Prize for Literature, and wrote novels that re-centered American memory around Black women's interior lives.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Beloved, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening: 124 Bluestone Road is haunted. Morrison's first sentence is too famous to discuss — read it again. Then watch how the present and the past stack. The novel is a ghost story that has nothing to do with haunting and everything to do with what you'd need..."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Modernist"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-philip-roth",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Philip Roth",
+    "teaser": "American novelist who wrote 31 books in 50 years, was the most celebrated American Jewish writer of his generation, then stopped publishing entirely in 2012 at 79.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "American Pastoral, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening scene. Nathan Zuckerman — Roth's alter ego — is at a high-school reunion. He's been told about Seymour 'the Swede' Levov's daughter. You won't fully understand the novel until page 100; that's how Roth wants you to approach it."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Late Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-cormac-mccarthy",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Cormac McCarthy",
+    "teaser": "American novelist who published his first novel at 35, wrote 12 more over the next 50 years, refused interviews through most of his career, and won the Pulitzer for The Road — which is also the novel where he introduced famous punctuation rules.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Blood Meridian, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter carefully. McCarthy writes prose as if it were weather — flat, declarative, and physically present. The kid is 14. The judge is 6'6\", bald, and unborn. Nothing moral in the opening makes sense — the rest of the book is the novelist telling you..."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Western"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-david-foster-wallace",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "David Foster Wallace",
+    "teaser": "American novelist who wrote the 1,000-page Infinite Jest and a cookbook-magazine-advice hybrid that became a generational artifact, then died by suicide at 46.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Infinite Jest, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read carefully — Wallace wrote with footnotes too. Then read pages 200–210 (anything else he wrote). Don't try to read the whole novel. Pick a chapter and follow a single character. Then re-read the same chapter. The form is the content."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Late Modern"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "author-haruki-murakami",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Haruki Murakami",
+    "teaser": "Japanese novelist who opened his jazz bar in Tokyo in his 20s, then sat down to write on a single afternoon and started a career that made him the most translated contemporary Japanese writer alive.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Norwegian Wood, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter — Tokyo, the 1960s, an older lover. Murakami's story usually starts in media res with a man standing in his kitchen by himself. Notice how every chapter has a pop song: it's the novel's soundtrack. You'll find yourself looking up the songs later."
+    },
+    "tags": [
+      "Japanese",
+      "Novel",
+      "Modern"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-octavia-butler",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Octavia E. Butler",
+    "teaser": "African-American science fiction writer who systematized her future-history novels, never graduated from a science program, taught writing workshops in person and by mail, and died at 58 in 2006.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Kindred, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter. A Black woman writer in 1976 is suddenly pulled to a slave plantation in 1815. Butler's keynote is what you'll need to feel: she's not writing about sci-fi tropes — she's writing about how time itself is a kind of enslavement."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "Black"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "author-ursula-k-le-guin",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Ursula K. Le Guin",
+    "teaser": "American novelist (daughter of anthropologist Alfred Kroeber and writer Theodora Kroeber) who wrote 20 novels of utopian science fiction and feminist anthropology, and won every major sci-fi award before her death at 88.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Left Hand of Darkness, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter. The envoy arrives on a planet whose inhabitants change sex. Le Guin refuses allegory — the planet's biology is its own argument. Then read 'The Ones Who Walk Away from Omelas' (short story, ~5 pages)."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "Feminist"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-chinua-achebe",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Chinua Achebe",
+    "teaser": "Nigerian novelist who wrote Things Fall Apart at 28 as a deliberate response to Conrad's Heart of Darkness — the novel estimated to have been read by 100M Africans and translated into 60+ languages.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Things Fall Apart, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter. The protagonist Okonkwo is wrestling with the conflict between strength and emotion. Then read the white-missionary chapter near the end. Achebe's novel compresses 50 years of cultural change into a 200-page arc, and at the end the reader is..."
+    },
+    "tags": [
+      "Nigerian",
+      "Novel",
+      "Postcolonial"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-olga-tokarczuk",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Olga Tokarczuk",
+    "teaser": "Polish novelist/psychologist who won the 2018 Nobel for Literature for 'a narrative imagination that with encyclopedic passion represents the crossing of boundaries as a form of life.' Her novel The Books of Jacob is over 900 pages.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Flights, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening in fragments. The novel is a constellation of small stories. Each chapter stands alone. Read three chapters, then read the table of contents in reverse — the novel's true subject is the body in motion. Then keep reading for the anatomy."
+    },
+    "tags": [
+      "Polish",
+      "Novel",
+      "Contemporary"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "author-agnes-varda-essayist",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Annie Ernaux",
+    "teaser": "French writer who won the 2022 Nobel for Literature for 'the courage and clinical acuity with which she uncovers the roots, estrangements, and collective restraints of personal memory.' She wrote herself into history.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Years, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter as if it were a collage. The book is written mostly in present tense — and entirely without personal pronouns. Now read it again as a memoir of post-war France. You'll be surprised to realize that 'she' or 'I' is never used."
+    },
+    "tags": [
+      "French",
+      "Memoir",
+      "Contemporary"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "author-sylvia-plath",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Sylvia Plath",
+    "teaser": "American poet who published one novel and one poetry collection under her married name, then died at 30. The posthumous Ariel collection became the most influential American poetry of the 1960s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ariel, \"Lady Lazarus,\" \"Daddy,\" \"Tulips\"",
+      "durationMinutes": 45,
+      "instruction": "Read three poems. Notice Plath's use of 'they' — it's the family, the doctors, the culture. The first-person 'I' has to escape 'they' across three lines that often don't sound reasonable at first. Read aloud for the breath pattern."
+    },
+    "tags": [
+      "American",
+      "Poetry",
+      "Confessional"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-langston-hughes",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Langston Hughes",
+    "teaser": "American poet of the Harlem Renaissance, age 17 on a train to Mexico wrote 'The Negro Speaks of Rivers' — never revised a single line — and became the most-quoted Black poet of his century.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "\"The Negro Speaks of Rivers\" (1921) + \"I, Too\" (1925) + \"The Weary Blues\" (1923)",
+      "durationMinutes": 30,
+      "instruction": "Read these three poems in chronological order. They outline the development of Hughes's voice — the first is historic, the second is political, the third is syncopated. He learned to write INTO jazz rhythm rather than above it."
+    },
+    "tags": [
+      "American",
+      "Poetry",
+      "Jazz"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-carlos-fuentes",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Carlos Fuentes",
+    "teaser": "Mexican novelist/diplomat whose novel The Death of Artemio Cruz at 39 defined the modern Latin American novel and whose work often ran 800+ pages because he believed Latin America deserved Spanish-Atlantic-length narratives.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Death of Artemio Cruz, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening chapter. A man is dying. The novel rotates between past tense (memory) and present tense (the moment of dying). Then read halfway. The voice that says 'I am Cuban and I have nothing' is the same voice you've been hearing."
+    },
+    "tags": [
+      "Mexican",
+      "Novel",
+      "Mid-20th"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "author-oscar-wilde",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Oscar Wilde",
+    "teaser": "Irish-Aesthete whose novel The Picture of Dorian Gray exposed late-Victorian hypocrisy — he was sentenced to two years' hard labor for 'gross indecency' in 1895. The prison years killed him.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Picture of Dorian Gray, Chapters 1–5",
+      "durationMinutes": 60,
+      "instruction": "Read the preface before anything else — it's Wilde's manifesto. Then read chapters 1–5. The novel is structured as a series of aphorisms; Wilde said it was 'a lesson in the non-moral ideal of beauty.' Read the last chapter carefully — Wilde knew the end was coming for..."
+    },
+    "tags": [
+      "Victorian",
+      "Irish-British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "author-roald-dahl",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Roald Dahl",
+    "teaser": "Welsh-British novelist who worked in MI6, drafted intelligence reports in oil-rich Africa, then wrote the most-lurid children's fiction of the 20th century.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Matilda, opening chapters + any short story from \"The Wonderful Story of Henry Sugar\"",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter of Matilda aloud — an adult reading it aloud to a child is doing 60% of the work. Then pick any Dahl short story (Kiss Kiss is a fine collection). They're slighted and slightly cruel — that's the texture."
+    },
+    "tags": [
+      "British-Welsh",
+      "Children's",
+      "20th Century"
+    ],
+    "tier": 2
+  }
+]

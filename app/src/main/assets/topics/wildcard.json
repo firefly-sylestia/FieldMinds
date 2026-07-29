@@ -1,1 +1,642 @@
-[]
+[
+  {
+    "id": "wildcard-stonehenge",
+    "categoryId": "WILDCARD",
+    "subtype": "Phenomenon",
+    "name": "Stonehenge",
+    "teaser": "30 standing stones on a Salisbury plain, hauled from Wales 240km away 4000 years ago by a culture whose only metal tools were made of copper. None of the stones match the local geology.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Stonehenge, Wiltshire, UK (tour + viewing from the visitor path; no touching stones)",
+      "durationMinutes": 90,
+      "instruction": "Walk the path around the stones clockwise. Look at the heel stone, off-axis with sunrise on midsummer. Walkers are not allowed into the inner circle except for solstice. The layout is engineered; we don't know what its purpose was or which we've forgotten."
+    },
+    "tags": [
+      "Archaeology",
+      "Megalithic",
+      "British"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "wildcard-quirigua",
+    "categoryId": "WILDCARD",
+    "subtype": "Mystery",
+    "name": "Quiriguá Stela E (AD 756)",
+    "teaser": "A Mayan ruler named K'ahk' Tiliw Chan Yopaat erected a 10-ton carved stela in AD 756 that weighed as much as four elephants and still stands. The site had no source that large; the stone was quarried 6 miles away.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Quiriguá archaeological site, Guatemala (enter UNESCO park)",
+      "durationMinutes": 60,
+      "instruction": "Touch Stela E. The glyphs are sharp 1250 years later. Then read the museum sign — the carving was done in 5 days. The stone was dressed in place. No one remembers how, but the capstone of the central monument weighs 60 tons."
+    },
+    "tags": [
+      "Archaeology",
+      "Mayan",
+      "Pre-Columbian"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-antikythera-mechanism",
+    "categoryId": "WILDCARD",
+    "subtype": "Artifact",
+    "name": "Antikythera Mechanism",
+    "teaser": "Greek divers in 1902 found a bronze box covered in coral, dated to 60BC. It turned out to be a mechanical computer that modeled the solar system, eclipse cycles and the Olympic calendar. Nothing similar was built again for 1500 years.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "National Archaeological Museum of Athens, Antikythera Mechanism gallery",
+      "durationMinutes": 60,
+      "instruction": "Look at the three main gear fragments under glass. The smallest preserved gear has 23 teeth. Twenty-three. That's the Saros cycle for predicting eclipses, which the Greeks used. The number isn't obvious from outside."
+    },
+    "tags": [
+      "Ancient",
+      "Greek",
+      "Mechanical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-bio-luminescent-bays",
+    "categoryId": "WILDCARD",
+    "subtype": "Phenomenon",
+    "name": "Bioluminescent Bays",
+    "teaser": "Five bays in the world glow blue when you stir the water, because of single-celled plankton (dinoflagellates) that flash when mechanically disturbed. Mosquito Bay on Vieques is the brightest.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Visit",
+      "targetName": "Mosquito Bay, Vieques, Puerto Rico (clear-water night kayak trip)",
+      "durationMinutes": 90,
+      "instruction": "Book with a kayak outfitter. Don't use mosquito repellent — the petroleum repels the plankton too. Paddle at the edges of the group. Throw a handful of water at a friend and watch the arc light up blue behind the splash."
+    },
+    "tags": [
+      "Ecology",
+      "Caribbean",
+      "Natural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-murmuration",
+    "categoryId": "WILDCARD",
+    "subtype": "Phenomenon",
+    "name": "Starling Murmurations",
+    "teaser": "Half a million starlings form a single fluid in the sky at dusk, each bird tracking seven neighbors, the whole flock behaving like a single slime mold. No leader. No choreography. Pure math of local rules.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Ham Wall (Somerset) or Brighton Pier murmuration (Nov–Feb)",
+      "durationMinutes": 30,
+      "instruction": "Find a recorded local watch group on Facebook — most have a 6pm meet time 30 min before dusk. Bring binoculars. The wave patterns only become visible at distance; standing among them is like standing in a snowstorm made of feathers."
+    },
+    "tags": [
+      "Ecology",
+      "British",
+      "Winter"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-mole-rico",
+    "categoryId": "WILDCARD",
+    "subtype": "Tradition",
+    "name": "Mole Negro",
+    "teaser": "Oaxacan sauce with 32 ingredients including three types of dried chile, chocolate, and burnt banana leaf. The dish has its own festival (the Festival of the Mole) every July in Oaxaca.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Try",
+      "targetName": "Casa Sierra Norte, Oaxaca — mole tasting menu",
+      "durationMinutes": 60,
+      "instruction": "Order the mole negro with chicken. Then ask the chef for the green and yellow mole sides for the table. The three flavors are layered: smoky, herbal, and citrus-sweet. Mix them on the same bite for the right Oaxaca effect."
+    },
+    "tags": [
+      "Food",
+      "Mexican",
+      "Oaxacan"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-capoeira",
+    "categoryId": "WILDCARD",
+    "subtype": "Practice",
+    "name": "Capoeira",
+    "teaser": "Brazilian art form that looks like dance and is a fight and was disguised as dance so enslaved Africans could train it in plain sight of Portuguese overseers in 16th-century Bahia.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Try",
+      "targetName": "Any capoeira regional academy — beginners welcome (use the berimbau)",
+      "durationMinutes": 60,
+      "instruction": "Don't try to fight on day one. The roda (circle) is a music event first. Learn the ginga stance — that's the dance. By session two, you'll be moving partner-to-partner without thinking about it. By month two, you'll start catching kicks."
+    },
+    "tags": [
+      "Movement",
+      "Brazilian",
+      "Ritual"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-parkour",
+    "categoryId": "WILDCARD",
+    "subtype": "Practice",
+    "name": "Parkour / Freerunning",
+    "teaser": "French military obstacle-training exercise French kids turned into an art form in the 1990s. Traceurs treat cities as obstacle courses — the goal is 'to be' rather than 'to arrive.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Try",
+      "targetName": "Parkour Generations or local parkour gym — 60-min intro class",
+      "durationMinutes": 60,
+      "instruction": "Wear long pants and indoor shoes. The first 20 minutes is conditioning; the last 40 is actual movement. Start with a 'precision' – a standing jump from one ledge to another of the same height. Build the habit of measuring before you jump."
+    },
+    "tags": [
+      "Movement",
+      "French",
+      "Urban"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-origami",
+    "categoryId": "WILDCARD",
+    "subtype": "Craft",
+    "name": "Origami",
+    "teaser": "Japanese paper-folding tradition that codified 18 traditional folds (Hiden Senbazuru Orikata) in 1797. Akira Yoshizawa turned it into a 20th-century art form. Modern origami designs use a single sheet and no cuts.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Make",
+      "targetName": "Yoshizawa-Randlett System — start with a crane (1 hr)",
+      "durationMinutes": 60,
+      "instruction": "Buy a 15 cm square of washi or origami paper (don't fold with printer paper — your first folds will tear). Follow a YouTube crane tutorial exactly. The 14 steps map to 14 creases. After the crane, fold it 100 times — that's the legend, and your hands will start to feel..."
+    },
+    "tags": [
+      "Craft",
+      "Japanese",
+      "Paper"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-bonsai",
+    "categoryId": "WILDCARD",
+    "subtype": "Practice",
+    "name": "Bonsai",
+    "teaser": "Japanese miniature-tree cultivation that became culturally significant after the 1921 Tokyo exhibition. Trees can be over 1,000 years old and are kept alive across generations like a family document.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Omiya Bonsai Village, Saitama, Japan (museum + gardens)",
+      "durationMinutes": 90,
+      "instruction": "Don't be put off by the prices of mature trees — the museum explains the styles formally. Look for the famous 'shari' (bleached wood veins) that signal age. The trees can outlive you; the gardens outlive empires."
+    },
+    "tags": [
+      "Plant",
+      "Japanese",
+      "Aesthetic"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-origami-crane-1000",
+    "categoryId": "WILDCARD",
+    "subtype": "Ritual",
+    "name": "Senbazuru (1000 Cranes)",
+    "teaser": "Japanese tradition, 'sembazuru,' of folding 1000 paper cranes. The legend says a wish is granted when all 1000 are made. Sadako Sasaki, a Hiroshima survivor, folded 1,300 before dying of leukemia at 12.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Make",
+      "targetName": "Fold 100 cranes (string them at 100, 250, 500, 1000)",
+      "durationMinutes": 600,
+      "instruction": "Make 5 first. Then 25. By 50, you'll have a rhythm. Don't shred your fingers; if your paper is right, you should use just your fingertips. String your 1000s at the 1000 mark. Send yourself a 1-line note the day you start. The discipline is the meaning."
+    },
+    "tags": [
+      "Craft",
+      "Japanese",
+      "Memorial"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-aquascaping-iwagumi",
+    "categoryId": "WILDCARD",
+    "subtype": "Practice",
+    "name": "Iwagumi Aquascape",
+    "teaser": "Japanese planted-aquarium style where the design is built around one hero stone and two supporting stones. Takashi Amano built entire schools of aquascapers in the 1990s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Aqua Forest Aquarium (Tokyo) — Amano exhibit (online gallery as fallback)",
+      "durationMinutes": 60,
+      "instruction": "Look at any chart of an Amano layout. There will be one larger stone in the back left, and two thirds the size in front of it, and the rest is gravel. The rule is that an odd number of stones — never 2, never 4 — anchors the eye."
+    },
+    "tags": [
+      "Aesthetic",
+      "Japanese",
+      "Aquatic"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-day-of-the-dead",
+    "categoryId": "WILDCARD",
+    "subtype": "Ritual",
+    "name": "Día de los Muertos",
+    "teaser": "Mexican multi-day ritual in late October/early November where families build ofrendas (altars) for the dead, paint faces like Catrinas, and celebrate direct contact with ancestors as if they were still alive.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Mixquic, Mexico City — Tzintzuntzan Cemetery Day of the Dead procession",
+      "durationMinutes": 240,
+      "instruction": "If you can't go in person, watch any documentary on the Michoacán island villages' night-long cemetery watch. The Mexican tradition treats death as a continuing relation, not a disappearance. Don't bring a somber mood; bring a basket of marigolds and a tamale."
+    },
+    "tags": [
+      "Ritual",
+      "Mexican",
+      "Indigenous-Christian"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-burning-man",
+    "categoryId": "WILDCARD",
+    "subtype": "Ritual",
+    "name": "Burning Man",
+    "teaser": "Annual week-long gathering on a Nevada desert playa begun in 1986 by two bakers in San Francisco. Principle: 'radical self-expression' + 'leave no trace.' Population: 80,000+ by late 2010s. Self-funded by ticket sales, no sponsors.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Black Rock Desert, NV (last week of August; bring 1.5 gal of water per person per day)",
+      "durationMinutes": 480,
+      "instruction": "If you've never been, watch the documentary 'Burning Man' or read the Wikipedia 'Rites of passage' section. The event is one part art show, one part rehearsal of post-scarcity logistics. Don't bring anything you can't carry home."
+    },
+    "tags": [
+      "Ritual",
+      "American",
+      "Art"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-tea-ceremony",
+    "categoryId": "WILDCARD",
+    "subtype": "Ritual",
+    "name": "Japanese Tea Ceremony",
+    "teaser": "Sen no Rikyū codified chadō (the way of tea) in the 1500s. The ceremony can take up to four hours, every gesture is choreographed, and matcha is the excuse for a meditation on impermanence.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Try",
+      "targetName": "Urasenke Tankōkai or any chashitsu tea-ceremony experience in Kyoto",
+      "durationMinutes": 90,
+      "instruction": "Wear light-colored socks. Sit seiza-style (kneeling) the whole time — your legs will hurt for 15 minutes, then stop as you settle in. Watch the hostess. Notice when she turns the bowl — 90 degrees away from the front design, for the guest. Then drink in two sips."
+    },
+    "tags": [
+      "Ritual",
+      "Japanese",
+      "Zen"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-zen-rocks",
+    "categoryId": "WILDCARD",
+    "subtype": "Aesthetic",
+    "name": "Zen Garden (Karesansui)",
+    "teaser": "Ryoan-ji's 15-rock garden has 15 stones visible from any angle along the veranda, but never 15 at once. The design may be 550 years old and never explained by its makers.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Visit",
+      "targetName": "Ryōan-ji, Kyoto, Japan",
+      "durationMinutes": 60,
+      "instruction": "Sit on the veranda for 30 minutes looking at the rocks. The white gravel is raked daily. Don't look for the meaning in the rocks; look for the way you stop looking for the meaning. The 14-rock abstraction is one of the deepest puzzles of designed space."
+    },
+    "tags": [
+      "Aesthetic",
+      "Japanese",
+      "Zen"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-bossa-nova",
+    "categoryId": "WILDCARD",
+    "subtype": "Genre",
+    "name": "Bossa Nova",
+    "teaser": "Brazilian samba-jazz hybrid invented in late-1950s Rio, married samba rhythm to American cool jazz, sold like wildfire after Stan Getz + João Gilberto recorded 'The Girl from Ipanema' in 1964.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Getz/Gilberto (1964) — \"Desafinado\"",
+      "durationMinutes": 5,
+      "instruction": "Listen to Gilberto's thumb. That's it. His thumb on the bass string of a classical guitar, plucking on beats 2 and 3, is the entire bossa nova beat. Once you hear it, you'll hear it in every Brazilian song ever recorded."
+    },
+    "tags": [
+      "Music",
+      "Brazilian",
+      "Jazz"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-gamelan",
+    "categoryId": "WILDCARD",
+    "subtype": "Genre",
+    "name": "Gamelan",
+    "teaser": "Indonesian percussion orchestra led by bronze gongs + metallophones, used in temple rituals for a thousand years. Each gamelan set is tuned to a local dialect — no two are tuned alike.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Gamelan of the Kraton (Yogyakarta Palace), Pelog pathet bem",
+      "durationMinutes": 60,
+      "instruction": "Each gamelan has its own micro-tuning — your ears will notice what feels wrong, even if you can't articulate why. The pelog scale is a non-equal-tempered 7-note scale; the slendro is a near-equal 5-note. Both are older than Western equal temperament by centuries."
+    },
+    "tags": [
+      "Music",
+      "Indonesian",
+      "Percussion"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-qawwali",
+    "categoryId": "WILDCARD",
+    "subtype": "Music",
+    "name": "Qawwali",
+    "teaser": "Sufi devotional music from the 13th-century shrines of South Asia; long improvisatory songs designed to put the listener into a trance. Nusrat Fateh Ali Khan made it the most-listened world music of the 1990s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Nusrat Fateh Ali Khan — \"Tumhe Dillagi\" (1997, the last concert recording)",
+      "durationMinutes": 12,
+      "instruction": "He stretches the song past 8 minutes by alternating solo vocals and choral responses. The rhythm section (dholak + tabla + claps) stays on the same beat throughout. That hand-clap never moves — that's the spiritual anchor."
+    },
+    "tags": [
+      "Music",
+      "Sufi",
+      "Pakistani-Indian"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-tuvan-throat",
+    "categoryId": "WILDCARD",
+    "subtype": "Music",
+    "name": "Tuvan Throat Singing",
+    "teaser": "Siberian Tuvan technique where one voice sings two notes at once — a fundamental pitch in the throat plus a controlled overtone above it. Huun-Huu-Tuur brought the genre to global stages in the 1990s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Huun-Huur-Tu — \"Borbangnadyr\" (any album, 1990s recordings)",
+      "durationMinutes": 5,
+      "instruction": "Listen with headphones. He's simultaneously humming two pitches in the same breath cycle. Try to whistle along with the overtone — your overtone will be wrong by half a step. This is one of the world's most counter-intuitive vocal techniques."
+    },
+    "tags": [
+      "Music",
+      "Tuvan",
+      "Vocal"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-icelandic-eleanor",
+    "categoryId": "WILDCARD",
+    "subtype": "Phenomenon",
+    "name": "Northern Lights (Aurora Borealis)",
+    "teaser": "Solar wind charged particles hit Earth's atmosphere 80–300 km up; collisions with O and N atoms emit green, red, and violet light. Visible roughly between September and March above 60° latitude.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Reykjavík, Iceland — winter 21:00–02:00, dim-light phases",
+      "durationMinutes": 120,
+      "instruction": "Check the Icelandic Met Office's aurora forecast. Aim for a Kp index above 3. Drive to Grótta lighthouse — west of the city, dark. Don't look at your phone for 10 minutes and let your eyes dark-adapt. Then turn around."
+    },
+    "tags": [
+      "Astronomy",
+      "Nordic",
+      "Winter"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "wildcard-icelandic-hot-springs",
+    "categoryId": "WILDCARD",
+    "subtype": "Practice",
+    "name": "Iceland Hot Springs",
+    "teaser": "Iceland sits on the Mid-Atlantic Ridge; 1/4 of its energy comes from geothermal. Locals' outdoor pools are 38–44°C year-round, free of charge, and the most relaxed social scenes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Soak",
+      "targetName": "Reykjavík — Sundhöllin or Vesturbæjarlaug (locals-only)",
+      "durationMinutes": 60,
+      "instruction": "Take the local etiquette seriously: shower naked before entering. Don't take your phone into the pool. The hot pots are 38, 40, and 44°C — start at 38. Leave the 44°C for after 8 minutes. Stay for 60 minutes — Icelanders stay for hours."
+    },
+    "tags": [
+      "Practice",
+      "Icelandic",
+      "Health"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-yoga-ashtanga",
+    "categoryId": "WILDCARD",
+    "subtype": "Practice",
+    "name": "Ashtanga Yoga",
+    "teaser": "Indian yoga system codified by T. Krishnamacharya in the 1930s. The primary series is 75 postures linked by vinyasa (breath-movement synchronization). Sri K. Pattabhi Jois popularized it in Mysore.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Try",
+      "targetName": "Local Mysore-style ashtanga shala — 90-min led class",
+      "durationMinutes": 90,
+      "instruction": "First time? Arrive 15 min early. No yoga experience required. The teacher will give you either a modified version or the full primary series — that's the shala's judgment. The breathing is the practice; the postures are the consequence."
+    },
+    "tags": [
+      "Practice",
+      "Indian",
+      "Body"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-vipassana-10-day",
+    "categoryId": "WILDCARD",
+    "subtype": "Practice",
+    "name": "Vipassana 10-day Retreat",
+    "teaser": "S.N. Goenka codified a 10-day course of silent meditation in Burma in 1969. Free of charge, run by volunteers, no teachers — only recorded audio. Over 100M people have completed at least one 10-day course.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Try",
+      "targetName": "Dhamma Giri (India) or any Vipassana center worldwide — apply months ahead",
+      "durationMinutes": 600,
+      "instruction": "Days 1-3 are silence and breath. Day 4 introduces body-scanning. Days 5-9 are full scans across the body in 1-hour sitting cycles. Day 10 returns to the world and you understand your reactions are not your self."
+    },
+    "tags": [
+      "Practice",
+      "Vipassana",
+      "Meditation"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-icelandic-bjorn-isleif",
+    "categoryId": "WILDCARD",
+    "subtype": "Ritual",
+    "name": "Icelandic Þorrablót",
+    "teaser": "Midwinter Viking feast that survives in Iceland as a multi-week ritual of fermented shark, ram testicles, boiled sheep head, and brennivín (caraway schnapps). The whale is technically illegal but eaten anyway.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Try",
+      "targetName": "Þorrablót at any Reykjavík restaurant in January/February",
+      "durationMinutes": 120,
+      "instruction": "Order svið (singed sheep head). Eat it the way locals do: with the brain. Take your first bite before judgment. If you can't, slátur (blood sausage) is the entry option. Bring a small notebook — Icelanders are unusually talkative after three brennivín."
+    },
+    "tags": [
+      "Ritual",
+      "Icelandic",
+      "Viking-tradition"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-ultramarathon",
+    "categoryId": "WILDCARD",
+    "subtype": "Practice",
+    "name": "Ultramarathon",
+    "teaser": "Footrace longer than the marathon's 42.195 km — usually 50 km, 100 km, or 100 miles. Comrades run, sleep deprivation runs, hallucination runs. The Western States 100 is the most mythic.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Try",
+      "targetName": "Local 50K race — apply months ahead, train 16 weeks",
+      "durationMinutes": 540,
+      "instruction": "Don't enter one without a coach. Multi-day ultras need specifically trained systems — heart rate, calorie intake strategy, hydration plan. The 50K is the right entry length; you'll learn both how hard you can push and how little you really knew your own body."
+    },
+    "tags": [
+      "Sport",
+      "American",
+      "Endurance"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-volcanic-iceland-iceland-erupt",
+    "categoryId": "WILDCARD",
+    "subtype": "Phenomenon",
+    "name": "Iceland Eruptions",
+    "teaser": "Reykjanes Peninsula erupts roughly every 800–1000 years; we've been in an active phase since 2021. The 2023–24 Litlihrútur eruption drew live-streamed sightseers from around the world.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Reykjanes Peninsula — public view sites around active vents (if open)",
+      "durationMinutes": 360,
+      "instruction": "Check safety.is and the IMO active eruption updates. Walk the marked paths only. Don't under-ventures — the lava is 1100°C. If no eruption is active, the new lava fields from previous years are still warm enough to melt snow on a winter afternoon."
+    },
+    "tags": [
+      "Geology",
+      "Icelandic",
+      "Active"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-y2k-panic",
+    "categoryId": "WILDCARD",
+    "subtype": "Phenomenon",
+    "name": "Y2K / Millennium Bug",
+    "teaser": "In 1999 the world spent $300B updating computer systems that represented years as two digits, fearing simultaneous failure at midnight on Jan 1, 2000. Most countries reported no major incidents; the panic became its own cultural moment.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Computer History Museum, Mountain View — Y2K exhibit",
+      "durationMinutes": 60,
+      "instruction": "Read the signage, then read the datebooks from 1998. Notice how the airline and banking industries spent $50B of the $300B. Then notice: the only major Y2K incident was in a single nuclear power plant in Ishikawa, Japan, where the safety system miscounted because both..."
+    },
+    "tags": [
+      "History",
+      "Tech",
+      "1990s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-voyager-golden-record",
+    "categoryId": "WILDCARD",
+    "subtype": "Artifact",
+    "name": "Voyager Golden Record",
+    "teaser": "Carl Sagan chaired a committee in 1977 to select 116 images, 27 songs, and greetings in 55 languages for a copper LP attached to two spacecraft now beyond the Sun's wind. There's now no longer light from our star reaching them.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Voyager Golden Record — full stream (NASA hosts it online)",
+      "durationMinutes": 90,
+      "instruction": "Listen to the greetings in 55 languages in order. Notice they didn't include Russian. Then listen to Chuck Berry's \"Johnny B. Goode\" — the committee debated including it for months because it's 'lowbrow' — Sagan insisted."
+    },
+    "tags": [
+      "Artifact",
+      "American",
+      "Space"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-johannes-kepler-mysterium",
+    "categoryId": "WILDCARD",
+    "subtype": "Phenomenon",
+    "name": "Kepler's Mysterium Cosmographicum (1596)",
+    "teaser": "Young Kepler proposed the five Platonic solids explained the spacing of the six known planets. He was wrong, but the model was so mathematically beautiful that he bet his career on it — and the work led to his actual laws of planetary motion.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Kepler's 1596 \"Mysterium Cosmographicum\" — introduction and figures",
+      "durationMinutes": 45,
+      "instruction": "Look at the diagrams. Each planet is nested inside a Platonic solid, which is nested inside the next planet's sphere. The five solids AND precisely describe the orbital radii. It's wrong, but so beautiful that Kepler spent his whole life trying to make it the..."
+    },
+    "tags": [
+      "History",
+      "Science",
+      "1590s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "wildcard-hidden-figures",
+    "categoryId": "WILDCARD",
+    "subtype": "Phenomenon",
+    "name": "Hidden Figures at NASA",
+    "teaser": "Four African-American women — Johnson, Vaughan, Jackson, Hoover — did the orbital mechanics for early US spaceflight from segregated offices at Langley. The title of the 2016 film refers to their bodies of work, too.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Margot Lee Shetterly, \"Hidden Figures\" — chapter on Katherine Johnson",
+      "durationMinutes": 45,
+      "instruction": "Johnson hand-computed the trajectory for John Glenn's 1962 orbit. Glenn refused to fly until she'd verified the IBM computer's work. Read the chapters on her colleagues. By 1960, all four women had titles but none were allowed to attend management meetings in the same..."
+    },
+    "tags": [
+      "History",
+      "Space",
+      "American"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wildcard-vinland",
+    "categoryId": "WILDCARD",
+    "subtype": "History",
+    "name": "Vinland — Norse in North America (1000 CE)",
+    "teaser": "Leif Erikson's expedition landed at L'Anse aux Meadows in Newfoundland 471 years before Columbus. The site has been confirmed and is now a UNESCO World Heritage Site you can stand on.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Visit",
+      "targetName": "L'Anse aux Meadows National Historic Site (Newfoundland, Canada)",
+      "durationMinutes": 120,
+      "instruction": "Walk the marked paths and read all the interpretation signs. The site is the only confirmed Norse settlement in the Americas. The smithy was found complete with bronze rivets. The site was occupied for only a few years before being abandoned due to conflict with the..."
+    },
+    "tags": [
+      "History",
+      "Norse",
+      "Indigenous"
+    ],
+    "tier": 2
+  }
+]

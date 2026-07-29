@@ -1,1 +1,722 @@
-[]
+[
+  {
+    "id": "director-kubrick",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Stanley Kubrick",
+    "teaser": "Bronx-born self-taught photographer who became the most austere studio filmmaker in American cinema. Most of his movies took longer than the calendar year.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "2001: A Space Odyssey (1968) — first 25 minutes",
+      "durationMinutes": 25,
+      "instruction": "Don't skim the opening. Kubrick gives us a 6-minute sequence with no dialogue and no music. Then the bone-to-satellite cut. That cut is the entire film: it says humanity's whole arc fits in a wordless pivot."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-hitchcock",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Alfred Hitchcock",
+    "teaser": "British studio director who invented the modern suspense film, came to Hollywood, refused to call himself an artist, and appeared in his own trailers.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Vertigo (1958) end-to-end",
+      "durationMinutes": 128,
+      "instruction": "Watch for the rooftop scene at the start. The camera tilts down. That's the move the whole film is built around — looking, but not being able to see clearly. The film is just that move, repeated."
+    },
+    "tags": [
+      "Thriller",
+      "British-American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-bergman",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Ingmar Bergman",
+    "teaser": "Swedish director who made 60 films in 40 years, shot most of them on a single island, and turned the inside of a face into a continent.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Persona (1966) end-to-end",
+      "durationMinutes": 84,
+      "instruction": "Two women's faces begin to merge on screen. By the end you can't tell which is which. That's not an accident — Bergman wanted the audience to feel the merger before understanding it."
+    },
+    "tags": [
+      "Drama",
+      "Swedish",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-tarkovsky",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Andrei Tarkovsky",
+    "teaser": "Russian director of seven features in 27 years, each shot like a prayer. His films are slow, water-soaked, and every scene has a dog in it.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Stalker (1979) end-to-end",
+      "durationMinutes": 162,
+      "instruction": "Turn off your phone. Tarkovsky's films are paced for a 3-hour attention span. Stalker is shot in three different colors of black because the Zone changes hour to hour. Note how the light on water is the film's main character."
+    },
+    "tags": [
+      "Sci-Fi",
+      "Russian",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-godard",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Jean-Luc Godard",
+    "teaser": "French-Swiss filmmaker who reinvented narrative cinema in 1960, almost never worked in studio again, and made a film that's mostly a car park over a weekend.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Breathless (À bout de souffle) (1960) end-to-end",
+      "durationMinutes": 90,
+      "instruction": "Watch the jump cuts. They're not editing errors — they're the film's argument about how cinema pretends continuity. Every jump cut is Godard refusing to honor that contract."
+    },
+    "tags": [
+      "French New Wave",
+      "French",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-fellini",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Federico Fellini",
+    "teaser": "Italian director who invented the cinema of dreams and the cinema of spectacle in the same decade, then spent forty years turning his memories into circuses.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "8½ (1963) end-to-end",
+      "durationMinutes": 138,
+      "instruction": "The protagonist is a director who can't finish a film — and the film you're watching is the film he can't finish. Fellini's trick is to make you live inside the failure as if it were a holiday."
+    },
+    "tags": [
+      "Drama",
+      "Italian",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-ozu",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Yasujirō Ozu",
+    "teaser": "Japanese director who shot only from a low tatami-mat angle, refused to use camera movement for thirty years, and made 54 films about families eating meals.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Tokyo Story (1953) end-to-end",
+      "durationMinutes": 136,
+      "instruction": "Don't expect drama. The film is mostly interiors. The camera does not move. Watch the meals. Each meal is more important than each conversation — Ozu said so himself."
+    },
+    "tags": [
+      "Drama",
+      "Japanese",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-kurosawa",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Akira Kurosawa",
+    "teaser": "Japanese director whose films were remade invisibly as Westerns and action films for sixty years. The Star Wars \"used the future\" was a samurai move.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Seven Samurai (1954) end-to-end",
+      "durationMinutes": 207,
+      "instruction": "Watch the rain. Kurosawa staged combat in weather so the eye couldn't predict hits. The famous final duel happens in a clearing after the rain stops — because the silence holds the sword."
+    },
+    "tags": [
+      "Samurai",
+      "Japanese",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-spielberg",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Steven Spielberg",
+    "teaser": "Hollywood director who, at 28, made the highest-grossing film of all time twice in a row, then became the most reliable director of unflashy biography in his 50s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Schindler's List (1993) end-to-end",
+      "durationMinutes": 195,
+      "instruction": "Watch the girl in the red coat. Spielberg told Liam Neeson to never look at her. The film is structured around the moment where one gaze is denied to a character — that denial is the entire moral argument."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-scorcese",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Martin Scorsese",
+    "teaser": "New York Italian-American director who treats every film like a confession, has worked with the same composer and editor for 40 years, and turned the gangster film into a Catholic mass.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Goodfellas (1990) — the Copacabana long take",
+      "durationMinutes": 12,
+      "instruction": "Watch from the back door to the front. The shot is 3 minutes and never cuts. Scorsese calls it the film within the film — you've crossed from outside the club into the family without realizing you were moving."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-coppola",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Francis Ford Coppola",
+    "teaser": "Italian-American director who turned a mafia novel into a trilogy about the American century, then almost went bankrupt making a Vietnam film that rewritten cinema's grammar.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Apocalypse Now (1979) end-to-end",
+      "durationMinutes": 153,
+      "instruction": "Watch the napalm sequence. The sound design is by Walter Murch, who mixed the film to feel like an envelope of light. Don't watch the helicopter — listen to what the helicopter isn't playing."
+    },
+    "tags": [
+      "War",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-lynch",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "David Lynch",
+    "teaser": "American painter-turned-filmmaker who spent 30 years insisting his films weren't about anything, then let someone else write a 4300-page book explaining them anyway.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Mulholland Drive (2001) end-to-end",
+      "durationMinutes": 147,
+      "instruction": "Try to follow the plot. Don't. Lynch's trap is that you'll be tempted to explain the film at the end. The Club Silencio scene is the key: she's in a theater watching a singer, and the singer never sings."
+    },
+    "tags": [
+      "Surrealist",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-tarantino",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Quentin Tarantino",
+    "teaser": "Tennessee-raised video-store clerk who became the most-quoted screenwriter of his generation and has spent twenty years cutting scenes from his finished films.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pulp Fiction (1994) end-to-end",
+      "durationMinutes": 154,
+      "instruction": "Watch the order of scenes. The diner scene is the middle of the film, not the beginning. Tarantino asks you to piece together three stories — but the seams are jokes. Don't try to be solemn."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-coen",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Coen Brothers",
+    "teaser": "Minnesota-born siblings who share one director's chair, write under one name they've joked is also a \"ship's anchor,\" and have made 18 features of dialect-rich American cinema.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "No Country for Old Men (2007) end-to-end",
+      "durationMinutes": 122,
+      "instruction": "Listen to the silences. The film has the least amount of music of any Coen Brothers feature — the silences ARE the score. The villain never explains his philosophy; the film asks you to feel it."
+    },
+    "tags": [
+      "Crime",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-malick",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Terrence Malick",
+    "teaser": "Harvard philosophy PhD who didn't release a film for 20 years between Days of Heaven (1978) and The Thin Red Line (1998), then released four features in twelve years, all of voiceover and natural light.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Tree of Life (2011) end-to-end",
+      "durationMinutes": 139,
+      "instruction": "Skip judging the voiceover. Listen to the questions instead. The film asks them in whisper — \"what did you do?\" \"who were you to me?\" — and never answers. The 30-minute creation-of-the-universe sequence is not the answer; it's a different question."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-paul-thomas-anderson",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Paul Thomas Anderson",
+    "teaser": "California director who shot his first feature at 26 with borrowed money, and has spent 30 years making films about the American family that resonate through its fault lines.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "There Will Be Blood (2007) end-to-end",
+      "durationMinutes": 158,
+      "instruction": "Listen to the score (Jonny Greenwood). It sounds like a film about oil pressure. The strings build tension that's almost unbearable — that's because the film never has a rest note. Listen for the bowings on the high strings."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-spike-lee",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Spike Lee",
+    "teaser": "Brooklyn-born NYU graduate who made She's Gotta Have It in 1986 on a $175K budget, then spent 30 years tilting American cinema from a 35-degree Dutch angle.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Do the Right Thing (1989) end-to-end",
+      "durationMinutes": 120,
+      "instruction": "Listen to Public Enemy's \"Fight the Power.\" The song is onscreen four times — and each time the way it's shot compresses. Lee wrote the song into the film. Watch the radio. Watch the mural. Watch the credits."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-john-ford",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "John Ford",
+    "teaser": "Maine Irish-American who directed more than 140 films and won 6 Best Director Oscars before that record stopped mattering. He invented the modern Western.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Searchers (1956) end-to-end",
+      "durationMinutes": 119,
+      "instruction": "Watch the doorframe. Ford famously stages Ethan Edwards in doorways and exits — never quite inside, never quite out — for the entire film. He treats the Western as a doorway America is still walking through."
+    },
+    "tags": [
+      "Western",
+      "American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-billy-wilder",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Billy Wilder",
+    "teaser": "Austrian-born emigré who landed in Hollywood with no English, became the only director to win Oscars for Best Director and Best Screenplay twice, and wrote the American sex comedy.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Some Like It Hot (1959) end-to-end",
+      "durationMinutes": 121,
+      "instruction": "The film is about two men in drag running from the mob, but every joke is built on period timing. Watch the last line. Wilder wrote the most perfect last line in comedy — and then wrote one better, then kept going."
+    },
+    "tags": [
+      "Comedy",
+      "American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-cassavetes",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "John Cassavetes",
+    "teaser": "Greek-American actor who borrowed money from his mother-in-law to make his first film in 1959, founded American independent cinema, and died still owing money on his last feature.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Faces (1968) end-to-end",
+      "durationMinutes": 130,
+      "instruction": "Listen to the dialogue. Cassavetes overlaid scenes — actors you cut away from are still talking when you cut back. The end credits are the most bruising ten minutes in 1960s American cinema."
+    },
+    "tags": [
+      "Drama",
+      "American",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-bresson",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Robert Bresson",
+    "teaser": "French painter who made 13 features in 50 years, insisted on calling his actors \"models,\" and made every shot look like a still photograph the audience could carry home.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Au Hasard Balthazar (1966) end-to-end",
+      "durationMinutes": 95,
+      "instruction": "Watch the donkey. Bresson tells an entire saint's life through an animal who can't speak. The film never explains the donkey — it just lets you watch."
+    },
+    "tags": [
+      "Drama",
+      "French",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-antonioni",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Michelangelo Antonioni",
+    "teaser": "Italian industrial painter turned filmmaker who spent 20 years arguing that boredom was a visual genre, then released Blow-Up in 1966 and became a global name.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "L'Eclisse (1962) end-to-end",
+      "durationMinutes": 126,
+      "instruction": "Watch the last 8 minutes. The screen is almost empty — Antonioni shows you a building site, traffic lights, no people. He called the ending a diagnosis of bourgeois emptiness. Watch what you think is missing."
+    },
+    "tags": [
+      "Drama",
+      "Italian",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-hou-hsiao-hsien",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Hou Hsiao-Hsien",
+    "teaser": "Taiwanese director who shot most of his films from a fixed camera 30 feet away, made the slowest masterpieces of world cinema, and then released a 4-hour autobiographical feature at 70.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Café Lumière (2003) end-to-end",
+      "durationMinutes": 103,
+      "instruction": "Don't try to read it. Hou's films reward the patient — the plot is partly overheard. The middle hour has music only. The final scene is in a bookstore. You don't need to know yousuh to feel her leaving."
+    },
+    "tags": [
+      "Drama",
+      "Taiwanese",
+      "2000s"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "director-wong-kar-wai",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Wong Kar-wai",
+    "teaser": "Hong Kong director whose films are song-and-color mood pieces disguised as love stories, and whose 4K reissues still regularly sell out global retrospectives.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "In the Mood for Love (2000) end-to-end",
+      "durationMinutes": 98,
+      "instruction": "Watch the wallpaper. The two protagonists keep passing each other in a corridor with green wallpaper. Tony Leung's shirts change color each scene to mark time. The film is built around a color that isn't named in any line."
+    },
+    "tags": [
+      "Romance",
+      "Hong Kong",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-bong-joon-ho",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Bong Joon-ho",
+    "teaser": "Korean director who studied sociology before film school, made four features about class war with genre trappings, and won the Palme d'Or + Best Picture + Best Director trifecta.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Parasite (2019) end-to-end",
+      "durationMinutes": 132,
+      "instruction": "Watch the rain. Bong uses a flood as social metaphor — the basement gets soaked while the upstairs watches on their phones. The smell is the film's through-line."
+    },
+    "tags": [
+      "Thriller",
+      "Korean",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-park-chan-wook",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Park Chan-wook",
+    "teaser": "Korean director who turned a single 2003 film into a trilogy that practically invented the modern revenge film, then directed a TV series about a psychopathic butler.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Oldboy (2003) end-to-end",
+      "durationMinutes": 120,
+      "instruction": "Watch the corridor fight — it was shot in a single take at 30 degrees in a real hallway. Park insisted no cuts. The shot turned the film into an action landmark for a generation of choreographers."
+    },
+    "tags": [
+      "Thriller",
+      "Korean",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-satyajit-ray",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Satyajit Ray",
+    "teaser": "Bengali who founded Indian art cinema from a Calcutta office while working a day job as an art director, then won the only Indian Lifetime Achievement Oscar in cinema.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pather Panchali (1955) end-to-end",
+      "durationMinutes": 125,
+      "instruction": "Watch the train. Ray sold his wife's jewelry to fund the shot of a train appearing through Bengali trees. The family in the film is partly his. He shot it over four years with no budget."
+    },
+    "tags": [
+      "Drama",
+      "Indian",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-alfonso-cuaron",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Alfonso Cuarón",
+    "teaser": "Mexican director of five features in twenty-five years, three of which landed on Sight & Sound's decade-best polls. Made the first Hollywood film shot in one continuous take.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Roma (2018) end-to-end",
+      "durationMinutes": 135,
+      "instruction": "Watch the waves. Cuarón won cinematography for a black-and-white film shot in his childhood neighborhood on Mexico City. The long opening shot is the film's argument: the world keeps moving and we're still here."
+    },
+    "tags": [
+      "Drama",
+      "Mexican",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-guillermo-del-toro",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Guillermo del Toro",
+    "teaser": "Mexican director who spent twelve years fighting to make a film about a fish-man, got demonetized by Hollywood, then won three Oscars in one night on a Different Picture.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pan's Labyrinth (2006) end-to-end",
+      "durationMinutes": 118,
+      "instruction": "Listen to the score (Javier Navarrete). Del Toro and Navarrete built an interlocking lullaby that synchronizes with a finger-tap motif. Both motifs reappear in The Shape of Water — the through-line is the filmmaker."
+    },
+    "tags": [
+      "Fantasy",
+      "Mexican",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-denis-villeneuve",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Denis Villeneuve",
+    "teaser": "Québécois director who took over the Blade Runner franchise, intercut Arrival with Sicario, and made the only major-studio feature about deafness in 2021.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Arrival (2016) end-to-end",
+      "durationMinutes": 116,
+      "instruction": "Watch the daughter's name. The film tells you in the first five minutes. Villeneuve insists the plot isn't time-travel — it's grammar. Sound and writing are the same operation. Don't skip the scene where she says \"what does it feel like?\""
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-christopher-nolan",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Christopher Nolan",
+    "teaser": "British-American director who refused to release his films in digital form for years, championed IMAX, and structured ten features around backward-running timelines.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Memento (2000) end-to-end",
+      "durationMinutes": 113,
+      "instruction": "Watch the color reversal. Black-and-white scenes run forward, color scenes run backward. Nolan is showing you the protagonist's memory architecture — your eyes have to work to keep up."
+    },
+    "tags": [
+      "Thriller",
+      "British",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-david-fincher",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "David Fincher",
+    "teaser": "Oregon director who began as a visual-effects artist on Return of the Jedi, then directed more than 100 music videos before making his first feature at 36.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Se7en (1995) end-to-end",
+      "durationMinutes": 127,
+      "instruction": "Watch the rain. Fincher and the production designer deliberately allowed the matte paintings to feel airbrushed — the film's lack of warmth IS the climate. Listen to the score (Howard Shore) — it's mostly notes that aren't resolving."
+    },
+    "tags": [
+      "Thriller",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-mike-leigh",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Mike Leigh",
+    "teaser": "British director whose films are improvised over six months of rehearsal with no script, and whose actors sometimes don't know what kind of film they're making.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Naked (1993) end-to-end",
+      "durationMinutes": 131,
+      "instruction": "Listen to David Thewlis's monologues. Leigh writes them. Thewlis was given 50 pages of monologue to memorize and perform. The film is two men fighting, and the long speeches ARE the fight."
+    },
+    "tags": [
+      "Drama",
+      "British",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "director-greta-gerwig",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Greta Gerwig",
+    "teaser": "American actress who became an indie-screenwriter, then directed two 21st-century landmark films about women in 20 years. Her third feature is still the highest-grossing directed by a woman in decades.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lady Bird (2017) end-to-end",
+      "durationMinutes": 94,
+      "instruction": "Watch the ending. Gerwig didn't write her own dialogue — she did write the structure. The last scene is two women who can't say what they feel. Listen to the radio under the dialogue."
+    },
+    "tags": [
+      "Coming-of-Age",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-agnes-varda",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Agnès Varda",
+    "teaser": "Belgian-French photographer who founded the French New Wave a year before Cahiers did, then released her last feature at 88 from her apartment kitchen.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Cleo from 5 to 7 (1962) end-to-end",
+      "durationMinutes": 90,
+      "instruction": "Watch the opening. Varda documentary-style starts. Then she claims the title card: \"Real time: from 5pm to 6:45pm.\" Then the real-time experiment. Watch the mirrors — Cleo hides in mirrors all film long."
+    },
+    "tags": [
+      "Drama",
+      "French",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "director-maya-deren",
+    "categoryId": "DIRECTORS",
+    "subtype": "Director",
+    "name": "Maya Deren",
+    "teaser": "Ukrainian-American who arrived in 1940s New York with no film training and made Meshes of the Afternoon for $200 in 1943, then spent twelve years arguing it was never \"avant-garde\" at all.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Meshes of the Afternoon (1943) end-to-end",
+      "durationMinutes": 14,
+      "instruction": "Watch once for plot. Watch once for atmosphere. Watch once for the camera — Deren taught herself that the camera's POV is a body. The figure with the mirrored face is doing what cinema hadn't yet decided it could."
+    },
+    "tags": [
+      "Experimental",
+      "American",
+      "1940s"
+    ],
+    "tier": 2
+  }
+]

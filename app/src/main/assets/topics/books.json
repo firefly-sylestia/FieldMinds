@@ -1,1 +1,822 @@
-[]
+[
+  {
+    "id": "book-iliad",
+    "categoryId": "BOOKS",
+    "subtype": "Epic",
+    "name": "The Iliad",
+    "teaser": "A long oral-formulaic poem about 51 days of the Trojan War and the wrath of Achilles. Most estimates put the composition around 750 BCE.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Book I (the quarrel between Achilles and Agamemnon)",
+      "durationMinutes": 90,
+      "instruction": "Read the opening aloud. The 'μῆνιν ἄειδε θεά' is widened intentionally so a singer could pause for breath. Then read Achilles' reply to Agamemnon's messenger. Iliad I ends with a plague and a quarrel — Homer's entire structure for the rest of the poem."
+    },
+    "tags": [
+      "Epic",
+      "Greek",
+      "Ancient"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-odyssey",
+    "categoryId": "BOOKS",
+    "subtype": "Epic",
+    "name": "The Odyssey",
+    "teaser": "Ten years after Troy, Odysseus is trying to come home. The poem is the first novel written in Europe — and Homer uses sensory details ('wine-dark sea') as much as narrative.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Books 5–8 (Calypso to Alcinoüs)",
+      "durationMinutes": 90,
+      "instruction": "These four books are the emotional center. Odysseus mourns on Calypso's island, shipwrecks, washes ashore, and is welcomed by the Phaeacians. Listen to the formulaic recursions — Homer is teaching you the song structure as he sings."
+    },
+    "tags": [
+      "Epic",
+      "Greek",
+      "Ancient"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-aeneid",
+    "categoryId": "BOOKS",
+    "subtype": "Epic",
+    "name": "The Aeneid",
+    "teaser": "Virgil's Roman epic, written on his deathbed under Augustus's request. Half of the first half is Aeneas fleeing Troy; most of the second half is Odysseus's epic reversed — but with a Latin soul.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Book IV (Dido's tragedy)",
+      "durationMinutes": 60,
+      "instruction": "Read Book IV aloud. It's the smallest book of the Aeneid and the most-quoted single book of Latin literature. Virgil wrote the death of Dido to outdo Homer by writing the death of a queen who is not in the Iliad. It's the whole epic's emotional pivot."
+    },
+    "tags": [
+      "Epic",
+      "Latin",
+      "Ancient"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-divine-comedy",
+    "categoryId": "BOOKS",
+    "subtype": "Epic",
+    "name": "The Divine Comedy",
+    "teaser": "Dante's 14,233-line Italian vernacular poem about a man walking through Hell, Purgatory, and Paradise in the Easter week of 1300. He completed Inferno in 1314, Paradiso in 1320, six months before he died.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Inferno, Canto V (the story of Paolo and Francesca)",
+      "durationMinutes": 30,
+      "instruction": "Read this canto aloud. The Italian terza rima (three-line stanzas rhymed ABA BCB CDC) is the actual meter. Then notice the famous moment where Dante faints at the lovers' story — Virgil has to nudge him back awake. By fainting, Dante has admitted he can be moved by Hell."
+    },
+    "tags": [
+      "Medieval",
+      "Italian",
+      "Poetry"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-don-quixote",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Don Quixote",
+    "teaser": "Spanish novel published in two parts (1605, 1615) by Cervantes, the first modern novel and arguably the first work of metafiction. Famous broken-nosed knight and his practical-minded squire.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Part I, Chapters 1–8",
+      "durationMinutes": 90,
+      "instruction": "Read the first 50 pages carefully. Don't rush. Cervantes starts as a parody of chivalric romance — within 8 chapters the protagonist has been beaten up and dragged home. Now read a 19th-century Russian novel, then return — you'll see Don Quixote's DNA in every..."
+    },
+    "tags": [
+      "Spanish Golden Age",
+      "Spanish",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-pride-and-prejudice",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Pride and Prejudice",
+    "teaser": "Austen's first mature novel (1813), originally drafted as 'First Impressions' in 1796. The book's opening line is in the top-ten most-quoted English-literature sentences.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Volume I (Chapters 1–23)",
+      "durationMinutes": 90,
+      "instruction": "Read the opening aloud. Notice Austen's free indirect style — she writes 'she felt' as if Darcy's nerves are inside Elizabeth's mind. By chapter 23, you've heard everyone say everything slightly wrong. That's Austen's technique — observe the social bright surface, and..."
+    },
+    "tags": [
+      "Regency",
+      "British",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-jane-eyre",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Jane Eyre",
+    "teaser": "Charlotte Brontë's 1847 novel that became the template for the female bildungsroman — first-person narration, declining marriage plot, and a heroine who refuses the role of victim.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Jane Eyre, Chapters 1–4 and Chapters 12–15",
+      "durationMinutes": 90,
+      "instruction": "Read what Jane tells Mr. Lloyd. Then read the Red Room passage — Jane is locked in the red room for misbehaving. The Red Room is the novel's first major image. Then jump to chapter 12 onward (Rochester enters). The novel has been aware of him since chapter 4."
+    },
+    "tags": [
+      "Victorian",
+      "British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-wuthering-heights",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Wuthering Heights",
+    "teaser": "Emily Brontë's 1847 novel — a love story told through tenant-farmer Lockwood and housekeeper Nelly Dean, who disagree violently about what they remember. The book has been called unreadable by generations of critics.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wuthering Heights, Chapters 1–9",
+      "durationMinutes": 60,
+      "instruction": "Read carefully through chapter 9 (Heathcliff's departure). Emily Brontë writes in second-person voice from inside a tenant's mind. The novel breaks every convention of Victorian moralism. Some Early critics called it unreadable — that criticism is the novel's point."
+    },
+    "tags": [
+      "Victorian",
+      "British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-frankenstein",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Frankenstein; or, The Modern Prometheus",
+    "teaser": "Mary Shelley's 1818 novel, written at 19 on a bet with Byron and Percy Shelley. The novel invented both science fiction and the recurring motif of creators failing at their own creations.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Volume I (Letters + first 4 chapters)",
+      "durationMinutes": 90,
+      "instruction": "Skip the famous horror scenes. Read the framing structure: a polar explorer named Walton writes letters home. The novel you're reading is one long letter he sends his sister. Walton's ambition — and the monster's revenge — are both inside that frame."
+    },
+    "tags": [
+      "Romantic",
+      "British",
+      "Gothic"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-great-expectations",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Great Expectations",
+    "teaser": "Dickens's 1861 bildungsroman — the only one of his novels to be a first-person narration. The novel's famous original ending was so bleak Dickens rewrote it on Bulwer-Lytton's advice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Great Expectations, Chapters 1–8 and the original 1860 ending",
+      "durationMinutes": 90,
+      "instruction": "Read the opening — Pip in the graveyard at his parents' headstone. Then read chapters 7–8 (the convict scene). Then read the *original* ending (freely available online). Then read the published ending. Dickens's novel is built around that single revision."
+    },
+    "tags": [
+      "Victorian",
+      "British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-oliver-twist",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Oliver Twist",
+    "teaser": "Dickens's second novel (1837–39), the first major Victorian novel to focus on a working-class child protagonist, and the origins of 'Please sir, I want some more' as the most-quoted Dickens line.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Chapters 1–8",
+      "durationMinutes": 60,
+      "instruction": "Read the first eight chapters. Notice Dickens's gift for naming institutions (the workhouse, Fagin's den). The novel's first great risk is choosing Oliver — an orphan with no interior cache of being — as narrator's central living thing. Dickens compensates by giving..."
+    },
+    "tags": [
+      "Victorian",
+      "British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-war-and-peace",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "War and Peace",
+    "teaser": "Tolstoy's 1225-page epic of Russian families during the Napoleonic Wars (1869). Tolstoy refused the copyright revenue to his wife's fury. He said he wrote the book 'to teach Russians to love history.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "War and Peace, Book I, opening 50 pages",
+      "durationMinutes": 90,
+      "instruction": "Read the first 30 pages. Then pages 100–150 (the hunt scene). The novel trains you to read two scales of time: Napoleon's movements across Europe, and a young woman explaining why she won't marry. Tolstoy is doing this on purpose — he wants you to feel his philosophy of history."
+    },
+    "tags": [
+      "Russian",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-crime-and-punishment",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Crime and Punishment",
+    "teaser": "Dostoevsky's 1866 novel, written in 1866 to escape gambling debts. The novel became the prototype for the 'psychological thriller' — its protagonist is redeemed before the plot begins.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Crime and Punishment, Part I (the murder scene only)",
+      "durationMinutes": 60,
+      "instruction": "Read just the murder scene. The axe. The room. The footsteps from the upstairs tenant. Dostoevsky decides to show you the murder from inside the killer's mind — showing how a murderer thinks in advance, not in cold blood. The novel never forgets this perspective."
+    },
+    "tags": [
+      "Russian",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-madame-bovary",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Madame Bovary",
+    "teaser": "Flaubert's 1856 novel, the subject of an 1857 obscenity trial in Paris. He spent 5 years writing it. The novel's mid-book agricultural fair scene is the most quoted single chapter in French literature.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Madame Bovary, Part I, Chapter 9 (the agricultural fair)",
+      "durationMinutes": 30,
+      "instruction": "Read the agricultural fair. Emma Bovary is sitting with her husband while a politician gives a long speech. Then she meets Léon — a stranger at another table. The scene shifts to them. Read both paragraphs as if you were blindfolded — Flaubert's rhythm section is the instrument."
+    },
+    "tags": [
+      "French",
+      "Realism",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-brothers-karamazov",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "The Brothers Karamazov",
+    "teaser": "Dostoevsky's last novel (1880), unfinished at his death. The novel's central argument between Ivan and Alyosha — 'If God does not exist, is everything permitted?' — became the most-argued theological question in 20th-century European fiction.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Book V, Chapter 4 (\"Rebellion\") + Book V, Chapter 5 (\"The Grand Inquisitor\")",
+      "durationMinutes": 90,
+      "instruction": "Read both chapters in one sitting. They're the most quoted chapters in Dostoevsky's last novel. The Grand Inquisitor argument is small: the Church took the wrong road by giving people 12 million in miracles when all they needed was freedom. The novel then leaves it..."
+    },
+    "tags": [
+      "Russian",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-moby-dick",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Moby-Dick; or, The Whale",
+    "teaser": "Melville's 1851 novel of a whaling voyage and a one-legged captain mad enough to chase a white sperm whale around the world. The book sold 3,000 copies in life; 30 years later critics proclaimed it America's first great novel.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Moby-Dick, Chapter 1 (Loomings) and Chapter 42 (\"The Whiteness of the Whale\")",
+      "durationMinutes": 90,
+      "instruction": "Read the opening chapter. Then jump straight to chapter 42. The novel's voice is established in the first — Ishmael decides that everyone who goes to sea becomes 'insane.' The middle chapter turns whiteness into an existential problem. The novel never returns to either..."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-leaves-of-grass",
+    "categoryId": "BOOKS",
+    "subtype": "Poetry Collection",
+    "name": "Leaves of Grass",
+    "teaser": "Whitman's self-published 1855 collection (12 poems) became the founding document of American poetry. He revised and expanded the work for 39 years.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "\"Song of Myself\" (Sections 1–10) + \"Crossing Brooklyn Ferry\" (any 5 sections)",
+      "durationMinutes": 60,
+      "instruction": "Read these aloud. Whitman taught himself that verse could be a list. The lists are tactile, physical. Notice the repeated use of the word 'and' — he's building a Long sentence. Compare to Dickinson who edited ruthlessly — Whitman's opposite."
+    },
+    "tags": [
+      "American",
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-emma",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Emma",
+    "teaser": "Austen's 1815 novel of a wealthy young woman who teaches herself to be a matchmaker — and learns that matchmaking is the wrong activity. The novel is intentionally comedic and unreachable.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Emma, Volume I (Chapters 1–18)",
+      "durationMinutes": 90,
+      "instruction": "Read the first volume. Emma is endowed with 'a great deal of imagination' — Austen tells you that's a problem. The chapters run as vignettes; each is a case study in Emma's confidence surpassing her perception. Austen asks you to be more skeptical than Emma is."
+    },
+    "tags": [
+      "Regency",
+      "British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-picture-of-dorian-gray",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "The Picture of Dorian Gray",
+    "teaser": "Wilde's 1890 novel — a Faustian aspect-fable whose only real horror is the portrait in the attic and the question who looks at it.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Picture of Dorian Gray, Chapters 1–5",
+      "durationMinutes": 60,
+      "instruction": "Read the preface before anything else — it's Wilde's manifesto. Then read chapters 1–5. Wilde structures chapters as a series of aphorisms; he said the novel was 'a lesson in the non-moral ideal of beauty.' Read the last chapter carefully — Wilde knew the end was..."
+    },
+    "tags": [
+      "Victorian",
+      "Irish-British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-trial",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "The Trial",
+    "teaser": "Kafka's 1925 novel (published posthumously by Max Brod, who ignored Kafka's request to burn his papers). The novel's most-quoted line: 'Someone must have been telling lies about Josef K., for one morning he was arrested without having done anything wrong.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Trial, Chapter 1 (\"Someone must have slandered Josef K...\")",
+      "durationMinutes": 30,
+      "instruction": "Read the first 10 pages. K is arrested on his 30th birthday by officials who tell him to keep working. He's never told what he's accused of. The novel's pre-WWII German-language nightmare ended up as prophecy. Read another Kafka work in the same week — the metaphor..."
+    },
+    "tags": [
+      "Modernist",
+      "Czech-Austrian",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-ulysses",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Ulysses",
+    "teaser": "Joyce's 1922 novel of one day in Dublin (June 16, 1904) — Bloomsday is still celebrated annually worldwide. The novel was banned in the US for obscenity in 1922; the ban was lifted in 1934.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Ulysses, Episode 3 (\"Proteus\") and Episode 18 (\"Penelope\")",
+      "durationMinutes": 90,
+      "instruction": "Skip the first two episodes and start at \"Proteus.\" Joyce writes Stephen Dedalus thinking by rolling his mind over language — that's the modernist twist. Then jump to the last episode — Molly Bloom's monologue. It's 30 pages of punctuation-free sentences; that voice..."
+    },
+    "tags": [
+      "Modernist",
+      "Irish",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-mrs-dalloway",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Mrs Dalloway",
+    "teaser": "Woolf's 1925 novel — one day in Clarissa Dalloway's life as she prepares for a party in post-war London. The novel hosts Septimus Smith's parallel interior life, a WWI veteran about to fail at suicide.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Mrs Dalloway, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read aloud. Woolf's sentences are doing two things at once: giving you the time of day and showing you what's inside one woman's mind. By the end of the first chapter you've been on a London street and inside a thought of suicide without being told there was a transition."
+    },
+    "tags": [
+      "Modernist",
+      "British",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-in-search-of-lost-time",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "In Search of Lost Time",
+    "teaser": "Proust's 1913–27 seven-volume novel (the 7th was posthumous). The novel is the longest in the canon, and the opening madeleine passage is the most quoted 200 words in literature.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Swann's Way, \"Combray\" opening 30 pages",
+      "durationMinutes": 90,
+      "instruction": "Read the madeleine passage. Then read the passage on falling in love. Proust's gift is showing you how memory isn't a recording — it's a state. The same madeleine tastes different to the same man in different decades. That's the book's most-quoted idea and the simplest."
+    },
+    "tags": [
+      "Modernist",
+      "French",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-waste-land",
+    "categoryId": "BOOKS",
+    "subtype": "Poem",
+    "name": "The Waste Land (1922)",
+    "teaser": "T.S. Eliot's 434-line modernist poem, written in notes, edited by Ezra Pound down from 800 lines. The poem opens with 'April is the cruellest month' — one of the most-quoted opening lines ever.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Waste Land (esp. lines 1–18, 60–75, and the final lines \"These fragments I have shored against my ruins\")",
+      "durationMinutes": 60,
+      "instruction": "Read the 434 lines. Then read the original Pound annotations. The poem is a collage and Eliot wants you to read it as if you crash-landed in a continent's songbook mid-song. Then read the final 10 lines and notice Eliot is asking you to 'shore' fragments against something."
+    },
+    "tags": [
+      "Modernist",
+      "American-British",
+      "Poetry"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-brave-new-world",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Brave New World",
+    "teaser": "Huxley's 1932 dystopian novel. The opening paragraph queues 11 cloned embryos into a continuous conveyor belt. The novel is structured around a long tour through a perfect society — and the question whether perfect is enough.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Brave New World, Chapters 1–6",
+      "durationMinutes": 90,
+      "instruction": "Read the first six chapters. The Hatchery tour is the novel's most quoted section. Then read chapters 9–12. Huxley wrote the book in three months during a 1931 trip to the United States. The novel notices that felt-pleasure and freedom are not the same thing."
+    },
+    "tags": [
+      "Dystopian",
+      "British",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-1984",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Nineteen Eighty-Four",
+    "teaser": "Orwell's 1949 dystopian novel, written in the English countryside as Orwell was dying of tuberculosis. The novel coined the words 'doublethink' and 'thoughtcrime,' among others.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "1984, Part I (the opening + the manifesto + the two-minute hate)",
+      "durationMinutes": 90,
+      "instruction": "Read Part I. The opening paragraph introduces Big Brother. The middle of Part I rewrites Goldstein's book. By Part II, Orwell's structure trains you to expect betrayal. The novel's last sentence is the most famous in 20th-century English fiction. Read it and ask: is it..."
+    },
+    "tags": [
+      "Dystopian",
+      "British",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-the-catcher-in-the-rye",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "The Catcher in the Rye",
+    "teaser": "Salinger's 1951 novel — Holden Caulfield narrates three days in NYC after being expelled from prep school. The novel became the most popular coming-of-age novel in American high-school English curricula.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Catcher in the Rye, Chapters 1–7",
+      "durationMinutes": 90,
+      "instruction": "Read the first 70 pages aloud. Salinger's gift is Holden's consciousness — he never finishes thoughts and never stops starting new ones. Now read the same chapters silently. Then read a chapter where Holden is angry. Notice which word Salinger repeats for emphasis."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Mid-20th"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-beloved",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Beloved",
+    "teaser": "Morrison's 1987 novel, based on the true story of Margaret Garner, an enslaved woman who killed her daughter rather than return her to bondage. Morrison won the Pulitzer the year after.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Beloved, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening: 124 Bluestone Road is haunted. Morrison's first sentence is too famous to discuss — read it again. Then watch how the present and the past stack. The novel is a ghost story that has nothing to do with haunting and everything to do with what you'd need..."
+    },
+    "tags": [
+      "American",
+      "Novel",
+      "Modern"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-one-hundred-years-of-solitude",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "One Hundred Years of Solitude",
+    "teaser": "Márquez's 1967 novel, the founding work of magical realism. The novel traces seven generations of the Buendía family in the fictional town of Macondo over a hundred years. Márquez wrote it in 18 months.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "One Hundred Years of Solitude, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening: a man faces a firing squad, goes back in memory to his village, his grandfather takes him to see ice. The novel's time-machine is the family. Márquez wrote it in nine months while living in Mexico City. Read until you understand 'solitude' as the..."
+    },
+    "tags": [
+      "Magical Realism",
+      "Colombian",
+      "Novel"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-if-on-a-winters-night-a-traveler",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "If on a winter's night a traveler",
+    "teaser": "Calvino's 1979 novel — a book where each even-numbered chapter is the first page of a different novel that ends, and each odd-numbered chapter is about you, the reader, trying to read the missing novels.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "\"If on a winter's night a traveler\" — Chapters 1–5 of each kind",
+      "durationMinutes": 60,
+      "instruction": "Read carefully. The novel alternates between an embedded-novel opening and a real-world frame. The trick is that the embedded novel always breaks. By chapter 10, you'll be reading like the protagonist: looking at the next-new story with a small frustration that's also..."
+    },
+    "tags": [
+      "Postmodern",
+      "Italian",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-house-of-leaves",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "House of Leaves",
+    "teaser": "Danielewski's 2000 novel of a house that's larger inside than outside. The novel's layout requires you to flip sections and read the footnotes to follow a family, an academic, and an extra-space documentarian.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "House of Leaves, opening 60 pages",
+      "durationMinutes": 90,
+      "instruction": "Read carefully — the typography is the meaning. The novel's footnotes include a fictional academic essay; the academic essay is about a fictional documentary; the documentary is about a house that's inside-out. By page 60, you've learned that 'House of Leaves' is also..."
+    },
+    "tags": [
+      "Postmodern",
+      "American",
+      "Horror"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "book-the-collected-poems-of-pablo-neruda",
+    "categoryId": "BOOKS",
+    "subtype": "Poetry Collection",
+    "name": "Pablo Neruda — Twenty Love Poems and a Song of Despair",
+    "teaser": "Neruda's 1924 debut collection at 19 — became the foundational erotic-poetry book of 20th-century Spanish-language writing. He won the Nobel for Literature in 1971.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Neruda's 1, 5, 10, 15, 20 + the final \"Song of Despair\"",
+      "durationMinutes": 60,
+      "instruction": "Read in Spanish if you can. Then read in English. Notice that Neruda's central figure is not 'I' but 'we' — the lovers are inside an outside ('es tan corto el amor / y es tan largo el olvido'). Read them to each other if you have a friend who would do that."
+    },
+    "tags": [
+      "Chilean",
+      "Poetry",
+      "Latin-American"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-second-sex",
+    "categoryId": "BOOKS",
+    "subtype": "Essay",
+    "name": "The Second Sex",
+    "teaser": "Beauvoir's 1949 essay on the construction of Woman. The book's opening chapter — 'The Second Sex is not a separate species...' — has been called the founding text of second-wave feminism.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Second Sex, Volume I, Chapter 1 + Volume II, Chapter 10 (\"The Independent Woman\")",
+      "durationMinutes": 90,
+      "instruction": "Read Volume I Chapter 1 and Volume II Chapter 10. Volume I is the diagnosis; Volume II is the prescription. Between them is the famous line — 'One is not born, but rather becomes, a woman.' Notice how Beauvoir weaves together biology, history, and phenomenology."
+    },
+    "tags": [
+      "French",
+      "Essays",
+      "Feminist"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-myth-of-sisyphus",
+    "categoryId": "BOOKS",
+    "subtype": "Essay",
+    "name": "The Myth of Sisyphus",
+    "teaser": "Camus's 1942 philosophical essay. The book's title essay opens with 'There is but one truly serious philosophical problem, and that is suicide.' The book argues absurdism and accepts that we must imagine Sisyphus happy.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Myth of Sisyphus (only the title essay, ~80 pages)",
+      "durationMinutes": 90,
+      "instruction": "Read the title essay. Take a breath at the opening. Camus is asking you to stare at the moment when you wonder if life is meaningful at all. Then read the conclusion — he says you must imagine Sisyphus happy. Note Camus doesn't resolve the absurdity; he works within it."
+    },
+    "tags": [
+      "French",
+      "Essays",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-god-of-small-things",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "The God of Small Things",
+    "teaser": "Roy's 1997 debut novel (Booker Prize 1997) about an Indian family in Kerala. The novel layers caste, family, and the consequences of small gestures across time jumps that are tighter than Faulkner.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The God of Small Things, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening carefully. Roy tells you the ending in the first 10 pages — then circles back to show you how everyone got there. Notice the small things: a touch on skin, a sound at night, a smell of food. They're the actual mechanism. Notice the 'Love Laws' passage..."
+    },
+    "tags": [
+      "Indian",
+      "Novel",
+      "Late 20th"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-left-hand-of-darkness",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "The Left Hand of Darkness",
+    "teaser": "Le Guin's 1969 sci-fi novel of an envoy arriving on Gethen, a planet whose inhabitants cycle through male and female. The novel won both Hugo and Nebula in 1970.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Left Hand of Darkness, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter. The envoy arrives on a planet whose inhabitants change sex. Le Guin refuses allegory — the planet's biology is its own argument. Then read 'The Ones Who Walk Away from Omelas' (short story, ~5 pages). Read both in the same week; you'll start..."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "Feminist"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-three-body-problem",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "The Three-Body Problem",
+    "teaser": "Liu Cixin's 2008 sci-fi novel, the first Asian novel to win the Hugo Award for Best Novel. The novel makes the Cultural Revolution a first-class sci-fi premise.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Three-Body Problem, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening. By the third chapter you've been transported to China's Cultural Revolution. Liu writes science detail at the level of a physics paper; then the world starts unraveling. Read the first 50 pages and you'll finish the trilogy. Read it on a quiet evening."
+    },
+    "tags": [
+      "Sci-Fi",
+      "Chinese",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-foundation",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Foundation",
+    "teaser": "Isaac Asimov's 1951 sci-fi novel — the foundation's premise that an empire's predicted fall can be shortened emerged from his reading of Gibbon's Decline and Fall of the Roman Empire. He was 31 and a chemistry PhD.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Foundation, first 4 chapters",
+      "durationMinutes": 60,
+      "instruction": "Read the opening. Asimov invented the concept of 'psychohistory' for this novel. Then read the first crisis (chapter 9). The novel's larger structure is five volumes spanning a thousand years. Read this one book and you'll know what every Star Wars story owes to it."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-dune",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Dune",
+    "teaser": "Frank Herbert's 1965 sci-fi novel set on a desert planet. The novel won the first Hugo and Nebula to do so; it's the bestselling single sci-fi novel of all time.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Dune, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the opening. By the second chapter you meet the Bene Gesserit, by the third you meet the spice. Herbert's gift is that he slows the reader down to the pace his characters think. Read the spice-visions chapter — then read the second book only after you've absorbed..."
+    },
+    "tags": [
+      "Sci-Fi",
+      "American",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "book-the-master-and-margarita",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "The Master and Margarita",
+    "teaser": "Bulgakov's 1967 novel (published posthumously after 26 years in Soviet censorship). The novel's most famous line: 'Manuscripts don't burn.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Master and Margarita, opening 30 pages",
+      "durationMinutes": 60,
+      "instruction": "Read the first chapter: the Devil arrives at a Moscow park. The novel's most-quoted line is 'Manuscripts don't burn.' Read until chapter 13 (Pontius Pilate) — that's a quarter-century waiting. Then read chapter 25 (the master writes a novel). The book is structured..."
+    },
+    "tags": [
+      "Soviet",
+      "Russian",
+      "Novel"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-persuasion",
+    "categoryId": "BOOKS",
+    "subtype": "Novel",
+    "name": "Persuasion",
+    "teaser": "Austen's last completed novel (1818), a short, melancholy work about a 27-year-old woman who broke off an engagement with a poor man eight years before and now encounters him again, wealthy.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Persuasion, Volume I (Chapters 1-12)",
+      "durationMinutes": 60,
+      "instruction": "Read the opening chapter. Austen wrote it while ill and mostly bedridden. The novel's tone is half-Romantic, half-classical; Anne Elliot never speaks angrily. By volume II, she's watching Captain Wentworth move through rooms. The famous final letter is what the whole..."
+    },
+    "tags": [
+      "Regency",
+      "British",
+      "Novel"
+    ],
+    "tier": 2
+  }
+]

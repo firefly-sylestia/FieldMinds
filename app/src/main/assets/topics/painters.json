@@ -1,1 +1,802 @@
-[]
+[
+  {
+    "id": "painter-leonardo-da-vinci",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Leonardo da Vinci",
+    "teaser": "Tuscan illegitimate son who was apprenticed at 14, sold almost nothing in life, died in 1519 at the French court — and his notebooks sold 1,800 years of scientific observation in 5,000 pages.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Last Supper (Milan, restored) — sit on the opposite bench, separately",
+      "durationMinutes": 45,
+      "instruction": "Sit where the original monks would have eaten. The composition is built around three windows and a strictly geometric 'Jesus at the center' rule, but the figures are so crammed with emotion that the geometry disappears on first viewing."
+    },
+    "tags": [
+      "Renaissance",
+      "Italian",
+      "15th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-michelangelo",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Michelangelo Buonarroti",
+    "teaser": "Florentine sculptor who at 26 carved the marble David from a 17-foot block Carrara had already partly ruined. He painted the Sistine Chapel in four years while arguing with the Pope almost daily about money.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Sistine Chapel ceiling — visit between tour groups",
+      "durationMinutes": 60,
+      "instruction": "Look at the separation of light and dark in the nine central panels. They're painted in fresco — water-based — onto wet plaster. Each day's painting had to complete a section. Michelangelo worked standing up, looking up, for years."
+    },
+    "tags": [
+      "Renaissance",
+      "Italian",
+      "15th-16th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-raphael",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Raphael",
+    "teaser": "Tuscan painter who died at 37 in 1520, leaving behind an enormous body of work that set the visual standard for the Italian Renaissance. The pope wept at his funeral.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The School of Athens (Stanza della Segnatura, Vatican)",
+      "durationMinutes": 30,
+      "instruction": "Look at the central figures. Plato and Aristotle, the two founders of Western philosophy, walk with their hands extended: Plato toward the sky (idealism), Aristotle toward the ground (empiricism). Raphael was 25 when he painted this."
+    },
+    "tags": [
+      "Renaissance",
+      "Italian",
+      "16th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-caravaggio",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Caravaggio",
+    "teaser": "Italian painter who fled Rome after killing a man in a tennis-game dispute, painted seven of his most important paintings while running from the law between Naples, Malta, and Sicily. He died at 39.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Calling of St Matthew (Contarelli Chapel, Rome)",
+      "durationMinutes": 30,
+      "instruction": "Look at the lighting. A single beam of light cuts across the room. Caravaggio didn't actually see this scene — he painted what an imagined harsh sunlight looked like on five men's backs. The painting technique is called 'tenebrism' — every shape emerges from..."
+    },
+    "tags": [
+      "Baroque",
+      "Italian",
+      "17th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-rembrandt",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Rembrandt van Rijn",
+    "teaser": "Dutch painter who died bankrupt in 1669, painted almost 100 self-portraits, became the first artist whose drawings were sometimes valued more than his paintings (by connoisseurs, not by patrons).",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Night Watch (Rijksmuseum, Amsterdam)",
+      "durationMinutes": 45,
+      "instruction": "Stand far first. Then close. Then return. The painting was cut on all four sides in 1715 to fit a wall — losing roughly 1m on each edge. Now the group doesn't look like a company on a mission; it looks like a wedding party."
+    },
+    "tags": [
+      "Baroque",
+      "Dutch",
+      "17th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-vermeer",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Johannes Vermeer",
+    "teaser": "Dutch painter who painted so slowly he produced 2-3 paintings a year, died at 43 leaving his wife and 11 children in debt. His work was largely forgotten for 200 years before being rediscovered in the 1860s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Girl with a Pearl Earring (Mauritshuis, The Hague)",
+      "durationMinutes": 30,
+      "instruction": "Look carefully at the pearl. Vermeer applied the highlight with a single thick stroke of white lead — slightly raised from the surface. Then look at the eye. The black is not simply painted — it's composed of two thin layers with different tinting."
+    },
+    "tags": [
+      "Baroque",
+      "Dutch",
+      "17th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-goya",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Francisco Goya",
+    "teaser": "Spanish court painter who recorded the Peninsular War and went deaf at 46 from an illness. His late work — the Black Paintings — were painted directly onto the walls of his house in the 14 years before he died.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Third of May 1808 (Prado, Madrid)",
+      "durationMinutes": 45,
+      "instruction": "Look at the man in the white shirt. He is about to be shot by a firing squad. The figure on the right is the lantern that lights him. The squareness of the lantern is what makes the man's shirt visible. The painting was completed 70 years before photography, and it's..."
+    },
+    "tags": [
+      "Romantic",
+      "Spanish",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-turner",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "J. M. W. Turner",
+    "teaser": "English painter who bequeathed 300 oil paintings and 30,000 drawings to the British Nation, trained himself on long canal-boat trips photographing the English light, and was so prolific the Tate has its own Turner Wing.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Snow Storm: Steam-Boat off a Harbour's Mouth (Tate)",
+      "durationMinutes": 30,
+      "instruction": "Look at the painting for 5 minutes. The painting's blur is disqualifying to most modern viewers because it looks unfinished. It's actually a representation of a vision Turner had while lashed to a mast in a snowstorm in 1842."
+    },
+    "tags": [
+      "Romantic",
+      "British",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-constable",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "John Constable",
+    "teaser": "English painter who spent 30 years in his native Suffolk painting the same 6-square-mile stretch of river valley, sold almost no paintings in life, then revived as the founder of modern landscape painting.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Hay Wain (National Gallery, London)",
+      "durationMinutes": 30,
+      "instruction": "Look at the sky. Constable devoted more canvas to sky than to anything else. Heath-cloth pieces of cloud layered over a blue the color of a fresh-laundered shirt. He believed the English sky was the most painted-worthy object on Earth and rewrote European landscape..."
+    },
+    "tags": [
+      "Romantic",
+      "British",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-friedrich",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Caspar David Friedrich",
+    "teaser": "German Romantic painter who lost family members in horse-riding accidents as a child, then painted landscapes in which the figure always faces away from the viewer — looking out at the same sublime nature he did.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Wanderer above the Sea of Fog (Kunsthalle Hamburg)",
+      "durationMinutes": 30,
+      "instruction": "Look at the figure. He's seen from behind. His hair is whipped by an unseen wind. He's looking out at fog over mountains. Friedrich believed the viewer's gaze should be directed by the painting. Look at the figure's posture — every muscle in the back is engaged."
+    },
+    "tags": [
+      "Romantic",
+      "German",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-manet",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Édouard Manet",
+    "teaser": "French painter who exhibited Le Déjeuner sur l'herbe in 1863 and Le Olympia in 1865 — both paintings caused scandals by mixing classical pose with flat modern photographic light. He had been the leader of the Impressionists' teachers.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Olympia (Musée d'Orsay, Paris)",
+      "durationMinutes": 30,
+      "instruction": "Look at Olympia. A young woman, fully nude, looks out at the viewer with confident composure. A black cat arches at her feet. A maid brings flowers. The painting caused a scandal in 1865 and still does. Manet used Titian's Venus of Urbino as a template and then..."
+    },
+    "tags": [
+      "Modern",
+      "French",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-monet",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Claude Monet",
+    "teaser": "French painter who, by 1895, had painted 30 paintings of a single haystack. He refined the Impressionist formula until landscape became a controlled experiment in the perception of light.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Haystacks series at Musée d'Orsay or the National Gallery — view 3 of them side by side",
+      "durationMinutes": 30,
+      "instruction": "Look at three paintings at once. Each haystack is the same subject, painted within months of each other. The sun is in different positions. He showed you what changes when light changes. That's the entire case for Impressionism in three paintings."
+    },
+    "tags": [
+      "Impressionism",
+      "French",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-cezanne",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Paul Cézanne",
+    "teaser": "French painter who wrote his mother from Paris that he was starving but unable to bring himself to paint for money. His work became the foundation of Cubism.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Mont Sainte-Victoire paintings (one at the Tate, one at the Met) — view as a pair",
+      "durationMinutes": 30,
+      "instruction": "Look at two paintings of the same mountain side by side. Cézanne painted 60 of them. Each one is a different conceptualization of how 3D form sits in 2D space. Picasso said Cézanne was 'the father of us all' — Cubism starts here."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "French",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-van-gogh",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Vincent van Gogh",
+    "teaser": "Dutch painter who sold one painting in life (The Red Vineyard), wrote his brother Theo 800 letters over 21 years — and within 18 months of his suicide, became a household name in Europe.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Starry Night (MoMA, New York)",
+      "durationMinutes": 30,
+      "instruction": "Look at the brushstroke pattern. Each star is a slightly different spiral. Each cloud moves differently. Van Gogh's thick brushstroke technique, called impasto, is what makes each element physical. Now look at the cypress tree — it's painted from the bottom up, like a..."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "Dutch",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-gauguin",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Paul Gauguin",
+    "teaser": "French banker turned painter, stockbroker at 35, abandoned his family for Brittany, then Tahiti, where he painted his most famous canvases while drinking absinthe and arguing with the local Catholic mission.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Where Do We Come From? What Are We? Where Are We Going? (Tate)",
+      "durationMinutes": 30,
+      "instruction": "Look at the painting's three sections. Gauguin painted the whole thing in two weeks, intended it to be his last work, and tried to poison himself afterward. Read right-to-left (he's Polynesian at the right, dying at the left)."
+    },
+    "tags": [
+      "Post-Impressionism",
+      "French",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-morisot",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Berthe Morisot",
+    "teaser": "French painter who exhibited in 7 of the 8 Impressionist exhibitions between 1874 and 1886 — more than any other artist. She died at 54, then her daughter published her correspondence with Mallarmé.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Woman at Her Toilette (Art Institute of Chicago)",
+      "durationMinutes": 30,
+      "instruction": "Look at the brushwork. Morisot paints with almost transparent washes and an almost-blank background. Her eye was trained to look at how figures absorb light; she said she never tried to finish a painting. Instead she caught figures mid-gesture."
+    },
+    "tags": [
+      "Impressionism",
+      "French",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-cassatt",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Mary Cassatt",
+    "teaser": "American painter who left Philadelphia for Paris at 23, became Edgar Degas's only American student, exhibited in 4 Impressionist shows, painted children and women in ways Impressionism had not.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Child's Bath (Art Institute of Chicago)",
+      "durationMinutes": 30,
+      "instruction": "Look at the hands. Cassatt's hands — the mother's on her daughter's shoulder, the daughter's small feet at the basin — are painted with what feels like a printer's precision. This is a painting of mother and daughter in an ordinary moment."
+    },
+    "tags": [
+      "Impressionism",
+      "American",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-picasso",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Pablo Picasso",
+    "teaser": "Spanish painter who at 17 drew with a precision that took the Spanish crown 19 years to believe was a real painting. He invented Cubism at 25 with Braque and kept painting until the day he died at 91.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Les Demoiselles d'Avignon (MoMA)",
+      "durationMinutes": 30,
+      "instruction": "Look at the women's faces. The two on the right have masks painted in African-style angular forms. Picasso saw the African masks at the Musée d'Ethnographie du Trocadéro in 1907 and the painting changed that year. Two years later he and Braque would found Cubism."
+    },
+    "tags": [
+      "Modern",
+      "Spanish",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-matisse",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Henri Matisse",
+    "teaser": "French painter whose Fauvist debut (1905) showed canvases of clashing pure color — a critic called it 'les fauves' (the wild beasts). His late cut-paper works, made in his 80s while bed-bound, are his most famous.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Snail (Tate Modern)",
+      "durationMinutes": 30,
+      "instruction": "Look at the composition. The painting is painted on a 9-foot square of paper cut into 49 pieces — Matisse glued the pieces back onto the canvas with the colors in reverse. He made it in bed after surgery. The painting is about a snail's spiral."
+    },
+    "tags": [
+      "Modern",
+      "French",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-kandinsky",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Wassily Kandinsky",
+    "teaser": "Russian painter who heard painting as music, kept a notebook mapping colors to specific musical instruments, abandoned figurative painting for pure abstraction and founded the Bauhaus color theory course.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Composition VIII (Guggenheim)",
+      "durationMinutes": 30,
+      "instruction": "Look at the colors as sound. Kandinsky mapped yellow to trumpets, blue to cellos, and orange to sustained middle-register blasts. The geometry in this painting is impossible without sound. Look at the largest yellow shape — does it actually make your chest expand?"
+    },
+    "tags": [
+      "Abstract",
+      "Russian",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-mondrian",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Piet Mondrian",
+    "teaser": "Dutch painter who moved to NYC in 1940 after London because NYC's skyscrapers looked to him like Braque's drawings. He died four years later, having painted his last canvases to the sound of boogie-woogie.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Composition with Red, Blue, and Yellow (Guggenheim)",
+      "durationMinutes": 30,
+      "instruction": "Look at the white lines. Most of the painting is white. The black lines divide the canvas into uneven squares, three of which contain a single pure color: red, blue, yellow. Mondrian spent 30 years narrowing his vocabulary to this."
+    },
+    "tags": [
+      "Abstract",
+      "Dutch",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-pollock",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Jackson Pollock",
+    "teaser": "American painter who's said to have invented 'action painting' — laying a canvas on the floor and flinging paint at it with sticks and brushes. His 1949 painting Number 1A was bought 30 years later for $58M.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "One: Number 31, 1950 (MoMA) — view from a distance",
+      "durationMinutes": 30,
+      "instruction": "Stand back first. Then walk in. Pollock's paintings are non-compositional — they work as physical record of a body's movement. He laid the canvas on the floor and walked around it, flinging paint from a stick. Look for the moments where the drip ran — they're the..."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "American",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-rothko",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Mark Rothko",
+    "teaser": "Latvian-American painter who painted in pairs of rectangles that simply float over a monochrome ground — and committed suicide at 66 in 1970 after completing the Rothko Chapel in Houston.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Rothko Chapel (Houston) — sit in silence for 30 min",
+      "durationMinutes": 60,
+      "instruction": "Sit. Don't read. Don't look at your phone. The Rothko Chapel holds 14 paintings in an octagonal room. Sit on the bench in front of any one of them. The painter's intent was that the painting would be the room's atmosphere, not an object."
+    },
+    "tags": [
+      "Abstract Expressionism",
+      "Latvian-American",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-warhol",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Andy Warhol",
+    "teaser": "Pittsburgh commercial artist who invented the silkscreen-multiple and the celebrity-as-product. He ran the Factory as a yearlong continuous performance that became the most influential art space of the 1960s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Marilyn Diptych (Tate Modern) — get in close",
+      "durationMinutes": 30,
+      "instruction": "Look at the second canvas. The silkscreen's imperfections are visible: ink-skip, register offset, smudged edges. Warhol never retouched them. He said he wanted the gold Marilyn to be the side you stare at and the black Marilyn to be the side that stares back."
+    },
+    "tags": [
+      "Pop",
+      "American",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-hockney",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "David Hockney",
+    "teaser": "British painter who at 26 painted A Bigger Splash, became the first artist to send a video overtly fishing for men, and at 71 turned to digital painting on his iPad — making it the most-listened-to tool of his career.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "A Bigger Splash (Tate)",
+      "durationMinutes": 30,
+      "instruction": "Look at the painting. Two weeks, no figures, just a swimming pool and an inland LA house. He painted the splash itself in 9 seconds and then spent a week analyzing the spray pattern. Look at the splash distorting the water — the splash is the painting."
+    },
+    "tags": [
+      "Pop",
+      "British",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-okeeffe",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Georgia O'Keeffe",
+    "teaser": "American painter who at the New York galleries of the 1920s taught Americans that flowers can be more than decoration and bones more than reminder — and persisted in her work past age 90.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Cow's Skull with Calico Roses (Art Institute of Chicago)",
+      "durationMinutes": 30,
+      "instruction": "Look at the painting. A bleached white cow skull with red roses behind it. O'Keeffe said she painted it because 'Texas is a state with nothing in it.' Now look at the painting's relation to scale — the skull fills the frame."
+    },
+    "tags": [
+      "Modern",
+      "American",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-frida-kahlo",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Frida Kahlo",
+    "teaser": "Mexican painter who dressed in Tehuana costume, painted almost exclusively self-portraits because she spent 30 years ill in a body cast after a bus crash, and died in 1954 at 47 with a final diary page: 'I hope the exit is joyful — and I hope never to come back.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Two Fridas (Museo de Arte Moderno, Mexico City)",
+      "durationMinutes": 30,
+      "instruction": "Look at the two figures. Frida painted two versions of herself sitting side by side after her divorce from Diego Rivera. One wears European dress, one wears Tehuana costume. Their hands are linked by a shared vein."
+    },
+    "tags": [
+      "Surrealist",
+      "Mexican",
+      "20th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-hokusai",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Katsushika Hokusai",
+    "teaser": "Japanese ukiyo-e woodblock printmaker who created The Great Wave off Kanagawa at 70, drew 30,000 prints in 70 years, and spent most of his life saying he hadn't yet learned to draw.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Great Wave off Kanagawa (any of the 30+ surviving impressions)",
+      "durationMinutes": 30,
+      "instruction": "Look at the wave. The fingers of foam are not waves — they're claws. Behind the wave, Mount Fuji sits still. The composition balances motion (the wave) against stillness (Fuji). The blue is prussian blue, imported."
+    },
+    "tags": [
+      "Ukiyo-e",
+      "Japanese",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-hiroshige",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Utagawa Hiroshige",
+    "teaser": "Japanese ukiyo-e artist of the 100 Famous Views of Edo series, whose prints influenced European Impressionists a half-century later. Van Gogh copied two of them.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Sudden Shower over Shin-Ōhashi Bridge (Met Museum)",
+      "durationMinutes": 30,
+      "instruction": "Look at the rain. Hiroshige bridged the rain by slashing diagonal lines across the print. The figures lean with their bodies to hold their hats. Van Gogh copied this in oil and donated the copy to his brother. Look at the leftmost figure, half-turning, holding his hat..."
+    },
+    "tags": [
+      "Ukiyo-e",
+      "Japanese",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-ai-weiwei",
+    "categoryId": "PAINTERS",
+    "subtype": "Conceptual Artist",
+    "name": "Ai Weiwei",
+    "teaser": "Chinese conceptual artist and activist whose studio designed the Beijing National Stadium, was arrested and detained 81 days in 2011 for tax evasion after criticizing the state.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Sunflower Seeds at Tate Modern — look from above",
+      "durationMinutes": 60,
+      "instruction": "Look at the installation as a whole, then walk to the front and inspect one seed. The installation is 100M hand-painted porcelain sunflower seeds. Several years and 1,600 artisans. Each seed was sculpted and hand-painted identically."
+    },
+    "tags": [
+      "Conceptual",
+      "Chinese",
+      "21st Century"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "painter-banksy",
+    "categoryId": "PAINTERS",
+    "subtype": "Street Artist",
+    "name": "Banksy",
+    "teaser": "Anonymous British street artist whose identity is unknown even to most art-market insiders. His 2018 'Girl with Balloon' self-shredded at Sotheby's right after being sold for $1.4M.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Any permanently-installed Banksy work — see the Banksy vs. Bristol Museum page for live street locations in Bristol / NYC / Bethlehem",
+      "durationMinutes": 45,
+      "instruction": "Don't go looking for a specific image. The best Banksy hits are ambient: a rat stenciled to a wall, a child chasing an imaginary friend. Look at the placement — Banksy always chooses a site that adds meaning to the image. See if you can find five within a 2-mile walk."
+    },
+    "tags": [
+      "Street Art",
+      "British",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-bourgeois",
+    "categoryId": "PAINTERS",
+    "subtype": "Sculptor",
+    "name": "Louise Bourgeois",
+    "teaser": "French-American sculptor who worked in her NY studio from the 1940s until she died at 98 in 2010. She invented the first 'Spider' (Maman) at 80 — 30 feet tall, now sited in cities around the world.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Maman (any major-city version: 21st Century Tate, Bilbao Guggenheim, São Paulo, Doha, etc.)",
+      "durationMinutes": 45,
+      "instruction": "Walk under the spider. Bourgeois said the sculpture was a tribute to her mother — a textile restorer who held the family together through her father's affairs. Walk counter-clockwise around the legs. Look at the marble eggs in the body of the spider."
+    },
+    "tags": [
+      "Sculpture",
+      "French-American",
+      "20th-21st Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-brancusi",
+    "categoryId": "PAINTERS",
+    "subtype": "Sculptor",
+    "name": "Constantin Brancusi",
+    "teaser": "Romanian sculptor who lived in Paris for 50 years, refused to make exhibitions of his sculptures in his lifetime because they lost meaning without his own installation, left the Romanian government an enormous body of work.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Bird in Space (any one — at the Met, MoMA, Tate) — sit and look for 15 min",
+      "durationMinutes": 30,
+      "instruction": "Look at the sculpture. It's a tall sliver of polished bronze. In 1926, the US courts ruled that Bird in Space was NOT an artwork for tax purposes — because it didn't look like a bird. Brancusi's point is that you should feel its flight, not look for its beak."
+    },
+    "tags": [
+      "Modern",
+      "Sculpture",
+      "Romanian"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-rodin",
+    "categoryId": "PAINTERS",
+    "subtype": "Sculptor",
+    "name": "Auguste Rodin",
+    "teaser": "French sculptor whose 1904 'Balzac' was rejected as 'a sack of coal' by the Société des Gens de Lettres but became the first modern sculpture; his 1889 Burghers of Calais sits as a public sculpture in front of city halls worldwide.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Burghers of Calais (any of 12 castings — Hôtel de Ville in Calais, Victoria Tower Gardens in London, Hirshhorn in DC)",
+      "durationMinutes": 45,
+      "instruction": "Walk around the sculpture. Rodin placed the figures at ground level — no pedestal. Walk the perimeter slowly. Each burgher is a specific historical person walking to his death. You should feel that the figures are as tall as you are."
+    },
+    "tags": [
+      "Sculpture",
+      "French",
+      "19th Century"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "painter-ansel-adams",
+    "categoryId": "PAINTERS",
+    "subtype": "Photographer",
+    "name": "Ansel Adams",
+    "teaser": "American photographer who at 14 taught himself a piano technique on a damaged piano, then made the Yosemite landscape a national concern by photographing it in his own 70-year-old camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Moonrise, Hernandez, New Mexico (any print at SFMOMA, MFA Boston, or Met)",
+      "durationMinutes": 30,
+      "instruction": "Look at the clouds. Adams shot this negative at 5 p.m. in 1941 in negative light. The exposure was 1 second at f/8. He developed the print in his 'Zone System' — dividing the world into 10 stops of dark/light. Notice the moon's position — the negative's reverse side."
+    },
+    "tags": [
+      "Landscape",
+      "American",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-dorothea-lange",
+    "categoryId": "PAINTERS",
+    "subtype": "Photographer",
+    "name": "Dorothea Lange",
+    "teaser": "American documentary photographer whose Migrant Mother (1936) became the most recognized photograph of the Great Depression. The woman in the photo (Florence Owens Thompson) didn't know her image had been published until 30 years later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Migrant Mother (MoMA, prints 001–007)",
+      "durationMinutes": 30,
+      "instruction": "Look at the woman's eyes. Her hands are around the youngest child — they have nothing left but their weight. Lange asked her to take the children out of focus — 'without names, the children could be any of the migrant children."
+    },
+    "tags": [
+      "Documentary",
+      "American",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-robert-frank",
+    "categoryId": "PAINTERS",
+    "subtype": "Photographer",
+    "name": "Robert Frank",
+    "teaser": "Swiss-American photographer whose 1958 book The Americans changed American documentary photography in a single volume. Jack Kerouac wrote the introduction in three hours.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "The Americans (whole book — public library or any museum copy)",
+      "durationMinutes": 90,
+      "instruction": "Read the book in one sitting. Frank shot 27,000 frames over two years; he chose 83 for the book. Each photograph is an indictment, observation, or joke. Look at frame 24 (Charleston, SC) — a Black man with a white child on his shoulders — then frame 25 (a passenger..."
+    },
+    "tags": [
+      "Documentary",
+      "Swiss-American",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-diane-arbus",
+    "categoryId": "PAINTERS",
+    "subtype": "Photographer",
+    "name": "Diane Arbus",
+    "teaser": "American photographer who, between 1962 and 1971, found 230 of the most otherized people in American suburbia and photographed them, then killed herself at 48. 'A photograph is a secret about a secret.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Identical Twins, Roselle, New Jersey (MoMA or Met)",
+      "durationMinutes": 30,
+      "instruction": "Look at the twins — they were 7 years old. They're not identical at this age; the photograph catches a moment of unconscious mirroring. Arbus insisted on using a square format, and the Rolleiflex TLR was heavy enough to slow her down."
+    },
+    "tags": [
+      "Documentary",
+      "American",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "painter-cindy-sherman",
+    "categoryId": "PAINTERS",
+    "subtype": "Photographer",
+    "name": "Cindy Sherman",
+    "teaser": "American photographer who appears as every character in every one of her photographs — never as herself. Her Untitled Film Stills (1977–80) became the most important photo series of the late 20th century.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look",
+      "targetName": "Untitled Film Stills (MoMA or any museum collection — at least 10 prints)",
+      "durationMinutes": 45,
+      "instruction": "Look at the prints as a sequence. Sherman never appears in her own photographs as Cindy Sherman — she is always a character. The most-cited single image is #6 (crop top + sunglasses + sidewalk). Look at the way she uses lighting to imply films you've never seen — the..."
+    },
+    "tags": [
+      "Conceptual",
+      "American",
+      "20th Century"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "painter-andy-warhol-quote",
+    "categoryId": "PAINTERS",
+    "subtype": "Conceptual Artist",
+    "name": "Yoko Ono",
+    "teaser": "Japanese-American artist whose 1964 book Grapefruit read as a Fluxus score, collaborated with John Lennon, and prefigured conceptual art 5+ years before it became a movement.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Try",
+      "targetName": "Read Yoko Ono's \"Grapefruit\" — pick 3 instructions at random and complete them",
+      "durationMinutes": 60,
+      "instruction": "Pick any three instructions. Examples: 'Imagine the clouds dripping. Dig a hole in your garden to fit your size.' 'Listen to the sound of the Earth turning.' Do them slowly. Ono's instructions are the artist's 'Work' — the canvas is the audience's act."
+    },
+    "tags": [
+      "Conceptual",
+      "Japanese-American",
+      "20th Century"
+    ],
+    "tier": 3
+  }
+]

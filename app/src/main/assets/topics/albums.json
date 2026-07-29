@@ -12,7 +12,11 @@
       "durationMinutes": 55,
       "instruction": "Notice how the beats hit your chest vs your head — that's intentional. The album mixes orchestral and beat programming in a way most artists avoid, and it rewards headphones and speakers differently."
     },
-    "tags": ["Electronic", "Art Pop", "2000s"],
+    "tags": [
+      "Electronic",
+      "Art Pop",
+      "2000s"
+    ],
     "tier": 1
   },
   {
@@ -28,7 +32,11 @@
       "durationMinutes": 48,
       "instruction": "Put it on low in the background while you do something else. The piece is built to reveal itself only when you half-listen — try to catch each of the four loops at the moment they phase in and out of each other."
     },
-    "tags": ["Ambient", "Electronic", "1970s"],
+    "tags": [
+      "Ambient",
+      "Electronic",
+      "1970s"
+    ],
     "tier": 1
   },
   {
@@ -44,7 +52,11 @@
       "durationMinutes": 33,
       "instruction": "Pick one track that doesn't grab you on first listen. Play it three times back-to-back. Mitski writes songs that read flat on the surface — give them room to flip."
     },
-    "tags": ["Indie Rock", "Art Pop", "2010s"],
+    "tags": [
+      "Indie Rock",
+      "Art Pop",
+      "2010s"
+    ],
     "tier": 1
   },
   {
@@ -60,7 +72,11 @@
       "durationMinutes": 75,
       "instruction": "Listen for the moments that sound broken or wrong — a synth that doesn't resolve, a sample that loops late. That's the texture Aphex Twin is constructing, not an artifact. The album is closer to a field recording of a place that doesn't exist."
     },
-    "tags": ["Ambient", "Electronic", "1990s"],
+    "tags": [
+      "Ambient",
+      "Electronic",
+      "1990s"
+    ],
     "tier": 1
   },
   {
@@ -76,7 +92,11 @@
       "durationMinutes": 45,
       "instruction": "Don't put it on as background music. The lyrics do the work; give them your full attention on first listen, then play your favorite track twice. The production hides on purpose."
     },
-    "tags": ["Indie Folk", "Singer-Songwriter", "2010s"],
+    "tags": [
+      "Indie Folk",
+      "Singer-Songwriter",
+      "2010s"
+    ],
     "tier": 1
   },
   {
@@ -92,7 +112,11 @@
       "durationMinutes": 42,
       "instruction": "Listen for the moments where a phrase repeats one bar longer than you'd expect. Floating Points builds grooves that go past the obvious exit — those are the hooks. Resist the urge to skip to the drop; the drop is buried."
     },
-    "tags": ["Electronic", "Dance", "2010s"],
+    "tags": [
+      "Electronic",
+      "Dance",
+      "2010s"
+    ],
     "tier": 1
   },
   {
@@ -108,7 +132,11 @@
       "durationMinutes": 6,
       "instruction": "Listen to the bassline first — it's the whole song. Then listen to how the drums refuse to land on the obvious beat. Most dance music hides its craft; this one wants you to hear the gears."
     },
-    "tags": ["City Pop", "Japanese", "1980s"],
+    "tags": [
+      "City Pop",
+      "Japanese",
+      "1980s"
+    ],
     "tier": 1
   },
   {
@@ -124,7 +152,550 @@
       "durationMinutes": 4,
       "instruction": "Notice the celeste — the bell-like keyboard that opens the song. It's the same instrument that scored every cheesy kids' show for the next 40 years. The Velvet Underground heard that association and used it on purpose."
     },
-    "tags": ["Art Rock", "1960s"],
+    "tags": [
+      "Art Rock",
+      "1960s"
+    ],
     "tier": 1
+  },
+  {
+    "id": "album-pet-sounds-1966",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Pet Sounds",
+    "teaser": "The Beach Boys' 1966 album — Brian Wilson at 23, listening to Rubber Soul all night, paying session musicians to do everything he'd hear in his head, then saving the album from Capitol's desire to drop it.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Pet Sounds (1966) end-to-end",
+      "durationMinutes": 37,
+      "instruction": "Listen to the title track 'Pet Sounds' — it's the album's hinge, a single piano note rings for several seconds before a bass solo emerges. Wilson's gift was orchestrating animal sounds, sleigh bells, bicycle horns, and a nervy 12-string bass into a pop record that..."
+    },
+    "tags": [
+      "Pop",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-sgt-peppers-1967",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Sgt. Pepper's Lonely Hearts Club Band",
+    "teaser": "1967 Beatles, recorded in 6 months at Abbey Road. The first rock album to win the Album of the Year Grammy. The first record most people actually 'listened to' as a coherent whole.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Sgt. Pepper's (1967) end-to-end",
+      "durationMinutes": 47,
+      "instruction": "Skip the title track — it's a four-bar overture. Begin with 'Sgt. Pepper's Lonely Hearts Club Band (Reprise)' on side 2. The album's entire structure is symmetrical. Side 1 ends with 'A Day in the Life'; side 2 ends with a reprise."
+    },
+    "tags": [
+      "Rock",
+      "British",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-abbey-road-1969",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Abbey Road",
+    "teaser": "1969 Beatles — their last recorded album. The side-A medley (tracks 7–17) was never rehearsed as a single sequence; George Martin stitched it together over a single long session.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Abbey Road (1969) — Side B (the medley)",
+      "durationMinutes": 23,
+      "instruction": "Listen to side B as a single 23-minute piece. Then listen to it again. The medley's transitions were never rehearsed; Lennon and McCartney wrote each fragment in isolation. Martin stitched them in 4-hour assembly."
+    },
+    "tags": [
+      "Rock",
+      "British",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-dark-side-of-the-moon-1973",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Dark Side of the Moon",
+    "teaser": "Pink Floyd 1973 — spent 937 weeks (almost 18 years) on the Billboard 200. Recorded partly live, partly in studio at Abbey Road, partly with rotary speaker custom-built for it.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Dark Side of the Moon (1973) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Listen on headphones in a dark room. The album is a single 43-minute arc with no breaks between songs. The band is miked using their own heartbeats — Roger Waters tapped a clock in time with his pulse to make the opening."
+    },
+    "tags": [
+      "Progressive Rock",
+      "British",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-led-zeppelin-iv-1971",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Led Zeppelin IV",
+    "teaser": "1971 Led Zeppelin, never officially titled (discography number 'IV'). Has 'Stairway to Heaven' — the most-listened-to rock song of all time according to the RIAA.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Led Zeppelin IV (1971) — \"Stairway to Heaven\" (8 min)",
+      "durationMinutes": 45,
+      "instruction": "Listen to 'Stairway' three times. The famous opening is technically a song that hasn't been written — Plant improvised the lyrics live, Page edited them. The song's structure is three movements: an acoustic intro, an electric interlude, and a hard-rock climax."
+    },
+    "tags": [
+      "Hard Rock",
+      "British",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-nevermind-1991",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Nevermind",
+    "teaser": "Nirvana's 1991 second album — recorded for $65K, sold 30M copies, ended hair metal in 18 months. The opening song drops you into a swimming pool kick.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Nevermind (1991) end-to-end",
+      "durationMinutes": 49,
+      "instruction": "Listen to the opening 4 bars. Kurt Cobain's voice is doing what no hard-rock voice had done before — it's barely audible for half the verse. Then it explodes. That contrast is what made indie rock mainstream. The album's production ('Steve Albini lite' by Butch Vig) is..."
+    },
+    "tags": [
+      "Grunge",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-ok-computer-1997",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "OK Computer",
+    "teaser": "Radiohead 1997 — recorded partly in a mansion in St Catherine's-on-the-Hudson, partly with a jazz band in a barn. The first major album of the post-millennial British rock era.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "OK Computer (1997) end-to-end",
+      "durationMinutes": 53,
+      "instruction": "Listen to 'Airbag' to 'Lucky.' That's the album's first half; it has the era-defining tracks. Then listen to 'Lucky' again. The lyrics 'I'm up late' and 'a pop song' become a different meaning. The album's last track ('The Tourist') is Thom Yorke alone with a piano."
+    },
+    "tags": [
+      "Alternative Rock",
+      "British",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-in-utero-1993",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "In Utero",
+    "teaser": "Nirvana's 1993 third album — Steve Albini recorded it in 5 days, Cobain didn't like the result, the label remixed 3 songs, and the album still went to #1. The unshaved, raw successor to Nevermind.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "In Utero (1993) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'Serve the Servants.' Cobain names the album's position in his life ('Teenage angst has paid off well'). Listen to 'All Apologies' — the chord progression moves in fourths, not fifths. Listen to 'Pennyroyal Tea.' The album's rawness is the point."
+    },
+    "tags": [
+      "Grunge",
+      "American",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-kind-of-blue-1959",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Kind of Blue",
+    "teaser": "Miles Davis 1959 — recorded in one session of about 9 hours. Sold millions, became the most-listened-to jazz album of all time, and is widely considered the most-touchstone modal-jazz recording.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Kind of Blue (1959) end-to-end",
+      "durationMinutes": 46,
+      "instruction": "Put it on once as soundtrack and once as the only sound in the room. The opening of 'So What' is a modal scale you'd never guess from the chord chart. Davis gave the band a few guidelines before recording and let the solos go wherever they wanted."
+    },
+    "tags": [
+      "Jazz",
+      "American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-a-love-supreme-1965",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "A Love Supreme",
+    "teaser": "John Coltrane's 1965 suite — his 'gift' to God after getting sober from heroin. Recorded in one evening, four parts, ~33 minutes. The album is a single prayer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "A Love Supreme (1965) end-to-end",
+      "durationMinutes": 33,
+      "instruction": "Listen to 'Resolution' twice. The first time, follow the saxophone. The second time, follow the bass. The album does both, and most people only ever hear half. Listen to 'Acknowledgement' — the four-note chant 'A Love Supreme' is the foundation; Coltrane plays it over..."
+    },
+    "tags": [
+      "Jazz",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-bitches-brew-1970",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Bitches Brew",
+    "teaser": "Miles Davis 1970 — recorded at Columbia's CBS studios in August 1969 with two keyboardists, two bassists, two trumpets, two drummers. By accident, it invented jazz-rock fusion and changed jazz forever.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Bitches Brew (1970) — title track only (27 min)",
+      "durationMinutes": 45,
+      "instruction": "Listen to the first 5 minutes. Then skip to 18 minutes in. Davis creates an electronic sense of presence before there were electronic instruments. Then listen to the title track — it's actually two pieces of music conjoined."
+    },
+    "tags": [
+      "Jazz-Rock Fusion",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-whats-going-on-1971",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "What's Going On",
+    "teaser": "Marvin Gaye 1971 — Motown refused to release it. Berry Gordy thought it wasn't commercial. Gaye threatened to leave the label. It became the first political soul album and one of the most important American records ever made.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "What's Going On (1971) end-to-end",
+      "durationMinutes": 70,
+      "instruction": "Listen to the title track first. It's 8 minutes. The vocal overdubs are layer on layer. Notice how Marvin's voice breathes 12 distinct times in the first 30 seconds. The album is the single moment soul music went political."
+    },
+    "tags": [
+      "Soul",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-innervisions-1973",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Innervisions",
+    "teaser": "Stevie Wonder's 1973 album — recorded mostly alone over a year. The album's opening is an arrhythmic assault; the second side ends with a protest against a food-stamp cut. One of the most-quoted American records.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Innervisions (1973) end-to-end",
+      "durationMinutes": 53,
+      "instruction": "Listen to 'Higher Ground.' It's 3:40 long. Stevie's clavinet entrance at 0:48 is a single note on a keyboard riff that uses a model Clint Eastwood had lent to him. Listen to 'Living for the City.' It's a 7-minute story of urban destitution — Stevie recorded his own..."
+    },
+    "tags": [
+      "Soul",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-songs-in-the-key-of-life-1976",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Songs in the Key of Life",
+    "teaser": "Stevie Wonder's 1976 double-album + bonus EP — the last record before he became a kind of ambient-church-folk artist. Released on the day before he turned 26.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Songs in the Key of Life (1976) end-to-end",
+      "durationMinutes": 105,
+      "instruction": "Listen to 'I Wish.' It's one of the most-quoted songs in history. The bassline backwards-mixed in the first 8 bars is a longstanding studio trick. Then listen to 'Pastime Paradise.' Coolio sampled it 20 years later for 'Gangsta's Paradise.' Then listen to 'As."
+    },
+    "tags": [
+      "Soul",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-illmatic-1994",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Illmatic",
+    "teaser": "Nas's 1994 Queensbridge album — 10 tracks, 5 producers, 39 minutes. The watershed East Coast hip-hop record. Produced for $200K by Q-Tip, Large Professor, Pete Rock, DJ Premier, and L.E.S.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Illmatic (1994) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to the opening. Nas is 19. The LP's 10 tracks are meant to be experienced as a continuous 39-minute mural. Q-Tip's production on 'One Love' is built on three samples layered into a single bassline. The album is 5-year-old verses and 5-day-old production."
+    },
+    "tags": [
+      "Hip-Hop",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-ready-to-die-1994",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Ready to Die",
+    "teaser": "Notorious B.I.G.'s 1994 debut — the only album released in his life. Recorded at Puff Daddy's house in New Jersey between court dates. The album's last track is the last track Biggie recorded while alive.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Ready to Die (1994) end-to-end",
+      "durationMinutes": 70,
+      "instruction": "Listen to 'Juicy.' It's the first hit of the era. The song's famous opening line was a last-minute replacement — Puffy told Big he wanted a hook they could sample. Listen to 'Warning.' It's 8 tracks of Biggie between two murder attempts. Listen to 'Suicidal Thoughts."
+    },
+    "tags": [
+      "Hip-Hop",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-miseducation-of-lauryn-hill-1998",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Miseducation of Lauryn Hill",
+    "teaser": "Lauryn Hill's 1998 debut solo album — the only rap album to win Album of the Year at the Grammys. It sold 15 million copies in its first year; she hasn't released a follow-up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Miseducation of Lauryn Hill (1998) end-to-end",
+      "durationMinutes": 78,
+      "instruction": "Listen to 'Doo Wop (That Thing).' It's 4 minutes of two voices debating economic materialism. Then listen to 'Ex-Factor.' It's the song that killed her next album. Then listen to the skit 12 minutes before 'To Zion' — Lauryn talks to her unborn son."
+    },
+    "tags": [
+      "Hip-Hop Soul",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-to-pimp-a-butterfly-2015",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "To Pimp a Butterfly",
+    "teaser": "Kendrick Lamar's 2015 album — recorded largely in a 9-month period at a Compton recording studio with a live jazz band. The album's most-quoted track is the closing single 'Alright,' which became a Black Lives Matter anthem.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "To Pimp a Butterfly (2015) end-to-end",
+      "durationMinutes": 79,
+      "instruction": "Listen to 'Wesley's Theory.' The opening groove is a sample of Parliament-Funkadelic, then Kendrick reads aloud. Listen to 'For Free? (Interlude).' It's Kendrick rapping over his own trumpet practice sample. The album's last track is a 4-minute voicemail that..."
+    },
+    "tags": [
+      "Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-my-beautiful-dark-twisted-fantasy-2010",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "My Beautiful Dark Twisted Fantasy",
+    "teaser": "Kanye West's 2010 album — recorded in Hawaii over a year. Discards the rap canon of the 2000s and replaces it with maximalist, baroque, sample-heavy production.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "My Beautiful Dark Twisted Fantasy (2010) end-to-end",
+      "durationMinutes": 68,
+      "instruction": "Listen to 'Runaway.' It's 9:08, has a single verse, and Kanye's center 4-minute refrain of 'let's have a toast for the douchebags' is delivered without shame. Listen to 'All of the Lights.' The horns are by Alicia Keys on piano, and 12 guest rappers — every name in..."
+    },
+    "tags": [
+      "Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-homework-1997",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Homework",
+    "teaser": "Daft Punk's 1997 debut — recorded in Guy-Manuel's bedroom in Paris. The album made electronic dance music a credible French art object for the first time in mainstream American listening.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Homework (1997) end-to-end",
+      "durationMinutes": 75,
+      "instruction": "Listen to 'Da Funk.' It's the album's signature track — a 6-minute funk riff on a 4-bar sample. Notice how the bass doesn't change for the entire song. Then listen to 'Around the World.' It's a 7-minute song built around a single vocal phrase."
+    },
+    "tags": [
+      "Electronic",
+      "French",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-discovery-2001",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Discovery",
+    "teaser": "Daft Punk's 2001 second album — recorded with a four-track, no computer sequencing. The album's leiji matsumoto-style animation film 'Interstella 5555' is its visual companion piece.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Discovery (2001) end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Listen to 'One More Time.' It's the album's most-quoted track — a sample from Eddie Locke's 'Mr. Gee' plus a vocoded Romance vocal by Romanthony. Listen to 'Aerodynamic.' The guitar solo was meant to sound like Eddie Van Halen. Listen to 'Digital Love."
+    },
+    "tags": [
+      "Electronic",
+      "French",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-music-has-the-right-to-children-1998",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Music Has the Right to Children",
+    "teaser": "Boards of Canada's 1998 debut — Michael Sandison and Marcus Eoin recording in their Pentland Hills hideaway in Scotland. The album's closest cousin is a memory of a TV show from a parallel universe.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Music Has the Right to Children (1998) end-to-end",
+      "durationMinutes": 68,
+      "instruction": "Listen on headphones in a chair with the lights low. The album's 'Telephasic Workshop' has a sample of US President Eisenhower from an obscure 1950s broadcast. Listen to 'Roygbiv.' It's the album's most-quoted track — an ambient lullaby in two chords."
+    },
+    "tags": [
+      "Electronic",
+      "Scottish",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-buena-vista-social-club-1997",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Buena Vista Social Club",
+    "teaser": "Ry Cooder's 1997 Cuban session album for Ibrahim Ferrer, Omara Portuondo, and Compay Segundo (most over 80) — the most internationally famous Cuban-record ever made, reintroduced Cuban music to the world.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Buena Vista Social Club (1997) end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Listen to 'Chan Chan.' It's 5 minutes. Compay Segundo's voice is 89 years old when he recorded it. Then listen to 'Dos Gardenias.' It's a son-form from 1945, but Omara's voice is 67 when she recorded it. The album's other-worldliness is that it captures the last of a..."
+    },
+    "tags": [
+      "Son",
+      "Cuban",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-at-folsom-prison-1968",
+    "categoryId": "ALBUMS",
+    "subtype": "Live Album",
+    "name": "At Folsom Prison",
+    "teaser": "Johnny Cash's 1968 live album at Folsom State Prison in California. The prison's warden let Cash in. The album's most-quoted single 'Folsom Prison Blues' premiered at the concert.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "At Folsom Prison (1968) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen in order. Cash's engineer was 27-year-old Neil Young fan, who'd worked at the prison before. The opening is the clack of the train — we never see the train. Listen to the song 'Greystone Chapel.' The prisoner Glen Sherley wrote it; Cash got him a deal; he died...",
+      "tags": [
+        "Country",
+        "American",
+        "1960s"
+      ],
+      "tier": 2
+    }
+  },
+  {
+    "id": "album-blond-frank-ocean-2016",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Blonde",
+    "teaser": "Frank Ocean's 2016 second album — released without promotion and in two editions, never officially for streaming. The album's most-quoted track is 'Self Control.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Blonde (2016) end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Listen to 'Self Control.' It's 4 minutes. The vocal and guitar are layered until they sound like a memory. Listen to 'Nights.' The song is two halves — a contemplative 2 minutes, then a sudden fight-music half with a key change."
+    },
+    "tags": [
+      "R&B",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-channel-orange-2012",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Channel Orange",
+    "teaser": "Frank Ocean's 2012 debut — released the day he came out in an open Tumblr letter. The album blends Prince, Stevie Wonder, and a stripped-down indie-R&B that influenced a generation of pop.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Channel Orange (2012) end-to-end",
+      "durationMinutes": 55,
+      "instruction": "Listen to 'Thinkin Bout You.' It's 4 minutes. The album's most-quoted track. Then listen to 'Bad Religion.' It's a 2:50 meditation on loneliness. Listen to 'Pyramids.' It's a 10-minute exercise in doubling — John Mayer plays guitar at 7:40 while Frank's vocal at 0:01..."
+    },
+    "tags": [
+      "R&B",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-tamer-animals-other-versions-2004",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Tamer Animals",
+    "teaser": "Arcade Fire side project of Win Butler's band of friends. A Whole New Mind of the mid-2000s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "\"Tamer Animals\" (+ side tracks), 2004",
+      "durationMinutes": 45,
+      "instruction": "Listen to the album along with their better-known 'Funeral' (2004). The side project is more atmospheric and quiet, with major-7 chords. Notice the harmony vocal at 2:40 in the title track. The whole album runs under 45 minutes and is meant to be listened to as a..."
+    },
+    "tags": [
+      "Indie Rock",
+      "American-Canadian",
+      "2000s"
+    ],
+    "tier": 3
   }
 ]
