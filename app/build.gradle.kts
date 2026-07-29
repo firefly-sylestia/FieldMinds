@@ -4,17 +4,18 @@ plugins {
 }
 
 android {
-    namespace = "fieldmind.research.app"
+    namespace = "com.curio.app"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "fieldmind.research.app"
+        applicationId = "com.curio.app"
         minSdk = 26
         targetSdk = 37
         versionCode = 1
-        versionName = "0.51.0-rebuild"
+        versionName = "0.1.0-curio"
 
-        // Only include English locale — saves ~5-8 MB of APK size
+        // Only include English locale — saves ~5-8 MB of APK size.
+        // Curio ships as a single-language app. Add others as needed.
         androidResources.localeFilters.clear()
         androidResources.localeFilters.add("en")
     }
@@ -50,13 +51,17 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    // No icons, animations, or coroutines used by the placeholder Compose screen.
-    // Those deps will return in later phases when real screens land.
+    // Icons are rendered via Material Symbols font ligatures (CurioIcon), NOT
+    // the bundled M2 vector set, so androidx.compose.material.icons.core is
+    // intentionally absent. Re-add only if a screen needs an M2 vector icon.
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.org.jetbrains.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)
     debugImplementation(libs.androidx.ui.tooling)

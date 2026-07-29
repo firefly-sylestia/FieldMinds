@@ -10,25 +10,52 @@ Read `master.md` and root `AGENTS.md` first, then this file for app-module-speci
 
 ## Purpose
 
-The `app/` module is the active Android application — **Curio**, a discovery app that hands the user a topic (via "The Spin" roulette) to explore in the real world, then captures what they found into "The Cabinet" library. The full UX/UI spec lives at [`CURIO_SPEC.md`](CURIO_SPEC.md) at the repo root of this module.
+The `app/` module is the active Android application — **Curio**, a discovery app that hands the user a topic (via "The Spin" roulette) to explore in the real world, then captures what they found into "The Cabinet" library. The full UX/UI spec lives at [`CURIO_SPEC.md`](CURIO_SPEC.md) at the repo root of this module. Every screen and component decision must reference this spec — it is the source of truth.
 
-The legacy FieldMind codebase is preserved at `app-legacy/`. Curio inherits two things from it: the Material Symbols variable font and `geom.ttf` display typography (see `CURIO_SPEC.md` §0.4 + §0.6). The icon + font files are **copied** into `app/src/main/res/font/` — `app-legacy/` is never modified.
+The legacy FieldMind codebase is preserved at `app-legacy/` (frozen, never modified). Curio inherits two things from it: the **Material Symbols** variable font and **geom.ttf** display typography (see `CURIO_SPEC.md` §0.4 + §0.6). Both font files are **copied** into `app/src/main/res/font/`; `app-legacy/` is never read at runtime by Curio except via the curated copy.
 
 ## Ownership
 
-Current files (Phase 1 placeholder state, will be updated by Phase 2 implementation):
+### Package layout (current, Phase 2 scaffold)
 
-- `app/build.gradle.kts` — Module build config (Android application, Compose). **Currently still has Phase 1 placeholder values: `namespace = "fieldmind.research.app"`, `applicationId = "fieldmind.research.app"`. Phase 2 implementation will update both to `com.curio.app`.**
-- `app/src/main/AndroidManifest.xml` — Minimal launcher manifest
-- `app/src/main/java/fieldmind/research/app/MainActivity.kt` — Placeholder Compose activity (package `fieldmind.research.app/` — will move to `com.curio.app/` in Phase 2)
-- `app/src/main/res/values/strings.xml` — `app_name = "FieldMind"` (placeholder; Curio will override)
-- `app/src/main/res/values/themes.xml` — `Theme.FieldMindRebuild` (placeholder)
-- `app/proguard-rules.pro` — Empty placeholder; release build disables minification
-- `app/.gitignore` — Standard `/build`
+```
+app/src/main/java/com/curio/app/
+├── MainActivity.kt                 # single Activity, edge-to-edge + CurioTheme + NavHost
+├── data/
+│   └── Category.kt                 # CategoryId enum + CurioCategory data class + canonical 6
+├── navigation/
+│   ├── CurioRoutes.kt              # all route constants + builders + bottomNavRoutes set
+│   └── CurioNavHost.kt             # Scaffold-wrapped NavHost with conditional bottom nav
+├── ui/
+│   ├── theme/                      # design system primitives
+│   │   ├── CurioColors.kt          # pastel coral palette + 6 category accents + wildcard gradient
+│   │   ├── CurioTypography.kt      # geom.ttf for display/headline/label; M3 default for body
+│   │   ├── CurioShapes.kt          # 16/24/32/48 corner tokens
+│   │   ├── CurioIcons.kt           # glyph constants + CurioIcon(name, ...) ligature renderer
+│   │   └── CurioTheme.kt           # light/dark M3 color schemes + edge-to-edge SideEffect
+│   └── components/                 # reusable building blocks
+│       ├── CurioBottomNav.kt       # 3-tab M3 NavigationBar with saveState/restoreState
+│       ├── CurioCategoryChip.kt    # FilterChip per category + CurioWildcardChip
+│       ├── CurioEmptyState.kt      # universal §13.7 empty-state skeleton
+│       ├── CurioHeroCard.kt        # ~40% vertical hero Spin card on Home
+│       └── CurioStreakPill.kt      # streak indicator pill + CurioSecondaryAction helper
+└── features/
+    ├── splash/SplashScreen.kt      # §13.1 splash — auto_awesome glyph + "Curio" + 3-dot pulse, 800ms → HOME
+    ├── home/HomeScreen.kt          # §3 home — top bar, greeting, streak, hero, chips, recently explored empty state
+    └── PlaceholderScreens.kt       # ONE file containing 11 stubs: Spin, Cabinet, CategoryPicker, TopicReveal, SaveCapture, EntryDetail, Settings, Onboarding, ManageCategories, TopicHistory, Lightbox. Each uses a shared `PlaceholderScaffold` with back arrow + glyph + title + subtitle + "Design phase · logic comes later". Real implementations replace these one-by-one in later phases.
+```
 
-Canonical design doc:
+### Resources
 
-- `app/CURIO_SPEC.md` — Curio's full UI/UX spec (v2). **Read this before adding any screen or component** — it is the source of truth for design decisions.
+- `app/src/main/res/font/geom.ttf` — display/headline typography (copied from `app-legacy/src/main/res/font/geom.ttf`)
+- `app/src/main/res/font/material_symbols_outlined.ttf` — UI + category icons (copied from `app-legacy/src/main/res/font/material_symbols_outlined.ttf`)
+- `app/src/main/res/values/strings.xml` — Curio app name + screen titles + category display names
+- `app/src/main/res/values/themes.xml` — `Theme.Curio` (M3 DayNight no-actionbar, cream surface)
+- `app/src/main/res/values/colors.xml` — XML color resources (cream + coral + plum) used at the OS-level splash background before Compose takes over
+
+### Canonical design doc
+
+- `app/CURIO_SPEC.md` — Curio's full UI/UX spec (v2). **Read this before adding any screen or component** — it is the source of truth for all design decisions (colors, typography, shapes, motion, navigation, screen layouts, empty states, etc.).
 
 ## Local Contracts
 
@@ -37,40 +64,59 @@ Canonical design doc:
 - `applicationId = "com.curio.app"` (new install, separate from FieldMind; users install Curio as a separate app)
 - `minSdk = 26`, `targetSdk = 37`, `compileSdk = 37`
 - `versionName = "0.1.0-curio"`, `versionCode = 1`
-- No product flavors yet — flavors will be reintroduced in a later phase when the real UI lands
-- Inherits `material_symbols_outlined.ttf` + `geom.ttf` from `app-legacy/src/main/res/font/` (copied into `app/src/main/res/font/` during initial scaffold — see `CURIO_SPEC.md` §0.4 + §0.6)
+- No product flavors yet — flavors will be reintroduced in a later phase when Room DB + storage permissions land
+- Debug builds append `.debug` to `applicationId` → `com.curio.app.debug` so both can coexist on one device
+- Inherits `material_symbols_outlined.ttf` + `geom.ttf` from `app-legacy/src/main/res/font/` (copied once during the Phase 2 scaffold, never re-read at runtime)
 
 ### Curio Database (separate from FieldMind)
-- Curio installs as a separate app under `applicationId = "com.curio.app"` — its data directory is `/data/data/com.curio.app/databases/curio_database` (DB name TBD in Phase 2).
+- Curio installs as a separate app under `applicationId = "com.curio.app"` — its data directory is `/data/data/com.curio.app/databases/` (DB name TBD when persistence lands).
 - FieldMind's data lives in FieldMind's separate install at `/data/data/fieldmind.research.app/databases/fieldmind_database`. Curio CANNOT access it directly.
 - FieldMind data is recoverable only by sideloading the legacy FieldMind APK (built from `app-legacy/`) and using its built-in V3 backup exporter (see `app-legacy/src/main/java/.../data/export/FieldMindExport.kt`).
 - The two apps do not share DB names, schemas, or SharedPreferences namespaces — fully isolated.
 
 ### UI
-- All UI must be Compose. No XML layouts for screens.
-- `MainActivity` is the only entry point for now.
+- All UI is 100% Jetpack Compose. No XML layouts for screens, ever.
+- `MainActivity` is the only entry point. It hosts `CurioNavHost` inside `CurioTheme`.
+- Edge-to-edge is enabled at the Activity level; the system bars are themed by `CurioTheme`'s `SideEffect` to match the current color scheme + light/dark mode.
+- **NO emoji anywhere** in user-facing copy or visuals. Use `CurioIcon(name = CurioIcons.X)` with the Material Symbols ligature font instead. See `CURIO_SPEC.md` §0.6.
+- All glyph names used by `CurioIcon` are declared in `CurioIcons.kt` (single source of truth for icon names). Adding a glyph = adding a `const val` there first.
+
+### Navigation
+- Single NavHost with flat routes (see `CurioRoutes.kt`). Bottom nav visibility is gated by the `CurioRoutes.bottomNavRoutes` set (`HOME`, `SPIN`, `CABINET`).
+- Bottom-nav switching uses the standard Compose pattern: `popUpTo(startDestination) { saveState = true }` + `launchSingleTop = true` + `restoreState = true`.
+- Tab routes also accept a `categorySlug` argument so the same `Spin` screen renders both as a tab target (`categorySlug = null`) and as a pushed destination (`categorySlug = "music"` etc.).
 
 ## Work Guidance
 
-This module is under active rebuild. The general workflow:
+### Adding a new screen
+1. Read `CURIO_SPEC.md` section for the screen.
+2. Create the file at `app/src/main/java/com/curio/app/features/{feature}/{Feature}Screen.kt`.
+3. If it's a stack of related sub-screens, group them in one file like `PlaceholderScreens.kt` does today, with a shared `*Scaffold` private helper at the top.
+4. Add a route constant + (if needed) a route builder to `CurioRoutes.kt`.
+5. Register the `composable(route) { ... }` block in `CurioNavHost.kt`.
+6. If the screen should hide the bottom nav, make sure its route is NOT in `CurioRoutes.bottomNavRoutes`. Add a per-feature AGENTS.md if the screen has non-obvious contracts.
 
-1. **Package layout**: code lives at `app/src/main/java/com/curio/app/...` (not `fieldmind.research.app/...`). Per Phase 2: each Curio screen/feature goes in `app/src/main/java/com/curio/app/features/{feature}/...` (e.g. `features/home/`, `features/spin/`, `features/cabinet/`, `features/capture/`).
-2. Wire navigation through `MainActivity`'s `NavHost` (added in Phase 2).
-3. Room entities: place under `app/src/main/java/com/curio/app/data/database/...` until the shared `:data` library module is introduced (later phase). Curio's schema is its own — it does NOT inherit FieldMind's 27 entities.
-4. Design system primitives live under `app/src/main/java/com/curio/app/ui/theme/...` (CurioTheme, CurioColors, CurioTypography, CurioShapes, CurioIcons).
-5. When adding new dependencies, update `gradle/libs.versions.toml` first, then reference via `libs.` in `app/build.gradle.kts`.
-6. Read [`CURIO_SPEC.md`](CURIO_SPEC.md) before adding any screen or component — it is the canonical design source of truth.
+### Adding a new design system primitive
+- Add to `ui/theme/` (colors → `CurioColors.kt`, glyphs → `CurioIcons.kt`, etc.).
+- New colors must be justified against `CURIO_SPEC.md` §0.2. If the spec doesn't mention it, push back and update the spec first.
+- New icons must be declared in the `CurioIcons` object (snake_case ligature names) — do NOT inline glyph names in screens.
+
+### Phase plan (current & next)
+- **Phase 2 (current)**: Design-system + NavHost + Home/Splash screens + 11 placeholder stub screens. CI gate verifies compilation. No business logic, no Room, no DataStore wiring yet.
+- **Phase 3 (next)**: Spin dial rendering, Onboarding flow, Reel/Marginalia/Gallery Wall/Field Notes capture format bodies, Cabinet grid rendering.
+- **Phase 4**: Per-entry persistence (ViewModels + Room), state preservation across spins.
+- **Phase 5+**: Streak tracking, share-card generation, Emergency Recovery hooks for FieldMind data.
 
 ## Verification
 
-- `MainActivity` must compile and run after Phase 2 implementation updates `app/build.gradle.kts` to the new `com.curio.app` namespace and applicationId (currently still on the legacy `fieldmind.research.app` from Phase 1's preservation commit).
-- DB name will be `curio_database` (TBD) — separate from FieldMind's `fieldmind_database`.
-- No background workers, no widgets, no emergency-recovery hooks yet — those arrive in later phases.
-- **Known spec-vs-code gap**: as of this writing, `app/build.gradle.kts` still has `fieldmind.research.app` (the Phase 1 placeholder values). The Identity section above describes the target state. Phase 2 implementation will reconcile.
-- **CI gate**: this environment has no Android SDK, so CI on push to `revamp` is the source of truth for compilation. If CI fails on the placeholder, fix the placeholder before adding real screens.
+- `MainActivity` compiles and runs as `com.curio.app` on debug builds with `applicationId = "com.curio.app.debug"`.
+- No background workers, no widgets, no Room/SharedPreferences persistence wiring yet — those arrive in Phase 4+.
+- **CI gate**: this environment has no Android SDK, so CI on push to `revamp` is the source of truth for compilation. Local `gradlew assemble*` is explicitly forbidden by root AGENTS.md.
+- All placeholder screens route correctly: tapping the Home hero with no chip → `PICKER`; with a chip → `spin/{slug}`; bottom-nav switching preserves each tab's back stack; back arrow pops the current route.
 
 ## Child DOX Index
 
 - [`CURIO_SPEC.md`](CURIO_SPEC.md) — Canonical UX/UI spec for Curio (per `master.md` Update After Editing rule: changes affecting screen design, navigation, or component behavior go in this doc, not buried in code comments).
-- (Future) `app/src/main/java/com/curio/app/features/{home,spin,cabinet,capture}/AGENTS.md` — per-screen feature contracts, added as each screen is built in Phase 2+.
-- (Future) `app/src/main/java/com/curio/app/ui/theme/AGENTS.md` — design system primitive contracts, added when CurioTheme / CurioColors / CurioTypography / CurioIcons land.
+- (Future) `app/src/main/java/com/curio/app/features/{home,spin,cabinet,capture}/AGENTS.md` — per-screen feature contracts, added when each screen gets real implementation in Phase 3+.
+- (Future) `app/src/main/java/com/curio/app/ui/theme/AGENTS.md` — design system primitive contracts, added when the theme system grows (Phase 3+ when dark-mode polish, motion tokens, etc. land).
+- (Future) `app/src/main/java/com/curio/app/data/AGENTS.md` — data-model contracts, added when Room + repositories land in Phase 4.
