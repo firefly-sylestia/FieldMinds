@@ -142,7 +142,8 @@ Do **not** update design docs: `WHATS_NEW_STRUCTURE.md`, `WHATS_NEW_IMPLEMENTATI
 
 ## Child DOX Index
 
-- [app/AGENTS.md](app/AGENTS.md) — Active Android app module under rebuild (placeholder)
+- [app/AGENTS.md](app/AGENTS.md) — Active Android app module under rebuild
+- [app/CURIO_SPEC.md](app/CURIO_SPEC.md) — Canonical UX/UI spec for the new app (Curio)
 - [app-legacy/AGENTS.md](app-legacy/AGENTS.md) — Frozen legacy Android app source (not built, not shipped; not consulted during normal revamp work)
 - [web/AGENTS.md](web/AGENTS.md) — Web landing page: Next.js, Tailwind, Vercel deployment
 - [gradle/AGENTS.md](gradle/AGENTS.md) — Gradle build system: version catalog, plugin versions
