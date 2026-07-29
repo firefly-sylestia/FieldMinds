@@ -1,3 +1,22 @@
+# Phase 1 Cleanup — Plan docs removed (per user instruction)
+
+The following plan files were deleted per user instruction *"remove the plan .md files which isnt needed specially outisde of app legacy and also inside docs direc"*:
+
+- `REVAMP_PLAN.md`
+- `REVAMP_GUARDRAILS.md`
+- `WHIMSICAL_REDESIGN_PLAN.md`
+- `docs/BackupExportLayoutPlan.md`
+- `docs/AnimationGestureUnificationPlan.md`
+- `docs/CANVAS_AUDIT_AND_PLAN.md`
+- `docs/NotesAppCanvasPlan.md`
+- `docs/CUTIFYING_THE_APP_PLAN.md`
+
+Root `AGENTS.md` Child DOX Index updated to remove the entries for the first two. References to any of these files in earlier entries of this log are now dangling.
+
+Going forward: do **not** look at `app-legacy/` unless explicitly told. All revamp work proceeds from `app/` and other non-`app-legacy/` paths only.
+
+---
+
 # Phase 1 Revamp — Preservation — Completion Summary
 
 ## Task
