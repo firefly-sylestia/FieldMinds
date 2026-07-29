@@ -46,6 +46,23 @@ enum class CategoryId {
  * A category as rendered to the user — accent color, glyph, display name.
  * Visibility (hidden via §13.4 Manage Categories) is part of the state layer
  * but defaults to visible here.
+ *
+ * Two boolean flags, with different owners:
+ *
+ * - `isHidden` — **user-controlled**, set via Settings → Manage Categories
+ *   (§13.4). When true, the category is filtered out of the Home chip row,
+ *   Category Picker, and Cabinet filter chips. Past entries in hidden
+ *   categories are preserved — they reappear the moment the user re-enables
+ *   the category. Defaults to `false`.
+ *
+ * - `isReady` — **data-layer-controlled**, set when 100+ topics are authored
+ *   + reviewed per CURIO_DATA_PLAN.md §1 + §5.2 step 5. When false, the
+ *   category is filtered out of the chip row + Picker and surfaces as a
+ *   "Coming soon" empty-state slot. Defaults to `false`; never flip to
+ *   `true` without a corresponding data drop in `assets/topics/{id}.json`.
+ *
+ * The two flags are independent — a category can be `isReady = true` (data
+ * shipped) and `isHidden = true` (user hid it) at the same time.
  */
 data class CurioCategory(
     val id: CategoryId,
@@ -53,7 +70,8 @@ data class CurioCategory(
     val accent: Color,
     val tint: Color,
     val iconGlyph: String,
-    val isHidden: Boolean = false
+    val isHidden: Boolean = false,
+    val isReady: Boolean = false
 )
 
 /**

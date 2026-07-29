@@ -8,76 +8,54 @@
     preview (Figma/Illustrator), web previews, and as a regression-check
     against future VisualDesignSystem refactors.
 
+    Redesigned: replaces the 6-wedge wheel from commit ac9a0742 with a
+    cleaner 3-wedge design on a coral background. See the corresponding
+    XML files for the full design rationale.
+
     See:
-      - CURIO_SPEC.md §13.1 (splash/icon logomark)
-      - CURIO_SPEC.md §0.2 (category accent palette)
+      - CURIO_SPEC.md section 13.1 (splash/icon logomark)
+      - CURIO_SPEC.md section 0.2 (palette)
       - app/src/main/res/drawable/ic_launcher_foreground.xml (compiled form)
       - app/src/main/res/drawable/ic_launcher_background.xml (compiled form)
 
     Coordinate system: 108x108 viewBox (matches Android adaptive-icon).
-    Safe zone: 66dp diameter centered at (54,54) — all foreground elements
-    live within radius 33 from center.
+    Safe zone: 66dp diameter centered at (54,54).
 
     Layer order (back to front):
-      1. cream rectangle (background, gets cropped by launcher mask)
-      2. 6 roulette wedges (clockwise from 12 o'clock)
-         - WILD (top):   lilac → sage → teal  (the one gradient)
-         - MOVIE:        dusty blue
-         - BOOKS:        sage
-         - ART:          peach
-         - SCIENCE:      teal
-         - MUSIC:        lilac
-      3. center sparkle (4-point star, deep plum)
-      4. pointer at top of dial (deep plum triangle)
+      1. coral rectangle (background, gets cropped by launcher mask)
+      2. cream wheel circle (r=30 at 54,54)
+      3. 3 roulette wedges (clockwise from 12 o'clock)
+         - W1 (12-4):   butter yellow
+         - W2 (4-8):    sky mint
+         - W3 (8-12):   lilac
+      4. pointer (deep plum triangle, apex at wheel top edge)
+      5. sparkle (butter yellow 4-point star, top-left at 24,24)
 -->
 <svg xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="0 0 108 108" width="108" height="108">
 
-  <defs>
-    <!-- Wildcard gradient: lilac → sage → teal sweep across the top wedge.
-         The one place a gradient appears in the Curio design system. -->
-    <linearGradient id="wildcardGradient" x1="54.00" y1="26.00"
-                                              x2="78.25" y2="40.00"
-                    gradientUnits="userSpaceOnUse">
-      <stop offset="0.0"  stop-color="#C9A6F2" />
-      <stop offset="0.5"  stop-color="#A8C99A" />
-      <stop offset="1.0"  stop-color="#6FC7BE" />
-    </linearGradient>
-  </defs>
-
   <!-- ── Background ─────────────────────────────────────────────────── -->
-  <rect x="0" y="0" width="108" height="108" fill="#FFFBF5" />
+  <rect x="0" y="0" width="108" height="108" fill="#FF8FA3" />
 
-  <!-- ── Wedge 1 (top, 12→2 o'clock) : WILDCARD gradient ────────────── -->
-  <path d="M 54 54 L 54 26 A 28 28 0 0 1 78.25 40 Z"
-        fill="url(#wildcardGradient)" />
+  <!-- ── Wheel body (cream circle) ──────────────────────────────────── -->
+  <circle cx="54" cy="54" r="30" fill="#FFFBF5" />
 
-  <!-- ── Wedge 2 (2→4 o'clock) : Movies · DustyBlue ─────────────────── -->
-  <path d="M 54 54 L 78.25 40 A 28 28 0 0 1 78.25 68 Z"
-        fill="#9BB8E8" />
+  <!-- ── Wedge 1 (12→4 o'clock) : Butter Yellow ─────────────────────── -->
+  <path d="M 54 54 L 54 24 A 30 30 0 0 1 79.98 69 Z"
+        fill="#FFD97D" />
 
-  <!-- ── Wedge 3 (4→6 o'clock) : Books · Sage ───────────────────────── -->
-  <path d="M 54 54 L 78.25 68 A 28 28 0 0 1 54 82 Z"
-        fill="#A8C99A" />
+  <!-- ── Wedge 2 (4→8 o'clock) : Sky Mint ─────────────────────────── -->
+  <path d="M 54 54 L 79.98 69 A 30 30 0 0 1 28.02 69 Z"
+        fill="#8FE3CF" />
 
-  <!-- ── Wedge 4 (6→8 o'clock) : Visual Art · Peach ────────────────── -->
-  <path d="M 54 54 L 54 82 A 28 28 0 0 1 29.75 68 Z"
-        fill="#FFB585" />
-
-  <!-- ── Wedge 5 (8→10 o'clock) : Science · Teal ───────────────────── -->
-  <path d="M 54 54 L 29.75 68 A 28 28 0 0 1 29.75 40 Z"
-        fill="#6FC7BE" />
-
-  <!-- ── Wedge 6 (10→12 o'clock) : Music · Lilac ────────────────────── -->
-  <path d="M 54 54 L 29.75 40 A 28 28 0 0 1 54 26 Z"
+  <!-- ── Wedge 3 (8→12 o'clock) : Lilac ────────────────────────────── -->
+  <path d="M 54 54 L 28.02 69 A 30 30 0 0 1 54 24 Z"
         fill="#C9A6F2" />
 
-  <!-- ── Center sparkle (4-point star, deep plum) ──────────────────── -->
-  <path d="M 54 42 L 56.12 51.88 L 66 54 L 56.12 56.12 L 54 66
-           L 51.88 56.12 L 42 54 L 51.88 51.88 Z"
-        fill="#3B0A17" />
+  <!-- ── Pointer at top of dial (deep plum triangle) ────────────────── -->
+  <path d="M 54 24 L 50 14 L 58 14 Z" fill="#3B0A17" />
 
-  <!-- ── Pointer at top of dial (deep plum triangle) ───────────────── -->
-  <path d="M 54 24 L 60 28 L 48 28 Z" fill="#3B0A17" />
+  <!-- ── Sparkle (butter yellow 4-point star, top-left) ─────────────── -->
+  <path d="M 24 18 L 26 22 L 30 24 L 26 26 L 24 30 L 22 26 L 18 24 L 22 22 Z"
+        fill="#FFD97D" />
 </svg>
