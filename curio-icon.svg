@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
     Curio app icon — reference SVG.
-    Archive-quality source-of-truth for the launcher design. The Android
-    launcher actually consumes the VectorDrawable XML in
-    app/src/main/res/drawable/ic_launcher_foreground.xml +
-    ic_launcher_background.xml, but this .svg mirrors that composition in
-    portable SVG for design-tool preview (Figma/Illustrator), web previews,
-    and as a regression-check against future VisualDesignSystem refactors.
 
-    Latest redesign: replaces the wheel-with-pointer design (commit
-    0d5e6b2b) with a stacked-card deck metaphor. The user asked for "a
-    shuffle between the topics in a beautiful way" — not a roulette wheel.
+    Polish iteration on the card-stack design (commit 5ad5fc2d). Three
+    reviewer-recommended fixes:
+
+      1. ROTATION: back cards tilted via SVG transform="rotate(angle cx cy)"
+         so the deck reads as "being shuffled" rather than "neatly stacked".
+            Card 1 (back):   rotate -6 around (32, 48)
+            Card 2 (middle): rotate +4 around (44, 52)
+            Card 3 (front):  no rotation (focal point)
+      2. THICKER BARS: title 24x3 -> 24x5 and subtitle 16x2 -> 16x4 so
+         they survive 24dp launcher scaling.
+      3. CATEGORY PALETTE: Card 1 = Dusty Blue (#9BB8E8, Movies),
+         Card 2 = Lilac (#C9A6F2, Music), Card 3 = Cream. Both back cards
+         use the actual in-app category palette (CURIO_SPEC.md section 0.2)
+         for stronger brand consistency.
 
     See:
       - CURIO_SPEC.md section 13.1 (splash/icon logomark)
@@ -19,46 +24,45 @@
       - app/src/main/res/drawable/ic_launcher_background.xml (compiled form)
 
     Coordinate system: 108x108 viewBox (matches Android adaptive-icon).
-    Safe zone: 66dp diameter centered at (54,54) — front card content stays
-    well inside; back card edges intentionally extend outside so launcher
-    masks crop them into the "stack silhouette".
 
     Layer order (back to front):
       1. coral rectangle (background, gets cropped by launcher mask)
-      2. Card 1 (back):   lilac 56x64 with rx=6 at (4,16)
-      3. Card 2 (middle): sky mint 56x64 with rx=6 at (16,20)
-      4. Card 3 (front):  cream 56x64 with rx=6 at (26,24)
+      2. Card 1 (back):   Dusty Blue, rotated -6 around (32, 48)
+      3. Card 2 (middle): Lilac,      rotated +4 around (44, 52)
+      4. Card 3 (front):  Cream,      no rotation (focal point)
       5. inside front card:
-         a. image placeholder: butter yellow 32x28 with rx=4 at (38,32)
-         b. title bar:         deep plum 24x3 at (38,65)
-         c. subtitle bar:      soft sand 16x2 at (38,72)
-         d. sparkle:           deep plum 4-point star at (74,30)
+         a. image placeholder: Butter Yellow 32x28 with rx=4 at (38,32)
+         b. title bar:         Deep Plum 24x5 at (38,65)
+         c. subtitle bar:      Soft Sand 16x4 at (38,73)
+         d. sparkle:           Deep Plum 4-point star at (74,30)
 -->
 <svg xmlns="http://www.w3.org/2000/svg"
      viewBox="0 0 108 108" width="108" height="108">
 
-  <!-- ── Background ─────────────────────────────────────────────────── -->
+  <!-- Background -->
   <rect x="0" y="0" width="108" height="108" fill="#FF8FA3" />
 
-  <!-- ── Card 1 (back): Lilac, peeks out top-left ─────────────────── -->
-  <rect x="4" y="16" width="56" height="64" rx="6" ry="6" fill="#C9A6F2" />
+  <!-- Card 1 (back): Dusty Blue (Movies), rotated -6 deg around (32, 48) -->
+  <rect x="4" y="16" width="56" height="64" rx="6" ry="6"
+        fill="#9BB8E8" transform="rotate(-6 32 48)" />
 
-  <!-- ── Card 2 (middle): Sky Mint, peeks out top-left ───────────── -->
-  <rect x="16" y="20" width="56" height="64" rx="6" ry="6" fill="#8FE3CF" />
+  <!-- Card 2 (middle): Lilac (Music), rotated +4 deg around (44, 52) -->
+  <rect x="16" y="20" width="56" height="64" rx="6" ry="6"
+        fill="#C9A6F2" transform="rotate(4 44 52)" />
 
-  <!-- ── Card 3 (front): Cream, the "current topic" ──────────────── -->
+  <!-- Card 3 (front): Cream, no rotation (focal point) -->
   <rect x="26" y="24" width="56" height="64" rx="6" ry="6" fill="#FFFBF5" />
 
-  <!-- ── Image placeholder (butter yellow) ─────────────────────────── -->
+  <!-- Image placeholder (butter yellow) -->
   <rect x="38" y="32" width="32" height="28" rx="4" ry="4" fill="#FFD97D" />
 
-  <!-- ── Title bar (deep plum) ──────────────────────────────────────── -->
-  <rect x="38" y="65" width="24" height="3" fill="#3B0A17" />
+  <!-- Title bar (deep plum, 5dp thick) -->
+  <rect x="38" y="65" width="24" height="5" fill="#3B0A17" />
 
-  <!-- ── Subtitle bar (soft sand) ─────────────────────────────────── -->
-  <rect x="38" y="72" width="16" height="2" fill="#F6EFE4" />
+  <!-- Subtitle bar (soft sand, 4dp thick) -->
+  <rect x="38" y="73" width="16" height="4" fill="#F6EFE4" />
 
-  <!-- ── Sparkle: deep plum 4-point star on the image area ─────────── -->
+  <!-- Sparkle: deep plum 4-point star on the image area -->
   <path d="M 74,26 L 76,28 L 78,30 L 76,32 L 74,34 L 72,32 L 70,30 L 72,28 Z"
         fill="#3B0A17" />
 </svg>
