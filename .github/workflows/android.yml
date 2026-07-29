@@ -50,29 +50,28 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Setup keystore
-      run: |
-        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > release.keystore
+    # NOTE: release-key signing configuration is deliberately deferred until
+    # Phase 4+ when Curio's distribution-channel logic lands. The legacy
+    # KeyStoreBase64 + KEYSTORE_* env-var pipeline lived only in
+    # app-legacy/build.gradle.kts and is not carried over.
 
-    - name: Build installable universal APKs for PR preview
-      env:
-        KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
-        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      run: ./gradlew assembleGithubDebug assembleGithubRelease --stacktrace
+    - name: Build installable APKs for PR preview
+      run: ./gradlew assembleDebug assembleRelease --stacktrace
 
-    - name: Verify installable universal APK outputs
+    - name: Verify installable APK outputs (unsigned APKs are treated as a build failure)
       run: |
         set -uo pipefail
         echo "=== APK outputs ==="
         find app/build/outputs/apk -type f -name '*.apk' -print || true
-        signed_debug=$(find app/build/outputs/apk/github/debug -maxdepth 1 -name 'FieldMind-*-githubDebug-signed-universal.apk' 2>/dev/null | head -1)
-        signed_release=$(find app/build/outputs/apk/github/release -maxdepth 1 -name 'FieldMind-*-githubRelease-signed-universal.apk' 2>/dev/null | head -1)
-        debug_apk="${signed_debug:-$(find app/build/outputs/apk/github/debug -maxdepth 1 -name '*.apk' 2>/dev/null | head -1)}"
-        release_apk="${signed_release:-$(find app/build/outputs/apk/github/release -maxdepth 1 -name '*.apk' 2>/dev/null | head -1)}"
+        debug_apk=$(find app/build/outputs/apk/debug   -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
+        release_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
         if [ -z "$debug_apk" ] && [ -z "$release_apk" ]; then
-          echo "::error::No APKs found at all. Build may have failed."
+          unsigned_found=$(find app/build/outputs/apk -type f -name '*-unsigned.apk' 2>/dev/null | head -1 || true)
+          if [ -n "$unsigned_found" ]; then
+            echo "::error::Found an unsigned APK at $unsigned_found but no signed APK. The release build's signing fallback failed \u2014 add a signing config to app/build.gradle.kts."
+          else
+            echo "::error::No APKs found at all. Build may have failed."
+          fi
           exit 1
         fi
         if [ -n "$debug_apk" ]; then echo "✅ Debug APK: $debug_apk"; fi
@@ -90,9 +89,9 @@ jobs:
         echo "Commit: ${{ github.sha }}" >> "$artifact_dir/build_info.txt"
         echo "Branch: ${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}" >> "$artifact_dir/build_info.txt"
 
-        mapfile -t apks < <(find app/build/outputs/apk/github -type f -name '*.apk' | sort)
+        mapfile -t apks < <(find app/build/outputs/apk -type f -name '*.apk' | sort)
         if [ "${#apks[@]}" -eq 0 ]; then
-          echo "::error::No APKs found to upload. Expected outputs under app/build/outputs/apk/github."
+          echo "::error::No APKs found to upload. Expected outputs under app/build/outputs/apk."
           exit 1
         fi
         printf 'APK files:\n' >> "$artifact_dir/build_info.txt"

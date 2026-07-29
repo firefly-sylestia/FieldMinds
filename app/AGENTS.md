@@ -112,6 +112,7 @@ app/src/main/java/com/curio/app/
 - `MainActivity` compiles and runs as `com.curio.app` on debug builds with `applicationId = "com.curio.app.debug"`.
 - No background workers, no widgets, no Room/SharedPreferences persistence wiring yet — those arrive in Phase 4+.
 - **CI gate**: this environment has no Android SDK, so CI on push to `revamp` is the source of truth for compilation. Local `gradlew assemble*` is explicitly forbidden by root AGENTS.md.
+- **CI expectations (flavorless)**: the new `app/` does NOT define `github`/`fdroid` product flavors. CI workflows call `./gradlew assembleDebug assembleRelease` (PRs) and `./gradlew assembleRelease` (tagged releases). Output APKs are at `app/build/outputs/apk/{debug,release}/`. The legacy fieldmind-* APK naming, the keystore + env-var pipeline, and the abi-split custom-renaming are NOT carried over. Release-key signing is **deferred to Phase 4+** when Curio's distribution-channel logic lands — until then, AGP's default debug-key fallback makes the release APK installable for PR previews.
 - All placeholder screens route correctly: tapping the Home hero with no chip → `PICKER`; with a chip → `spin/{slug}`; bottom-nav switching preserves each tab's back stack; back arrow pops the current route.
 
 ## Child DOX Index
