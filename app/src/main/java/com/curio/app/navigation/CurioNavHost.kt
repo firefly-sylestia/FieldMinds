@@ -1,5 +1,6 @@
 package com.curio.app.navigation
 
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -96,7 +97,7 @@ fun CurioNavHost(
                     // Other forward navigations: slide left + fade
                     else -> slideInHorizontally(
                         initialOffsetX = { fullWidth -> fullWidth / 4 },
-                        animationSpec = CurioMotion.Springs.Morph
+                        animationSpec = tween(CurioMotion.Durations.Morph, easing = FastOutSlowInEasing)
                     ) + fadeIn(animationSpec = tween(CurioMotion.Durations.Morph))
                 }
             },
@@ -126,7 +127,7 @@ fun CurioNavHost(
                 // Pop exit: slide right + fade out
                 slideOutHorizontally(
                     targetOffsetX = { fullWidth -> fullWidth / 4 },
-                    animationSpec = CurioMotion.Springs.Morph
+                    animationSpec = tween(CurioMotion.Durations.Morph, easing = FastOutSlowInEasing)
                 ) + fadeOut(animationSpec = tween(CurioMotion.Durations.Morph))
             }
         ) {

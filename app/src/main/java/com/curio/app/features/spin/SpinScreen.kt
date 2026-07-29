@@ -77,6 +77,7 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -160,7 +161,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
 
         // Run the cycler faster — it cycles through ~10x more "ticks"
-        val cyclerJob = kotlinx.coroutines.launch {
+        val cyclerJob = launch {
             // Decelerating speed: start at 1.0 (fast), end at 0.08 (slow)
             cyclerProgress.snapTo(0f)
             val totalCyclerTicks = (cycles * 14f).toInt()
@@ -193,7 +194,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         landedTopic = finalPick
         // Add to recent IDs (keep last 20)
         if (finalPick != null) {
-            recentTopicIds = (recentTopicIds + finalPick.id).takeLast(20).toSet()
+            recentTopicIds = (recentTopicIds + finalPick.id).toList().takeLast(20).toSet()
         }
         // Set visibleTopicIndex to the landed topic's position in displayPool
         val finalIdx = displayPool.indexOfFirst { it.name == finalPick?.name }

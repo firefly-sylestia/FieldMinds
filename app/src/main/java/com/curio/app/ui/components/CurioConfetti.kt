@@ -426,7 +426,7 @@ private fun DrawScope.drawConfettiShape(
                         cx - s, cy - s * 0.6f, cx, cy + s * 0.2f
                     ),
                     startAngleDegrees = 210f,
-                    arcLengthDegrees = 150f,
+                    sweepAngleDegrees = 150f,
                     forceMoveTo = false
                 )
                 // Right lobe
@@ -435,7 +435,7 @@ private fun DrawScope.drawConfettiShape(
                         cx, cy - s * 0.6f, cx + s, cy + s * 0.2f
                     ),
                     startAngleDegrees = 240f,
-                    arcLengthDegrees = 150f,
+                    sweepAngleDegrees = 150f,
                     forceMoveTo = false
                 )
                 lineTo(cx, cy + s)
