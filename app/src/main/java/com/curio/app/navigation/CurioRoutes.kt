@@ -44,4 +44,16 @@ object CurioRoutes {
 
     /** Routes where the bottom navigation bar should be visible. */
     val bottomNavRoutes: Set<String> = setOf(HOME, SPIN, CABINET)
+
+    /**
+     * Route PREFIXES where the bottom navigation bar should be visible.
+     * Use this (not [bottomNavRoutes]) when checking `destination.route`
+     * — the Nav library returns the route TEMPLATE (e.g.
+     * `spin/{categorySlug}`), not the resolved URL, so exact-string
+     * membership fails for any parameterised route. The previous check
+     * `currentRoute in bottomNavRoutes` hid the bar when on
+     * `spin/{categorySlug}` (the Spin screen WITH a category), which is
+     * exactly the user-visible splash-nav bug.
+     */
+    val bottomNavRoutePrefixes: Set<String> = setOf(HOME, SPIN, CABINET)
 }

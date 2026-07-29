@@ -49,7 +49,17 @@ fun CurioNavHost(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val showBottomBar = currentRoute in CurioRoutes.bottomNavRoutes
+    // Route-prefix match: destination.route returns the route TEMPLATE
+    // (e.g. "spin/{categorySlug}"), not the resolved URL, so the old
+    // exact-string `in bottomNavRoutes` check broke for any parameterised
+    // route (the user-visible bug: bottom nav flashed during the
+    // splash→home transition AND on SpinScreen-with-category because
+    // "spin/{categorySlug}" wasn't in the set). Matching the first
+    // path segment fixes both cases.
+    val showBottomBar = remember(currentRoute) {
+        val routePrefix = currentRoute?.substringBefore("/")
+        routePrefix in CurioRoutes.bottomNavRoutePrefixes
+    }
 
     Scaffold(
         bottomBar = {
