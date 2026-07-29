@@ -2,50 +2,47 @@ package com.curio.app.features.capture
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
+import com.curio.app.data.CurioCategory
 import com.curio.app.data.MockTopics
+import com.curio.app.features.capture.formats.FieldNotesFormat
+import com.curio.app.features.capture.formats.GalleryWallFormat
+import com.curio.app.features.capture.formats.MarginaliaFormat
+import com.curio.app.features.capture.formats.OpenNotebookFormat
+import com.curio.app.features.capture.formats.ReelNotesFormat
+import com.curio.app.features.capture.formats.SoundBiteFormat
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
-import com.curio.app.ui.components.LiveWaveform
 import com.curio.app.ui.components.ScreenEntrance
-import com.curio.app.ui.components.formatRecordingTime
-import com.curio.app.ui.components.rememberPulseScale
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -54,21 +51,21 @@ import kotlinx.coroutines.delay
 /**
  * Save / Capture — see CURIO_SPEC.md §8.
  *
- * The shared outer shell is the same for all 6 formats; only the middle
- * format body changes. For the design phase we ship the Sound Bite
- * format (Music) — ReelNotes / Marginalia / GalleryWall / FieldNotes /
- * OpenNotebook bodies land in Phase 4 once the data layer is wired.
+ * Shared outer shell (consistent across all 6 formats) + format-specific
+ * body dispatched from the active category. Each format body lives in
+ * its own file under `formats/` and owns its own state; the screen
+ * just hosts the shell, the format body, and the bottom Save CTA.
  *
- * Sound Bite flow (CURIO_SPEC.md §8.1):
- *   - IDLE: tap big mic → RECORDING
- *   - RECORDING: pulsing ring + live waveform + mm:ss timer +
- *                Pause / Stop / Discard controls
- *   - PAUSED: ring pauses pulse, controls swap Pause → Resume
- *   - STOPPED: shows "Recording saved (m:ss)" + "Record over" reset
- *   - Any state with seconds > 0 enables the bottom "Save entry" CTA
- *
- * Save sequence: 400ms simulated save → confetti in category accent →
- * ~700ms pause → navigate to EntryDetail.
+ * Flow:
+ *   1. Resolve category from routeSlug
+ *   2. Look up a topic from MockTopics (Phase 4 swaps for Room-backed
+ *      CurioTopic)
+ *   3. Render shell: top bar + topic reminder strip + format body +
+ *      sticky Save CTA
+ *   4. Each format body calls [FormatBodyForCategory]'s onCanSaveChange
+ *      callback when its internal canSave state changes
+ *   5. Save button click triggers simulated 400ms save → confetti →
+ *      700ms pause → navigate to EntryDetail
  */
 @Composable
 fun SaveCaptureScreen(
@@ -80,33 +77,17 @@ fun SaveCaptureScreen(
         CurioCategories.byRouteSlug(categorySlug)
             ?: CurioCategories.byId(CategoryId.WILDCARD)
     }
-
     val topic = remember(topicName) {
         MockTopics.samplePool.find { it.name == topicName }
             ?: MockTopics.samplePool.first()
     }
 
-    // ── Recording state ────────────────────────────────────────────────────
-    var recordingState by remember { mutableStateOf(RecordingState.IDLE) }
-    var recordingSeconds by remember { mutableStateOf(0) }
-    var title by remember { mutableStateOf("") }
+    // ── Format-specific save-ability (driven by format body callback) ─────
+    var canSave by remember { mutableStateOf(false) }
 
-    // ── Save-in-progress + confetti flow ───────────────────────────────────
+    // ── Save-in-progress + confetti flow ──────────────────────────────────
     var saveInProgress by remember { mutableStateOf(false) }
-    var confettiTrigger by remember { mutableStateOf(0) }
-
-    // Tick the recording timer every second while RECORDING.
-    LaunchedEffect(recordingState) {
-        if (recordingState == RecordingState.RECORDING) {
-            while (recordingState == RecordingState.RECORDING) {
-                delay(1000)
-                recordingSeconds++
-            }
-        }
-    }
-
-    val canSave = recordingSeconds > 0 &&
-                  recordingState == RecordingState.STOPPED
+    var confettiTrigger by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = Modifier
@@ -124,13 +105,8 @@ fun SaveCaptureScreen(
         ) {
             Surface(
                 onClick = {
-                    if (recordingState != RecordingState.IDLE) {
-                        // TODO Phase 4: confirm discard dialog per §8 spec
-                        recordingState = RecordingState.IDLE
-                        recordingSeconds = 0
-                    } else {
-                        navController.popBackStack()
-                    }
+                    // TODO Phase 4: confirm-discard dialog if format has content
+                    navController.popBackStack()
                 },
                 shape = RoundedCornerShape(50),
                 color = MaterialTheme.colorScheme.surfaceVariant
@@ -150,7 +126,7 @@ fun SaveCaptureScreen(
             )
         }
 
-        // ── Topic reminder strip (tap → re-view Topic Reveal) ───────────────
+        // ── Topic reminder strip ────────────────────────────────────────────
         Surface(
             color = cat.tint,
             modifier = Modifier
@@ -177,7 +153,7 @@ fun SaveCaptureScreen(
             }
         }
 
-        // ── Format body ─────────────────────────────────────────────────────
+        // ── Format body (dispatched from category) ──────────────────────────
         ScreenEntrance {
             Column(
                 modifier = Modifier
@@ -187,54 +163,9 @@ fun SaveCaptureScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                when (recordingState) {
-                    RecordingState.IDLE -> IdleControls(
-                        accent = cat.accent,
-                        onRecord = {
-                            recordingState = RecordingState.RECORDING
-                            recordingSeconds = 0
-                        }
-                    )
-                    RecordingState.RECORDING,
-                    RecordingState.PAUSED -> LiveControls(
-                        accent = cat.accent,
-                        tint = cat.tint,
-                        state = recordingState,
-                        seconds = recordingSeconds,
-                        onPauseResume = {
-                            recordingState =
-                                if (recordingState == RecordingState.RECORDING)
-                                    RecordingState.PAUSED
-                                else RecordingState.RECORDING
-                        },
-                        onStop = { recordingState = RecordingState.STOPPED },
-                        onDiscard = {
-                            recordingState = RecordingState.IDLE
-                            recordingSeconds = 0
-                        }
-                    )
-                    RecordingState.STOPPED -> StoppedControls(
-                        accent = cat.accent,
-                        tint = cat.tint,
-                        seconds = recordingSeconds,
-                        onReRecord = {
-                            recordingState = RecordingState.IDLE
-                            recordingSeconds = 0
-                        }
-                    )
-                }
-
-                Spacer(Modifier.height(24.dp))
-
-                // Optional one-line title (CURIO_SPEC.md §8.1)
-                OutlinedTextField(
-                    value = title,
-                    onValueChange = { title = it },
-                    label = { Text("Add a quick title (optional)") },
-                    singleLine = true,
-                    shape = RoundedCornerShape(16.dp),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    modifier = Modifier.fillMaxWidth()
+                FormatBodyForCategory(
+                    category = cat,
+                    onCanSaveChange = { canSave = it }
                 )
             }
         }
@@ -252,8 +183,10 @@ fun SaveCaptureScreen(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
                         contentColor = CurioColors.DeepPlum,
-                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        disabledContainerColor =
+                            MaterialTheme.colorScheme.surfaceVariant,
+                        disabledContentColor =
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     contentPadding = PaddingValues(vertical = 16.dp),
                     modifier = Modifier.fillMaxWidth()
@@ -307,202 +240,30 @@ fun SaveCaptureScreen(
     }
 }
 
-private enum class RecordingState { IDLE, RECORDING, PAUSED, STOPPED }
-
+/**
+ * Dispatch the right format body based on the active category.
+ *
+ * Each format owns its own state and notifies [onCanSaveChange] when its
+ * internal save-ability flips. The shell (SaveCaptureScreen) tracks the
+ * latest value and uses it to enable/disable the bottom Save CTA.
+ */
 @Composable
-private fun IdleControls(
-    accent: Color,
-    onRecord: () -> Unit
+private fun FormatBodyForCategory(
+    category: CurioCategory,
+    onCanSaveChange: (Boolean) -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        Surface(
-            onClick = onRecord,
-            shape = CircleShape,
-            color = accent,
-            modifier = Modifier.size(96.dp)
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                CurioIcon(
-                    name = CurioIcons.Mic,
-                    contentDescription = "Start recording",
-                    tint = CurioColors.DeepPlum,
-                    size = 48.dp
-                )
-            }
-        }
-        Text(
-            text = "Tap to record your take",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun LiveControls(
-    accent: Color,
-    tint: Color,
-    state: RecordingState,
-    seconds: Int,
-    onPauseResume: () -> Unit,
-    onStop: () -> Unit,
-    onDiscard: () -> Unit
-) {
-    val pulseScale = rememberPulseScale(active = state == RecordingState.RECORDING)
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        // Pulsing outer ring + solid mic center
-        Box(
-            modifier = Modifier.size(140.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Surface(
-                shape = CircleShape,
-                color = tint,
-                modifier = Modifier
-                    .size(120.dp)
-                    .scale(pulseScale)
-            ) {}
-            Surface(
-                shape = CircleShape,
-                color = accent,
-                modifier = Modifier.size(96.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    CurioIcon(
-                        name = if (state == RecordingState.PAUSED)
-                            CurioIcons.MicNone
-                        else CurioIcons.Mic,
-                        contentDescription = null,
-                        tint = CurioColors.DeepPlum,
-                        size = 48.dp
-                    )
-                }
-            }
-        }
-
-        // Live waveform — always rendered (visible=true was a no-op wrapper)
-        LiveWaveform(
-            color = accent,
-            active = state == RecordingState.RECORDING,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-        )
-
-        // Running mm:ss timer
-        Text(
-            text = formatRecordingTime(seconds),
-            style = MaterialTheme.typography.displaySmall,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        // Pause / Stop / Discard controls
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            ControlButton(
-                icon = if (state == RecordingState.PAUSED)
-                    CurioIcons.PlayArrow
-                else CurioIcons.Pause,
-                label = if (state == RecordingState.PAUSED) "Resume" else "Pause",
-                tint = accent,
-                onClick = onPauseResume
-            )
-            ControlButton(
-                icon = CurioIcons.Stop,
-                label = "Stop",
-                tint = accent,
-                onClick = onStop
-            )
-            ControlButton(
-                icon = CurioIcons.Replay,
-                label = "Discard",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                onClick = onDiscard
-            )
-        }
-    }
-}
-
-@Composable
-private fun StoppedControls(
-    accent: Color,
-    tint: Color,
-    seconds: Int,
-    onReRecord: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Surface(
-            shape = CircleShape,
-            color = tint,
-            modifier = Modifier.size(96.dp)
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                CurioIcon(
-                    name = CurioIcons.Mic,
-                    contentDescription = null,
-                    tint = accent,
-                    size = 48.dp
-                )
-            }
-        }
-        Text(
-            text = "Recording saved (${formatRecordingTime(seconds)})",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        TextButton(onClick = onReRecord) {
-            Text(
-                text = "Record over",
-                color = accent
-            )
-        }
-    }
-}
-
-@Composable
-private fun ControlButton(
-    icon: String,
-    label: String,
-    tint: Color,
-    onClick: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Surface(
-            onClick = onClick,
-            shape = CircleShape,
-            color = tint.copy(alpha = 0.15f)
-        ) {
-            Box(
-                modifier = Modifier.padding(12.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                CurioIcon(
-                    name = icon,
-                    contentDescription = label,
-                    tint = tint,
-                    size = 24.dp
-                )
-            }
-        }
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+    when (category.id) {
+        CategoryId.MUSIC ->
+            SoundBiteFormat(category.accent, category.tint, onCanSaveChange)
+        CategoryId.MOVIES ->
+            ReelNotesFormat(category.accent, category.tint, onCanSaveChange)
+        CategoryId.BOOKS ->
+            MarginaliaFormat(category.accent, category.tint, onCanSaveChange)
+        CategoryId.VISUAL_ART ->
+            GalleryWallFormat(category.accent, category.tint, onCanSaveChange)
+        CategoryId.SCIENCE ->
+            FieldNotesFormat(category.accent, category.tint, onCanSaveChange)
+        CategoryId.WILDCARD ->
+            OpenNotebookFormat(category.accent, category.tint, onCanSaveChange)
     }
 }
