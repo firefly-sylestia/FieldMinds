@@ -1,0 +1,136 @@
+package com.curio.app.ui.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import com.curio.app.data.CaptureFormat
+import com.curio.app.data.CategoryId
+import com.curio.app.data.CurioCategories
+import com.curio.app.data.MockEntry
+import com.curio.app.ui.theme.CurioGradients
+import com.curio.app.ui.theme.CurioIcon
+import com.curio.app.ui.theme.CurioIcons
+
+/**
+ * Cabinet's entry card — used in the 2-col grid (CURIO_SPEC.md §9).
+ *
+ * Renders each saved capture as a card with:
+ *   - Image placeholder (category accent gradient) at the top, 20dp top
+ *     corners rounded, contains the category glyph in white at 56dp
+ *   - Card body: topic name (geom, 2 lines max), bodyPreview excerpt
+ *     (neutral sans, 2 lines max), time caption ("3d ago") + format glyph
+ *
+ * Tap → navigates to EntryDetail.
+ */
+@Composable
+fun CurioEntryCard(
+    entry: MockEntry,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val cat = CurioCategories.byId(entry.topic.categoryId)
+
+    Surface(
+        onClick = onClick,
+        modifier = modifier,
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 2.dp,
+        tonalElevation = 1.dp
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // Image placeholder
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .background(
+                        if (cat.id == CategoryId.WILDCARD)
+                            Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
+                        else Brush.horizontalGradient(listOf(cat.accent, cat.tint))
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                CurioIcon(
+                    name = cat.iconGlyph,
+                    contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.85f),
+                    size = 56.dp
+                )
+            }
+
+            Column(
+                modifier = Modifier.padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = entry.topic.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = entry.bodyPreview,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(Modifier.height(4.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = formatTimeAgo(entry.capturedAtDaysAgo),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = cat.accent
+                    )
+                    CurioIcon(
+                        name = formatGlyph(entry.format),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        size = 16.dp
+                    )
+                }
+            }
+        }
+    }
+}
+
+/** Maps a capture format to its small Material Symbols glyph. */
+private fun formatGlyph(format: CaptureFormat): String = when (format) {
+    CaptureFormat.SoundBite    -> CurioIcons.Mic
+    CaptureFormat.ReelNotes    -> CurioIcons.Edit
+    CaptureFormat.Marginalia   -> CurioIcons.MenuBook
+    CaptureFormat.GalleryWall  -> CurioIcons.Image
+    CaptureFormat.FieldNotes   -> CurioIcons.AutoAwesome
+    CaptureFormat.OpenNotebook -> CurioIcons.MenuBook
+}
+
+/** Returns a friendly "Xd ago" / "Today" / "Yesterday" string. */
+private fun formatTimeAgo(daysAgo: Int): String = when (daysAgo) {
+    0    -> "Today"
+    1    -> "Yesterday"
+    else -> "${daysAgo}d ago"
+}
