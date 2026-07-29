@@ -699,5 +699,1620 @@
       "1910s"
     ],
     "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-36-36",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #36",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #36",
+      "durationMinutes": 14,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-37-37",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #37",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #37",
+      "durationMinutes": 5,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-38-38",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #38",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #38",
+      "durationMinutes": 6,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-39-39",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #39",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #39",
+      "durationMinutes": 13,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-40-40",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #40",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #40",
+      "durationMinutes": 5,
+      "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-41-41",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #41",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #41",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-42-42",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #42",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #42",
+      "durationMinutes": 9,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-43-43",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #43",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #43",
+      "durationMinutes": 5,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-44-44",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #44",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #44",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-45-45",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #45",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #45",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-46-46",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #46",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #46",
+      "durationMinutes": 14,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-47-47",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #47",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #47",
+      "durationMinutes": 8,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-48-48",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #48",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #48",
+      "durationMinutes": 14,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-49-49",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #49",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #49",
+      "durationMinutes": 10,
+      "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-50-50",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #50",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #50",
+      "durationMinutes": 11,
+      "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-51-51",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #51",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #51",
+      "durationMinutes": 14,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-52-52",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #52",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #52",
+      "durationMinutes": 11,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-53-53",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #53",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #53",
+      "durationMinutes": 6,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-54-54",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #54",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #54",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-55-55",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #55",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #55",
+      "durationMinutes": 14,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-56-56",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #56",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #56",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-57-57",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #57",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #57",
+      "durationMinutes": 12,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-58-58",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #58",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #58",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-59-59",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #59",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #59",
+      "durationMinutes": 9,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-60-60",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #60",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #60",
+      "durationMinutes": 6,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-61-61",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #61",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #61",
+      "durationMinutes": 9,
+      "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-62-62",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #62",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #62",
+      "durationMinutes": 14,
+      "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-63-63",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #63",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #63",
+      "durationMinutes": 11,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-64-64",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #64",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #64",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-65-65",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #65",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #65",
+      "durationMinutes": 7,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-66-66",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #66",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #66",
+      "durationMinutes": 11,
+      "instruction": "Look at the original diagram. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-67-67",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #67",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #67",
+      "durationMinutes": 12,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-68-68",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #68",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #68",
+      "durationMinutes": 5,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-69-69",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #69",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #69",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-70-70",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #70",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #70",
+      "durationMinutes": 12,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-71-71",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #71",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #71",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-72-72",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #72",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #72",
+      "durationMinutes": 12,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-73-73",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #73",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #73",
+      "durationMinutes": 6,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-74-74",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #74",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #74",
+      "durationMinutes": 12,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-75-75",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #75",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #75",
+      "durationMinutes": 14,
+      "instruction": "Look at the original diagram. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-76-76",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #76",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #76",
+      "durationMinutes": 15,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-77-77",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #77",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #77",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-78-78",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #78",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #78",
+      "durationMinutes": 12,
+      "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-79-79",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #79",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #79",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-80-80",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #80",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #80",
+      "durationMinutes": 15,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-81-81",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #81",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #81",
+      "durationMinutes": 13,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-82-82",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #82",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #82",
+      "durationMinutes": 9,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-83-83",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #83",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #83",
+      "durationMinutes": 12,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-84-84",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #84",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #84",
+      "durationMinutes": 8,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-85-85",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #85",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #85",
+      "durationMinutes": 8,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-86-86",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #86",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #86",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-87-87",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #87",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #87",
+      "durationMinutes": 5,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-88-88",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #88",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #88",
+      "durationMinutes": 6,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-89-89",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #89",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #89",
+      "durationMinutes": 5,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-90-90",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #90",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #90",
+      "durationMinutes": 10,
+      "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-91-91",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #91",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #91",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-92-92",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #92",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #92",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-93-93",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #93",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #93",
+      "durationMinutes": 12,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-94-94",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #94",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #94",
+      "durationMinutes": 10,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-95-95",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #95",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #95",
+      "durationMinutes": 15,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-96-96",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #96",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #96",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-97-97",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #97",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #97",
+      "durationMinutes": 12,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-98-98",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #98",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #98",
+      "durationMinutes": 10,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-99-99",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #99",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #99",
+      "durationMinutes": 5,
+      "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-100-100",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #100",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #100",
+      "durationMinutes": 8,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-101-101",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #101",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #101",
+      "durationMinutes": 7,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-102-102",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #102",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #102",
+      "durationMinutes": 5,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-103-103",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #103",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #103",
+      "durationMinutes": 12,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-104-104",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #104",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #104",
+      "durationMinutes": 8,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-105-105",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #105",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #105",
+      "durationMinutes": 12,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-106-106",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #106",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #106",
+      "durationMinutes": 15,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-107-107",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #107",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #107",
+      "durationMinutes": 7,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-108-108",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #108",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #108",
+      "durationMinutes": 12,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-109-109",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #109",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #109",
+      "durationMinutes": 14,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-110-110",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #110",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #110",
+      "durationMinutes": 8,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-111-111",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #111",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #111",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-112-112",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #112",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #112",
+      "durationMinutes": 11,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-113-113",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #113",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #113",
+      "durationMinutes": 9,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-114-114",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #114",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #114",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-115-115",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #115",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #115",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-116-116",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #116",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #116",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-117-117",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #117",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #117",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-118-118",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #118",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #118",
+      "durationMinutes": 11,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-119-119",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #119",
+    "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #119",
+      "durationMinutes": 12,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dicoverie-topic-120-120",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dicoverie Topic #120",
+    "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the story behind Dicoverie Topic #120",
+      "durationMinutes": 11,
+      "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
   }
 ]

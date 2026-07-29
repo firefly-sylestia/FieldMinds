@@ -818,5 +818,1734 @@
       "2000s"
     ],
     "tier": 2
+  },
+  {
+    "id": "film-film-topic-42-42",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #42",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #42 on any reliable service",
+      "durationMinutes": 165,
+      "instruction": "Track how the lighting changes from act one to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-43-43",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #43",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #43 on any reliable service",
+      "durationMinutes": 152,
+      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-44-44",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #44",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #44 on any reliable service",
+      "durationMinutes": 173,
+      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-45-45",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #45",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #45 on any reliable service",
+      "durationMinutes": 70,
+      "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-46-46",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #46",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #46 on any reliable service",
+      "durationMinutes": 117,
+      "instruction": "Track how the lighting changes from act one to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-47-47",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #47",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #47 on any reliable service",
+      "durationMinutes": 91,
+      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-48-48",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #48",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #48 on any reliable service",
+      "durationMinutes": 171,
+      "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-49-49",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #49",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #49 on any reliable service",
+      "durationMinutes": 141,
+      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-50-50",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #50",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #50 on any reliable service",
+      "durationMinutes": 113,
+      "instruction": "Notice the color palette shift during third act. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-51-51",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #51",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #51 on any reliable service",
+      "durationMinutes": 94,
+      "instruction": "Pay attention to how the camera frames brushwork. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-52-52",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #52",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #52 on any reliable service",
+      "durationMinutes": 106,
+      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-53-53",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #53",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #53 on any reliable service",
+      "durationMinutes": 80,
+      "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-54-54",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #54",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #54 on any reliable service",
+      "durationMinutes": 72,
+      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-55-55",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #55",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #55 on any reliable service",
+      "durationMinutes": 166,
+      "instruction": "Watch the background actors during the climax — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-56-56",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #56",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #56 on any reliable service",
+      "durationMinutes": 177,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for calm settles."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-57-57",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #57",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #57 on any reliable service",
+      "durationMinutes": 170,
+      "instruction": "Track how the lighting changes from the first half to nightfall. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-58-58",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #58",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #58 on any reliable service",
+      "durationMinutes": 84,
+      "instruction": "Notice the color palette shift during chase sequence. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-59-59",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #59",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #59 on any reliable service",
+      "durationMinutes": 131,
+      "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-60-60",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #60",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #60 on any reliable service",
+      "durationMinutes": 71,
+      "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-61-61",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #61",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #61 on any reliable service",
+      "durationMinutes": 127,
+      "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-62-62",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #62",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #62 on any reliable service",
+      "durationMinutes": 86,
+      "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-63-63",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #63",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #63 on any reliable service",
+      "durationMinutes": 132,
+      "instruction": "Watch the background actors during the opening scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-64-64",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #64",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #64 on any reliable service",
+      "durationMinutes": 163,
+      "instruction": "Track how the lighting changes from the opening to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-65-65",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #65",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #65 on any reliable service",
+      "durationMinutes": 150,
+      "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-66-66",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #66",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #66 on any reliable service",
+      "durationMinutes": 154,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for safety returns."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-67-67",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #67",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #67 on any reliable service",
+      "durationMinutes": 169,
+      "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-68-68",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #68",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #68 on any reliable service",
+      "durationMinutes": 134,
+      "instruction": "Pay attention to how the camera frames light and shadow. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-69-69",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #69",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #69 on any reliable service",
+      "durationMinutes": 83,
+      "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for calm settles."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-70-70",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #70",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #70 on any reliable service",
+      "durationMinutes": 144,
+      "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-71-71",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #71",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #71 on any reliable service",
+      "durationMinutes": 117,
+      "instruction": "Pay attention to how the camera frames negative space. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-72-72",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #72",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #72 on any reliable service",
+      "durationMinutes": 75,
+      "instruction": "Track how the lighting changes from the opening to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-73-73",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #73",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #73 on any reliable service",
+      "durationMinutes": 152,
+      "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-74-74",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #74",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #74 on any reliable service",
+      "durationMinutes": 121,
+      "instruction": "Track how the lighting changes from morning to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-75-75",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #75",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #75 on any reliable service",
+      "durationMinutes": 77,
+      "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-76-76",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #76",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #76 on any reliable service",
+      "durationMinutes": 129,
+      "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-77-77",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #77",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #77 on any reliable service",
+      "durationMinutes": 138,
+      "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for safety returns."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-78-78",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #78",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #78 on any reliable service",
+      "durationMinutes": 81,
+      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-79-79",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #79",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #79 on any reliable service",
+      "durationMinutes": 70,
+      "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-80-80",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #80",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #80 on any reliable service",
+      "durationMinutes": 71,
+      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-81-81",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #81",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #81 on any reliable service",
+      "durationMinutes": 140,
+      "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for relief comes."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-82-82",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #82",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #82 on any reliable service",
+      "durationMinutes": 105,
+      "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for relief comes."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-83-83",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #83",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #83 on any reliable service",
+      "durationMinutes": 95,
+      "instruction": "Watch the background actors during the chase sequence — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-84-84",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #84",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #84 on any reliable service",
+      "durationMinutes": 144,
+      "instruction": "Pay attention to how the camera frames light and shadow. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-85-85",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #85",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #85 on any reliable service",
+      "durationMinutes": 128,
+      "instruction": "Track how the lighting changes from the opening to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-86-86",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #86",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #86 on any reliable service",
+      "durationMinutes": 93,
+      "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-87-87",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #87",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #87 on any reliable service",
+      "durationMinutes": 124,
+      "instruction": "Notice the color palette shift during chase sequence. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-88-88",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #88",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #88 on any reliable service",
+      "durationMinutes": 129,
+      "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-89-89",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #89",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #89 on any reliable service",
+      "durationMinutes": 106,
+      "instruction": "Notice the color palette shift during third act. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-90-90",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #90",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #90 on any reliable service",
+      "durationMinutes": 161,
+      "instruction": "Pay attention to how the camera frames negative space. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-91-91",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #91",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #91 on any reliable service",
+      "durationMinutes": 163,
+      "instruction": "Track how the lighting changes from the first half to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-92-92",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #92",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #92 on any reliable service",
+      "durationMinutes": 98,
+      "instruction": "Track how the lighting changes from morning to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-93-93",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #93",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #93 on any reliable service",
+      "durationMinutes": 129,
+      "instruction": "Track how the lighting changes from morning to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-94-94",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #94",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #94 on any reliable service",
+      "durationMinutes": 95,
+      "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-95-95",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #95",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #95 on any reliable service",
+      "durationMinutes": 162,
+      "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-96-96",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #96",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #96 on any reliable service",
+      "durationMinutes": 98,
+      "instruction": "Track how the lighting changes from the opening to nightfall. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-97-97",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #97",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #97 on any reliable service",
+      "durationMinutes": 91,
+      "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-98-98",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #98",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #98 on any reliable service",
+      "durationMinutes": 138,
+      "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-99-99",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #99",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #99 on any reliable service",
+      "durationMinutes": 142,
+      "instruction": "Track how the lighting changes from morning to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-100-100",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #100",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #100 on any reliable service",
+      "durationMinutes": 100,
+      "instruction": "Watch the background actors during the quiet moment — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-101-101",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #101",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #101 on any reliable service",
+      "durationMinutes": 79,
+      "instruction": "Track how the lighting changes from the opening to nightfall. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-102-102",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #102",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #102 on any reliable service",
+      "durationMinutes": 177,
+      "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for calm settles."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-103-103",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #103",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #103 on any reliable service",
+      "durationMinutes": 158,
+      "instruction": "Track how the lighting changes from act one to the finale. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-104-104",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #104",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #104 on any reliable service",
+      "durationMinutes": 135,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-105-105",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #105",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #105 on any reliable service",
+      "durationMinutes": 75,
+      "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-106-106",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #106",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #106 on any reliable service",
+      "durationMinutes": 134,
+      "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-107-107",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #107",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #107 on any reliable service",
+      "durationMinutes": 105,
+      "instruction": "Pay attention to how the camera frames negative space. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-108-108",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #108",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #108 on any reliable service",
+      "durationMinutes": 94,
+      "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-109-109",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #109",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #109 on any reliable service",
+      "durationMinutes": 104,
+      "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-110-110",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #110",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #110 on any reliable service",
+      "durationMinutes": 129,
+      "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-111-111",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #111",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #111 on any reliable service",
+      "durationMinutes": 152,
+      "instruction": "Track how the lighting changes from morning to the second half. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-112-112",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #112",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #112 on any reliable service",
+      "durationMinutes": 147,
+      "instruction": "Notice the color palette shift during chase sequence. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-113-113",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #113",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #113 on any reliable service",
+      "durationMinutes": 166,
+      "instruction": "Pay attention to how the camera frames brushwork. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-114-114",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #114",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #114 on any reliable service",
+      "durationMinutes": 117,
+      "instruction": "Notice the color palette shift during third act. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-115-115",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #115",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #115 on any reliable service",
+      "durationMinutes": 105,
+      "instruction": "Watch the background actors during the opening scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-116-116",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #116",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #116 on any reliable service",
+      "durationMinutes": 157,
+      "instruction": "Watch the background actors during the opening scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-117-117",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #117",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #117 on any reliable service",
+      "durationMinutes": 70,
+      "instruction": "Pay attention to how the camera frames color temperature. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-118-118",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #118",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #118 on any reliable service",
+      "durationMinutes": 171,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-119-119",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #119",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #119 on any reliable service",
+      "durationMinutes": 155,
+      "instruction": "Observe the editing rhythm — it speeds up when emotions peak and slows for calm settles."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-120-120",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #120",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #120 on any reliable service",
+      "durationMinutes": 143,
+      "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-121-121",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #121",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #121 on any reliable service",
+      "durationMinutes": 133,
+      "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-122-122",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #122",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #122 on any reliable service",
+      "durationMinutes": 159,
+      "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-123-123",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #123",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #123 on any reliable service",
+      "durationMinutes": 111,
+      "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-124-124",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #124",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #124 on any reliable service",
+      "durationMinutes": 92,
+      "instruction": "Pay attention to how the camera frames color temperature. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-125-125",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #125",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #125 on any reliable service",
+      "durationMinutes": 85,
+      "instruction": "Pay attention to how the camera frames brushwork. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-126-126",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #126",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #126 on any reliable service",
+      "durationMinutes": 120,
+      "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-127-127",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #127",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #127 on any reliable service",
+      "durationMinutes": 116,
+      "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-128-128",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #128",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #128 on any reliable service",
+      "durationMinutes": 88,
+      "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-129-129",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #129",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #129 on any reliable service",
+      "durationMinutes": 151,
+      "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-130-130",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #130",
+    "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #130 on any reliable service",
+      "durationMinutes": 88,
+      "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-131-131",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #131",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #131 on any reliable service",
+      "durationMinutes": 114,
+      "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-film-topic-132-132",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Film Topic #132",
+    "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Film Topic #132 on any reliable service",
+      "durationMinutes": 105,
+      "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for relief comes."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
   }
 ]

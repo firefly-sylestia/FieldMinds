@@ -638,5 +638,1563 @@
       "Indigenous"
     ],
     "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-33-33",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #33",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #33",
+      "durationMinutes": 21,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-34-34",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #34",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #34",
+      "durationMinutes": 21,
+      "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-35-35",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #35",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #35",
+      "durationMinutes": 19,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-36-36",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #36",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #36",
+      "durationMinutes": 6,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-37-37",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #37",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #37",
+      "durationMinutes": 28,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-38-38",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #38",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #38",
+      "durationMinutes": 21,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-39-39",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #39",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #39",
+      "durationMinutes": 27,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-40-40",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #40",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #40",
+      "durationMinutes": 4,
+      "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-41-41",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #41",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #41",
+      "durationMinutes": 15,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-42-42",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #42",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #42",
+      "durationMinutes": 29,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-43-43",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #43",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #43",
+      "durationMinutes": 3,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-44-44",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #44",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #44",
+      "durationMinutes": 12,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-45-45",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #45",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #45",
+      "durationMinutes": 13,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-46-46",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #46",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #46",
+      "durationMinutes": 17,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-47-47",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #47",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #47",
+      "durationMinutes": 13,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-48-48",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #48",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #48",
+      "durationMinutes": 20,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-49-49",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #49",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #49",
+      "durationMinutes": 22,
+      "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-50-50",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #50",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #50",
+      "durationMinutes": 21,
+      "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-51-51",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #51",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #51",
+      "durationMinutes": 30,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-52-52",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #52",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #52",
+      "durationMinutes": 29,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-53-53",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #53",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #53",
+      "durationMinutes": 21,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-54-54",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #54",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #54",
+      "durationMinutes": 9,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-55-55",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #55",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #55",
+      "durationMinutes": 3,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-56-56",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #56",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #56",
+      "durationMinutes": 14,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-57-57",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #57",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #57",
+      "durationMinutes": 26,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-58-58",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #58",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #58",
+      "durationMinutes": 4,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-59-59",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #59",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #59",
+      "durationMinutes": 26,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-60-60",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #60",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #60",
+      "durationMinutes": 3,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-61-61",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #61",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #61",
+      "durationMinutes": 17,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-62-62",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #62",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #62",
+      "durationMinutes": 10,
+      "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-63-63",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #63",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #63",
+      "durationMinutes": 30,
+      "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-64-64",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #64",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #64",
+      "durationMinutes": 19,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-65-65",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #65",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #65",
+      "durationMinutes": 27,
+      "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-66-66",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #66",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #66",
+      "durationMinutes": 19,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-67-67",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #67",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #67",
+      "durationMinutes": 15,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-68-68",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #68",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #68",
+      "durationMinutes": 28,
+      "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-69-69",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #69",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #69",
+      "durationMinutes": 8,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-70-70",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #70",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #70",
+      "durationMinutes": 25,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-71-71",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #71",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #71",
+      "durationMinutes": 21,
+      "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-72-72",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #72",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #72",
+      "durationMinutes": 7,
+      "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-73-73",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #73",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #73",
+      "durationMinutes": 4,
+      "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-74-74",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #74",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #74",
+      "durationMinutes": 5,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-75-75",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #75",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #75",
+      "durationMinutes": 25,
+      "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-76-76",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #76",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #76",
+      "durationMinutes": 21,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-77-77",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #77",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #77",
+      "durationMinutes": 16,
+      "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-78-78",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #78",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #78",
+      "durationMinutes": 4,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-79-79",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #79",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #79",
+      "durationMinutes": 29,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-80-80",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #80",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #80",
+      "durationMinutes": 27,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-81-81",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #81",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #81",
+      "durationMinutes": 23,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-82-82",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #82",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #82",
+      "durationMinutes": 7,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-83-83",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #83",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #83",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-84-84",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #84",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #84",
+      "durationMinutes": 20,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-85-85",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #85",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #85",
+      "durationMinutes": 27,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-86-86",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #86",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #86",
+      "durationMinutes": 8,
+      "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-87-87",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #87",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #87",
+      "durationMinutes": 21,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-88-88",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #88",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #88",
+      "durationMinutes": 9,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-89-89",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #89",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #89",
+      "durationMinutes": 17,
+      "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-90-90",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #90",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #90",
+      "durationMinutes": 25,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-91-91",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #91",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #91",
+      "durationMinutes": 7,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-92-92",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #92",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #92",
+      "durationMinutes": 8,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-93-93",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #93",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #93",
+      "durationMinutes": 17,
+      "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-94-94",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #94",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #94",
+      "durationMinutes": 12,
+      "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-95-95",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #95",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #95",
+      "durationMinutes": 21,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-96-96",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #96",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #96",
+      "durationMinutes": 28,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-97-97",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #97",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #97",
+      "durationMinutes": 13,
+      "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-98-98",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #98",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #98",
+      "durationMinutes": 9,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-99-99",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #99",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #99",
+      "durationMinutes": 28,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-100-100",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #100",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #100",
+      "durationMinutes": 23,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-101-101",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #101",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #101",
+      "durationMinutes": 20,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-102-102",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #102",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #102",
+      "durationMinutes": 13,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-103-103",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #103",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #103",
+      "durationMinutes": 24,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-104-104",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #104",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #104",
+      "durationMinutes": 22,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-105-105",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #105",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #105",
+      "durationMinutes": 6,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-106-106",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #106",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #106",
+      "durationMinutes": 18,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-107-107",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #107",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #107",
+      "durationMinutes": 28,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-108-108",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #108",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #108",
+      "durationMinutes": 15,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-109-109",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #109",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #109",
+      "durationMinutes": 21,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-110-110",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #110",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #110",
+      "durationMinutes": 21,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-111-111",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #111",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #111",
+      "durationMinutes": 3,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-112-112",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #112",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #112",
+      "durationMinutes": 3,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-113-113",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #113",
+    "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #113",
+      "durationMinutes": 14,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-wildcard-topic-114-114",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Wildcard Topic #114",
+    "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wildcard Topic #114",
+      "durationMinutes": 21,
+      "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
   }
 ]

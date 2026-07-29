@@ -697,5 +697,1620 @@
       "2000s"
     ],
     "tier": 3
+  },
+  {
+    "id": "albu-album-topic-36-36",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #36",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #36 end-to-end",
+      "durationMinutes": 65,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-37-37",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #37",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #37 end-to-end",
+      "durationMinutes": 67,
+      "instruction": "Pay attention to the percussion work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-38-38",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #38",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #38 end-to-end",
+      "durationMinutes": 61,
+      "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel unsettled."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-39-39",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #39",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #39 end-to-end",
+      "durationMinutes": 79,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-40-40",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #40",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #40 end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel euphoric."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-41-41",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #41",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #41 end-to-end",
+      "durationMinutes": 49,
+      "instruction": "Listen for the moment at 2:13 when the synthesizer does something unexpected."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-42-42",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #42",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #42 end-to-end",
+      "durationMinutes": 61,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-43-43",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #43",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #43 end-to-end",
+      "durationMinutes": 45,
+      "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel expansive."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-44-44",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #44",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #44 end-to-end",
+      "durationMinutes": 26,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-45-45",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #45",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #45 end-to-end",
+      "durationMinutes": 32,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-46-46",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #46",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #46 end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-47-47",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #47",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #47 end-to-end",
+      "durationMinutes": 76,
+      "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel expansive."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-48-48",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #48",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #48 end-to-end",
+      "durationMinutes": 61,
+      "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-49-49",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #49",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #49 end-to-end",
+      "durationMinutes": 70,
+      "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel expansive."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-50-50",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #50",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #50 end-to-end",
+      "durationMinutes": 62,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-51-51",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #51",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #51 end-to-end",
+      "durationMinutes": 65,
+      "instruction": "Listen for the moment at 1:54 when the guitar does something unexpected."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-52-52",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #52",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #52 end-to-end",
+      "durationMinutes": 75,
+      "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-53-53",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #53",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #53 end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-54-54",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #54",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #54 end-to-end",
+      "durationMinutes": 77,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-55-55",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #55",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #55 end-to-end",
+      "durationMinutes": 36,
+      "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel unsettled."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-56-56",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #56",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #56 end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-57-57",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #57",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #57 end-to-end",
+      "durationMinutes": 50,
+      "instruction": "Listen for the moment at 3:47 when the bass does something unexpected."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-58-58",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #58",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #58 end-to-end",
+      "durationMinutes": 42,
+      "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-59-59",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #59",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #59 end-to-end",
+      "durationMinutes": 72,
+      "instruction": "Listen for the moment at 2:23 when the strings does something unexpected."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-60-60",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #60",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #60 end-to-end",
+      "durationMinutes": 28,
+      "instruction": "Pay attention to the vocals work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Folk",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-61-61",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #61",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #61 end-to-end",
+      "durationMinutes": 28,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-62-62",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #62",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #62 end-to-end",
+      "durationMinutes": 54,
+      "instruction": "Pay attention to the horns work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-63-63",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #63",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #63 end-to-end",
+      "durationMinutes": 73,
+      "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel nostalgic."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-64-64",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #64",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #64 end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-65-65",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #65",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #65 end-to-end",
+      "durationMinutes": 55,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-66-66",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #66",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #66 end-to-end",
+      "durationMinutes": 46,
+      "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-67-67",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #67",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #67 end-to-end",
+      "durationMinutes": 45,
+      "instruction": "Pay attention to the synthesizer work. It shifts twice in ways most tracks don't dare."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-68-68",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #68",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #68 end-to-end",
+      "durationMinutes": 33,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-69-69",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #69",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #69 end-to-end",
+      "durationMinutes": 78,
+      "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel grounded."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-70-70",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #70",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #70 end-to-end",
+      "durationMinutes": 71,
+      "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel grounded."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-71-71",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #71",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #71 end-to-end",
+      "durationMinutes": 67,
+      "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel unsettled."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-72-72",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #72",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #72 end-to-end",
+      "durationMinutes": 32,
+      "instruction": "Notice how the production layers spatial mixing. That's intentional — the artist wanted you to feel anxious."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-73-73",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #73",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #73 end-to-end",
+      "durationMinutes": 33,
+      "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel grounded."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-74-74",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #74",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #74 end-to-end",
+      "durationMinutes": 80,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-75-75",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #75",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #75 end-to-end",
+      "durationMinutes": 29,
+      "instruction": "Listen for the moment at 3:24 when the guitar does something unexpected."
+    },
+    "tags": [
+      "Folk",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-76-76",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #76",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #76 end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-77-77",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #77",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #77 end-to-end",
+      "durationMinutes": 31,
+      "instruction": "Pay attention to the piano work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-78-78",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #78",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #78 end-to-end",
+      "durationMinutes": 77,
+      "instruction": "Listen for the moment at 3:47 when the bass does something unexpected."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-79-79",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #79",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #79 end-to-end",
+      "durationMinutes": 63,
+      "instruction": "Listen for the moment at 3:58 when the horns does something unexpected."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-80-80",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #80",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #80 end-to-end",
+      "durationMinutes": 64,
+      "instruction": "Listen for the moment at 3:21 when the percussion does something unexpected."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-81-81",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #81",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #81 end-to-end",
+      "durationMinutes": 28,
+      "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel intimate."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-82-82",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #82",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #82 end-to-end",
+      "durationMinutes": 67,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Folk",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-83-83",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #83",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #83 end-to-end",
+      "durationMinutes": 27,
+      "instruction": "Listen for the moment at 3:26 when the percussion does something unexpected."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-84-84",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #84",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #84 end-to-end",
+      "durationMinutes": 58,
+      "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-85-85",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #85",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #85 end-to-end",
+      "durationMinutes": 68,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-86-86",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #86",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #86 end-to-end",
+      "durationMinutes": 67,
+      "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-87-87",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #87",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #87 end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-88-88",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #88",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #88 end-to-end",
+      "durationMinutes": 26,
+      "instruction": "Pay attention to the percussion work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-89-89",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #89",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #89 end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-90-90",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #90",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #90 end-to-end",
+      "durationMinutes": 67,
+      "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-91-91",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #91",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #91 end-to-end",
+      "durationMinutes": 68,
+      "instruction": "Listen for the moment at 2:41 when the vocals does something unexpected."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-92-92",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #92",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #92 end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-93-93",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #93",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #93 end-to-end",
+      "durationMinutes": 71,
+      "instruction": "Listen for the moment at 1:26 when the vocals does something unexpected."
+    },
+    "tags": [
+      "Folk",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-94-94",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #94",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #94 end-to-end",
+      "durationMinutes": 66,
+      "instruction": "Listen for the moment at 1:43 when the guitar does something unexpected."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-95-95",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #95",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #95 end-to-end",
+      "durationMinutes": 48,
+      "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel euphoric."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-96-96",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #96",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #96 end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Pay attention to the bass work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-97-97",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #97",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #97 end-to-end",
+      "durationMinutes": 63,
+      "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel nostalgic."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-98-98",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #98",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #98 end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel nostalgic."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-99-99",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #99",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #99 end-to-end",
+      "durationMinutes": 72,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Folk",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-100-100",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #100",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #100 end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Folk",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-101-101",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #101",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #101 end-to-end",
+      "durationMinutes": 65,
+      "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel unsettled."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-102-102",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #102",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #102 end-to-end",
+      "durationMinutes": 75,
+      "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-103-103",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #103",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #103 end-to-end",
+      "durationMinutes": 78,
+      "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-104-104",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #104",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #104 end-to-end",
+      "durationMinutes": 53,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-105-105",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #105",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #105 end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-106-106",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #106",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #106 end-to-end",
+      "durationMinutes": 74,
+      "instruction": "Notice how the production layers spatial mixing. That's intentional — the artist wanted you to feel unsettled."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-107-107",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #107",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #107 end-to-end",
+      "durationMinutes": 27,
+      "instruction": "Listen for the moment at 3:43 when the vocals does something unexpected."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-108-108",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #108",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #108 end-to-end",
+      "durationMinutes": 55,
+      "instruction": "Listen for the moment at 1:36 when the vocals does something unexpected."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-109-109",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #109",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #109 end-to-end",
+      "durationMinutes": 34,
+      "instruction": "Pay attention to the percussion work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-110-110",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #110",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #110 end-to-end",
+      "durationMinutes": 31,
+      "instruction": "Listen for the moment at 3:26 when the piano does something unexpected."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-111-111",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #111",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #111 end-to-end",
+      "durationMinutes": 34,
+      "instruction": "Listen for the moment at 1:31 when the strings does something unexpected."
+    },
+    "tags": [
+      "R&B",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-112-112",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #112",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #112 end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel anxious."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-113-113",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #113",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #113 end-to-end",
+      "durationMinutes": 58,
+      "instruction": "Notice how the production layers spatial mixing. That's intentional — the artist wanted you to feel expansive."
+    },
+    "tags": [
+      "Folk",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-114-114",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #114",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #114 end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen for the moment at 2:40 when the percussion does something unexpected."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-115-115",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #115",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #115 end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-116-116",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #116",
+    "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #116 end-to-end",
+      "durationMinutes": 64,
+      "instruction": "Pay attention to the percussion work. It shifts twice in ways most tracks don't dare."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-117-117",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #117",
+    "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #117 end-to-end",
+      "durationMinutes": 54,
+      "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel grounded."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-118-118",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #118",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #118 end-to-end",
+      "durationMinutes": 74,
+      "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-119-119",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #119",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #119 end-to-end",
+      "durationMinutes": 25,
+      "instruction": "Listen for the moment at 1:12 when the horns does something unexpected."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-album-topic-120-120",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Album Topic #120",
+    "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Album Topic #120 end-to-end",
+      "durationMinutes": 56,
+      "instruction": "Listen for the moment at 1:11 when the vocals does something unexpected."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
   }
 ]

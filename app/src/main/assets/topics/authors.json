@@ -698,5 +698,1620 @@
       "20th Century"
     ],
     "tier": 2
+  },
+  {
+    "id": "auth-author-topic-36-36",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #36",
+    "teaser": "Author Topic #36 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #36",
+      "durationMinutes": 42,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-37-37",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #37",
+    "teaser": "Author Topic #37 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #37",
+      "durationMinutes": 34,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-38-38",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #38",
+    "teaser": "Critics dismissed Author Topic #38's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #38",
+      "durationMinutes": 39,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-39-39",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #39",
+    "teaser": "Critics dismissed Author Topic #39's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #39",
+      "durationMinutes": 33,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-40-40",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #40",
+    "teaser": "Author Topic #40 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #40",
+      "durationMinutes": 20,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-41-41",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #41",
+    "teaser": "Critics dismissed Author Topic #41's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #41",
+      "durationMinutes": 31,
+      "instruction": "Track the recurring motif of birds. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-42-42",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #42",
+    "teaser": "Author Topic #42 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #42",
+      "durationMinutes": 19,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-43-43",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #43",
+    "teaser": "Critics dismissed Author Topic #43's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #43",
+      "durationMinutes": 17,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-44-44",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #44",
+    "teaser": "Author Topic #44 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #44",
+      "durationMinutes": 16,
+      "instruction": "Track the recurring motif of doors. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-45-45",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #45",
+    "teaser": "Author Topic #45 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #45",
+      "durationMinutes": 22,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-46-46",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #46",
+    "teaser": "Author Topic #46 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #46",
+      "durationMinutes": 36,
+      "instruction": "Notice how the author uses imagery to make you feel intimate without saying it directly."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-47-47",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #47",
+    "teaser": "Author Topic #47 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #47",
+      "durationMinutes": 23,
+      "instruction": "Track the recurring motif of mirrors. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-48-48",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #48",
+    "teaser": "Critics dismissed Author Topic #48's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #48",
+      "durationMinutes": 32,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-49-49",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #49",
+    "teaser": "Critics dismissed Author Topic #49's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #49",
+      "durationMinutes": 24,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-50-50",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #50",
+    "teaser": "Author Topic #50 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #50",
+      "durationMinutes": 20,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-51-51",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #51",
+    "teaser": "Author Topic #51 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #51",
+      "durationMinutes": 27,
+      "instruction": "Track the recurring motif of windows. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-52-52",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #52",
+    "teaser": "Critics dismissed Author Topic #52's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #52",
+      "durationMinutes": 16,
+      "instruction": "Stop after the bridge. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-53-53",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #53",
+    "teaser": "Author Topic #53 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #53",
+      "durationMinutes": 31,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-54-54",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #54",
+    "teaser": "Critics dismissed Author Topic #54's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #54",
+      "durationMinutes": 19,
+      "instruction": "Notice how the author uses sentence length to make you feel unsettled without saying it directly."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-55-55",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #55",
+    "teaser": "Critics dismissed Author Topic #55's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #55",
+      "durationMinutes": 25,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-56-56",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #56",
+    "teaser": "Author Topic #56 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #56",
+      "durationMinutes": 33,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-57-57",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #57",
+    "teaser": "Author Topic #57 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #57",
+      "durationMinutes": 20,
+      "instruction": "Notice how the author uses imagery to make you feel anxious without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-58-58",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #58",
+    "teaser": "Author Topic #58 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #58",
+      "durationMinutes": 12,
+      "instruction": "Track the recurring motif of shadows. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-59-59",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #59",
+    "teaser": "Author Topic #59 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #59",
+      "durationMinutes": 21,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-60-60",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #60",
+    "teaser": "Critics dismissed Author Topic #60's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #60",
+      "durationMinutes": 10,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel euphoric without saying it directly."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-61-61",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #61",
+    "teaser": "Author Topic #61 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #61",
+      "durationMinutes": 32,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-62-62",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #62",
+    "teaser": "Critics dismissed Author Topic #62's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #62",
+      "durationMinutes": 18,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-63-63",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #63",
+    "teaser": "Critics dismissed Author Topic #63's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #63",
+      "durationMinutes": 14,
+      "instruction": "Track the recurring motif of water. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-64-64",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #64",
+    "teaser": "Critics dismissed Author Topic #64's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #64",
+      "durationMinutes": 42,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-65-65",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #65",
+    "teaser": "Critics dismissed Author Topic #65's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #65",
+      "durationMinutes": 39,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-66-66",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #66",
+    "teaser": "Critics dismissed Author Topic #66's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #66",
+      "durationMinutes": 23,
+      "instruction": "Track the recurring motif of doors. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-67-67",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #67",
+    "teaser": "Author Topic #67 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #67",
+      "durationMinutes": 43,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-68-68",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #68",
+    "teaser": "Critics dismissed Author Topic #68's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #68",
+      "durationMinutes": 19,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-69-69",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #69",
+    "teaser": "Author Topic #69 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #69",
+      "durationMinutes": 32,
+      "instruction": "Notice how the author uses repetition to make you feel floating without saying it directly."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-70-70",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #70",
+    "teaser": "Author Topic #70 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #70",
+      "durationMinutes": 21,
+      "instruction": "Track the recurring motif of food. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-71-71",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #71",
+    "teaser": "Critics dismissed Author Topic #71's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #71",
+      "durationMinutes": 12,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-72-72",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #72",
+    "teaser": "Author Topic #72 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #72",
+      "durationMinutes": 36,
+      "instruction": "Stop after the verse. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-73-73",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #73",
+    "teaser": "Critics dismissed Author Topic #73's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #73",
+      "durationMinutes": 20,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel anxious without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-74-74",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #74",
+    "teaser": "Critics dismissed Author Topic #74's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #74",
+      "durationMinutes": 18,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-75-75",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #75",
+    "teaser": "Author Topic #75 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #75",
+      "durationMinutes": 21,
+      "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-76-76",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #76",
+    "teaser": "Critics dismissed Author Topic #76's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #76",
+      "durationMinutes": 32,
+      "instruction": "Track the recurring motif of hands. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-77-77",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #77",
+    "teaser": "Author Topic #77 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #77",
+      "durationMinutes": 40,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-78-78",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #78",
+    "teaser": "Critics dismissed Author Topic #78's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #78",
+      "durationMinutes": 27,
+      "instruction": "Track the recurring motif of birds. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-79-79",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #79",
+    "teaser": "Author Topic #79 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #79",
+      "durationMinutes": 32,
+      "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-80-80",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #80",
+    "teaser": "Author Topic #80 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #80",
+      "durationMinutes": 27,
+      "instruction": "Track the recurring motif of windows. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-81-81",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #81",
+    "teaser": "Author Topic #81 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #81",
+      "durationMinutes": 11,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-82-82",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #82",
+    "teaser": "Critics dismissed Author Topic #82's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #82",
+      "durationMinutes": 13,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-83-83",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #83",
+    "teaser": "Author Topic #83 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #83",
+      "durationMinutes": 12,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-84-84",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #84",
+    "teaser": "Critics dismissed Author Topic #84's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #84",
+      "durationMinutes": 41,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-85-85",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #85",
+    "teaser": "Critics dismissed Author Topic #85's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #85",
+      "durationMinutes": 16,
+      "instruction": "Notice how the author uses imagery to make you feel expansive without saying it directly."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-86-86",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #86",
+    "teaser": "Author Topic #86 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #86",
+      "durationMinutes": 39,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-87-87",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #87",
+    "teaser": "Critics dismissed Author Topic #87's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #87",
+      "durationMinutes": 38,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-88-88",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #88",
+    "teaser": "Author Topic #88 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #88",
+      "durationMinutes": 44,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-89-89",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #89",
+    "teaser": "Author Topic #89 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #89",
+      "durationMinutes": 25,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-90-90",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #90",
+    "teaser": "Critics dismissed Author Topic #90's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #90",
+      "durationMinutes": 25,
+      "instruction": "Stop after the bridge. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-91-91",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #91",
+    "teaser": "Critics dismissed Author Topic #91's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #91",
+      "durationMinutes": 29,
+      "instruction": "Track the recurring motif of water. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-92-92",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #92",
+    "teaser": "Author Topic #92 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #92",
+      "durationMinutes": 15,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-93-93",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #93",
+    "teaser": "Critics dismissed Author Topic #93's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #93",
+      "durationMinutes": 39,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-94-94",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #94",
+    "teaser": "Author Topic #94 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #94",
+      "durationMinutes": 29,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-95-95",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #95",
+    "teaser": "Critics dismissed Author Topic #95's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #95",
+      "durationMinutes": 34,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-96-96",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #96",
+    "teaser": "Author Topic #96 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #96",
+      "durationMinutes": 37,
+      "instruction": "Notice how the author uses imagery to make you feel unsettled without saying it directly."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-97-97",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #97",
+    "teaser": "Critics dismissed Author Topic #97's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #97",
+      "durationMinutes": 42,
+      "instruction": "Notice how the author uses repetition to make you feel intimate without saying it directly."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-98-98",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #98",
+    "teaser": "Author Topic #98 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #98",
+      "durationMinutes": 42,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel anxious without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-99-99",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #99",
+    "teaser": "Author Topic #99 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #99",
+      "durationMinutes": 40,
+      "instruction": "Track the recurring motif of mirrors. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-100-100",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #100",
+    "teaser": "Critics dismissed Author Topic #100's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #100",
+      "durationMinutes": 28,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-101-101",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #101",
+    "teaser": "Author Topic #101 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #101",
+      "durationMinutes": 38,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-102-102",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #102",
+    "teaser": "Critics dismissed Author Topic #102's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #102",
+      "durationMinutes": 40,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-103-103",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #103",
+    "teaser": "Author Topic #103 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #103",
+      "durationMinutes": 25,
+      "instruction": "Notice how the author uses sentence length to make you feel nostalgic without saying it directly."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-104-104",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #104",
+    "teaser": "Critics dismissed Author Topic #104's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #104",
+      "durationMinutes": 41,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-105-105",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #105",
+    "teaser": "Critics dismissed Author Topic #105's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #105",
+      "durationMinutes": 40,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-106-106",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #106",
+    "teaser": "Critics dismissed Author Topic #106's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #106",
+      "durationMinutes": 34,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-107-107",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #107",
+    "teaser": "Author Topic #107 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #107",
+      "durationMinutes": 18,
+      "instruction": "Track the recurring motif of shadows. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-108-108",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #108",
+    "teaser": "Author Topic #108 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #108",
+      "durationMinutes": 42,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-109-109",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #109",
+    "teaser": "Critics dismissed Author Topic #109's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #109",
+      "durationMinutes": 33,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel nostalgic without saying it directly."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-110-110",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #110",
+    "teaser": "Critics dismissed Author Topic #110's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #110",
+      "durationMinutes": 25,
+      "instruction": "Notice how the author uses imagery to make you feel nostalgic without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-111-111",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #111",
+    "teaser": "Critics dismissed Author Topic #111's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #111",
+      "durationMinutes": 32,
+      "instruction": "Track the recurring motif of windows. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-112-112",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #112",
+    "teaser": "Critics dismissed Author Topic #112's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #112",
+      "durationMinutes": 34,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-113-113",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #113",
+    "teaser": "Critics dismissed Author Topic #113's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #113",
+      "durationMinutes": 31,
+      "instruction": "Track the recurring motif of food. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-114-114",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #114",
+    "teaser": "Author Topic #114 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #114",
+      "durationMinutes": 27,
+      "instruction": "Notice how the author uses repetition to make you feel intimate without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-115-115",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #115",
+    "teaser": "Critics dismissed Author Topic #115's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #115",
+      "durationMinutes": 32,
+      "instruction": "Track the recurring motif of windows. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-116-116",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #116",
+    "teaser": "Author Topic #116 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #116",
+      "durationMinutes": 12,
+      "instruction": "Track the recurring motif of light. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Poetry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-117-117",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #117",
+    "teaser": "Critics dismissed Author Topic #117's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #117",
+      "durationMinutes": 30,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-118-118",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #118",
+    "teaser": "Critics dismissed Author Topic #118's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #118",
+      "durationMinutes": 23,
+      "instruction": "Track the recurring motif of shadows. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-119-119",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #119",
+    "teaser": "Critics dismissed Author Topic #119's early work as 'too peculiar,' only to later describe it as 'visionary' when the world caught up.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #119",
+      "durationMinutes": 22,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel euphoric without saying it directly."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "auth-author-topic-120-120",
+    "categoryId": "AUTHORS",
+    "subtype": "Author",
+    "name": "Author Topic #120",
+    "teaser": "Author Topic #120 wrote their first published work on a borrowed typewriter while working night shifts, revising each page dozens of times.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "a chapter from a book by Author Topic #120",
+      "durationMinutes": 24,
+      "instruction": "Track the recurring motif of hands. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Philosophy",
+      "19th Century"
+    ],
+    "tier": 2
   }
 ]

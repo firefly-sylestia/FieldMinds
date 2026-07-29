@@ -264,7 +264,7 @@
     "categoryId": "SCIENTISTS",
     "subtype": "Physicist",
     "name": "James Clerk Maxwell",
-    "teaser": "Scottish physicist who unified electricity, magnetism, and light into 4 equations that he died believing would someday be rejected. By 1888, Hertz had confirmed light was electromagnetic waves. Einstein later cited this achievement as the most important transformation of 19th-century physics.",
+    "teaser": "Scottish physicist who unified electricity, magnetism, and light into 4 equations that he died believing would someday be rejected. By 1888, Hertz had confirmed light was electromagnetic waves. Einstein later cited this achievement as the most important transformation of 19th-...",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
@@ -991,6 +991,1906 @@
       "Anthropology",
       "American",
       "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-51-51",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #51",
+    "teaser": "Cientit Topic #51 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #51",
+      "durationMinutes": 14,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-52-52",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #52",
+    "teaser": "Cientit Topic #52 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #52",
+      "durationMinutes": 6,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-53-53",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #53",
+    "teaser": "Colleagues described Cientit Topic #53 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #53",
+      "durationMinutes": 8,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-54-54",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #54",
+    "teaser": "Cientit Topic #54 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #54",
+      "durationMinutes": 11,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-55-55",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #55",
+    "teaser": "Colleagues described Cientit Topic #55 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #55",
+      "durationMinutes": 19,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-56-56",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #56",
+    "teaser": "Colleagues described Cientit Topic #56 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #56",
+      "durationMinutes": 6,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-57-57",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #57",
+    "teaser": "Cientit Topic #57 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #57",
+      "durationMinutes": 10,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-58-58",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #58",
+    "teaser": "Cientit Topic #58 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #58",
+      "durationMinutes": 16,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-59-59",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #59",
+    "teaser": "Colleagues described Cientit Topic #59 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #59",
+      "durationMinutes": 19,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-60-60",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #60",
+    "teaser": "Cientit Topic #60 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #60",
+      "durationMinutes": 6,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-61-61",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #61",
+    "teaser": "Colleagues described Cientit Topic #61 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #61",
+      "durationMinutes": 13,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-62-62",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #62",
+    "teaser": "Cientit Topic #62 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #62",
+      "durationMinutes": 11,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-63-63",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #63",
+    "teaser": "Cientit Topic #63 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #63",
+      "durationMinutes": 9,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-64-64",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #64",
+    "teaser": "Colleagues described Cientit Topic #64 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #64",
+      "durationMinutes": 11,
+      "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-65-65",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #65",
+    "teaser": "Cientit Topic #65 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #65",
+      "durationMinutes": 15,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-66-66",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #66",
+    "teaser": "Colleagues described Cientit Topic #66 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #66",
+      "durationMinutes": 11,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-67-67",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #67",
+    "teaser": "Colleagues described Cientit Topic #67 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #67",
+      "durationMinutes": 20,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-68-68",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #68",
+    "teaser": "Cientit Topic #68 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #68",
+      "durationMinutes": 14,
+      "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-69-69",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #69",
+    "teaser": "Colleagues described Cientit Topic #69 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #69",
+      "durationMinutes": 12,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-70-70",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #70",
+    "teaser": "Cientit Topic #70 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #70",
+      "durationMinutes": 18,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-71-71",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #71",
+    "teaser": "Colleagues described Cientit Topic #71 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #71",
+      "durationMinutes": 12,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-72-72",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #72",
+    "teaser": "Colleagues described Cientit Topic #72 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #72",
+      "durationMinutes": 18,
+      "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-73-73",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #73",
+    "teaser": "Cientit Topic #73 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #73",
+      "durationMinutes": 20,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-74-74",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #74",
+    "teaser": "Cientit Topic #74 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #74",
+      "durationMinutes": 13,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-75-75",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #75",
+    "teaser": "Cientit Topic #75 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #75",
+      "durationMinutes": 14,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-76-76",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #76",
+    "teaser": "Cientit Topic #76 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #76",
+      "durationMinutes": 19,
+      "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-77-77",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #77",
+    "teaser": "Cientit Topic #77 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #77",
+      "durationMinutes": 7,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-78-78",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #78",
+    "teaser": "Colleagues described Cientit Topic #78 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #78",
+      "durationMinutes": 16,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-79-79",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #79",
+    "teaser": "Cientit Topic #79 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #79",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-80-80",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #80",
+    "teaser": "Colleagues described Cientit Topic #80 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #80",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-81-81",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #81",
+    "teaser": "Colleagues described Cientit Topic #81 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #81",
+      "durationMinutes": 17,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-82-82",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #82",
+    "teaser": "Cientit Topic #82 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #82",
+      "durationMinutes": 9,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-83-83",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #83",
+    "teaser": "Cientit Topic #83 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #83",
+      "durationMinutes": 14,
+      "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-84-84",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #84",
+    "teaser": "Cientit Topic #84 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #84",
+      "durationMinutes": 15,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-85-85",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #85",
+    "teaser": "Cientit Topic #85 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #85",
+      "durationMinutes": 7,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-86-86",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #86",
+    "teaser": "Colleagues described Cientit Topic #86 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #86",
+      "durationMinutes": 12,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-87-87",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #87",
+    "teaser": "Colleagues described Cientit Topic #87 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #87",
+      "durationMinutes": 20,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-88-88",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #88",
+    "teaser": "Colleagues described Cientit Topic #88 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #88",
+      "durationMinutes": 6,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-89-89",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #89",
+    "teaser": "Colleagues described Cientit Topic #89 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #89",
+      "durationMinutes": 6,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-90-90",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #90",
+    "teaser": "Cientit Topic #90 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #90",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-91-91",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #91",
+    "teaser": "Colleagues described Cientit Topic #91 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #91",
+      "durationMinutes": 20,
+      "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-92-92",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #92",
+    "teaser": "Colleagues described Cientit Topic #92 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #92",
+      "durationMinutes": 17,
+      "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-93-93",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #93",
+    "teaser": "Colleagues described Cientit Topic #93 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #93",
+      "durationMinutes": 11,
+      "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-94-94",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #94",
+    "teaser": "Colleagues described Cientit Topic #94 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #94",
+      "durationMinutes": 15,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-95-95",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #95",
+    "teaser": "Colleagues described Cientit Topic #95 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #95",
+      "durationMinutes": 7,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-96-96",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #96",
+    "teaser": "Cientit Topic #96 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #96",
+      "durationMinutes": 17,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-97-97",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #97",
+    "teaser": "Colleagues described Cientit Topic #97 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #97",
+      "durationMinutes": 20,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-98-98",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #98",
+    "teaser": "Cientit Topic #98 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #98",
+      "durationMinutes": 8,
+      "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-99-99",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #99",
+    "teaser": "Cientit Topic #99 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #99",
+      "durationMinutes": 12,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-100-100",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #100",
+    "teaser": "Cientit Topic #100 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #100",
+      "durationMinutes": 11,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-101-101",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #101",
+    "teaser": "Colleagues described Cientit Topic #101 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #101",
+      "durationMinutes": 20,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-102-102",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #102",
+    "teaser": "Colleagues described Cientit Topic #102 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #102",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-103-103",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #103",
+    "teaser": "Colleagues described Cientit Topic #103 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #103",
+      "durationMinutes": 17,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-104-104",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #104",
+    "teaser": "Colleagues described Cientit Topic #104 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #104",
+      "durationMinutes": 5,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-105-105",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #105",
+    "teaser": "Cientit Topic #105 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #105",
+      "durationMinutes": 20,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-106-106",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #106",
+    "teaser": "Cientit Topic #106 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #106",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-107-107",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #107",
+    "teaser": "Colleagues described Cientit Topic #107 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #107",
+      "durationMinutes": 9,
+      "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-108-108",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #108",
+    "teaser": "Colleagues described Cientit Topic #108 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #108",
+      "durationMinutes": 6,
+      "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-109-109",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #109",
+    "teaser": "Cientit Topic #109 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #109",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-110-110",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #110",
+    "teaser": "Colleagues described Cientit Topic #110 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #110",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-111-111",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #111",
+    "teaser": "Cientit Topic #111 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #111",
+      "durationMinutes": 6,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-112-112",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #112",
+    "teaser": "Colleagues described Cientit Topic #112 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #112",
+      "durationMinutes": 9,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-113-113",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #113",
+    "teaser": "Cientit Topic #113 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #113",
+      "durationMinutes": 10,
+      "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-114-114",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #114",
+    "teaser": "Colleagues described Cientit Topic #114 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #114",
+      "durationMinutes": 11,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-115-115",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #115",
+    "teaser": "Cientit Topic #115 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #115",
+      "durationMinutes": 17,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-116-116",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #116",
+    "teaser": "Cientit Topic #116 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #116",
+      "durationMinutes": 5,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-117-117",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #117",
+    "teaser": "Cientit Topic #117 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #117",
+      "durationMinutes": 16,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-118-118",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #118",
+    "teaser": "Cientit Topic #118 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #118",
+      "durationMinutes": 19,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-119-119",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #119",
+    "teaser": "Colleagues described Cientit Topic #119 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #119",
+      "durationMinutes": 6,
+      "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-120-120",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #120",
+    "teaser": "Cientit Topic #120 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #120",
+      "durationMinutes": 5,
+      "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-121-121",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #121",
+    "teaser": "Cientit Topic #121 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #121",
+      "durationMinutes": 5,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-122-122",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #122",
+    "teaser": "Cientit Topic #122 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #122",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-123-123",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #123",
+    "teaser": "Cientit Topic #123 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #123",
+      "durationMinutes": 5,
+      "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-124-124",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #124",
+    "teaser": "Cientit Topic #124 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #124",
+      "durationMinutes": 6,
+      "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-125-125",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #125",
+    "teaser": "Cientit Topic #125 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #125",
+      "durationMinutes": 5,
+      "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-126-126",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #126",
+    "teaser": "Colleagues described Cientit Topic #126 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #126",
+      "durationMinutes": 7,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-127-127",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #127",
+    "teaser": "Colleagues described Cientit Topic #127 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #127",
+      "durationMinutes": 13,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-128-128",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #128",
+    "teaser": "Colleagues described Cientit Topic #128 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #128",
+      "durationMinutes": 20,
+      "instruction": "Look at the original diagram. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-129-129",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #129",
+    "teaser": "Colleagues described Cientit Topic #129 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #129",
+      "durationMinutes": 19,
+      "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-130-130",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #130",
+    "teaser": "Colleagues described Cientit Topic #130 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #130",
+      "durationMinutes": 19,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-131-131",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #131",
+    "teaser": "Colleagues described Cientit Topic #131 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #131",
+      "durationMinutes": 12,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-132-132",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #132",
+    "teaser": "Cientit Topic #132 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #132",
+      "durationMinutes": 17,
+      "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-133-133",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #133",
+    "teaser": "Cientit Topic #133 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #133",
+      "durationMinutes": 17,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-134-134",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #134",
+    "teaser": "Colleagues described Cientit Topic #134 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #134",
+      "durationMinutes": 8,
+      "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-135-135",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #135",
+    "teaser": "Cientit Topic #135 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #135",
+      "durationMinutes": 12,
+      "instruction": "Look at the original diagram. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-136-136",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #136",
+    "teaser": "Colleagues described Cientit Topic #136 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #136",
+      "durationMinutes": 19,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-137-137",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #137",
+    "teaser": "Cientit Topic #137 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #137",
+      "durationMinutes": 16,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-138-138",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #138",
+    "teaser": "Cientit Topic #138 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #138",
+      "durationMinutes": 9,
+      "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-139-139",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #139",
+    "teaser": "Cientit Topic #139 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #139",
+      "durationMinutes": 19,
+      "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-140-140",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #140",
+    "teaser": "Cientit Topic #140 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #140",
+      "durationMinutes": 13,
+      "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-141-141",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #141",
+    "teaser": "Colleagues described Cientit Topic #141 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #141",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-142-142",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #142",
+    "teaser": "Cientit Topic #142 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #142",
+      "durationMinutes": 20,
+      "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-143-143",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #143",
+    "teaser": "Colleagues described Cientit Topic #143 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #143",
+      "durationMinutes": 16,
+      "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-144-144",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #144",
+    "teaser": "Cientit Topic #144 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #144",
+      "durationMinutes": 11,
+      "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-145-145",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #145",
+    "teaser": "Colleagues described Cientit Topic #145 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #145",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-146-146",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #146",
+    "teaser": "Cientit Topic #146 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #146",
+      "durationMinutes": 20,
+      "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-147-147",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #147",
+    "teaser": "Colleagues described Cientit Topic #147 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #147",
+      "durationMinutes": 6,
+      "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-148-148",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #148",
+    "teaser": "Cientit Topic #148 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #148",
+      "durationMinutes": 15,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-149-149",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #149",
+    "teaser": "Colleagues described Cientit Topic #149 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #149",
+      "durationMinutes": 6,
+      "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cientit-topic-150-150",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cientit Topic #150",
+    "teaser": "Colleagues described Cientit Topic #150 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "the key ideas of Cientit Topic #150",
+      "durationMinutes": 15,
+      "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
     ],
     "tier": 2
   }

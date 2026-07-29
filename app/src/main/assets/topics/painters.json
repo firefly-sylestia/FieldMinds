@@ -798,5 +798,1715 @@
       "20th Century"
     ],
     "tier": 3
+  },
+  {
+    "id": "pain-painter-topic-41-41",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #41",
+    "teaser": "Painter Topic #41 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #41's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-42-42",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #42",
+    "teaser": "Painter Topic #42 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #42's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-43-43",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #43",
+    "teaser": "Painter Topic #43 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #43's most famous work",
+      "durationMinutes": 7,
+      "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-44-44",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #44",
+    "teaser": "Painter Topic #44 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #44's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Look at the use of focal point. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-45-45",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #45",
+    "teaser": "Painter Topic #45 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #45's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Compare the upper section with the foreground. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-46-46",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #46",
+    "teaser": "Painter Topic #46 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #46's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-47-47",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #47",
+    "teaser": "Painter Topic #47 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #47's most famous work",
+      "durationMinutes": 5,
+      "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-48-48",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #48",
+    "teaser": "Painter Topic #48 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #48's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Compare the lower edge with the left half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-49-49",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #49",
+    "teaser": "Painter Topic #49 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #49's most famous work",
+      "durationMinutes": 9,
+      "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-50-50",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #50",
+    "teaser": "Painter Topic #50 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #50's most famous work",
+      "durationMinutes": 5,
+      "instruction": "Notice what's missing. The artist deliberately left out color temperature — that absence speaks volumes."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-51-51",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #51",
+    "teaser": "Painter Topic #51 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #51's most famous work",
+      "durationMinutes": 7,
+      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-52-52",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #52",
+    "teaser": "Painter Topic #52 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #52's most famous work",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-53-53",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #53",
+    "teaser": "Painter Topic #53 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #53's most famous work",
+      "durationMinutes": 9,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-54-54",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #54",
+    "teaser": "Painter Topic #54 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #54's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-55-55",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #55",
+    "teaser": "Painter Topic #55 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #55's most famous work",
+      "durationMinutes": 7,
+      "instruction": "Step back and squint. The texture reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-56-56",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #56",
+    "teaser": "Painter Topic #56 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #56's most famous work",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-57-57",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #57",
+    "teaser": "Painter Topic #57 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #57's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Compare the lower edge with the foreground. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-58-58",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #58",
+    "teaser": "Painter Topic #58 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #58's most famous work",
+      "durationMinutes": 3,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-59-59",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #59",
+    "teaser": "Painter Topic #59 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #59's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-60-60",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #60",
+    "teaser": "Painter Topic #60 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #60's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-61-61",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #61",
+    "teaser": "Painter Topic #61 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #61's most famous work",
+      "durationMinutes": 3,
+      "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-62-62",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #62",
+    "teaser": "Painter Topic #62 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #62's most famous work",
+      "durationMinutes": 7,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-63-63",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #63",
+    "teaser": "Painter Topic #63 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #63's most famous work",
+      "durationMinutes": 5,
+      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-64-64",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #64",
+    "teaser": "Painter Topic #64 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #64's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Notice what's missing. The artist deliberately left out color temperature — that absence speaks volumes."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-65-65",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #65",
+    "teaser": "Painter Topic #65 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #65's most famous work",
+      "durationMinutes": 7,
+      "instruction": "Compare the left half with the right half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-66-66",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #66",
+    "teaser": "Painter Topic #66 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #66's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-67-67",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #67",
+    "teaser": "Painter Topic #67 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #67's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-68-68",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #68",
+    "teaser": "Painter Topic #68 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #68's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-69-69",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #69",
+    "teaser": "Painter Topic #69 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #69's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Compare the background with the left half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-70-70",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #70",
+    "teaser": "Painter Topic #70 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #70's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-71-71",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #71",
+    "teaser": "Painter Topic #71 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #71's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-72-72",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #72",
+    "teaser": "Painter Topic #72 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #72's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Compare the foreground with the foreground. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-73-73",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #73",
+    "teaser": "Painter Topic #73 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #73's most famous work",
+      "durationMinutes": 3,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-74-74",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #74",
+    "teaser": "Painter Topic #74 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #74's most famous work",
+      "durationMinutes": 3,
+      "instruction": "Compare the foreground with the right half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-75-75",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #75",
+    "teaser": "Painter Topic #75 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #75's most famous work",
+      "durationMinutes": 3,
+      "instruction": "Look at the use of texture. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-76-76",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #76",
+    "teaser": "Painter Topic #76 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #76's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Look at the use of brushwork. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-77-77",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #77",
+    "teaser": "Painter Topic #77 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #77's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-78-78",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #78",
+    "teaser": "Painter Topic #78 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #78's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-79-79",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #79",
+    "teaser": "Painter Topic #79 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #79's most famous work",
+      "durationMinutes": 5,
+      "instruction": "Step back and squint. The focal point reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-80-80",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #80",
+    "teaser": "Painter Topic #80 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #80's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-81-81",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #81",
+    "teaser": "Painter Topic #81 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #81's most famous work",
+      "durationMinutes": 7,
+      "instruction": "Compare the lower edge with the upper section. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-82-82",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #82",
+    "teaser": "Painter Topic #82 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #82's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-83-83",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #83",
+    "teaser": "Painter Topic #83 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #83's most famous work",
+      "durationMinutes": 9,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-84-84",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #84",
+    "teaser": "Painter Topic #84 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #84's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-85-85",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #85",
+    "teaser": "Painter Topic #85 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #85's most famous work",
+      "durationMinutes": 5,
+      "instruction": "Compare the foreground with the background. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-86-86",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #86",
+    "teaser": "Painter Topic #86 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #86's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-87-87",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #87",
+    "teaser": "Painter Topic #87 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #87's most famous work",
+      "durationMinutes": 9,
+      "instruction": "Step back and squint. The focal point reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-88-88",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #88",
+    "teaser": "Painter Topic #88 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #88's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Look at the use of color temperature. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-89-89",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #89",
+    "teaser": "Painter Topic #89 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #89's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Compare the left half with the right half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-90-90",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #90",
+    "teaser": "Painter Topic #90 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #90's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Compare the left half with the foreground. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-91-91",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #91",
+    "teaser": "Painter Topic #91 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #91's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-92-92",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #92",
+    "teaser": "Painter Topic #92 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #92's most famous work",
+      "durationMinutes": 5,
+      "instruction": "Step back and squint. The texture reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-93-93",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #93",
+    "teaser": "Painter Topic #93 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #93's most famous work",
+      "durationMinutes": 9,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-94-94",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #94",
+    "teaser": "Painter Topic #94 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #94's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-95-95",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #95",
+    "teaser": "Painter Topic #95 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #95's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Look at the use of focal point. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-96-96",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #96",
+    "teaser": "Painter Topic #96 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #96's most famous work",
+      "durationMinutes": 7,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-97-97",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #97",
+    "teaser": "Painter Topic #97 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #97's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-98-98",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #98",
+    "teaser": "Painter Topic #98 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #98's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-99-99",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #99",
+    "teaser": "Painter Topic #99 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #99's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-100-100",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #100",
+    "teaser": "Painter Topic #100 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #100's most famous work",
+      "durationMinutes": 7,
+      "instruction": "Notice what's missing. The artist deliberately left out texture — that absence speaks volumes."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-101-101",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #101",
+    "teaser": "Painter Topic #101 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #101's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Look at the use of focal point. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-102-102",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #102",
+    "teaser": "Painter Topic #102 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #102's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-103-103",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #103",
+    "teaser": "Painter Topic #103 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #103's most famous work",
+      "durationMinutes": 9,
+      "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-104-104",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #104",
+    "teaser": "Painter Topic #104 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #104's most famous work",
+      "durationMinutes": 5,
+      "instruction": "Compare the background with the foreground. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-105-105",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #105",
+    "teaser": "Painter Topic #105 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #105's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Compare the background with the foreground. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-106-106",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #106",
+    "teaser": "Painter Topic #106 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #106's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-107-107",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #107",
+    "teaser": "Painter Topic #107 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #107's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-108-108",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #108",
+    "teaser": "Painter Topic #108 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #108's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-109-109",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #109",
+    "teaser": "Painter Topic #109 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #109's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-110-110",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #110",
+    "teaser": "Painter Topic #110 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #110's most famous work",
+      "durationMinutes": 9,
+      "instruction": "Notice what's missing. The artist deliberately left out texture — that absence speaks volumes."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-111-111",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #111",
+    "teaser": "Painter Topic #111 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #111's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Notice what's missing. The artist deliberately left out color temperature — that absence speaks volumes."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-112-112",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #112",
+    "teaser": "Painter Topic #112 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #112's most famous work",
+      "durationMinutes": 3,
+      "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-113-113",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #113",
+    "teaser": "Painter Topic #113 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #113's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-114-114",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #114",
+    "teaser": "Painter Topic #114 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #114's most famous work",
+      "durationMinutes": 9,
+      "instruction": "Look at the use of color temperature. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-115-115",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #115",
+    "teaser": "Painter Topic #115 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #115's most famous work",
+      "durationMinutes": 10,
+      "instruction": "Compare the right half with the upper section. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-116-116",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #116",
+    "teaser": "Painter Topic #116 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #116's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-117-117",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #117",
+    "teaser": "Painter Topic #117 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #117's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-118-118",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #118",
+    "teaser": "Painter Topic #118 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #118's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Compare the foreground with the left half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-119-119",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #119",
+    "teaser": "Painter Topic #119 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #119's most famous work",
+      "durationMinutes": 3,
+      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-120-120",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #120",
+    "teaser": "Painter Topic #120 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #120's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Compare the left half with the right half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-121-121",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #121",
+    "teaser": "Painter Topic #121 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #121's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Look at the use of focal point. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-122-122",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #122",
+    "teaser": "Painter Topic #122 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #122's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Look at the use of brushwork. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-123-123",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #123",
+    "teaser": "Painter Topic #123 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #123's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Notice what's missing. The artist deliberately left out light and shadow — that absence speaks volumes."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-124-124",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #124",
+    "teaser": "Painter Topic #124 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #124's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Compare the right half with the left half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-125-125",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #125",
+    "teaser": "Painter Topic #125 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #125's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Compare the left half with the background. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-126-126",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #126",
+    "teaser": "Painter Topic #126 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #126's most famous work",
+      "durationMinutes": 3,
+      "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-127-127",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #127",
+    "teaser": "Painter Topic #127 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #127's most famous work",
+      "durationMinutes": 8,
+      "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-128-128",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #128",
+    "teaser": "Painter Topic #128 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #128's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Compare the lower edge with the lower edge. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-129-129",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #129",
+    "teaser": "Painter Topic #129 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #129's most famous work",
+      "durationMinutes": 6,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-painter-topic-130-130",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Painter Topic #130",
+    "teaser": "Painter Topic #130 once traded a painting for a month's rent — that same work now hangs in a national museum.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Painter Topic #130's most famous work",
+      "durationMinutes": 4,
+      "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
   }
 ]

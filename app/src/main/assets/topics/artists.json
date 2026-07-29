@@ -1484,5 +1484,2323 @@
       "1970s"
     ],
     "tier": 3
+  },
+  {
+    "id": "arti-artit-topic-73-73",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #73",
+    "teaser": "A studio engineer once said Artit Topic #73's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #73 — a specific track or album",
+      "durationMinutes": 43,
+      "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel intimate."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-74-74",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #74",
+    "teaser": "Before their breakthrough, Artit Topic #74 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #74 — a specific track or album",
+      "durationMinutes": 40,
+      "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel nostalgic."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-75-75",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #75",
+    "teaser": "Artit Topic #75 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #75 — a specific track or album",
+      "durationMinutes": 15,
+      "instruction": "Notice how the production layers spatial mixing. That's intentional — the artist wanted you to feel euphoric."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-76-76",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #76",
+    "teaser": "Artit Topic #76 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #76 — a specific track or album",
+      "durationMinutes": 43,
+      "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-77-77",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #77",
+    "teaser": "Before their breakthrough, Artit Topic #77 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #77 — a specific track or album",
+      "durationMinutes": 28,
+      "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-78-78",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #78",
+    "teaser": "Before their breakthrough, Artit Topic #78 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #78 — a specific track or album",
+      "durationMinutes": 21,
+      "instruction": "Pay attention to the guitar work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-79-79",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #79",
+    "teaser": "A studio engineer once said Artit Topic #79's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #79 — a specific track or album",
+      "durationMinutes": 39,
+      "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel unsettled."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-80-80",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #80",
+    "teaser": "A studio engineer once said Artit Topic #80's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #80 — a specific track or album",
+      "durationMinutes": 17,
+      "instruction": "Listen for the moment at 1:55 when the synthesizer does something unexpected."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-81-81",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #81",
+    "teaser": "Before their breakthrough, Artit Topic #81 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #81 — a specific track or album",
+      "durationMinutes": 54,
+      "instruction": "Pay attention to the horns work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-82-82",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #82",
+    "teaser": "A studio engineer once said Artit Topic #82's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #82 — a specific track or album",
+      "durationMinutes": 18,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-83-83",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #83",
+    "teaser": "Artit Topic #83 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #83 — a specific track or album",
+      "durationMinutes": 49,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-84-84",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #84",
+    "teaser": "A studio engineer once said Artit Topic #84's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #84 — a specific track or album",
+      "durationMinutes": 39,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-85-85",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #85",
+    "teaser": "A studio engineer once said Artit Topic #85's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #85 — a specific track or album",
+      "durationMinutes": 37,
+      "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-86-86",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #86",
+    "teaser": "A studio engineer once said Artit Topic #86's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #86 — a specific track or album",
+      "durationMinutes": 24,
+      "instruction": "Listen for the moment at 1:50 when the guitar does something unexpected."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-87-87",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #87",
+    "teaser": "Artit Topic #87 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #87 — a specific track or album",
+      "durationMinutes": 40,
+      "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-88-88",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #88",
+    "teaser": "A studio engineer once said Artit Topic #88's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #88 — a specific track or album",
+      "durationMinutes": 50,
+      "instruction": "Listen for the moment at 2:24 when the horns does something unexpected."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-89-89",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #89",
+    "teaser": "Before their breakthrough, Artit Topic #89 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #89 — a specific track or album",
+      "durationMinutes": 10,
+      "instruction": "Pay attention to the bass work. It shifts twice in ways most tracks don't dare."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-90-90",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #90",
+    "teaser": "Before their breakthrough, Artit Topic #90 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #90 — a specific track or album",
+      "durationMinutes": 45,
+      "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-91-91",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #91",
+    "teaser": "Artit Topic #91 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #91 — a specific track or album",
+      "durationMinutes": 53,
+      "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-92-92",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #92",
+    "teaser": "A studio engineer once said Artit Topic #92's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #92 — a specific track or album",
+      "durationMinutes": 52,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-93-93",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #93",
+    "teaser": "Artit Topic #93 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #93 — a specific track or album",
+      "durationMinutes": 55,
+      "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-94-94",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #94",
+    "teaser": "Before their breakthrough, Artit Topic #94 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #94 — a specific track or album",
+      "durationMinutes": 17,
+      "instruction": "Pay attention to the strings work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-95-95",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #95",
+    "teaser": "Before their breakthrough, Artit Topic #95 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #95 — a specific track or album",
+      "durationMinutes": 17,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-96-96",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #96",
+    "teaser": "Before their breakthrough, Artit Topic #96 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #96 — a specific track or album",
+      "durationMinutes": 16,
+      "instruction": "Listen for the moment at 2:15 when the guitar does something unexpected."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-97-97",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #97",
+    "teaser": "A studio engineer once said Artit Topic #97's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #97 — a specific track or album",
+      "durationMinutes": 45,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-98-98",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #98",
+    "teaser": "Before their breakthrough, Artit Topic #98 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #98 — a specific track or album",
+      "durationMinutes": 52,
+      "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-99-99",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #99",
+    "teaser": "Artit Topic #99 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #99 — a specific track or album",
+      "durationMinutes": 30,
+      "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-100-100",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #100",
+    "teaser": "A studio engineer once said Artit Topic #100's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #100 — a specific track or album",
+      "durationMinutes": 15,
+      "instruction": "Pay attention to the vocals work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-101-101",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #101",
+    "teaser": "Artit Topic #101 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #101 — a specific track or album",
+      "durationMinutes": 50,
+      "instruction": "Listen for the moment at 2:24 when the guitar does something unexpected."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-102-102",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #102",
+    "teaser": "Artit Topic #102 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #102 — a specific track or album",
+      "durationMinutes": 3,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-103-103",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #103",
+    "teaser": "A studio engineer once said Artit Topic #103's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #103 — a specific track or album",
+      "durationMinutes": 34,
+      "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-104-104",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #104",
+    "teaser": "Before their breakthrough, Artit Topic #104 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #104 — a specific track or album",
+      "durationMinutes": 16,
+      "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel euphoric."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-105-105",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #105",
+    "teaser": "A studio engineer once said Artit Topic #105's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #105 — a specific track or album",
+      "durationMinutes": 37,
+      "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-106-106",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #106",
+    "teaser": "Before their breakthrough, Artit Topic #106 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #106 — a specific track or album",
+      "durationMinutes": 50,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-107-107",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #107",
+    "teaser": "Before their breakthrough, Artit Topic #107 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #107 — a specific track or album",
+      "durationMinutes": 29,
+      "instruction": "Listen for the moment at 2:54 when the percussion does something unexpected."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-108-108",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #108",
+    "teaser": "Artit Topic #108 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #108 — a specific track or album",
+      "durationMinutes": 15,
+      "instruction": "Listen for the moment at 1:27 when the vocals does something unexpected."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-109-109",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #109",
+    "teaser": "A studio engineer once said Artit Topic #109's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #109 — a specific track or album",
+      "durationMinutes": 32,
+      "instruction": "Pay attention to the guitar work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-110-110",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #110",
+    "teaser": "Artit Topic #110 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #110 — a specific track or album",
+      "durationMinutes": 31,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-111-111",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #111",
+    "teaser": "Before their breakthrough, Artit Topic #111 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #111 — a specific track or album",
+      "durationMinutes": 40,
+      "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel grounded."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-112-112",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #112",
+    "teaser": "A studio engineer once said Artit Topic #112's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #112 — a specific track or album",
+      "durationMinutes": 7,
+      "instruction": "Listen for the moment at 3:55 when the horns does something unexpected."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-113-113",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #113",
+    "teaser": "A studio engineer once said Artit Topic #113's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #113 — a specific track or album",
+      "durationMinutes": 14,
+      "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-114-114",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #114",
+    "teaser": "Before their breakthrough, Artit Topic #114 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #114 — a specific track or album",
+      "durationMinutes": 15,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-115-115",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #115",
+    "teaser": "Artit Topic #115 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #115 — a specific track or album",
+      "durationMinutes": 51,
+      "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-116-116",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #116",
+    "teaser": "Before their breakthrough, Artit Topic #116 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #116 — a specific track or album",
+      "durationMinutes": 55,
+      "instruction": "Listen for the moment at 1:19 when the strings does something unexpected."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-117-117",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #117",
+    "teaser": "A studio engineer once said Artit Topic #117's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #117 — a specific track or album",
+      "durationMinutes": 46,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-118-118",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #118",
+    "teaser": "Artit Topic #118 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #118 — a specific track or album",
+      "durationMinutes": 45,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-119-119",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #119",
+    "teaser": "A studio engineer once said Artit Topic #119's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #119 — a specific track or album",
+      "durationMinutes": 15,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-120-120",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #120",
+    "teaser": "A studio engineer once said Artit Topic #120's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #120 — a specific track or album",
+      "durationMinutes": 4,
+      "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel euphoric."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-121-121",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #121",
+    "teaser": "A studio engineer once said Artit Topic #121's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #121 — a specific track or album",
+      "durationMinutes": 44,
+      "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel nostalgic."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-122-122",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #122",
+    "teaser": "Artit Topic #122 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #122 — a specific track or album",
+      "durationMinutes": 53,
+      "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel euphoric."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-123-123",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #123",
+    "teaser": "Artit Topic #123 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #123 — a specific track or album",
+      "durationMinutes": 9,
+      "instruction": "Listen for the moment at 1:36 when the piano does something unexpected."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-124-124",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #124",
+    "teaser": "A studio engineer once said Artit Topic #124's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #124 — a specific track or album",
+      "durationMinutes": 39,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-125-125",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #125",
+    "teaser": "Before their breakthrough, Artit Topic #125 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #125 — a specific track or album",
+      "durationMinutes": 32,
+      "instruction": "Pay attention to the piano work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-126-126",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #126",
+    "teaser": "Before their breakthrough, Artit Topic #126 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #126 — a specific track or album",
+      "durationMinutes": 10,
+      "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-127-127",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #127",
+    "teaser": "A studio engineer once said Artit Topic #127's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #127 — a specific track or album",
+      "durationMinutes": 48,
+      "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-128-128",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #128",
+    "teaser": "A studio engineer once said Artit Topic #128's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #128 — a specific track or album",
+      "durationMinutes": 30,
+      "instruction": "Pay attention to the strings work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-129-129",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #129",
+    "teaser": "A studio engineer once said Artit Topic #129's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #129 — a specific track or album",
+      "durationMinutes": 7,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-130-130",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #130",
+    "teaser": "Artit Topic #130 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #130 — a specific track or album",
+      "durationMinutes": 8,
+      "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-131-131",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #131",
+    "teaser": "Before their breakthrough, Artit Topic #131 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #131 — a specific track or album",
+      "durationMinutes": 31,
+      "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-132-132",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #132",
+    "teaser": "A studio engineer once said Artit Topic #132's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #132 — a specific track or album",
+      "durationMinutes": 45,
+      "instruction": "Listen for the moment at 3:15 when the percussion does something unexpected."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-133-133",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #133",
+    "teaser": "A studio engineer once said Artit Topic #133's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #133 — a specific track or album",
+      "durationMinutes": 11,
+      "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel grounded."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-134-134",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #134",
+    "teaser": "Before their breakthrough, Artit Topic #134 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #134 — a specific track or album",
+      "durationMinutes": 53,
+      "instruction": "Pay attention to the guitar work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-135-135",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #135",
+    "teaser": "A studio engineer once said Artit Topic #135's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #135 — a specific track or album",
+      "durationMinutes": 8,
+      "instruction": "Listen for the moment at 1:38 when the horns does something unexpected."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-136-136",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #136",
+    "teaser": "Before their breakthrough, Artit Topic #136 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #136 — a specific track or album",
+      "durationMinutes": 21,
+      "instruction": "Pay attention to the vocals work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-137-137",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #137",
+    "teaser": "Artit Topic #137 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #137 — a specific track or album",
+      "durationMinutes": 34,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-138-138",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #138",
+    "teaser": "A studio engineer once said Artit Topic #138's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #138 — a specific track or album",
+      "durationMinutes": 53,
+      "instruction": "Listen for the moment at 1:32 when the piano does something unexpected."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-139-139",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #139",
+    "teaser": "Before their breakthrough, Artit Topic #139 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #139 — a specific track or album",
+      "durationMinutes": 35,
+      "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-140-140",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #140",
+    "teaser": "Before their breakthrough, Artit Topic #140 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #140 — a specific track or album",
+      "durationMinutes": 49,
+      "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel anxious."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-141-141",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #141",
+    "teaser": "A studio engineer once said Artit Topic #141's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #141 — a specific track or album",
+      "durationMinutes": 53,
+      "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel nostalgic."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-142-142",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #142",
+    "teaser": "A studio engineer once said Artit Topic #142's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #142 — a specific track or album",
+      "durationMinutes": 31,
+      "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-143-143",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #143",
+    "teaser": "Before their breakthrough, Artit Topic #143 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #143 — a specific track or album",
+      "durationMinutes": 7,
+      "instruction": "Pay attention to the strings work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-144-144",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #144",
+    "teaser": "Artit Topic #144 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #144 — a specific track or album",
+      "durationMinutes": 54,
+      "instruction": "Pay attention to the strings work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-145-145",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #145",
+    "teaser": "A studio engineer once said Artit Topic #145's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #145 — a specific track or album",
+      "durationMinutes": 35,
+      "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel anxious."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-146-146",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #146",
+    "teaser": "Artit Topic #146 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #146 — a specific track or album",
+      "durationMinutes": 45,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-147-147",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #147",
+    "teaser": "A studio engineer once said Artit Topic #147's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #147 — a specific track or album",
+      "durationMinutes": 6,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-148-148",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #148",
+    "teaser": "Before their breakthrough, Artit Topic #148 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #148 — a specific track or album",
+      "durationMinutes": 6,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-149-149",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #149",
+    "teaser": "Before their breakthrough, Artit Topic #149 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #149 — a specific track or album",
+      "durationMinutes": 6,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-150-150",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #150",
+    "teaser": "Artit Topic #150 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #150 — a specific track or album",
+      "durationMinutes": 20,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-151-151",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #151",
+    "teaser": "A studio engineer once said Artit Topic #151's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #151 — a specific track or album",
+      "durationMinutes": 23,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-152-152",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #152",
+    "teaser": "Artit Topic #152 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #152 — a specific track or album",
+      "durationMinutes": 53,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-153-153",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #153",
+    "teaser": "A studio engineer once said Artit Topic #153's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #153 — a specific track or album",
+      "durationMinutes": 49,
+      "instruction": "Pay attention to the piano work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-154-154",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #154",
+    "teaser": "Artit Topic #154 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #154 — a specific track or album",
+      "durationMinutes": 16,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-155-155",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #155",
+    "teaser": "Artit Topic #155 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #155 — a specific track or album",
+      "durationMinutes": 55,
+      "instruction": "Listen for the moment at 3:57 when the percussion does something unexpected."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-156-156",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #156",
+    "teaser": "Before their breakthrough, Artit Topic #156 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #156 — a specific track or album",
+      "durationMinutes": 33,
+      "instruction": "Pay attention to the guitar work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-157-157",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #157",
+    "teaser": "A studio engineer once said Artit Topic #157's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #157 — a specific track or album",
+      "durationMinutes": 41,
+      "instruction": "Listen for the moment at 3:39 when the vocals does something unexpected."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-158-158",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #158",
+    "teaser": "Before their breakthrough, Artit Topic #158 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #158 — a specific track or album",
+      "durationMinutes": 35,
+      "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel grounded."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-159-159",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #159",
+    "teaser": "A studio engineer once said Artit Topic #159's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #159 — a specific track or album",
+      "durationMinutes": 22,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-160-160",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #160",
+    "teaser": "Before their breakthrough, Artit Topic #160 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #160 — a specific track or album",
+      "durationMinutes": 48,
+      "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel grounded."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-161-161",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #161",
+    "teaser": "A studio engineer once said Artit Topic #161's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #161 — a specific track or album",
+      "durationMinutes": 39,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-162-162",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #162",
+    "teaser": "Artit Topic #162 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #162 — a specific track or album",
+      "durationMinutes": 52,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-163-163",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #163",
+    "teaser": "Artit Topic #163 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #163 — a specific track or album",
+      "durationMinutes": 49,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-164-164",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #164",
+    "teaser": "Before their breakthrough, Artit Topic #164 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #164 — a specific track or album",
+      "durationMinutes": 5,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-165-165",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #165",
+    "teaser": "A studio engineer once said Artit Topic #165's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #165 — a specific track or album",
+      "durationMinutes": 34,
+      "instruction": "Listen for the moment at 2:36 when the piano does something unexpected."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-166-166",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #166",
+    "teaser": "A studio engineer once said Artit Topic #166's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #166 — a specific track or album",
+      "durationMinutes": 19,
+      "instruction": "Listen for the moment at 1:44 when the vocals does something unexpected."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-167-167",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #167",
+    "teaser": "Before their breakthrough, Artit Topic #167 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #167 — a specific track or album",
+      "durationMinutes": 51,
+      "instruction": "Pay attention to the horns work. It shifts twice in ways most tracks don't dare."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-168-168",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #168",
+    "teaser": "Artit Topic #168 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #168 — a specific track or album",
+      "durationMinutes": 5,
+      "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-169-169",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #169",
+    "teaser": "Artit Topic #169 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #169 — a specific track or album",
+      "durationMinutes": 44,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-170-170",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #170",
+    "teaser": "Artit Topic #170 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #170 — a specific track or album",
+      "durationMinutes": 6,
+      "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-171-171",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #171",
+    "teaser": "Before their breakthrough, Artit Topic #171 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #171 — a specific track or album",
+      "durationMinutes": 53,
+      "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel nostalgic."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-172-172",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #172",
+    "teaser": "Before their breakthrough, Artit Topic #172 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #172 — a specific track or album",
+      "durationMinutes": 44,
+      "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-173-173",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #173",
+    "teaser": "Artit Topic #173 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #173 — a specific track or album",
+      "durationMinutes": 27,
+      "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-174-174",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #174",
+    "teaser": "Before their breakthrough, Artit Topic #174 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #174 — a specific track or album",
+      "durationMinutes": 38,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-175-175",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #175",
+    "teaser": "A studio engineer once said Artit Topic #175's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #175 — a specific track or album",
+      "durationMinutes": 9,
+      "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel nostalgic."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-176-176",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #176",
+    "teaser": "A studio engineer once said Artit Topic #176's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #176 — a specific track or album",
+      "durationMinutes": 27,
+      "instruction": "Pay attention to the guitar work. It shifts three times in ways most tracks don't dare."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-177-177",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #177",
+    "teaser": "Before their breakthrough, Artit Topic #177 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #177 — a specific track or album",
+      "durationMinutes": 3,
+      "instruction": "Listen for the moment at 2:37 when the piano does something unexpected."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-178-178",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #178",
+    "teaser": "Before their breakthrough, Artit Topic #178 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #178 — a specific track or album",
+      "durationMinutes": 20,
+      "instruction": "Listen for the moment at 3:11 when the percussion does something unexpected."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-179-179",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #179",
+    "teaser": "Artit Topic #179 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #179 — a specific track or album",
+      "durationMinutes": 31,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-180-180",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #180",
+    "teaser": "Artit Topic #180 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #180 — a specific track or album",
+      "durationMinutes": 50,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-181-181",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #181",
+    "teaser": "A studio engineer once said Artit Topic #181's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #181 — a specific track or album",
+      "durationMinutes": 53,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-182-182",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #182",
+    "teaser": "Before their breakthrough, Artit Topic #182 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #182 — a specific track or album",
+      "durationMinutes": 30,
+      "instruction": "Pay attention to the percussion work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-183-183",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #183",
+    "teaser": "Before their breakthrough, Artit Topic #183 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #183 — a specific track or album",
+      "durationMinutes": 15,
+      "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel unsettled."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-184-184",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #184",
+    "teaser": "A studio engineer once said Artit Topic #184's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #184 — a specific track or album",
+      "durationMinutes": 47,
+      "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-185-185",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #185",
+    "teaser": "Before their breakthrough, Artit Topic #185 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #185 — a specific track or album",
+      "durationMinutes": 55,
+      "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
+    },
+    "tags": [
+      "World",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-186-186",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #186",
+    "teaser": "Before their breakthrough, Artit Topic #186 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #186 — a specific track or album",
+      "durationMinutes": 10,
+      "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-187-187",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #187",
+    "teaser": "A studio engineer once said Artit Topic #187's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #187 — a specific track or album",
+      "durationMinutes": 42,
+      "instruction": "Pay attention to the piano work. It shifts subtly in ways most tracks don't dare."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-188-188",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #188",
+    "teaser": "A studio engineer once said Artit Topic #188's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #188 — a specific track or album",
+      "durationMinutes": 23,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Metal",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-189-189",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #189",
+    "teaser": "A studio engineer once said Artit Topic #189's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #189 — a specific track or album",
+      "durationMinutes": 28,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Indie",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-190-190",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #190",
+    "teaser": "Artit Topic #190 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #190 — a specific track or album",
+      "durationMinutes": 11,
+      "instruction": "Listen for the moment at 2:26 when the strings does something unexpected."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-191-191",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #191",
+    "teaser": "A studio engineer once said Artit Topic #191's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #191 — a specific track or album",
+      "durationMinutes": 40,
+      "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
+    },
+    "tags": [
+      "Alternative",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-192-192",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #192",
+    "teaser": "A studio engineer once said Artit Topic #192's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #192 — a specific track or album",
+      "durationMinutes": 46,
+      "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel floating."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-193-193",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #193",
+    "teaser": "Before their breakthrough, Artit Topic #193 spent years playing in venues so small the audience could literally reach out and touch the performer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #193 — a specific track or album",
+      "durationMinutes": 18,
+      "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel intimate."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-artit-topic-194-194",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Artit Topic #194",
+    "teaser": "A studio engineer once said Artit Topic #194's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Artit Topic #194 — a specific track or album",
+      "durationMinutes": 23,
+      "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
   }
 ]

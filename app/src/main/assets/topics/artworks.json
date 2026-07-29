@@ -1,3 +1,952 @@
 [
-
+  {
+    "id": "artw-artwork-topic-1-1",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #1",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #1",
+      "durationMinutes": 9,
+      "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-2-2",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #2",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #2",
+      "durationMinutes": 7,
+      "instruction": "Compare the foreground with the right half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-3-3",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #3",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #3",
+      "durationMinutes": 7,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-4-4",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #4",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #4",
+      "durationMinutes": 7,
+      "instruction": "Step back and squint. The focal point reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-5-5",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #5",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #5",
+      "durationMinutes": 6,
+      "instruction": "Notice what's missing. The artist deliberately left out light and shadow — that absence speaks volumes."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-6-6",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #6",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #6",
+      "durationMinutes": 3,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-7-7",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #7",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #7",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-8-8",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #8",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #8",
+      "durationMinutes": 6,
+      "instruction": "Step back and squint. The light and shadow reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-9-9",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #9",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #9",
+      "durationMinutes": 4,
+      "instruction": "Look at the use of texture. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-10-10",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #10",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #10",
+      "durationMinutes": 6,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-11-11",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #11",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #11",
+      "durationMinutes": 3,
+      "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-12-12",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #12",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #12",
+      "durationMinutes": 9,
+      "instruction": "Step back and squint. The light and shadow reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-13-13",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #13",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #13",
+      "durationMinutes": 3,
+      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-14-14",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #14",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #14",
+      "durationMinutes": 3,
+      "instruction": "Compare the upper section with the background. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-15-15",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #15",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #15",
+      "durationMinutes": 6,
+      "instruction": "Step back and squint. The texture reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-16-16",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #16",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #16",
+      "durationMinutes": 3,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-17-17",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #17",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #17",
+      "durationMinutes": 6,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-18-18",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #18",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #18",
+      "durationMinutes": 7,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-19-19",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #19",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #19",
+      "durationMinutes": 7,
+      "instruction": "Step back and squint. The focal point reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-20-20",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #20",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #20",
+      "durationMinutes": 6,
+      "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-21-21",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #21",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #21",
+      "durationMinutes": 6,
+      "instruction": "Compare the foreground with the left half. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-22-22",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #22",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #22",
+      "durationMinutes": 9,
+      "instruction": "Notice what's missing. The artist deliberately left out texture — that absence speaks volumes."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-23-23",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #23",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #23",
+      "durationMinutes": 7,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-24-24",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #24",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #24",
+      "durationMinutes": 10,
+      "instruction": "Step back and squint. The texture reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-25-25",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #25",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #25",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-26-26",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #26",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #26",
+      "durationMinutes": 8,
+      "instruction": "Compare the left half with the lower edge. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-27-27",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #27",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #27",
+      "durationMinutes": 7,
+      "instruction": "Compare the upper section with the lower edge. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-28-28",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #28",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #28",
+      "durationMinutes": 5,
+      "instruction": "Compare the upper section with the upper section. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-29-29",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #29",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #29",
+      "durationMinutes": 4,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-30-30",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #30",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #30",
+      "durationMinutes": 10,
+      "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-31-31",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #31",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #31",
+      "durationMinutes": 5,
+      "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-32-32",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #32",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #32",
+      "durationMinutes": 8,
+      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-33-33",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #33",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #33",
+      "durationMinutes": 3,
+      "instruction": "Compare the lower edge with the lower edge. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-34-34",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #34",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #34",
+      "durationMinutes": 5,
+      "instruction": "Notice what's missing. The artist deliberately left out texture — that absence speaks volumes."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-35-35",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #35",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #35",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-36-36",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #36",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #36",
+      "durationMinutes": 8,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-37-37",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #37",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #37",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-38-38",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #38",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #38",
+      "durationMinutes": 6,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-39-39",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #39",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #39",
+      "durationMinutes": 8,
+      "instruction": "Notice what's missing. The artist deliberately left out focal point — that absence speaks volumes."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-40-40",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #40",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #40",
+      "durationMinutes": 10,
+      "instruction": "Compare the foreground with the upper section. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-41-41",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #41",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #41",
+      "durationMinutes": 10,
+      "instruction": "Step back and squint. The light and shadow reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-42-42",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #42",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #42",
+      "durationMinutes": 5,
+      "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Photography",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-43-43",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #43",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #43",
+      "durationMinutes": 4,
+      "instruction": "Look at the use of texture. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-44-44",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #44",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #44",
+      "durationMinutes": 10,
+      "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-45-45",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #45",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #45",
+      "durationMinutes": 3,
+      "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
+    },
+    "tags": [
+      "Sculpture",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-46-46",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #46",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #46",
+      "durationMinutes": 6,
+      "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-47-47",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #47",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #47",
+      "durationMinutes": 6,
+      "instruction": "Notice what's missing. The artist deliberately left out focal point — that absence speaks volumes."
+    },
+    "tags": [
+      "Oil Painting",
+      "Classical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-48-48",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #48",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #48",
+      "durationMinutes": 10,
+      "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-49-49",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #49",
+    "teaser": "The artist completed this work in near-secrecy, only revealing it when they felt it could stand entirely on its own terms.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #49",
+      "durationMinutes": 6,
+      "instruction": "Compare the right half with the upper section. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Mixed Media",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "artw-artwork-topic-50-50",
+    "categoryId": "ARTWORKS",
+    "subtype": "Artwork",
+    "name": "Artwork Topic #50",
+    "teaser": "When first exhibited, this piece drew laughter from critics who didn't understand it. Decades later, those same critics' successors call it a turning point.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "a high-res image of Artwork Topic #50",
+      "durationMinutes": 3,
+      "instruction": "Compare the left half with the lower edge. The contrast is the whole point of the piece."
+    },
+    "tags": [
+      "Installation",
+      "Contemporary"
+    ],
+    "tier": 2
+  }
 ]

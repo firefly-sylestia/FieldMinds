@@ -818,5 +818,1734 @@
       "Novel"
     ],
     "tier": 2
+  },
+  {
+    "id": "book-book-topic-42-42",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #42",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #42",
+      "durationMinutes": 40,
+      "instruction": "Notice how the author uses imagery to make you feel nostalgic without saying it directly."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-43-43",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #43",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #43",
+      "durationMinutes": 32,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-44-44",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #44",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #44",
+      "durationMinutes": 29,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-45-45",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #45",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #45",
+      "durationMinutes": 28,
+      "instruction": "Track the recurring motif of light. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-46-46",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #46",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #46",
+      "durationMinutes": 17,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-47-47",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #47",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #47",
+      "durationMinutes": 37,
+      "instruction": "Track the recurring motif of windows. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-48-48",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #48",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #48",
+      "durationMinutes": 10,
+      "instruction": "Stop after the verse. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-49-49",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #49",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #49",
+      "durationMinutes": 16,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-50-50",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #50",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #50",
+      "durationMinutes": 42,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-51-51",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #51",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #51",
+      "durationMinutes": 31,
+      "instruction": "Track the recurring motif of mirrors. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-52-52",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #52",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #52",
+      "durationMinutes": 23,
+      "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-53-53",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #53",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #53",
+      "durationMinutes": 42,
+      "instruction": "Stop after the bridge. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-54-54",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #54",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #54",
+      "durationMinutes": 15,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-55-55",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #55",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #55",
+      "durationMinutes": 16,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-56-56",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #56",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #56",
+      "durationMinutes": 36,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-57-57",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #57",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #57",
+      "durationMinutes": 17,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-58-58",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #58",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #58",
+      "durationMinutes": 33,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-59-59",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #59",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #59",
+      "durationMinutes": 31,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-60-60",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #60",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #60",
+      "durationMinutes": 23,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel grounded without saying it directly."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-61-61",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #61",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #61",
+      "durationMinutes": 14,
+      "instruction": "Notice how the author uses dialogue tags to make you feel unsettled without saying it directly."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-62-62",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #62",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #62",
+      "durationMinutes": 19,
+      "instruction": "Track the recurring motif of food. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-63-63",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #63",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #63",
+      "durationMinutes": 22,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-64-64",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #64",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #64",
+      "durationMinutes": 39,
+      "instruction": "Notice how the author uses free indirect discourse to make you feel grounded without saying it directly."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-65-65",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #65",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #65",
+      "durationMinutes": 30,
+      "instruction": "Track the recurring motif of windows. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-66-66",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #66",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #66",
+      "durationMinutes": 29,
+      "instruction": "Track the recurring motif of mirrors. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-67-67",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #67",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #67",
+      "durationMinutes": 39,
+      "instruction": "Notice how the author uses sentence length to make you feel euphoric without saying it directly."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-68-68",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #68",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #68",
+      "durationMinutes": 32,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-69-69",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #69",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #69",
+      "durationMinutes": 12,
+      "instruction": "Track the recurring motif of water. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-70-70",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #70",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #70",
+      "durationMinutes": 29,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-71-71",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #71",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #71",
+      "durationMinutes": 37,
+      "instruction": "Track the recurring motif of birds. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-72-72",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #72",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #72",
+      "durationMinutes": 22,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-73-73",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #73",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #73",
+      "durationMinutes": 25,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-74-74",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #74",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #74",
+      "durationMinutes": 24,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-75-75",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #75",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #75",
+      "durationMinutes": 15,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-76-76",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #76",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #76",
+      "durationMinutes": 31,
+      "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-77-77",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #77",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #77",
+      "durationMinutes": 37,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-78-78",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #78",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #78",
+      "durationMinutes": 41,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-79-79",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #79",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #79",
+      "durationMinutes": 21,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-80-80",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #80",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #80",
+      "durationMinutes": 27,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-81-81",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #81",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #81",
+      "durationMinutes": 44,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-82-82",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #82",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #82",
+      "durationMinutes": 29,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-83-83",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #83",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #83",
+      "durationMinutes": 23,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-84-84",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #84",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #84",
+      "durationMinutes": 21,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-85-85",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #85",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #85",
+      "durationMinutes": 25,
+      "instruction": "Track the recurring motif of mirrors. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-86-86",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #86",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #86",
+      "durationMinutes": 23,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-87-87",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #87",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #87",
+      "durationMinutes": 36,
+      "instruction": "Track the recurring motif of doors. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-88-88",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #88",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #88",
+      "durationMinutes": 19,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-89-89",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #89",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #89",
+      "durationMinutes": 43,
+      "instruction": "Stop after the breakdown. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-90-90",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #90",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #90",
+      "durationMinutes": 19,
+      "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-91-91",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #91",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #91",
+      "durationMinutes": 29,
+      "instruction": "Notice how the author uses dialogue tags to make you feel intimate without saying it directly."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-92-92",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #92",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #92",
+      "durationMinutes": 43,
+      "instruction": "Notice how the author uses dialogue tags to make you feel anxious without saying it directly."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-93-93",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #93",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #93",
+      "durationMinutes": 44,
+      "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-94-94",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #94",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #94",
+      "durationMinutes": 36,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-95-95",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #95",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #95",
+      "durationMinutes": 21,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-96-96",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #96",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #96",
+      "durationMinutes": 20,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-97-97",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #97",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #97",
+      "durationMinutes": 35,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-98-98",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #98",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #98",
+      "durationMinutes": 27,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-99-99",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #99",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #99",
+      "durationMinutes": 17,
+      "instruction": "Notice how the author uses repetition to make you feel grounded without saying it directly."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-100-100",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #100",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #100",
+      "durationMinutes": 23,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-101-101",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #101",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #101",
+      "durationMinutes": 12,
+      "instruction": "Track the recurring motif of doors. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-102-102",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #102",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #102",
+      "durationMinutes": 31,
+      "instruction": "Track the recurring motif of birds. It appears four times and means something different each time."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-103-103",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #103",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #103",
+      "durationMinutes": 19,
+      "instruction": "Notice how the author uses sentence length to make you feel intimate without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-104-104",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #104",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #104",
+      "durationMinutes": 18,
+      "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-105-105",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #105",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #105",
+      "durationMinutes": 17,
+      "instruction": "Track the recurring motif of food. It appears seven times and means something different each time."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-106-106",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #106",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #106",
+      "durationMinutes": 24,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-107-107",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #107",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #107",
+      "durationMinutes": 36,
+      "instruction": "Notice how the author uses pacing to make you feel anxious without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-108-108",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #108",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #108",
+      "durationMinutes": 44,
+      "instruction": "Track the recurring motif of mirrors. It appears three times and means something different each time."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-109-109",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #109",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #109",
+      "durationMinutes": 16,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-110-110",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #110",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #110",
+      "durationMinutes": 18,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-111-111",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #111",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #111",
+      "durationMinutes": 23,
+      "instruction": "Track the recurring motif of doors. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-112-112",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #112",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #112",
+      "durationMinutes": 16,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-113-113",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #113",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #113",
+      "durationMinutes": 44,
+      "instruction": "Track the recurring motif of food. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-114-114",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #114",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #114",
+      "durationMinutes": 29,
+      "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-115-115",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #115",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #115",
+      "durationMinutes": 27,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-116-116",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #116",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #116",
+      "durationMinutes": 27,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-117-117",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #117",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #117",
+      "durationMinutes": 26,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-118-118",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #118",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #118",
+      "durationMinutes": 16,
+      "instruction": "Notice how the author uses dialogue tags to make you feel nostalgic without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-119-119",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #119",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #119",
+      "durationMinutes": 39,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-120-120",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #120",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #120",
+      "durationMinutes": 16,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-121-121",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #121",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #121",
+      "durationMinutes": 14,
+      "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-122-122",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #122",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #122",
+      "durationMinutes": 41,
+      "instruction": "Notice how the author uses pacing to make you feel euphoric without saying it directly."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-123-123",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #123",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #123",
+      "durationMinutes": 26,
+      "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-124-124",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #124",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #124",
+      "durationMinutes": 13,
+      "instruction": "Track the recurring motif of doors. It appears five times and means something different each time."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-125-125",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #125",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #125",
+      "durationMinutes": 35,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-126-126",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #126",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #126",
+      "durationMinutes": 21,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-127-127",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #127",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #127",
+      "durationMinutes": 21,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-128-128",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #128",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #128",
+      "durationMinutes": 11,
+      "instruction": "Stop after the verse. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-129-129",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #129",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #129",
+      "durationMinutes": 16,
+      "instruction": "Notice how the author uses dialogue tags to make you feel anxious without saying it directly."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-130-130",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #130",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #130",
+      "durationMinutes": 32,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Poetry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-131-131",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #131",
+    "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #131",
+      "durationMinutes": 11,
+      "instruction": "Stop after the verse. Write down one thing you didn't understand AND one thing that surprised you."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-book-topic-132-132",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Book Topic #132",
+    "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "the first chapter of Book Topic #132",
+      "durationMinutes": 44,
+      "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
+    },
+    "tags": [
+      "Non-Fiction",
+      "21st Century"
+    ],
+    "tier": 2
   }
 ]
