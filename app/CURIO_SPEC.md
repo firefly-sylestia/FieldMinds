@@ -37,18 +37,22 @@ Base on M3's tonal palette generator, but seed it from a warm coral instead of a
   Error................. Warm Coral Red #E4626F
   On-Primary............ #3B0A17 (deep plum text on primary, not pure black
                           — keeps the whole palette feeling warm, never
-                          clinical)
-
-  Each of the 6 categories gets its OWN accent color layered on top of the
+                          clinical)Each of the 6 categories gets its OWN accent color layered on top of the
   base palette (used for chips, category headers, spin-segment fills):
     Music / Artists ........ Lilac      #C9A6F2
     Movies / Directors ..... Dusty Blue #9BB8E8
     Books / Authors ........ Sage       #A8C99A
-    Visual Art / Painters .. Peach      #FFB585
-    Science & Nature ....... Teal       #6FC7BE
+    Visual Art / Painters .. Peach     #FFB585
+    Science & Nature ....... Teal      #6FC7BE
     Wildcard ............... Rainbow gradient (all 5 colors swept together —
                               this is the ONLY place a gradient is used, so
                               it stays special)
+
+  **Forward note:** the category palette will expand from 6 → 10 categories
+  over v1.1–v1.4 (adds Philosophy & Ideas, History & Mythology,
+  Architecture & Design, Food & Culture). For the full data-layer roadmap
+  — new category accents, topic schema, authoring pipeline, rollout cadence
+  — see **`app/CURIO_DATA_PLAN.md`**.
 
 ### 0.3 SHAPE SYSTEM
   M3 shape tokens, but pushed rounder across the board:
@@ -623,8 +627,13 @@ Items the user has weighed in on inline during spec evolution. Captured here so 
 | 4 | Icon system | "dont use emoji use the icons of the previous app legacy just the icon system and typography geom" | ✅ Locked — Material Symbols + geom from `app-legacy/` (NO emoji anywhere) |
 | 5 | Application ID | "New `com.curio.app`" | ✅ Locked — fresh install, separate from FieldMind |
 | 6 | Data schema | "Curio schema + legacy tables kept but unused" | ✅ Locked — Curio has its own Room schema in its own data directory (`/data/data/com.curio.app/databases/curio_database`, name TBD in Phase 2). FieldMind's tables remain in FieldMind's separate install (`/data/data/fieldmind.research.app/databases/fieldmind_database`) for forensic recovery — sideload the legacy APK to extract via the V3 backup exporter in `app-legacy/`. The two apps are fully isolated; Curio cannot read FieldMind's tables directly. |
+| 7 | **Data layer + category roadmap** | "we will be adding more categories and each category is going to have 100s of topics or more with proper explanation of what to do. and accurately etc we ill go each category one by one." | ✅ Locked — see **`app/CURIO_DATA_PLAN.md`** for the full plan. Taxonomy expands 6 → 10 categories (adds Philosophy, History, Architecture, Food); each category ships with 150+ topics authored via LLM-draft + human-review per the `ExploreAction` schema (verb + targetName + durationMinutes + instruction). Image strategy = URL + Coil (no APK bloat). Wildcard refactored to a meta-spin. Rollout order: Music → Movies → Books → Visual Art → Science → Wildcard → the 4 new categories. |
+| 8 | Per-category `isReady` flag | (derived from #7) | ✅ Locked — every `CurioCategory` carries `isReady: Boolean`. Only `isReady = true` categories appear in Home's chip row + the Category Picker. Categories under construction are filtered out and surface as "Coming soon" empty-state slots. See `CURIO_DATA_PLAN.md` §1. |
 
 ---
 
 ## 15. END OF SPEC v2
 ### Next: scaffold Phase 2 (theme + icon system + nav + first home screen) on the `revamp` branch per the master plan.
+
+### Companion docs
+- **`app/CURIO_DATA_PLAN.md`** — the data layer companion to this UX spec. Owns category taxonomy expansion (6 → 10), topic data schema (`CurioTopic` + `ExploreAction`), authoring pipeline (LLM-draft + human-review), image strategy (URL + Coil, no bundling), and per-category rollout cadence (one category per PR, Music first).

@@ -10,7 +10,9 @@ Read `master.md` and root `AGENTS.md` first, then this file for app-module-speci
 
 ## Purpose
 
-The `app/` module is the active Android application — **Curio**, a discovery app that hands the user a topic (via "The Spin" roulette) to explore in the real world, then captures what they found into "The Cabinet" library. The full UX/UI spec lives at [`CURIO_SPEC.md`](CURIO_SPEC.md) at the repo root of this module. Every screen and component decision must reference this spec — it is the source of truth.
+The `app/` module is the active Android application — **Curio**, a discovery app that hands the user a topic (via "The Spin" roulette) to explore in the real world, then captures what they found into "The Cabinet" library. The full UX/UI spec lives at [`CURIO_SPEC.md`](CURIO_SPEC.md) at the repo root of this module. Every screen and component decision must reference this spec — it is the source of truth for what users see.
+
+The **data layer** (category taxonomy, topic schema, `ExploreAction` prompt format, authoring pipeline, rollout cadence) is documented separately in [`CURIO_DATA_PLAN.md`](CURIO_DATA_PLAN.md). It expands the category palette from 6 → 10 and ships 150+ topics per category authored via LLM-draft + human-review. **Read both docs together** before any feature work that touches data or content.
 
 The legacy FieldMind codebase is preserved at `app-legacy/` (frozen, never modified). Curio inherits two things from it: the **Material Symbols** variable font and **geom.ttf** display typography (see `CURIO_SPEC.md` §0.4 + §0.6). Both font files are **copied** into `app/src/main/res/font/`; `app-legacy/` is never read at runtime by Curio except via the curated copy.
 
@@ -105,8 +107,8 @@ app/src/main/java/com/curio/app/
 ### Phase plan (current & next)
 - **Phase 2 (current)**: Design-system + NavHost + Home/Splash screens + 11 placeholder stub screens. CI gate verifies compilation. No business logic, no Room, no DataStore wiring yet.
 - **Phase 3 (next)**: Spin dial rendering, Onboarding flow, Reel/Marginalia/Gallery Wall/Field Notes capture format bodies, Cabinet grid rendering.
-- **Phase 4**: Per-entry persistence (ViewModels + Room), state preservation across spins.
-- **Phase 5+**: Streak tracking, share-card generation, Emergency Recovery hooks for FieldMind data.
+- **Phase 4**: Per-entry persistence (ViewModels + Room), state preservation across spins. Also: **first content drop** — seed Music per `CURIO_DATA_PLAN.md` §5.1 (150 topics, LLM-drafted + human-reviewed, ships as `assets/topics/music.json` + a `validatetopics` Gradle task).
+- **Phase 5+**: Streak tracking, share-card generation, Emergency Recovery hooks for FieldMind data. Per-category content drops (Movies, Books, Art, Science, then the 4 new categories) continue at one-per-PR cadence per `CURIO_DATA_PLAN.md` §5.1.
 
 ## Verification
 
@@ -118,7 +120,8 @@ app/src/main/java/com/curio/app/
 
 ## Child DOX Index
 
-- [`CURIO_SPEC.md`](CURIO_SPEC.md) — Canonical UX/UI spec for Curio (per `master.md` Update After Editing rule: changes affecting screen design, navigation, or component behavior go in this doc, not buried in code comments).
+- [`CURIO_SPEC.md`](CURIO_SPEC.md) — Canonical **UX/UI** spec for Curio (per `master.md` Update After Editing rule: changes affecting screen design, navigation, or component behavior go in this doc, not buried in code comments).
+- [`CURIO_DATA_PLAN.md`](CURIO_DATA_PLAN.md) — Canonical **data layer** spec (companion to CURIO_SPEC.md). Owns: category taxonomy expansion (6 → 10), `CurioTopic` + `ExploreAction` schema, JSON-on-disk canonical format, Room DB seed flow, image strategy (URL + Coil, no bundling), authoring pipeline (LLM-draft + human-review + smoke test), per-category rollout cadence (one category per PR, Music first). Read this BEFORE adding any topic data, category entry, or capture-format prompt.
 - (Future) `app/src/main/java/com/curio/app/features/{home,spin,cabinet,capture}/AGENTS.md` — per-screen feature contracts, added when each screen gets real implementation in Phase 3+.
 - (Future) `app/src/main/java/com/curio/app/ui/theme/AGENTS.md` — design system primitive contracts, added when the theme system grows (Phase 3+ when dark-mode polish, motion tokens, etc. land).
 - (Future) `app/src/main/java/com/curio/app/data/AGENTS.md` — data-model contracts, added when Room + repositories land in Phase 4.
