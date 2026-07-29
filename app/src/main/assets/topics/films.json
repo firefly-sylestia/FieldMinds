@@ -820,15 +820,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-42-42",
+    "id": "film-singin-in-the-rain-165",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #42",
+    "name": "Singin' in the Rain (1952)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #42 on any reliable service",
+      "targetName": "Singin' in the Rain (1952)",
       "durationMinutes": 165,
       "instruction": "Track how the lighting changes from act one to the second half. It mirrors the protagonist's internal state."
     },
@@ -839,15 +839,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-43-43",
+    "id": "film-the-seventh-seal-1957-166",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #43",
+    "name": "The Seventh Seal (1957)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #43 on any reliable service",
+      "targetName": "The Seventh Seal (1957)",
       "durationMinutes": 152,
       "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
     },
@@ -858,15 +858,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-44-44",
+    "id": "film-psycho-1960-167",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #44",
+    "name": "Psycho (1960)",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #44 on any reliable service",
+      "targetName": "Psycho (1960)",
       "durationMinutes": 173,
       "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
     },
@@ -877,15 +877,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-45-45",
+    "id": "film-lawrence-of-arabia-1962-168",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #45",
+    "name": "Lawrence of Arabia (1962)",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #45 on any reliable service",
+      "targetName": "Lawrence of Arabia (1962)",
       "durationMinutes": 70,
       "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
     },
@@ -896,15 +896,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-46-46",
+    "id": "film-the-good-the-bad-169",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #46",
+    "name": "The Good the Bad and the Ugly (1966)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #46 on any reliable service",
+      "targetName": "The Good the Bad and the Ugly (1966)",
       "durationMinutes": 117,
       "instruction": "Track how the lighting changes from act one to the second half. It mirrors the protagonist's internal state."
     },
@@ -915,15 +915,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-47-47",
+    "id": "film-once-upon-a-time-170",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #47",
+    "name": "Once Upon a Time in the West (1968)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #47 on any reliable service",
+      "targetName": "Once Upon a Time in the West (1968)",
       "durationMinutes": 91,
       "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
     },
@@ -934,15 +934,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-48-48",
+    "id": "film-a-clockwork-orange-1971-171",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #48",
+    "name": "A Clockwork Orange (1971)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #48 on any reliable service",
+      "targetName": "A Clockwork Orange (1971)",
       "durationMinutes": 171,
       "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
     },
@@ -953,15 +953,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-49-49",
+    "id": "film-chinatown-1974-172",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #49",
+    "name": "Chinatown (1974)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #49 on any reliable service",
+      "targetName": "Chinatown (1974)",
       "durationMinutes": 141,
       "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
     },
@@ -972,15 +972,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-50-50",
+    "id": "film-oppenheimer-2023-173",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #50",
+    "name": "Oppenheimer (2023)",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #50 on any reliable service",
+      "targetName": "Oppenheimer (2023)",
       "durationMinutes": 113,
       "instruction": "Notice the color palette shift during third act. It tells you everything before the dialogue does."
     },
@@ -991,15 +991,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-51-51",
+    "id": "film-killers-of-the-flower-174",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #51",
+    "name": "Killers of the Flower Moon (2023)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #51 on any reliable service",
+      "targetName": "Killers of the Flower Moon (2023)",
       "durationMinutes": 94,
       "instruction": "Pay attention to how the camera frames brushwork. Every shot is working as visual commentary."
     },
@@ -1010,15 +1010,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-52-52",
+    "id": "film-poor-things-2023-175",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #52",
+    "name": "Poor Things (2023)",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #52 on any reliable service",
+      "targetName": "Poor Things (2023)",
       "durationMinutes": 106,
       "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
     },
@@ -1029,15 +1029,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-53-53",
+    "id": "film-anatomy-of-a-fall-176",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #53",
+    "name": "Anatomy of a Fall (2023)",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #53 on any reliable service",
+      "targetName": "Anatomy of a Fall (2023)",
       "durationMinutes": 80,
       "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
     },
@@ -1048,15 +1048,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-54-54",
+    "id": "film-hidden-frame-1-439",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #54",
+    "name": "Hidden Frame #1",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #54 on any reliable service",
+      "targetName": "Hidden Frame #1",
       "durationMinutes": 72,
       "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
     },
@@ -1067,15 +1067,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-55-55",
+    "id": "film-forgotten-frame-2-440",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #55",
+    "name": "Forgotten Frame #2",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #55 on any reliable service",
+      "targetName": "Forgotten Frame #2",
       "durationMinutes": 166,
       "instruction": "Watch the background actors during the climax — their positioning reveals the power dynamics."
     },
@@ -1086,15 +1086,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-56-56",
+    "id": "film-unsung-frame-3-441",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #56",
+    "name": "Unsung Frame #3",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #56 on any reliable service",
+      "targetName": "Unsung Frame #3",
       "durationMinutes": 177,
       "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for calm settles."
     },
@@ -1105,15 +1105,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-57-57",
+    "id": "film-radiant-frame-4-442",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #57",
+    "name": "Radiant Frame #4",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #57 on any reliable service",
+      "targetName": "Radiant Frame #4",
       "durationMinutes": 170,
       "instruction": "Track how the lighting changes from the first half to nightfall. It mirrors the protagonist's internal state."
     },
@@ -1124,15 +1124,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-58-58",
+    "id": "film-quiet-frame-5-443",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #58",
+    "name": "Quiet Frame #5",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #58 on any reliable service",
+      "targetName": "Quiet Frame #5",
       "durationMinutes": 84,
       "instruction": "Notice the color palette shift during chase sequence. It tells you everything before the dialogue does."
     },
@@ -1143,15 +1143,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-59-59",
+    "id": "film-luminous-frame-6-444",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #59",
+    "name": "Luminous Frame #6",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #59 on any reliable service",
+      "targetName": "Luminous Frame #6",
       "durationMinutes": 131,
       "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
     },
@@ -1162,15 +1162,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-60-60",
+    "id": "film-distant-frame-7-445",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #60",
+    "name": "Distant Frame #7",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #60 on any reliable service",
+      "targetName": "Distant Frame #7",
       "durationMinutes": 71,
       "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
     },
@@ -1181,15 +1181,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-61-61",
+    "id": "film-unexpected-frame-8-446",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #61",
+    "name": "Unexpected Frame #8",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #61 on any reliable service",
+      "targetName": "Unexpected Frame #8",
       "durationMinutes": 127,
       "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
     },
@@ -1200,15 +1200,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-62-62",
+    "id": "film-eternal-frame-9-447",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #62",
+    "name": "Eternal Frame #9",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #62 on any reliable service",
+      "targetName": "Eternal Frame #9",
       "durationMinutes": 86,
       "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
     },
@@ -1219,15 +1219,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-63-63",
+    "id": "film-restless-frame-10-448",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #63",
+    "name": "Restless Frame #10",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #63 on any reliable service",
+      "targetName": "Restless Frame #10",
       "durationMinutes": 132,
       "instruction": "Watch the background actors during the opening scene — their positioning reveals the power dynamics."
     },
@@ -1238,15 +1238,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-64-64",
+    "id": "film-brilliant-frame-11-449",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #64",
+    "name": "Brilliant Frame #11",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #64 on any reliable service",
+      "targetName": "Brilliant Frame #11",
       "durationMinutes": 163,
       "instruction": "Track how the lighting changes from the opening to the second half. It mirrors the protagonist's internal state."
     },
@@ -1257,15 +1257,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-65-65",
+    "id": "film-enigmatic-frame-12-450",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #65",
+    "name": "Enigmatic Frame #12",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #65 on any reliable service",
+      "targetName": "Enigmatic Frame #12",
       "durationMinutes": 150,
       "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
     },
@@ -1276,15 +1276,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-66-66",
+    "id": "film-restless-frame-13-451",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #66",
+    "name": "Restless Frame #13",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #66 on any reliable service",
+      "targetName": "Restless Frame #13",
       "durationMinutes": 154,
       "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for safety returns."
     },
@@ -1295,15 +1295,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-67-67",
+    "id": "film-subtle-frame-14-452",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #67",
+    "name": "Subtle Frame #14",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #67 on any reliable service",
+      "targetName": "Subtle Frame #14",
       "durationMinutes": 169,
       "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
     },
@@ -1314,15 +1314,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-68-68",
+    "id": "film-vivid-frame-15-453",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #68",
+    "name": "Vivid Frame #15",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #68 on any reliable service",
+      "targetName": "Vivid Frame #15",
       "durationMinutes": 134,
       "instruction": "Pay attention to how the camera frames light and shadow. Every shot is working as visual commentary."
     },
@@ -1333,15 +1333,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-69-69",
+    "id": "film-ancient-frame-16-454",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #69",
+    "name": "Ancient Frame #16",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #69 on any reliable service",
+      "targetName": "Ancient Frame #16",
       "durationMinutes": 83,
       "instruction": "Observe the editing rhythm — it speeds up when tension rises and slows for calm settles."
     },
@@ -1352,15 +1352,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-70-70",
+    "id": "film-modern-frame-17-455",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #70",
+    "name": "Modern Frame #17",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #70 on any reliable service",
+      "targetName": "Modern Frame #17",
       "durationMinutes": 144,
       "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
     },
@@ -1371,15 +1371,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-71-71",
+    "id": "film-lost-frame-18-456",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #71",
+    "name": "Lost Frame #18",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #71 on any reliable service",
+      "targetName": "Lost Frame #18",
       "durationMinutes": 117,
       "instruction": "Pay attention to how the camera frames negative space. Every shot is working as visual commentary."
     },
@@ -1390,15 +1390,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-72-72",
+    "id": "film-wandering-frame-19-457",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #72",
+    "name": "Wandering Frame #19",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #72 on any reliable service",
+      "targetName": "Wandering Frame #19",
       "durationMinutes": 75,
       "instruction": "Track how the lighting changes from the opening to the second half. It mirrors the protagonist's internal state."
     },
@@ -1409,15 +1409,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-73-73",
+    "id": "film-timeless-frame-20-458",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #73",
+    "name": "Timeless Frame #20",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #73 on any reliable service",
+      "targetName": "Timeless Frame #20",
       "durationMinutes": 152,
       "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
     },
@@ -1428,15 +1428,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-74-74",
+    "id": "film-hidden-scene-21-459",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #74",
+    "name": "Hidden Scene #21",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #74 on any reliable service",
+      "targetName": "Hidden Scene #21",
       "durationMinutes": 121,
       "instruction": "Track how the lighting changes from morning to the finale. It mirrors the protagonist's internal state."
     },
@@ -1447,15 +1447,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-75-75",
+    "id": "film-forgotten-scene-22-460",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #75",
+    "name": "Forgotten Scene #22",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #75 on any reliable service",
+      "targetName": "Forgotten Scene #22",
       "durationMinutes": 77,
       "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
     },
@@ -1466,15 +1466,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-76-76",
+    "id": "film-unsung-scene-23-461",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #76",
+    "name": "Unsung Scene #23",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #76 on any reliable service",
+      "targetName": "Unsung Scene #23",
       "durationMinutes": 129,
       "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
     },
@@ -1485,15 +1485,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-77-77",
+    "id": "film-radiant-scene-24-462",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #77",
+    "name": "Radiant Scene #24",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #77 on any reliable service",
+      "targetName": "Radiant Scene #24",
       "durationMinutes": 138,
       "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for safety returns."
     },
@@ -1504,15 +1504,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-78-78",
+    "id": "film-quiet-scene-25-463",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #78",
+    "name": "Quiet Scene #25",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #78 on any reliable service",
+      "targetName": "Quiet Scene #25",
       "durationMinutes": 81,
       "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
     },
@@ -1523,15 +1523,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-79-79",
+    "id": "film-luminous-scene-26-464",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #79",
+    "name": "Luminous Scene #26",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #79 on any reliable service",
+      "targetName": "Luminous Scene #26",
       "durationMinutes": 70,
       "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
     },
@@ -1542,15 +1542,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-80-80",
+    "id": "film-distant-scene-27-465",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #80",
+    "name": "Distant Scene #27",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #80 on any reliable service",
+      "targetName": "Distant Scene #27",
       "durationMinutes": 71,
       "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
     },
@@ -1561,15 +1561,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-81-81",
+    "id": "film-unexpected-scene-28-466",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #81",
+    "name": "Unexpected Scene #28",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #81 on any reliable service",
+      "targetName": "Unexpected Scene #28",
       "durationMinutes": 140,
       "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for relief comes."
     },
@@ -1580,15 +1580,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-82-82",
+    "id": "film-eternal-scene-29-467",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #82",
+    "name": "Eternal Scene #29",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #82 on any reliable service",
+      "targetName": "Eternal Scene #29",
       "durationMinutes": 105,
       "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for relief comes."
     },
@@ -1599,15 +1599,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-83-83",
+    "id": "film-restless-scene-30-468",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #83",
+    "name": "Restless Scene #30",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #83 on any reliable service",
+      "targetName": "Restless Scene #30",
       "durationMinutes": 95,
       "instruction": "Watch the background actors during the chase sequence — their positioning reveals the power dynamics."
     },
@@ -1618,15 +1618,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-84-84",
+    "id": "film-brilliant-scene-31-469",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #84",
+    "name": "Brilliant Scene #31",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #84 on any reliable service",
+      "targetName": "Brilliant Scene #31",
       "durationMinutes": 144,
       "instruction": "Pay attention to how the camera frames light and shadow. Every shot is working as visual commentary."
     },
@@ -1637,15 +1637,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-85-85",
+    "id": "film-enigmatic-scene-32-470",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #85",
+    "name": "Enigmatic Scene #32",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #85 on any reliable service",
+      "targetName": "Enigmatic Scene #32",
       "durationMinutes": 128,
       "instruction": "Track how the lighting changes from the opening to the finale. It mirrors the protagonist's internal state."
     },
@@ -1656,15 +1656,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-86-86",
+    "id": "film-restless-scene-33-471",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #86",
+    "name": "Restless Scene #33",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #86 on any reliable service",
+      "targetName": "Restless Scene #33",
       "durationMinutes": 93,
       "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
     },
@@ -1675,15 +1675,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-87-87",
+    "id": "film-subtle-scene-34-472",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #87",
+    "name": "Subtle Scene #34",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #87 on any reliable service",
+      "targetName": "Subtle Scene #34",
       "durationMinutes": 124,
       "instruction": "Notice the color palette shift during chase sequence. It tells you everything before the dialogue does."
     },
@@ -1694,15 +1694,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-88-88",
+    "id": "film-vivid-scene-35-473",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #88",
+    "name": "Vivid Scene #35",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #88 on any reliable service",
+      "targetName": "Vivid Scene #35",
       "durationMinutes": 129,
       "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
     },
@@ -1713,15 +1713,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-89-89",
+    "id": "film-ancient-scene-36-474",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #89",
+    "name": "Ancient Scene #36",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #89 on any reliable service",
+      "targetName": "Ancient Scene #36",
       "durationMinutes": 106,
       "instruction": "Notice the color palette shift during third act. It tells you everything before the dialogue does."
     },
@@ -1732,15 +1732,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-90-90",
+    "id": "film-modern-scene-37-475",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #90",
+    "name": "Modern Scene #37",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #90 on any reliable service",
+      "targetName": "Modern Scene #37",
       "durationMinutes": 161,
       "instruction": "Pay attention to how the camera frames negative space. Every shot is working as visual commentary."
     },
@@ -1751,15 +1751,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-91-91",
+    "id": "film-lost-scene-38-476",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #91",
+    "name": "Lost Scene #38",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #91 on any reliable service",
+      "targetName": "Lost Scene #38",
       "durationMinutes": 163,
       "instruction": "Track how the lighting changes from the first half to the second half. It mirrors the protagonist's internal state."
     },
@@ -1770,15 +1770,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-92-92",
+    "id": "film-wandering-scene-39-477",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #92",
+    "name": "Wandering Scene #39",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #92 on any reliable service",
+      "targetName": "Wandering Scene #39",
       "durationMinutes": 98,
       "instruction": "Track how the lighting changes from morning to the finale. It mirrors the protagonist's internal state."
     },
@@ -1789,15 +1789,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-93-93",
+    "id": "film-timeless-scene-40-478",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #93",
+    "name": "Timeless Scene #40",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #93 on any reliable service",
+      "targetName": "Timeless Scene #40",
       "durationMinutes": 129,
       "instruction": "Track how the lighting changes from morning to the finale. It mirrors the protagonist's internal state."
     },
@@ -1808,15 +1808,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-94-94",
+    "id": "film-hidden-picture-41-479",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #94",
+    "name": "Hidden Picture #41",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #94 on any reliable service",
+      "targetName": "Hidden Picture #41",
       "durationMinutes": 95,
       "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
     },
@@ -1827,15 +1827,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-95-95",
+    "id": "film-forgotten-picture-42-480",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #95",
+    "name": "Forgotten Picture #42",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #95 on any reliable service",
+      "targetName": "Forgotten Picture #42",
       "durationMinutes": 162,
       "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
     },
@@ -1846,15 +1846,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-96-96",
+    "id": "film-unsung-picture-43-481",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #96",
+    "name": "Unsung Picture #43",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #96 on any reliable service",
+      "targetName": "Unsung Picture #43",
       "durationMinutes": 98,
       "instruction": "Track how the lighting changes from the opening to nightfall. It mirrors the protagonist's internal state."
     },
@@ -1865,15 +1865,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-97-97",
+    "id": "film-radiant-picture-44-482",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #97",
+    "name": "Radiant Picture #44",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #97 on any reliable service",
+      "targetName": "Radiant Picture #44",
       "durationMinutes": 91,
       "instruction": "Observe the editing rhythm — it speeds up when danger is near and slows for relief comes."
     },
@@ -1884,15 +1884,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-98-98",
+    "id": "film-quiet-picture-45-483",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #98",
+    "name": "Quiet Picture #45",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #98 on any reliable service",
+      "targetName": "Quiet Picture #45",
       "durationMinutes": 138,
       "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
     },
@@ -1903,15 +1903,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-99-99",
+    "id": "film-luminous-picture-46-484",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #99",
+    "name": "Luminous Picture #46",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #99 on any reliable service",
+      "targetName": "Luminous Picture #46",
       "durationMinutes": 142,
       "instruction": "Track how the lighting changes from morning to the second half. It mirrors the protagonist's internal state."
     },
@@ -1922,15 +1922,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-100-100",
+    "id": "film-distant-picture-47-485",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #100",
+    "name": "Distant Picture #47",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #100 on any reliable service",
+      "targetName": "Distant Picture #47",
       "durationMinutes": 100,
       "instruction": "Watch the background actors during the quiet moment — their positioning reveals the power dynamics."
     },
@@ -1941,15 +1941,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-101-101",
+    "id": "film-unexpected-picture-48-486",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #101",
+    "name": "Unexpected Picture #48",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #101 on any reliable service",
+      "targetName": "Unexpected Picture #48",
       "durationMinutes": 79,
       "instruction": "Track how the lighting changes from the opening to nightfall. It mirrors the protagonist's internal state."
     },
@@ -1960,15 +1960,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-102-102",
+    "id": "film-eternal-picture-49-487",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #102",
+    "name": "Eternal Picture #49",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #102 on any reliable service",
+      "targetName": "Eternal Picture #49",
       "durationMinutes": 177,
       "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for calm settles."
     },
@@ -1979,15 +1979,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-103-103",
+    "id": "film-restless-picture-50-488",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #103",
+    "name": "Restless Picture #50",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #103 on any reliable service",
+      "targetName": "Restless Picture #50",
       "durationMinutes": 158,
       "instruction": "Track how the lighting changes from act one to the finale. It mirrors the protagonist's internal state."
     },
@@ -1998,15 +1998,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-104-104",
+    "id": "film-brilliant-picture-51-489",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #104",
+    "name": "Brilliant Picture #51",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #104 on any reliable service",
+      "targetName": "Brilliant Picture #51",
       "durationMinutes": 135,
       "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
     },
@@ -2017,15 +2017,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-105-105",
+    "id": "film-enigmatic-picture-52-490",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #105",
+    "name": "Enigmatic Picture #52",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #105 on any reliable service",
+      "targetName": "Enigmatic Picture #52",
       "durationMinutes": 75,
       "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
     },
@@ -2036,15 +2036,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-106-106",
+    "id": "film-restless-picture-53-491",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #106",
+    "name": "Restless Picture #53",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #106 on any reliable service",
+      "targetName": "Restless Picture #53",
       "durationMinutes": 134,
       "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
     },
@@ -2055,15 +2055,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-107-107",
+    "id": "film-subtle-picture-54-492",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #107",
+    "name": "Subtle Picture #54",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #107 on any reliable service",
+      "targetName": "Subtle Picture #54",
       "durationMinutes": 105,
       "instruction": "Pay attention to how the camera frames negative space. Every shot is working as visual commentary."
     },
@@ -2074,15 +2074,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-108-108",
+    "id": "film-vivid-picture-55-493",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #108",
+    "name": "Vivid Picture #55",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #108 on any reliable service",
+      "targetName": "Vivid Picture #55",
       "durationMinutes": 94,
       "instruction": "Notice the color palette shift during dinner scene. It tells you everything before the dialogue does."
     },
@@ -2093,15 +2093,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-109-109",
+    "id": "film-ancient-picture-56-494",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #109",
+    "name": "Ancient Picture #56",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #109 on any reliable service",
+      "targetName": "Ancient Picture #56",
       "durationMinutes": 104,
       "instruction": "Pay attention to how the camera frames focal point. Every shot is working as visual commentary."
     },
@@ -2112,15 +2112,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-110-110",
+    "id": "film-modern-picture-57-495",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #110",
+    "name": "Modern Picture #57",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #110 on any reliable service",
+      "targetName": "Modern Picture #57",
       "durationMinutes": 129,
       "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
     },
@@ -2131,15 +2131,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-111-111",
+    "id": "film-lost-picture-58-496",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #111",
+    "name": "Lost Picture #58",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #111 on any reliable service",
+      "targetName": "Lost Picture #58",
       "durationMinutes": 152,
       "instruction": "Track how the lighting changes from morning to the second half. It mirrors the protagonist's internal state."
     },
@@ -2150,15 +2150,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-112-112",
+    "id": "film-wandering-picture-59-497",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #112",
+    "name": "Wandering Picture #59",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #112 on any reliable service",
+      "targetName": "Wandering Picture #59",
       "durationMinutes": 147,
       "instruction": "Notice the color palette shift during chase sequence. It tells you everything before the dialogue does."
     },
@@ -2169,15 +2169,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-113-113",
+    "id": "film-timeless-picture-60-498",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #113",
+    "name": "Timeless Picture #60",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #113 on any reliable service",
+      "targetName": "Timeless Picture #60",
       "durationMinutes": 166,
       "instruction": "Pay attention to how the camera frames brushwork. Every shot is working as visual commentary."
     },
@@ -2188,15 +2188,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-114-114",
+    "id": "film-hidden-chronicle-61-499",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #114",
+    "name": "Hidden Chronicle #61",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #114 on any reliable service",
+      "targetName": "Hidden Chronicle #61",
       "durationMinutes": 117,
       "instruction": "Notice the color palette shift during third act. It tells you everything before the dialogue does."
     },
@@ -2207,15 +2207,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-115-115",
+    "id": "film-forgotten-chronicle-62-500",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #115",
+    "name": "Forgotten Chronicle #62",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #115 on any reliable service",
+      "targetName": "Forgotten Chronicle #62",
       "durationMinutes": 105,
       "instruction": "Watch the background actors during the opening scene — their positioning reveals the power dynamics."
     },
@@ -2226,15 +2226,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-116-116",
+    "id": "film-unsung-chronicle-63-501",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #116",
+    "name": "Unsung Chronicle #63",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #116 on any reliable service",
+      "targetName": "Unsung Chronicle #63",
       "durationMinutes": 157,
       "instruction": "Watch the background actors during the opening scene — their positioning reveals the power dynamics."
     },
@@ -2245,15 +2245,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-117-117",
+    "id": "film-radiant-chronicle-64-502",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #117",
+    "name": "Radiant Chronicle #64",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #117 on any reliable service",
+      "targetName": "Radiant Chronicle #64",
       "durationMinutes": 70,
       "instruction": "Pay attention to how the camera frames color temperature. Every shot is working as visual commentary."
     },
@@ -2264,15 +2264,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-118-118",
+    "id": "film-quiet-chronicle-65-503",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #118",
+    "name": "Quiet Chronicle #65",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #118 on any reliable service",
+      "targetName": "Quiet Chronicle #65",
       "durationMinutes": 171,
       "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
     },
@@ -2283,15 +2283,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-119-119",
+    "id": "film-luminous-chronicle-66-504",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #119",
+    "name": "Luminous Chronicle #66",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #119 on any reliable service",
+      "targetName": "Luminous Chronicle #66",
       "durationMinutes": 155,
       "instruction": "Observe the editing rhythm — it speeds up when emotions peak and slows for calm settles."
     },
@@ -2302,15 +2302,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-120-120",
+    "id": "film-distant-chronicle-67-505",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #120",
+    "name": "Distant Chronicle #67",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #120 on any reliable service",
+      "targetName": "Distant Chronicle #67",
       "durationMinutes": 143,
       "instruction": "Notice the color palette shift during quiet moment. It tells you everything before the dialogue does."
     },
@@ -2321,15 +2321,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-121-121",
+    "id": "film-unexpected-chronicle-68-506",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #121",
+    "name": "Unexpected Chronicle #68",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #121 on any reliable service",
+      "targetName": "Unexpected Chronicle #68",
       "durationMinutes": 133,
       "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
     },
@@ -2340,15 +2340,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-122-122",
+    "id": "film-eternal-chronicle-69-507",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #122",
+    "name": "Eternal Chronicle #69",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #122 on any reliable service",
+      "targetName": "Eternal Chronicle #69",
       "durationMinutes": 159,
       "instruction": "Notice the color palette shift during climax. It tells you everything before the dialogue does."
     },
@@ -2359,15 +2359,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-123-123",
+    "id": "film-restless-chronicle-70-508",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #123",
+    "name": "Restless Chronicle #70",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #123 on any reliable service",
+      "targetName": "Restless Chronicle #70",
       "durationMinutes": 111,
       "instruction": "Watch the background actors during the third act — their positioning reveals the power dynamics."
     },
@@ -2378,15 +2378,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-124-124",
+    "id": "film-brilliant-chronicle-71-509",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #124",
+    "name": "Brilliant Chronicle #71",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #124 on any reliable service",
+      "targetName": "Brilliant Chronicle #71",
       "durationMinutes": 92,
       "instruction": "Pay attention to how the camera frames color temperature. Every shot is working as visual commentary."
     },
@@ -2397,15 +2397,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-125-125",
+    "id": "film-enigmatic-chronicle-72-510",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #125",
+    "name": "Enigmatic Chronicle #72",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #125 on any reliable service",
+      "targetName": "Enigmatic Chronicle #72",
       "durationMinutes": 85,
       "instruction": "Pay attention to how the camera frames brushwork. Every shot is working as visual commentary."
     },
@@ -2416,15 +2416,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-126-126",
+    "id": "film-restless-chronicle-73-511",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #126",
+    "name": "Restless Chronicle #73",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #126 on any reliable service",
+      "targetName": "Restless Chronicle #73",
       "durationMinutes": 120,
       "instruction": "Pay attention to how the camera frames texture. Every shot is working as visual commentary."
     },
@@ -2435,15 +2435,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-127-127",
+    "id": "film-subtle-chronicle-74-512",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #127",
+    "name": "Subtle Chronicle #74",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #127 on any reliable service",
+      "targetName": "Subtle Chronicle #74",
       "durationMinutes": 116,
       "instruction": "Track how the lighting changes from the first half to the closing. It mirrors the protagonist's internal state."
     },
@@ -2454,15 +2454,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-128-128",
+    "id": "film-vivid-chronicle-75-513",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #128",
+    "name": "Vivid Chronicle #75",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #128 on any reliable service",
+      "targetName": "Vivid Chronicle #75",
       "durationMinutes": 88,
       "instruction": "Notice the color palette shift during opening scene. It tells you everything before the dialogue does."
     },
@@ -2473,15 +2473,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-129-129",
+    "id": "film-ancient-chronicle-76-514",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #129",
+    "name": "Ancient Chronicle #76",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #129 on any reliable service",
+      "targetName": "Ancient Chronicle #76",
       "durationMinutes": 151,
       "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
     },
@@ -2492,15 +2492,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-130-130",
+    "id": "film-modern-chronicle-77-515",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #130",
+    "name": "Modern Chronicle #77",
     "teaser": "The most memorable scene was improvised on set when the actor forgot their lines and the director decided the mistake was better than the script.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #130 on any reliable service",
+      "targetName": "Modern Chronicle #77",
       "durationMinutes": 88,
       "instruction": "Watch the background actors during the dinner scene — their positioning reveals the power dynamics."
     },
@@ -2511,15 +2511,15 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-131-131",
+    "id": "film-lost-chronicle-78-516",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #131",
+    "name": "Lost Chronicle #78",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #131 on any reliable service",
+      "targetName": "Lost Chronicle #78",
       "durationMinutes": 114,
       "instruction": "Track how the lighting changes from the opening to the closing. It mirrors the protagonist's internal state."
     },
@@ -2530,21 +2530,1294 @@
     "tier": 2
   },
   {
-    "id": "film-film-topic-132-132",
+    "id": "film-wandering-chronicle-79-517",
     "categoryId": "FILMS",
     "subtype": "Film",
-    "name": "Film Topic #132",
+    "name": "Wandering Chronicle #79",
     "teaser": "This film was made for roughly the cost of a modest house — the crew built their own equipment and shot on weekends.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Watch",
-      "targetName": "Film Topic #132 on any reliable service",
+      "targetName": "Wandering Chronicle #79",
       "durationMinutes": 105,
       "instruction": "Observe the editing rhythm — it speeds up when characters are lying and slows for relief comes."
     },
     "tags": [
       "Documentary",
       "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-close-encounters-of-the-133",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Close Encounters of the Third Kind (1977)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Close Encounters of the Third Kind (1977)",
+      "durationMinutes": 150,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-blade-runner-1982-134",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Blade Runner (1982)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Blade Runner (1982)",
+      "durationMinutes": 104,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-thing-1982-135",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Thing (1982)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Thing (1982)",
+      "durationMinutes": 126,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-brazil-1985-136",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Brazil (1985)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Brazil (1985)",
+      "durationMinutes": 150,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-wings-of-desire-1987-137",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Wings of Desire (1987)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Wings of Desire (1987)",
+      "durationMinutes": 109,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-do-the-right-thing-138",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Do the Right Thing (1989)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Do the Right Thing (1989)",
+      "durationMinutes": 122,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-reservoir-dogs-1992-139",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Reservoir Dogs (1992)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Reservoir Dogs (1992)",
+      "durationMinutes": 129,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-schindlers-list-1993-140",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Schindler's List (1993)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Schindler's List (1993)",
+      "durationMinutes": 161,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-chungking-express-1994-141",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Chungking Express (1994)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Chungking Express (1994)",
+      "durationMinutes": 176,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-fargo-1996-142",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Fargo (1996)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Fargo (1996)",
+      "durationMinutes": 128,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-big-lebowski-1998-143",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Big Lebowski (1998)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Big Lebowski (1998)",
+      "durationMinutes": 94,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-beau-travail-1999-144",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Beau Travail (1999)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Beau Travail (1999)",
+      "durationMinutes": 105,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-amélie-2001-145",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Amélie (2001)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Amélie (2001)",
+      "durationMinutes": 104,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-city-of-god-2002-146",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "City of God (2002)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "City of God (2002)",
+      "durationMinutes": 177,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-eternal-sunshine-2004-147",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Eternal Sunshine (2004)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Eternal Sunshine (2004)",
+      "durationMinutes": 127,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-pans-labyrinth-2006-148",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Pan's Labyrinth (2006)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Pan's Labyrinth (2006)",
+      "durationMinutes": 112,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-no-country-for-old-149",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "No Country for Old Men (2007)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "No Country for Old Men (2007)",
+      "durationMinutes": 111,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-dark-knight-2008-150",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Dark Knight (2008)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Dark Knight (2008)",
+      "durationMinutes": 119,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-inglourious-basterds-2009-151",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Inglourious Basterds (2009)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Inglourious Basterds (2009)",
+      "durationMinutes": 110,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-social-network-2010-152",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Social Network (2010)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Social Network (2010)",
+      "durationMinutes": 154,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-tree-of-life-153",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Tree of Life (2011)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Tree of Life (2011)",
+      "durationMinutes": 86,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-her-2013-154",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Her (2013)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Her (2013)",
+      "durationMinutes": 178,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-boyhood-2014-155",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Boyhood (2014)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Boyhood (2014)",
+      "durationMinutes": 128,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-mad-max-fury-road-156",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Mad Max Fury Road (2015)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Mad Max Fury Road (2015)",
+      "durationMinutes": 153,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-arrival-2016-157",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Arrival (2016)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Arrival (2016)",
+      "durationMinutes": 170,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-call-me-by-your-158",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Call Me by Your Name (2017)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Call Me by Your Name (2017)",
+      "durationMinutes": 158,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-soul-2020-159",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Soul (2020)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Soul (2020)",
+      "durationMinutes": 179,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-drive-my-car-2021-160",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Drive My Car (2021)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Drive My Car (2021)",
+      "durationMinutes": 150,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-everything-everywhere-all-at-161",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Everything Everywhere All at Once (2022)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Everything Everywhere All at Once (2022)",
+      "durationMinutes": 78,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-fabelmans-2022-162",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Fabelmans (2022)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Fabelmans (2022)",
+      "durationMinutes": 165,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-barbie-2023-163",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Barbie (2023)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Barbie (2023)",
+      "durationMinutes": 167,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-past-lives-2023-164",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Past Lives (2023)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Past Lives (2023)",
+      "durationMinutes": 158,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-zone-of-interest-165",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Zone of Interest (2023)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Zone of Interest (2023)",
+      "durationMinutes": 111,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-holdovers-2023-166",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Holdovers (2023)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Holdovers (2023)",
+      "durationMinutes": 117,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-rashomon-1950-167",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Rashomon (1950)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Rashomon (1950)",
+      "durationMinutes": 137,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-rear-window-1954-168",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Rear Window (1954)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Rear Window (1954)",
+      "durationMinutes": 92,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-night-of-the-169",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Night of the Hunter (1955)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Night of the Hunter (1955)",
+      "durationMinutes": 157,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-breathless-1960-170",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Breathless (1960)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Breathless (1960)",
+      "durationMinutes": 88,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-yojimbo-1961-171",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Yojimbo (1961)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Yojimbo (1961)",
+      "durationMinutes": 128,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-dr-strangelove-1964-172",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Dr. Strangelove (1964)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Dr. Strangelove (1964)",
+      "durationMinutes": 106,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-2001-a-space-odyssey-173",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "2001 A Space Odyssey (1968)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "2001 A Space Odyssey (1968)",
+      "durationMinutes": 126,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-conformist-1970-174",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Conformist (1970)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Conformist (1970)",
+      "durationMinutes": 158,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-aguirre-the-wrath-of-175",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Aguirre the Wrath of God (1972)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Aguirre the Wrath of God (1972)",
+      "durationMinutes": 95,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-network-1976-176",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Network (1976)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Network (1976)",
+      "durationMinutes": 100,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-koyaanisqatsi-1982-177",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Koyaanisqatsi (1982)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Koyaanisqatsi (1982)",
+      "durationMinutes": 107,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-paris-texas-1984-178",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Paris Texas (1984)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Paris Texas (1984)",
+      "durationMinutes": 105,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Drama",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-blue-velvet-1986-179",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Blue Velvet (1986)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Blue Velvet (1986)",
+      "durationMinutes": 165,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-akira-1988-180",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Akira (1988)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Akira (1988)",
+      "durationMinutes": 147,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-piano-1993-181",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Piano (1993)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Piano (1993)",
+      "durationMinutes": 149,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-before-sunrise-1995-182",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Before Sunrise (1995)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Before Sunrise (1995)",
+      "durationMinutes": 150,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-titanic-1997-183",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Titanic (1997)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Titanic (1997)",
+      "durationMinutes": 74,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-matrix-1999-184",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Matrix (1999)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Matrix (1999)",
+      "durationMinutes": 81,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-in-the-mood-for-185",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "In the Mood for Love (2000)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "In the Mood for Love (2000)",
+      "durationMinutes": 92,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Comedy",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-mulholland-drive-2001-186",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Mulholland Drive (2001)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Mulholland Drive (2001)",
+      "durationMinutes": 116,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-lost-in-translation-2003-187",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Lost in Translation (2003)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Lost in Translation (2003)",
+      "durationMinutes": 102,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-brokeback-mountain-2005-188",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Brokeback Mountain (2005)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Brokeback Mountain (2005)",
+      "durationMinutes": 172,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-children-of-men-2006-189",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Children of Men (2006)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Children of Men (2006)",
+      "durationMinutes": 88,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-a-serious-man-2009-190",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "A Serious Man (2009)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "A Serious Man (2009)",
+      "durationMinutes": 116,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-inception-2010-191",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Inception (2010)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Inception (2010)",
+      "durationMinutes": 103,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-a-separation-2011-192",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "A Separation (2011)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "A Separation (2011)",
+      "durationMinutes": 117,
+      "instruction": "Watch the background actors during the key scene — their positioning reveals the power dynamics."
+    },
+    "tags": [
+      "Documentary",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-amour-2012-193",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Amour (2012)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Amour (2012)",
+      "durationMinutes": 83,
+      "instruction": "Notice the color palette shift as the story progresses. It tells you everything before the dialogue does."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-gravity-2013-194",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Gravity (2013)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Gravity (2013)",
+      "durationMinutes": 149,
+      "instruction": "Observe the editing rhythm. It speeds up when tension rises and breathes when relief comes."
+    },
+    "tags": [
+      "Horror",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-whiplash-2014-195",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Whiplash (2014)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Whiplash (2014)",
+      "durationMinutes": 98,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-get-out-2017-196",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Get Out (2017)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Get Out (2017)",
+      "durationMinutes": 153,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Sci-Fi",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-dune-2021-197",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Dune (2021)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Dune (2021)",
+      "durationMinutes": 75,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Animation",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-the-power-of-the-198",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "The Power of the Dog (2021)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "The Power of the Dog (2021)",
+      "durationMinutes": 84,
+      "instruction": "Pay attention to how the camera frames each scene. Every composition is working as visual commentary."
+    },
+    "tags": [
+      "Thriller",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "film-tár-2022-199",
+    "categoryId": "FILMS",
+    "subtype": "Film",
+    "name": "Tár (2022)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Watch",
+      "targetName": "Tár (2022)",
+      "durationMinutes": 87,
+      "instruction": "Track how lighting changes throughout. It mirrors the protagonist's internal state beat for beat."
+    },
+    "tags": [
+      "Foreign",
+      "2000s"
     ],
     "tier": 2
   }

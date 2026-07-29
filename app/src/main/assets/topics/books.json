@@ -820,15 +820,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-42-42",
+    "id": "book-the-godfather-1969-145",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #42",
+    "name": "The Godfather (1969)",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #42",
+      "targetName": "The Godfather (1969)",
       "durationMinutes": 40,
       "instruction": "Notice how the author uses imagery to make you feel nostalgic without saying it directly."
     },
@@ -839,15 +839,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-43-43",
+    "id": "book-fear-and-loathing-in-146",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #43",
+    "name": "Fear and Loathing in Las Vegas (1971)",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #43",
+      "targetName": "Fear and Loathing in Las Vegas (1971)",
       "durationMinutes": 32,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -858,15 +858,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-44-44",
+    "id": "book-hidden-volume-1-197",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #44",
+    "name": "Hidden Volume #1",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #44",
+      "targetName": "Hidden Volume #1",
       "durationMinutes": 29,
       "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
     },
@@ -877,15 +877,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-45-45",
+    "id": "book-forgotten-volume-2-198",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #45",
+    "name": "Forgotten Volume #2",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #45",
+      "targetName": "Forgotten Volume #2",
       "durationMinutes": 28,
       "instruction": "Track the recurring motif of light. It appears four times and means something different each time."
     },
@@ -896,15 +896,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-46-46",
+    "id": "book-unsung-volume-3-199",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #46",
+    "name": "Unsung Volume #3",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #46",
+      "targetName": "Unsung Volume #3",
       "durationMinutes": 17,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -915,15 +915,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-47-47",
+    "id": "book-radiant-volume-4-200",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #47",
+    "name": "Radiant Volume #4",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #47",
+      "targetName": "Radiant Volume #4",
       "durationMinutes": 37,
       "instruction": "Track the recurring motif of windows. It appears four times and means something different each time."
     },
@@ -934,15 +934,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-48-48",
+    "id": "book-quiet-volume-5-201",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #48",
+    "name": "Quiet Volume #5",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #48",
+      "targetName": "Quiet Volume #5",
       "durationMinutes": 10,
       "instruction": "Stop after the verse. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -953,15 +953,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-49-49",
+    "id": "book-luminous-volume-6-202",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #49",
+    "name": "Luminous Volume #6",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #49",
+      "targetName": "Luminous Volume #6",
       "durationMinutes": 16,
       "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -972,15 +972,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-50-50",
+    "id": "book-distant-volume-7-203",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #50",
+    "name": "Distant Volume #7",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #50",
+      "targetName": "Distant Volume #7",
       "durationMinutes": 42,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -991,15 +991,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-51-51",
+    "id": "book-unexpected-volume-8-204",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #51",
+    "name": "Unexpected Volume #8",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #51",
+      "targetName": "Unexpected Volume #8",
       "durationMinutes": 31,
       "instruction": "Track the recurring motif of mirrors. It appears seven times and means something different each time."
     },
@@ -1010,15 +1010,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-52-52",
+    "id": "book-eternal-volume-9-205",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #52",
+    "name": "Eternal Volume #9",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #52",
+      "targetName": "Eternal Volume #9",
       "durationMinutes": 23,
       "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1029,15 +1029,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-53-53",
+    "id": "book-restless-volume-10-206",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #53",
+    "name": "Restless Volume #10",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #53",
+      "targetName": "Restless Volume #10",
       "durationMinutes": 42,
       "instruction": "Stop after the bridge. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1048,15 +1048,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-54-54",
+    "id": "book-brilliant-volume-11-207",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #54",
+    "name": "Brilliant Volume #11",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #54",
+      "targetName": "Brilliant Volume #11",
       "durationMinutes": 15,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1067,15 +1067,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-55-55",
+    "id": "book-enigmatic-volume-12-208",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #55",
+    "name": "Enigmatic Volume #12",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #55",
+      "targetName": "Enigmatic Volume #12",
       "durationMinutes": 16,
       "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
     },
@@ -1086,15 +1086,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-56-56",
+    "id": "book-restless-volume-13-209",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #56",
+    "name": "Restless Volume #13",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #56",
+      "targetName": "Restless Volume #13",
       "durationMinutes": 36,
       "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
     },
@@ -1105,15 +1105,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-57-57",
+    "id": "book-subtle-volume-14-210",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #57",
+    "name": "Subtle Volume #14",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #57",
+      "targetName": "Subtle Volume #14",
       "durationMinutes": 17,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1124,15 +1124,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-58-58",
+    "id": "book-vivid-volume-15-211",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #58",
+    "name": "Vivid Volume #15",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #58",
+      "targetName": "Vivid Volume #15",
       "durationMinutes": 33,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1143,15 +1143,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-59-59",
+    "id": "book-ancient-volume-16-212",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #59",
+    "name": "Ancient Volume #16",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #59",
+      "targetName": "Ancient Volume #16",
       "durationMinutes": 31,
       "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1162,15 +1162,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-60-60",
+    "id": "book-modern-volume-17-213",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #60",
+    "name": "Modern Volume #17",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #60",
+      "targetName": "Modern Volume #17",
       "durationMinutes": 23,
       "instruction": "Notice how the author uses free indirect discourse to make you feel grounded without saying it directly."
     },
@@ -1181,15 +1181,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-61-61",
+    "id": "book-lost-volume-18-214",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #61",
+    "name": "Lost Volume #18",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #61",
+      "targetName": "Lost Volume #18",
       "durationMinutes": 14,
       "instruction": "Notice how the author uses dialogue tags to make you feel unsettled without saying it directly."
     },
@@ -1200,15 +1200,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-62-62",
+    "id": "book-wandering-volume-19-215",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #62",
+    "name": "Wandering Volume #19",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #62",
+      "targetName": "Wandering Volume #19",
       "durationMinutes": 19,
       "instruction": "Track the recurring motif of food. It appears four times and means something different each time."
     },
@@ -1219,15 +1219,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-63-63",
+    "id": "book-timeless-volume-20-216",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #63",
+    "name": "Timeless Volume #20",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #63",
+      "targetName": "Timeless Volume #20",
       "durationMinutes": 22,
       "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
     },
@@ -1238,15 +1238,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-64-64",
+    "id": "book-hidden-tome-21-217",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #64",
+    "name": "Hidden Tome #21",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #64",
+      "targetName": "Hidden Tome #21",
       "durationMinutes": 39,
       "instruction": "Notice how the author uses free indirect discourse to make you feel grounded without saying it directly."
     },
@@ -1257,15 +1257,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-65-65",
+    "id": "book-forgotten-tome-22-218",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #65",
+    "name": "Forgotten Tome #22",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #65",
+      "targetName": "Forgotten Tome #22",
       "durationMinutes": 30,
       "instruction": "Track the recurring motif of windows. It appears three times and means something different each time."
     },
@@ -1276,15 +1276,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-66-66",
+    "id": "book-unsung-tome-23-219",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #66",
+    "name": "Unsung Tome #23",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #66",
+      "targetName": "Unsung Tome #23",
       "durationMinutes": 29,
       "instruction": "Track the recurring motif of mirrors. It appears five times and means something different each time."
     },
@@ -1295,15 +1295,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-67-67",
+    "id": "book-radiant-tome-24-220",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #67",
+    "name": "Radiant Tome #24",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #67",
+      "targetName": "Radiant Tome #24",
       "durationMinutes": 39,
       "instruction": "Notice how the author uses sentence length to make you feel euphoric without saying it directly."
     },
@@ -1314,15 +1314,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-68-68",
+    "id": "book-quiet-tome-25-221",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #68",
+    "name": "Quiet Tome #25",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #68",
+      "targetName": "Quiet Tome #25",
       "durationMinutes": 32,
       "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
     },
@@ -1333,15 +1333,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-69-69",
+    "id": "book-luminous-tome-26-222",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #69",
+    "name": "Luminous Tome #26",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #69",
+      "targetName": "Luminous Tome #26",
       "durationMinutes": 12,
       "instruction": "Track the recurring motif of water. It appears four times and means something different each time."
     },
@@ -1352,15 +1352,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-70-70",
+    "id": "book-distant-tome-27-223",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #70",
+    "name": "Distant Tome #27",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #70",
+      "targetName": "Distant Tome #27",
       "durationMinutes": 29,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1371,15 +1371,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-71-71",
+    "id": "book-unexpected-tome-28-224",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #71",
+    "name": "Unexpected Tome #28",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #71",
+      "targetName": "Unexpected Tome #28",
       "durationMinutes": 37,
       "instruction": "Track the recurring motif of birds. It appears four times and means something different each time."
     },
@@ -1390,15 +1390,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-72-72",
+    "id": "book-eternal-tome-29-225",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #72",
+    "name": "Eternal Tome #29",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #72",
+      "targetName": "Eternal Tome #29",
       "durationMinutes": 22,
       "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
     },
@@ -1409,15 +1409,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-73-73",
+    "id": "book-restless-tome-30-226",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #73",
+    "name": "Restless Tome #30",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #73",
+      "targetName": "Restless Tome #30",
       "durationMinutes": 25,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1428,15 +1428,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-74-74",
+    "id": "book-brilliant-tome-31-227",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #74",
+    "name": "Brilliant Tome #31",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #74",
+      "targetName": "Brilliant Tome #31",
       "durationMinutes": 24,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1447,15 +1447,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-75-75",
+    "id": "book-enigmatic-tome-32-228",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #75",
+    "name": "Enigmatic Tome #32",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #75",
+      "targetName": "Enigmatic Tome #32",
       "durationMinutes": 15,
       "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1466,15 +1466,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-76-76",
+    "id": "book-restless-tome-33-229",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #76",
+    "name": "Restless Tome #33",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #76",
+      "targetName": "Restless Tome #33",
       "durationMinutes": 31,
       "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1485,15 +1485,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-77-77",
+    "id": "book-subtle-tome-34-230",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #77",
+    "name": "Subtle Tome #34",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #77",
+      "targetName": "Subtle Tome #34",
       "durationMinutes": 37,
       "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
     },
@@ -1504,15 +1504,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-78-78",
+    "id": "book-vivid-tome-35-231",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #78",
+    "name": "Vivid Tome #35",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #78",
+      "targetName": "Vivid Tome #35",
       "durationMinutes": 41,
       "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
     },
@@ -1523,15 +1523,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-79-79",
+    "id": "book-ancient-tome-36-232",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #79",
+    "name": "Ancient Tome #36",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #79",
+      "targetName": "Ancient Tome #36",
       "durationMinutes": 21,
       "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1542,15 +1542,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-80-80",
+    "id": "book-modern-tome-37-233",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #80",
+    "name": "Modern Tome #37",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #80",
+      "targetName": "Modern Tome #37",
       "durationMinutes": 27,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1561,15 +1561,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-81-81",
+    "id": "book-lost-tome-38-234",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #81",
+    "name": "Lost Tome #38",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #81",
+      "targetName": "Lost Tome #38",
       "durationMinutes": 44,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1580,15 +1580,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-82-82",
+    "id": "book-wandering-tome-39-235",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #82",
+    "name": "Wandering Tome #39",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #82",
+      "targetName": "Wandering Tome #39",
       "durationMinutes": 29,
       "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
     },
@@ -1599,15 +1599,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-83-83",
+    "id": "book-timeless-tome-40-236",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #83",
+    "name": "Timeless Tome #40",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #83",
+      "targetName": "Timeless Tome #40",
       "durationMinutes": 23,
       "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1618,15 +1618,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-84-84",
+    "id": "book-hidden-manuscript-41-237",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #84",
+    "name": "Hidden Manuscript #41",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #84",
+      "targetName": "Hidden Manuscript #41",
       "durationMinutes": 21,
       "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
     },
@@ -1637,15 +1637,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-85-85",
+    "id": "book-forgotten-manuscript-42-238",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #85",
+    "name": "Forgotten Manuscript #42",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #85",
+      "targetName": "Forgotten Manuscript #42",
       "durationMinutes": 25,
       "instruction": "Track the recurring motif of mirrors. It appears seven times and means something different each time."
     },
@@ -1656,15 +1656,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-86-86",
+    "id": "book-unsung-manuscript-43-239",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #86",
+    "name": "Unsung Manuscript #43",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #86",
+      "targetName": "Unsung Manuscript #43",
       "durationMinutes": 23,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1675,15 +1675,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-87-87",
+    "id": "book-radiant-manuscript-44-240",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #87",
+    "name": "Radiant Manuscript #44",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #87",
+      "targetName": "Radiant Manuscript #44",
       "durationMinutes": 36,
       "instruction": "Track the recurring motif of doors. It appears four times and means something different each time."
     },
@@ -1694,15 +1694,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-88-88",
+    "id": "book-quiet-manuscript-45-241",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #88",
+    "name": "Quiet Manuscript #45",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #88",
+      "targetName": "Quiet Manuscript #45",
       "durationMinutes": 19,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1713,15 +1713,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-89-89",
+    "id": "book-luminous-manuscript-46-242",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #89",
+    "name": "Luminous Manuscript #46",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #89",
+      "targetName": "Luminous Manuscript #46",
       "durationMinutes": 43,
       "instruction": "Stop after the breakdown. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1732,15 +1732,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-90-90",
+    "id": "book-distant-manuscript-47-243",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #90",
+    "name": "Distant Manuscript #47",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #90",
+      "targetName": "Distant Manuscript #47",
       "durationMinutes": 19,
       "instruction": "Pay attention to the rhythm of the sentences — they get longer when tension builds."
     },
@@ -1751,15 +1751,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-91-91",
+    "id": "book-unexpected-manuscript-48-244",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #91",
+    "name": "Unexpected Manuscript #48",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #91",
+      "targetName": "Unexpected Manuscript #48",
       "durationMinutes": 29,
       "instruction": "Notice how the author uses dialogue tags to make you feel intimate without saying it directly."
     },
@@ -1770,15 +1770,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-92-92",
+    "id": "book-eternal-manuscript-49-245",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #92",
+    "name": "Eternal Manuscript #49",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #92",
+      "targetName": "Eternal Manuscript #49",
       "durationMinutes": 43,
       "instruction": "Notice how the author uses dialogue tags to make you feel anxious without saying it directly."
     },
@@ -1789,15 +1789,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-93-93",
+    "id": "book-restless-manuscript-50-246",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #93",
+    "name": "Restless Manuscript #50",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #93",
+      "targetName": "Restless Manuscript #50",
       "durationMinutes": 44,
       "instruction": "Pay attention to the rhythm of the sentences — they get shorter when tension builds."
     },
@@ -1808,15 +1808,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-94-94",
+    "id": "book-brilliant-manuscript-51-247",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #94",
+    "name": "Brilliant Manuscript #51",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #94",
+      "targetName": "Brilliant Manuscript #51",
       "durationMinutes": 36,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1827,15 +1827,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-95-95",
+    "id": "book-enigmatic-manuscript-52-248",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #95",
+    "name": "Enigmatic Manuscript #52",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #95",
+      "targetName": "Enigmatic Manuscript #52",
       "durationMinutes": 21,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1846,15 +1846,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-96-96",
+    "id": "book-restless-manuscript-53-249",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #96",
+    "name": "Restless Manuscript #53",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #96",
+      "targetName": "Restless Manuscript #53",
       "durationMinutes": 20,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -1865,15 +1865,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-97-97",
+    "id": "book-subtle-manuscript-54-250",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #97",
+    "name": "Subtle Manuscript #54",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #97",
+      "targetName": "Subtle Manuscript #54",
       "durationMinutes": 35,
       "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1884,15 +1884,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-98-98",
+    "id": "book-vivid-manuscript-55-251",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #98",
+    "name": "Vivid Manuscript #55",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #98",
+      "targetName": "Vivid Manuscript #55",
       "durationMinutes": 27,
       "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -1903,15 +1903,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-99-99",
+    "id": "book-ancient-manuscript-56-252",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #99",
+    "name": "Ancient Manuscript #56",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #99",
+      "targetName": "Ancient Manuscript #56",
       "durationMinutes": 17,
       "instruction": "Notice how the author uses repetition to make you feel grounded without saying it directly."
     },
@@ -1922,15 +1922,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-100-100",
+    "id": "book-modern-manuscript-57-253",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #100",
+    "name": "Modern Manuscript #57",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #100",
+      "targetName": "Modern Manuscript #57",
       "durationMinutes": 23,
       "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
     },
@@ -1941,15 +1941,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-101-101",
+    "id": "book-lost-manuscript-58-254",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #101",
+    "name": "Lost Manuscript #58",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #101",
+      "targetName": "Lost Manuscript #58",
       "durationMinutes": 12,
       "instruction": "Track the recurring motif of doors. It appears seven times and means something different each time."
     },
@@ -1960,15 +1960,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-102-102",
+    "id": "book-wandering-manuscript-59-255",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #102",
+    "name": "Wandering Manuscript #59",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #102",
+      "targetName": "Wandering Manuscript #59",
       "durationMinutes": 31,
       "instruction": "Track the recurring motif of birds. It appears four times and means something different each time."
     },
@@ -1979,15 +1979,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-103-103",
+    "id": "book-timeless-manuscript-60-256",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #103",
+    "name": "Timeless Manuscript #60",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #103",
+      "targetName": "Timeless Manuscript #60",
       "durationMinutes": 19,
       "instruction": "Notice how the author uses sentence length to make you feel intimate without saying it directly."
     },
@@ -1998,15 +1998,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-104-104",
+    "id": "book-hidden-chronicle-61-257",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #104",
+    "name": "Hidden Chronicle #61",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #104",
+      "targetName": "Hidden Chronicle #61",
       "durationMinutes": 18,
       "instruction": "Stop after the outro. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -2017,15 +2017,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-105-105",
+    "id": "book-forgotten-chronicle-62-258",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #105",
+    "name": "Forgotten Chronicle #62",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #105",
+      "targetName": "Forgotten Chronicle #62",
       "durationMinutes": 17,
       "instruction": "Track the recurring motif of food. It appears seven times and means something different each time."
     },
@@ -2036,15 +2036,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-106-106",
+    "id": "book-unsung-chronicle-63-259",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #106",
+    "name": "Unsung Chronicle #63",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #106",
+      "targetName": "Unsung Chronicle #63",
       "durationMinutes": 24,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2055,15 +2055,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-107-107",
+    "id": "book-radiant-chronicle-64-260",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #107",
+    "name": "Radiant Chronicle #64",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #107",
+      "targetName": "Radiant Chronicle #64",
       "durationMinutes": 36,
       "instruction": "Notice how the author uses pacing to make you feel anxious without saying it directly."
     },
@@ -2074,15 +2074,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-108-108",
+    "id": "book-quiet-chronicle-65-261",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #108",
+    "name": "Quiet Chronicle #65",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #108",
+      "targetName": "Quiet Chronicle #65",
       "durationMinutes": 44,
       "instruction": "Track the recurring motif of mirrors. It appears three times and means something different each time."
     },
@@ -2093,15 +2093,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-109-109",
+    "id": "book-luminous-chronicle-66-262",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #109",
+    "name": "Luminous Chronicle #66",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #109",
+      "targetName": "Luminous Chronicle #66",
       "durationMinutes": 16,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2112,15 +2112,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-110-110",
+    "id": "book-distant-chronicle-67-263",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #110",
+    "name": "Distant Chronicle #67",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #110",
+      "targetName": "Distant Chronicle #67",
       "durationMinutes": 18,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2131,15 +2131,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-111-111",
+    "id": "book-unexpected-chronicle-68-264",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #111",
+    "name": "Unexpected Chronicle #68",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #111",
+      "targetName": "Unexpected Chronicle #68",
       "durationMinutes": 23,
       "instruction": "Track the recurring motif of doors. It appears five times and means something different each time."
     },
@@ -2150,15 +2150,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-112-112",
+    "id": "book-eternal-chronicle-69-265",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #112",
+    "name": "Eternal Chronicle #69",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #112",
+      "targetName": "Eternal Chronicle #69",
       "durationMinutes": 16,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2169,15 +2169,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-113-113",
+    "id": "book-restless-chronicle-70-266",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #113",
+    "name": "Restless Chronicle #70",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #113",
+      "targetName": "Restless Chronicle #70",
       "durationMinutes": 44,
       "instruction": "Track the recurring motif of food. It appears five times and means something different each time."
     },
@@ -2188,15 +2188,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-114-114",
+    "id": "book-brilliant-chronicle-71-267",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #114",
+    "name": "Brilliant Chronicle #71",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #114",
+      "targetName": "Brilliant Chronicle #71",
       "durationMinutes": 29,
       "instruction": "Stop after the chorus. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -2207,15 +2207,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-115-115",
+    "id": "book-enigmatic-chronicle-72-268",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #115",
+    "name": "Enigmatic Chronicle #72",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #115",
+      "targetName": "Enigmatic Chronicle #72",
       "durationMinutes": 27,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2226,15 +2226,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-116-116",
+    "id": "book-restless-chronicle-73-269",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #116",
+    "name": "Restless Chronicle #73",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #116",
+      "targetName": "Restless Chronicle #73",
       "durationMinutes": 27,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2245,15 +2245,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-117-117",
+    "id": "book-subtle-chronicle-74-270",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #117",
+    "name": "Subtle Chronicle #74",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #117",
+      "targetName": "Subtle Chronicle #74",
       "durationMinutes": 26,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2264,15 +2264,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-118-118",
+    "id": "book-vivid-chronicle-75-271",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #118",
+    "name": "Vivid Chronicle #75",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #118",
+      "targetName": "Vivid Chronicle #75",
       "durationMinutes": 16,
       "instruction": "Notice how the author uses dialogue tags to make you feel nostalgic without saying it directly."
     },
@@ -2283,15 +2283,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-119-119",
+    "id": "book-ancient-chronicle-76-272",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #119",
+    "name": "Ancient Chronicle #76",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #119",
+      "targetName": "Ancient Chronicle #76",
       "durationMinutes": 39,
       "instruction": "Pay attention to the rhythm of the sentences — they get more flowing when tension builds."
     },
@@ -2302,15 +2302,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-120-120",
+    "id": "book-modern-chronicle-77-273",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #120",
+    "name": "Modern Chronicle #77",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #120",
+      "targetName": "Modern Chronicle #77",
       "durationMinutes": 16,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2321,15 +2321,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-121-121",
+    "id": "book-lost-chronicle-78-274",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #121",
+    "name": "Lost Chronicle #78",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #121",
+      "targetName": "Lost Chronicle #78",
       "durationMinutes": 14,
       "instruction": "Stop after the middle eight. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -2340,15 +2340,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-122-122",
+    "id": "book-wandering-chronicle-79-275",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #122",
+    "name": "Wandering Chronicle #79",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #122",
+      "targetName": "Wandering Chronicle #79",
       "durationMinutes": 41,
       "instruction": "Notice how the author uses pacing to make you feel euphoric without saying it directly."
     },
@@ -2359,15 +2359,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-123-123",
+    "id": "book-timeless-chronicle-80-276",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #123",
+    "name": "Timeless Chronicle #80",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #123",
+      "targetName": "Timeless Chronicle #80",
       "durationMinutes": 26,
       "instruction": "Pay attention to the rhythm of the sentences — they get more fragmented when tension builds."
     },
@@ -2378,15 +2378,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-124-124",
+    "id": "book-hidden-testament-81-277",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #124",
+    "name": "Hidden Testament #81",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #124",
+      "targetName": "Hidden Testament #81",
       "durationMinutes": 13,
       "instruction": "Track the recurring motif of doors. It appears five times and means something different each time."
     },
@@ -2397,15 +2397,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-125-125",
+    "id": "book-forgotten-testament-82-278",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #125",
+    "name": "Forgotten Testament #82",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #125",
+      "targetName": "Forgotten Testament #82",
       "durationMinutes": 35,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2416,15 +2416,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-126-126",
+    "id": "book-unsung-testament-83-279",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #126",
+    "name": "Unsung Testament #83",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #126",
+      "targetName": "Unsung Testament #83",
       "durationMinutes": 21,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2435,15 +2435,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-127-127",
+    "id": "book-radiant-testament-84-280",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #127",
+    "name": "Radiant Testament #84",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #127",
+      "targetName": "Radiant Testament #84",
       "durationMinutes": 21,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2454,15 +2454,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-128-128",
+    "id": "book-quiet-testament-85-281",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #128",
+    "name": "Quiet Testament #85",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #128",
+      "targetName": "Quiet Testament #85",
       "durationMinutes": 11,
       "instruction": "Stop after the verse. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -2473,15 +2473,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-129-129",
+    "id": "book-luminous-testament-86-282",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #129",
+    "name": "Luminous Testament #86",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #129",
+      "targetName": "Luminous Testament #86",
       "durationMinutes": 16,
       "instruction": "Notice how the author uses dialogue tags to make you feel anxious without saying it directly."
     },
@@ -2492,15 +2492,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-130-130",
+    "id": "book-distant-testament-87-283",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #130",
+    "name": "Distant Testament #87",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #130",
+      "targetName": "Distant Testament #87",
       "durationMinutes": 32,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
@@ -2511,15 +2511,15 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-131-131",
+    "id": "book-unexpected-testament-88-284",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #131",
+    "name": "Unexpected Testament #88",
     "teaser": "This book was written in a 6-week creative burst, fueled by coffee and a deadline the author had already missed twice.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #131",
+      "targetName": "Unexpected Testament #88",
       "durationMinutes": 11,
       "instruction": "Stop after the verse. Write down one thing you didn't understand AND one thing that surprised you."
     },
@@ -2530,21 +2530,2035 @@
     "tier": 2
   },
   {
-    "id": "book-book-topic-132-132",
+    "id": "book-eternal-testament-89-285",
     "categoryId": "BOOKS",
     "subtype": "Book",
-    "name": "Book Topic #132",
+    "name": "Eternal Testament #89",
     "teaser": "The original manuscript was rejected by 12 publishers before finding a home — the 13th editor said 'I don't know what this is, but I can't stop reading it.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Read",
-      "targetName": "the first chapter of Book Topic #132",
+      "targetName": "Eternal Testament #89",
       "durationMinutes": 44,
       "instruction": "Read the first paragraph aloud. The sound of the words was deliberate — the author was a closet musician."
     },
     "tags": [
       "Non-Fiction",
       "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-sula-1973-133",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Sula (1973)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Sula (1973)",
+      "durationMinutes": 45,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-song-of-solomon-1977-134",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Song of Solomon (1977)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Song of Solomon (1977)",
+      "durationMinutes": 22,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-midnights-children-1981-135",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Midnight's Children (1981)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Midnight's Children (1981)",
+      "durationMinutes": 42,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-neuromancer-1984-136",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Neuromancer (1984)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Neuromancer (1984)",
+      "durationMinutes": 16,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-beloved-1987-137",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Beloved (1987)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Beloved (1987)",
+      "durationMinutes": 42,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-satanic-verses-1988-138",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Satanic Verses (1988)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Satanic Verses (1988)",
+      "durationMinutes": 38,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-things-they-carried-139",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Things They Carried (1990)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Things They Carried (1990)",
+      "durationMinutes": 20,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-english-patient-1992-140",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The English Patient (1992)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The English Patient (1992)",
+      "durationMinutes": 34,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-snow-crash-1992-141",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Snow Crash (1992)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Snow Crash (1992)",
+      "durationMinutes": 13,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-infinite-jest-1996-142",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Infinite Jest (1996)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Infinite Jest (1996)",
+      "durationMinutes": 16,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-memoirs-of-a-geisha-143",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Memoirs of a Geisha (1997)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Memoirs of a Geisha (1997)",
+      "durationMinutes": 28,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-god-of-small-144",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The God of Small Things (1997)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The God of Small Things (1997)",
+      "durationMinutes": 19,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-white-teeth-2000-145",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "White Teeth (2000)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "White Teeth (2000)",
+      "durationMinutes": 19,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-atonement-2001-146",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Atonement (2001)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Atonement (2001)",
+      "durationMinutes": 18,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-middlesex-2002-147",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Middlesex (2002)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Middlesex (2002)",
+      "durationMinutes": 29,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-cloud-atlas-2004-148",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Cloud Atlas (2004)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Cloud Atlas (2004)",
+      "durationMinutes": 18,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-road-2006-149",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Road (2006)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Road (2006)",
+      "durationMinutes": 42,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-wolf-hall-2009-150",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Wolf Hall (2009)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wolf Hall (2009)",
+      "durationMinutes": 29,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-a-visit-from-the-151",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "A Visit from the Goon Squad (2010)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "A Visit from the Goon Squad (2010)",
+      "durationMinutes": 41,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-gone-girl-2012-152",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Gone Girl (2012)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Gone Girl (2012)",
+      "durationMinutes": 19,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-americanah-2013-153",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Americanah (2013)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Americanah (2013)",
+      "durationMinutes": 42,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-between-the-world-and-154",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Between the World and Me (2015)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Between the World and Me (2015)",
+      "durationMinutes": 12,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-lincoln-in-the-bardo-155",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Lincoln in the Bardo (2017)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lincoln in the Bardo (2017)",
+      "durationMinutes": 34,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-normal-people-2018-156",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Normal People (2018)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Normal People (2018)",
+      "durationMinutes": 20,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-testaments-2019-157",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Testaments (2019)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Testaments (2019)",
+      "durationMinutes": 33,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-klara-and-the-sun-158",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Klara and the Sun (2021)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Klara and the Sun (2021)",
+      "durationMinutes": 28,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-demon-copperhead-2022-159",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Demon Copperhead (2022)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Demon Copperhead (2022)",
+      "durationMinutes": 25,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-chain-gang-all-stars-2023-160",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Chain-Gang All-Stars (2023)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Chain-Gang All-Stars (2023)",
+      "durationMinutes": 33,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-yellowface-2023-161",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Yellowface (2023)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Yellowface (2023)",
+      "durationMinutes": 28,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-north-woods-2023-162",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "North Woods (2023)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "North Woods (2023)",
+      "durationMinutes": 36,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-wellness-2023-163",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Wellness (2023)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Wellness (2023)",
+      "durationMinutes": 18,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-birnam-wood-2023-164",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Birnam Wood (2023)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Birnam Wood (2023)",
+      "durationMinutes": 33,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-wager-2023-165",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Wager (2023)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Wager (2023)",
+      "durationMinutes": 17,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-king-a-life-2023-166",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "King A Life (2023)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "King A Life (2023)",
+      "durationMinutes": 27,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-vaster-wilds-2023-167",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Vaster Wilds (2023)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Vaster Wilds (2023)",
+      "durationMinutes": 37,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-western-lane-2023-168",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Western Lane (2023)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Western Lane (2023)",
+      "durationMinutes": 32,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-old-gods-time-2023-169",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Old God's Time (2023)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Old God's Time (2023)",
+      "durationMinutes": 35,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-guest-2023-170",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Guest (2023)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Guest (2023)",
+      "durationMinutes": 34,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-tremor-2023-171",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Tremor (2023)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Tremor (2023)",
+      "durationMinutes": 11,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-everythings-fine-2023-172",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Everything's Fine (2023)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Everything's Fine (2023)",
+      "durationMinutes": 19,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-new-naturals-2023-173",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The New Naturals (2023)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The New Naturals (2023)",
+      "durationMinutes": 40,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-pride-and-prejudice-1813-174",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Pride and Prejudice (1813)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Pride and Prejudice (1813)",
+      "durationMinutes": 38,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-crime-and-punishment-1866-175",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Crime and Punishment (1866)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Crime and Punishment (1866)",
+      "durationMinutes": 11,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-heart-of-darkness-1899-176",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Heart of Darkness (1899)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Heart of Darkness (1899)",
+      "durationMinutes": 45,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-to-the-lighthouse-1927-177",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "To the Lighthouse (1927)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "To the Lighthouse (1927)",
+      "durationMinutes": 17,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-grapes-of-wrath-178",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Grapes of Wrath (1939)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Grapes of Wrath (1939)",
+      "durationMinutes": 17,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-1984-1949-179",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "1984 (1949)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "1984 (1949)",
+      "durationMinutes": 39,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-invisible-man-1952-180",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Invisible Man (1952)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Invisible Man (1952)",
+      "durationMinutes": 44,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-lord-of-the-flies-181",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Lord of the Flies (1954)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lord of the Flies (1954)",
+      "durationMinutes": 25,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-things-fall-apart-1958-182",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Things Fall Apart (1958)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Things Fall Apart (1958)",
+      "durationMinutes": 10,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-catch-22-1961-183",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Catch-22 (1961)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Catch-22 (1961)",
+      "durationMinutes": 36,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-bell-jar-1963-184",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Bell Jar (1963)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Bell Jar (1963)",
+      "durationMinutes": 43,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-slaughterhouse-five-1969-185",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Slaughterhouse-Five (1969)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Slaughterhouse-Five (1969)",
+      "durationMinutes": 44,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-bluest-eye-1970-186",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Bluest Eye (1970)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Bluest Eye (1970)",
+      "durationMinutes": 11,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-gulag-archipelago-1973-187",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Gulag Archipelago (1973)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Gulag Archipelago (1973)",
+      "durationMinutes": 34,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-hitchhikers-guide-to-188",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Hitchhiker's Guide to the Galaxy (1979)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Hitchhiker's Guide to the Galaxy (1979)",
+      "durationMinutes": 32,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-color-purple-1982-189",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Color Purple (1982)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Color Purple (1982)",
+      "durationMinutes": 16,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-handmaids-tale-1985-190",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Handmaid's Tale (1985)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Handmaid's Tale (1985)",
+      "durationMinutes": 18,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-norwegian-wood-1987-191",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Norwegian Wood (1987)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Norwegian Wood (1987)",
+      "durationMinutes": 31,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-remains-of-the-192",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Remains of the Day (1989)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Remains of the Day (1989)",
+      "durationMinutes": 40,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-american-psycho-1991-193",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "American Psycho (1991)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "American Psycho (1991)",
+      "durationMinutes": 39,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-virgin-suicides-1993-194",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Virgin Suicides (1993)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Virgin Suicides (1993)",
+      "durationMinutes": 12,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-trainspotting-1993-195",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Trainspotting (1993)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Trainspotting (1993)",
+      "durationMinutes": 29,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-fight-club-1996-196",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Fight Club (1996)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Fight Club (1996)",
+      "durationMinutes": 40,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-harry-potter-1997-197",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Harry Potter (1997)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Harry Potter (1997)",
+      "durationMinutes": 28,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-disgrace-1999-198",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Disgrace (1999)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Disgrace (1999)",
+      "durationMinutes": 27,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-corrections-2001-199",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Corrections (2001)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Corrections (2001)",
+      "durationMinutes": 35,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-life-of-pi-2001-200",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Life of Pi (2001)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Life of Pi (2001)",
+      "durationMinutes": 21,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-kite-runner-2003-201",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Kite Runner (2003)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Kite Runner (2003)",
+      "durationMinutes": 33,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-never-let-me-go-202",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Never Let Me Go (2005)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Never Let Me Go (2005)",
+      "durationMinutes": 37,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-brief-wondrous-life-203",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Brief Wondrous Life of Oscar Wao (2007)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Brief Wondrous Life of Oscar Wao (2007)",
+      "durationMinutes": 21,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-help-2009-204",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Help (2009)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Help (2009)",
+      "durationMinutes": 16,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-swamplandia-2011-205",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Swamplandia (2011)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Swamplandia (2011)",
+      "durationMinutes": 29,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-goldfinch-2013-206",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Goldfinch (2013)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Goldfinch (2013)",
+      "durationMinutes": 20,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-all-the-light-we-207",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "All the Light We Cannot See (2014)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "All the Light We Cannot See (2014)",
+      "durationMinutes": 12,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-underground-railroad-2016-208",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Underground Railroad (2016)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Underground Railroad (2016)",
+      "durationMinutes": 27,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-sing-unburied-sing-2017-209",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Sing Unburied Sing (2017)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Sing Unburied Sing (2017)",
+      "durationMinutes": 33,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-circe-2018-210",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Circe (2018)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Circe (2018)",
+      "durationMinutes": 11,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-piranesi-2020-211",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Piranesi (2020)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Piranesi (2020)",
+      "durationMinutes": 12,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-sea-of-tranquility-2022-212",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Sea of Tranquility (2022)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Sea of Tranquility (2022)",
+      "durationMinutes": 33,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-tomorrow-and-tomorrow-2022-213",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Tomorrow and Tomorrow (2022)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Tomorrow and Tomorrow (2022)",
+      "durationMinutes": 12,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-fraud-2023-214",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Fraud (2023)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Fraud (2023)",
+      "durationMinutes": 33,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-bee-sting-2023-215",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Bee Sting (2023)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Bee Sting (2023)",
+      "durationMinutes": 18,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-tom-lake-2023-216",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Tom Lake (2023)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Tom Lake (2023)",
+      "durationMinutes": 30,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-heaven-earth-grocery-217",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Heaven Earth Grocery (2023)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Heaven Earth Grocery (2023)",
+      "durationMinutes": 11,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-lone-women-2023-218",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Lone Women (2023)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lone Women (2023)",
+      "durationMinutes": 34,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Fiction",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-how-to-say-babylon-219",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "How to Say Babylon (2023)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "How to Say Babylon (2023)",
+      "durationMinutes": 26,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-blackouts-2023-220",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Blackouts (2023)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Blackouts (2023)",
+      "durationMinutes": 28,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-prophet-song-2023-221",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Prophet Song (2023)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Prophet Song (2023)",
+      "durationMinutes": 18,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-this-other-eden-2023-222",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "This Other Eden (2023)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "This Other Eden (2023)",
+      "durationMinutes": 38,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-in-memoriam-2023-223",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "In Memoriam (2023)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "In Memoriam (2023)",
+      "durationMinutes": 32,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-let-us-descend-2023-224",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Let Us Descend (2023)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Let Us Descend (2023)",
+      "durationMinutes": 28,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-roman-stories-2023-225",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Roman Stories (2023)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Roman Stories (2023)",
+      "durationMinutes": 33,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-land-of-milk-and-226",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Land of Milk and Honey (2023)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Land of Milk and Honey (2023)",
+      "durationMinutes": 22,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-family-meal-2023-227",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Family Meal (2023)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Family Meal (2023)",
+      "durationMinutes": 11,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-moby-dick-1851-228",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Moby-Dick (1851)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Moby-Dick (1851)",
+      "durationMinutes": 33,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-anna-karenina-1877-229",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Anna Karenina (1877)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Anna Karenina (1877)",
+      "durationMinutes": 15,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-great-gatsby-1925-230",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Great Gatsby (1925)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Great Gatsby (1925)",
+      "durationMinutes": 40,
+      "instruction": "Read the opening paragraph aloud. The author chose every word for sound as much as meaning."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-brave-new-world-1932-231",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Brave New World (1932)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Brave New World (1932)",
+      "durationMinutes": 14,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Sci-Fi",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-native-son-1940-232",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Native Son (1940)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Native Son (1940)",
+      "durationMinutes": 38,
+      "instruction": "Track the recurring motifs. Each appearance means something slightly different than the last."
+    },
+    "tags": [
+      "Mystery",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-the-catcher-in-the-233",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "The Catcher in the Rye (1951)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "The Catcher in the Rye (1951)",
+      "durationMinutes": 32,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-fahrenheit-451-1953-234",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Fahrenheit 451 (1953)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Fahrenheit 451 (1953)",
+      "durationMinutes": 21,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Memoir",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-lolita-1955-235",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "Lolita (1955)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "Lolita (1955)",
+      "durationMinutes": 13,
+      "instruction": "Stop after finishing. Write down one thing that surprised you and one thing you found confusing."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-to-kill-a-mockingbird-236",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "To Kill a Mockingbird (1960)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "To Kill a Mockingbird (1960)",
+      "durationMinutes": 29,
+      "instruction": "Notice the rhythm of the sentences. They shift from short and punchy to long and flowing when the mood changes."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-one-flew-over-the-237",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "One Flew Over the Cuckoo's Nest (1962)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "One Flew Over the Cuckoo's Nest (1962)",
+      "durationMinutes": 24,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Fantasy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "book-one-hundred-years-of-238",
+    "categoryId": "BOOKS",
+    "subtype": "Book",
+    "name": "One Hundred Years of Solitude (1967)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Read",
+      "targetName": "One Hundred Years of Solitude (1967)",
+      "durationMinutes": 15,
+      "instruction": "Pay attention to how the narrator describes physical spaces. The rooms mirror the characters' minds."
+    },
+    "tags": [
+      "Classic",
+      "19th Century"
     ],
     "tier": 2
   }

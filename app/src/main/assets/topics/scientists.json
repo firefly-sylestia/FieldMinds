@@ -995,15 +995,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-51-51",
+    "id": "scie-antonie-van-leeuwenhoek-182",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #51",
+    "name": "Antonie van Leeuwenhoek",
     "teaser": "Cientit Topic #51 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #51",
+      "targetName": "Antonie van Leeuwenhoek",
       "durationMinutes": 14,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -1014,15 +1014,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-52-52",
+    "id": "scie-humphry-davy-183",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #52",
+    "name": "Humphry Davy",
     "teaser": "Cientit Topic #52 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #52",
+      "targetName": "Humphry Davy",
       "durationMinutes": 6,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -1033,15 +1033,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-53-53",
+    "id": "scie-heinrich-hertz-184",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #53",
+    "name": "Heinrich Hertz",
     "teaser": "Colleagues described Cientit Topic #53 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #53",
+      "targetName": "Heinrich Hertz",
       "durationMinutes": 8,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -1052,15 +1052,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-54-54",
+    "id": "scie-erwin-schrödinger-185",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #54",
+    "name": "Erwin Schrödinger",
     "teaser": "Cientit Topic #54 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #54",
+      "targetName": "Erwin Schrödinger",
       "durationMinutes": 11,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1071,15 +1071,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-55-55",
+    "id": "scie-enrico-fermi-186",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #55",
+    "name": "Enrico Fermi",
     "teaser": "Colleagues described Cientit Topic #55 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #55",
+      "targetName": "Enrico Fermi",
       "durationMinutes": 19,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -1090,15 +1090,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-56-56",
+    "id": "scie-otto-hahn-187",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #56",
+    "name": "Otto Hahn",
     "teaser": "Colleagues described Cientit Topic #56 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #56",
+      "targetName": "Otto Hahn",
       "durationMinutes": 6,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -1109,15 +1109,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-57-57",
+    "id": "scie-edwin-hubble-188",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #57",
+    "name": "Edwin Hubble",
     "teaser": "Cientit Topic #57 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #57",
+      "targetName": "Edwin Hubble",
       "durationMinutes": 10,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -1128,15 +1128,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-58-58",
+    "id": "scie-subrahmanyan-chandrasekhar-189",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #58",
+    "name": "Subrahmanyan Chandrasekhar",
     "teaser": "Cientit Topic #58 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #58",
+      "targetName": "Subrahmanyan Chandrasekhar",
       "durationMinutes": 16,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1147,15 +1147,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-59-59",
+    "id": "scie-hidden-mind-1-603",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #59",
+    "name": "Hidden Mind #1",
     "teaser": "Colleagues described Cientit Topic #59 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #59",
+      "targetName": "Hidden Mind #1",
       "durationMinutes": 19,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -1166,15 +1166,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-60-60",
+    "id": "scie-forgotten-mind-2-604",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #60",
+    "name": "Forgotten Mind #2",
     "teaser": "Cientit Topic #60 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #60",
+      "targetName": "Forgotten Mind #2",
       "durationMinutes": 6,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -1185,15 +1185,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-61-61",
+    "id": "scie-unsung-mind-3-605",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #61",
+    "name": "Unsung Mind #3",
     "teaser": "Colleagues described Cientit Topic #61 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #61",
+      "targetName": "Unsung Mind #3",
       "durationMinutes": 13,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -1204,15 +1204,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-62-62",
+    "id": "scie-radiant-mind-4-606",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #62",
+    "name": "Radiant Mind #4",
     "teaser": "Cientit Topic #62 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #62",
+      "targetName": "Radiant Mind #4",
       "durationMinutes": 11,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1223,15 +1223,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-63-63",
+    "id": "scie-quiet-mind-5-607",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #63",
+    "name": "Quiet Mind #5",
     "teaser": "Cientit Topic #63 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #63",
+      "targetName": "Quiet Mind #5",
       "durationMinutes": 9,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -1242,15 +1242,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-64-64",
+    "id": "scie-luminous-mind-6-608",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #64",
+    "name": "Luminous Mind #6",
     "teaser": "Colleagues described Cientit Topic #64 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #64",
+      "targetName": "Luminous Mind #6",
       "durationMinutes": 11,
       "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
     },
@@ -1261,15 +1261,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-65-65",
+    "id": "scie-distant-mind-7-609",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #65",
+    "name": "Distant Mind #7",
     "teaser": "Cientit Topic #65 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #65",
+      "targetName": "Distant Mind #7",
       "durationMinutes": 15,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -1280,15 +1280,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-66-66",
+    "id": "scie-unexpected-mind-8-610",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #66",
+    "name": "Unexpected Mind #8",
     "teaser": "Colleagues described Cientit Topic #66 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #66",
+      "targetName": "Unexpected Mind #8",
       "durationMinutes": 11,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -1299,15 +1299,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-67-67",
+    "id": "scie-eternal-mind-9-611",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #67",
+    "name": "Eternal Mind #9",
     "teaser": "Colleagues described Cientit Topic #67 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #67",
+      "targetName": "Eternal Mind #9",
       "durationMinutes": 20,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -1318,15 +1318,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-68-68",
+    "id": "scie-restless-mind-10-612",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #68",
+    "name": "Restless Mind #10",
     "teaser": "Cientit Topic #68 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #68",
+      "targetName": "Restless Mind #10",
       "durationMinutes": 14,
       "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
     },
@@ -1337,15 +1337,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-69-69",
+    "id": "scie-brilliant-mind-11-613",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #69",
+    "name": "Brilliant Mind #11",
     "teaser": "Colleagues described Cientit Topic #69 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #69",
+      "targetName": "Brilliant Mind #11",
       "durationMinutes": 12,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -1356,15 +1356,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-70-70",
+    "id": "scie-enigmatic-mind-12-614",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #70",
+    "name": "Enigmatic Mind #12",
     "teaser": "Cientit Topic #70 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #70",
+      "targetName": "Enigmatic Mind #12",
       "durationMinutes": 18,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1375,15 +1375,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-71-71",
+    "id": "scie-restless-mind-13-615",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #71",
+    "name": "Restless Mind #13",
     "teaser": "Colleagues described Cientit Topic #71 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #71",
+      "targetName": "Restless Mind #13",
       "durationMinutes": 12,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -1394,15 +1394,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-72-72",
+    "id": "scie-subtle-mind-14-616",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #72",
+    "name": "Subtle Mind #14",
     "teaser": "Colleagues described Cientit Topic #72 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #72",
+      "targetName": "Subtle Mind #14",
       "durationMinutes": 18,
       "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
     },
@@ -1413,15 +1413,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-73-73",
+    "id": "scie-vivid-mind-15-617",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #73",
+    "name": "Vivid Mind #15",
     "teaser": "Cientit Topic #73 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #73",
+      "targetName": "Vivid Mind #15",
       "durationMinutes": 20,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -1432,15 +1432,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-74-74",
+    "id": "scie-ancient-mind-16-618",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #74",
+    "name": "Ancient Mind #16",
     "teaser": "Cientit Topic #74 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #74",
+      "targetName": "Ancient Mind #16",
       "durationMinutes": 13,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -1451,15 +1451,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-75-75",
+    "id": "scie-modern-mind-17-619",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #75",
+    "name": "Modern Mind #17",
     "teaser": "Cientit Topic #75 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #75",
+      "targetName": "Modern Mind #17",
       "durationMinutes": 14,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -1470,15 +1470,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-76-76",
+    "id": "scie-lost-mind-18-620",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #76",
+    "name": "Lost Mind #18",
     "teaser": "Cientit Topic #76 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #76",
+      "targetName": "Lost Mind #18",
       "durationMinutes": 19,
       "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
     },
@@ -1489,15 +1489,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-77-77",
+    "id": "scie-wandering-mind-19-621",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #77",
+    "name": "Wandering Mind #19",
     "teaser": "Cientit Topic #77 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #77",
+      "targetName": "Wandering Mind #19",
       "durationMinutes": 7,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -1508,15 +1508,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-78-78",
+    "id": "scie-timeless-mind-20-622",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #78",
+    "name": "Timeless Mind #20",
     "teaser": "Colleagues described Cientit Topic #78 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #78",
+      "targetName": "Timeless Mind #20",
       "durationMinutes": 16,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -1527,15 +1527,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-79-79",
+    "id": "scie-hidden-inquiry-21-623",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #79",
+    "name": "Hidden Inquiry #21",
     "teaser": "Cientit Topic #79 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #79",
+      "targetName": "Hidden Inquiry #21",
       "durationMinutes": 13,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1546,15 +1546,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-80-80",
+    "id": "scie-forgotten-inquiry-22-624",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #80",
+    "name": "Forgotten Inquiry #22",
     "teaser": "Colleagues described Cientit Topic #80 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #80",
+      "targetName": "Forgotten Inquiry #22",
       "durationMinutes": 6,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1565,15 +1565,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-81-81",
+    "id": "scie-unsung-inquiry-23-625",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #81",
+    "name": "Unsung Inquiry #23",
     "teaser": "Colleagues described Cientit Topic #81 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #81",
+      "targetName": "Unsung Inquiry #23",
       "durationMinutes": 17,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1584,15 +1584,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-82-82",
+    "id": "scie-radiant-inquiry-24-626",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #82",
+    "name": "Radiant Inquiry #24",
     "teaser": "Cientit Topic #82 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #82",
+      "targetName": "Radiant Inquiry #24",
       "durationMinutes": 9,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1603,15 +1603,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-83-83",
+    "id": "scie-quiet-inquiry-25-627",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #83",
+    "name": "Quiet Inquiry #25",
     "teaser": "Cientit Topic #83 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #83",
+      "targetName": "Quiet Inquiry #25",
       "durationMinutes": 14,
       "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
     },
@@ -1622,15 +1622,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-84-84",
+    "id": "scie-luminous-inquiry-26-628",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #84",
+    "name": "Luminous Inquiry #26",
     "teaser": "Cientit Topic #84 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #84",
+      "targetName": "Luminous Inquiry #26",
       "durationMinutes": 15,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -1641,15 +1641,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-85-85",
+    "id": "scie-distant-inquiry-27-629",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #85",
+    "name": "Distant Inquiry #27",
     "teaser": "Cientit Topic #85 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #85",
+      "targetName": "Distant Inquiry #27",
       "durationMinutes": 7,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -1660,15 +1660,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-86-86",
+    "id": "scie-unexpected-inquiry-28-630",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #86",
+    "name": "Unexpected Inquiry #28",
     "teaser": "Colleagues described Cientit Topic #86 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #86",
+      "targetName": "Unexpected Inquiry #28",
       "durationMinutes": 12,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1679,15 +1679,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-87-87",
+    "id": "scie-eternal-inquiry-29-631",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #87",
+    "name": "Eternal Inquiry #29",
     "teaser": "Colleagues described Cientit Topic #87 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #87",
+      "targetName": "Eternal Inquiry #29",
       "durationMinutes": 20,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -1698,15 +1698,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-88-88",
+    "id": "scie-restless-inquiry-30-632",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #88",
+    "name": "Restless Inquiry #30",
     "teaser": "Colleagues described Cientit Topic #88 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #88",
+      "targetName": "Restless Inquiry #30",
       "durationMinutes": 6,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -1717,15 +1717,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-89-89",
+    "id": "scie-brilliant-inquiry-31-633",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #89",
+    "name": "Brilliant Inquiry #31",
     "teaser": "Colleagues described Cientit Topic #89 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #89",
+      "targetName": "Brilliant Inquiry #31",
       "durationMinutes": 6,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -1736,15 +1736,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-90-90",
+    "id": "scie-enigmatic-inquiry-32-634",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #90",
+    "name": "Enigmatic Inquiry #32",
     "teaser": "Cientit Topic #90 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #90",
+      "targetName": "Enigmatic Inquiry #32",
       "durationMinutes": 9,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -1755,15 +1755,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-91-91",
+    "id": "scie-restless-inquiry-33-635",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #91",
+    "name": "Restless Inquiry #33",
     "teaser": "Colleagues described Cientit Topic #91 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #91",
+      "targetName": "Restless Inquiry #33",
       "durationMinutes": 20,
       "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
     },
@@ -1774,15 +1774,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-92-92",
+    "id": "scie-subtle-inquiry-34-636",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #92",
+    "name": "Subtle Inquiry #34",
     "teaser": "Colleagues described Cientit Topic #92 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #92",
+      "targetName": "Subtle Inquiry #34",
       "durationMinutes": 17,
       "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
     },
@@ -1793,15 +1793,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-93-93",
+    "id": "scie-vivid-inquiry-35-637",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #93",
+    "name": "Vivid Inquiry #35",
     "teaser": "Colleagues described Cientit Topic #93 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #93",
+      "targetName": "Vivid Inquiry #35",
       "durationMinutes": 11,
       "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
     },
@@ -1812,15 +1812,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-94-94",
+    "id": "scie-ancient-inquiry-36-638",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #94",
+    "name": "Ancient Inquiry #36",
     "teaser": "Colleagues described Cientit Topic #94 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #94",
+      "targetName": "Ancient Inquiry #36",
       "durationMinutes": 15,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -1831,15 +1831,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-95-95",
+    "id": "scie-modern-inquiry-37-639",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #95",
+    "name": "Modern Inquiry #37",
     "teaser": "Colleagues described Cientit Topic #95 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #95",
+      "targetName": "Modern Inquiry #37",
       "durationMinutes": 7,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -1850,15 +1850,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-96-96",
+    "id": "scie-lost-inquiry-38-640",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #96",
+    "name": "Lost Inquiry #38",
     "teaser": "Cientit Topic #96 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #96",
+      "targetName": "Lost Inquiry #38",
       "durationMinutes": 17,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -1869,15 +1869,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-97-97",
+    "id": "scie-wandering-inquiry-39-641",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #97",
+    "name": "Wandering Inquiry #39",
     "teaser": "Colleagues described Cientit Topic #97 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #97",
+      "targetName": "Wandering Inquiry #39",
       "durationMinutes": 20,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1888,15 +1888,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-98-98",
+    "id": "scie-timeless-inquiry-40-642",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #98",
+    "name": "Timeless Inquiry #40",
     "teaser": "Cientit Topic #98 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #98",
+      "targetName": "Timeless Inquiry #40",
       "durationMinutes": 8,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -1907,15 +1907,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-99-99",
+    "id": "scie-hidden-theorist-41-643",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #99",
+    "name": "Hidden Theorist #41",
     "teaser": "Cientit Topic #99 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #99",
+      "targetName": "Hidden Theorist #41",
       "durationMinutes": 12,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -1926,15 +1926,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-100-100",
+    "id": "scie-forgotten-theorist-42-644",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #100",
+    "name": "Forgotten Theorist #42",
     "teaser": "Cientit Topic #100 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #100",
+      "targetName": "Forgotten Theorist #42",
       "durationMinutes": 11,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1945,15 +1945,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-101-101",
+    "id": "scie-unsung-theorist-43-645",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #101",
+    "name": "Unsung Theorist #43",
     "teaser": "Colleagues described Cientit Topic #101 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #101",
+      "targetName": "Unsung Theorist #43",
       "durationMinutes": 20,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -1964,15 +1964,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-102-102",
+    "id": "scie-radiant-theorist-44-646",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #102",
+    "name": "Radiant Theorist #44",
     "teaser": "Colleagues described Cientit Topic #102 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #102",
+      "targetName": "Radiant Theorist #44",
       "durationMinutes": 14,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1983,15 +1983,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-103-103",
+    "id": "scie-quiet-theorist-45-647",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #103",
+    "name": "Quiet Theorist #45",
     "teaser": "Colleagues described Cientit Topic #103 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #103",
+      "targetName": "Quiet Theorist #45",
       "durationMinutes": 17,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -2002,15 +2002,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-104-104",
+    "id": "scie-luminous-theorist-46-648",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #104",
+    "name": "Luminous Theorist #46",
     "teaser": "Colleagues described Cientit Topic #104 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #104",
+      "targetName": "Luminous Theorist #46",
       "durationMinutes": 5,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2021,15 +2021,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-105-105",
+    "id": "scie-distant-theorist-47-649",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #105",
+    "name": "Distant Theorist #47",
     "teaser": "Cientit Topic #105 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #105",
+      "targetName": "Distant Theorist #47",
       "durationMinutes": 20,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -2040,15 +2040,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-106-106",
+    "id": "scie-unexpected-theorist-48-650",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #106",
+    "name": "Unexpected Theorist #48",
     "teaser": "Cientit Topic #106 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #106",
+      "targetName": "Unexpected Theorist #48",
       "durationMinutes": 14,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2059,15 +2059,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-107-107",
+    "id": "scie-eternal-theorist-49-651",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #107",
+    "name": "Eternal Theorist #49",
     "teaser": "Colleagues described Cientit Topic #107 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #107",
+      "targetName": "Eternal Theorist #49",
       "durationMinutes": 9,
       "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
     },
@@ -2078,15 +2078,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-108-108",
+    "id": "scie-restless-theorist-50-652",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #108",
+    "name": "Restless Theorist #50",
     "teaser": "Colleagues described Cientit Topic #108 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #108",
+      "targetName": "Restless Theorist #50",
       "durationMinutes": 6,
       "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
     },
@@ -2097,15 +2097,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-109-109",
+    "id": "scie-brilliant-theorist-51-653",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #109",
+    "name": "Brilliant Theorist #51",
     "teaser": "Cientit Topic #109 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #109",
+      "targetName": "Brilliant Theorist #51",
       "durationMinutes": 10,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2116,15 +2116,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-110-110",
+    "id": "scie-enigmatic-theorist-52-654",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #110",
+    "name": "Enigmatic Theorist #52",
     "teaser": "Colleagues described Cientit Topic #110 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #110",
+      "targetName": "Enigmatic Theorist #52",
       "durationMinutes": 6,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2135,15 +2135,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-111-111",
+    "id": "scie-restless-theorist-53-655",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #111",
+    "name": "Restless Theorist #53",
     "teaser": "Cientit Topic #111 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #111",
+      "targetName": "Restless Theorist #53",
       "durationMinutes": 6,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -2154,15 +2154,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-112-112",
+    "id": "scie-subtle-theorist-54-656",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #112",
+    "name": "Subtle Theorist #54",
     "teaser": "Colleagues described Cientit Topic #112 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #112",
+      "targetName": "Subtle Theorist #54",
       "durationMinutes": 9,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -2173,15 +2173,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-113-113",
+    "id": "scie-vivid-theorist-55-657",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #113",
+    "name": "Vivid Theorist #55",
     "teaser": "Cientit Topic #113 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #113",
+      "targetName": "Vivid Theorist #55",
       "durationMinutes": 10,
       "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
     },
@@ -2192,15 +2192,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-114-114",
+    "id": "scie-ancient-theorist-56-658",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #114",
+    "name": "Ancient Theorist #56",
     "teaser": "Colleagues described Cientit Topic #114 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #114",
+      "targetName": "Ancient Theorist #56",
       "durationMinutes": 11,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -2211,15 +2211,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-115-115",
+    "id": "scie-modern-theorist-57-659",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #115",
+    "name": "Modern Theorist #57",
     "teaser": "Cientit Topic #115 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #115",
+      "targetName": "Modern Theorist #57",
       "durationMinutes": 17,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -2230,15 +2230,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-116-116",
+    "id": "scie-lost-theorist-58-660",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #116",
+    "name": "Lost Theorist #58",
     "teaser": "Cientit Topic #116 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #116",
+      "targetName": "Lost Theorist #58",
       "durationMinutes": 5,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -2249,15 +2249,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-117-117",
+    "id": "scie-wandering-theorist-59-661",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #117",
+    "name": "Wandering Theorist #59",
     "teaser": "Cientit Topic #117 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #117",
+      "targetName": "Wandering Theorist #59",
       "durationMinutes": 16,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -2268,15 +2268,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-118-118",
+    "id": "scie-timeless-theorist-60-662",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #118",
+    "name": "Timeless Theorist #60",
     "teaser": "Cientit Topic #118 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #118",
+      "targetName": "Timeless Theorist #60",
       "durationMinutes": 19,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -2287,15 +2287,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-119-119",
+    "id": "scie-hidden-observer-61-663",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #119",
+    "name": "Hidden Observer #61",
     "teaser": "Colleagues described Cientit Topic #119 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #119",
+      "targetName": "Hidden Observer #61",
       "durationMinutes": 6,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -2306,15 +2306,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-120-120",
+    "id": "scie-forgotten-observer-62-664",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #120",
+    "name": "Forgotten Observer #62",
     "teaser": "Cientit Topic #120 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #120",
+      "targetName": "Forgotten Observer #62",
       "durationMinutes": 5,
       "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
     },
@@ -2325,15 +2325,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-121-121",
+    "id": "scie-unsung-observer-63-665",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #121",
+    "name": "Unsung Observer #63",
     "teaser": "Cientit Topic #121 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #121",
+      "targetName": "Unsung Observer #63",
       "durationMinutes": 5,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -2344,15 +2344,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-122-122",
+    "id": "scie-radiant-observer-64-666",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #122",
+    "name": "Radiant Observer #64",
     "teaser": "Cientit Topic #122 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #122",
+      "targetName": "Radiant Observer #64",
       "durationMinutes": 13,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2363,15 +2363,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-123-123",
+    "id": "scie-quiet-observer-65-667",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #123",
+    "name": "Quiet Observer #65",
     "teaser": "Cientit Topic #123 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #123",
+      "targetName": "Quiet Observer #65",
       "durationMinutes": 5,
       "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
     },
@@ -2382,15 +2382,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-124-124",
+    "id": "scie-luminous-observer-66-668",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #124",
+    "name": "Luminous Observer #66",
     "teaser": "Cientit Topic #124 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #124",
+      "targetName": "Luminous Observer #66",
       "durationMinutes": 6,
       "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
     },
@@ -2401,15 +2401,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-125-125",
+    "id": "scie-distant-observer-67-669",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #125",
+    "name": "Distant Observer #67",
     "teaser": "Cientit Topic #125 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #125",
+      "targetName": "Distant Observer #67",
       "durationMinutes": 5,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -2420,15 +2420,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-126-126",
+    "id": "scie-unexpected-observer-68-670",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #126",
+    "name": "Unexpected Observer #68",
     "teaser": "Colleagues described Cientit Topic #126 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #126",
+      "targetName": "Unexpected Observer #68",
       "durationMinutes": 7,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2439,15 +2439,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-127-127",
+    "id": "scie-eternal-observer-69-671",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #127",
+    "name": "Eternal Observer #69",
     "teaser": "Colleagues described Cientit Topic #127 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #127",
+      "targetName": "Eternal Observer #69",
       "durationMinutes": 13,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -2458,15 +2458,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-128-128",
+    "id": "scie-restless-observer-70-672",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #128",
+    "name": "Restless Observer #70",
     "teaser": "Colleagues described Cientit Topic #128 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #128",
+      "targetName": "Restless Observer #70",
       "durationMinutes": 20,
       "instruction": "Look at the original diagram. You'll notice something the textbook version usually omits."
     },
@@ -2477,15 +2477,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-129-129",
+    "id": "scie-brilliant-observer-71-673",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #129",
+    "name": "Brilliant Observer #71",
     "teaser": "Colleagues described Cientit Topic #129 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #129",
+      "targetName": "Brilliant Observer #71",
       "durationMinutes": 19,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -2496,15 +2496,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-130-130",
+    "id": "scie-enigmatic-observer-72-674",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #130",
+    "name": "Enigmatic Observer #72",
     "teaser": "Colleagues described Cientit Topic #130 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #130",
+      "targetName": "Enigmatic Observer #72",
       "durationMinutes": 19,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -2515,15 +2515,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-131-131",
+    "id": "scie-restless-observer-73-675",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #131",
+    "name": "Restless Observer #73",
     "teaser": "Colleagues described Cientit Topic #131 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #131",
+      "targetName": "Restless Observer #73",
       "durationMinutes": 12,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -2534,15 +2534,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-132-132",
+    "id": "scie-subtle-observer-74-676",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #132",
+    "name": "Subtle Observer #74",
     "teaser": "Cientit Topic #132 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #132",
+      "targetName": "Subtle Observer #74",
       "durationMinutes": 17,
       "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
     },
@@ -2553,15 +2553,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-133-133",
+    "id": "scie-vivid-observer-75-677",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #133",
+    "name": "Vivid Observer #75",
     "teaser": "Cientit Topic #133 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #133",
+      "targetName": "Vivid Observer #75",
       "durationMinutes": 17,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -2572,15 +2572,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-134-134",
+    "id": "scie-ancient-observer-76-678",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #134",
+    "name": "Ancient Observer #76",
     "teaser": "Colleagues described Cientit Topic #134 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #134",
+      "targetName": "Ancient Observer #76",
       "durationMinutes": 8,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -2591,15 +2591,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-135-135",
+    "id": "scie-modern-observer-77-679",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #135",
+    "name": "Modern Observer #77",
     "teaser": "Cientit Topic #135 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #135",
+      "targetName": "Modern Observer #77",
       "durationMinutes": 12,
       "instruction": "Look at the original diagram. You'll notice something the textbook version usually omits."
     },
@@ -2610,15 +2610,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-136-136",
+    "id": "scie-lost-observer-78-680",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #136",
+    "name": "Lost Observer #78",
     "teaser": "Colleagues described Cientit Topic #136 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #136",
+      "targetName": "Lost Observer #78",
       "durationMinutes": 19,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2629,15 +2629,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-137-137",
+    "id": "scie-wandering-observer-79-681",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #137",
+    "name": "Wandering Observer #79",
     "teaser": "Cientit Topic #137 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #137",
+      "targetName": "Wandering Observer #79",
       "durationMinutes": 16,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2648,15 +2648,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-138-138",
+    "id": "scie-timeless-observer-80-682",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #138",
+    "name": "Timeless Observer #80",
     "teaser": "Cientit Topic #138 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #138",
+      "targetName": "Timeless Observer #80",
       "durationMinutes": 9,
       "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
     },
@@ -2667,15 +2667,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-139-139",
+    "id": "scie-hidden-experimenter-81-683",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #139",
+    "name": "Hidden Experimenter #81",
     "teaser": "Cientit Topic #139 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #139",
+      "targetName": "Hidden Experimenter #81",
       "durationMinutes": 19,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -2686,15 +2686,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-140-140",
+    "id": "scie-forgotten-experimenter-82-684",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #140",
+    "name": "Forgotten Experimenter #82",
     "teaser": "Cientit Topic #140 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #140",
+      "targetName": "Forgotten Experimenter #82",
       "durationMinutes": 13,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -2705,15 +2705,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-141-141",
+    "id": "scie-unsung-experimenter-83-685",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #141",
+    "name": "Unsung Experimenter #83",
     "teaser": "Colleagues described Cientit Topic #141 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #141",
+      "targetName": "Unsung Experimenter #83",
       "durationMinutes": 9,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -2724,15 +2724,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-142-142",
+    "id": "scie-radiant-experimenter-84-686",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #142",
+    "name": "Radiant Experimenter #84",
     "teaser": "Cientit Topic #142 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #142",
+      "targetName": "Radiant Experimenter #84",
       "durationMinutes": 20,
       "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
     },
@@ -2743,15 +2743,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-143-143",
+    "id": "scie-quiet-experimenter-85-687",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #143",
+    "name": "Quiet Experimenter #85",
     "teaser": "Colleagues described Cientit Topic #143 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #143",
+      "targetName": "Quiet Experimenter #85",
       "durationMinutes": 16,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -2762,15 +2762,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-144-144",
+    "id": "scie-luminous-experimenter-86-688",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #144",
+    "name": "Luminous Experimenter #86",
     "teaser": "Cientit Topic #144 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #144",
+      "targetName": "Luminous Experimenter #86",
       "durationMinutes": 11,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -2781,15 +2781,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-145-145",
+    "id": "scie-distant-experimenter-87-689",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #145",
+    "name": "Distant Experimenter #87",
     "teaser": "Colleagues described Cientit Topic #145 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #145",
+      "targetName": "Distant Experimenter #87",
       "durationMinutes": 10,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2800,15 +2800,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-146-146",
+    "id": "scie-unexpected-experimenter-88-690",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #146",
+    "name": "Unexpected Experimenter #88",
     "teaser": "Cientit Topic #146 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #146",
+      "targetName": "Unexpected Experimenter #88",
       "durationMinutes": 20,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -2819,15 +2819,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-147-147",
+    "id": "scie-eternal-experimenter-89-691",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #147",
+    "name": "Eternal Experimenter #89",
     "teaser": "Colleagues described Cientit Topic #147 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #147",
+      "targetName": "Eternal Experimenter #89",
       "durationMinutes": 6,
       "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
     },
@@ -2838,15 +2838,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-148-148",
+    "id": "scie-restless-experimenter-90-692",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #148",
+    "name": "Restless Experimenter #90",
     "teaser": "Cientit Topic #148 kept a journal of 'failed' experiments that later turned out to be more scientifically valuable than the successes.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #148",
+      "targetName": "Restless Experimenter #90",
       "durationMinutes": 15,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2857,15 +2857,15 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-149-149",
+    "id": "scie-brilliant-experimenter-91-693",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #149",
+    "name": "Brilliant Experimenter #91",
     "teaser": "Colleagues described Cientit Topic #149 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #149",
+      "targetName": "Brilliant Experimenter #91",
       "durationMinutes": 6,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -2876,21 +2876,1427 @@
     "tier": 2
   },
   {
-    "id": "scie-cientit-topic-150-150",
+    "id": "scie-enigmatic-experimenter-92-694",
     "categoryId": "SCIENTISTS",
     "subtype": "Scientist",
-    "name": "Cientit Topic #150",
+    "name": "Enigmatic Experimenter #92",
     "teaser": "Colleagues described Cientit Topic #150 as 'the kind of mind that asks the question everyone else assumed was already answered.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the key ideas of Cientit Topic #150",
+      "targetName": "Enigmatic Experimenter #92",
       "durationMinutes": 15,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
     "tags": [
       "Biology",
       "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-murray-gell-mann-151",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Murray Gell-Mann",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Murray Gell-Mann",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-dorothy-hodgkin-152",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Dorothy Hodgkin",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Dorothy Hodgkin",
+      "durationMinutes": 18,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-francis-crick-153",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Francis Crick",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Francis Crick",
+      "durationMinutes": 16,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-lynn-margulis-154",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Lynn Margulis",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Lynn Margulis",
+      "durationMinutes": 18,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-roger-penrose-155",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Roger Penrose",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Roger Penrose",
+      "durationMinutes": 17,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-neil-degrasse-tyson-156",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Neil deGrasse Tyson",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Neil deGrasse Tyson",
+      "durationMinutes": 12,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-dian-fossey-157",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Dian Fossey",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Dian Fossey",
+      "durationMinutes": 19,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-eo-wilson-158",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "E.O. Wilson",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "E.O. Wilson",
+      "durationMinutes": 18,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-richard-dawkins-159",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Richard Dawkins",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Richard Dawkins",
+      "durationMinutes": 17,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-vint-cerf-160",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Vint Cerf",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Vint Cerf",
+      "durationMinutes": 15,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-margaret-hamilton-161",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Margaret Hamilton",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Margaret Hamilton",
+      "durationMinutes": 7,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-katherine-johnson-162",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Katherine Johnson",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Katherine Johnson",
+      "durationMinutes": 6,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-dorothy-vaughan-163",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Dorothy Vaughan",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Dorothy Vaughan",
+      "durationMinutes": 6,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-mae-jemison-164",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Mae Jemison",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Mae Jemison",
+      "durationMinutes": 11,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-vera-rubin-165",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Vera Rubin",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Vera Rubin",
+      "durationMinutes": 14,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-donna-strickland-166",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Donna Strickland",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Donna Strickland",
+      "durationMinutes": 8,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-emmanuelle-charpentier-167",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Emmanuelle Charpentier",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Emmanuelle Charpentier",
+      "durationMinutes": 11,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-katalin-karikó-168",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Katalin Karikó",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Katalin Karikó",
+      "durationMinutes": 15,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-françoise-barré-sinoussi-169",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Françoise Barré-Sinoussi",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Françoise Barré-Sinoussi",
+      "durationMinutes": 16,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-gerty-cori-170",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Gerty Cori",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Gerty Cori",
+      "durationMinutes": 20,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-may-britt-moser-171",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "May-Britt Moser",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "May-Britt Moser",
+      "durationMinutes": 15,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-alexander-fleming-172",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Alexander Fleming",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Alexander Fleming",
+      "durationMinutes": 18,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-albert-sabin-173",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Albert Sabin",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Albert Sabin",
+      "durationMinutes": 9,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-frederick-banting-174",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Frederick Banting",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Frederick Banting",
+      "durationMinutes": 18,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-barry-marshall-175",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Barry Marshall",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Barry Marshall",
+      "durationMinutes": 15,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-harold-varmus-176",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Harold Varmus",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Harold Varmus",
+      "durationMinutes": 12,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-eric-kandel-177",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Eric Kandel",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Eric Kandel",
+      "durationMinutes": 13,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-vs-ramachandran-178",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "V.S. Ramachandran",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "V.S. Ramachandran",
+      "durationMinutes": 19,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-amos-tversky-179",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Amos Tversky",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Amos Tversky",
+      "durationMinutes": 10,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-bf-skinner-180",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "B.F. Skinner",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "B.F. Skinner",
+      "durationMinutes": 20,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-lev-vygotsky-181",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Lev Vygotsky",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Lev Vygotsky",
+      "durationMinutes": 6,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-juan-maldacena-182",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Juan Maldacena",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Juan Maldacena",
+      "durationMinutes": 5,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-brian-greene-183",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Brian Greene",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Brian Greene",
+      "durationMinutes": 7,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-robert-hooke-184",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Robert Hooke",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Robert Hooke",
+      "durationMinutes": 19,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-carl-linnaeus-185",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Carl Linnaeus",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Carl Linnaeus",
+      "durationMinutes": 20,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-benjamin-franklin-186",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Benjamin Franklin",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Benjamin Franklin",
+      "durationMinutes": 18,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-lord-kelvin-187",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Lord Kelvin",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Lord Kelvin",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-wilhelm-röntgen-188",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Wilhelm Röntgen",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wilhelm Röntgen",
+      "durationMinutes": 18,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-pierre-curie-189",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Pierre Curie",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Pierre Curie",
+      "durationMinutes": 9,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-max-planck-190",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Max Planck",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Max Planck",
+      "durationMinutes": 13,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-werner-heisenberg-191",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Werner Heisenberg",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Werner Heisenberg",
+      "durationMinutes": 7,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-wolfgang-pauli-192",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Wolfgang Pauli",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Wolfgang Pauli",
+      "durationMinutes": 12,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-lise-meitner-193",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Lise Meitner",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Lise Meitner",
+      "durationMinutes": 6,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-kurt-gödel-194",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Kurt Gödel",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Kurt Gödel",
+      "durationMinutes": 17,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-georges-lemaître-195",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Georges Lemaître",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Georges Lemaître",
+      "durationMinutes": 5,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-john-bardeen-196",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "John Bardeen",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "John Bardeen",
+      "durationMinutes": 18,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-linus-pauling-197",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Linus Pauling",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Linus Pauling",
+      "durationMinutes": 6,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-james-watson-198",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "James Watson",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "James Watson",
+      "durationMinutes": 20,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-stephen-hawking-199",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Stephen Hawking",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Stephen Hawking",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-carl-sagan-200",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Carl Sagan",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Carl Sagan",
+      "durationMinutes": 10,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-david-attenborough-201",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "David Attenborough",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "David Attenborough",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-tim-berners-lee-202",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Tim Berners-Lee",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Tim Berners-Lee",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-grace-hopper-203",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Grace Hopper",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Grace Hopper",
+      "durationMinutes": 17,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-mary-jackson-204",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Mary Jackson",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Mary Jackson",
+      "durationMinutes": 9,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-sally-ride-205",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Sally Ride",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Sally Ride",
+      "durationMinutes": 6,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-chien-shiung-wu-206",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Chien-Shiung Wu",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Chien-Shiung Wu",
+      "durationMinutes": 7,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-jocelyn-bell-burnell-207",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Jocelyn Bell Burnell",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Jocelyn Bell Burnell",
+      "durationMinutes": 17,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-andrea-ghez-208",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Andrea Ghez",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Andrea Ghez",
+      "durationMinutes": 19,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-tu-youyou-209",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Tu Youyou",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Tu Youyou",
+      "durationMinutes": 17,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-rita-levi-montalcini-210",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Rita Levi-Montalcini",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Rita Levi-Montalcini",
+      "durationMinutes": 17,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-maria-goeppert-mayer-211",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Maria Goeppert Mayer",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Maria Goeppert Mayer",
+      "durationMinutes": 12,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-edward-jenner-212",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Edward Jenner",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Edward Jenner",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-jonas-salk-213",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Jonas Salk",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Jonas Salk",
+      "durationMinutes": 17,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-gertrude-elion-214",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Gertrude Elion",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Gertrude Elion",
+      "durationMinutes": 7,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Chemistry",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-charles-best-215",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Charles Best",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Charles Best",
+      "durationMinutes": 16,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-robin-warren-216",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Robin Warren",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Robin Warren",
+      "durationMinutes": 7,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-santiago-ramón-y-cajal-217",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Santiago Ramón y Cajal",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Santiago Ramón y Cajal",
+      "durationMinutes": 18,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-oliver-sacks-218",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Oliver Sacks",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Oliver Sacks",
+      "durationMinutes": 16,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-daniel-kahneman-219",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Daniel Kahneman",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Daniel Kahneman",
+      "durationMinutes": 15,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-noam-chomsky-220",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Noam Chomsky",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Noam Chomsky",
+      "durationMinutes": 18,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-jean-piaget-221",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Jean Piaget",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Jean Piaget",
+      "durationMinutes": 12,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Neuroscience",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-edward-witten-222",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Edward Witten",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Edward Witten",
+      "durationMinutes": 17,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-cumrun-vafa-223",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Cumrun Vafa",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Cumrun Vafa",
+      "durationMinutes": 14,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "scie-lisa-randall-224",
+    "categoryId": "SCIENTISTS",
+    "subtype": "Scientist",
+    "name": "Lisa Randall",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Lisa Randall",
+      "durationMinutes": 7,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mathematics",
+      "18th Century"
     ],
     "tier": 2
   }

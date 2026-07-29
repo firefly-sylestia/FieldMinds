@@ -129,6 +129,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var confettiTrigger by remember { mutableIntStateOf(0) }
     var sparkleTrigger by remember { mutableIntStateOf(0) }
     var landedTopic by remember { mutableStateOf<CurioTopic?>(null) }
+    // Track recently-shown topic IDs to avoid repeats within a session
+    var recentTopicIds by remember { mutableStateOf(setOf<String>()) }
 
     val shuffleProgress = remember(shuffleCount) { Animatable(0f) }
 
@@ -187,8 +189,12 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
 
         shuffling = false
-        val finalPick = pickRandomFrom(filteredPool, cat.id)
+        val finalPick = pickRandomFrom(filteredPool, cat.id, recentTopicIds)
         landedTopic = finalPick
+        // Add to recent IDs (keep last 20)
+        if (finalPick != null) {
+            recentTopicIds = (recentTopicIds + finalPick.id).takeLast(20).toSet()
+        }
         // Set visibleTopicIndex to the landed topic's position in displayPool
         val finalIdx = displayPool.indexOfFirst { it.name == finalPick?.name }
         if (finalIdx >= 0) visibleTopicIndex = finalIdx
@@ -202,7 +208,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         if (confettiTrigger == 0) return@LaunchedEffect
         delay(CurioMotion.Durations.RevealHold.toLong())
         val topic = landedTopic
-            ?: pickRandomFrom(filteredPool, cat.id)
+            ?: pickRandomFrom(filteredPool, cat.id, recentTopicIds)
             ?: return@LaunchedEffect
         navController.navigate(
             CurioRoutes.revealFor(cat.id.routeSlug, topic.name)
@@ -1004,14 +1010,80 @@ private fun TagChip(
     }
 }
 
+/**
+ * Pick a random topic from the filtered pool using tier-weighted selection.
+ *
+ * Weight distribution (per CURIO_DATA_PLAN.md §4.3):
+ *   - Tier 1 (human-curated marquee): weight 100 — surfaces ~50% of the time
+ *   - Tier 2 (AI-curated long tail):  weight 60  — surfaces ~30% of the time
+ *   - Tier 3 (draft / placeholder):  weight 20  — surfaces ~12% of the time
+ *
+ * This ensures the best-quality topics appear more frequently while still
+ * giving the long tail a chance. Fallback to uniform random if weights
+ * fail to produce a pick (e.g. empty pool after filtering).
+ *
+ * @param filteredPool The tag-filtered pool to pick from.
+ * @param fallbackCategory Fallback category if filtered pool is empty.
+ * @param recentIds Set of recently-shown topic IDs to avoid repeats.
+ */
 private fun pickRandomFrom(
     filteredPool: List<CurioTopic>,
-    fallbackCategory: CategoryId
+    fallbackCategory: CategoryId,
+    recentIds: Set<String> = emptySet()
 ): CurioTopic? {
-    if (filteredPool.isNotEmpty()) return filteredPool.random()
+    // ── Prefer filtered pool with tier weighting ─────────────────────────
+    if (filteredPool.isNotEmpty()) {
+        // Try weighted pick, avoiding recent repeats if possible
+        val withoutRecents = filteredPool.filterNot { it.id in recentIds }
+        val pool = if (withoutRecents.isNotEmpty()) withoutRecents else filteredPool
+        return pickWeighted(pool)
+    }
+
+    // ── Fallback: load from cached category pool ─────────────────────────
     return try {
-        TopicJsonLoader.cached(fallbackCategory)?.randomOrNull()
-    } catch (t: Throwable) {
+        val cached = TopicJsonLoader.cached(fallbackCategory)
+        if (cached != null && cached.isNotEmpty()) {
+            val withoutRecents = cached.filterNot { it.id in recentIds }
+            val pool = if (withoutRecents.isNotEmpty()) withoutRecents else cached
+            pickWeighted(pool)
+        } else null
+    } catch (e: Exception) {
         null
     }
+}
+
+/**
+ * Weighted random pick from a pool using tier-based weights.
+ * Falls back to uniform random if weights produce an invalid result.
+ */
+private fun pickWeighted(pool: List<CurioTopic>): CurioTopic? {
+    if (pool.isEmpty()) return null
+    if (pool.size == 1) return pool[0]
+
+    // Calculate total weight
+    val totalWeight = pool.sumOf { topic ->
+        when (topic.tier) {
+            1 -> 100
+            2 -> 60
+            3 -> 20
+            else -> 30
+        }
+    }
+    if (totalWeight <= 0) return pool.random()
+
+    // Spin the weighted wheel
+    var target = Random.nextInt(totalWeight)
+    for (topic in pool) {
+        val w = when (topic.tier) {
+            1 -> 100
+            2 -> 60
+            3 -> 20
+            else -> 30
+        }
+        target -= w
+        if (target < 0) return topic
+    }
+
+    // Fallback (shouldn't reach here, but be safe)
+    return pool.random()
 }

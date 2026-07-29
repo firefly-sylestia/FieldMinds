@@ -1486,15 +1486,15 @@
     "tier": 3
   },
   {
-    "id": "arti-artit-topic-73-73",
+    "id": "arti-aretha-franklin-19",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #73",
+    "name": "Aretha Franklin",
     "teaser": "A studio engineer once said Artit Topic #73's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #73 — a specific track or album",
+      "targetName": "Aretha Franklin",
       "durationMinutes": 43,
       "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel intimate."
     },
@@ -1505,15 +1505,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-74-74",
+    "id": "arti-johnny-cash-20",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #74",
+    "name": "Johnny Cash",
     "teaser": "Before their breakthrough, Artit Topic #74 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #74 — a specific track or album",
+      "targetName": "Johnny Cash",
       "durationMinutes": 40,
       "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel nostalgic."
     },
@@ -1524,15 +1524,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-75-75",
+    "id": "arti-chuck-berry-21",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #75",
+    "name": "Chuck Berry",
     "teaser": "Artit Topic #75 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #75 — a specific track or album",
+      "targetName": "Chuck Berry",
       "durationMinutes": 15,
       "instruction": "Notice how the production layers spatial mixing. That's intentional — the artist wanted you to feel euphoric."
     },
@@ -1543,15 +1543,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-76-76",
+    "id": "arti-the-who-22",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #76",
+    "name": "The Who",
     "teaser": "Artit Topic #76 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #76 — a specific track or album",
+      "targetName": "The Who",
       "durationMinutes": 43,
       "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
     },
@@ -1562,15 +1562,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-77-77",
+    "id": "arti-the-kinks-23",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #77",
+    "name": "The Kinks",
     "teaser": "Before their breakthrough, Artit Topic #77 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #77 — a specific track or album",
+      "targetName": "The Kinks",
       "durationMinutes": 28,
       "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
     },
@@ -1581,15 +1581,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-78-78",
+    "id": "arti-velvet-underground-24",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #78",
+    "name": "Velvet Underground",
     "teaser": "Before their breakthrough, Artit Topic #78 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #78 — a specific track or album",
+      "targetName": "Velvet Underground",
       "durationMinutes": 21,
       "instruction": "Pay attention to the guitar work. It shifts subtly in ways most tracks don't dare."
     },
@@ -1600,15 +1600,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-79-79",
+    "id": "arti-the-doors-25",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #79",
+    "name": "The Doors",
     "teaser": "A studio engineer once said Artit Topic #79's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #79 — a specific track or album",
+      "targetName": "The Doors",
       "durationMinutes": 39,
       "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel unsettled."
     },
@@ -1619,15 +1619,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-80-80",
+    "id": "arti-janis-joplin-26",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #80",
+    "name": "Janis Joplin",
     "teaser": "A studio engineer once said Artit Topic #80's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #80 — a specific track or album",
+      "targetName": "Janis Joplin",
       "durationMinutes": 17,
       "instruction": "Listen for the moment at 1:55 when the synthesizer does something unexpected."
     },
@@ -1638,15 +1638,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-81-81",
+    "id": "arti-the-byrds-27",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #81",
+    "name": "The Byrds",
     "teaser": "Before their breakthrough, Artit Topic #81 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #81 — a specific track or album",
+      "targetName": "The Byrds",
       "durationMinutes": 54,
       "instruction": "Pay attention to the horns work. It shifts three times in ways most tracks don't dare."
     },
@@ -1657,15 +1657,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-82-82",
+    "id": "arti-simon-and-garfunkel-28",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #82",
+    "name": "Simon and Garfunkel",
     "teaser": "A studio engineer once said Artit Topic #82's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #82 — a specific track or album",
+      "targetName": "Simon and Garfunkel",
       "durationMinutes": 18,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1676,15 +1676,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-83-83",
+    "id": "arti-creedence-clearwater-29",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #83",
+    "name": "Creedence Clearwater",
     "teaser": "Artit Topic #83 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #83 — a specific track or album",
+      "targetName": "Creedence Clearwater",
       "durationMinutes": 49,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1695,15 +1695,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-84-84",
+    "id": "arti-the-band-30",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #84",
+    "name": "The Band",
     "teaser": "A studio engineer once said Artit Topic #84's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #84 — a specific track or album",
+      "targetName": "The Band",
       "durationMinutes": 39,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -1714,15 +1714,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-85-85",
+    "id": "arti-neil-young-31",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #85",
+    "name": "Neil Young",
     "teaser": "A studio engineer once said Artit Topic #85's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #85 — a specific track or album",
+      "targetName": "Neil Young",
       "durationMinutes": 37,
       "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
     },
@@ -1733,15 +1733,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-86-86",
+    "id": "arti-crosby-stills-and-nash-32",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #86",
+    "name": "Crosby Stills and Nash",
     "teaser": "A studio engineer once said Artit Topic #86's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #86 — a specific track or album",
+      "targetName": "Crosby Stills and Nash",
       "durationMinutes": 24,
       "instruction": "Listen for the moment at 1:50 when the guitar does something unexpected."
     },
@@ -1752,15 +1752,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-87-87",
+    "id": "arti-pink-floyd-33",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #87",
+    "name": "Pink Floyd",
     "teaser": "Artit Topic #87 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #87 — a specific track or album",
+      "targetName": "Pink Floyd",
       "durationMinutes": 40,
       "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
     },
@@ -1771,15 +1771,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-88-88",
+    "id": "arti-black-sabbath-34",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #88",
+    "name": "Black Sabbath",
     "teaser": "A studio engineer once said Artit Topic #88's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #88 — a specific track or album",
+      "targetName": "Black Sabbath",
       "durationMinutes": 50,
       "instruction": "Listen for the moment at 2:24 when the horns does something unexpected."
     },
@@ -1790,15 +1790,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-89-89",
+    "id": "arti-the-ramones-35",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #89",
+    "name": "The Ramones",
     "teaser": "Before their breakthrough, Artit Topic #89 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #89 — a specific track or album",
+      "targetName": "The Ramones",
       "durationMinutes": 10,
       "instruction": "Pay attention to the bass work. It shifts twice in ways most tracks don't dare."
     },
@@ -1809,15 +1809,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-90-90",
+    "id": "arti-blondie-36",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #90",
+    "name": "Blondie",
     "teaser": "Before their breakthrough, Artit Topic #90 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #90 — a specific track or album",
+      "targetName": "Blondie",
       "durationMinutes": 45,
       "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
     },
@@ -1828,15 +1828,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-91-91",
+    "id": "arti-joy-division-37",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #91",
+    "name": "Joy Division",
     "teaser": "Artit Topic #91 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #91 — a specific track or album",
+      "targetName": "Joy Division",
       "durationMinutes": 53,
       "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
     },
@@ -1847,15 +1847,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-92-92",
+    "id": "arti-depeche-mode-38",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #92",
+    "name": "Depeche Mode",
     "teaser": "A studio engineer once said Artit Topic #92's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #92 — a specific track or album",
+      "targetName": "Depeche Mode",
       "durationMinutes": 52,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1866,15 +1866,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-93-93",
+    "id": "arti-the-smiths-39",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #93",
+    "name": "The Smiths",
     "teaser": "Artit Topic #93 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #93 — a specific track or album",
+      "targetName": "The Smiths",
       "durationMinutes": 55,
       "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
     },
@@ -1885,15 +1885,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-94-94",
+    "id": "arti-u2-40",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #94",
+    "name": "U2",
     "teaser": "Before their breakthrough, Artit Topic #94 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #94 — a specific track or album",
+      "targetName": "U2",
       "durationMinutes": 17,
       "instruction": "Pay attention to the strings work. It shifts three times in ways most tracks don't dare."
     },
@@ -1904,15 +1904,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-95-95",
+    "id": "arti-michael-jackson-41",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #95",
+    "name": "Michael Jackson",
     "teaser": "Before their breakthrough, Artit Topic #95 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #95 — a specific track or album",
+      "targetName": "Michael Jackson",
       "durationMinutes": 17,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1923,15 +1923,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-96-96",
+    "id": "arti-madonna-42",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #96",
+    "name": "Madonna",
     "teaser": "Before their breakthrough, Artit Topic #96 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #96 — a specific track or album",
+      "targetName": "Madonna",
       "durationMinutes": 16,
       "instruction": "Listen for the moment at 2:15 when the guitar does something unexpected."
     },
@@ -1942,15 +1942,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-97-97",
+    "id": "arti-george-michael-43",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #97",
+    "name": "George Michael",
     "teaser": "A studio engineer once said Artit Topic #97's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #97 — a specific track or album",
+      "targetName": "George Michael",
       "durationMinutes": 45,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -1961,15 +1961,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-98-98",
+    "id": "arti-peter-gabriel-44",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #98",
+    "name": "Peter Gabriel",
     "teaser": "Before their breakthrough, Artit Topic #98 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #98 — a specific track or album",
+      "targetName": "Peter Gabriel",
       "durationMinutes": 52,
       "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
     },
@@ -1980,15 +1980,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-99-99",
+    "id": "arti-suzanne-vega-45",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #99",
+    "name": "Suzanne Vega",
     "teaser": "Artit Topic #99 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #99 — a specific track or album",
+      "targetName": "Suzanne Vega",
       "durationMinutes": 30,
       "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
     },
@@ -1999,15 +1999,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-100-100",
+    "id": "arti-annie-lennox-46",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #100",
+    "name": "Annie Lennox",
     "teaser": "A studio engineer once said Artit Topic #100's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #100 — a specific track or album",
+      "targetName": "Annie Lennox",
       "durationMinutes": 15,
       "instruction": "Pay attention to the vocals work. It shifts subtly in ways most tracks don't dare."
     },
@@ -2018,15 +2018,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-101-101",
+    "id": "arti-lauryn-hill-47",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #101",
+    "name": "Lauryn Hill",
     "teaser": "Artit Topic #101 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #101 — a specific track or album",
+      "targetName": "Lauryn Hill",
       "durationMinutes": 50,
       "instruction": "Listen for the moment at 2:24 when the guitar does something unexpected."
     },
@@ -2037,15 +2037,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-102-102",
+    "id": "arti-a-tribe-called-quest-48",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #102",
+    "name": "A Tribe Called Quest",
     "teaser": "Artit Topic #102 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #102 — a specific track or album",
+      "targetName": "A Tribe Called Quest",
       "durationMinutes": 3,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -2056,15 +2056,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-103-103",
+    "id": "arti-beastie-boys-49",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #103",
+    "name": "Beastie Boys",
     "teaser": "A studio engineer once said Artit Topic #103's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #103 — a specific track or album",
+      "targetName": "Beastie Boys",
       "durationMinutes": 34,
       "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
     },
@@ -2075,15 +2075,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-104-104",
+    "id": "arti-run-dmc-50",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #104",
+    "name": "Run-DMC",
     "teaser": "Before their breakthrough, Artit Topic #104 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #104 — a specific track or album",
+      "targetName": "Run-DMC",
       "durationMinutes": 16,
       "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel euphoric."
     },
@@ -2094,15 +2094,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-105-105",
+    "id": "arti-nas-51",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #105",
+    "name": "Nas",
     "teaser": "A studio engineer once said Artit Topic #105's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #105 — a specific track or album",
+      "targetName": "Nas",
       "durationMinutes": 37,
       "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
     },
@@ -2113,15 +2113,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-106-106",
+    "id": "arti-the-notorious-big-52",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #106",
+    "name": "The Notorious B.I.G.",
     "teaser": "Before their breakthrough, Artit Topic #106 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #106 — a specific track or album",
+      "targetName": "The Notorious B.I.G.",
       "durationMinutes": 50,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -2132,15 +2132,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-107-107",
+    "id": "arti-dr-dre-53",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #107",
+    "name": "Dr. Dre",
     "teaser": "Before their breakthrough, Artit Topic #107 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #107 — a specific track or album",
+      "targetName": "Dr. Dre",
       "durationMinutes": 29,
       "instruction": "Listen for the moment at 2:54 when the percussion does something unexpected."
     },
@@ -2151,15 +2151,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-108-108",
+    "id": "arti-missy-elliott-54",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #108",
+    "name": "Missy Elliott",
     "teaser": "Artit Topic #108 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #108 — a specific track or album",
+      "targetName": "Missy Elliott",
       "durationMinutes": 15,
       "instruction": "Listen for the moment at 1:27 when the vocals does something unexpected."
     },
@@ -2170,15 +2170,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-109-109",
+    "id": "arti-kendrick-lamar-55",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #109",
+    "name": "Kendrick Lamar",
     "teaser": "A studio engineer once said Artit Topic #109's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #109 — a specific track or album",
+      "targetName": "Kendrick Lamar",
       "durationMinutes": 32,
       "instruction": "Pay attention to the guitar work. It shifts three times in ways most tracks don't dare."
     },
@@ -2189,15 +2189,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-110-110",
+    "id": "arti-solange-56",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #110",
+    "name": "Solange",
     "teaser": "Artit Topic #110 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #110 — a specific track or album",
+      "targetName": "Solange",
       "durationMinutes": 31,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2208,15 +2208,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-111-111",
+    "id": "arti-childish-gambino-57",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #111",
+    "name": "Childish Gambino",
     "teaser": "Before their breakthrough, Artit Topic #111 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #111 — a specific track or album",
+      "targetName": "Childish Gambino",
       "durationMinutes": 40,
       "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel grounded."
     },
@@ -2227,15 +2227,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-112-112",
+    "id": "arti-dua-lipa-58",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #112",
+    "name": "Dua Lipa",
     "teaser": "A studio engineer once said Artit Topic #112's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #112 — a specific track or album",
+      "targetName": "Dua Lipa",
       "durationMinutes": 7,
       "instruction": "Listen for the moment at 3:55 when the horns does something unexpected."
     },
@@ -2246,15 +2246,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-113-113",
+    "id": "arti-her-59",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #113",
+    "name": "H.E.R.",
     "teaser": "A studio engineer once said Artit Topic #113's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #113 — a specific track or album",
+      "targetName": "H.E.R.",
       "durationMinutes": 14,
       "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
     },
@@ -2265,15 +2265,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-114-114",
+    "id": "arti-john-legend-60",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #114",
+    "name": "John Legend",
     "teaser": "Before their breakthrough, Artit Topic #114 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #114 — a specific track or album",
+      "targetName": "John Legend",
       "durationMinutes": 15,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2284,15 +2284,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-115-115",
+    "id": "arti-ed-sheeran-61",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #115",
+    "name": "Ed Sheeran",
     "teaser": "Artit Topic #115 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #115 — a specific track or album",
+      "targetName": "Ed Sheeran",
       "durationMinutes": 51,
       "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
     },
@@ -2303,15 +2303,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-116-116",
+    "id": "arti-amy-winehouse-62",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #116",
+    "name": "Amy Winehouse",
     "teaser": "Before their breakthrough, Artit Topic #116 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #116 — a specific track or album",
+      "targetName": "Amy Winehouse",
       "durationMinutes": 55,
       "instruction": "Listen for the moment at 1:19 when the strings does something unexpected."
     },
@@ -2322,15 +2322,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-117-117",
+    "id": "arti-arctic-monkeys-63",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #117",
+    "name": "Arctic Monkeys",
     "teaser": "A studio engineer once said Artit Topic #117's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #117 — a specific track or album",
+      "targetName": "Arctic Monkeys",
       "durationMinutes": 46,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2341,15 +2341,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-118-118",
+    "id": "arti-tame-impala-64",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #118",
+    "name": "Tame Impala",
     "teaser": "Artit Topic #118 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #118 — a specific track or album",
+      "targetName": "Tame Impala",
       "durationMinutes": 45,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -2360,15 +2360,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-119-119",
+    "id": "arti-james-blake-65",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #119",
+    "name": "James Blake",
     "teaser": "A studio engineer once said Artit Topic #119's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #119 — a specific track or album",
+      "targetName": "James Blake",
       "durationMinutes": 15,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2379,15 +2379,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-120-120",
+    "id": "arti-gorillaz-66",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #120",
+    "name": "Gorillaz",
     "teaser": "A studio engineer once said Artit Topic #120's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #120 — a specific track or album",
+      "targetName": "Gorillaz",
       "durationMinutes": 4,
       "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel euphoric."
     },
@@ -2398,15 +2398,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-121-121",
+    "id": "arti-massive-attack-67",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #121",
+    "name": "Massive Attack",
     "teaser": "A studio engineer once said Artit Topic #121's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #121 — a specific track or album",
+      "targetName": "Massive Attack",
       "durationMinutes": 44,
       "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel nostalgic."
     },
@@ -2417,15 +2417,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-122-122",
+    "id": "arti-underworld-68",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #122",
+    "name": "Underworld",
     "teaser": "Artit Topic #122 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #122 — a specific track or album",
+      "targetName": "Underworld",
       "durationMinutes": 53,
       "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel euphoric."
     },
@@ -2436,15 +2436,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-123-123",
+    "id": "arti-moby-69",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #123",
+    "name": "Moby",
     "teaser": "Artit Topic #123 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #123 — a specific track or album",
+      "targetName": "Moby",
       "durationMinutes": 9,
       "instruction": "Listen for the moment at 1:36 when the piano does something unexpected."
     },
@@ -2455,15 +2455,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-124-124",
+    "id": "arti-the-prodigy-70",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #124",
+    "name": "The Prodigy",
     "teaser": "A studio engineer once said Artit Topic #124's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #124 — a specific track or album",
+      "targetName": "The Prodigy",
       "durationMinutes": 39,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2474,15 +2474,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-125-125",
+    "id": "arti-the-flaming-lips-71",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #125",
+    "name": "The Flaming Lips",
     "teaser": "Before their breakthrough, Artit Topic #125 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #125 — a specific track or album",
+      "targetName": "The Flaming Lips",
       "durationMinutes": 32,
       "instruction": "Pay attention to the piano work. It shifts subtly in ways most tracks don't dare."
     },
@@ -2493,15 +2493,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-126-126",
+    "id": "arti-modest-mouse-72",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #126",
+    "name": "Modest Mouse",
     "teaser": "Before their breakthrough, Artit Topic #126 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #126 — a specific track or album",
+      "targetName": "Modest Mouse",
       "durationMinutes": 10,
       "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
     },
@@ -2512,15 +2512,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-127-127",
+    "id": "arti-interpol-73",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #127",
+    "name": "Interpol",
     "teaser": "A studio engineer once said Artit Topic #127's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #127 — a specific track or album",
+      "targetName": "Interpol",
       "durationMinutes": 48,
       "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
     },
@@ -2531,15 +2531,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-128-128",
+    "id": "arti-the-white-stripes-74",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #128",
+    "name": "The White Stripes",
     "teaser": "A studio engineer once said Artit Topic #128's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #128 — a specific track or album",
+      "targetName": "The White Stripes",
       "durationMinutes": 30,
       "instruction": "Pay attention to the strings work. It shifts three times in ways most tracks don't dare."
     },
@@ -2550,15 +2550,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-129-129",
+    "id": "arti-foo-fighters-75",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #129",
+    "name": "Foo Fighters",
     "teaser": "A studio engineer once said Artit Topic #129's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #129 — a specific track or album",
+      "targetName": "Foo Fighters",
       "durationMinutes": 7,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2569,15 +2569,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-130-130",
+    "id": "arti-tool-76",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #130",
+    "name": "Tool",
     "teaser": "Artit Topic #130 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #130 — a specific track or album",
+      "targetName": "Tool",
       "durationMinutes": 8,
       "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
     },
@@ -2588,15 +2588,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-131-131",
+    "id": "arti-slipknot-77",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #131",
+    "name": "Slipknot",
     "teaser": "Before their breakthrough, Artit Topic #131 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #131 — a specific track or album",
+      "targetName": "Slipknot",
       "durationMinutes": 31,
       "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
     },
@@ -2607,15 +2607,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-132-132",
+    "id": "arti-rage-against-the-machine-78",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #132",
+    "name": "Rage Against the Machine",
     "teaser": "A studio engineer once said Artit Topic #132's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #132 — a specific track or album",
+      "targetName": "Rage Against the Machine",
       "durationMinutes": 45,
       "instruction": "Listen for the moment at 3:15 when the percussion does something unexpected."
     },
@@ -2626,15 +2626,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-133-133",
+    "id": "arti-blink-182-79",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #133",
+    "name": "Blink-182",
     "teaser": "A studio engineer once said Artit Topic #133's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #133 — a specific track or album",
+      "targetName": "Blink-182",
       "durationMinutes": 11,
       "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel grounded."
     },
@@ -2645,15 +2645,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-134-134",
+    "id": "arti-red-hot-chili-peppers-80",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #134",
+    "name": "Red Hot Chili Peppers",
     "teaser": "Before their breakthrough, Artit Topic #134 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #134 — a specific track or album",
+      "targetName": "Red Hot Chili Peppers",
       "durationMinutes": 53,
       "instruction": "Pay attention to the guitar work. It shifts three times in ways most tracks don't dare."
     },
@@ -2664,15 +2664,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-135-135",
+    "id": "arti-soundgarden-81",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #135",
+    "name": "Soundgarden",
     "teaser": "A studio engineer once said Artit Topic #135's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #135 — a specific track or album",
+      "targetName": "Soundgarden",
       "durationMinutes": 8,
       "instruction": "Listen for the moment at 1:38 when the horns does something unexpected."
     },
@@ -2683,15 +2683,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-136-136",
+    "id": "arti-stone-temple-pilots-82",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #136",
+    "name": "Stone Temple Pilots",
     "teaser": "Before their breakthrough, Artit Topic #136 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #136 — a specific track or album",
+      "targetName": "Stone Temple Pilots",
       "durationMinutes": 21,
       "instruction": "Pay attention to the vocals work. It shifts subtly in ways most tracks don't dare."
     },
@@ -2702,15 +2702,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-137-137",
+    "id": "arti-lana-del-rey-83",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #137",
+    "name": "Lana Del Rey",
     "teaser": "Artit Topic #137 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #137 — a specific track or album",
+      "targetName": "Lana Del Rey",
       "durationMinutes": 34,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -2721,15 +2721,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-138-138",
+    "id": "arti-phoebe-bridgers-84",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #138",
+    "name": "Phoebe Bridgers",
     "teaser": "A studio engineer once said Artit Topic #138's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #138 — a specific track or album",
+      "targetName": "Phoebe Bridgers",
       "durationMinutes": 53,
       "instruction": "Listen for the moment at 1:32 when the piano does something unexpected."
     },
@@ -2740,15 +2740,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-139-139",
+    "id": "arti-maggie-rogers-85",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #139",
+    "name": "Maggie Rogers",
     "teaser": "Before their breakthrough, Artit Topic #139 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #139 — a specific track or album",
+      "targetName": "Maggie Rogers",
       "durationMinutes": 35,
       "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
     },
@@ -2759,15 +2759,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-140-140",
+    "id": "arti-clairo-86",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #140",
+    "name": "Clairo",
     "teaser": "Before their breakthrough, Artit Topic #140 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #140 — a specific track or album",
+      "targetName": "Clairo",
       "durationMinutes": 49,
       "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel anxious."
     },
@@ -2778,15 +2778,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-141-141",
+    "id": "arti-japanese-breakfast-87",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #141",
+    "name": "Japanese Breakfast",
     "teaser": "A studio engineer once said Artit Topic #141's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #141 — a specific track or album",
+      "targetName": "Japanese Breakfast",
       "durationMinutes": 53,
       "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel nostalgic."
     },
@@ -2797,15 +2797,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-142-142",
+    "id": "arti-wet-leg-88",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #142",
+    "name": "Wet Leg",
     "teaser": "A studio engineer once said Artit Topic #142's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #142 — a specific track or album",
+      "targetName": "Wet Leg",
       "durationMinutes": 31,
       "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
     },
@@ -2816,15 +2816,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-143-143",
+    "id": "arti-boygenius-89",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #143",
+    "name": "boygenius",
     "teaser": "Before their breakthrough, Artit Topic #143 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #143 — a specific track or album",
+      "targetName": "boygenius",
       "durationMinutes": 7,
       "instruction": "Pay attention to the strings work. It shifts subtly in ways most tracks don't dare."
     },
@@ -2835,15 +2835,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-144-144",
+    "id": "arti-burna-boy-90",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #144",
+    "name": "Burna Boy",
     "teaser": "Artit Topic #144 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #144 — a specific track or album",
+      "targetName": "Burna Boy",
       "durationMinutes": 54,
       "instruction": "Pay attention to the strings work. It shifts three times in ways most tracks don't dare."
     },
@@ -2854,15 +2854,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-145-145",
+    "id": "arti-wizkid-91",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #145",
+    "name": "Wizkid",
     "teaser": "A studio engineer once said Artit Topic #145's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #145 — a specific track or album",
+      "targetName": "Wizkid",
       "durationMinutes": 35,
       "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel anxious."
     },
@@ -2873,15 +2873,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-146-146",
+    "id": "arti-tems-92",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #146",
+    "name": "Tems",
     "teaser": "Artit Topic #146 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #146 — a specific track or album",
+      "targetName": "Tems",
       "durationMinutes": 45,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -2892,15 +2892,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-147-147",
+    "id": "arti-rema-93",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #147",
+    "name": "Rema",
     "teaser": "A studio engineer once said Artit Topic #147's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #147 — a specific track or album",
+      "targetName": "Rema",
       "durationMinutes": 6,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2911,15 +2911,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-148-148",
+    "id": "arti-amaarae-94",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #148",
+    "name": "Amaarae",
     "teaser": "Before their breakthrough, Artit Topic #148 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #148 — a specific track or album",
+      "targetName": "Amaarae",
       "durationMinutes": 6,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2930,15 +2930,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-149-149",
+    "id": "arti-c-tangana-95",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #149",
+    "name": "C. Tangana",
     "teaser": "Before their breakthrough, Artit Topic #149 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #149 — a specific track or album",
+      "targetName": "C. Tangana",
       "durationMinutes": 6,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2949,15 +2949,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-150-150",
+    "id": "arti-nathy-peluso-96",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #150",
+    "name": "Nathy Peluso",
     "teaser": "Artit Topic #150 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #150 — a specific track or album",
+      "targetName": "Nathy Peluso",
       "durationMinutes": 20,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -2968,15 +2968,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-151-151",
+    "id": "arti-kali-uchis-97",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #151",
+    "name": "Kali Uchis",
     "teaser": "A studio engineer once said Artit Topic #151's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #151 — a specific track or album",
+      "targetName": "Kali Uchis",
       "durationMinutes": 23,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2987,15 +2987,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-152-152",
+    "id": "arti-karol-g-98",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #152",
+    "name": "Karol G",
     "teaser": "Artit Topic #152 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #152 — a specific track or album",
+      "targetName": "Karol G",
       "durationMinutes": 53,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -3006,15 +3006,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-153-153",
+    "id": "arti-bts-99",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #153",
+    "name": "BTS",
     "teaser": "A studio engineer once said Artit Topic #153's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #153 — a specific track or album",
+      "targetName": "BTS",
       "durationMinutes": 49,
       "instruction": "Pay attention to the piano work. It shifts subtly in ways most tracks don't dare."
     },
@@ -3025,15 +3025,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-154-154",
+    "id": "arti-blackpink-100",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #154",
+    "name": "BLACKPINK",
     "teaser": "Artit Topic #154 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #154 — a specific track or album",
+      "targetName": "BLACKPINK",
       "durationMinutes": 16,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3044,15 +3044,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-155-155",
+    "id": "arti-iu-101",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #155",
+    "name": "IU",
     "teaser": "Artit Topic #155 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #155 — a specific track or album",
+      "targetName": "IU",
       "durationMinutes": 55,
       "instruction": "Listen for the moment at 3:57 when the percussion does something unexpected."
     },
@@ -3063,15 +3063,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-156-156",
+    "id": "arti-radwimps-102",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #156",
+    "name": "Radwimps",
     "teaser": "Before their breakthrough, Artit Topic #156 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #156 — a specific track or album",
+      "targetName": "Radwimps",
       "durationMinutes": 33,
       "instruction": "Pay attention to the guitar work. It shifts subtly in ways most tracks don't dare."
     },
@@ -3082,15 +3082,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-157-157",
+    "id": "arti-yoasobi-103",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #157",
+    "name": "YOASOBI",
     "teaser": "A studio engineer once said Artit Topic #157's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #157 — a specific track or album",
+      "targetName": "YOASOBI",
       "durationMinutes": 41,
       "instruction": "Listen for the moment at 3:39 when the vocals does something unexpected."
     },
@@ -3101,15 +3101,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-158-158",
+    "id": "arti-stromae-104",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #158",
+    "name": "Stromae",
     "teaser": "Before their breakthrough, Artit Topic #158 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #158 — a specific track or album",
+      "targetName": "Stromae",
       "durationMinutes": 35,
       "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel grounded."
     },
@@ -3120,15 +3120,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-159-159",
+    "id": "arti-angèle-105",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #159",
+    "name": "Angèle",
     "teaser": "A studio engineer once said Artit Topic #159's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #159 — a specific track or album",
+      "targetName": "Angèle",
       "durationMinutes": 22,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3139,15 +3139,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-160-160",
+    "id": "arti-christine-and-the-queens-106",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #160",
+    "name": "Christine and the Queens",
     "teaser": "Before their breakthrough, Artit Topic #160 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #160 — a specific track or album",
+      "targetName": "Christine and the Queens",
       "durationMinutes": 48,
       "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel grounded."
     },
@@ -3158,15 +3158,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-161-161",
+    "id": "arti-aya-nakamura-107",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #161",
+    "name": "Aya Nakamura",
     "teaser": "A studio engineer once said Artit Topic #161's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #161 — a specific track or album",
+      "targetName": "Aya Nakamura",
       "durationMinutes": 39,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -3177,15 +3177,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-162-162",
+    "id": "arti-orelsan-108",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #162",
+    "name": "Orelsan",
     "teaser": "Artit Topic #162 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #162 — a specific track or album",
+      "targetName": "Orelsan",
       "durationMinutes": 52,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3196,15 +3196,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-163-163",
+    "id": "arti-sevdaliza-109",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #163",
+    "name": "Sevdaliza",
     "teaser": "Artit Topic #163 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #163 — a specific track or album",
+      "targetName": "Sevdaliza",
       "durationMinutes": 49,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3215,15 +3215,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-164-164",
+    "id": "arti-altin-gün-110",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #164",
+    "name": "Altin Gün",
     "teaser": "Before their breakthrough, Artit Topic #164 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #164 — a specific track or album",
+      "targetName": "Altin Gün",
       "durationMinutes": 5,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3234,15 +3234,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-165-165",
+    "id": "arti-tinariwen-111",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #165",
+    "name": "Tinariwen",
     "teaser": "A studio engineer once said Artit Topic #165's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #165 — a specific track or album",
+      "targetName": "Tinariwen",
       "durationMinutes": 34,
       "instruction": "Listen for the moment at 2:36 when the piano does something unexpected."
     },
@@ -3253,15 +3253,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-166-166",
+    "id": "arti-bombino-112",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #166",
+    "name": "Bombino",
     "teaser": "A studio engineer once said Artit Topic #166's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #166 — a specific track or album",
+      "targetName": "Bombino",
       "durationMinutes": 19,
       "instruction": "Listen for the moment at 1:44 when the vocals does something unexpected."
     },
@@ -3272,15 +3272,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-167-167",
+    "id": "arti-mdou-moctar-113",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #167",
+    "name": "Mdou Moctar",
     "teaser": "Before their breakthrough, Artit Topic #167 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #167 — a specific track or album",
+      "targetName": "Mdou Moctar",
       "durationMinutes": 51,
       "instruction": "Pay attention to the horns work. It shifts twice in ways most tracks don't dare."
     },
@@ -3291,15 +3291,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-168-168",
+    "id": "arti-khruangbin-114",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #168",
+    "name": "Khruangbin",
     "teaser": "Artit Topic #168 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #168 — a specific track or album",
+      "targetName": "Khruangbin",
       "durationMinutes": 5,
       "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
     },
@@ -3310,15 +3310,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-169-169",
+    "id": "arti-king-gizzard-115",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #169",
+    "name": "King Gizzard",
     "teaser": "Artit Topic #169 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #169 — a specific track or album",
+      "targetName": "King Gizzard",
       "durationMinutes": 44,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3329,15 +3329,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-170-170",
+    "id": "arti-black-midi-116",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #170",
+    "name": "Black Midi",
     "teaser": "Artit Topic #170 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #170 — a specific track or album",
+      "targetName": "Black Midi",
       "durationMinutes": 6,
       "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
     },
@@ -3348,15 +3348,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-171-171",
+    "id": "arti-black-country-new-road-117",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #171",
+    "name": "Black Country New Road",
     "teaser": "Before their breakthrough, Artit Topic #171 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #171 — a specific track or album",
+      "targetName": "Black Country New Road",
       "durationMinutes": 53,
       "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel nostalgic."
     },
@@ -3367,15 +3367,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-172-172",
+    "id": "arti-squid-118",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #172",
+    "name": "Squid",
     "teaser": "Before their breakthrough, Artit Topic #172 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #172 — a specific track or album",
+      "targetName": "Squid",
       "durationMinutes": 44,
       "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
     },
@@ -3386,15 +3386,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-173-173",
+    "id": "arti-caroline-polachek-119",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #173",
+    "name": "Caroline Polachek",
     "teaser": "Artit Topic #173 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #173 — a specific track or album",
+      "targetName": "Caroline Polachek",
       "durationMinutes": 27,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -3405,15 +3405,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-174-174",
+    "id": "arti-charli-xcx-120",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #174",
+    "name": "Charli XCX",
     "teaser": "Before their breakthrough, Artit Topic #174 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #174 — a specific track or album",
+      "targetName": "Charli XCX",
       "durationMinutes": 38,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3424,15 +3424,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-175-175",
+    "id": "arti-rina-sawayama-121",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #175",
+    "name": "Rina Sawayama",
     "teaser": "A studio engineer once said Artit Topic #175's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #175 — a specific track or album",
+      "targetName": "Rina Sawayama",
       "durationMinutes": 9,
       "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel nostalgic."
     },
@@ -3443,15 +3443,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-176-176",
+    "id": "arti-shygirl-122",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #176",
+    "name": "Shygirl",
     "teaser": "A studio engineer once said Artit Topic #176's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #176 — a specific track or album",
+      "targetName": "Shygirl",
       "durationMinutes": 27,
       "instruction": "Pay attention to the guitar work. It shifts three times in ways most tracks don't dare."
     },
@@ -3462,15 +3462,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-177-177",
+    "id": "arti-pinkpantheress-123",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #177",
+    "name": "PinkPantheress",
     "teaser": "Before their breakthrough, Artit Topic #177 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #177 — a specific track or album",
+      "targetName": "PinkPantheress",
       "durationMinutes": 3,
       "instruction": "Listen for the moment at 2:37 when the piano does something unexpected."
     },
@@ -3481,15 +3481,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-178-178",
+    "id": "arti-fred-again-124",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #178",
+    "name": "Fred again..",
     "teaser": "Before their breakthrough, Artit Topic #178 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #178 — a specific track or album",
+      "targetName": "Fred again..",
       "durationMinutes": 20,
       "instruction": "Listen for the moment at 3:11 when the percussion does something unexpected."
     },
@@ -3500,15 +3500,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-179-179",
+    "id": "arti-four-tet-125",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #179",
+    "name": "Four Tet",
     "teaser": "Artit Topic #179 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #179 — a specific track or album",
+      "targetName": "Four Tet",
       "durationMinutes": 31,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3519,15 +3519,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-180-180",
+    "id": "arti-jamie-xx-126",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #180",
+    "name": "Jamie xx",
     "teaser": "Artit Topic #180 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #180 — a specific track or album",
+      "targetName": "Jamie xx",
       "durationMinutes": 50,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -3538,15 +3538,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-181-181",
+    "id": "arti-floating-points-127",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #181",
+    "name": "Floating Points",
     "teaser": "A studio engineer once said Artit Topic #181's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #181 — a specific track or album",
+      "targetName": "Floating Points",
       "durationMinutes": 53,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -3557,15 +3557,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-182-182",
+    "id": "arti-overmono-128",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #182",
+    "name": "Overmono",
     "teaser": "Before their breakthrough, Artit Topic #182 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #182 — a specific track or album",
+      "targetName": "Overmono",
       "durationMinutes": 30,
       "instruction": "Pay attention to the percussion work. It shifts subtly in ways most tracks don't dare."
     },
@@ -3576,15 +3576,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-183-183",
+    "id": "arti-kelela-129",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #183",
+    "name": "Kelela",
     "teaser": "Before their breakthrough, Artit Topic #183 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #183 — a specific track or album",
+      "targetName": "Kelela",
       "durationMinutes": 15,
       "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel unsettled."
     },
@@ -3595,15 +3595,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-184-184",
+    "id": "arti-yves-tumor-130",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #184",
+    "name": "Yves Tumor",
     "teaser": "A studio engineer once said Artit Topic #184's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #184 — a specific track or album",
+      "targetName": "Yves Tumor",
       "durationMinutes": 47,
       "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
     },
@@ -3614,15 +3614,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-185-185",
+    "id": "arti-blood-orange-131",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #185",
+    "name": "Blood Orange",
     "teaser": "Before their breakthrough, Artit Topic #185 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #185 — a specific track or album",
+      "targetName": "Blood Orange",
       "durationMinutes": 55,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -3633,15 +3633,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-186-186",
+    "id": "arti-moses-sumney-132",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #186",
+    "name": "Moses Sumney",
     "teaser": "Before their breakthrough, Artit Topic #186 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #186 — a specific track or album",
+      "targetName": "Moses Sumney",
       "durationMinutes": 10,
       "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
     },
@@ -3652,15 +3652,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-187-187",
+    "id": "arti-perfume-genius-133",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #187",
+    "name": "Perfume Genius",
     "teaser": "A studio engineer once said Artit Topic #187's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #187 — a specific track or album",
+      "targetName": "Perfume Genius",
       "durationMinutes": 42,
       "instruction": "Pay attention to the piano work. It shifts subtly in ways most tracks don't dare."
     },
@@ -3671,15 +3671,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-188-188",
+    "id": "arti-hidden-voice-1-66",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #188",
+    "name": "Hidden Voice #1",
     "teaser": "A studio engineer once said Artit Topic #188's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #188 — a specific track or album",
+      "targetName": "Hidden Voice #1",
       "durationMinutes": 23,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3690,15 +3690,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-189-189",
+    "id": "arti-forgotten-voice-2-67",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #189",
+    "name": "Forgotten Voice #2",
     "teaser": "A studio engineer once said Artit Topic #189's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #189 — a specific track or album",
+      "targetName": "Forgotten Voice #2",
       "durationMinutes": 28,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -3709,15 +3709,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-190-190",
+    "id": "arti-unsung-voice-3-68",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #190",
+    "name": "Unsung Voice #3",
     "teaser": "Artit Topic #190 famously refused to follow genre conventions, telling an interviewer 'rules are just other people's habits.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #190 — a specific track or album",
+      "targetName": "Unsung Voice #3",
       "durationMinutes": 11,
       "instruction": "Listen for the moment at 2:26 when the strings does something unexpected."
     },
@@ -3728,15 +3728,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-191-191",
+    "id": "arti-radiant-voice-4-69",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #191",
+    "name": "Radiant Voice #4",
     "teaser": "A studio engineer once said Artit Topic #191's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #191 — a specific track or album",
+      "targetName": "Radiant Voice #4",
       "durationMinutes": 40,
       "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
     },
@@ -3747,15 +3747,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-192-192",
+    "id": "arti-quiet-voice-5-70",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #192",
+    "name": "Quiet Voice #5",
     "teaser": "A studio engineer once said Artit Topic #192's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #192 — a specific track or album",
+      "targetName": "Quiet Voice #5",
       "durationMinutes": 46,
       "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel floating."
     },
@@ -3766,15 +3766,15 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-193-193",
+    "id": "arti-luminous-voice-6-71",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #193",
+    "name": "Luminous Voice #6",
     "teaser": "Before their breakthrough, Artit Topic #193 spent years playing in venues so small the audience could literally reach out and touch the performer.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #193 — a specific track or album",
+      "targetName": "Luminous Voice #6",
       "durationMinutes": 18,
       "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel intimate."
     },
@@ -3785,21 +3785,1085 @@
     "tier": 2
   },
   {
-    "id": "arti-artit-topic-194-194",
+    "id": "arti-distant-voice-7-72",
     "categoryId": "ARTISTS",
     "subtype": "Artist",
-    "name": "Artit Topic #194",
+    "name": "Distant Voice #7",
     "teaser": "A studio engineer once said Artit Topic #194's sessions felt more like alchemy than recording — sounds emerged that no one could reproduce later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Artit Topic #194 — a specific track or album",
+      "targetName": "Distant Voice #7",
       "durationMinutes": 23,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
     "tags": [
       "Jazz",
       "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-elton-john-195",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Elton John",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Elton John",
+      "durationMinutes": 4,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-led-zeppelin-196",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Led Zeppelin",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Led Zeppelin",
+      "durationMinutes": 11,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-deep-purple-197",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Deep Purple",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Deep Purple",
+      "durationMinutes": 30,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-talking-heads-198",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Talking Heads",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Talking Heads",
+      "durationMinutes": 16,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-the-clash-199",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Clash",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Clash",
+      "durationMinutes": 15,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-the-cure-200",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Cure",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Cure",
+      "durationMinutes": 31,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-new-order-201",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "New Order",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "New Order",
+      "durationMinutes": 51,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-rem-202",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "R.E.M.",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "R.E.M.",
+      "durationMinutes": 20,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-the-police-203",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Police",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Police",
+      "durationMinutes": 9,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-whitney-houston-204",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Whitney Houston",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Whitney Houston",
+      "durationMinutes": 25,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-janet-jackson-205",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Janet Jackson",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Janet Jackson",
+      "durationMinutes": 49,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-phil-collins-206",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Phil Collins",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Phil Collins",
+      "durationMinutes": 8,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-tracy-chapman-207",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Tracy Chapman",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tracy Chapman",
+      "durationMinutes": 26,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-sinéad-oconnor-208",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Sinéad O'Connor",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Sinéad O'Connor",
+      "durationMinutes": 5,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-kate-bush-209",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Kate Bush",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Kate Bush",
+      "durationMinutes": 17,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-the-fugees-210",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Fugees",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Fugees",
+      "durationMinutes": 32,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-de-la-soul-211",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "De La Soul",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "De La Soul",
+      "durationMinutes": 25,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-public-enemy-212",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Public Enemy",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Public Enemy",
+      "durationMinutes": 41,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-eric-b-and-rakim-213",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Eric B. and Rakim",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Eric B. and Rakim",
+      "durationMinutes": 32,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-jay-z-214",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Jay-Z",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Jay-Z",
+      "durationMinutes": 17,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-snoop-dogg-215",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Snoop Dogg",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Snoop Dogg",
+      "durationMinutes": 55,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Pop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-eminem-216",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Eminem",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Eminem",
+      "durationMinutes": 20,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-outkast-217",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "OutKast",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "OutKast",
+      "durationMinutes": 48,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-frank-ocean-218",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Frank Ocean",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Frank Ocean",
+      "durationMinutes": 28,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-tyler-the-creator-219",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Tyler the Creator",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tyler the Creator",
+      "durationMinutes": 11,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-lizzo-220",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Lizzo",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Lizzo",
+      "durationMinutes": 30,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-the-weeknd-221",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Weeknd",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Weeknd",
+      "durationMinutes": 17,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-alicia-keys-222",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Alicia Keys",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Alicia Keys",
+      "durationMinutes": 51,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-adele-223",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Adele",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Adele",
+      "durationMinutes": 43,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-sam-smith-224",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Sam Smith",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Sam Smith",
+      "durationMinutes": 7,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-florence-and-the-machine-225",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Florence and the Machine",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Florence and the Machine",
+      "durationMinutes": 32,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-vampire-weekend-226",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Vampire Weekend",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Vampire Weekend",
+      "durationMinutes": 3,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-fka-twigs-227",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "FKA twigs",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "FKA twigs",
+      "durationMinutes": 10,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-bon-iver-228",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Bon Iver",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Bon Iver",
+      "durationMinutes": 32,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-st-vincent-229",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "St. Vincent",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "St. Vincent",
+      "durationMinutes": 51,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-lcd-soundsystem-230",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "LCD Soundsystem",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "LCD Soundsystem",
+      "durationMinutes": 43,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-daft-punk-231",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Daft Punk",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Daft Punk",
+      "durationMinutes": 26,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-tricky-232",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Tricky",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tricky",
+      "durationMinutes": 23,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-aphex-twin-233",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Aphex Twin",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Aphex Twin",
+      "durationMinutes": 26,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-the-chemical-brothers-234",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Chemical Brothers",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Chemical Brothers",
+      "durationMinutes": 18,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-fatboy-slim-235",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Fatboy Slim",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Fatboy Slim",
+      "durationMinutes": 49,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-beck-236",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Beck",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Beck",
+      "durationMinutes": 52,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Electronic",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-wilco-237",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Wilco",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Wilco",
+      "durationMinutes": 38,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-the-strokes-238",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "The Strokes",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Strokes",
+      "durationMinutes": 41,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-yeah-yeah-yeahs-239",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Yeah Yeah Yeahs",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Yeah Yeah Yeahs",
+      "durationMinutes": 51,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Classical",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-queens-of-the-stone-240",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Queens of the Stone Age",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Queens of the Stone Age",
+      "durationMinutes": 45,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-nine-inch-nails-241",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Nine Inch Nails",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Nine Inch Nails",
+      "durationMinutes": 31,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-system-of-a-down-242",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "System of a Down",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "System of a Down",
+      "durationMinutes": 7,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-korn-243",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Korn",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Korn",
+      "durationMinutes": 38,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-green-day-244",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Green Day",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Green Day",
+      "durationMinutes": 7,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Hip-Hop",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-weezer-245",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Weezer",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Weezer",
+      "durationMinutes": 5,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Jazz",
+      "1950s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-pearl-jam-246",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Pearl Jam",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Pearl Jam",
+      "durationMinutes": 18,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-alice-in-chains-247",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Alice in Chains",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Alice in Chains",
+      "durationMinutes": 37,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-smashing-pumpkins-248",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Smashing Pumpkins",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Smashing Pumpkins",
+      "durationMinutes": 53,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-lorde-249",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Lorde",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Lorde",
+      "durationMinutes": 9,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Folk",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "arti-olivia-rodrigo-250",
+    "categoryId": "ARTISTS",
+    "subtype": "Artist",
+    "name": "Olivia Rodrigo",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Olivia Rodrigo",
+      "durationMinutes": 30,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
     ],
     "tier": 2
   }

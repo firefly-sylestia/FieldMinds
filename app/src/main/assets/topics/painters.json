@@ -800,15 +800,15 @@
     "tier": 3
   },
   {
-    "id": "pain-painter-topic-41-41",
+    "id": "pain-gustav-klimt-177",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #41",
+    "name": "Gustav Klimt",
     "teaser": "Painter Topic #41 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #41's most famous work",
+      "targetName": "Gustav Klimt",
       "durationMinutes": 4,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -819,15 +819,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-42-42",
+    "id": "pain-edvard-munch-178",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #42",
+    "name": "Edvard Munch",
     "teaser": "Painter Topic #42 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #42's most famous work",
+      "targetName": "Edvard Munch",
       "durationMinutes": 6,
       "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
     },
@@ -838,15 +838,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-43-43",
+    "id": "pain-marc-chagall-179",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #43",
+    "name": "Marc Chagall",
     "teaser": "Painter Topic #43 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #43's most famous work",
+      "targetName": "Marc Chagall",
       "durationMinutes": 7,
       "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
     },
@@ -857,15 +857,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-44-44",
+    "id": "pain-salvador-dalí-180",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #44",
+    "name": "Salvador Dalí",
     "teaser": "Painter Topic #44 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #44's most famous work",
+      "targetName": "Salvador Dalí",
       "durationMinutes": 8,
       "instruction": "Look at the use of focal point. It's not random — the artist spent years mastering that technique."
     },
@@ -876,15 +876,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-45-45",
+    "id": "pain-paul-klee-181",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #45",
+    "name": "Paul Klee",
     "teaser": "Painter Topic #45 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #45's most famous work",
+      "targetName": "Paul Klee",
       "durationMinutes": 6,
       "instruction": "Compare the upper section with the foreground. The contrast is the whole point of the piece."
     },
@@ -895,15 +895,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-46-46",
+    "id": "pain-hidden-brush-1-518",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #46",
+    "name": "Hidden Brush #1",
     "teaser": "Painter Topic #46 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #46's most famous work",
+      "targetName": "Hidden Brush #1",
       "durationMinutes": 4,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -914,15 +914,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-47-47",
+    "id": "pain-forgotten-brush-2-519",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #47",
+    "name": "Forgotten Brush #2",
     "teaser": "Painter Topic #47 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #47's most famous work",
+      "targetName": "Forgotten Brush #2",
       "durationMinutes": 5,
       "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
     },
@@ -933,15 +933,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-48-48",
+    "id": "pain-unsung-brush-3-520",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #48",
+    "name": "Unsung Brush #3",
     "teaser": "Painter Topic #48 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #48's most famous work",
+      "targetName": "Unsung Brush #3",
       "durationMinutes": 8,
       "instruction": "Compare the lower edge with the left half. The contrast is the whole point of the piece."
     },
@@ -952,15 +952,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-49-49",
+    "id": "pain-radiant-brush-4-521",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #49",
+    "name": "Radiant Brush #4",
     "teaser": "Painter Topic #49 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #49's most famous work",
+      "targetName": "Radiant Brush #4",
       "durationMinutes": 9,
       "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
     },
@@ -971,15 +971,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-50-50",
+    "id": "pain-quiet-brush-5-522",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #50",
+    "name": "Quiet Brush #5",
     "teaser": "Painter Topic #50 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #50's most famous work",
+      "targetName": "Quiet Brush #5",
       "durationMinutes": 5,
       "instruction": "Notice what's missing. The artist deliberately left out color temperature — that absence speaks volumes."
     },
@@ -990,15 +990,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-51-51",
+    "id": "pain-luminous-brush-6-523",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #51",
+    "name": "Luminous Brush #6",
     "teaser": "Painter Topic #51 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #51's most famous work",
+      "targetName": "Luminous Brush #6",
       "durationMinutes": 7,
       "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
     },
@@ -1009,15 +1009,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-52-52",
+    "id": "pain-distant-brush-7-524",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #52",
+    "name": "Distant Brush #7",
     "teaser": "Painter Topic #52 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #52's most famous work",
+      "targetName": "Distant Brush #7",
       "durationMinutes": 5,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1028,15 +1028,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-53-53",
+    "id": "pain-unexpected-brush-8-525",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #53",
+    "name": "Unexpected Brush #8",
     "teaser": "Painter Topic #53 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #53's most famous work",
+      "targetName": "Unexpected Brush #8",
       "durationMinutes": 9,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1047,15 +1047,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-54-54",
+    "id": "pain-eternal-brush-9-526",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #54",
+    "name": "Eternal Brush #9",
     "teaser": "Painter Topic #54 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #54's most famous work",
+      "targetName": "Eternal Brush #9",
       "durationMinutes": 6,
       "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
     },
@@ -1066,15 +1066,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-55-55",
+    "id": "pain-restless-brush-10-527",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #55",
+    "name": "Restless Brush #10",
     "teaser": "Painter Topic #55 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #55's most famous work",
+      "targetName": "Restless Brush #10",
       "durationMinutes": 7,
       "instruction": "Step back and squint. The texture reveals itself only when you stop looking directly at it."
     },
@@ -1085,15 +1085,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-56-56",
+    "id": "pain-brilliant-brush-11-528",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #56",
+    "name": "Brilliant Brush #11",
     "teaser": "Painter Topic #56 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #56's most famous work",
+      "targetName": "Brilliant Brush #11",
       "durationMinutes": 5,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1104,15 +1104,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-57-57",
+    "id": "pain-enigmatic-brush-12-529",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #57",
+    "name": "Enigmatic Brush #12",
     "teaser": "Painter Topic #57 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #57's most famous work",
+      "targetName": "Enigmatic Brush #12",
       "durationMinutes": 4,
       "instruction": "Compare the lower edge with the foreground. The contrast is the whole point of the piece."
     },
@@ -1123,15 +1123,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-58-58",
+    "id": "pain-restless-brush-13-530",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #58",
+    "name": "Restless Brush #13",
     "teaser": "Painter Topic #58 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #58's most famous work",
+      "targetName": "Restless Brush #13",
       "durationMinutes": 3,
       "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
     },
@@ -1142,15 +1142,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-59-59",
+    "id": "pain-subtle-brush-14-531",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #59",
+    "name": "Subtle Brush #14",
     "teaser": "Painter Topic #59 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #59's most famous work",
+      "targetName": "Subtle Brush #14",
       "durationMinutes": 8,
       "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
     },
@@ -1161,15 +1161,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-60-60",
+    "id": "pain-vivid-brush-15-532",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #60",
+    "name": "Vivid Brush #15",
     "teaser": "Painter Topic #60 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #60's most famous work",
+      "targetName": "Vivid Brush #15",
       "durationMinutes": 8,
       "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
     },
@@ -1180,15 +1180,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-61-61",
+    "id": "pain-ancient-brush-16-533",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #61",
+    "name": "Ancient Brush #16",
     "teaser": "Painter Topic #61 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #61's most famous work",
+      "targetName": "Ancient Brush #16",
       "durationMinutes": 3,
       "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
     },
@@ -1199,15 +1199,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-62-62",
+    "id": "pain-modern-brush-17-534",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #62",
+    "name": "Modern Brush #17",
     "teaser": "Painter Topic #62 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #62's most famous work",
+      "targetName": "Modern Brush #17",
       "durationMinutes": 7,
       "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
     },
@@ -1218,15 +1218,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-63-63",
+    "id": "pain-lost-brush-18-535",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #63",
+    "name": "Lost Brush #18",
     "teaser": "Painter Topic #63 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #63's most famous work",
+      "targetName": "Lost Brush #18",
       "durationMinutes": 5,
       "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
     },
@@ -1237,15 +1237,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-64-64",
+    "id": "pain-wandering-brush-19-536",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #64",
+    "name": "Wandering Brush #19",
     "teaser": "Painter Topic #64 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #64's most famous work",
+      "targetName": "Wandering Brush #19",
       "durationMinutes": 10,
       "instruction": "Notice what's missing. The artist deliberately left out color temperature — that absence speaks volumes."
     },
@@ -1256,15 +1256,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-65-65",
+    "id": "pain-timeless-brush-20-537",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #65",
+    "name": "Timeless Brush #20",
     "teaser": "Painter Topic #65 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #65's most famous work",
+      "targetName": "Timeless Brush #20",
       "durationMinutes": 7,
       "instruction": "Compare the left half with the right half. The contrast is the whole point of the piece."
     },
@@ -1275,15 +1275,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-66-66",
+    "id": "pain-hidden-palette-21-538",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #66",
+    "name": "Hidden Palette #21",
     "teaser": "Painter Topic #66 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #66's most famous work",
+      "targetName": "Hidden Palette #21",
       "durationMinutes": 4,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1294,15 +1294,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-67-67",
+    "id": "pain-forgotten-palette-22-539",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #67",
+    "name": "Forgotten Palette #22",
     "teaser": "Painter Topic #67 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #67's most famous work",
+      "targetName": "Forgotten Palette #22",
       "durationMinutes": 10,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1313,15 +1313,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-68-68",
+    "id": "pain-unsung-palette-23-540",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #68",
+    "name": "Unsung Palette #23",
     "teaser": "Painter Topic #68 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #68's most famous work",
+      "targetName": "Unsung Palette #23",
       "durationMinutes": 8,
       "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
     },
@@ -1332,15 +1332,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-69-69",
+    "id": "pain-radiant-palette-24-541",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #69",
+    "name": "Radiant Palette #24",
     "teaser": "Painter Topic #69 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #69's most famous work",
+      "targetName": "Radiant Palette #24",
       "durationMinutes": 8,
       "instruction": "Compare the background with the left half. The contrast is the whole point of the piece."
     },
@@ -1351,15 +1351,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-70-70",
+    "id": "pain-quiet-palette-25-542",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #70",
+    "name": "Quiet Palette #25",
     "teaser": "Painter Topic #70 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #70's most famous work",
+      "targetName": "Quiet Palette #25",
       "durationMinutes": 6,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1370,15 +1370,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-71-71",
+    "id": "pain-luminous-palette-26-543",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #71",
+    "name": "Luminous Palette #26",
     "teaser": "Painter Topic #71 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #71's most famous work",
+      "targetName": "Luminous Palette #26",
       "durationMinutes": 10,
       "instruction": "Step back and squint. The color temperature reveals itself only when you stop looking directly at it."
     },
@@ -1389,15 +1389,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-72-72",
+    "id": "pain-distant-palette-27-544",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #72",
+    "name": "Distant Palette #27",
     "teaser": "Painter Topic #72 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #72's most famous work",
+      "targetName": "Distant Palette #27",
       "durationMinutes": 4,
       "instruction": "Compare the foreground with the foreground. The contrast is the whole point of the piece."
     },
@@ -1408,15 +1408,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-73-73",
+    "id": "pain-unexpected-palette-28-545",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #73",
+    "name": "Unexpected Palette #28",
     "teaser": "Painter Topic #73 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #73's most famous work",
+      "targetName": "Unexpected Palette #28",
       "durationMinutes": 3,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1427,15 +1427,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-74-74",
+    "id": "pain-eternal-palette-29-546",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #74",
+    "name": "Eternal Palette #29",
     "teaser": "Painter Topic #74 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #74's most famous work",
+      "targetName": "Eternal Palette #29",
       "durationMinutes": 3,
       "instruction": "Compare the foreground with the right half. The contrast is the whole point of the piece."
     },
@@ -1446,15 +1446,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-75-75",
+    "id": "pain-restless-palette-30-547",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #75",
+    "name": "Restless Palette #30",
     "teaser": "Painter Topic #75 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #75's most famous work",
+      "targetName": "Restless Palette #30",
       "durationMinutes": 3,
       "instruction": "Look at the use of texture. It's not random — the artist spent years mastering that technique."
     },
@@ -1465,15 +1465,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-76-76",
+    "id": "pain-brilliant-palette-31-548",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #76",
+    "name": "Brilliant Palette #31",
     "teaser": "Painter Topic #76 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #76's most famous work",
+      "targetName": "Brilliant Palette #31",
       "durationMinutes": 10,
       "instruction": "Look at the use of brushwork. It's not random — the artist spent years mastering that technique."
     },
@@ -1484,15 +1484,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-77-77",
+    "id": "pain-enigmatic-palette-32-549",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #77",
+    "name": "Enigmatic Palette #32",
     "teaser": "Painter Topic #77 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #77's most famous work",
+      "targetName": "Enigmatic Palette #32",
       "durationMinutes": 8,
       "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
     },
@@ -1503,15 +1503,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-78-78",
+    "id": "pain-restless-palette-33-550",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #78",
+    "name": "Restless Palette #33",
     "teaser": "Painter Topic #78 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #78's most famous work",
+      "targetName": "Restless Palette #33",
       "durationMinutes": 4,
       "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
     },
@@ -1522,15 +1522,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-79-79",
+    "id": "pain-subtle-palette-34-551",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #79",
+    "name": "Subtle Palette #34",
     "teaser": "Painter Topic #79 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #79's most famous work",
+      "targetName": "Subtle Palette #34",
       "durationMinutes": 5,
       "instruction": "Step back and squint. The focal point reveals itself only when you stop looking directly at it."
     },
@@ -1541,15 +1541,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-80-80",
+    "id": "pain-vivid-palette-35-552",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #80",
+    "name": "Vivid Palette #35",
     "teaser": "Painter Topic #80 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #80's most famous work",
+      "targetName": "Vivid Palette #35",
       "durationMinutes": 4,
       "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
     },
@@ -1560,15 +1560,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-81-81",
+    "id": "pain-ancient-palette-36-553",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #81",
+    "name": "Ancient Palette #36",
     "teaser": "Painter Topic #81 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #81's most famous work",
+      "targetName": "Ancient Palette #36",
       "durationMinutes": 7,
       "instruction": "Compare the lower edge with the upper section. The contrast is the whole point of the piece."
     },
@@ -1579,15 +1579,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-82-82",
+    "id": "pain-modern-palette-37-554",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #82",
+    "name": "Modern Palette #37",
     "teaser": "Painter Topic #82 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #82's most famous work",
+      "targetName": "Modern Palette #37",
       "durationMinutes": 8,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1598,15 +1598,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-83-83",
+    "id": "pain-lost-palette-38-555",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #83",
+    "name": "Lost Palette #38",
     "teaser": "Painter Topic #83 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #83's most famous work",
+      "targetName": "Lost Palette #38",
       "durationMinutes": 9,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1617,15 +1617,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-84-84",
+    "id": "pain-wandering-palette-39-556",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #84",
+    "name": "Wandering Palette #39",
     "teaser": "Painter Topic #84 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #84's most famous work",
+      "targetName": "Wandering Palette #39",
       "durationMinutes": 8,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1636,15 +1636,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-85-85",
+    "id": "pain-timeless-palette-40-557",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #85",
+    "name": "Timeless Palette #40",
     "teaser": "Painter Topic #85 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #85's most famous work",
+      "targetName": "Timeless Palette #40",
       "durationMinutes": 5,
       "instruction": "Compare the foreground with the background. The contrast is the whole point of the piece."
     },
@@ -1655,15 +1655,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-86-86",
+    "id": "pain-hidden-portraitist-41-558",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #86",
+    "name": "Hidden Portraitist #41",
     "teaser": "Painter Topic #86 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #86's most famous work",
+      "targetName": "Hidden Portraitist #41",
       "durationMinutes": 6,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1674,15 +1674,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-87-87",
+    "id": "pain-forgotten-portraitist-42-559",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #87",
+    "name": "Forgotten Portraitist #42",
     "teaser": "Painter Topic #87 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #87's most famous work",
+      "targetName": "Forgotten Portraitist #42",
       "durationMinutes": 9,
       "instruction": "Step back and squint. The focal point reveals itself only when you stop looking directly at it."
     },
@@ -1693,15 +1693,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-88-88",
+    "id": "pain-unsung-portraitist-43-560",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #88",
+    "name": "Unsung Portraitist #43",
     "teaser": "Painter Topic #88 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #88's most famous work",
+      "targetName": "Unsung Portraitist #43",
       "durationMinutes": 4,
       "instruction": "Look at the use of color temperature. It's not random — the artist spent years mastering that technique."
     },
@@ -1712,15 +1712,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-89-89",
+    "id": "pain-radiant-portraitist-44-561",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #89",
+    "name": "Radiant Portraitist #44",
     "teaser": "Painter Topic #89 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #89's most famous work",
+      "targetName": "Radiant Portraitist #44",
       "durationMinutes": 6,
       "instruction": "Compare the left half with the right half. The contrast is the whole point of the piece."
     },
@@ -1731,15 +1731,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-90-90",
+    "id": "pain-quiet-portraitist-45-562",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #90",
+    "name": "Quiet Portraitist #45",
     "teaser": "Painter Topic #90 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #90's most famous work",
+      "targetName": "Quiet Portraitist #45",
       "durationMinutes": 8,
       "instruction": "Compare the left half with the foreground. The contrast is the whole point of the piece."
     },
@@ -1750,15 +1750,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-91-91",
+    "id": "pain-luminous-portraitist-46-563",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #91",
+    "name": "Luminous Portraitist #46",
     "teaser": "Painter Topic #91 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #91's most famous work",
+      "targetName": "Luminous Portraitist #46",
       "durationMinutes": 8,
       "instruction": "Notice what's missing. The artist deliberately left out brushwork — that absence speaks volumes."
     },
@@ -1769,15 +1769,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-92-92",
+    "id": "pain-distant-portraitist-47-564",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #92",
+    "name": "Distant Portraitist #47",
     "teaser": "Painter Topic #92 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #92's most famous work",
+      "targetName": "Distant Portraitist #47",
       "durationMinutes": 5,
       "instruction": "Step back and squint. The texture reveals itself only when you stop looking directly at it."
     },
@@ -1788,15 +1788,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-93-93",
+    "id": "pain-unexpected-portraitist-48-565",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #93",
+    "name": "Unexpected Portraitist #48",
     "teaser": "Painter Topic #93 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #93's most famous work",
+      "targetName": "Unexpected Portraitist #48",
       "durationMinutes": 9,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1807,15 +1807,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-94-94",
+    "id": "pain-eternal-portraitist-49-566",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #94",
+    "name": "Eternal Portraitist #49",
     "teaser": "Painter Topic #94 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #94's most famous work",
+      "targetName": "Eternal Portraitist #49",
       "durationMinutes": 8,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1826,15 +1826,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-95-95",
+    "id": "pain-restless-portraitist-50-567",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #95",
+    "name": "Restless Portraitist #50",
     "teaser": "Painter Topic #95 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #95's most famous work",
+      "targetName": "Restless Portraitist #50",
       "durationMinutes": 8,
       "instruction": "Look at the use of focal point. It's not random — the artist spent years mastering that technique."
     },
@@ -1845,15 +1845,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-96-96",
+    "id": "pain-brilliant-portraitist-51-568",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #96",
+    "name": "Brilliant Portraitist #51",
     "teaser": "Painter Topic #96 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #96's most famous work",
+      "targetName": "Brilliant Portraitist #51",
       "durationMinutes": 7,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1864,15 +1864,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-97-97",
+    "id": "pain-enigmatic-portraitist-52-569",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #97",
+    "name": "Enigmatic Portraitist #52",
     "teaser": "Painter Topic #97 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #97's most famous work",
+      "targetName": "Enigmatic Portraitist #52",
       "durationMinutes": 8,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1883,15 +1883,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-98-98",
+    "id": "pain-restless-portraitist-53-570",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #98",
+    "name": "Restless Portraitist #53",
     "teaser": "Painter Topic #98 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #98's most famous work",
+      "targetName": "Restless Portraitist #53",
       "durationMinutes": 10,
       "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
     },
@@ -1902,15 +1902,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-99-99",
+    "id": "pain-subtle-portraitist-54-571",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #99",
+    "name": "Subtle Portraitist #54",
     "teaser": "Painter Topic #99 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #99's most famous work",
+      "targetName": "Subtle Portraitist #54",
       "durationMinutes": 10,
       "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
     },
@@ -1921,15 +1921,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-100-100",
+    "id": "pain-vivid-portraitist-55-572",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #100",
+    "name": "Vivid Portraitist #55",
     "teaser": "Painter Topic #100 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #100's most famous work",
+      "targetName": "Vivid Portraitist #55",
       "durationMinutes": 7,
       "instruction": "Notice what's missing. The artist deliberately left out texture — that absence speaks volumes."
     },
@@ -1940,15 +1940,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-101-101",
+    "id": "pain-ancient-portraitist-56-573",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #101",
+    "name": "Ancient Portraitist #56",
     "teaser": "Painter Topic #101 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #101's most famous work",
+      "targetName": "Ancient Portraitist #56",
       "durationMinutes": 8,
       "instruction": "Look at the use of focal point. It's not random — the artist spent years mastering that technique."
     },
@@ -1959,15 +1959,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-102-102",
+    "id": "pain-modern-portraitist-57-574",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #102",
+    "name": "Modern Portraitist #57",
     "teaser": "Painter Topic #102 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #102's most famous work",
+      "targetName": "Modern Portraitist #57",
       "durationMinutes": 10,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -1978,15 +1978,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-103-103",
+    "id": "pain-lost-portraitist-58-575",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #103",
+    "name": "Lost Portraitist #58",
     "teaser": "Painter Topic #103 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #103's most famous work",
+      "targetName": "Lost Portraitist #58",
       "durationMinutes": 9,
       "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
     },
@@ -1997,15 +1997,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-104-104",
+    "id": "pain-wandering-portraitist-59-576",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #104",
+    "name": "Wandering Portraitist #59",
     "teaser": "Painter Topic #104 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #104's most famous work",
+      "targetName": "Wandering Portraitist #59",
       "durationMinutes": 5,
       "instruction": "Compare the background with the foreground. The contrast is the whole point of the piece."
     },
@@ -2016,15 +2016,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-105-105",
+    "id": "pain-timeless-portraitist-60-577",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #105",
+    "name": "Timeless Portraitist #60",
     "teaser": "Painter Topic #105 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #105's most famous work",
+      "targetName": "Timeless Portraitist #60",
       "durationMinutes": 10,
       "instruction": "Compare the background with the foreground. The contrast is the whole point of the piece."
     },
@@ -2035,15 +2035,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-106-106",
+    "id": "pain-hidden-colourist-61-578",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #106",
+    "name": "Hidden Colourist #61",
     "teaser": "Painter Topic #106 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #106's most famous work",
+      "targetName": "Hidden Colourist #61",
       "durationMinutes": 6,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -2054,15 +2054,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-107-107",
+    "id": "pain-forgotten-colourist-62-579",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #107",
+    "name": "Forgotten Colourist #62",
     "teaser": "Painter Topic #107 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #107's most famous work",
+      "targetName": "Forgotten Colourist #62",
       "durationMinutes": 8,
       "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
     },
@@ -2073,15 +2073,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-108-108",
+    "id": "pain-unsung-colourist-63-580",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #108",
+    "name": "Unsung Colourist #63",
     "teaser": "Painter Topic #108 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #108's most famous work",
+      "targetName": "Unsung Colourist #63",
       "durationMinutes": 4,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -2092,15 +2092,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-109-109",
+    "id": "pain-radiant-colourist-64-581",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #109",
+    "name": "Radiant Colourist #64",
     "teaser": "Painter Topic #109 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #109's most famous work",
+      "targetName": "Radiant Colourist #64",
       "durationMinutes": 6,
       "instruction": "Trace the visual structure — what sits at the center? Notice how the composition guides your eye."
     },
@@ -2111,15 +2111,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-110-110",
+    "id": "pain-quiet-colourist-65-582",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #110",
+    "name": "Quiet Colourist #65",
     "teaser": "Painter Topic #110 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #110's most famous work",
+      "targetName": "Quiet Colourist #65",
       "durationMinutes": 9,
       "instruction": "Notice what's missing. The artist deliberately left out texture — that absence speaks volumes."
     },
@@ -2130,15 +2130,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-111-111",
+    "id": "pain-luminous-colourist-66-583",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #111",
+    "name": "Luminous Colourist #66",
     "teaser": "Painter Topic #111 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #111's most famous work",
+      "targetName": "Luminous Colourist #66",
       "durationMinutes": 10,
       "instruction": "Notice what's missing. The artist deliberately left out color temperature — that absence speaks volumes."
     },
@@ -2149,15 +2149,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-112-112",
+    "id": "pain-distant-colourist-67-584",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #112",
+    "name": "Distant Colourist #67",
     "teaser": "Painter Topic #112 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #112's most famous work",
+      "targetName": "Distant Colourist #67",
       "durationMinutes": 3,
       "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
     },
@@ -2168,15 +2168,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-113-113",
+    "id": "pain-unexpected-colourist-68-585",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #113",
+    "name": "Unexpected Colourist #68",
     "teaser": "Painter Topic #113 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #113's most famous work",
+      "targetName": "Unexpected Colourist #68",
       "durationMinutes": 4,
       "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
     },
@@ -2187,15 +2187,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-114-114",
+    "id": "pain-eternal-colourist-69-586",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #114",
+    "name": "Eternal Colourist #69",
     "teaser": "Painter Topic #114 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #114's most famous work",
+      "targetName": "Eternal Colourist #69",
       "durationMinutes": 9,
       "instruction": "Look at the use of color temperature. It's not random — the artist spent years mastering that technique."
     },
@@ -2206,15 +2206,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-115-115",
+    "id": "pain-restless-colourist-70-587",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #115",
+    "name": "Restless Colourist #70",
     "teaser": "Painter Topic #115 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #115's most famous work",
+      "targetName": "Restless Colourist #70",
       "durationMinutes": 10,
       "instruction": "Compare the right half with the upper section. The contrast is the whole point of the piece."
     },
@@ -2225,15 +2225,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-116-116",
+    "id": "pain-brilliant-colourist-71-588",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #116",
+    "name": "Brilliant Colourist #71",
     "teaser": "Painter Topic #116 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #116's most famous work",
+      "targetName": "Brilliant Colourist #71",
       "durationMinutes": 8,
       "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
     },
@@ -2244,15 +2244,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-117-117",
+    "id": "pain-enigmatic-colourist-72-589",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #117",
+    "name": "Enigmatic Colourist #72",
     "teaser": "Painter Topic #117 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #117's most famous work",
+      "targetName": "Enigmatic Colourist #72",
       "durationMinutes": 8,
       "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
     },
@@ -2263,15 +2263,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-118-118",
+    "id": "pain-restless-colourist-73-590",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #118",
+    "name": "Restless Colourist #73",
     "teaser": "Painter Topic #118 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #118's most famous work",
+      "targetName": "Restless Colourist #73",
       "durationMinutes": 4,
       "instruction": "Compare the foreground with the left half. The contrast is the whole point of the piece."
     },
@@ -2282,15 +2282,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-119-119",
+    "id": "pain-subtle-colourist-74-591",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #119",
+    "name": "Subtle Colourist #74",
     "teaser": "Painter Topic #119 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #119's most famous work",
+      "targetName": "Subtle Colourist #74",
       "durationMinutes": 3,
       "instruction": "Step back and squint. The negative space reveals itself only when you stop looking directly at it."
     },
@@ -2301,15 +2301,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-120-120",
+    "id": "pain-vivid-colourist-75-592",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #120",
+    "name": "Vivid Colourist #75",
     "teaser": "Painter Topic #120 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #120's most famous work",
+      "targetName": "Vivid Colourist #75",
       "durationMinutes": 8,
       "instruction": "Compare the left half with the right half. The contrast is the whole point of the piece."
     },
@@ -2320,15 +2320,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-121-121",
+    "id": "pain-ancient-colourist-76-593",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #121",
+    "name": "Ancient Colourist #76",
     "teaser": "Painter Topic #121 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #121's most famous work",
+      "targetName": "Ancient Colourist #76",
       "durationMinutes": 4,
       "instruction": "Look at the use of focal point. It's not random — the artist spent years mastering that technique."
     },
@@ -2339,15 +2339,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-122-122",
+    "id": "pain-modern-colourist-77-594",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #122",
+    "name": "Modern Colourist #77",
     "teaser": "Painter Topic #122 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #122's most famous work",
+      "targetName": "Modern Colourist #77",
       "durationMinutes": 4,
       "instruction": "Look at the use of brushwork. It's not random — the artist spent years mastering that technique."
     },
@@ -2358,15 +2358,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-123-123",
+    "id": "pain-lost-colourist-78-595",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #123",
+    "name": "Lost Colourist #78",
     "teaser": "Painter Topic #123 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #123's most famous work",
+      "targetName": "Lost Colourist #78",
       "durationMinutes": 6,
       "instruction": "Notice what's missing. The artist deliberately left out light and shadow — that absence speaks volumes."
     },
@@ -2377,15 +2377,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-124-124",
+    "id": "pain-wandering-colourist-79-596",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #124",
+    "name": "Wandering Colourist #79",
     "teaser": "Painter Topic #124 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #124's most famous work",
+      "targetName": "Wandering Colourist #79",
       "durationMinutes": 4,
       "instruction": "Compare the right half with the left half. The contrast is the whole point of the piece."
     },
@@ -2396,15 +2396,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-125-125",
+    "id": "pain-timeless-colourist-80-597",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #125",
+    "name": "Timeless Colourist #80",
     "teaser": "Painter Topic #125 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #125's most famous work",
+      "targetName": "Timeless Colourist #80",
       "durationMinutes": 8,
       "instruction": "Compare the left half with the background. The contrast is the whole point of the piece."
     },
@@ -2415,15 +2415,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-126-126",
+    "id": "pain-hidden-visionary-81-598",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #126",
+    "name": "Hidden Visionary #81",
     "teaser": "Painter Topic #126 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #126's most famous work",
+      "targetName": "Hidden Visionary #81",
       "durationMinutes": 3,
       "instruction": "Step back and squint. The brushwork reveals itself only when you stop looking directly at it."
     },
@@ -2434,15 +2434,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-127-127",
+    "id": "pain-forgotten-visionary-82-599",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #127",
+    "name": "Forgotten Visionary #82",
     "teaser": "Painter Topic #127 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #127's most famous work",
+      "targetName": "Forgotten Visionary #82",
       "durationMinutes": 8,
       "instruction": "Notice what's missing. The artist deliberately left out negative space — that absence speaks volumes."
     },
@@ -2453,15 +2453,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-128-128",
+    "id": "pain-unsung-visionary-83-600",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #128",
+    "name": "Unsung Visionary #83",
     "teaser": "Painter Topic #128 destroyed more paintings than they exhibited, believing that only the ones that survived self-criticism deserved an audience.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #128's most famous work",
+      "targetName": "Unsung Visionary #83",
       "durationMinutes": 6,
       "instruction": "Compare the lower edge with the lower edge. The contrast is the whole point of the piece."
     },
@@ -2472,15 +2472,15 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-129-129",
+    "id": "pain-radiant-visionary-84-601",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #129",
+    "name": "Radiant Visionary #84",
     "teaser": "Painter Topic #129 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #129's most famous work",
+      "targetName": "Radiant Visionary #84",
       "durationMinutes": 6,
       "instruction": "Look at the use of light and shadow. It's not random — the artist spent years mastering that technique."
     },
@@ -2491,21 +2491,1389 @@
     "tier": 2
   },
   {
-    "id": "pain-painter-topic-130-130",
+    "id": "pain-quiet-visionary-85-602",
     "categoryId": "PAINTERS",
     "subtype": "Painter",
-    "name": "Painter Topic #130",
+    "name": "Quiet Visionary #85",
     "teaser": "Painter Topic #130 once traded a painting for a month's rent — that same work now hangs in a national museum.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Look at",
-      "targetName": "a high-res image of Painter Topic #130's most famous work",
+      "targetName": "Quiet Visionary #85",
       "durationMinutes": 4,
       "instruction": "Look at the use of negative space. It's not random — the artist spent years mastering that technique."
     },
     "tags": [
       "Renaissance",
       "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-diego-rivera-131",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Diego Rivera",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Diego Rivera",
+      "durationMinutes": 7,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-edward-hopper-132",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Edward Hopper",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Edward Hopper",
+      "durationMinutes": 4,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-norman-rockwell-133",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Norman Rockwell",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Norman Rockwell",
+      "durationMinutes": 5,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-francis-bacon-134",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Francis Bacon",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Francis Bacon",
+      "durationMinutes": 8,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-bridget-riley-135",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Bridget Riley",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Bridget Riley",
+      "durationMinutes": 4,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-anselm-kiefer-136",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Anselm Kiefer",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Anselm Kiefer",
+      "durationMinutes": 7,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-yayoi-kusama-137",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Yayoi Kusama",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Yayoi Kusama",
+      "durationMinutes": 3,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-yoshitomo-nara-138",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Yoshitomo Nara",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Yoshitomo Nara",
+      "durationMinutes": 7,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-lee-krasner-139",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Lee Krasner",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Lee Krasner",
+      "durationMinutes": 9,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-agnes-martin-140",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Agnes Martin",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Agnes Martin",
+      "durationMinutes": 3,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-alice-neel-141",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Alice Neel",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Alice Neel",
+      "durationMinutes": 10,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-betye-saar-142",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Betye Saar",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Betye Saar",
+      "durationMinutes": 5,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-lorna-simpson-143",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Lorna Simpson",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Lorna Simpson",
+      "durationMinutes": 8,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-kehinde-wiley-144",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Kehinde Wiley",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Kehinde Wiley",
+      "durationMinutes": 4,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-toyin-ojih-odutola-145",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Toyin Ojih Odutola",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Toyin Ojih Odutola",
+      "durationMinutes": 4,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-mickalene-thomas-146",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Mickalene Thomas",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Mickalene Thomas",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-julie-mehretu-147",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Julie Mehretu",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Julie Mehretu",
+      "durationMinutes": 9,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-tschabalala-self-148",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Tschabalala Self",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Tschabalala Self",
+      "durationMinutes": 5,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-flora-yukhnovich-149",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Flora Yukhnovich",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Flora Yukhnovich",
+      "durationMinutes": 6,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-shara-hughes-150",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Shara Hughes",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Shara Hughes",
+      "durationMinutes": 10,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-otis-kwame-kye-quaicoe-151",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Otis Kwame Kye Quaicoe",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Otis Kwame Kye Quaicoe",
+      "durationMinutes": 3,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-issy-wood-152",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Issy Wood",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Issy Wood",
+      "durationMinutes": 10,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-caroline-walker-153",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Caroline Walker",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Caroline Walker",
+      "durationMinutes": 8,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-fra-angelico-154",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Fra Angelico",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Fra Angelico",
+      "durationMinutes": 10,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-hieronymus-bosch-155",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Hieronymus Bosch",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Hieronymus Bosch",
+      "durationMinutes": 7,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-albrecht-dürer-156",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Albrecht Dürer",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Albrecht Dürer",
+      "durationMinutes": 9,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-el-greco-157",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "El Greco",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "El Greco",
+      "durationMinutes": 9,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-judith-leyster-158",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Judith Leyster",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Judith Leyster",
+      "durationMinutes": 3,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-angelica-kauffman-159",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Angelica Kauffman",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Angelica Kauffman",
+      "durationMinutes": 8,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-jmw-turner-160",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "J.M.W. Turner",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "J.M.W. Turner",
+      "durationMinutes": 9,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-eugène-delacroix-161",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Eugène Delacroix",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Eugène Delacroix",
+      "durationMinutes": 7,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-jean-françois-millet-162",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Jean-François Millet",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Jean-François Millet",
+      "durationMinutes": 4,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-rosa-bonheur-163",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Rosa Bonheur",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Rosa Bonheur",
+      "durationMinutes": 8,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-edgar-degas-164",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Edgar Degas",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Edgar Degas",
+      "durationMinutes": 5,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-georges-seurat-165",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Georges Seurat",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Georges Seurat",
+      "durationMinutes": 9,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-henri-de-toulouse-lautrec-166",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Henri de Toulouse-Lautrec",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Henri de Toulouse-Lautrec",
+      "durationMinutes": 3,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-egon-schiele-167",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Egon Schiele",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Egon Schiele",
+      "durationMinutes": 10,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-kazimir-malevich-168",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Kazimir Malevich",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Kazimir Malevich",
+      "durationMinutes": 5,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-rené-magritte-169",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "René Magritte",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "René Magritte",
+      "durationMinutes": 5,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-joan-miró-170",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Joan Miró",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Joan Miró",
+      "durationMinutes": 8,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-tamara-de-lempicka-171",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Tamara de Lempicka",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Tamara de Lempicka",
+      "durationMinutes": 10,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-grant-wood-172",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Grant Wood",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Grant Wood",
+      "durationMinutes": 3,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-andrew-wyeth-173",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Andrew Wyeth",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Andrew Wyeth",
+      "durationMinutes": 9,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-lucian-freud-174",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Lucian Freud",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Lucian Freud",
+      "durationMinutes": 10,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-gerhard-richter-175",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Gerhard Richter",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Gerhard Richter",
+      "durationMinutes": 6,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-georg-baselitz-176",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Georg Baselitz",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Georg Baselitz",
+      "durationMinutes": 5,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-takashi-murakami-177",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Takashi Murakami",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Takashi Murakami",
+      "durationMinutes": 9,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-zao-wou-ki-178",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Zao Wou-Ki",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Zao Wou-Ki",
+      "durationMinutes": 3,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-helen-frankenthaler-179",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Helen Frankenthaler",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Helen Frankenthaler",
+      "durationMinutes": 6,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-joan-mitchell-180",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Joan Mitchell",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Joan Mitchell",
+      "durationMinutes": 9,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-faith-ringgold-181",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Faith Ringgold",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Faith Ringgold",
+      "durationMinutes": 9,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-howardena-pindell-182",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Howardena Pindell",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Howardena Pindell",
+      "durationMinutes": 3,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-kerry-james-marshall-183",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Kerry James Marshall",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Kerry James Marshall",
+      "durationMinutes": 8,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-amy-sherald-184",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Amy Sherald",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Amy Sherald",
+      "durationMinutes": 8,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Contemporary",
+      "21st Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-njideka-akunyili-crosby-185",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Njideka Akunyili Crosby",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Njideka Akunyili Crosby",
+      "durationMinutes": 8,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-wangechi-mutu-186",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Wangechi Mutu",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Wangechi Mutu",
+      "durationMinutes": 10,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-lynette-yiadom-boakye-187",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Lynette Yiadom-Boakye",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Lynette Yiadom-Boakye",
+      "durationMinutes": 7,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-jadé-fadojutimi-188",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Jadé Fadojutimi",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Jadé Fadojutimi",
+      "durationMinutes": 6,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-salman-toor-189",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Salman Toor",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Salman Toor",
+      "durationMinutes": 8,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-amoako-boafo-190",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Amoako Boafo",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Amoako Boafo",
+      "durationMinutes": 7,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-tunji-adeniyi-jones-191",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Tunji Adeniyi-Jones",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Tunji Adeniyi-Jones",
+      "durationMinutes": 9,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-louise-giovanelli-192",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Louise Giovanelli",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Louise Giovanelli",
+      "durationMinutes": 7,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-giotto-193",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Giotto",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Giotto",
+      "durationMinutes": 8,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-piero-della-francesca-194",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Piero della Francesca",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Piero della Francesca",
+      "durationMinutes": 10,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Modernism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-matthias-grünewald-195",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Matthias Grünewald",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Matthias Grünewald",
+      "durationMinutes": 7,
+      "instruction": "Notice what is absent. The artist deliberately excluded something — that empty space carries meaning."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-pieter-bruegel-the-elder-196",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Pieter Bruegel the Elder",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Pieter Bruegel the Elder",
+      "durationMinutes": 5,
+      "instruction": "Trace the visual structure. What draws your eye first? The composition is guiding you intentionally."
+    },
+    "tags": [
+      "Renaissance",
+      "15th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-artemisia-gentileschi-197",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Artemisia Gentileschi",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Artemisia Gentileschi",
+      "durationMinutes": 6,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-rachel-ruysch-198",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Rachel Ruysch",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Rachel Ruysch",
+      "durationMinutes": 6,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-élisabeth-vigée-le-brun-199",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Élisabeth Vigée Le Brun",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Élisabeth Vigée Le Brun",
+      "durationMinutes": 9,
+      "instruction": "Step back and squint. The overall balance reveals itself only when you stop examining individual details."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-camille-corot-200",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Camille Corot",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Camille Corot",
+      "durationMinutes": 4,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Impressionism",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-gustave-courbet-201",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "Gustave Courbet",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "Gustave Courbet",
+      "durationMinutes": 5,
+      "instruction": "Compare the foreground with the background. The contrast between them is the whole point."
+    },
+    "tags": [
+      "Expressionism",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "pain-james-mcneill-whistler-202",
+    "categoryId": "PAINTERS",
+    "subtype": "Painter",
+    "name": "James McNeill Whistler",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Look at",
+      "targetName": "James McNeill Whistler",
+      "durationMinutes": 10,
+      "instruction": "Notice the use of light and shadow. Where the light falls tells you what the artist wants you to feel."
+    },
+    "tags": [
+      "Baroque",
+      "17th Century"
     ],
     "tier": 2
   }

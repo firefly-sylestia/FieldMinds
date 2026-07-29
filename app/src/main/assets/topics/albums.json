@@ -699,15 +699,15 @@
     "tier": 3
   },
   {
-    "id": "albu-album-topic-36-36",
+    "id": "albu-the-queen-is-dead-0",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #36",
+    "name": "The Queen Is Dead by The Smiths",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #36 end-to-end",
+      "targetName": "The Queen Is Dead by The Smiths",
       "durationMinutes": 65,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -718,15 +718,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-37-37",
+    "id": "albu-power-corruption-and-lies-1",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #37",
+    "name": "Power Corruption and Lies by New Order",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #37 end-to-end",
+      "targetName": "Power Corruption and Lies by New Order",
       "durationMinutes": 67,
       "instruction": "Pay attention to the percussion work. It shifts subtly in ways most tracks don't dare."
     },
@@ -737,15 +737,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-38-38",
+    "id": "albu-songs-from-the-big-2",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #38",
+    "name": "Songs from the Big Chair by Tears for Fears",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #38 end-to-end",
+      "targetName": "Songs from the Big Chair by Tears for Fears",
       "durationMinutes": 61,
       "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel unsettled."
     },
@@ -756,15 +756,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-39-39",
+    "id": "albu-zooropa-by-u2-3",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #39",
+    "name": "Zooropa by U2",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #39 end-to-end",
+      "targetName": "Zooropa by U2",
       "durationMinutes": 79,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -775,15 +775,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-40-40",
+    "id": "albu-purple-rain-by-prince-4",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #40",
+    "name": "Purple Rain by Prince",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #40 end-to-end",
+      "targetName": "Purple Rain by Prince",
       "durationMinutes": 60,
       "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel euphoric."
     },
@@ -794,15 +794,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-41-41",
+    "id": "albu-dirty-mind-by-prince-5",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #41",
+    "name": "Dirty Mind by Prince",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #41 end-to-end",
+      "targetName": "Dirty Mind by Prince",
       "durationMinutes": 49,
       "instruction": "Listen for the moment at 2:13 when the synthesizer does something unexpected."
     },
@@ -813,15 +813,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-42-42",
+    "id": "albu-innervisions-by-stevie-wonder-6",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #42",
+    "name": "Innervisions by Stevie Wonder",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #42 end-to-end",
+      "targetName": "Innervisions by Stevie Wonder",
       "durationMinutes": 61,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -832,15 +832,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-43-43",
+    "id": "albu-head-hunters-by-herbie-7",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #43",
+    "name": "Head Hunters by Herbie Hancock",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #43 end-to-end",
+      "targetName": "Head Hunters by Herbie Hancock",
       "durationMinutes": 45,
       "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel expansive."
     },
@@ -851,15 +851,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-44-44",
+    "id": "albu-a-love-supreme-by-8",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #44",
+    "name": "A Love Supreme by John Coltrane",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #44 end-to-end",
+      "targetName": "A Love Supreme by John Coltrane",
       "durationMinutes": 26,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -870,15 +870,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-45-45",
+    "id": "albu-the-shape-of-jazz-9",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #45",
+    "name": "The Shape of Jazz to Come by Ornette Coleman",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #45 end-to-end",
+      "targetName": "The Shape of Jazz to Come by Ornette Coleman",
       "durationMinutes": 32,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -889,15 +889,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-46-46",
+    "id": "albu-moanin-by-art-blakey-10",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #46",
+    "name": "Moanin by Art Blakey",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #46 end-to-end",
+      "targetName": "Moanin by Art Blakey",
       "durationMinutes": 51,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -908,15 +908,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-47-47",
+    "id": "albu-giant-steps-by-john-11",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #47",
+    "name": "Giant Steps by John Coltrane",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #47 end-to-end",
+      "targetName": "Giant Steps by John Coltrane",
       "durationMinutes": 76,
       "instruction": "Notice how the production layers bass presence. That's intentional — the artist wanted you to feel expansive."
     },
@@ -927,15 +927,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-48-48",
+    "id": "albu-getzgilberto-by-stan-getz-12",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #48",
+    "name": "Getz/Gilberto by Stan Getz",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #48 end-to-end",
+      "targetName": "Getz/Gilberto by Stan Getz",
       "durationMinutes": 61,
       "instruction": "Track how the vocal delivery changes across the chorus. There's a story in those shifts."
     },
@@ -946,15 +946,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-49-49",
+    "id": "albu-3-feet-high-and-13",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #49",
+    "name": "3 Feet High and Rising by De La Soul",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #49 end-to-end",
+      "targetName": "3 Feet High and Rising by De La Soul",
       "durationMinutes": 70,
       "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel expansive."
     },
@@ -965,15 +965,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-50-50",
+    "id": "albu-illmatic-by-nas-14",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #50",
+    "name": "Illmatic by Nas",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #50 end-to-end",
+      "targetName": "Illmatic by Nas",
       "durationMinutes": 62,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -984,15 +984,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-51-51",
+    "id": "albu-the-miseducation-by-lauryn-15",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #51",
+    "name": "The Miseducation by Lauryn Hill",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #51 end-to-end",
+      "targetName": "The Miseducation by Lauryn Hill",
       "durationMinutes": 65,
       "instruction": "Listen for the moment at 1:54 when the guitar does something unexpected."
     },
@@ -1003,15 +1003,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-52-52",
+    "id": "albu-the-score-by-fugees-16",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #52",
+    "name": "The Score by Fugees",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #52 end-to-end",
+      "targetName": "The Score by Fugees",
       "durationMinutes": 75,
       "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
     },
@@ -1022,15 +1022,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-53-53",
+    "id": "albu-donuts-by-j-dilla-17",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #53",
+    "name": "Donuts by J Dilla",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #53 end-to-end",
+      "targetName": "Donuts by J Dilla",
       "durationMinutes": 35,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1041,15 +1041,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-54-54",
+    "id": "albu-fear-of-music-by-18",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #54",
+    "name": "Fear of Music by Talking Heads",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #54 end-to-end",
+      "targetName": "Fear of Music by Talking Heads",
       "durationMinutes": 77,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -1060,15 +1060,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-55-55",
+    "id": "albu-hidden-recording-1-0",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #55",
+    "name": "Hidden Recording #1",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #55 end-to-end",
+      "targetName": "Hidden Recording #1",
       "durationMinutes": 36,
       "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel unsettled."
     },
@@ -1079,15 +1079,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-56-56",
+    "id": "albu-forgotten-recording-2-1",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #56",
+    "name": "Forgotten Recording #2",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #56 end-to-end",
+      "targetName": "Forgotten Recording #2",
       "durationMinutes": 44,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1098,15 +1098,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-57-57",
+    "id": "albu-unsung-recording-3-2",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #57",
+    "name": "Unsung Recording #3",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #57 end-to-end",
+      "targetName": "Unsung Recording #3",
       "durationMinutes": 50,
       "instruction": "Listen for the moment at 3:47 when the bass does something unexpected."
     },
@@ -1117,15 +1117,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-58-58",
+    "id": "albu-radiant-recording-4-3",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #58",
+    "name": "Radiant Recording #4",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #58 end-to-end",
+      "targetName": "Radiant Recording #4",
       "durationMinutes": 42,
       "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
     },
@@ -1136,15 +1136,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-59-59",
+    "id": "albu-quiet-recording-5-4",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #59",
+    "name": "Quiet Recording #5",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #59 end-to-end",
+      "targetName": "Quiet Recording #5",
       "durationMinutes": 72,
       "instruction": "Listen for the moment at 2:23 when the strings does something unexpected."
     },
@@ -1155,15 +1155,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-60-60",
+    "id": "albu-luminous-recording-6-5",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #60",
+    "name": "Luminous Recording #6",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #60 end-to-end",
+      "targetName": "Luminous Recording #6",
       "durationMinutes": 28,
       "instruction": "Pay attention to the vocals work. It shifts subtly in ways most tracks don't dare."
     },
@@ -1174,15 +1174,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-61-61",
+    "id": "albu-distant-recording-7-6",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #61",
+    "name": "Distant Recording #7",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #61 end-to-end",
+      "targetName": "Distant Recording #7",
       "durationMinutes": 28,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -1193,15 +1193,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-62-62",
+    "id": "albu-unexpected-recording-8-7",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #62",
+    "name": "Unexpected Recording #8",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #62 end-to-end",
+      "targetName": "Unexpected Recording #8",
       "durationMinutes": 54,
       "instruction": "Pay attention to the horns work. It shifts subtly in ways most tracks don't dare."
     },
@@ -1212,15 +1212,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-63-63",
+    "id": "albu-eternal-recording-9-8",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #63",
+    "name": "Eternal Recording #9",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #63 end-to-end",
+      "targetName": "Eternal Recording #9",
       "durationMinutes": 73,
       "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel nostalgic."
     },
@@ -1231,15 +1231,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-64-64",
+    "id": "albu-restless-recording-10-9",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #64",
+    "name": "Restless Recording #10",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #64 end-to-end",
+      "targetName": "Restless Recording #10",
       "durationMinutes": 44,
       "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
     },
@@ -1250,15 +1250,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-65-65",
+    "id": "albu-brilliant-recording-11-10",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #65",
+    "name": "Brilliant Recording #11",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #65 end-to-end",
+      "targetName": "Brilliant Recording #11",
       "durationMinutes": 55,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -1269,15 +1269,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-66-66",
+    "id": "albu-enigmatic-recording-12-11",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #66",
+    "name": "Enigmatic Recording #12",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #66 end-to-end",
+      "targetName": "Enigmatic Recording #12",
       "durationMinutes": 46,
       "instruction": "Pay attention to the bass work. It shifts three times in ways most tracks don't dare."
     },
@@ -1288,15 +1288,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-67-67",
+    "id": "albu-restless-recording-13-12",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #67",
+    "name": "Restless Recording #13",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #67 end-to-end",
+      "targetName": "Restless Recording #13",
       "durationMinutes": 45,
       "instruction": "Pay attention to the synthesizer work. It shifts twice in ways most tracks don't dare."
     },
@@ -1307,15 +1307,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-68-68",
+    "id": "albu-subtle-recording-14-13",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #68",
+    "name": "Subtle Recording #14",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #68 end-to-end",
+      "targetName": "Subtle Recording #14",
       "durationMinutes": 33,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1326,15 +1326,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-69-69",
+    "id": "albu-vivid-recording-15-14",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #69",
+    "name": "Vivid Recording #15",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #69 end-to-end",
+      "targetName": "Vivid Recording #15",
       "durationMinutes": 78,
       "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel grounded."
     },
@@ -1345,15 +1345,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-70-70",
+    "id": "albu-ancient-recording-16-15",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #70",
+    "name": "Ancient Recording #16",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #70 end-to-end",
+      "targetName": "Ancient Recording #16",
       "durationMinutes": 71,
       "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel grounded."
     },
@@ -1364,15 +1364,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-71-71",
+    "id": "albu-modern-recording-17-16",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #71",
+    "name": "Modern Recording #17",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #71 end-to-end",
+      "targetName": "Modern Recording #17",
       "durationMinutes": 67,
       "instruction": "Notice how the production layers drum compression. That's intentional — the artist wanted you to feel unsettled."
     },
@@ -1383,15 +1383,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-72-72",
+    "id": "albu-lost-recording-18-17",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #72",
+    "name": "Lost Recording #18",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #72 end-to-end",
+      "targetName": "Lost Recording #18",
       "durationMinutes": 32,
       "instruction": "Notice how the production layers spatial mixing. That's intentional — the artist wanted you to feel anxious."
     },
@@ -1402,15 +1402,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-73-73",
+    "id": "albu-wandering-recording-19-18",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #73",
+    "name": "Wandering Recording #19",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #73 end-to-end",
+      "targetName": "Wandering Recording #19",
       "durationMinutes": 33,
       "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel grounded."
     },
@@ -1421,15 +1421,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-74-74",
+    "id": "albu-timeless-recording-20-19",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #74",
+    "name": "Timeless Recording #20",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #74 end-to-end",
+      "targetName": "Timeless Recording #20",
       "durationMinutes": 80,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -1440,15 +1440,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-75-75",
+    "id": "albu-hidden-session-21-20",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #75",
+    "name": "Hidden Session #21",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #75 end-to-end",
+      "targetName": "Hidden Session #21",
       "durationMinutes": 29,
       "instruction": "Listen for the moment at 3:24 when the guitar does something unexpected."
     },
@@ -1459,15 +1459,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-76-76",
+    "id": "albu-forgotten-session-22-21",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #76",
+    "name": "Forgotten Session #22",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #76 end-to-end",
+      "targetName": "Forgotten Session #22",
       "durationMinutes": 51,
       "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
     },
@@ -1478,15 +1478,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-77-77",
+    "id": "albu-unsung-session-23-22",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #77",
+    "name": "Unsung Session #23",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #77 end-to-end",
+      "targetName": "Unsung Session #23",
       "durationMinutes": 31,
       "instruction": "Pay attention to the piano work. It shifts subtly in ways most tracks don't dare."
     },
@@ -1497,15 +1497,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-78-78",
+    "id": "albu-radiant-session-24-23",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #78",
+    "name": "Radiant Session #24",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #78 end-to-end",
+      "targetName": "Radiant Session #24",
       "durationMinutes": 77,
       "instruction": "Listen for the moment at 3:47 when the bass does something unexpected."
     },
@@ -1516,15 +1516,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-79-79",
+    "id": "albu-quiet-session-25-24",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #79",
+    "name": "Quiet Session #25",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #79 end-to-end",
+      "targetName": "Quiet Session #25",
       "durationMinutes": 63,
       "instruction": "Listen for the moment at 3:58 when the horns does something unexpected."
     },
@@ -1535,15 +1535,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-80-80",
+    "id": "albu-luminous-session-26-25",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #80",
+    "name": "Luminous Session #26",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #80 end-to-end",
+      "targetName": "Luminous Session #26",
       "durationMinutes": 64,
       "instruction": "Listen for the moment at 3:21 when the percussion does something unexpected."
     },
@@ -1554,15 +1554,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-81-81",
+    "id": "albu-distant-session-27-26",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #81",
+    "name": "Distant Session #27",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #81 end-to-end",
+      "targetName": "Distant Session #27",
       "durationMinutes": 28,
       "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel intimate."
     },
@@ -1573,15 +1573,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-82-82",
+    "id": "albu-unexpected-session-28-27",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #82",
+    "name": "Unexpected Session #28",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #82 end-to-end",
+      "targetName": "Unexpected Session #28",
       "durationMinutes": 67,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1592,15 +1592,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-83-83",
+    "id": "albu-eternal-session-29-28",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #83",
+    "name": "Eternal Session #29",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #83 end-to-end",
+      "targetName": "Eternal Session #29",
       "durationMinutes": 27,
       "instruction": "Listen for the moment at 3:26 when the percussion does something unexpected."
     },
@@ -1611,15 +1611,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-84-84",
+    "id": "albu-restless-session-30-29",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #84",
+    "name": "Restless Session #30",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #84 end-to-end",
+      "targetName": "Restless Session #30",
       "durationMinutes": 58,
       "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
     },
@@ -1630,15 +1630,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-85-85",
+    "id": "albu-brilliant-session-31-30",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #85",
+    "name": "Brilliant Session #31",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #85 end-to-end",
+      "targetName": "Brilliant Session #31",
       "durationMinutes": 68,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1649,15 +1649,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-86-86",
+    "id": "albu-enigmatic-session-32-31",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #86",
+    "name": "Enigmatic Session #32",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #86 end-to-end",
+      "targetName": "Enigmatic Session #32",
       "durationMinutes": 67,
       "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
     },
@@ -1668,15 +1668,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-87-87",
+    "id": "albu-restless-session-33-32",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #87",
+    "name": "Restless Session #33",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #87 end-to-end",
+      "targetName": "Restless Session #33",
       "durationMinutes": 51,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1687,15 +1687,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-88-88",
+    "id": "albu-subtle-session-34-33",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #88",
+    "name": "Subtle Session #34",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #88 end-to-end",
+      "targetName": "Subtle Session #34",
       "durationMinutes": 26,
       "instruction": "Pay attention to the percussion work. It shifts subtly in ways most tracks don't dare."
     },
@@ -1706,15 +1706,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-89-89",
+    "id": "albu-vivid-session-35-34",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #89",
+    "name": "Vivid Session #35",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #89 end-to-end",
+      "targetName": "Vivid Session #35",
       "durationMinutes": 51,
       "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
     },
@@ -1725,15 +1725,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-90-90",
+    "id": "albu-ancient-session-36-35",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #90",
+    "name": "Ancient Session #36",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #90 end-to-end",
+      "targetName": "Ancient Session #36",
       "durationMinutes": 67,
       "instruction": "Pay attention to the strings work. It shifts twice in ways most tracks don't dare."
     },
@@ -1744,15 +1744,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-91-91",
+    "id": "albu-modern-session-37-36",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #91",
+    "name": "Modern Session #37",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #91 end-to-end",
+      "targetName": "Modern Session #37",
       "durationMinutes": 68,
       "instruction": "Listen for the moment at 2:41 when the vocals does something unexpected."
     },
@@ -1763,15 +1763,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-92-92",
+    "id": "albu-lost-session-38-37",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #92",
+    "name": "Lost Session #38",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #92 end-to-end",
+      "targetName": "Lost Session #38",
       "durationMinutes": 60,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -1782,15 +1782,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-93-93",
+    "id": "albu-wandering-session-39-38",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #93",
+    "name": "Wandering Session #39",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #93 end-to-end",
+      "targetName": "Wandering Session #39",
       "durationMinutes": 71,
       "instruction": "Listen for the moment at 1:26 when the vocals does something unexpected."
     },
@@ -1801,15 +1801,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-94-94",
+    "id": "albu-timeless-session-40-39",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #94",
+    "name": "Timeless Session #40",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #94 end-to-end",
+      "targetName": "Timeless Session #40",
       "durationMinutes": 66,
       "instruction": "Listen for the moment at 1:43 when the guitar does something unexpected."
     },
@@ -1820,15 +1820,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-95-95",
+    "id": "albu-hidden-suite-41-40",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #95",
+    "name": "Hidden Suite #41",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #95 end-to-end",
+      "targetName": "Hidden Suite #41",
       "durationMinutes": 48,
       "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel euphoric."
     },
@@ -1839,15 +1839,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-96-96",
+    "id": "albu-forgotten-suite-42-41",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #96",
+    "name": "Forgotten Suite #42",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #96 end-to-end",
+      "targetName": "Forgotten Suite #42",
       "durationMinutes": 35,
       "instruction": "Pay attention to the bass work. It shifts subtly in ways most tracks don't dare."
     },
@@ -1858,15 +1858,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-97-97",
+    "id": "albu-unsung-suite-43-42",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #97",
+    "name": "Unsung Suite #43",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #97 end-to-end",
+      "targetName": "Unsung Suite #43",
       "durationMinutes": 63,
       "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel nostalgic."
     },
@@ -1877,15 +1877,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-98-98",
+    "id": "albu-radiant-suite-44-43",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #98",
+    "name": "Radiant Suite #44",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #98 end-to-end",
+      "targetName": "Radiant Suite #44",
       "durationMinutes": 51,
       "instruction": "Notice how the production layers stereo width. That's intentional — the artist wanted you to feel nostalgic."
     },
@@ -1896,15 +1896,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-99-99",
+    "id": "albu-quiet-suite-45-44",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #99",
+    "name": "Quiet Suite #45",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #99 end-to-end",
+      "targetName": "Quiet Suite #45",
       "durationMinutes": 72,
       "instruction": "Track how the vocal delivery changes across the breakdown. There's a story in those shifts."
     },
@@ -1915,15 +1915,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-100-100",
+    "id": "albu-luminous-suite-46-45",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #100",
+    "name": "Luminous Suite #46",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #100 end-to-end",
+      "targetName": "Luminous Suite #46",
       "durationMinutes": 60,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -1934,15 +1934,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-101-101",
+    "id": "albu-distant-suite-47-46",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #101",
+    "name": "Distant Suite #47",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #101 end-to-end",
+      "targetName": "Distant Suite #47",
       "durationMinutes": 65,
       "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel unsettled."
     },
@@ -1953,15 +1953,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-102-102",
+    "id": "albu-unexpected-suite-48-47",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #102",
+    "name": "Unexpected Suite #48",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #102 end-to-end",
+      "targetName": "Unexpected Suite #48",
       "durationMinutes": 75,
       "instruction": "Track how the vocal delivery changes across the bridge. There's a story in those shifts."
     },
@@ -1972,15 +1972,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-103-103",
+    "id": "albu-eternal-suite-49-48",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #103",
+    "name": "Eternal Suite #49",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #103 end-to-end",
+      "targetName": "Eternal Suite #49",
       "durationMinutes": 78,
       "instruction": "Track how the vocal delivery changes across the outro. There's a story in those shifts."
     },
@@ -1991,15 +1991,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-104-104",
+    "id": "albu-restless-suite-50-49",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #104",
+    "name": "Restless Suite #50",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #104 end-to-end",
+      "targetName": "Restless Suite #50",
       "durationMinutes": 53,
       "instruction": "Track how the vocal delivery changes across the middle eight. There's a story in those shifts."
     },
@@ -2010,15 +2010,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-105-105",
+    "id": "albu-brilliant-suite-51-50",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #105",
+    "name": "Brilliant Suite #51",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #105 end-to-end",
+      "targetName": "Brilliant Suite #51",
       "durationMinutes": 43,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2029,15 +2029,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-106-106",
+    "id": "albu-enigmatic-suite-52-51",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #106",
+    "name": "Enigmatic Suite #52",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #106 end-to-end",
+      "targetName": "Enigmatic Suite #52",
       "durationMinutes": 74,
       "instruction": "Notice how the production layers spatial mixing. That's intentional — the artist wanted you to feel unsettled."
     },
@@ -2048,15 +2048,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-107-107",
+    "id": "albu-restless-suite-53-52",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #107",
+    "name": "Restless Suite #53",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #107 end-to-end",
+      "targetName": "Restless Suite #53",
       "durationMinutes": 27,
       "instruction": "Listen for the moment at 3:43 when the vocals does something unexpected."
     },
@@ -2067,15 +2067,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-108-108",
+    "id": "albu-subtle-suite-54-53",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #108",
+    "name": "Subtle Suite #54",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #108 end-to-end",
+      "targetName": "Subtle Suite #54",
       "durationMinutes": 55,
       "instruction": "Listen for the moment at 1:36 when the vocals does something unexpected."
     },
@@ -2086,15 +2086,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-109-109",
+    "id": "albu-vivid-suite-55-54",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #109",
+    "name": "Vivid Suite #55",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #109 end-to-end",
+      "targetName": "Vivid Suite #55",
       "durationMinutes": 34,
       "instruction": "Pay attention to the percussion work. It shifts three times in ways most tracks don't dare."
     },
@@ -2105,15 +2105,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-110-110",
+    "id": "albu-ancient-suite-56-55",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #110",
+    "name": "Ancient Suite #56",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #110 end-to-end",
+      "targetName": "Ancient Suite #56",
       "durationMinutes": 31,
       "instruction": "Listen for the moment at 3:26 when the piano does something unexpected."
     },
@@ -2124,15 +2124,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-111-111",
+    "id": "albu-modern-suite-57-56",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #111",
+    "name": "Modern Suite #57",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #111 end-to-end",
+      "targetName": "Modern Suite #57",
       "durationMinutes": 34,
       "instruction": "Listen for the moment at 1:31 when the strings does something unexpected."
     },
@@ -2143,15 +2143,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-112-112",
+    "id": "albu-lost-suite-58-57",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #112",
+    "name": "Lost Suite #58",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #112 end-to-end",
+      "targetName": "Lost Suite #58",
       "durationMinutes": 41,
       "instruction": "Notice how the production layers reverb tails. That's intentional — the artist wanted you to feel anxious."
     },
@@ -2162,15 +2162,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-113-113",
+    "id": "albu-wandering-suite-59-58",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #113",
+    "name": "Wandering Suite #59",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #113 end-to-end",
+      "targetName": "Wandering Suite #59",
       "durationMinutes": 58,
       "instruction": "Notice how the production layers spatial mixing. That's intentional — the artist wanted you to feel expansive."
     },
@@ -2181,15 +2181,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-114-114",
+    "id": "albu-timeless-suite-60-59",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #114",
+    "name": "Timeless Suite #60",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #114 end-to-end",
+      "targetName": "Timeless Suite #60",
       "durationMinutes": 41,
       "instruction": "Listen for the moment at 2:40 when the percussion does something unexpected."
     },
@@ -2200,15 +2200,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-115-115",
+    "id": "albu-hidden-collection-61-60",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #115",
+    "name": "Hidden Collection #61",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #115 end-to-end",
+      "targetName": "Hidden Collection #61",
       "durationMinutes": 35,
       "instruction": "Focus on the space between the notes — the silence is doing as much work as the sound."
     },
@@ -2219,15 +2219,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-116-116",
+    "id": "albu-forgotten-collection-62-61",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #116",
+    "name": "Forgotten Collection #62",
     "teaser": "The iconic cover art was shot in a single afternoon with no budget — the photographer used available light and a borrowed camera.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #116 end-to-end",
+      "targetName": "Forgotten Collection #62",
       "durationMinutes": 64,
       "instruction": "Pay attention to the percussion work. It shifts twice in ways most tracks don't dare."
     },
@@ -2238,15 +2238,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-117-117",
+    "id": "albu-unsung-collection-63-62",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #117",
+    "name": "Unsung Collection #63",
     "teaser": "Fans initially rejected this album as 'too different,' only to crown it a masterpiece a decade later.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #117 end-to-end",
+      "targetName": "Unsung Collection #63",
       "durationMinutes": 54,
       "instruction": "Notice how the production layers vocal layering. That's intentional — the artist wanted you to feel grounded."
     },
@@ -2257,15 +2257,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-118-118",
+    "id": "albu-radiant-collection-64-63",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #118",
+    "name": "Radiant Collection #64",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #118 end-to-end",
+      "targetName": "Radiant Collection #64",
       "durationMinutes": 74,
       "instruction": "Track how the vocal delivery changes across the verse. There's a story in those shifts."
     },
@@ -2276,15 +2276,15 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-119-119",
+    "id": "albu-quiet-collection-65-64",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #119",
+    "name": "Quiet Collection #65",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #119 end-to-end",
+      "targetName": "Quiet Collection #65",
       "durationMinutes": 25,
       "instruction": "Listen for the moment at 1:12 when the horns does something unexpected."
     },
@@ -2295,21 +2295,2491 @@
     "tier": 2
   },
   {
-    "id": "albu-album-topic-120-120",
+    "id": "albu-luminous-collection-66-65",
     "categoryId": "ALBUMS",
     "subtype": "Album",
-    "name": "Album Topic #120",
+    "name": "Luminous Collection #66",
     "teaser": "This album was recorded mostly at night because the producer believed creativity peaked between midnight and 4 AM.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Listen",
-      "targetName": "Album Topic #120 end-to-end",
+      "targetName": "Luminous Collection #66",
       "durationMinutes": 56,
       "instruction": "Listen for the moment at 1:11 when the vocals does something unexpected."
     },
     "tags": [
       "Soul",
       "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-q-are-we-not-121",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Q Are We Not Men by Devo",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Q Are We Not Men by Devo",
+      "durationMinutes": 68,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-idiot-by-iggy-122",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Idiot by Iggy Pop",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Idiot by Iggy Pop",
+      "durationMinutes": 71,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-horses-by-patti-smith-123",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Horses by Patti Smith",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Horses by Patti Smith",
+      "durationMinutes": 37,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-rocket-to-russia-by-124",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Rocket to Russia by Ramones",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Rocket to Russia by Ramones",
+      "durationMinutes": 52,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-surfer-rosa-by-pixies-125",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Surfer Rosa by Pixies",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Surfer Rosa by Pixies",
+      "durationMinutes": 40,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-goo-by-sonic-youth-126",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Goo by Sonic Youth",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Goo by Sonic Youth",
+      "durationMinutes": 31,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-crooked-rain-by-pavement-127",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Crooked Rain by Pavement",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Crooked Rain by Pavement",
+      "durationMinutes": 73,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-lonesome-crowded-west-128",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Lonesome Crowded West by Modest Mouse",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Lonesome Crowded West by Modest Mouse",
+      "durationMinutes": 56,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-eitheror-by-elliott-smith-129",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Either/Or by Elliott Smith",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Either/Or by Elliott Smith",
+      "durationMinutes": 28,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-figure-8-by-elliott-130",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Figure 8 by Elliott Smith",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Figure 8 by Elliott Smith",
+      "durationMinutes": 49,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-sketches-for-my-sweetheart-131",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Sketches for My Sweetheart by Jeff Buckley",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Sketches for My Sweetheart by Jeff Buckley",
+      "durationMinutes": 52,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-bends-by-radiohead-132",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Bends by Radiohead",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Bends by Radiohead",
+      "durationMinutes": 37,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-hail-to-the-thief-133",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Hail to the Thief by Radiohead",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Hail to the Thief by Radiohead",
+      "durationMinutes": 62,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-amnesiac-by-radiohead-134",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Amnesiac by Radiohead",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Amnesiac by Radiohead",
+      "durationMinutes": 28,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-whatever-people-say-by-135",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Whatever People Say by Arctic Monkeys",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Whatever People Say by Arctic Monkeys",
+      "durationMinutes": 79,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-tranquility-base-by-arctic-136",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Tranquility Base by Arctic Monkeys",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tranquility Base by Arctic Monkeys",
+      "durationMinutes": 57,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-back-in-black-by-137",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Back in Black by AC/DC",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Back in Black by AC/DC",
+      "durationMinutes": 63,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-dark-side-of-138",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Dark Side of the Moon by Pink Floyd",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Dark Side of the Moon by Pink Floyd",
+      "durationMinutes": 32,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-london-calling-by-the-139",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "London Calling by The Clash",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "London Calling by The Clash",
+      "durationMinutes": 63,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-blue-by-joni-mitchell-140",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Blue by Joni Mitchell",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Blue by Joni Mitchell",
+      "durationMinutes": 67,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-aja-by-steely-dan-141",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Aja by Steely Dan",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Aja by Steely Dan",
+      "durationMinutes": 38,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-tracy-chapman-by-tracy-142",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Tracy Chapman by Tracy Chapman",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tracy Chapman by Tracy Chapman",
+      "durationMinutes": 50,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-automatic-for-the-people-143",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Automatic for the People by R.E.M.",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Automatic for the People by R.E.M.",
+      "durationMinutes": 45,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-ok-computer-by-radiohead-144",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "OK Computer by Radiohead",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "OK Computer by Radiohead",
+      "durationMinutes": 64,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-in-rainbows-by-radiohead-145",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "In Rainbows by Radiohead",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "In Rainbows by Radiohead",
+      "durationMinutes": 59,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-funeral-by-arcade-fire-146",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Funeral by Arcade Fire",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Funeral by Arcade Fire",
+      "durationMinutes": 47,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-yankee-hotel-foxtrot-by-147",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Yankee Hotel Foxtrot by Wilco",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Yankee Hotel Foxtrot by Wilco",
+      "durationMinutes": 43,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-for-emma-by-bon-148",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "For Emma by Bon Iver",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "For Emma by Bon Iver",
+      "durationMinutes": 70,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-blonde-by-frank-ocean-149",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Blonde by Frank Ocean",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Blonde by Frank Ocean",
+      "durationMinutes": 44,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-lemonade-by-beyoncé-150",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Lemonade by Beyoncé",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Lemonade by Beyoncé",
+      "durationMinutes": 32,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-ctrl-by-sza-151",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "CTRL by SZA",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "CTRL by SZA",
+      "durationMinutes": 43,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-future-nostalgia-by-dua-152",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Future Nostalgia by Dua Lipa",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Future Nostalgia by Dua Lipa",
+      "durationMinutes": 38,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-folklore-by-taylor-swift-153",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "folklore by Taylor Swift",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "folklore by Taylor Swift",
+      "durationMinutes": 79,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-midnights-by-taylor-swift-154",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Midnights by Taylor Swift",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Midnights by Taylor Swift",
+      "durationMinutes": 78,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-norman-rockwell-by-lana-155",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Norman Rockwell by Lana Del Rey",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Norman Rockwell by Lana Del Rey",
+      "durationMinutes": 46,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-fetch-the-bolt-cutters-156",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Fetch the Bolt Cutters by Fiona Apple",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Fetch the Bolt Cutters by Fiona Apple",
+      "durationMinutes": 72,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-preachers-daughter-by-ethel-157",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Preachers Daughter by Ethel Cain",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Preachers Daughter by Ethel Cain",
+      "durationMinutes": 25,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-gemini-rights-by-steve-158",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Gemini Rights by Steve Lacy",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Gemini Rights by Steve Lacy",
+      "durationMinutes": 59,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-un-verano-sin-ti-159",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Un Verano Sin Ti by Bad Bunny",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Un Verano Sin Ti by Bad Bunny",
+      "durationMinutes": 60,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-el-mal-querer-by-160",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "El Mal Querer by ROSALÍA",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "El Mal Querer by ROSALÍA",
+      "durationMinutes": 27,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-22-a-million-by-161",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "22 A Million by Bon Iver",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "22 A Million by Bon Iver",
+      "durationMinutes": 47,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-currents-by-tame-impala-162",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Currents by Tame Impala",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Currents by Tame Impala",
+      "durationMinutes": 47,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-slow-rush-by-163",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Slow Rush by Tame Impala",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Slow Rush by Tame Impala",
+      "durationMinutes": 72,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-discovery-by-daft-punk-164",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Discovery by Daft Punk",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Discovery by Daft Punk",
+      "durationMinutes": 76,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-since-i-left-you-165",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Since I Left You by The Avalanches",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Since I Left You by The Avalanches",
+      "durationMinutes": 36,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-syro-by-aphex-twin-166",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Syro by Aphex Twin",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Syro by Aphex Twin",
+      "durationMinutes": 42,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-promises-by-floating-points-167",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Promises by Floating Points",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Promises by Floating Points",
+      "durationMinutes": 80,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-dummy-by-portishead-168",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Dummy by Portishead",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Dummy by Portishead",
+      "durationMinutes": 37,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-maxinquaye-by-tricky-169",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Maxinquaye by Tricky",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Maxinquaye by Tricky",
+      "durationMinutes": 77,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-homogenic-by-björk-170",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Homogenic by Björk",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Homogenic by Björk",
+      "durationMinutes": 67,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-hounds-of-love-by-171",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Hounds of Love by Kate Bush",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Hounds of Love by Kate Bush",
+      "durationMinutes": 42,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-sensual-world-by-172",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Sensual World by Kate Bush",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Sensual World by Kate Bush",
+      "durationMinutes": 66,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-loveless-by-my-bloody-173",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Loveless by My Bloody Valentine",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Loveless by My Bloody Valentine",
+      "durationMinutes": 46,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-disintegration-by-the-cure-174",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Disintegration by The Cure",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Disintegration by The Cure",
+      "durationMinutes": 36,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-unknown-pleasures-by-joy-175",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Unknown Pleasures by Joy Division",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Unknown Pleasures by Joy Division",
+      "durationMinutes": 31,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-violator-by-depeche-mode-176",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Violator by Depeche Mode",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Violator by Depeche Mode",
+      "durationMinutes": 71,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-achtung-baby-by-u2-177",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Achtung Baby by U2",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Achtung Baby by U2",
+      "durationMinutes": 57,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-sign-o-the-times-178",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Sign o the Times by Prince",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Sign o the Times by Prince",
+      "durationMinutes": 37,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-1999-by-prince-179",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "1999 by Prince",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "1999 by Prince",
+      "durationMinutes": 25,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-whats-going-on-by-180",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "What's Going On by Marvin Gaye",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "What's Going On by Marvin Gaye",
+      "durationMinutes": 52,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-songs-in-the-key-181",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Songs in the Key of Life by Stevie Wonder",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Songs in the Key of Life by Stevie Wonder",
+      "durationMinutes": 45,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-bitches-brew-by-miles-182",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Bitches Brew by Miles Davis",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Bitches Brew by Miles Davis",
+      "durationMinutes": 44,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-kind-of-blue-by-183",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Kind of Blue by Miles Davis",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Kind of Blue by Miles Davis",
+      "durationMinutes": 69,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-time-out-by-dave-184",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Time Out by Dave Brubeck",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Time Out by Dave Brubeck",
+      "durationMinutes": 51,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-saxophone-colossus-by-sonny-185",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Saxophone Colossus by Sonny Rollins",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Saxophone Colossus by Sonny Rollins",
+      "durationMinutes": 61,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-a-charlie-brown-christmas-186",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "A Charlie Brown Christmas by Vince Guaraldi",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "A Charlie Brown Christmas by Vince Guaraldi",
+      "durationMinutes": 78,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-wave-by-antonio-carlos-187",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Wave by Antonio Carlos Jobim",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Wave by Antonio Carlos Jobim",
+      "durationMinutes": 38,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-talking-timbuktu-by-ali-188",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Talking Timbuktu by Ali Farka Touré",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Talking Timbuktu by Ali Farka Touré",
+      "durationMinutes": 53,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-pauls-boutique-by-beastie-189",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Paul's Boutique by Beastie Boys",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Paul's Boutique by Beastie Boys",
+      "durationMinutes": 55,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-low-end-theory-190",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Low End Theory by A Tribe Called Quest",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Low End Theory by A Tribe Called Quest",
+      "durationMinutes": 57,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-ready-to-die-by-191",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Ready to Die by Biggie",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Ready to Die by Biggie",
+      "durationMinutes": 77,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-things-fall-apart-by-192",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Things Fall Apart by The Roots",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Things Fall Apart by The Roots",
+      "durationMinutes": 76,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-madvillainy-by-madvillain-193",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Madvillainy by Madvillain",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Madvillainy by Madvillain",
+      "durationMinutes": 27,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-endtroducing-by-dj-shadow-194",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Endtroducing by DJ Shadow",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Endtroducing by DJ Shadow",
+      "durationMinutes": 79,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-remain-in-light-by-195",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Remain in Light by Talking Heads",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Remain in Light by Talking Heads",
+      "durationMinutes": 65,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-parallel-lines-by-blondie-196",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Parallel Lines by Blondie",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Parallel Lines by Blondie",
+      "durationMinutes": 56,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-entertainment-by-gang-of-197",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Entertainment by Gang of Four",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Entertainment by Gang of Four",
+      "durationMinutes": 66,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-transformer-by-lou-reed-198",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Transformer by Lou Reed",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Transformer by Lou Reed",
+      "durationMinutes": 39,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-raw-power-by-the-199",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Raw Power by The Stooges",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Raw Power by The Stooges",
+      "durationMinutes": 60,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-marquee-moon-by-television-200",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Marquee Moon by Television",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Marquee Moon by Television",
+      "durationMinutes": 33,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-doolittle-by-pixies-201",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Doolittle by Pixies",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Doolittle by Pixies",
+      "durationMinutes": 64,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-daydream-nation-by-sonic-202",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Daydream Nation by Sonic Youth",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Daydream Nation by Sonic Youth",
+      "durationMinutes": 53,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-slanted-and-enchanted-by-203",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Slanted and Enchanted by Pavement",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Slanted and Enchanted by Pavement",
+      "durationMinutes": 41,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-spiderland-by-slint-204",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Spiderland by Slint",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Spiderland by Slint",
+      "durationMinutes": 56,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-moon-and-antarctica-205",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Moon and Antarctica by Modest Mouse",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Moon and Antarctica by Modest Mouse",
+      "durationMinutes": 29,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-xo-by-elliott-smith-206",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "XO by Elliott Smith",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "XO by Elliott Smith",
+      "durationMinutes": 46,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-grace-by-jeff-buckley-207",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Grace by Jeff Buckley",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Grace by Jeff Buckley",
+      "durationMinutes": 34,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-o-by-damien-rice-208",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "O by Damien Rice",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "O by Damien Rice",
+      "durationMinutes": 70,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-pablo-honey-by-radiohead-209",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Pablo Honey by Radiohead",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Pablo Honey by Radiohead",
+      "durationMinutes": 51,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-a-moon-shaped-pool-210",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "A Moon Shaped Pool by Radiohead",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "A Moon Shaped Pool by Radiohead",
+      "durationMinutes": 28,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-king-of-limbs-by-211",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "King of Limbs by Radiohead",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "King of Limbs by Radiohead",
+      "durationMinutes": 74,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-am-by-arctic-monkeys-212",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "AM by Arctic Monkeys",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "AM by Arctic Monkeys",
+      "durationMinutes": 49,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-thriller-by-michael-jackson-213",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Thriller by Michael Jackson",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Thriller by Michael Jackson",
+      "durationMinutes": 44,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-rumours-by-fleetwood-mac-214",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Rumours by Fleetwood Mac",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Rumours by Fleetwood Mac",
+      "durationMinutes": 72,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-born-to-run-by-215",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Born to Run by Bruce Springsteen",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Born to Run by Bruce Springsteen",
+      "durationMinutes": 39,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-exile-on-main-st-216",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Exile on Main St. by The Rolling Stones",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Exile on Main St. by The Rolling Stones",
+      "durationMinutes": 26,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-bridge-over-troubled-water-217",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Bridge Over Troubled Water by Simon and Garfunkel",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Bridge Over Troubled Water by Simon and Garfunkel",
+      "durationMinutes": 71,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-graceland-by-paul-simon-218",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Graceland by Paul Simon",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Graceland by Paul Simon",
+      "durationMinutes": 64,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-joshua-tree-by-219",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Joshua Tree by U2",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Joshua Tree by U2",
+      "durationMinutes": 62,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-jagged-little-pill-by-220",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Jagged Little Pill by Alanis Morissette",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Jagged Little Pill by Alanis Morissette",
+      "durationMinutes": 66,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-kid-a-by-radiohead-221",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Kid A by Radiohead",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Kid A by Radiohead",
+      "durationMinutes": 36,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-is-this-it-by-222",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Is This It by The Strokes",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Is This It by The Strokes",
+      "durationMinutes": 45,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-elephant-by-the-white-223",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Elephant by The White Stripes",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Elephant by The White Stripes",
+      "durationMinutes": 46,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-illinois-by-sufjan-stevens-224",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Illinois by Sufjan Stevens",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Illinois by Sufjan Stevens",
+      "durationMinutes": 41,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-channel-orange-by-frank-225",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Channel Orange by Frank Ocean",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Channel Orange by Frank Ocean",
+      "durationMinutes": 72,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-good-kid-maad-city-226",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "good kid mAAd city by Kendrick Lamar",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "good kid mAAd city by Kendrick Lamar",
+      "durationMinutes": 39,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-anti-by-rihanna-227",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Anti by Rihanna",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Anti by Rihanna",
+      "durationMinutes": 40,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-after-hours-by-the-228",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "After Hours by The Weeknd",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "After Hours by The Weeknd",
+      "durationMinutes": 34,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-sour-by-olivia-rodrigo-229",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "SOUR by Olivia Rodrigo",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "SOUR by Olivia Rodrigo",
+      "durationMinutes": 67,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-evermore-by-taylor-swift-230",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "evermore by Taylor Swift",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "evermore by Taylor Swift",
+      "durationMinutes": 69,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-melodrama-by-lorde-231",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Melodrama by Lorde",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Melodrama by Lorde",
+      "durationMinutes": 63,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-punisher-by-phoebe-bridgers-232",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Punisher by Phoebe Bridgers",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Punisher by Phoebe Bridgers",
+      "durationMinutes": 44,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-jubilee-by-japanese-breakfast-233",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Jubilee by Japanese Breakfast",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Jubilee by Japanese Breakfast",
+      "durationMinutes": 61,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Alternative",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-an-evening-with-silk-234",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "An Evening with Silk Sonic",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "An Evening with Silk Sonic",
+      "durationMinutes": 29,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-renaissance-by-beyoncé-235",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "RENAISSANCE by Beyoncé",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "RENAISSANCE by Beyoncé",
+      "durationMinutes": 69,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-motomami-by-rosalía-236",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "MOTOMAMI by ROSALÍA",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "MOTOMAMI by ROSALÍA",
+      "durationMinutes": 75,
+      "instruction": "Notice how the production layers create space. Listen once with headphones and once without — the mix changes."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-carrie-and-lowell-by-237",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Carrie and Lowell by Sufjan Stevens",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Carrie and Lowell by Sufjan Stevens",
+      "durationMinutes": 52,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-dawn-fm-by-the-238",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Dawn FM by The Weeknd",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Dawn FM by The Weeknd",
+      "durationMinutes": 66,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Electronic",
+      "1990s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-lonerism-by-tame-impala-239",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Lonerism by Tame Impala",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Lonerism by Tame Impala",
+      "durationMinutes": 77,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-random-access-memories-by-240",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Random Access Memories by Daft Punk",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Random Access Memories by Daft Punk",
+      "durationMinutes": 48,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-homework-by-daft-punk-241",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Homework by Daft Punk",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Homework by Daft Punk",
+      "durationMinutes": 36,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-cosmogramma-by-flying-lotus-242",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Cosmogramma by Flying Lotus",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Cosmogramma by Flying Lotus",
+      "durationMinutes": 76,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-immunity-by-jon-hopkins-243",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Immunity by Jon Hopkins",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Immunity by Jon Hopkins",
+      "durationMinutes": 52,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-untrue-by-burial-244",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Untrue by Burial",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Untrue by Burial",
+      "durationMinutes": 79,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Rock",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-mezzanine-by-massive-attack-245",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Mezzanine by Massive Attack",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Mezzanine by Massive Attack",
+      "durationMinutes": 53,
+      "instruction": "Pay attention to the bassline. It shifts subtly from verse to chorus in a way most listeners miss."
+    },
+    "tags": [
+      "Indie",
+      "2020s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-vespertine-by-björk-246",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Vespertine by Björk",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Vespertine by Björk",
+      "durationMinutes": 64,
+      "instruction": "Listen for the background textures. The producer buried details that reward headphone-listening."
+    },
+    "tags": [
+      "Soul",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-post-by-björk-247",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Post by Björk",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Post by Björk",
+      "durationMinutes": 56,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Pop",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-the-kick-inside-by-248",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Kick Inside by Kate Bush",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Kick Inside by Kate Bush",
+      "durationMinutes": 38,
+      "instruction": "Focus on the vocal delivery. Every inflection carries deliberate weight — this wasn't a one-take recording."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-souvlaki-by-slowdive-249",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Souvlaki by Slowdive",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Souvlaki by Slowdive",
+      "durationMinutes": 42,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Hip-Hop",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "albu-heaven-or-las-vegas-250",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Heaven or Las Vegas by Cocteau Twins",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Heaven or Las Vegas by Cocteau Twins",
+      "durationMinutes": 25,
+      "instruction": "Track the arrangement. The song builds toward a moment at the midpoint — find it."
+    },
+    "tags": [
+      "Jazz",
+      "1960s"
     ],
     "tier": 2
   }

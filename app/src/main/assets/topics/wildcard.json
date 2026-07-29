@@ -640,15 +640,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-33-33",
+    "id": "wild-ikebana-190",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #33",
+    "name": "Ikebana",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #33",
+      "targetName": "Ikebana",
       "durationMinutes": 21,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -659,15 +659,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-34-34",
+    "id": "wild-wabi-sabi-191",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #34",
+    "name": "Wabi-Sabi",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #34",
+      "targetName": "Wabi-Sabi",
       "durationMinutes": 21,
       "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
     },
@@ -678,15 +678,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-35-35",
+    "id": "wild-lagom-192",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #35",
+    "name": "Lagom",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #35",
+      "targetName": "Lagom",
       "durationMinutes": 19,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -697,15 +697,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-36-36",
+    "id": "wild-sisu-193",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #36",
+    "name": "Sisu",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #36",
+      "targetName": "Sisu",
       "durationMinutes": 6,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -716,15 +716,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-37-37",
+    "id": "wild-hidden-wonder-1-695",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #37",
+    "name": "Hidden Wonder #1",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #37",
+      "targetName": "Hidden Wonder #1",
       "durationMinutes": 28,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -735,15 +735,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-38-38",
+    "id": "wild-forgotten-wonder-2-696",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #38",
+    "name": "Forgotten Wonder #2",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #38",
+      "targetName": "Forgotten Wonder #2",
       "durationMinutes": 21,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -754,15 +754,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-39-39",
+    "id": "wild-unsung-wonder-3-697",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #39",
+    "name": "Unsung Wonder #3",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #39",
+      "targetName": "Unsung Wonder #3",
       "durationMinutes": 27,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -773,15 +773,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-40-40",
+    "id": "wild-radiant-wonder-4-698",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #40",
+    "name": "Radiant Wonder #4",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #40",
+      "targetName": "Radiant Wonder #4",
       "durationMinutes": 4,
       "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
     },
@@ -792,15 +792,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-41-41",
+    "id": "wild-quiet-wonder-5-699",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #41",
+    "name": "Quiet Wonder #5",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #41",
+      "targetName": "Quiet Wonder #5",
       "durationMinutes": 15,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -811,15 +811,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-42-42",
+    "id": "wild-luminous-wonder-6-700",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #42",
+    "name": "Luminous Wonder #6",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #42",
+      "targetName": "Luminous Wonder #6",
       "durationMinutes": 29,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -830,15 +830,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-43-43",
+    "id": "wild-distant-wonder-7-701",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #43",
+    "name": "Distant Wonder #7",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #43",
+      "targetName": "Distant Wonder #7",
       "durationMinutes": 3,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -849,15 +849,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-44-44",
+    "id": "wild-unexpected-wonder-8-702",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #44",
+    "name": "Unexpected Wonder #8",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #44",
+      "targetName": "Unexpected Wonder #8",
       "durationMinutes": 12,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -868,15 +868,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-45-45",
+    "id": "wild-eternal-wonder-9-703",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #45",
+    "name": "Eternal Wonder #9",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #45",
+      "targetName": "Eternal Wonder #9",
       "durationMinutes": 13,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -887,15 +887,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-46-46",
+    "id": "wild-restless-wonder-10-704",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #46",
+    "name": "Restless Wonder #10",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #46",
+      "targetName": "Restless Wonder #10",
       "durationMinutes": 17,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -906,15 +906,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-47-47",
+    "id": "wild-brilliant-wonder-11-705",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #47",
+    "name": "Brilliant Wonder #11",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #47",
+      "targetName": "Brilliant Wonder #11",
       "durationMinutes": 13,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -925,15 +925,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-48-48",
+    "id": "wild-enigmatic-wonder-12-706",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #48",
+    "name": "Enigmatic Wonder #12",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #48",
+      "targetName": "Enigmatic Wonder #12",
       "durationMinutes": 20,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -944,15 +944,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-49-49",
+    "id": "wild-restless-wonder-13-707",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #49",
+    "name": "Restless Wonder #13",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #49",
+      "targetName": "Restless Wonder #13",
       "durationMinutes": 22,
       "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
     },
@@ -963,15 +963,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-50-50",
+    "id": "wild-subtle-wonder-14-708",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #50",
+    "name": "Subtle Wonder #14",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #50",
+      "targetName": "Subtle Wonder #14",
       "durationMinutes": 21,
       "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
     },
@@ -982,15 +982,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-51-51",
+    "id": "wild-vivid-wonder-15-709",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #51",
+    "name": "Vivid Wonder #15",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #51",
+      "targetName": "Vivid Wonder #15",
       "durationMinutes": 30,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1001,15 +1001,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-52-52",
+    "id": "wild-ancient-wonder-16-710",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #52",
+    "name": "Ancient Wonder #16",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #52",
+      "targetName": "Ancient Wonder #16",
       "durationMinutes": 29,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -1020,15 +1020,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-53-53",
+    "id": "wild-modern-wonder-17-711",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #53",
+    "name": "Modern Wonder #17",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #53",
+      "targetName": "Modern Wonder #17",
       "durationMinutes": 21,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -1039,15 +1039,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-54-54",
+    "id": "wild-lost-wonder-18-712",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #54",
+    "name": "Lost Wonder #18",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #54",
+      "targetName": "Lost Wonder #18",
       "durationMinutes": 9,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -1058,15 +1058,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-55-55",
+    "id": "wild-wandering-wonder-19-713",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #55",
+    "name": "Wandering Wonder #19",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #55",
+      "targetName": "Wandering Wonder #19",
       "durationMinutes": 3,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1077,15 +1077,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-56-56",
+    "id": "wild-timeless-wonder-20-714",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #56",
+    "name": "Timeless Wonder #20",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #56",
+      "targetName": "Timeless Wonder #20",
       "durationMinutes": 14,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -1096,15 +1096,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-57-57",
+    "id": "wild-hidden-mystery-21-715",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #57",
+    "name": "Hidden Mystery #21",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #57",
+      "targetName": "Hidden Mystery #21",
       "durationMinutes": 26,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1115,15 +1115,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-58-58",
+    "id": "wild-forgotten-mystery-22-716",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #58",
+    "name": "Forgotten Mystery #22",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #58",
+      "targetName": "Forgotten Mystery #22",
       "durationMinutes": 4,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -1134,15 +1134,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-59-59",
+    "id": "wild-unsung-mystery-23-717",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #59",
+    "name": "Unsung Mystery #23",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #59",
+      "targetName": "Unsung Mystery #23",
       "durationMinutes": 26,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -1153,15 +1153,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-60-60",
+    "id": "wild-radiant-mystery-24-718",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #60",
+    "name": "Radiant Mystery #24",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #60",
+      "targetName": "Radiant Mystery #24",
       "durationMinutes": 3,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1172,15 +1172,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-61-61",
+    "id": "wild-quiet-mystery-25-719",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #61",
+    "name": "Quiet Mystery #25",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #61",
+      "targetName": "Quiet Mystery #25",
       "durationMinutes": 17,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1191,15 +1191,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-62-62",
+    "id": "wild-luminous-mystery-26-720",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #62",
+    "name": "Luminous Mystery #26",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #62",
+      "targetName": "Luminous Mystery #26",
       "durationMinutes": 10,
       "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
     },
@@ -1210,15 +1210,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-63-63",
+    "id": "wild-distant-mystery-27-721",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #63",
+    "name": "Distant Mystery #27",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #63",
+      "targetName": "Distant Mystery #27",
       "durationMinutes": 30,
       "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
     },
@@ -1229,15 +1229,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-64-64",
+    "id": "wild-unexpected-mystery-28-722",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #64",
+    "name": "Unexpected Mystery #28",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #64",
+      "targetName": "Unexpected Mystery #28",
       "durationMinutes": 19,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -1248,15 +1248,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-65-65",
+    "id": "wild-eternal-mystery-29-723",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #65",
+    "name": "Eternal Mystery #29",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #65",
+      "targetName": "Eternal Mystery #29",
       "durationMinutes": 27,
       "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
     },
@@ -1267,15 +1267,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-66-66",
+    "id": "wild-restless-mystery-30-724",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #66",
+    "name": "Restless Mystery #30",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #66",
+      "targetName": "Restless Mystery #30",
       "durationMinutes": 19,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1286,15 +1286,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-67-67",
+    "id": "wild-brilliant-mystery-31-725",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #67",
+    "name": "Brilliant Mystery #31",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #67",
+      "targetName": "Brilliant Mystery #31",
       "durationMinutes": 15,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1305,15 +1305,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-68-68",
+    "id": "wild-enigmatic-mystery-32-726",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #68",
+    "name": "Enigmatic Mystery #32",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #68",
+      "targetName": "Enigmatic Mystery #32",
       "durationMinutes": 28,
       "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
     },
@@ -1324,15 +1324,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-69-69",
+    "id": "wild-restless-mystery-33-727",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #69",
+    "name": "Restless Mystery #33",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #69",
+      "targetName": "Restless Mystery #33",
       "durationMinutes": 8,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -1343,15 +1343,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-70-70",
+    "id": "wild-subtle-mystery-34-728",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #70",
+    "name": "Subtle Mystery #34",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #70",
+      "targetName": "Subtle Mystery #34",
       "durationMinutes": 25,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -1362,15 +1362,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-71-71",
+    "id": "wild-vivid-mystery-35-729",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #71",
+    "name": "Vivid Mystery #35",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #71",
+      "targetName": "Vivid Mystery #35",
       "durationMinutes": 21,
       "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
     },
@@ -1381,15 +1381,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-72-72",
+    "id": "wild-ancient-mystery-36-730",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #72",
+    "name": "Ancient Mystery #36",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #72",
+      "targetName": "Ancient Mystery #36",
       "durationMinutes": 7,
       "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
     },
@@ -1400,15 +1400,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-73-73",
+    "id": "wild-modern-mystery-37-731",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #73",
+    "name": "Modern Mystery #37",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #73",
+      "targetName": "Modern Mystery #37",
       "durationMinutes": 4,
       "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
     },
@@ -1419,15 +1419,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-74-74",
+    "id": "wild-lost-mystery-38-732",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #74",
+    "name": "Lost Mystery #38",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #74",
+      "targetName": "Lost Mystery #38",
       "durationMinutes": 5,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -1438,15 +1438,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-75-75",
+    "id": "wild-wandering-mystery-39-733",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #75",
+    "name": "Wandering Mystery #39",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #75",
+      "targetName": "Wandering Mystery #39",
       "durationMinutes": 25,
       "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
     },
@@ -1457,15 +1457,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-76-76",
+    "id": "wild-timeless-mystery-40-734",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #76",
+    "name": "Timeless Mystery #40",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #76",
+      "targetName": "Timeless Mystery #40",
       "durationMinutes": 21,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -1476,15 +1476,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-77-77",
+    "id": "wild-hidden-anomaly-41-735",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #77",
+    "name": "Hidden Anomaly #41",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #77",
+      "targetName": "Hidden Anomaly #41",
       "durationMinutes": 16,
       "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
     },
@@ -1495,15 +1495,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-78-78",
+    "id": "wild-forgotten-anomaly-42-736",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #78",
+    "name": "Forgotten Anomaly #42",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #78",
+      "targetName": "Forgotten Anomaly #42",
       "durationMinutes": 4,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1514,15 +1514,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-79-79",
+    "id": "wild-unsung-anomaly-43-737",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #79",
+    "name": "Unsung Anomaly #43",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #79",
+      "targetName": "Unsung Anomaly #43",
       "durationMinutes": 29,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -1533,15 +1533,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-80-80",
+    "id": "wild-radiant-anomaly-44-738",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #80",
+    "name": "Radiant Anomaly #44",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #80",
+      "targetName": "Radiant Anomaly #44",
       "durationMinutes": 27,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1552,15 +1552,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-81-81",
+    "id": "wild-quiet-anomaly-45-739",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #81",
+    "name": "Quiet Anomaly #45",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #81",
+      "targetName": "Quiet Anomaly #45",
       "durationMinutes": 23,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -1571,15 +1571,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-82-82",
+    "id": "wild-luminous-anomaly-46-740",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #82",
+    "name": "Luminous Anomaly #46",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #82",
+      "targetName": "Luminous Anomaly #46",
       "durationMinutes": 7,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -1590,15 +1590,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-83-83",
+    "id": "wild-distant-anomaly-47-741",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #83",
+    "name": "Distant Anomaly #47",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #83",
+      "targetName": "Distant Anomaly #47",
       "durationMinutes": 13,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1609,15 +1609,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-84-84",
+    "id": "wild-unexpected-anomaly-48-742",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #84",
+    "name": "Unexpected Anomaly #48",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #84",
+      "targetName": "Unexpected Anomaly #48",
       "durationMinutes": 20,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -1628,15 +1628,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-85-85",
+    "id": "wild-eternal-anomaly-49-743",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #85",
+    "name": "Eternal Anomaly #49",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #85",
+      "targetName": "Eternal Anomaly #49",
       "durationMinutes": 27,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1647,15 +1647,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-86-86",
+    "id": "wild-restless-anomaly-50-744",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #86",
+    "name": "Restless Anomaly #50",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #86",
+      "targetName": "Restless Anomaly #50",
       "durationMinutes": 8,
       "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
     },
@@ -1666,15 +1666,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-87-87",
+    "id": "wild-brilliant-anomaly-51-745",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #87",
+    "name": "Brilliant Anomaly #51",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #87",
+      "targetName": "Brilliant Anomaly #51",
       "durationMinutes": 21,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1685,15 +1685,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-88-88",
+    "id": "wild-enigmatic-anomaly-52-746",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #88",
+    "name": "Enigmatic Anomaly #52",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #88",
+      "targetName": "Enigmatic Anomaly #52",
       "durationMinutes": 9,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1704,15 +1704,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-89-89",
+    "id": "wild-restless-anomaly-53-747",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #89",
+    "name": "Restless Anomaly #53",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #89",
+      "targetName": "Restless Anomaly #53",
       "durationMinutes": 17,
       "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
     },
@@ -1723,15 +1723,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-90-90",
+    "id": "wild-subtle-anomaly-54-748",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #90",
+    "name": "Subtle Anomaly #54",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #90",
+      "targetName": "Subtle Anomaly #54",
       "durationMinutes": 25,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -1742,15 +1742,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-91-91",
+    "id": "wild-vivid-anomaly-55-749",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #91",
+    "name": "Vivid Anomaly #55",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #91",
+      "targetName": "Vivid Anomaly #55",
       "durationMinutes": 7,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -1761,15 +1761,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-92-92",
+    "id": "wild-ancient-anomaly-56-750",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #92",
+    "name": "Ancient Anomaly #56",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #92",
+      "targetName": "Ancient Anomaly #56",
       "durationMinutes": 8,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1780,15 +1780,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-93-93",
+    "id": "wild-modern-anomaly-57-751",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #93",
+    "name": "Modern Anomaly #57",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #93",
+      "targetName": "Modern Anomaly #57",
       "durationMinutes": 17,
       "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
     },
@@ -1799,15 +1799,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-94-94",
+    "id": "wild-lost-anomaly-58-752",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #94",
+    "name": "Lost Anomaly #58",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #94",
+      "targetName": "Lost Anomaly #58",
       "durationMinutes": 12,
       "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
     },
@@ -1818,15 +1818,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-95-95",
+    "id": "wild-wandering-anomaly-59-753",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #95",
+    "name": "Wandering Anomaly #59",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #95",
+      "targetName": "Wandering Anomaly #59",
       "durationMinutes": 21,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -1837,15 +1837,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-96-96",
+    "id": "wild-timeless-anomaly-60-754",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #96",
+    "name": "Timeless Anomaly #60",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #96",
+      "targetName": "Timeless Anomaly #60",
       "durationMinutes": 28,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1856,15 +1856,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-97-97",
+    "id": "wild-hidden-enigma-61-755",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #97",
+    "name": "Hidden Enigma #61",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #97",
+      "targetName": "Hidden Enigma #61",
       "durationMinutes": 13,
       "instruction": "Look at the original lab notebook. You'll notice something the textbook version usually omits."
     },
@@ -1875,15 +1875,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-98-98",
+    "id": "wild-forgotten-enigma-62-756",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #98",
+    "name": "Forgotten Enigma #62",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #98",
+      "targetName": "Forgotten Enigma #62",
       "durationMinutes": 9,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -1894,15 +1894,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-99-99",
+    "id": "wild-unsung-enigma-63-757",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #99",
+    "name": "Unsung Enigma #63",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #99",
+      "targetName": "Unsung Enigma #63",
       "durationMinutes": 28,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -1913,15 +1913,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-100-100",
+    "id": "wild-radiant-enigma-64-758",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #100",
+    "name": "Radiant Enigma #64",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #100",
+      "targetName": "Radiant Enigma #64",
       "durationMinutes": 23,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1932,15 +1932,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-101-101",
+    "id": "wild-quiet-enigma-65-759",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #101",
+    "name": "Quiet Enigma #65",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #101",
+      "targetName": "Quiet Enigma #65",
       "durationMinutes": 20,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -1951,15 +1951,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-102-102",
+    "id": "wild-luminous-enigma-66-760",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #102",
+    "name": "Luminous Enigma #66",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #102",
+      "targetName": "Luminous Enigma #66",
       "durationMinutes": 13,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -1970,15 +1970,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-103-103",
+    "id": "wild-distant-enigma-67-761",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #103",
+    "name": "Distant Enigma #67",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #103",
+      "targetName": "Distant Enigma #67",
       "durationMinutes": 24,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1989,15 +1989,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-104-104",
+    "id": "wild-unexpected-enigma-68-762",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #104",
+    "name": "Unexpected Enigma #68",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #104",
+      "targetName": "Unexpected Enigma #68",
       "durationMinutes": 22,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -2008,15 +2008,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-105-105",
+    "id": "wild-eternal-enigma-69-763",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #105",
+    "name": "Eternal Enigma #69",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #105",
+      "targetName": "Eternal Enigma #69",
       "durationMinutes": 6,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -2027,15 +2027,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-106-106",
+    "id": "wild-restless-enigma-70-764",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #106",
+    "name": "Restless Enigma #70",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #106",
+      "targetName": "Restless Enigma #70",
       "durationMinutes": 18,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -2046,15 +2046,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-107-107",
+    "id": "wild-brilliant-enigma-71-765",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #107",
+    "name": "Brilliant Enigma #71",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #107",
+      "targetName": "Brilliant Enigma #71",
       "durationMinutes": 28,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -2065,15 +2065,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-108-108",
+    "id": "wild-enigmatic-enigma-72-766",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #108",
+    "name": "Enigmatic Enigma #72",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #108",
+      "targetName": "Enigmatic Enigma #72",
       "durationMinutes": 15,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -2084,15 +2084,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-109-109",
+    "id": "wild-restless-enigma-73-767",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #109",
+    "name": "Restless Enigma #73",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #109",
+      "targetName": "Restless Enigma #73",
       "durationMinutes": 21,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2103,15 +2103,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-110-110",
+    "id": "wild-subtle-enigma-74-768",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #110",
+    "name": "Subtle Enigma #74",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #110",
+      "targetName": "Subtle Enigma #74",
       "durationMinutes": 21,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -2122,15 +2122,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-111-111",
+    "id": "wild-vivid-enigma-75-769",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #111",
+    "name": "Vivid Enigma #75",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #111",
+      "targetName": "Vivid Enigma #75",
       "durationMinutes": 3,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2141,15 +2141,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-112-112",
+    "id": "wild-ancient-enigma-76-770",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #112",
+    "name": "Ancient Enigma #76",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #112",
+      "targetName": "Ancient Enigma #76",
       "durationMinutes": 3,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -2160,15 +2160,15 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-113-113",
+    "id": "wild-modern-enigma-77-771",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #113",
+    "name": "Modern Enigma #77",
     "teaser": "This curious phenomenon has puzzled observers for generations. Every explanation proposed so far has fallen apart under closer scrutiny.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #113",
+      "targetName": "Modern Enigma #77",
       "durationMinutes": 14,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -2179,21 +2179,2263 @@
     "tier": 2
   },
   {
-    "id": "wild-wildcard-topic-114-114",
+    "id": "wild-lost-enigma-78-772",
     "categoryId": "WILDCARD",
     "subtype": "Curiosity",
-    "name": "Wildcard Topic #114",
+    "name": "Lost Enigma #78",
     "teaser": "What makes this so fascinating is that it shouldn't exist according to the rules we thought governed everything — and yet, there it is.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "Wildcard Topic #114",
+      "targetName": "Lost Enigma #78",
       "durationMinutes": 21,
       "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
     },
     "tags": [
       "Tradition",
       "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-konmari-method-115",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The KonMari Method",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The KonMari Method",
+      "durationMinutes": 29,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-bullet-journal-116",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Bullet Journal",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Bullet Journal",
+      "durationMinutes": 13,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-slow-movement-117",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Slow Movement",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Slow Movement",
+      "durationMinutes": 21,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-tiny-house-movement-118",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Tiny House Movement",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Tiny House Movement",
+      "durationMinutes": 28,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-voynich-manuscript-119",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Voynich Manuscript",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Voynich Manuscript",
+      "durationMinutes": 6,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-nazca-lines-120",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Nazca Lines",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Nazca Lines",
+      "durationMinutes": 30,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-terracotta-army-121",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Terracotta Army",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Terracotta Army",
+      "durationMinutes": 3,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-angkor-wat-122",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Angkor Wat",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Angkor Wat",
+      "durationMinutes": 23,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-easter-island-moai-123",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Easter Island Moai",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Easter Island Moai",
+      "durationMinutes": 5,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-chichén-itzá-124",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Chichén Itzá",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Chichén Itzá",
+      "durationMinutes": 14,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-great-wall-of-125",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Great Wall of China",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Great Wall of China",
+      "durationMinutes": 23,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-forbidden-city-126",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Forbidden City",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Forbidden City",
+      "durationMinutes": 23,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-sagrada-família-127",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Sagrada Família",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Sagrada Família",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-golden-gate-bridge-128",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Golden Gate Bridge",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Golden Gate Bridge",
+      "durationMinutes": 21,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-northern-lights-129",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Northern Lights",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Northern Lights",
+      "durationMinutes": 3,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-victoria-falls-130",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Victoria Falls",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Victoria Falls",
+      "durationMinutes": 30,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-great-barrier-reef-131",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Great Barrier Reef",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Great Barrier Reef",
+      "durationMinutes": 5,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-sahara-desert-132",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Sahara Desert",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Sahara Desert",
+      "durationMinutes": 26,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-yosemite-national-park-133",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Yosemite National Park",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Yosemite National Park",
+      "durationMinutes": 14,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-galápagos-islands-134",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Galápagos Islands",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Galápagos Islands",
+      "durationMinutes": 27,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-svalbard-global-seed-135",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Svalbard Global Seed Vault",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Svalbard Global Seed Vault",
+      "durationMinutes": 19,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-large-hadron-collider-136",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Large Hadron Collider",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Large Hadron Collider",
+      "durationMinutes": 23,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-james-webb-space-137",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The James Webb Space Telescope",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The James Webb Space Telescope",
+      "durationMinutes": 26,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-voyager-1-spacecraft-138",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Voyager 1 Spacecraft",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Voyager 1 Spacecraft",
+      "durationMinutes": 22,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-dead-sea-scrolls-139",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Dead Sea Scrolls",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Dead Sea Scrolls",
+      "durationMinutes": 6,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-bayeux-tapestry-140",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Bayeux Tapestry",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Bayeux Tapestry",
+      "durationMinutes": 26,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-magna-carta-141",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Magna Carta",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Magna Carta",
+      "durationMinutes": 13,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-constitution-142",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Constitution",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Constitution",
+      "durationMinutes": 23,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-turing-test-143",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Turing Test",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Turing Test",
+      "durationMinutes": 22,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-butterfly-effect-144",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Butterfly Effect",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Butterfly Effect",
+      "durationMinutes": 27,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-placebo-effect-145",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Placebo Effect",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Placebo Effect",
+      "durationMinutes": 19,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-lucid-dreaming-146",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Lucid Dreaming",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Lucid Dreaming",
+      "durationMinutes": 26,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-uncanny-valley-147",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Uncanny Valley",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Uncanny Valley",
+      "durationMinutes": 28,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-fibonacci-sequence-148",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Fibonacci Sequence",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Fibonacci Sequence",
+      "durationMinutes": 6,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-library-of-alexandria-149",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Library of Alexandria",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Library of Alexandria",
+      "durationMinutes": 5,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-atlantis-150",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Atlantis",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Atlantis",
+      "durationMinutes": 13,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-bermuda-triangle-151",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Bermuda Triangle",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Bermuda Triangle",
+      "durationMinutes": 16,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-tunguska-event-152",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Tunguska Event",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Tunguska Event",
+      "durationMinutes": 27,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-taos-hum-153",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Taos Hum",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Taos Hum",
+      "durationMinutes": 21,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-lost-colony-of-154",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Lost Colony of Roanoke",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Lost Colony of Roanoke",
+      "durationMinutes": 9,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-oak-island-money-155",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Oak Island Money Pit",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Oak Island Money Pit",
+      "durationMinutes": 19,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-zodiac-killer-156",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Zodiac Killer",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Zodiac Killer",
+      "durationMinutes": 16,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-somerton-man-157",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Somerton Man",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Somerton Man",
+      "durationMinutes": 20,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-lead-masks-case-158",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Lead Masks Case",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Lead Masks Case",
+      "durationMinutes": 5,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-polyglots-159",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Polyglots",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Polyglots",
+      "durationMinutes": 9,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-prodigies-160",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Prodigies",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Prodigies",
+      "durationMinutes": 15,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-paris-catacombs-161",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Paris Catacombs",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Paris Catacombs",
+      "durationMinutes": 25,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-island-of-the-162",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Island of the Dolls",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Island of the Dolls",
+      "durationMinutes": 10,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-winchester-mystery-house-163",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Winchester Mystery House",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Winchester Mystery House",
+      "durationMinutes": 17,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-centralia-pennsylvania-164",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Centralia Pennsylvania",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Centralia Pennsylvania",
+      "durationMinutes": 12,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-hashima-island-165",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Hashima Island",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Hashima Island",
+      "durationMinutes": 25,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-svalbard-166",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Svalbard",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Svalbard",
+      "durationMinutes": 18,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-door-to-hell-167",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Door to Hell Turkmenistan",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Door to Hell Turkmenistan",
+      "durationMinutes": 28,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-lake-natron-tanzania-168",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Lake Natron Tanzania",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Lake Natron Tanzania",
+      "durationMinutes": 7,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-waitomo-glowworm-caves-169",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Waitomo Glowworm Caves",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Waitomo Glowworm Caves",
+      "durationMinutes": 13,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-pamukkale-turkey-170",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Pamukkale Turkey",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Pamukkale Turkey",
+      "durationMinutes": 5,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-wave-arizona-171",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Wave Arizona",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Wave Arizona",
+      "durationMinutes": 18,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-bryce-canyon-172",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Bryce Canyon",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Bryce Canyon",
+      "durationMinutes": 4,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-tea-ceremony-173",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Tea Ceremony",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Tea Ceremony",
+      "durationMinutes": 14,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-kintsugi-174",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Kintsugi",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Kintsugi",
+      "durationMinutes": 21,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-hygge-175",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Hygge",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Hygge",
+      "durationMinutes": 3,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-friluftsliv-176",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Friluftsliv",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Friluftsliv",
+      "durationMinutes": 4,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-pomodoro-technique-177",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Pomodoro Technique",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Pomodoro Technique",
+      "durationMinutes": 7,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-getting-things-done-178",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Getting Things Done Method",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Getting Things Done Method",
+      "durationMinutes": 28,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-minimalism-movement-179",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Minimalism Movement",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Minimalism Movement",
+      "durationMinutes": 10,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-van-life-movement-180",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Van Life Movement",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Van Life Movement",
+      "durationMinutes": 29,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-antikythera-mechanism-181",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Antikythera Mechanism",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Antikythera Mechanism",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-machu-picchu-182",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Machu Picchu",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Machu Picchu",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-petra-183",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Petra",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Petra",
+      "durationMinutes": 5,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-great-pyramid-of-184",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Great Pyramid of Giza",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Great Pyramid of Giza",
+      "durationMinutes": 13,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-colosseum-185",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Colosseum",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Colosseum",
+      "durationMinutes": 3,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-taj-mahal-186",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Taj Mahal",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Taj Mahal",
+      "durationMinutes": 21,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-mont-saint-michel-187",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Mont Saint-Michel",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Mont Saint-Michel",
+      "durationMinutes": 17,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-sydney-opera-house-188",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Sydney Opera House",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Sydney Opera House",
+      "durationMinutes": 27,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-eiffel-tower-189",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Eiffel Tower",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Eiffel Tower",
+      "durationMinutes": 7,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-grand-canyon-190",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Grand Canyon",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Grand Canyon",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-mount-everest-191",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Mount Everest",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Mount Everest",
+      "durationMinutes": 13,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-amazon-rainforest-192",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Amazon Rainforest",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Amazon Rainforest",
+      "durationMinutes": 6,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-dead-sea-193",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Dead Sea",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Dead Sea",
+      "durationMinutes": 16,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-yellowstone-194",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Yellowstone",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Yellowstone",
+      "durationMinutes": 25,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-icelands-geothermal-springs-195",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Iceland's Geothermal Springs",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Iceland's Geothermal Springs",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-international-space-station-196",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The International Space Station",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The International Space Station",
+      "durationMinutes": 17,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-hubble-telescope-197",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Hubble Telescope",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Hubble Telescope",
+      "durationMinutes": 19,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-curiosity-mars-rover-198",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Curiosity Mars Rover",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Curiosity Mars Rover",
+      "durationMinutes": 21,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-apollo-11-moon-landing-199",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Apollo 11 Moon Landing",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Apollo 11 Moon Landing",
+      "durationMinutes": 24,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-rosetta-stone-200",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Rosetta Stone",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Rosetta Stone",
+      "durationMinutes": 11,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-gutenberg-bible-201",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Gutenberg Bible",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Gutenberg Bible",
+      "durationMinutes": 13,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-declaration-of-independence-202",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Declaration of Independence",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Declaration of Independence",
+      "durationMinutes": 5,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-universal-declaration-of-203",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Universal Declaration of Human Rights",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Universal Declaration of Human Rights",
+      "durationMinutes": 6,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-schrödingers-cat-204",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Schrödinger's Cat",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Schrödinger's Cat",
+      "durationMinutes": 17,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-mandela-effect-205",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Mandela Effect",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Mandela Effect",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-synesthesia-206",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Synesthesia",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Synesthesia",
+      "durationMinutes": 17,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-overview-effect-207",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Overview Effect",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Overview Effect",
+      "durationMinutes": 30,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-golden-ratio-208",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Golden Ratio",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Golden Ratio",
+      "durationMinutes": 28,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-pi-day-209",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Pi Day",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Pi Day",
+      "durationMinutes": 9,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-hanging-gardens-of-210",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Hanging Gardens of Babylon",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Hanging Gardens of Babylon",
+      "durationMinutes": 25,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-el-dorado-211",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "El Dorado",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "El Dorado",
+      "durationMinutes": 19,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-crop-circles-212",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Crop Circles",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Crop Circles",
+      "durationMinutes": 29,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-wow-signal-213",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Wow Signal",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Wow Signal",
+      "durationMinutes": 30,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-dancing-plague-of-214",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Dancing Plague of 1518",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Dancing Plague of 1518",
+      "durationMinutes": 10,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-mary-celeste-215",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Mary Celeste",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Mary Celeste",
+      "durationMinutes": 28,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-dyatlov-pass-incident-216",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Dyatlov Pass Incident",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Dyatlov Pass Incident",
+      "durationMinutes": 4,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-db-cooper-217",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "D.B. Cooper",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "D.B. Cooper",
+      "durationMinutes": 29,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-tamam-shud-case-218",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Tamam Shud Case",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Tamam Shud Case",
+      "durationMinutes": 21,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Tradition",
+      "Cultural"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-isdal-woman-219",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Isdal Woman",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Isdal Woman",
+      "durationMinutes": 3,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-savants-220",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Savants",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Savants",
+      "durationMinutes": 28,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-synesthetes-221",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Synesthetes",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Synesthetes",
+      "durationMinutes": 6,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-sedlec-ossuary-222",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Sedlec Ossuary",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Sedlec Ossuary",
+      "durationMinutes": 8,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-aokigahara-forest-223",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Aokigahara Forest",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Aokigahara Forest",
+      "durationMinutes": 18,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-pripyat-chernobyl-224",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Pripyat Chernobyl",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Pripyat Chernobyl",
+      "durationMinutes": 8,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-socotra-island-225",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Socotra Island",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Socotra Island",
+      "durationMinutes": 11,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-tristan-da-cunha-226",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Tristan da Cunha",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Tristan da Cunha",
+      "durationMinutes": 4,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Curiosity",
+      "Modern"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-eye-of-the-227",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Eye of the Sahara",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Eye of the Sahara",
+      "durationMinutes": 10,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-the-great-blue-hole-228",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "The Great Blue Hole Belize",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Great Blue Hole Belize",
+      "durationMinutes": 20,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Mystery",
+      "Global"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-salar-de-uyuni-229",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Salar de Uyuni",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Salar de Uyuni",
+      "durationMinutes": 11,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-zhangjiajie-national-forest-230",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Zhangjiajie National Forest",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Zhangjiajie National Forest",
+      "durationMinutes": 9,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Phenomenon",
+      "Earth"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-antelope-canyon-231",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Antelope Canyon",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Antelope Canyon",
+      "durationMinutes": 28,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "wild-monument-valley-232",
+    "categoryId": "WILDCARD",
+    "subtype": "Curiosity",
+    "name": "Monument Valley",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Monument Valley",
+      "durationMinutes": 18,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Oddity",
+      "Historical"
     ],
     "tier": 2
   }

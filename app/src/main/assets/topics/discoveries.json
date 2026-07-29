@@ -701,15 +701,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-36-36",
+    "id": "disc-the-cosmic-microwave-background-163",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #36",
+    "name": "The Cosmic Microwave Background (1965)",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #36",
+      "targetName": "The Cosmic Microwave Background (1965)",
       "durationMinutes": 14,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -720,15 +720,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-37-37",
+    "id": "disc-exoplanets-1995-164",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #37",
+    "name": "Exoplanets (1995)",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #37",
+      "targetName": "Exoplanets (1995)",
       "durationMinutes": 5,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -739,15 +739,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-38-38",
+    "id": "disc-hidden-finding-1-356",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #38",
+    "name": "Hidden Finding #1",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #38",
+      "targetName": "Hidden Finding #1",
       "durationMinutes": 6,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -758,15 +758,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-39-39",
+    "id": "disc-forgotten-finding-2-357",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #39",
+    "name": "Forgotten Finding #2",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #39",
+      "targetName": "Forgotten Finding #2",
       "durationMinutes": 13,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -777,15 +777,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-40-40",
+    "id": "disc-unsung-finding-3-358",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #40",
+    "name": "Unsung Finding #3",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #40",
+      "targetName": "Unsung Finding #3",
       "durationMinutes": 5,
       "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
     },
@@ -796,15 +796,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-41-41",
+    "id": "disc-radiant-finding-4-359",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #41",
+    "name": "Radiant Finding #4",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #41",
+      "targetName": "Radiant Finding #4",
       "durationMinutes": 6,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -815,15 +815,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-42-42",
+    "id": "disc-quiet-finding-5-360",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #42",
+    "name": "Quiet Finding #5",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #42",
+      "targetName": "Quiet Finding #5",
       "durationMinutes": 9,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -834,15 +834,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-43-43",
+    "id": "disc-luminous-finding-6-361",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #43",
+    "name": "Luminous Finding #6",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #43",
+      "targetName": "Luminous Finding #6",
       "durationMinutes": 5,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -853,15 +853,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-44-44",
+    "id": "disc-distant-finding-7-362",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #44",
+    "name": "Distant Finding #7",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #44",
+      "targetName": "Distant Finding #7",
       "durationMinutes": 10,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -872,15 +872,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-45-45",
+    "id": "disc-unexpected-finding-8-363",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #45",
+    "name": "Unexpected Finding #8",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #45",
+      "targetName": "Unexpected Finding #8",
       "durationMinutes": 14,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -891,15 +891,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-46-46",
+    "id": "disc-eternal-finding-9-364",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #46",
+    "name": "Eternal Finding #9",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #46",
+      "targetName": "Eternal Finding #9",
       "durationMinutes": 14,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -910,15 +910,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-47-47",
+    "id": "disc-restless-finding-10-365",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #47",
+    "name": "Restless Finding #10",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #47",
+      "targetName": "Restless Finding #10",
       "durationMinutes": 8,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -929,15 +929,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-48-48",
+    "id": "disc-brilliant-finding-11-366",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #48",
+    "name": "Brilliant Finding #11",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #48",
+      "targetName": "Brilliant Finding #11",
       "durationMinutes": 14,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -948,15 +948,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-49-49",
+    "id": "disc-enigmatic-finding-12-367",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #49",
+    "name": "Enigmatic Finding #12",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #49",
+      "targetName": "Enigmatic Finding #12",
       "durationMinutes": 10,
       "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
     },
@@ -967,15 +967,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-50-50",
+    "id": "disc-restless-finding-13-368",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #50",
+    "name": "Restless Finding #13",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #50",
+      "targetName": "Restless Finding #13",
       "durationMinutes": 11,
       "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
     },
@@ -986,15 +986,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-51-51",
+    "id": "disc-subtle-finding-14-369",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #51",
+    "name": "Subtle Finding #14",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #51",
+      "targetName": "Subtle Finding #14",
       "durationMinutes": 14,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -1005,15 +1005,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-52-52",
+    "id": "disc-vivid-finding-15-370",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #52",
+    "name": "Vivid Finding #15",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #52",
+      "targetName": "Vivid Finding #15",
       "durationMinutes": 11,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1024,15 +1024,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-53-53",
+    "id": "disc-ancient-finding-16-371",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #53",
+    "name": "Ancient Finding #16",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #53",
+      "targetName": "Ancient Finding #16",
       "durationMinutes": 6,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -1043,15 +1043,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-54-54",
+    "id": "disc-modern-finding-17-372",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #54",
+    "name": "Modern Finding #17",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #54",
+      "targetName": "Modern Finding #17",
       "durationMinutes": 13,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1062,15 +1062,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-55-55",
+    "id": "disc-lost-finding-18-373",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #55",
+    "name": "Lost Finding #18",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #55",
+      "targetName": "Lost Finding #18",
       "durationMinutes": 14,
       "instruction": "Ask yourself: why did this take centuries to figure out? The answer reveals how science actually works."
     },
@@ -1081,15 +1081,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-56-56",
+    "id": "disc-wandering-finding-19-374",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #56",
+    "name": "Wandering Finding #19",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #56",
+      "targetName": "Wandering Finding #19",
       "durationMinutes": 10,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1100,15 +1100,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-57-57",
+    "id": "disc-timeless-finding-20-375",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #57",
+    "name": "Timeless Finding #20",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #57",
+      "targetName": "Timeless Finding #20",
       "durationMinutes": 12,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -1119,15 +1119,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-58-58",
+    "id": "disc-hidden-breakthrough-21-376",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #58",
+    "name": "Hidden Breakthrough #21",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #58",
+      "targetName": "Hidden Breakthrough #21",
       "durationMinutes": 9,
       "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
     },
@@ -1138,15 +1138,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-59-59",
+    "id": "disc-forgotten-breakthrough-22-377",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #59",
+    "name": "Forgotten Breakthrough #22",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #59",
+      "targetName": "Forgotten Breakthrough #22",
       "durationMinutes": 9,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -1157,15 +1157,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-60-60",
+    "id": "disc-unsung-breakthrough-23-378",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #60",
+    "name": "Unsung Breakthrough #23",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #60",
+      "targetName": "Unsung Breakthrough #23",
       "durationMinutes": 6,
       "instruction": "Trace how this connects to contemporary rivals. Science is rarely a solo act — this was part of a web."
     },
@@ -1176,15 +1176,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-61-61",
+    "id": "disc-radiant-breakthrough-24-379",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #61",
+    "name": "Radiant Breakthrough #24",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #61",
+      "targetName": "Radiant Breakthrough #24",
       "durationMinutes": 9,
       "instruction": "Trace how this connects to earlier discoveries. Science is rarely a solo act — this was part of a web."
     },
@@ -1195,15 +1195,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-62-62",
+    "id": "disc-quiet-breakthrough-25-380",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #62",
+    "name": "Quiet Breakthrough #25",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #62",
+      "targetName": "Quiet Breakthrough #25",
       "durationMinutes": 14,
       "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
     },
@@ -1214,15 +1214,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-63-63",
+    "id": "disc-luminous-breakthrough-26-381",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #63",
+    "name": "Luminous Breakthrough #26",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #63",
+      "targetName": "Luminous Breakthrough #26",
       "durationMinutes": 11,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -1233,15 +1233,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-64-64",
+    "id": "disc-distant-breakthrough-27-382",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #64",
+    "name": "Distant Breakthrough #27",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #64",
+      "targetName": "Distant Breakthrough #27",
       "durationMinutes": 14,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1252,15 +1252,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-65-65",
+    "id": "disc-unexpected-breakthrough-28-383",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #65",
+    "name": "Unexpected Breakthrough #28",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #65",
+      "targetName": "Unexpected Breakthrough #28",
       "durationMinutes": 7,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -1271,15 +1271,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-66-66",
+    "id": "disc-eternal-breakthrough-29-384",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #66",
+    "name": "Eternal Breakthrough #29",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #66",
+      "targetName": "Eternal Breakthrough #29",
       "durationMinutes": 11,
       "instruction": "Look at the original diagram. You'll notice something the textbook version usually omits."
     },
@@ -1290,15 +1290,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-67-67",
+    "id": "disc-restless-breakthrough-30-385",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #67",
+    "name": "Restless Breakthrough #30",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #67",
+      "targetName": "Restless Breakthrough #30",
       "durationMinutes": 12,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -1309,15 +1309,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-68-68",
+    "id": "disc-brilliant-breakthrough-31-386",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #68",
+    "name": "Brilliant Breakthrough #31",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #68",
+      "targetName": "Brilliant Breakthrough #31",
       "durationMinutes": 5,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -1328,15 +1328,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-69-69",
+    "id": "disc-enigmatic-breakthrough-32-387",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #69",
+    "name": "Enigmatic Breakthrough #32",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #69",
+      "targetName": "Enigmatic Breakthrough #32",
       "durationMinutes": 14,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1347,15 +1347,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-70-70",
+    "id": "disc-restless-breakthrough-33-388",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #70",
+    "name": "Restless Breakthrough #33",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #70",
+      "targetName": "Restless Breakthrough #33",
       "durationMinutes": 12,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -1366,15 +1366,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-71-71",
+    "id": "disc-subtle-breakthrough-34-389",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #71",
+    "name": "Subtle Breakthrough #34",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #71",
+      "targetName": "Subtle Breakthrough #34",
       "durationMinutes": 9,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -1385,15 +1385,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-72-72",
+    "id": "disc-vivid-breakthrough-35-390",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #72",
+    "name": "Vivid Breakthrough #35",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #72",
+      "targetName": "Vivid Breakthrough #35",
       "durationMinutes": 12,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -1404,15 +1404,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-73-73",
+    "id": "disc-ancient-breakthrough-36-391",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #73",
+    "name": "Ancient Breakthrough #36",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #73",
+      "targetName": "Ancient Breakthrough #36",
       "durationMinutes": 6,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -1423,15 +1423,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-74-74",
+    "id": "disc-modern-breakthrough-37-392",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #74",
+    "name": "Modern Breakthrough #37",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #74",
+      "targetName": "Modern Breakthrough #37",
       "durationMinutes": 12,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1442,15 +1442,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-75-75",
+    "id": "disc-lost-breakthrough-38-393",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #75",
+    "name": "Lost Breakthrough #38",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #75",
+      "targetName": "Lost Breakthrough #38",
       "durationMinutes": 14,
       "instruction": "Look at the original diagram. You'll notice something the textbook version usually omits."
     },
@@ -1461,15 +1461,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-76-76",
+    "id": "disc-wandering-breakthrough-39-394",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #76",
+    "name": "Wandering Breakthrough #39",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #76",
+      "targetName": "Wandering Breakthrough #39",
       "durationMinutes": 15,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -1480,15 +1480,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-77-77",
+    "id": "disc-timeless-breakthrough-40-395",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #77",
+    "name": "Timeless Breakthrough #40",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #77",
+      "targetName": "Timeless Breakthrough #40",
       "durationMinutes": 9,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -1499,15 +1499,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-78-78",
+    "id": "disc-hidden-revelation-41-396",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #78",
+    "name": "Hidden Revelation #41",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #78",
+      "targetName": "Hidden Revelation #41",
       "durationMinutes": 12,
       "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
     },
@@ -1518,15 +1518,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-79-79",
+    "id": "disc-forgotten-revelation-42-397",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #79",
+    "name": "Forgotten Revelation #42",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #79",
+      "targetName": "Forgotten Revelation #42",
       "durationMinutes": 6,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1537,15 +1537,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-80-80",
+    "id": "disc-unsung-revelation-43-398",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #80",
+    "name": "Unsung Revelation #43",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #80",
+      "targetName": "Unsung Revelation #43",
       "durationMinutes": 15,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1556,15 +1556,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-81-81",
+    "id": "disc-radiant-revelation-44-399",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #81",
+    "name": "Radiant Revelation #44",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #81",
+      "targetName": "Radiant Revelation #44",
       "durationMinutes": 13,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -1575,15 +1575,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-82-82",
+    "id": "disc-quiet-revelation-45-400",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #82",
+    "name": "Quiet Revelation #45",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #82",
+      "targetName": "Quiet Revelation #45",
       "durationMinutes": 9,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1594,15 +1594,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-83-83",
+    "id": "disc-luminous-revelation-46-401",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #83",
+    "name": "Luminous Revelation #46",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #83",
+      "targetName": "Luminous Revelation #46",
       "durationMinutes": 12,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1613,15 +1613,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-84-84",
+    "id": "disc-distant-revelation-47-402",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #84",
+    "name": "Distant Revelation #47",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #84",
+      "targetName": "Distant Revelation #47",
       "durationMinutes": 8,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1632,15 +1632,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-85-85",
+    "id": "disc-unexpected-revelation-48-403",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #85",
+    "name": "Unexpected Revelation #48",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #85",
+      "targetName": "Unexpected Revelation #48",
       "durationMinutes": 8,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -1651,15 +1651,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-86-86",
+    "id": "disc-eternal-revelation-49-404",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #86",
+    "name": "Eternal Revelation #49",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #86",
+      "targetName": "Eternal Revelation #49",
       "durationMinutes": 6,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1670,15 +1670,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-87-87",
+    "id": "disc-restless-revelation-50-405",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #87",
+    "name": "Restless Revelation #50",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #87",
+      "targetName": "Restless Revelation #50",
       "durationMinutes": 5,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -1689,15 +1689,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-88-88",
+    "id": "disc-brilliant-revelation-51-406",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #88",
+    "name": "Brilliant Revelation #51",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #88",
+      "targetName": "Brilliant Revelation #51",
       "durationMinutes": 6,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -1708,15 +1708,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-89-89",
+    "id": "disc-enigmatic-revelation-52-407",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #89",
+    "name": "Enigmatic Revelation #52",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #89",
+      "targetName": "Enigmatic Revelation #52",
       "durationMinutes": 5,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1727,15 +1727,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-90-90",
+    "id": "disc-restless-revelation-53-408",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #90",
+    "name": "Restless Revelation #53",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #90",
+      "targetName": "Restless Revelation #53",
       "durationMinutes": 10,
       "instruction": "Look at the original correspondence. You'll notice something the textbook version usually omits."
     },
@@ -1746,15 +1746,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-91-91",
+    "id": "disc-subtle-revelation-54-409",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #91",
+    "name": "Subtle Revelation #54",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #91",
+      "targetName": "Subtle Revelation #54",
       "durationMinutes": 14,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1765,15 +1765,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-92-92",
+    "id": "disc-vivid-revelation-55-410",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #92",
+    "name": "Vivid Revelation #55",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #92",
+      "targetName": "Vivid Revelation #55",
       "durationMinutes": 10,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1784,15 +1784,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-93-93",
+    "id": "disc-ancient-revelation-56-411",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #93",
+    "name": "Ancient Revelation #56",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #93",
+      "targetName": "Ancient Revelation #56",
       "durationMinutes": 12,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -1803,15 +1803,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-94-94",
+    "id": "disc-modern-revelation-57-412",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #94",
+    "name": "Modern Revelation #57",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #94",
+      "targetName": "Modern Revelation #57",
       "durationMinutes": 10,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -1822,15 +1822,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-95-95",
+    "id": "disc-lost-revelation-58-413",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #95",
+    "name": "Lost Revelation #58",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #95",
+      "targetName": "Lost Revelation #58",
       "durationMinutes": 15,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -1841,15 +1841,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-96-96",
+    "id": "disc-wandering-revelation-59-414",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #96",
+    "name": "Wandering Revelation #59",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #96",
+      "targetName": "Wandering Revelation #59",
       "durationMinutes": 14,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1860,15 +1860,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-97-97",
+    "id": "disc-timeless-revelation-60-415",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #97",
+    "name": "Timeless Revelation #60",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #97",
+      "targetName": "Timeless Revelation #60",
       "durationMinutes": 12,
       "instruction": "Consider the timing — why that decade? What else was happening in the world that made this possible?"
     },
@@ -1879,15 +1879,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-98-98",
+    "id": "disc-hidden-insight-61-416",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #98",
+    "name": "Hidden Insight #61",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #98",
+      "targetName": "Hidden Insight #61",
       "durationMinutes": 10,
       "instruction": "Look at the original interview. You'll notice something the textbook version usually omits."
     },
@@ -1898,15 +1898,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-99-99",
+    "id": "disc-forgotten-insight-62-417",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #99",
+    "name": "Forgotten Insight #62",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #99",
+      "targetName": "Forgotten Insight #62",
       "durationMinutes": 5,
       "instruction": "Ask yourself: why did this take so long to figure out? The answer reveals how science actually works."
     },
@@ -1917,15 +1917,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-100-100",
+    "id": "disc-unsung-insight-63-418",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #100",
+    "name": "Unsung Insight #63",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #100",
+      "targetName": "Unsung Insight #63",
       "durationMinutes": 8,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -1936,15 +1936,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-101-101",
+    "id": "disc-radiant-insight-64-419",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #101",
+    "name": "Radiant Insight #64",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #101",
+      "targetName": "Radiant Insight #64",
       "durationMinutes": 7,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -1955,15 +1955,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-102-102",
+    "id": "disc-quiet-insight-65-420",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #102",
+    "name": "Quiet Insight #65",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #102",
+      "targetName": "Quiet Insight #65",
       "durationMinutes": 5,
       "instruction": "Ask yourself: why did this take decades to figure out? The answer reveals how science actually works."
     },
@@ -1974,15 +1974,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-103-103",
+    "id": "disc-luminous-insight-66-421",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #103",
+    "name": "Luminous Insight #66",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #103",
+      "targetName": "Luminous Insight #66",
       "durationMinutes": 12,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -1993,15 +1993,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-104-104",
+    "id": "disc-distant-insight-67-422",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #104",
+    "name": "Distant Insight #67",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #104",
+      "targetName": "Distant Insight #67",
       "durationMinutes": 8,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2012,15 +2012,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-105-105",
+    "id": "disc-unexpected-insight-68-423",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #105",
+    "name": "Unexpected Insight #68",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #105",
+      "targetName": "Unexpected Insight #68",
       "durationMinutes": 12,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -2031,15 +2031,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-106-106",
+    "id": "disc-eternal-insight-69-424",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #106",
+    "name": "Eternal Insight #69",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #106",
+      "targetName": "Eternal Insight #69",
       "durationMinutes": 15,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2050,15 +2050,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-107-107",
+    "id": "disc-restless-insight-70-425",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #107",
+    "name": "Restless Insight #70",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #107",
+      "targetName": "Restless Insight #70",
       "durationMinutes": 7,
       "instruction": "Trace how this connects to technological advances. Science is rarely a solo act — this was part of a web."
     },
@@ -2069,15 +2069,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-108-108",
+    "id": "disc-brilliant-insight-71-426",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #108",
+    "name": "Brilliant Insight #71",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #108",
+      "targetName": "Brilliant Insight #71",
       "durationMinutes": 12,
       "instruction": "Ask yourself: why did this take years to figure out? The answer reveals how science actually works."
     },
@@ -2088,15 +2088,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-109-109",
+    "id": "disc-enigmatic-insight-72-427",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #109",
+    "name": "Enigmatic Insight #72",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #109",
+      "targetName": "Enigmatic Insight #72",
       "durationMinutes": 14,
       "instruction": "Look at the original original paper. You'll notice something the textbook version usually omits."
     },
@@ -2107,15 +2107,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-110-110",
+    "id": "disc-restless-insight-73-428",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #110",
+    "name": "Restless Insight #73",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #110",
+      "targetName": "Restless Insight #73",
       "durationMinutes": 8,
       "instruction": "Look at the original photograph. You'll notice something the textbook version usually omits."
     },
@@ -2126,15 +2126,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-111-111",
+    "id": "disc-subtle-insight-74-429",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #111",
+    "name": "Subtle Insight #74",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #111",
+      "targetName": "Subtle Insight #74",
       "durationMinutes": 9,
       "instruction": "Consider the timing — why now? What else was happening in the world that made this possible?"
     },
@@ -2145,15 +2145,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-112-112",
+    "id": "disc-vivid-insight-75-430",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #112",
+    "name": "Vivid Insight #75",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #112",
+      "targetName": "Vivid Insight #75",
       "durationMinutes": 11,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -2164,15 +2164,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-113-113",
+    "id": "disc-ancient-insight-76-431",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #113",
+    "name": "Ancient Insight #76",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #113",
+      "targetName": "Ancient Insight #76",
       "durationMinutes": 9,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2183,15 +2183,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-114-114",
+    "id": "disc-modern-insight-77-432",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #114",
+    "name": "Modern Insight #77",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #114",
+      "targetName": "Modern Insight #77",
       "durationMinutes": 9,
       "instruction": "Consider the timing — why then? What else was happening in the world that made this possible?"
     },
@@ -2202,15 +2202,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-115-115",
+    "id": "disc-lost-insight-78-433",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #115",
+    "name": "Lost Insight #78",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #115",
+      "targetName": "Lost Insight #78",
       "durationMinutes": 13,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2221,15 +2221,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-116-116",
+    "id": "disc-wandering-insight-79-434",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #116",
+    "name": "Wandering Insight #79",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #116",
+      "targetName": "Wandering Insight #79",
       "durationMinutes": 10,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2240,15 +2240,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-117-117",
+    "id": "disc-timeless-insight-80-435",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #117",
+    "name": "Timeless Insight #80",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #117",
+      "targetName": "Timeless Insight #80",
       "durationMinutes": 6,
       "instruction": "Think about what people believed before this. The resistance was real — and it tells you something about human nature."
     },
@@ -2259,15 +2259,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-118-118",
+    "id": "disc-hidden-principle-81-436",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #118",
+    "name": "Hidden Principle #81",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #118",
+      "targetName": "Hidden Principle #81",
       "durationMinutes": 11,
       "instruction": "Trace how this connects to cultural shifts. Science is rarely a solo act — this was part of a web."
     },
@@ -2278,15 +2278,15 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-119-119",
+    "id": "disc-forgotten-principle-82-437",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #119",
+    "name": "Forgotten Principle #82",
     "teaser": "This discovery was initially dismissed as a measurement error. It took a younger researcher to recognize it as something fundamentally new.",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #119",
+      "targetName": "Forgotten Principle #82",
       "durationMinutes": 12,
       "instruction": "Trace how this connects to philosophical debates. Science is rarely a solo act — this was part of a web."
     },
@@ -2297,21 +2297,1674 @@
     "tier": 2
   },
   {
-    "id": "disc-dicoverie-topic-120-120",
+    "id": "disc-unsung-principle-83-438",
     "categoryId": "DISCOVERIES",
     "subtype": "Discovery",
-    "name": "Dicoverie Topic #120",
+    "name": "Unsung Principle #83",
     "teaser": "The key insight came not in the lab but during a walk — the discoverer later said 'my feet were doing the thinking.'",
     "imageUrl": "",
     "exploreAction": {
       "verb": "Explore",
-      "targetName": "the story behind Dicoverie Topic #120",
+      "targetName": "Unsung Principle #83",
       "durationMinutes": 11,
       "instruction": "Consider the timing — why that year? What else was happening in the world that made this possible?"
     },
     "tags": [
       "Astronomy",
       "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-evolution-by-natural-selection-121",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Evolution by Natural Selection (1859)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Evolution by Natural Selection (1859)",
+      "durationMinutes": 11,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-periodic-table-1869-122",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Periodic Table (1869)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Periodic Table (1869)",
+      "durationMinutes": 10,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-radiocarbon-dating-1949-123",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Radiocarbon Dating (1949)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Radiocarbon Dating (1949)",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-polio-vaccine-1955-124",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Polio Vaccine (1955)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Polio Vaccine (1955)",
+      "durationMinutes": 6,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-first-organ-transplant-125",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The First Organ Transplant (1954)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The First Organ Transplant (1954)",
+      "durationMinutes": 11,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-ct-scanning-1971-126",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "CT Scanning (1971)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "CT Scanning (1971)",
+      "durationMinutes": 10,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-stem-cells-1998-127",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Stem Cells (1998)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Stem Cells (1998)",
+      "durationMinutes": 15,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-induced-pluripotent-stem-cells-128",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Induced Pluripotent Stem Cells (2006)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Induced Pluripotent Stem Cells (2006)",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-first-exoplanet-1992-129",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The First Exoplanet (1992)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The First Exoplanet (1992)",
+      "durationMinutes": 10,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-accelerating-universe-1998-130",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Accelerating Universe (1998)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Accelerating Universe (1998)",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-god-particle-2012-131",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The God Particle (2012)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The God Particle (2012)",
+      "durationMinutes": 10,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-graphene-2004-132",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Graphene (2004)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Graphene (2004)",
+      "durationMinutes": 10,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-first-black-hole-133",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The First Black Hole Image (2019)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The First Black Hole Image (2019)",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-chaos-theory-1960s-134",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Chaos Theory (1960s)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Chaos Theory (1960s)",
+      "durationMinutes": 5,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-world-wide-web-135",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The World Wide Web (1989)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The World Wide Web (1989)",
+      "durationMinutes": 9,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-public-key-cryptography-1976-136",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Public Key Cryptography (1976)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Public Key Cryptography (1976)",
+      "durationMinutes": 7,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-deep-learning-neural-networks-137",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Deep Learning Neural Networks (2012)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Deep Learning Neural Networks (2012)",
+      "durationMinutes": 15,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-self-driving-cars-2010s-138",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Self-Driving Cars (2010s)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Self-Driving Cars (2010s)",
+      "durationMinutes": 6,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-structure-of-the-139",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Structure of the Ribosome (2000)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Structure of the Ribosome (2000)",
+      "durationMinutes": 14,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-apoptosis-1972-140",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Apoptosis (1972)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Apoptosis (1972)",
+      "durationMinutes": 11,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-first-clone-dolly-141",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The First Clone (Dolly 1996)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The First Clone (Dolly 1996)",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-microbiome-2010s-142",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Microbiome (2010s)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Microbiome (2010s)",
+      "durationMinutes": 8,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-ozone-layer-recovery-143",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Ozone Layer Recovery (ongoing)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Ozone Layer Recovery (ongoing)",
+      "durationMinutes": 5,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-keeling-curve-1958-144",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Keeling Curve (1958)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Keeling Curve (1958)",
+      "durationMinutes": 11,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-extinction-of-the-145",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Extinction of the Dinosaurs (1980)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Extinction of the Dinosaurs (1980)",
+      "durationMinutes": 9,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-homo-naledi-2013-146",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Homo Naledi (2013)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Homo Naledi (2013)",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-fire-prehistoric-147",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Fire (prehistoric)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Fire (prehistoric)",
+      "durationMinutes": 12,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-agriculture-10000-bc-148",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Agriculture (10000 BC)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Agriculture (10000 BC)",
+      "durationMinutes": 15,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-printing-press-1440-149",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Printing Press (1440)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Printing Press (1440)",
+      "durationMinutes": 10,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-electricity-1800-150",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Electricity (1800)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Electricity (1800)",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-light-bulb-1879-151",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Light Bulb (1879)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Light Bulb (1879)",
+      "durationMinutes": 7,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-television-1927-152",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Television (1927)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Television (1927)",
+      "durationMinutes": 12,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-microprocessor-1971-153",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Microprocessor (1971)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Microprocessor (1971)",
+      "durationMinutes": 10,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-search-engine-1996-154",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Search Engine (1996)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Search Engine (1996)",
+      "durationMinutes": 12,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-structure-of-dna-155",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Structure of DNA (1953)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Structure of DNA (1953)",
+      "durationMinutes": 5,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-anesthesia-1846-156",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Anesthesia (1846)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Anesthesia (1846)",
+      "durationMinutes": 15,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-pasteurization-1864-157",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Pasteurization (1864)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Pasteurization (1864)",
+      "durationMinutes": 13,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-x-rays-1895-158",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "X-Rays (1895)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "X-Rays (1895)",
+      "durationMinutes": 10,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-electron-1897-159",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Electron (1897)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Electron (1897)",
+      "durationMinutes": 8,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-relativity-1905-160",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Relativity (1905)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Relativity (1905)",
+      "durationMinutes": 15,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-proton-1919-161",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Proton (1919)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Proton (1919)",
+      "durationMinutes": 14,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-nuclear-fission-1938-162",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Nuclear Fission (1938)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Nuclear Fission (1938)",
+      "durationMinutes": 11,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-laser-1960-163",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Laser (1960)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Laser (1960)",
+      "durationMinutes": 8,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-pulsars-1967-164",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Pulsars (1967)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Pulsars (1967)",
+      "durationMinutes": 6,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-ozone-hole-1985-165",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Ozone Hole (1985)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Ozone Hole (1985)",
+      "durationMinutes": 10,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-higgs-boson-2012-166",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Higgs Boson (2012)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Higgs Boson (2012)",
+      "durationMinutes": 9,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-big-bang-theory-167",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Big Bang Theory",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Big Bang Theory",
+      "durationMinutes": 14,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-mendelian-genetics-1866-168",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Mendelian Genetics (1866)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Mendelian Genetics (1866)",
+      "durationMinutes": 14,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-electron-microscope-1931-169",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Electron Microscope (1931)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Electron Microscope (1931)",
+      "durationMinutes": 12,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-first-antibiotic-1932-170",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The First Antibiotic (1932)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The First Antibiotic (1932)",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-structure-of-insulin-171",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Structure of Insulin (1969)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Structure of Insulin (1969)",
+      "durationMinutes": 10,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-mri-imaging-1973-172",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "MRI Imaging (1973)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "MRI Imaging (1973)",
+      "durationMinutes": 6,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-human-genome-project-173",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Human Genome Project (2003)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Human Genome Project (2003)",
+      "durationMinutes": 13,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-rna-interference-1998-174",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "RNA Interference (1998)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "RNA Interference (1998)",
+      "durationMinutes": 7,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-mrna-vaccines-2020-175",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "mRNA Vaccines (2020)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "mRNA Vaccines (2020)",
+      "durationMinutes": 7,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-dark-energy-1998-176",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Dark Energy (1998)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Dark Energy (1998)",
+      "durationMinutes": 13,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-neutrino-oscillations-1998-177",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Neutrino Oscillations (1998)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Neutrino Oscillations (1998)",
+      "durationMinutes": 7,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-topological-insulators-2007-178",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Topological Insulators (2007)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Topological Insulators (2007)",
+      "durationMinutes": 14,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-fullerenes-1985-179",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Fullerenes (1985)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Fullerenes (1985)",
+      "durationMinutes": 12,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-theory-of-everything-180",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Theory of Everything (ongoing)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Theory of Everything (ongoing)",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-fractals-1975-181",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Fractals (1975)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Fractals (1975)",
+      "durationMinutes": 15,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-internet-protocol-1974-182",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Internet Protocol (1974)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Internet Protocol (1974)",
+      "durationMinutes": 12,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-smartphone-2007-183",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Smartphone (2007)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Smartphone (2007)",
+      "durationMinutes": 5,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-alphafold-protein-folding-2020-184",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "AlphaFold Protein Folding (2020)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "AlphaFold Protein Folding (2020)",
+      "durationMinutes": 9,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-reusable-rockets-2015-185",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Reusable Rockets (2015)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Reusable Rockets (2015)",
+      "durationMinutes": 7,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-telomerase-1984-186",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Telomerase (1984)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Telomerase (1984)",
+      "durationMinutes": 13,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-cell-cycle-2001-187",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Cell Cycle (2001)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Cell Cycle (2001)",
+      "durationMinutes": 6,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-optogenetics-2005-188",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Optogenetics (2005)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Optogenetics (2005)",
+      "durationMinutes": 13,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-first-gene-therapy-189",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The First Gene Therapy (1990)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The First Gene Therapy (1990)",
+      "durationMinutes": 8,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-climate-change-science-1988-190",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Climate Change Science (1988)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Climate Change Science (1988)",
+      "durationMinutes": 9,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-ocean-acidification-2000s-191",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Ocean Acidification (2000s)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Ocean Acidification (2000s)",
+      "durationMinutes": 10,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-lucy-the-australopithecus-1974-192",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Lucy the Australopithecus (1974)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Lucy the Australopithecus (1974)",
+      "durationMinutes": 8,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-homo-floresiensis-2003-193",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Homo Floresiensis (2003)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Homo Floresiensis (2003)",
+      "durationMinutes": 14,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-wheel-3500-bc-194",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Wheel (3500 BC)",
+    "teaser": "Hiding in plain sight. What makes this special is easy to miss on a casual glance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Wheel (3500 BC)",
+      "durationMinutes": 7,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-writing-3200-bc-195",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Writing (3200 BC)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Writing (3200 BC)",
+      "durationMinutes": 14,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-steam-engine-1712-196",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Steam Engine (1712)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Steam Engine (1712)",
+      "durationMinutes": 14,
+      "instruction": "Think about what people believed before. The resistance to this idea tells you something important about human nature."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-telephone-1876-197",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Telephone (1876)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Telephone (1876)",
+      "durationMinutes": 9,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-radio-1895-198",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Radio (1895)",
+    "teaser": "Often cited but rarely fully understood. The deeper you go, the more there is to find.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Radio (1895)",
+      "durationMinutes": 13,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-computer-1940s-199",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Computer (1940s)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Computer (1940s)",
+      "durationMinutes": 5,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-internet-1983-200",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Internet (1983)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Internet (1983)",
+      "durationMinutes": 8,
+      "instruction": "Look at the original source material. You will notice something the popular version usually omits."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-social-media-2004-201",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Social Media (2004)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Social Media (2004)",
+      "durationMinutes": 15,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-vaccination-1796-202",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Vaccination (1796)",
+    "teaser": "Widely discussed yet still full of surprises for those willing to look closer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Vaccination (1796)",
+      "durationMinutes": 14,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Chemistry",
+      "19th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-germ-theory-of-disease-203",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Germ Theory of Disease (1860s)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Germ Theory of Disease (1860s)",
+      "durationMinutes": 12,
+      "instruction": "Ask why this took so long to figure out. The answer reveals how discovery actually works in practice."
+    },
+    "tags": [
+      "Physics",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-quantum-theory-1900-204",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "Quantum Theory (1900)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "Quantum Theory (1900)",
+      "durationMinutes": 13,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-atomic-nucleus-1911-205",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Atomic Nucleus (1911)",
+    "teaser": "The kind of work that rewards patience. Give it time and it will give back more than expected.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Atomic Nucleus (1911)",
+      "durationMinutes": 12,
+      "instruction": "Trace the connections to other ideas. This didn't happen in isolation — it was part of a larger web."
+    },
+    "tags": [
+      "Astronomy",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-neutron-1932-206",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Neutron (1932)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Neutron (1932)",
+      "durationMinutes": 6,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Medicine",
+      "20th Century"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "disc-the-transistor-1947-207",
+    "categoryId": "DISCOVERIES",
+    "subtype": "Discovery",
+    "name": "The Transistor (1947)",
+    "teaser": "A fascinating figure whose work rewards close attention. There's more here than the surface suggests.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Explore",
+      "targetName": "The Transistor (1947)",
+      "durationMinutes": 13,
+      "instruction": "Consider the timing. Why that moment in history? What else was happening that made this possible?"
+    },
+    "tags": [
+      "Biology",
+      "19th Century"
     ],
     "tier": 2
   }
