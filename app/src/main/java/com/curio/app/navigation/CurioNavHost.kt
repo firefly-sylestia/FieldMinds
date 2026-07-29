@@ -14,11 +14,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.curio.app.features.LightboxScreen
-import com.curio.app.features.ManageCategoriesScreen
-import com.curio.app.features.OnboardingScreen
-import com.curio.app.features.SettingsScreen
-import com.curio.app.features.TopicHistoryScreen
+import com.curio.app.features.lightbox.LightboxScreen
+import com.curio.app.features.managecategories.ManageCategoriesScreen
+import com.curio.app.features.onboarding.OnboardingScreen
+import com.curio.app.features.settings.SettingsScreen
+import com.curio.app.features.topichistory.TopicHistoryScreen
 import com.curio.app.features.cabinet.CabinetScreen
 import com.curio.app.features.capture.SaveCaptureScreen
 import com.curio.app.features.detail.EntryDetailScreen
