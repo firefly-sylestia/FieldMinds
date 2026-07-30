@@ -93,14 +93,23 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         value = TopicJsonLoader.load(activeCategory.id)
     }
 
+    // Subtype filter state
+    val allSubtypes = remember(pool) {
+        pool.map { it.subtype }.distinct().sorted()
+    }
+    var activeSubtype by remember(activeCategory.id, pool) { mutableStateOf<String?>(null) }
+
     // Tag filter state
     val allTags = remember(pool) {
         pool.flatMap { it.tags }.distinct().sorted()
     }
     var activeTag by remember(activeCategory.id, pool) { mutableStateOf<String?>(null) }
-    val filteredPool = remember(pool, activeTag) {
-        if (activeTag == null) pool
-        else pool.filter { activeTag in it.tags }
+
+    val filteredPool = remember(pool, activeSubtype, activeTag) {
+        var result = pool
+        if (activeSubtype != null) result = result.filter { it.subtype == activeSubtype }
+        if (activeTag != null) result = result.filter { activeTag in it.tags }
+        result
     }
 
     var shuffling by remember { mutableStateOf(false) }
@@ -234,7 +243,46 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             }
         }
 
-        // ── 3. Tag/genre filter chips ───────────────────────────────────
+        // ── 3. Subtype filter chips ────────────────────────────────────
+        if (allSubtypes.size > 1) {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                modifier = Modifier.padding(bottom = 2.dp)
+            ) {
+                item {
+                    Surface(
+                        onClick = { activeSubtype = null },
+                        shape = RoundedCornerShape(50),
+                        color = if (activeSubtype == null) cat.accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant
+                    ) {
+                        Text(
+                            "All types",
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (activeSubtype == null) FontWeight.Bold else FontWeight.Normal),
+                            color = if (activeSubtype == null) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+                items(allSubtypes) { subtype ->
+                    val sel = subtype == activeSubtype
+                    Surface(
+                        onClick = { activeSubtype = if (sel) null else subtype },
+                        shape = RoundedCornerShape(50),
+                        color = if (sel) cat.accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant
+                    ) {
+                        Text(
+                            subtype,
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal),
+                            color = if (sel) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        // ── 4. Tag/genre filter chips ───────────────────────────────────
         if (allTags.isNotEmpty()) {
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 12.dp),
@@ -273,7 +321,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             }
         }
 
-        // ── 4. Card stack area ──────────────────────────────────────────
+        // ── 5. Card stack area ──────────────────────────────────────────
         Box(
             modifier = Modifier.fillMaxWidth().weight(1f),
             contentAlignment = Alignment.Center
@@ -291,7 +339,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             )
         }
 
-        // ── 5. Bottom CTA ───────────────────────────────────────────────
+        // ── 6. Bottom CTA ───────────────────────────────────────────────
         Box(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 20.dp),
             contentAlignment = Alignment.Center
