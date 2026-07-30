@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CaptureRepository
@@ -118,11 +119,23 @@ fun SaveCaptureScreen(
         val data = currentCaptureData ?: return@Unit
         saveInProgress = true
         scope.launch {
+            val entryId = CaptureRepository.createId()
+
+            // Persist audio file from cache to internal storage before saving
+            val persistedData = if (data is CaptureData.SoundBite && !data.audioFilePath.isNullOrBlank()) {
+                val persistentPath = AudioStorageManager.persistAudio(
+                    context, data.audioFilePath!!, entryId
+                )
+                data.copy(audioFilePath = persistentPath)
+            } else {
+                data
+            }
+
             val entry = CurioEntry(
-                id = CaptureRepository.createId(),
+                id = entryId,
                 topic = topic ?: return@launch,
                 format = cat.defaultFormat,
-                captureData = data
+                captureData = persistedData
             )
             repo.save(entry)
             savedEntryId = entry.id

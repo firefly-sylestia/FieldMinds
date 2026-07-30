@@ -60,6 +60,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
+import com.curio.app.data.AudioStorageManager
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CategoryId
@@ -265,6 +266,8 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                 TextButton(onClick = {
                     deleteDialogVisible = false
                     scope.launch {
+                        val data = resolvedEntry.captureData as? CaptureData.SoundBite
+                        AudioStorageManager.deleteAudio(context, data?.audioFilePath)
                         CurioRepositoryHolder.repo.deleteById(resolvedEntry.id)
                         navController.popBackStack()
                     }
