@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
@@ -154,10 +155,10 @@ fun TopicRevealScreen(
                     .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // ── Enhanced sparkle motif ─────────────────────────────────────
+                // ── Compact sparkle motif ───────────────────────────────────
                 EnhancedSparkleMotif(color = cat.accent, trigger = sparkleTrigger)
 
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(12.dp))
 
                 // ── Staggered content ──────────────────────────────────────────
                 StaggeredEntrance {
@@ -166,7 +167,7 @@ fun TopicRevealScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(280.dp)
+                                .height(220.dp)
                                 .background(
                                     brush = if (cat.id == CategoryId.WILDCARD)
                                         Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
@@ -191,7 +192,10 @@ fun TopicRevealScreen(
                             text = topic?.name ?: cat.displayName,
                             style = MaterialTheme.typography.displaySmall,
                             color = MaterialTheme.colorScheme.onBackground,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                     Spacer(Modifier.height(8.dp))
@@ -230,21 +234,25 @@ fun TopicRevealScreen(
                             }
                         }
                     }
-                    Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(20.dp))
 
                     // ── Teaser ────────────────────────────────────────────────
                     StaggeredItem(index = 3) {
                         Text(
                             text = "One quirky fact to get you curious...",
                             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                            color = cat.accent
+                            color = cat.accent,
+                            modifier = Modifier.fillMaxWidth()
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
                             text = topic?.teaser ?: "Loading topic…",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            maxLines = 4,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                     Spacer(Modifier.height(32.dp))
@@ -349,19 +357,19 @@ private fun EnhancedSparkleMotif(color: Color, trigger: Int) {
     )
 
     Box(
-        modifier = Modifier.size(72.dp),
+        modifier = Modifier.size(48.dp),
         contentAlignment = Alignment.Center
     ) {
         // Sparkle ring background
         CurioSparkle(
             color = color.copy(alpha = 0.3f),
             trigger = trigger,
-            size = 72.dp,
+            size = 48.dp,
             ringCount = 2
         )
         Box(
             modifier = Modifier
-                .size(64.dp)
+                .size(40.dp)
                 .scale(pulse)
                 .rotate(rotation),
             contentAlignment = Alignment.Center
@@ -370,7 +378,7 @@ private fun EnhancedSparkleMotif(color: Color, trigger: Int) {
                 name = CurioIcons.AutoAwesome,
                 contentDescription = null,
                 tint = color,
-                size = 56.dp
+                size = 36.dp
             )
         }
     }
