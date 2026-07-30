@@ -40,8 +40,8 @@ android {
         applicationId = "com.curio.app"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1.0-curio"
+        versionCode = 100
+        versionName = "1.0.0"
 
         // Only include English locale — saves ~5-8 MB of APK size.
         // Curio ships as a single-language app. Add others as needed.
