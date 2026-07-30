@@ -383,7 +383,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════���═══════════════════════════════════════════
 // Shuffle stack — the core visual
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -577,7 +577,7 @@ private fun CyclingTopicCard(
             ) + fadeOut(tween(150, easing = FastOutSlowInEasing)))
         },
         label = "topicCycle"
-    ) { _ ->            Surface(
+    ) { topicName ->            Surface(
                 shape = RoundedCornerShape(28.dp),
                 color = CurioColors.CreamWhite,
                 shadowElevation = 4.dp,
@@ -637,7 +637,7 @@ private fun CyclingTopicCard(
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = topic.name,
+                        text = topicName,
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.ExtraBold
                         ),
