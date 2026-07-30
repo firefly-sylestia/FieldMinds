@@ -402,7 +402,7 @@ private fun TopBar(
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════════════
-// Compact filter bottom sheet (multi-select)
+// Compact filter bottom sheet with visible selected-filter chips
 // ═══════════════════════════════════════════════════════════════════════════
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -433,46 +433,76 @@ private fun FilterSheet(
                 .fillMaxWidth()
                 .padding(bottom = 20.dp)
         ) {
-            // ── Compact header ────────────────────────────────────────
+            // ── Header row ────────────────────────────────────────────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 8.dp),
+                    .padding(horizontal = 20.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                CurioIcon(cat.iconGlyph, null, tint = cat.accent, size = 22.dp)
+                Spacer(Modifier.width(8.dp))
                 Text(
-                    text = "Filter ${cat.displayName}",
+                    text = cat.displayName,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(1f)
                 )
                 if (activeCount > 0) {
-                    Surface(
-                        shape = RoundedCornerShape(50),
-                        color = cat.accent
-                    ) {
-                        Text(
-                            text = "$activeCount active",
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                            color = Color.White,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
-                    Spacer(Modifier.width(8.dp))
                     TextButton(
                         onClick = {
                             draftFilters = emptySet()
                             draftSubtypes = emptySet()
                         },
-                        contentPadding = PaddingValues(horizontal = 8.dp)
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
                     ) {
                         Text(
-                            "Clear",
+                            "Clear all",
                             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.error
                         )
                     }
                 }
+            }
+
+            // ── Active filter summary chips — this is what was missing ─
+            if (activeCount > 0) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                ) {
+                    Text(
+                        text = "Active filters",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.5.sp
+                        ),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 6.dp)
+                    )
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        draftSubtypes.forEach { st ->
+                            ActiveFilterChip(
+                                label = st,
+                                accent = cat.accent,
+                                onRemove = { draftSubtypes = draftSubtypes - st }
+                            )
+                        }
+                        draftFilters.forEach { tag ->
+                            ActiveFilterChip(
+                                label = tag,
+                                accent = cat.accent,
+                                onRemove = { draftFilters = draftFilters - tag }
+                            )
+                        }
+                    }
+                }
+                Spacer(Modifier.height(14.dp))
             }
 
             if (subtypes.size <= 1 && tags.isEmpty()) {
@@ -486,9 +516,19 @@ private fun FilterSheet(
                         .padding(vertical = 32.dp)
                 )
             } else {
-                // ── Subtype chips (compact) ─────────────────────────
+                // ── Divider line ──────────────────────────────────────
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(1.dp)
+                        .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                )
+                Spacer(Modifier.height(10.dp))
+
+                // ── Subtype chips ────────────────────────────────────
                 if (subtypes.size > 1) {
-                    SectionLabel("Type", Modifier.padding(horizontal = 20.dp, vertical = 4.dp))
+                    SectionLabel("Type", Modifier.padding(horizontal = 20.dp, vertical = 2.dp))
                     FlowRow(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -509,10 +549,10 @@ private fun FilterSheet(
                     }
                 }
 
-                // ── Tag chips (compact) ─────────────────────────────
+                // ── Tag chips ────────────────────────────────────────
                 if (tags.isNotEmpty()) {
-                    if (subtypes.size > 1) Spacer(Modifier.height(12.dp))
-                    SectionLabel("Genres", Modifier.padding(horizontal = 20.dp, vertical = 4.dp))
+                    if (subtypes.size > 1) Spacer(Modifier.height(10.dp))
+                    SectionLabel("Genres", Modifier.padding(horizontal = 20.dp, vertical = 2.dp))
                     FlowRow(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -534,9 +574,9 @@ private fun FilterSheet(
                 }
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(14.dp))
 
-            // ── Apply button ──────────────────────────────────────
+            // ── Apply button ──────────────────────────────────────────
             Button(
                 onClick = { onApply(draftFilters, draftSubtypes) },
                 shape = RoundedCornerShape(50),
@@ -552,8 +592,46 @@ private fun FilterSheet(
                 CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 18.dp)
                 Spacer(Modifier.width(6.dp))
                 Text(
-                    text = if (activeCount > 0) "Apply filters" else "Show all topics",
+                    text = if (activeCount > 0) "Apply filters ($activeCount)" else "Show all topics",
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold)
+                )
+            }
+        }
+    }
+}
+
+/** Chip showing an active filter with ✕ to remove. */
+@Composable
+private fun ActiveFilterChip(
+    label: String,
+    accent: Color,
+    onRemove: () -> Unit
+) {
+    Surface(
+        shape = RoundedCornerShape(50),
+        color = accent,
+        shadowElevation = 1.dp
+    ) {
+        Row(
+            modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                color = Color.White
+            )
+            Surface(
+                onClick = onRemove,
+                shape = CircleShape,
+                color = Color.White.copy(alpha = 0.25f)
+            ) {
+                CurioIcon(
+                    CurioIcons.Close, null,
+                    tint = Color.White,
+                    size = 14.dp,
+                    modifier = Modifier.padding(2.dp)
                 )
             }
         }
@@ -1056,13 +1134,15 @@ private fun BottomCta(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        // ── Categories pill ─────────────────────────────────────────
+        // ── Categories button — same level as Filter ────────────────
         Surface(
             onClick = onCategories,
             shape = RoundedCornerShape(50),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            shadowElevation = 1.dp
         ) {
             Row(
                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
@@ -1070,25 +1150,34 @@ private fun BottomCta(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 CurioIcon(
-                    CurioIcons.Palette, null,
+                    cat.iconGlyph, null,
                     tint = cat.accent,
-                    size = 16.dp
+                    size = 18.dp
                 )
                 Text(
-                    text = "Categories",
+                    text = cat.displayName,
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1
                 )
+                CurioIcon(
+                    CurioIcons.KeyboardArrowDown, null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 16.dp
+                )
             }
         }
 
-        // ── Filter pill ────────────────────────────────────────────
+        // ── Filter button — same visual level as Categories ─────────
+        val hasFilters = filterActiveCount > 0
         Surface(
             onClick = onFilter,
             shape = RoundedCornerShape(50),
-            color = if (filterActiveCount > 0) cat.accent.copy(alpha = 0.18f)
-                else MaterialTheme.colorScheme.surfaceContainerHigh
+            color = if (hasFilters) cat.accent.copy(alpha = 0.12f)
+                else MaterialTheme.colorScheme.surfaceContainerHigh,
+            border = if (hasFilters) BorderStroke(1.5.dp, cat.accent.copy(alpha = 0.6f))
+                else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            shadowElevation = if (hasFilters) 2.dp else 1.dp
         ) {
             Row(
                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
@@ -1096,19 +1185,32 @@ private fun BottomCta(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 CurioIcon(
-                    if (filterActiveCount > 0) CurioIcons.Check else CurioIcons.Search,
-                    null,
-                    tint = if (filterActiveCount > 0) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                    size = 16.dp
+                    CurioIcons.Search, null,
+                    tint = if (hasFilters) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    size = 18.dp
                 )
                 Text(
-                    text = if (filterActiveCount == 0) "Filter" else "$filterActiveCount",
+                    text = "Filter",
                     style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = if (filterActiveCount > 0) FontWeight.Bold else FontWeight.Medium
+                        fontWeight = if (hasFilters) FontWeight.Bold else FontWeight.Medium
                     ),
-                    color = if (filterActiveCount > 0) cat.accent else MaterialTheme.colorScheme.onSurface,
+                    color = if (hasFilters) cat.accent else MaterialTheme.colorScheme.onSurface,
                     maxLines = 1
                 )
+                if (hasFilters) {
+                    Spacer(Modifier.width(2.dp))
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = cat.accent
+                    ) {
+                        Text(
+                            text = "$filterActiveCount",
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp)
+                        )
+                    }
+                }
             }
         }
 
@@ -1188,26 +1290,45 @@ private fun CategoryPickerSheet(
                 .fillMaxWidth()
                 .padding(bottom = 20.dp)
         ) {
-            // ── Header ────────────────────────────────────────────────
-            Text(
-                text = "Explore a category",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
-            )
+            // ── Header (matching Explore page style) ──────────────────
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "What are we exploring?",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.weight(1f)
+                )
+                // Current category indicator
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = currentCat.accent.copy(alpha = 0.15f)
+                ) {
+                    Text(
+                        text = currentCat.displayName,
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                        color = currentCat.accent,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                    )
+                }
+            }
 
-            // ── 2-column tile grid ────────────────────────────────────
+            // ── 2-column tile grid (matching Explore page size) ────────
             MorphEntrance {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.height(440.dp)
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                    modifier = Modifier.height(480.dp)
                 ) {
                     itemsIndexed(categories) { index, cat ->
                         StaggeredItem(index = index, staggerDelayMs = CurioMotion.Stagger.Fast) {
-                            MiniCategoryTile(
+                            CategoryPickerTile(
                                 category = cat,
                                 isSelected = cat.id == currentCat.id,
                                 onClick = { onCategorySelected(cat) }
@@ -1238,62 +1359,95 @@ private fun CategoryPickerSheet(
     }
 }
 
+/** Full-height category tile matching the Explore page style with press animation. */
 @Composable
-private fun MiniCategoryTile(
+private fun CategoryPickerTile(
     category: CurioCategory,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
+    var pressed by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (pressed) 0.92f else 1f,
+        animationSpec = CurioMotion.Springs.Press,
+        label = "catTileScale"
+    )
+
     val isWildcard = category.id == CategoryId.WILDCARD
     val cardColor = if (isWildcard) CurioColors.CoralBlush.copy(alpha = 0.85f) else category.accent
 
     Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(22.dp),
+        onClick = {
+            pressed = true
+            onClick()
+        },
+        shape = RoundedCornerShape(28.dp),
         color = cardColor,
-        shadowElevation = if (isSelected) 8.dp else 4.dp,
+        shadowElevation = if (isSelected) 10.dp else 6.dp,
         tonalElevation = if (isSelected) 6.dp else 2.dp,
-        border = if (isSelected) BorderStroke(2.dp, Color.White.copy(alpha = 0.6f)) else null,
+        border = if (isSelected) BorderStroke(2.5.dp, Color.White.copy(alpha = 0.7f)) else null,
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(156.dp)
+            .scale(scale)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // Ghost icon
+            // Large ghost icon — decorative
             CurioIcon(
                 name = category.iconGlyph,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.15f),
-                size = 72.dp,
+                tint = Color.White.copy(alpha = 0.16f),
+                size = 104.dp,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 6.dp, end = 2.dp)
+                    .padding(top = 8.dp, end = 4.dp)
             )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(14.dp),
+                    .padding(18.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 // Icon badge
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(18.dp),
                     color = Color.White.copy(alpha = 0.22f)
                 ) {
                     CurioIcon(
                         name = category.iconGlyph,
                         contentDescription = null,
                         tint = Color.White,
-                        size = 26.dp,
-                        modifier = Modifier.padding(8.dp)
+                        size = 34.dp,
+                        modifier = Modifier.padding(10.dp)
                     )
                 }
-                // Name
-                Text(
-                    text = category.displayName,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
-                    color = Color.White
-                )
+
+                // Name + selected check
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Text(
+                        text = category.displayName,
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                        color = Color.White,
+                        modifier = Modifier.weight(1f)
+                    )
+                    if (isSelected) {
+                        Surface(
+                            shape = CircleShape,
+                            color = Color.White
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Check, null,
+                                tint = cardColor,
+                                size = 20.dp,
+                                modifier = Modifier.padding(4.dp)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
