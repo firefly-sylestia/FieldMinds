@@ -1,5 +1,6 @@
 package com.curio.app.features.spin
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -33,6 +34,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -71,6 +73,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
@@ -1264,10 +1268,9 @@ private fun BottomCta(
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════════════
-// Category picker bottom sheet — tile grid like the Explore page
+// Full-screen category picker dialog — immersive tile grid
 // ═══════════════════════════════════════════════════════════════════════════
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CategoryPickerSheet(
     currentCat: CurioCategory,
@@ -1276,85 +1279,128 @@ private fun CategoryPickerSheet(
     onBrowseAll: () -> Unit
 ) {
     val categories = remember { CurioCategories.visible }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var visible by remember { mutableStateOf(false) }
 
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        dragHandle = { BottomSheetDefaults.DragHandle() },
-        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+    LaunchedEffect(Unit) { visible = true }
+
+    Dialog(
+        onDismissRequest = { visible = false },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            dismissOnClickOutside = false
+        )
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp)
+        AnimatedVisibility(
+            visible = visible,
+            enter = slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = CurioMotion.Springs.Snappy
+            ) + fadeIn(animationSpec = tween(280)),
+            exit = slideOutVertically(
+                targetOffsetY = { it },
+                animationSpec = tween(240)
+            ) + fadeOut(animationSpec = tween(180))
         ) {
-            // ── Header (matching Explore page style) ──────────────────
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
             ) {
-                Text(
-                    text = "What are we exploring?",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.weight(1f)
-                )
-                // Current category indicator
-                Surface(
-                    shape = RoundedCornerShape(50),
-                    color = currentCat.accent.copy(alpha = 0.15f)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .statusBarsPadding()
+                        .navigationBarsPadding()
                 ) {
-                    Text(
-                        text = currentCat.displayName,
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-                        color = currentCat.accent,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                    )
-                }
-            }
-
-            // ── 2-column tile grid (matching Explore page size) ────────
-            MorphEntrance {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(14.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp),
-                    modifier = Modifier.height(480.dp)
-                ) {
-                    itemsIndexed(categories) { index, cat ->
-                        StaggeredItem(index = index, staggerDelayMs = CurioMotion.Stagger.Fast) {
-                            CategoryPickerTile(
-                                category = cat,
-                                isSelected = cat.id == currentCat.id,
-                                onClick = { onCategorySelected(cat) }
+                    // ── Close button + header ────────────────────────
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Surface(
+                            onClick = { visible = false },
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.surfaceVariant
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Close, "Close",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                size = 22.dp,
+                                modifier = Modifier.padding(9.dp)
+                            )
+                        }
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            text = "What are we exploring?",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.weight(1f)
+                        )
+                        // Current category indicator
+                        Surface(
+                            shape = RoundedCornerShape(50),
+                            color = currentCat.accent.copy(alpha = 0.15f)
+                        ) {
+                            Text(
+                                text = currentCat.displayName,
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                                color = currentCat.accent,
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                             )
                         }
                     }
+
+                    // ── Tile grid filling the screen ────────────────
+                    MorphEntrance {
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(14.dp),
+                            verticalArrangement = Arrangement.spacedBy(14.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            itemsIndexed(categories) { index, cat ->
+                                StaggeredItem(index = index, staggerDelayMs = CurioMotion.Stagger.Fast) {
+                                    CategoryPickerTile(
+                                        category = cat,
+                                        isSelected = cat.id == currentCat.id,
+                                        onClick = { onCategorySelected(cat) }
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(8.dp))
+
+                    // ── Browse all link ─────────────────────────────
+                    TextButton(
+                        onClick = onBrowseAll,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        CurioIcon(CurioIcons.Palette, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            text = "Browse all categories",
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                    Spacer(Modifier.height(8.dp))
                 }
             }
+        }
+    }
 
-            Spacer(Modifier.height(8.dp))
-
-            // ── Browse all link ─────────────────────────────────────
-            TextButton(
-                onClick = onBrowseAll,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                CurioIcon(CurioIcons.Palette, null, tint = MaterialTheme.colorScheme.primary, size = 18.dp)
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = "Browse all categories",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+    // ── Dismiss after animation completes ──────────────────────────
+    LaunchedEffect(visible) {
+        if (!visible) {
+            delay(260)
+            onDismiss()
         }
     }
 }
