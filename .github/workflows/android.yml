@@ -61,16 +61,13 @@ jobs:
             echo "$KEYSTORE_BASE64" | tr -d '[:space:]' | base64 -d > release.keystore
           fi
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
-
-      - name: Build release APK
+      - name: Build debug and release APKs
         env:
           KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease --stacktrace
+        run: ./gradlew assembleDebug assembleRelease --stacktrace
 
       - name: Verify installable APK outputs (unsigned APKs are treated as a build failure)
         run: |
