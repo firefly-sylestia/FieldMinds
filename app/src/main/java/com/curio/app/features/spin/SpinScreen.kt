@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -239,7 +240,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             cat = cat,
             poolCount = pool.size,
             filteredCount = filteredPool.size,
-            modifier = Modifier.statusBarsPadding(),
+            modifier = Modifier.statusBarsPadding().offset(y = (-2).dp),
             onBack = { navController.popBackStack() },
             onOpenCategoryPicker = { showCategoryPicker = true }
         )
@@ -248,7 +249,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 2.dp),
+                .padding(horizontal = 20.dp, vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -302,14 +303,14 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 2.dp, bottom = 2.dp)
+                .padding(vertical = 0.dp)
         )
 
         // ── 4. Center spin button ───────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp),
+                .padding(vertical = 0.dp),
             contentAlignment = Alignment.Center
         ) {
             SpinButton(
@@ -335,7 +336,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                     navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, topic.name))
                 },
                 onRespin = { shuffleCount++ },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 2.dp)
             )
         } else {
             // ── 5. Bottom CTA ───────────────────────────────────────────
@@ -419,7 +420,7 @@ private fun TopBar(
     ) {
         CurioBackButton(onClick = onBack)
 
-        Spacer(Modifier.width(10.dp))
+        Spacer(Modifier.width(6.dp))
 
         // ── CategoryMenu trigger chip ─────────────────────────────────
         Surface(
@@ -428,7 +429,7 @@ private fun TopBar(
             color = cat.accent.copy(alpha = 0.15f)
         ) {
             Row(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -509,9 +510,9 @@ private fun CategoryPickerSheet(
         ) {
             // ── Header ────────────────────────────────────────────────
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
@@ -970,7 +971,7 @@ private fun Carousel(
 ) {
     val poolSize = displayPool.size
     Box(
-        modifier = modifier.height(400.dp),
+        modifier = modifier.height(360.dp),
         contentAlignment = Alignment.Center
     ) {
         if (poolSize == 0) {
@@ -1060,9 +1061,9 @@ private fun CarouselCard(
     val w = if (isCenter) 250.dp else 210.dp
     val h = if (isCenter) 230.dp else 140.dp
     val yOff: Float = when (slot) {
-        -1 -> -120f
+        -1 -> -108f
         0 -> 0f
-        else -> 120f
+        else -> 108f
     }
     val s = if (isCenter) 1f else 0.78f
     // Side cards: 0.55 in light, 0.68 in dark — keeps them visible against dark backgrounds.
@@ -1519,7 +1520,7 @@ private fun BottomCta(
         enter = slideInVertically { it } + fadeIn(),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(horizontal = 20.dp, vertical = 4.dp)
     ) {
         if (showExplore) {
             Button(
