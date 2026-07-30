@@ -1,15 +1,11 @@
 package com.curio.app.features.spin
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,12 +16,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -42,20 +40,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
-import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioTopic
 import com.curio.app.data.StreakTracker
 import com.curio.app.data.TopicJsonLoader
@@ -68,17 +66,20 @@ import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.cos
+import kotlin.math.roundToInt
+import kotlin.math.sin
 import kotlin.random.Random
 
 /**
- * The Shuffle — premium card-stack spin experience.
+ * The Spin — redesigned card-fan experience.
  *
  * Layout:
- *   1. Compact top bar: back + current category name
- *   2. Category rail: horizontal chips to switch categories in-place
- *   3. Tag/genre filter chips: dynamic from topic tags (e.g. "Rock", "1970s")
- *   4. Card stack: 3 layered cards, top cycles during shuffle
- *   5. Big shuffle button + confetti on landing
+ *   1. Top bar: back + category name + topic count
+ *   2. Compact filter bar: icon-only category dots + broad decade/era chips
+ *   3. Card fan: 5 cards fanned in semi-circle around center spin button
+ *   4. Shuffle button at bottom
+ *   5. Landed overlay when topic lands
  */
 @Composable
 fun SpinScreen(categorySlug: String?, navController: NavController) {
@@ -93,22 +94,24 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         value = TopicJsonLoader.load(activeCategory.id)
     }
 
-    // Subtype filter state
+    // Broad decade/era chips from tags (group "1970s", "1980s" etc.)
+    val broadFilters = remember(pool) {
+        pool.flatMap { it.tags }
+            .filter { it.matches(Regex("\\d{4}s?")) || it.contains("Century") }
+            .distinct().sorted()
+    }
+    var activeFilter by remember(activeCategory.id, pool) { mutableStateOf<String?>(null) }
+
+    // Subtype filter (for categories with multiple subtypes like Painters, Scientists)
     val allSubtypes = remember(pool) {
         pool.map { it.subtype }.distinct().sorted()
     }
     var activeSubtype by remember(activeCategory.id, pool) { mutableStateOf<String?>(null) }
 
-    // Tag filter state
-    val allTags = remember(pool) {
-        pool.flatMap { it.tags }.distinct().sorted()
-    }
-    var activeTag by remember(activeCategory.id, pool) { mutableStateOf<String?>(null) }
-
-    val filteredPool = remember(pool, activeSubtype, activeTag) {
+    val filteredPool = remember(pool, activeFilter, activeSubtype) {
         var result = pool
+        if (activeFilter != null) result = result.filter { activeFilter in it.tags }
         if (activeSubtype != null) result = result.filter { it.subtype == activeSubtype }
-        if (activeTag != null) result = result.filter { activeTag in it.tags }
         result
     }
 
@@ -119,60 +122,45 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var recentTopicIds by remember(activeCategory.id) { mutableStateOf(setOf<String>()) }
 
     val displayPool = remember(filteredPool) {
-        if (filteredPool.size <= 25) filteredPool.toList()
+        if (filteredPool.size <= 25) filteredPool.shuffled().toList()
         else filteredPool.shuffled().take(25)
     }
-    var visibleTopicIndex by remember(shuffleCount) { mutableStateOf(0) }
-    val cardProgress = remember(shuffleCount) { Animatable(0f) }
+    var cycleIndex by remember(shuffleCount) { mutableIntStateOf(0) }
     val cat = activeCategory
 
-    // ── Reset state when category changes ──────────────────────────────
+    // Reset on category switch
     LaunchedEffect(activeCategory.id) {
-        landedTopic = null
-        shuffling = false
+        landedTopic = null; shuffling = false
     }
 
-    // ── Shuffle logic ────────────────────────────────────────────────────
+    // Shuffle logic
     LaunchedEffect(shuffleCount) {
-        if (shuffleCount == 0) return@LaunchedEffect
-        if (filteredPool.isEmpty()) return@LaunchedEffect
-        shuffling = true
-        landedTopic = null
-
-        val cycles = Random.nextInt(CurioMotion.MinSpinTurns, CurioMotion.MaxSpinTurns + 1).toFloat()
-        val durationMs = Random.nextInt(CurioMotion.Durations.SpinMin, CurioMotion.Durations.SpinMax + 1)
+        if (shuffleCount == 0 || filteredPool.isEmpty()) return@LaunchedEffect
+        shuffling = true; landedTopic = null
+        val durationMs = 2400
 
         val cyclerJob = launch {
-            val totalTicks = (cycles * 7f).toInt()
-            repeat(totalTicks) { tick ->
-                if (displayPool.isNotEmpty()) {
-                    visibleTopicIndex = tick % displayPool.size
-                }
-                val progress = tick.toFloat() / totalTicks
-                val tickDuration = ((durationMs.toFloat() / totalTicks) * (1f + progress * 0.4f)).toLong()
-                delay(tickDuration.coerceAtLeast(180))
+            val ticks = 40
+            repeat(ticks) { tick ->
+                if (displayPool.isNotEmpty()) cycleIndex = (tick * 3) % displayPool.size
+                delay((durationMs / ticks).toLong())
             }
         }
 
-        cardProgress.snapTo(0f)
-        cardProgress.animateTo(
-            targetValue = cycles,
-            animationSpec = tween(durationMillis = durationMs, easing = CubicBezierEasing(0.10f, 0.70f, 0.25f, 1f))
-        )
-
-        shuffling = false
+        delay((durationMs * 0.7f).toLong())  // deceleration phase
         cyclerJob.cancel()
+        shuffling = false
 
-        val finalPick = pickFrom(filteredPool, recentTopicIds)
-        landedTopic = finalPick
-        if (finalPick != null) {
-            recentTopicIds = (recentTopicIds + finalPick.id).toList().takeLast(20).toSet()
+        val pick = pickFrom(filteredPool, recentTopicIds)
+        landedTopic = pick
+        if (pick != null) {
+            recentTopicIds = (recentTopicIds + pick.id).toList().takeLast(20).toSet()
             StreakTracker.recordActivity(context)
         }
         confettiTrigger++
     }
 
-    // ── Navigate after celebration ───────────────────────────────────────
+    // Navigate
     LaunchedEffect(confettiTrigger) {
         if (confettiTrigger == 0) return@LaunchedEffect
         delay(CurioMotion.Durations.RevealHold.toLong())
@@ -180,204 +168,195 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, topic.name))
     }
 
-    // ── Landing pop ──────────────────────────────────────────────────────
-    val popScale by animateFloatAsState(
-        if (landedTopic != null) 1f else 0.96f,
-        CurioMotion.Springs.Elastic, label = "landScale"
+    // Landing pop scale
+    val landScale by animateFloatAsState(
+        if (landedTopic != null) 1.05f else 1f,
+        CurioMotion.Springs.Elastic, label = "land"
     )
 
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding()
     ) {
-        // ── 1. Compact top bar ──────────────────────────────────────────
+        // ── 1. Top bar ─────────────────────────────────────────────────
         Row(
-            modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 12.dp, vertical = 6.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CurioBackButton(onClick = { navController.popBackStack() })
-            Spacer(Modifier.width(8.dp))
-            Text(
-                cat.displayName,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Spacer(Modifier.width(4.dp))
+            Text(cat.displayName, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onBackground)
             Spacer(Modifier.weight(1f))
             if (filteredPool.isNotEmpty()) {
                 Surface(shape = RoundedCornerShape(8.dp), color = cat.accent.copy(alpha = 0.12f)) {
-                    Text(
-                        "${filteredPool.size} topics",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = cat.accent,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                    )
+                    Text("${filteredPool.size}", style = MaterialTheme.typography.labelSmall,
+                        color = cat.accent, modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp))
                 }
             }
         }
 
-        // ── 2. Category rail ────────────────────────────────────────────
+        // ── 2. Compact filter bar ──────────────────────────────────────
         LazyRow(
             contentPadding = PaddingValues(horizontal = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
+            // Category dots (icon only)
             items(CurioCategories.visible) { c ->
                 val sel = c.id == cat.id
                 Surface(
                     onClick = { activeCategory = c },
-                    shape = RoundedCornerShape(50),
-                    color = if (sel) c.accent.copy(alpha = 0.18f) else Color.Transparent
+                    shape = CircleShape,
+                    color = if (sel) c.accent else Color.Transparent,
+                    modifier = Modifier.size(36.dp)
                 ) {
-                    Row(
-                        Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        CurioIcon(c.iconGlyph, null, tint = if (sel) c.accent else MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
-                        Text(
-                            c.displayName,
-                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal),
-                            color = if (sel) c.accent else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        CurioIcon(c.iconGlyph, null,
+                            tint = if (sel) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                            size = 18.dp)
                     }
                 }
             }
-        }
 
-        // ── 3. Subtype filter chips ────────────────────────────────────
-        if (allSubtypes.size > 1) {
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                modifier = Modifier.padding(bottom = 2.dp)
-            ) {
-                item {
-                    Surface(
-                        onClick = { activeSubtype = null },
-                        shape = RoundedCornerShape(50),
-                        color = if (activeSubtype == null) cat.accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant
-                    ) {
-                        Text(
-                            "All types",
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (activeSubtype == null) FontWeight.Bold else FontWeight.Normal),
-                            color = if (activeSubtype == null) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
-                }
+            // Divider dot
+            item {
+                Box(Modifier.width(1.dp).height(20.dp).background(MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(1.dp)))
+            }
+
+            // Broad filters: subtypes first, then decade/era chips
+            if (allSubtypes.size > 1) {
                 items(allSubtypes) { subtype ->
                     val sel = subtype == activeSubtype
-                    Surface(
-                        onClick = { activeSubtype = if (sel) null else subtype },
-                        shape = RoundedCornerShape(50),
-                        color = if (sel) cat.accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant
-                    ) {
-                        Text(
-                            subtype,
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal),
-                            color = if (sel) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
+                    FilterChip(subtype, sel, cat.accent) { activeSubtype = if (sel) null else subtype }
+                }
+            }
+            if (broadFilters.isNotEmpty()) {
+                items(broadFilters) { filter ->
+                    val sel = filter == activeFilter
+                    FilterChip(filter, sel, cat.accent) { activeFilter = if (sel) null else filter }
                 }
             }
         }
 
-        // ── 4. Tag/genre filter chips ───────────────────────────────────
-        if (allTags.isNotEmpty()) {
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                modifier = Modifier.padding(bottom = 8.dp)
-            ) {
-                item {
-                    Surface(
-                        onClick = { activeTag = null },
-                        shape = RoundedCornerShape(50),
-                        color = if (activeTag == null) cat.accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant
-                    ) {
-                        Text(
-                            "All",
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (activeTag == null) FontWeight.Bold else FontWeight.Normal),
-                            color = if (activeTag == null) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
-                }
-                items(allTags) { tag ->
-                    val sel = tag == activeTag
-                    Surface(
-                        onClick = { activeTag = if (sel) null else tag },
-                        shape = RoundedCornerShape(50),
-                        color = if (sel) cat.accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant
-                    ) {
-                        Text(
-                            tag,
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal),
-                            color = if (sel) cat.accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
-                }
-            }
-        }
+        Spacer(Modifier.height(8.dp))
 
-        // ── 5. Card stack area ──────────────────────────────────────────
+        // ── 3. Card fan area ───────────────────────────────────────────
         Box(
             modifier = Modifier.fillMaxWidth().weight(1f),
             contentAlignment = Alignment.Center
         ) {
-            CardStack(
-                accent = cat.accent,
-                glyph = cat.iconGlyph,
-                shuffling = shuffling,
-                landedTopic = landedTopic,
-                displayTopic = displayPool.getOrNull(visibleTopicIndex),
-                poolEmpty = filteredPool.isEmpty(),
-                poolHasTopics = pool.isNotEmpty() && filteredPool.isEmpty(),
-                popScale = popScale,
-                onClick = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ }
-            )
+            val fanCount = 5
+            val fanRadius = 200.dp
+            val fanAngle = 80f  // total spread in degrees
+
+            val density = LocalDensity.current
+                val radiusPx = with(density) { fanRadius.toPx() }
+
+    for (i in 0 until fanCount) {
+                val angle = -fanAngle / 2 + (fanAngle / (fanCount - 1)) * i
+                val topicForCard = when {
+                    landedTopic != null && i == fanCount / 2 -> landedTopic
+                    shuffling && displayPool.isNotEmpty() -> displayPool.getOrNull((cycleIndex + i) % displayPool.size)
+                    else -> displayPool.getOrNull(i % maxOf(displayPool.size, 1))
+                }
+                val isCenter = i == fanCount / 2
+
+                // Fan position
+                val rad = Math.toRadians(angle.toDouble())
+                val offsetX = (radiusPx * sin(rad)).toInt()
+                val offsetY = (radiusPx * cos(rad) - radiusPx).toInt()
+
+                Box(
+                    modifier = Modifier
+                        .offset { IntOffset(offsetX, offsetY) }
+                        .rotate(angle * 0.3f)
+                        .scale(if (isCenter && landedTopic != null) landScale else 1f)
+                        .zIndex(if (isCenter) 10f else (5f - i.coerceIn(0, 4)).toFloat())
+                ) {
+                    FanCard(
+                        accent = cat.accent,
+                        glyph = cat.iconGlyph,
+                        topic = topicForCard,
+                        isCenter = isCenter,
+                        landed = landedTopic != null && isCenter,
+                        isEmpty = filteredPool.isEmpty()
+                    )
+                }
+            }
+
+            // Center spin button
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.zIndex(20f)) {
+                Surface(
+                    onClick = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
+                    enabled = !shuffling && filteredPool.isNotEmpty(),
+                    shape = CircleShape,
+                    color = if (landedTopic != null) cat.accent.copy(alpha = 0.12f) else cat.accent,
+                    shadowElevation = 8.dp,
+                    modifier = Modifier.size(if (landedTopic != null) 64.dp else 72.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        if (shuffling) {
+                            Text("…", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                color = Color.White)
+                        } else {
+                            CurioIcon(
+                                if (landedTopic != null) CurioIcons.Refresh else CurioIcons.Casino, null,
+                                tint = if (landedTopic != null) cat.accent else Color.White,
+                                size = 32.dp)
+                        }
+                    }
+                }
+                if (landedTopic == null && !shuffling && filteredPool.isNotEmpty()) {
+                    Spacer(Modifier.height(4.dp))
+                    Text("Tap to spin", style = MaterialTheme.typography.labelSmall, color = cat.accent)
+                }
+            }
         }
 
-        // ── 6. Bottom CTA ───────────────────────────────────────────────
-        Box(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 20.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(
-                onClick = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
-                enabled = !shuffling && filteredPool.isNotEmpty(),
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = cat.accent,
-                    contentColor = if (landedTopic != null) Color.White else CurioColors.DeepPlum,
-                    disabledContainerColor = cat.tint,
-                    disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.4f)
-                ),
-                contentPadding = PaddingValues(horizontal = 64.dp, vertical = 18.dp)
+        // ── 4. Bottom button ───────────────────────────────────────────
+        if (landedTopic != null) {
+            AnimatedVisibility(
+                visible = true,
+                enter = slideInVertically { it } + fadeIn(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (!shuffling) {
-                        CurioIcon(
-                            if (landedTopic != null) CurioIcons.Refresh else CurioIcons.Casino,
-                            null,
-                            tint = if (landedTopic != null) Color.White else CurioColors.DeepPlum,
-                            size = 22.dp
-                        )
-                    }
+                Button(
+                    onClick = {
+                        val name = landedTopic?.name ?: return@Button
+                        navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, name))
+                    },
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(containerColor = cat.accent, contentColor = Color.White),
+                    contentPadding = PaddingValues(horizontal = 48.dp, vertical = 16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Explore this topic", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+                }
+            }
+        } else {
+            Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp), contentAlignment = Alignment.Center) {
+                Button(
+                    onClick = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
+                    enabled = !shuffling && filteredPool.isNotEmpty(),
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = cat.accent,
+                        contentColor = Color.White,
+                        disabledContainerColor = cat.tint,
+                        disabledContentColor = Color.White.copy(alpha = 0.5f)
+                    ),
+                    contentPadding = PaddingValues(horizontal = 64.dp, vertical = 16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Text(
-                        when { shuffling -> "Shuffling…"; landedTopic != null -> "Shuffle again"; else -> "SHUFFLE" },
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = if (landedTopic == null) 2.sp else 0.sp
-                        )
+                        when { shuffling -> "Spinning…"; else -> "Shuffle" },
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
                     )
                 }
             }
         }
     }
 
-    // ── Confetti ─────────────────────────────────────────────────────────
     if (confettiTrigger > 0) {
         ConfettiBurst(
             colors = listOf(cat.accent, cat.tint, CurioColors.ButterYellow),
@@ -390,191 +369,91 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 3-card stack with shuffle animation
+// Compact filter chip
 // ═══════════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun CardStack(
-    accent: Color,
-    glyph: String,
-    shuffling: Boolean,
-    landedTopic: CurioTopic?,
-    displayTopic: CurioTopic?,
-    poolEmpty: Boolean,
-    poolHasTopics: Boolean = false,
-    popScale: Float,
-    onClick: () -> Unit
-) {
-    val deckSize = 3
-
-    Box(modifier = Modifier.size(width = 260.dp, height = 340.dp), contentAlignment = Alignment.Center) {
-        // Back cards (static, provide depth illusion)
-        if (!poolEmpty) {
-            for (i in (deckSize - 1) downTo 1) {
-                val offsetPx = ((deckSize - i) * 8).dp
-                val cardAlpha = 1f - i * 0.25f
-                val rot = (i - 2) * 3f
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = offsetPx, start = offsetPx)
-                        .zIndex(i.toFloat())
-                        .graphicsLayer { alpha = cardAlpha.coerceAtLeast(0.3f); rotationZ = rot }
-                ) {
-                    CardFace(accent = accent, glyph = glyph, isTop = false, topic = null)
-                }
-            }
-        }
-
-        // Top card — the animated one
-        val isTop = shuffling || landedTopic != null
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .zIndex(deckSize.toFloat())
-                .scale(if (landedTopic != null) popScale else 1f)
-        ) {
-            CardFace(
-                accent = accent,
-                glyph = glyph,
-                isTop = true,
-                topic = when {
-                    landedTopic != null -> landedTopic
-                    shuffling -> displayTopic
-                    else -> null
-                },
-                shuffling = shuffling,
-                poolEmpty = poolEmpty,
-                poolHasTopics = poolHasTopics
-            )
-        }
-
-        // Invisible tap target covering the whole stack
-        Surface(
-            onClick = onClick,
-            enabled = !shuffling && !poolEmpty,
-            color = Color.Transparent,
-            modifier = Modifier.fillMaxSize().zIndex((deckSize + 1).toFloat())
-        ) {}
+private fun FilterChip(label: String, selected: Boolean, accent: Color, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(50),
+        color = if (selected) accent.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal),
+            color = if (selected) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+        )
     }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// Individual fan card
+// ═══════════════════════════════════════════════════════════════════════════
+
 @Composable
-private fun CardFace(
+private fun FanCard(
     accent: Color,
     glyph: String,
-    isTop: Boolean,
     topic: CurioTopic?,
-    shuffling: Boolean = false,
-    poolEmpty: Boolean = false,
-    poolHasTopics: Boolean = false
+    isCenter: Boolean,
+    landed: Boolean,
+    isEmpty: Boolean = false
 ) {
-    val cardColor = if (isTop) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+    val cardW = if (isCenter) 150.dp else 100.dp
+    val cardH = if (isCenter) 210.dp else 140.dp
+    val bg = if (isCenter) accent.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
 
     Surface(
-        shape = RoundedCornerShape(28.dp),
-        color = cardColor,
-        shadowElevation = if (isTop) 8.dp else 4.dp,
-        modifier = Modifier.fillMaxSize()
+        shape = RoundedCornerShape(if (isCenter) 24.dp else 16.dp),
+        color = bg,
+        shadowElevation = if (isCenter) 8.dp else 3.dp,
+        modifier = Modifier.size(cardW, cardH)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            if (topic != null && isTop) {
-                // Landed or cycling topic
-                if (!shuffling) {
-                    // Landed state
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        modifier = Modifier.padding(bottom = 12.dp)
-                    ) {
-                        CurioIcon(CurioIcons.AutoAwesome, null, tint = accent, size = 16.dp)
-                        Text("Your pick", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold), color = accent)
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            if (topic != null) {
+                Column(
+                    modifier = Modifier.padding(if (isCenter) 14.dp else 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    if (isCenter) {
+                        CurioIcon(CurioIcons.AutoAwesome, null, tint = accent, size = 14.dp)
+                        Spacer(Modifier.height(6.dp))
                     }
-                }
-
-                // Topic name (cycling or landed)
-                if (shuffling) {
-                    AnimatedContent(
-                        targetState = topic.name,
-                        transitionSpec = {
-                            (slideInVertically { it / 3 } + fadeIn(tween(200))) togetherWith
-                            (slideOutVertically { -it / 3 } + fadeOut(tween(150)))
-                        },
-                        label = "cycle"
-                    ) { name ->
-                        Text(
-                            name,
-                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold, lineHeight = 32.sp),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            textAlign = TextAlign.Center,
-                            maxLines = 3, overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                } else {
                     Text(
                         topic.name,
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold, lineHeight = 32.sp),
+                        style = if (isCenter) MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold)
+                        else MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
-                        maxLines = 3, overflow = TextOverflow.Ellipsis
+                        maxLines = if (isCenter) 3 else 1,
+                        overflow = TextOverflow.Ellipsis
                     )
-                }
-
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    topic.subtype,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = accent
-                )
-
-                if (!shuffling) {
-                    Spacer(Modifier.height(12.dp))
-                    // Accent divider
-                    Box(Modifier.width(48.dp).height(3.dp).background(accent, RoundedCornerShape(2.dp)))
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        topic.teaser,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2, overflow = TextOverflow.Ellipsis
-                    )
-                }
-            } else if (isTop) {
-                // Idle state
-                Surface(
-                    shape = RoundedCornerShape(20.dp),
-                    color = accent.copy(alpha = 0.10f),
-                    modifier = Modifier.size(88.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        CurioIcon(glyph, null, tint = accent, size = 44.dp)
+                    if (isCenter && landed) {
+                        Spacer(Modifier.height(4.dp))
+                        Text(topic.subtype, style = MaterialTheme.typography.labelSmall, color = accent)
+                        Spacer(Modifier.height(4.dp))
+                        Box(Modifier.width(32.dp).height(2.dp).background(accent, RoundedCornerShape(1.dp)))
+                        Spacer(Modifier.height(4.dp))
+                        Text(topic.teaser,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            maxLines = 2, overflow = TextOverflow.Ellipsis)
                     }
                 }
-                Spacer(Modifier.height(20.dp))
-                Text(
-                    if (poolEmpty) "Coming soon" else "Tap to shuffle",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = if (poolEmpty) MaterialTheme.colorScheme.onSurfaceVariant else accent,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    if (poolHasTopics) "No matches for this filter"
-                else if (poolEmpty) "Topics are on the way" else "Discover something new",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
-                )
-            } else {
-                // Back card — subtle watermark
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    CurioIcon(glyph, null, tint = accent.copy(alpha = 0.06f), size = 100.dp)
+            } else if (isCenter) {
+                // Idle center card
+                if (isEmpty) {
+                    Text("Coming soon", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                } else {
+                    CurioIcon(glyph, null, tint = accent.copy(alpha = 0.4f), size = 40.dp)
                 }
+            } else {
+                // Side card placeholder
+                CurioIcon(glyph, null, tint = accent.copy(alpha = 0.15f), size = 24.dp)
             }
         }
     }
@@ -593,7 +472,6 @@ private fun pickFrom(pool: List<CurioTopic>, recentIds: Set<String>): CurioTopic
 
     val totalWeight = candidates.sumOf { t -> when (t.tier) { 1 -> 100; 2 -> 60; 3 -> 20; else -> 30 } }
     if (totalWeight <= 0) return candidates.random()
-
     var target = Random.nextInt(totalWeight)
     for (topic in candidates) {
         target -= when (topic.tier) { 1 -> 100; 2 -> 60; 3 -> 20; else -> 30 }
