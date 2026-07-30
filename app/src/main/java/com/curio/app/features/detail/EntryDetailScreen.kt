@@ -226,7 +226,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     if (resolvedEntry.title != null) {
                         Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
                             Text(
-                                text = resolvedEntry.title!!,
+                                text = resolvedEntry.title,
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
@@ -362,7 +362,7 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
             // ── Real audio player (when file path is available) ─────────
             if (!data.audioFilePath.isNullOrBlank()) {
                 AudioPlayerBar(
-                    audioFilePath = data.audioFilePath!!,
+                    audioFilePath = data.audioFilePath,
                     accent = category.accent,
                     tint = category.tint
                 )

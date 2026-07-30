@@ -102,7 +102,7 @@ fun HomeScreen(navController: NavController) {
 
     // Load recent captures from Room
     val recentEntries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
-        value = try { CurioRepositoryHolder.repo?.getAll()?.take(4) ?: emptyList() } catch (_: Exception) { emptyList() }
+        value = try { CurioRepositoryHolder.repo.getAll().take(4) } catch (_: Exception) { emptyList() }
     }
 
     ModalNavigationDrawer(

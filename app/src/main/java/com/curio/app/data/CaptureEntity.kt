@@ -47,6 +47,7 @@ class CaptureConverters {
     @TypeConverter
     fun toCaptureData(json: String): CaptureData {
         // First deserialize as a generic map to find the type discriminator
+        @Suppress("UNCHECKED_CAST")
         val map = gson.fromJson(json, Map::class.java) as Map<String, Any?>
         return when (map["subFormat"]) {
             // OpenNotebook has a nested format

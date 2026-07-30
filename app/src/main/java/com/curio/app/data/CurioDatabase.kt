@@ -25,7 +25,7 @@ abstract class CurioDatabase : RoomDatabase() {
                     CurioDatabase::class.java,
                     "curio_database"
                 )
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(false)
                     .build()
                     .also { INSTANCE = it }
             }
