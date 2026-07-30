@@ -37,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -214,8 +213,9 @@ fun GalleryWallFormat(
                                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                                 color = MaterialTheme.colorScheme.onSurface
                             )
+                            Spacer(Modifier.height(6.dp))
                             Text(
-                                text = "Add images, drag them around — make it yours \u2726",
+                                text = "Add images, drag them around",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -278,14 +278,8 @@ fun GalleryWallFormat(
                                         Box(
                                             modifier = Modifier
                                                 .fillMaxSize()
-                                                .background(
-                                                    Brush.verticalGradient(
-                                                        colors = listOf(
-                                                            Color.Transparent,
-                                                            Color.Black.copy(alpha = 0.15f)
-                                                        ),
-                                                        startY = 0.6f
-                                                    ),
+                                            .background(
+                                                Color.Black.copy(alpha = 0.08f),
                                                     RoundedCornerShape(14.dp)
                                                 )
                                         )
