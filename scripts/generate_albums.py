@@ -1176,6 +1176,266 @@ ALBUMS = [
     ),
 
     # ═══════════════════════════════════════════════════════════════════════
+    # ELECTRONIC BATCH 4 — Techno, House, D&B, Jungle, Garage, Synthwave, Glitch
+    # ═══════════════════════════════════════════════════════════════════════
+    (
+        "album-jeff-mills-waveform-3", "Album",
+        "Waveform Transmission Vol. 3",
+        "Jeff Mills 1994 — the Detroit techno purist's most essential album. Recorded live to DAT tape with no overdubs. Mills, a former radio DJ known as The Wizard, built tracks from Roland TR-909 drum patterns and minimal synth lines, creating a sound so precise it felt like mathematics set to a 4/4 kick.",
+        "Waveform Transmission Vol. 3 (1994) end-to-end", 53,
+        "Listen to 'The Bells' — the track is a single synth stab repeated for 5 minutes while the 909 kicks you in the chest. Mills famously plays 3-4 decks simultaneously in his DJ sets. Then 'Changes of Life' — the snare roll at 2:17 sounds like a machine gun made of hi-hats. Detroit techno's philosophy: less is more, but louder.",
+        ["Techno", "Detroit Techno", "Electronic", "American", "1990s"], 1
+    ),
+    (
+        "album-juan-atkins-deep-space", "Album",
+        "Deep Space",
+        "Juan Atkins (as Model 500) 1995 — the godfather of techno's space-obsessed masterwork. Atkins coined the term 'techno' in the early 80s after reading Alvin Toffler's 'The Third Wave'. The album imagines Detroit not as a decaying industrial city but as a launching pad to the stars.",
+        "Deep Space (1995) end-to-end", 58,
+        "Listen to 'The Flow' — the bassline is a single arpeggiated note from a Roland TB-303, the same synth that created acid house. Then 'Night Drive' — inspired by Atkins' actual drives through Detroit's empty 3 AM streets. The album's sci-fi aesthetic wasn't escapism; it was a Black American's vision of a future that included him.",
+        ["Techno", "Detroit Techno", "Electronic", "American", "1990s"], 1
+    ),
+    (
+        "album-derrick-may-innovator", "Album",
+        "Innovator",
+        "Derrick May 1997 — a compilation of the Detroit techno pioneer's most important tracks from 1987-1990. May called his music 'Hi-Tech Soul', believing that machines could express human emotion. His track 'Strings of Life' — a piano-driven techno anthem — was made in a single afternoon and accidentally became the most important dance track of the era.",
+        "Innovator (1997 compilation) end-to-end", 60,
+        "Listen to 'Strings of Life' — the piano was played by May's friend Michael James, who didn't know the tape was rolling. The string sample is from a 1970s Detroit Symphony recording. Then 'Nude Photo' — the track was produced in Juan Atkins' mother's basement. May, Atkins, and Kevin Saunderson went to the same high school in Belleville, Michigan.",
+        ["Techno", "Detroit Techno", "Electronic", "American", "1990s"], 1
+    ),
+    (
+        "album-carl-craig-more-songs-about-food", "Album",
+        "More Songs About Food and Revolutionary Art",
+        "Carl Craig 1997 — the second-generation Detroit techno producer's masterpiece. Craig fused techno with jazz, ambient, and classical influences. The album title is a Talking Heads reference. Craig played nearly every instrument himself, layering Rhodes piano, synthesizers, and drum machines into a sound that was both futuristic and deeply human.",
+        "More Songs About Food (1997) end-to-end", 52,
+        "Listen to 'At Les' — the track builds for 15 minutes from a single piano chord into a full orchestral-techno climax. Then 'Televised Green Smoke' — the drum programming is so intricate it sounds like a live jazz drummer, but it's entirely sequenced. Craig's secret: he programs drums at half-speed, then speeds them up.",
+        ["Techno", "Detroit Techno", "Electronic", "American", "1990s"], 1
+    ),
+    (
+        "album-underworld-dubnobasswithmyheadman", "Album",
+        "Dubnobasswithmyheadman",
+        "Underworld 1994 — the album where a failed 80s pop band reinvented itself as techno poets. Karl Hyde's stream-of-consciousness vocals — collected from overheard conversations, late-night TV, and London street observations — floated over Rick Smith and Darren Emerson's propulsive beats. The album made techno feel like literature.",
+        "Dubnobasswithmyheadman (1994) end-to-end", 73,
+        "Listen to 'Dark & Long' — the 7-minute opener evolves from a single bass pulse into a panorama. Then 'Cowgirl' — the lyric 'everything everything' was repeated so many times during recording that Hyde lost his voice. The album was recorded at night after the band's day jobs; they'd finish at 6 AM and watch the sunrise over the Thames.",
+        ["Techno", "Progressive House", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-orbital-brown-album", "Album",
+        "Orbital (Brown Album)",
+        "Orbital 1993 — the Hartnoll brothers' second album, named for its brown cover (they never title their albums). Recorded in a studio built into a converted water tower in Kent. The album took techno's rigid structures and made them bend — shifting time signatures, unexpected melodic turns, and a warmth that most electronic music lacked.",
+        "Orbital (Brown Album, 1993) end-to-end", 66,
+        "Listen to 'Halcyon + On + On' — the track is built around a sample of Opus III's 'It's a Fine Day' and Kirsty Hawkshaw's vocals, pitched and reversed. Then 'Impact (The Earth Is Burning)' — the track samples a BBC documentary about environmental collapse. The album was made entirely on hardware: no computers, just synthesizers and a 24-track tape machine.",
+        ["Techno", "Ambient Techno", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-frankie-knuckles-beyond-the-mix", "Album",
+        "Beyond the Mix",
+        "Frankie Knuckles 1991 — the godfather of house music's only proper studio album. Knuckles, who started DJing at Chicago's Warehouse club (which gave house music its name), brought in vocalists, string sections, and gospel influences. The album bridged underground dance music and the pop mainstream.",
+        "Beyond the Mix (1991) end-to-end", 55,
+        "Listen to 'The Whistle Song' — the synth-whistle melody was played on a Roland D-50. The track became a global hit despite having no verse, no chorus, and almost no words. Then 'Rain Falls' — Lisa Michaelis's vocal was recorded in a single take in Knuckles's apartment. The album's warmth comes from Knuckles mixing everything through vintage analog compressors.",
+        ["House", "Chicago House", "Electronic", "American", "1990s"], 1
+    ),
+    (
+        "album-larry-heard-another-side", "Album",
+        "Another Side",
+        "Larry Heard (as Mr. Fingers) 1988 — the album that proved house music could be deeply emotional. Heard's track 'Can You Feel It' had already become an anthem; this album extended that vision into a full-length statement. Heard played all the instruments: Rhodes piano, Juno-106, TR-808, and his own voice.",
+        "Another Side (1988) end-to-end", 48,
+        "Listen to 'Can You Feel It' — the spoken word intro ('In the beginning, there was Jack…') is a sermon about the origins of house music. Then 'Mystery of Love' — Heard's falsetto floats over a Rhodes chord progression that never resolves. Heard was a drummer before he was a producer; every track has a rhythmic sophistication that most house music lacks.",
+        ["House", "Deep House", "Chicago House", "Electronic", "American", "1980s"], 1
+    ),
+    (
+        "album-moodymann-silentintroduction", "Album",
+        "Silentintroduction",
+        "Moodymann (Kenny Dixon Jr.) 1997 — the Detroit producer's debut, a collage of deep house, soul samples, and spoken-word interludes that feel like eavesdropping on a private conversation. Dixon's signature move — leaving vinyl crackle and tape hiss in the mix — made the music feel like it was coming from a dusty record collection, not a computer.",
+        "Silentintroduction (1997) end-to-end", 42,
+        "Listen to 'I Can't Kick This Feeling When It Hits' — the track is built from a 4-bar Chic sample looped for 8 minutes, and it never gets boring. Then 'Dem Young Sconies' — the shouted vocal sample is Dixon's friends at a Detroit party. Dixon famously refuses to show his face in interviews, insisting the music speak for itself.",
+        ["House", "Deep House", "Electronic", "American", "1990s"], 1
+    ),
+    (
+        "album-ron-trent-raw-footage", "Album",
+        "Raw Footage",
+        "Ron Trent 1999 — the Chicago-born, New York-based producer's magnum opus. Trent started DJing at 14; by 16 he'd produced 'Altered States', a track that defined deep house. This album expands that sound into something cinematic: jazz fusion, African percussion, and spoken-word poetry over deep, patient grooves.",
+        "Raw Footage (1999) end-to-end", 56,
+        "Listen to 'The Sound' — the opening congas were recorded in a single session with a percussionist Trent met at a drum circle. Then 'Journey' — the track runs 12 minutes and passes through at least 4 distinct movements. Trent's production philosophy: 'let the track breathe.' Most of these songs were first takes.",
+        ["House", "Deep House", "Electronic", "American", "1990s"], 1
+    ),
+    (
+        "album-goldie-timeless", "Album",
+        "Timeless",
+        "Goldie 1995 — the first drum & bass album to cross over to the mainstream. Recorded over 2 years at a cost of £250,000 (unheard of for electronic music at the time). Goldie couldn't read music or play an instrument; he hummed ideas to session musicians. The 21-minute opening track 'Inner City Life' was originally 3 separate songs stitched together.",
+        "Timeless (1995) end-to-end", 75,
+        "Listen to 'Inner City Life' — Diane Charlemagne's vocal was recorded in a single session after Goldie found her singing in a London jazz club. Then 'Angel' — the swirling strings were arranged by a classical composer who'd never heard drum & bass before. The album's ambition was so extreme that the label tried to cut it in half; Goldie refused.",
+        ["Drum & Bass", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-roni-size-new-forms", "Album",
+        "New Forms",
+        "Roni Size / Reprazent 1997 — the album that won the Mercury Prize and proved drum & bass could be a live band, not just a DJ genre. Recorded in a Bristol basement with a rotating crew of musicians. Size's production blended jazz improvisation, dub basslines, and breakbeats into something wholly new.",
+        "New Forms (1997) end-to-end", 70,
+        "Listen to 'Brown Paper Bag' — the bassline was played by a live double bassist, then sampled and looped. Then 'Heroes' — the track's orchestral swell was recorded with the Bristol Philharmonic in a single afternoon. Size built the album's beats from live drum recordings, not samples, giving it a human feel that most drum & bass lacked.",
+        ["Drum & Bass", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-ltj-bukem-logical-progression", "Album",
+        "Logical Progression",
+        "LTJ Bukem 1996 — the album that defined 'intelligent' drum & bass (a term Bukem himself hated). Recorded at his Good Looking Records studio. Bukem's production was the antithesis of the aggressive jungle dominating the scene: lush pads, jazz-influenced chords, and breakbeats that rolled rather than attacked.",
+        "Logical Progression (1996) end-to-end", 72,
+        "Listen to 'Horizons' — the track's string pads were played on a Korg M1, the same synthesizer that scored a thousand 90s house tracks. Then 'Music' — the vocal sample is a single phrase from an obscure 1970s soul record, pitched and stretched into a 7-minute meditation. Bukem's secret: he mixed the drums lower than the melody, which was heresy in drum & bass.",
+        ["Drum & Bass", "Liquid Funk", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-shy-fx-diary-of-a-digital-soundboy", "Album",
+        "Diary of a Digital Soundboy",
+        "Shy FX 2005 — the jungle pioneer's debut album, recorded 13 years after his genre-defining track 'Original Nuttah'. The album spans jungle, reggae, dancehall, and liquid drum & bass, reflecting Shy FX's London upbringing where sound system culture and pirate radio were inseparable.",
+        "Diary of a Digital Soundboy (2005) end-to-end", 55,
+        "Listen to 'Feelings' — the vocal by Kele Le Roc was recorded at 4 AM after the studio had emptied. Then 'On the Run' — the track samples a 1960s Lee 'Scratch' Perry production and runs it through a digital delay so aggressive it almost breaks apart. The album title refers to Shy FX's belief that digital production tools had finally caught up with his imagination.",
+        ["Jungle", "Drum & Bass", "Electronic", "British", "2000s"], 1
+    ),
+    (
+        "album-squarepusher-hard-normal-daddy", "Album",
+        "Hard Normal Daddy",
+        "Squarepusher (Tom Jenkinson) 1997 — the album where a bass virtuoso applied jazz-fusion technique to drum & bass. Jenkinson played every instrument: bass guitar, drums, synthesizers. The bass solos — played on a 6-string bass through a distortion pedal at 180 BPM — sounded like a computer but were entirely human.",
+        "Hard Normal Daddy (1997) end-to-end", 53,
+        "Listen to 'Beep Street' — the drum programming shifts time signatures every 4 bars while the bass plays a walking jazz line. Then 'Chin Hippy' — the track's central bass riff was recorded at half-speed and sped up, giving it an inhuman precision. Jenkinson's father was a jazz drummer; the album's complex rhythms are genetic.",
+        ["Drum & Bass", "IDM", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-the-prodigy-fat-of-the-land", "Album",
+        "The Fat of the Land",
+        "The Prodigy 1997 — the album that took rave culture to #1 in 22 countries. Recorded in Liam Howlett's Essex home studio. The album fused breakbeats, punk energy, and arena-rock ambition. 'Firestarter' was the first electronic track to top the UK singles chart while simultaneously being banned from daytime radio.",
+        "The Fat of the Land (1997) end-to-end", 57,
+        "Listen to 'Smack My Bitch Up' — the track samples at least 6 different records including Ultramagnetic MCs and Rage Against the Machine. The video (banned by MTV) was shot from a first-person perspective of a night out. Then 'Breathe' — Keith Flint's sneering vocal was his attempt to channel the Sex Pistols. Flint was a dancer, not a singer; Howlett liked the amateur energy.",
+        ["Big Beat", "Breakbeat", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-chemical-brothers-dig-your-own-hole", "Album",
+        "Dig Your Own Hole",
+        "The Chemical Brothers 1997 — the album that made big beat the sound of the late 90s. Tom Rowlands and Ed Simons built tracks from psychedelic rock samples, hip-hop breakbeats, and acid house squelches. Noel Gallagher's guest vocal on 'Setting Sun' was recorded in a single afternoon after he'd been up all night.",
+        "Dig Your Own Hole (1997) end-to-end", 63,
+        "Listen to 'Setting Sun' — the bassline is a slowed-down sample from a 1960s Indian classical record. Gallagher's vocal was recorded through a cheap microphone to make it sound distorted. Then 'Block Rockin' Beats' — the track won a Grammy for Best Rock Instrumental despite having no guitars. The Chemical Brothers' secret: they treated the sampler as a rock instrument.",
+        ["Big Beat", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-flying-lotus-cosmogramma", "Album",
+        "Cosmogramma",
+        "Flying Lotus (Steven Ellison) 2010 — the album that blurred the line between hip-hop, electronic, and jazz into a new genre. Ellison, the grand-nephew of Alice Coltrane, recorded the album in his Los Angeles apartment. The tracks shift tempo, texture, and genre mid-bar, creating music that feels like channel-surfing through the cosmos.",
+        "Cosmogramma (2010) end-to-end", 45,
+        "Listen to 'Zodiac Shit' — the track samples a 1970s spiritual jazz record that Ellison found in his aunt's collection, then runs it through a digital blender. Then 'Do the Astral Plane' — the bassline was played by Thundercat, who Ellison discovered playing jazz clubs. The album's density rewards multiple listens: every return reveals a new sample, a new layer.",
+        ["Electronic", "Experimental", "Wonky", "American", "2010s"], 1
+    ),
+    (
+        "album-four-tet-rounds", "Album",
+        "Rounds",
+        "Four Tet (Kieran Hebden) 2003 — an album made entirely on a desktop computer with found sounds: a squeaky door, a radio broadcast, an old folk record played at the wrong speed. Hebden stitched these fragments into something that felt organic, not digital. The album's warmth comes from its imperfections.",
+        "Rounds (2003) end-to-end", 45,
+        "Listen to 'My Angel Rocks Back and Forth' — the central melody is a music box sample slowed to half-speed. Then 'As Serious as Your Life' — the drum pattern was assembled from single hits Hebden recorded on a hand-held microphone in his kitchen. The album's title refers to the circular nature of Hebden's compositional method: ideas that loop back on themselves.",
+        ["Electronic", "Folktronica", "IDM", "British", "2000s"], 1
+    ),
+    (
+        "album-caribou-swim", "Album",
+        "Swim",
+        "Caribou (Dan Snaith) 2010 — an album about swimming through grief, built from liquid synthesizer arpeggios and submerged beats. Snaith has a PhD in mathematics; the album's complex polyrhythms were derived from mathematical models of water turbulence. Despite the academic origins, the album is deeply emotional.",
+        "Swim (2010) end-to-end", 43,
+        "Listen to 'Odessa' — the flute melody was played by Snaith's wife on a recorder purchased the day before. Then 'Sun' — the track builds for 6 minutes around a single chord before releasing into a chorus that feels like surfacing for air. Snaith recorded most of the album alone in a remote cabin during a Canadian winter.",
+        ["Electronic", "Indietronica", "Canadian", "2010s"], 1
+    ),
+    (
+        "album-amon-tobin-isam", "Album",
+        "ISAM",
+        "Amon Tobin 2011 — an album built entirely from field recordings: a motorcycle engine, a wasp trapped in a jar, a creaking gate, human teeth chattering. No traditional instruments appear. Tobin, a Brazilian-born sound designer, spent 4 years collecting and processing sounds into an album that makes you question what music is.",
+        "ISAM (2011) end-to-end", 58,
+        "Listen to 'Journeyman' — the percussion comes from recordings of falling bricks, a pneumatic drill, and a typewriter carriage return. Then 'Lost & Found' — the 'melody' is a violin sample that Tobin stretched until it became unrecognizable texture. The album was accompanied by a custom-designed 3D projection system for live shows.",
+        ["Electronic", "Experimental", "Glitch", "Brazilian-British", "2010s"], 1
+    ),
+    (
+        "album-venetian-snares-rossz-csillag", "Album",
+        "Rossz Csillag Alatt Született",
+        "Venetian Snares (Aaron Funk) 2005 — an album of breakcore built around classical samples, named after a Hungarian phrase meaning 'born under a bad star'. Funk, a Canadian producer from Winnipeg, recorded the album after a trip to Hungary. The track titles are quotes from Hungarian poetry.",
+        "Rossz Csillag (2005) end-to-end", 47,
+        "Listen to 'Hajnal' — the track opens with a solo violin from a 1930s Hungarian recording, then the drums explode at 120 BPM while the violin keeps playing, unaffected. Then 'Öngyilkos Vasárnap' — the title means 'Suicidal Sunday', a reference to the famous 'Gloomy Sunday' song. The album makes classical music and breakcore feel like they were always meant to be together.",
+        ["Breakcore", "Electronic", "Experimental", "Canadian", "2000s"], 1
+    ),
+    (
+        "album-autechre-tri-repetae", "Album",
+        "Tri Repetae",
+        "Autechre 1995 — the Sheffield duo's third album, where their sound shifted from melodic techno to something more abstract and machine-like. Sean Booth and Rob Brown built their own software to generate sounds no existing synthesizer could make. The album's title suggests 'three repetitions', but nothing on it repeats in any predictable way.",
+        "Tri Repetae (1995) end-to-end", 72,
+        "Listen to 'Clipper' — the track's rhythm is in 4/4 but every sound lands slightly off the grid, creating a sensation of constant unease. Then 'Eutow' — the central synth line seems to be made of melting metal. Autechre's music divides listeners: some hear noise, others hear structures too complex for the ear to decode on first listen.",
+        ["IDM", "Experimental", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-pan-sonic-kesto", "Album",
+        "Kesto",
+        "Pan Sonic 2004 — the Finnish duo's 4-disc magnum opus of industrial minimalism. Mika Vainio and Ilpo Väisänen built their own electronic instruments from circuit boards and scrap metal. The album's 50 tracks range from 15-second bursts of pure noise to a single 67-minute drone piece that tests the limits of human patience.",
+        "Kesto (2004) — disc 1", 60,
+        "Listen to the drone tracks at low volume. Pan Sonic's music is about texture, not structure: the way a frequency vibrates in your chest, the physical sensation of bass that's almost subsonic. Then try 'Havainto' — the entire track is a single tone that slowly changes timbre over 12 minutes. The album's title is Finnish for 'duration' or 'stamina'.",
+        ["Experimental", "Minimal", "Industrial", "Electronic", "Finnish", "2000s"], 1
+    ),
+    (
+        "album-kavinsky-outrun", "Album",
+        "OutRun",
+        "Kavinsky 2013 — the album that defined synthwave nostalgia. Named after the 1986 Sega arcade game, the album imagines a 1980s that never existed: neon grids, testarossas, and synthesized sunsets. Kavinsky's alter-ego is a teenager who died in a car crash in 1986 and returned as a zombie producer.",
+        "OutRun (2013) end-to-end", 44,
+        "Listen to 'Nightcall' — the vocal is by Daft Punk's Guy-Manuel de Homem-Christo, processed through a vocoder. The track opened the film 'Drive'. Then 'ProtoVision' — the synth solo was played on a Roland Jupiter-8, the same synthesizer that scored every 80s action movie. The album's conceit — that it's the soundtrack to a film that doesn't exist — became the genre's defining idea.",
+        ["Synthwave", "Electronic", "French", "2010s"], 1
+    ),
+    (
+        "album-perturbator-dangerous-days", "Album",
+        "Dangerous Days",
+        "Perturbator (James Kent) 2014 — the darker, heavier side of synthwave. Kent, a French producer and metal guitarist, brought distorted guitars and horror-movie atmospherics to the genre. The album's cyberpunk dystopia feels less like nostalgia and more like a warning.",
+        "Dangerous Days (2014) end-to-end", 55,
+        "Listen to 'Humans Are Such Easy Prey' — the title is a reference to the Terminator franchise. Then 'She Is Young, She Is Beautiful, She Is Next' — the synth arpeggio at 2:30 was played on a Minimoog and run through a distortion pedal. Kent recorded the album in his Paris apartment at night, deliberately working in the dark to maintain the mood.",
+        ["Synthwave", "Darkwave", "Electronic", "French", "2010s"], 1
+    ),
+    (
+        "album-com-truise-galactic-melt", "Album",
+        "Galactic Melt",
+        "Com Truise (Seth Haley) 2011 — the album that perfected the 'slow-motion 80s' sound. Haley, a New Jersey graphic designer, built tracks from detuned analog synthesizers, gated reverb, and drum machines pitched down to the point of melting. The music sounds like a VHS tape of a corporate training video left in a hot car.",
+        "Galactic Melt (2011) end-to-end", 42,
+        "Listen to 'Brokendate' — the synth melody sounds like it's being played through a stretched cassette tape. Then 'VHS Sex' — the title says it all. Haley worked as an art director for a pharmaceutical company; the album's aesthetic was partly inspired by the cold, geometric graphics of 1980s drug advertisements.",
+        ["Synthwave", "Chillwave", "Electronic", "American", "2010s"], 1
+    ),
+    (
+        "album-clark-body-riddle", "Album",
+        "Body Riddle",
+        "Clark (Chris Clark) 2006 — the Warp Records artist's breakthrough, an album of glitch-techno that sounds like a machine learning to feel. Clark played most of the acoustic instruments — strings, woodwinds, percussion — then processed them until the source was unrecognizable. The result is electronic music with something human trapped inside.",
+        "Body Riddle (2006) end-to-end", 48,
+        "Listen to 'Herr Bar' — the track's central melody is a single piano note processed through six different effects chains simultaneously. Then 'Night Knuckles' — the rhythm sounds random but is actually a highly structured 11/8 pattern. Clark's secret: he records improvisations at 3 AM while half-asleep, then edits the most interesting moments.",
+        ["IDM", "Glitch", "Electronic", "British", "2000s"], 1
+    ),
+    (
+        "album-machinedrum-rooms", "Album",
+        "Room(s)",
+        "Machinedrum (Travis Stewart) 2011 — an album that fused footwork, jungle, and IDM into something new. Stewart, a North Carolina native, had been making music since age 10. The album's title refers to the different emotional spaces Stewart was navigating: grief, hope, anxiety, love.",
+        "Room(s) (2011) end-to-end", 42,
+        "Listen to 'She Died There' — the track's vocal sample is a single phrase from an R&B record, pitched and glitched until it sounds like a skipping CD. Then 'U Don't Survive' — the 808 kick patterns are so fast they blur into a drone. Stewart produced the entire album on headphones in a Brooklyn apartment while his neighbors complained about the bass.",
+        ["Electronic", "Footwork", "IDM", "American", "2010s"], 1
+    ),
+    (
+        "album-oneohtrix-point-never-replica", "Album",
+        "Replica",
+        "Oneohtrix Point Never (Daniel Lopatin) 2011 — an album built almost entirely from samples of 1980s TV commercials. Lopatin processed the audio until the original content was unrecognizable, leaving only emotional residue. The result is an album that feels like watching Nick at Nite through a fever dream.",
+        "Replica (2011) end-to-end", 40,
+        "Listen to 'Sleep Dealer' — the central sample is a single sustained note from a furniture commercial, stretched until it fills 3 minutes. Then 'Andro' — the 'melody' is a fragment of dialogue from an unknown 1980s soap opera. Lopatin described the album as 'music for a memory you're not sure you actually have.'",
+        ["Electronic", "Ambient", "Vaporwave", "American", "2010s"], 1
+    ),
+    (
+        "album-tim-hecker-ravendeath", "Album",
+        "Ravedeath, 1972",
+        "Tim Hecker 2011 — an album of digitally-abused pipe organ, recorded in a church in Reykjavik, then processed beyond recognition. Hecker and Ben Frost spent a day recording the church organ, then Hecker spent a year destroying the recordings — overdriving them, pitch-shifting them, burying them in static — until the sacred became profane.",
+        "Ravedeath, 1972 (2011) end-to-end", 52,
+        "Listen to 'In the Fog I' — the pipe organ is audible but just barely, like hearing a church service from a block away. Then 'Studio Suicide, 1980' — a single sustained chord slowly dissolves into white noise over 9 minutes. The album's title refers not to a literal event but to the death of analog music in the digital age.",
+        ["Ambient", "Drone", "Electronic", "Canadian", "2010s"], 1
+    ),
+    (
+        "album-lapalux-lustmore", "Album",
+        "Lustmore",
+        "Lapalux (Stuart Howard) 2015 — a concept album about liminal states: the moment between sleep and waking, between sobriety and intoxication, between one relationship and the next. Howard, an Essex-born producer, built tracks from warped R&B samples, field recordings, and synthesizers so processed they sound liquid.",
+        "Lustmore (2015) end-to-end", 45,
+        "Listen to 'U Never Know' — Andréya Triana's vocal was recorded at 1.5x speed, then slowed down to create an otherworldly timbre. Then 'Don't Mean a Thing' — the drum pattern was generated by a random algorithm Howard coded himself. The album's interlude tracks are recordings of Howard's friends describing their strangest dreams.",
+        ["Electronic", "Wonky", "British", "2010s"], 1
+    ),
+
+    # ═══════════════════════════════════════════════════════════════════════
     # SOUL / R&B — Classic soul, Neo-soul, Contemporary
     # ═══════════════════════════════════════════════════════════════════════
     (
