@@ -43,9 +43,9 @@ class MainActivity : ComponentActivity() {
         val db = CurioDatabase.getInstance(this)
         CurioRepositoryHolder.init(db.captureDao())
 
-        val savedTheme = AppPreferences.getThemeMode(this)
+        AppPreferences.initThemeMode(this)
         setContent {
-            CurioTheme(themeMode = savedTheme) {
+            CurioTheme {
                 CurioNavHost()
             }
         }

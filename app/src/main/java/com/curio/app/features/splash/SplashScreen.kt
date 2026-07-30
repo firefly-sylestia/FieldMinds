@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.curio.app.data.AppPreferences
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.infrastructure.CurioCrashReporter
@@ -129,8 +128,7 @@ fun SplashScreen(navController: NavHostController) {
         }
     }
 
-    val savedTheme = AppPreferences.getThemeMode(context)
-    CurioTheme(themeMode = savedTheme) {
+    CurioTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background

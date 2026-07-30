@@ -1,6 +1,9 @@
 package com.curio.app.data
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 /**
  * Simple SharedPreferences wrapper for Curio user preferences.
@@ -28,12 +31,26 @@ object AppPreferences {
     fun setDisplayName(context: Context, name: String) =
         prefs(context).edit().putString(KEY_DISPLAY_NAME, name).apply()
 
+    /**
+     * Reactive theme mode state — updated by [setThemeMode] so [CurioTheme]
+     * recomposes instantly when the user toggles the theme in settings.
+     * Call [initThemeMode] once at app startup to seed it from prefs.
+     */
+    var themeModeState by mutableStateOf(THEME_SYSTEM)
+        private set
+
+    fun initThemeMode(context: Context) {
+        themeModeState = getThemeMode(context)
+    }
+
     // ── Theme ────────────────────────────────────────────────────────
     fun getThemeMode(context: Context): String =
         prefs(context).getString(KEY_THEME_MODE, THEME_SYSTEM) ?: THEME_SYSTEM
 
-    fun setThemeMode(context: Context, mode: String) =
+    fun setThemeMode(context: Context, mode: String) {
         prefs(context).edit().putString(KEY_THEME_MODE, mode).apply()
+        themeModeState = mode
+    }
 
     // ── Daily reminder ───────────────────────────────────────────────
     fun isReminderEnabled(context: Context): Boolean =
