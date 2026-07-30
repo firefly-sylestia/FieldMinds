@@ -412,14 +412,14 @@ private fun CardStack(
         if (!poolEmpty) {
             for (i in (deckSize - 1) downTo 1) {
                 val offsetPx = ((deckSize - i) * 8).dp
-                val alpha = 1f - i * 0.25f
+                val cardAlpha = 1f - i * 0.25f
                 val rot = (i - 2) * 3f
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(top = offsetPx, start = offsetPx)
                         .zIndex(i.toFloat())
-                        .graphicsLayer { alpha = alpha.coerceAtLeast(0.3f); rotationZ = rot }
+                        .graphicsLayer { alpha = cardAlpha.coerceAtLeast(0.3f); rotationZ = rot }
                 ) {
                     CardFace(accent = accent, glyph = glyph, isTop = false, topic = null)
                 }
@@ -466,7 +466,8 @@ private fun CardFace(
     isTop: Boolean,
     topic: CurioTopic?,
     shuffling: Boolean = false,
-    poolEmpty: Boolean = false
+    poolEmpty: Boolean = false,
+    poolHasTopics: Boolean = false
 ) {
     val cardColor = if (isTop) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
 
