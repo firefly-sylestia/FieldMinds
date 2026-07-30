@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import com.curio.app.data.AppPreferences
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.features.onboarding.CurioOnboardingState
+import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
@@ -115,7 +116,10 @@ fun SplashScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         TopicJsonLoader.preloadAll()
         delay(800)
-        val destination = if (CurioOnboardingState.isComplete(context)) {
+        // Check for pending crash from previous session
+        val destination = if (CurioCrashReporter.hasPendingCrash(context)) {
+            CurioRoutes.CRASH
+        } else if (CurioOnboardingState.isComplete(context)) {
             CurioRoutes.HOME
         } else {
             CurioRoutes.ONBOARDING

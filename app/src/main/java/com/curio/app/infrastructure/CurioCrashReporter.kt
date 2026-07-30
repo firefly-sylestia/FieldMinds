@@ -23,6 +23,7 @@ object CurioCrashReporter {
     private const val PREFS_NAME = "curio_crash_logs"
     private const val KEY_LAST_CRASH = "last_crash_log"
     private const val KEY_CRASH_HISTORY = "crash_history"
+    private const val KEY_HAS_PENDING_CRASH = "has_pending_crash"
 
     private val handlingCrash = AtomicBoolean(false)
     private var previousHandler: Thread.UncaughtExceptionHandler? = null
@@ -81,7 +82,10 @@ object CurioCrashReporter {
 
     private fun persistCrash(context: Context, log: String) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefs.edit().putString(KEY_LAST_CRASH, log).apply()
+        prefs.edit()
+            .putString(KEY_LAST_CRASH, log)
+            .putBoolean(KEY_HAS_PENDING_CRASH, true)
+            .apply()
         val history = getCrashHistory(context).toMutableList()
         history.add(0, log)
         prefs.edit().putString(KEY_CRASH_HISTORY, history.take(20).joinToString("\n---\n")).apply()
@@ -98,7 +102,18 @@ object CurioCrashReporter {
             .getString(KEY_LAST_CRASH, null)
     }
 
+    fun hasPendingCrash(context: Context): Boolean {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getBoolean(KEY_HAS_PENDING_CRASH, false)
+    }
+
+    fun clearPendingCrash(context: Context) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit().putBoolean(KEY_HAS_PENDING_CRASH, false).apply()
+    }
+
     fun clearCrashHistory(context: Context) {
+        clearPendingCrash(context)
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .edit().clear().apply()
     }

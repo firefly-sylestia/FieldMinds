@@ -124,7 +124,7 @@ fun CurioCrashScreen(navController: NavController) {
                 // Primary action
                 Button(
                     onClick = {
-                        CurioCrashReporter.clearCrashHistory(context)
+                        CurioCrashReporter.clearPendingCrash(context)
                         navController.navigate(CurioRoutes.HOME) {
                             popUpTo(0) { inclusive = true }
                         }
