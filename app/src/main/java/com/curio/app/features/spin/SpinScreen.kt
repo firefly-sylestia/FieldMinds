@@ -399,8 +399,8 @@ private fun CyclingContent(accent: Color, glyph: String, topic: CurioTopic) {
     AnimatedContent(
         targetState = topic.name,
         transitionSpec = {
-            (slideInVertically(initialOffsetY = { it / 3 }) { it } + fadeIn(tween(200))) togetherWith
-            (slideOutVertically(targetOffsetY = { -it / 3 }) { it } + fadeOut(tween(150)))
+            (slideInVertically(initialOffsetY = { it / 3 }) + fadeIn(tween(200))) togetherWith
+            (slideOutVertically(targetOffsetY = { -it / 3 }) + fadeOut(tween(150)))
         },
         label = "topicCycle"
     ) { topicName ->

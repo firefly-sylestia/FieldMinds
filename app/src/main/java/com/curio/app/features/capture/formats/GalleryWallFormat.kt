@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -187,23 +188,25 @@ fun GalleryWallFormat(
                                 .rotate(tile.rotationDeg)
                                 .size(tile.sizeDp.dp)
                                 .zIndex(i.toFloat())
-                                .pointerInput(Unit) {
+                                .pointerInput(tile.uri) {
                                     detectTapGestures {
                                         // Bring to front: move to end of list
-                                        if (i < tiles.size && i != tiles.lastIndex) {
-                                            val moved = tiles.removeAt(i)
+                                        val idx = tiles.indexOfFirst { it.uri == tile.uri }
+                                        if (idx >= 0 && idx != tiles.lastIndex) {
+                                            val moved = tiles.removeAt(idx)
                                             tiles.add(moved)
                                         }
                                     }
                                 }
-                                .pointerInput(Unit) {
+                                .pointerInput(tile.uri) {
                                     detectDragGestures { change, dragAmount ->
                                         change.consume()
-                                        val idx = tiles.indexOfFirst { it === tile }
+                                        val idx = tiles.indexOfFirst { it.uri == tile.uri }
                                         if (idx >= 0) {
-                                            tiles[idx] = tile.copy(
-                                                offsetXDp = (tile.offsetXDp + dragAmount.x).coerceIn(0f, 240f),
-                                                offsetYDp = (tile.offsetYDp + dragAmount.y).coerceIn(0f, 260f)
+                                            val t = tiles[idx]
+                                            tiles[idx] = t.copy(
+                                                offsetXDp = (t.offsetXDp + dragAmount.x).coerceIn(0f, 240f),
+                                                offsetYDp = (t.offsetYDp + dragAmount.y).coerceIn(0f, 260f)
                                             )
                                         }
                                     }
