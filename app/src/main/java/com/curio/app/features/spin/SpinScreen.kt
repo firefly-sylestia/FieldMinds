@@ -63,7 +63,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -114,6 +116,7 @@ import kotlin.random.Random
 @Composable
 fun SpinScreen(categorySlug: String?, navController: NavController) {
     val context = LocalContext.current
+    val haptics = LocalHapticFeedback.current
     val initialCat = remember(categorySlug) {
         categorySlug?.let { CurioCategories.byRouteSlug(it) }
             ?: CurioCategories.byId(CategoryId.WILDCARD)
@@ -187,6 +190,10 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             val eased = sin((1f - progress) * Math.PI.toFloat() / 2f)
             val interval = (40L + (360L * eased).toLong()).coerceAtMost(400L)
             cycleIndex = ++tick
+            // Soft ratcheting tick — light haptic on each card cycle.
+            // As intervals lengthen, ticks naturally space out like a
+            // prize wheel settling.
+            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
             delay(interval)
             if (System.currentTimeMillis() - start >= durationMs) break
         }
