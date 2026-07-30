@@ -51,11 +51,7 @@ jobs:
       # KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD secrets.
       # app/build.gradle.kts reads these env vars at build time and signs release
       # APKs with them when all four are present; otherwise the release buildType
-      # falls back to debug signing so local dev builds remain installable.
-      #
-      # When secrets aren't configured (e.g. contributor PRs from forks, or
-      # before the maintainer sets up CI secrets), we skip the release build
-      # entirely so the workflow still passes on debug-only changes.
+      # falls back to debug signing so the release build always passes.
 
       - name: Decode keystore from secrets
         env:
@@ -71,8 +67,7 @@ jobs:
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
 
-      - name: Build release APK (requires configured keystore secrets)
-        if: env.HAS_KEYSTORE == 'true'
+      - name: Build release APK
         env:
           KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
