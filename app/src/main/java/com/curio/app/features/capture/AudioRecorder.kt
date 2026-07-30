@@ -78,6 +78,7 @@ class AudioRecorder(private val context: Context) {
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             setAudioSamplingRate(quality.samplingRate)
+            setAudioEncodingBitRate(quality.bitRate)
             setOutputFile(outputFile!!.absolutePath)
 
             prepare()

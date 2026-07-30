@@ -62,7 +62,6 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
-import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.StaggeredEntrance
 import com.curio.app.ui.components.StaggeredItem
@@ -212,12 +211,14 @@ fun HomeScreen(navController: NavController) {
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    text = greetingSubtitle(streakDays),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                if (streakDays > 0) {
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        text = "$streakDays-day streak",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                        color = CurioColors.CoralBlush
+                    )
+                }
             }
 
             Spacer(Modifier.height(12.dp))
@@ -282,6 +283,7 @@ fun HomeScreen(navController: NavController) {
                                 )
                             }
                             Column {
+                                Spacer(Modifier.height(6.dp))
                                 Text(
                                     text = chosen?.displayName ?: "Spin the wheel",
                                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
@@ -289,15 +291,7 @@ fun HomeScreen(navController: NavController) {
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
-                                Spacer(Modifier.height(2.dp))
-                                Text(
-                                    text = if (chosen != null) "A new ${chosen.displayName.lowercase()} topic awaits."
-                                        else "A new topic — picked just for you.",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis
-                                )
+
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -380,7 +374,7 @@ fun HomeScreen(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "Explore categories",
+                        "Categories",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -451,40 +445,22 @@ fun HomeScreen(navController: NavController) {
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Column {
-                                Text(
-                                    "Recently explored",
-                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
-                                Text(
-                                    "Your last few spins",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
+                            Text(
+                                "Recently explored",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
                             if (recentEntries.isNotEmpty()) {
                                 Surface(
                                     onClick = { navController.navigate(CurioRoutes.CABINET) },
                                     shape = RoundedCornerShape(50),
                                     color = Color.Transparent
-                                ) {
-                                    Row(
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(2.dp)
-                                    ) {
-                                        Text(
-                                            "Open Cabinet",
-                                            style = MaterialTheme.typography.labelMedium,
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
-                                        CurioIcon(
-                                            CurioIcons.ArrowForward, null,
+                                ) {                                        CurioIcon(
+                                            CurioIcons.ArrowForward, "Open Cabinet",
                                             tint = MaterialTheme.colorScheme.primary,
-                                            size = 14.dp
+                                            size = 18.dp,
+                                            modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
                                         )
-                                    }
                                 }
                             }
                         }
@@ -924,7 +900,4 @@ private fun greetingForNow(displayName: String): String {
     return "$greeting, $displayName"
 }
 
-private fun greetingSubtitle(streakDays: Int): String = when {
-    streakDays > 0 -> "You're on a $streakDays-day streak. Spin to keep it going."
-    else -> "Discover something new today."
-}
+

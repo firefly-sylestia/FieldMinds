@@ -75,6 +75,7 @@ fun ProfileScreen(navController: NavController) {
     val themeMode = remember { mutableStateOf(AppPreferences.getThemeMode(context)) }
     val reminderEnabled = remember { mutableStateOf(AppPreferences.isReminderEnabled(context)) }
     val showNameDialog = remember { mutableStateOf(false) }
+    val showQualityDialog = remember { mutableStateOf(false) }
     val nameInput = remember(displayName.value) { mutableStateOf(displayName.value) }
     val crashCount = remember { mutableIntStateOf(0) }
 
@@ -151,6 +152,86 @@ fun ProfileScreen(navController: NavController) {
         )
     }
 
+    // ── Audio quality picker dialog ─────────────────────────────────
+    if (showQualityDialog.value) {
+        val currentQuality = audioQuality.value
+        AlertDialog(
+            onDismissRequest = { showQualityDialog.value = false },
+            shape = RoundedCornerShape(28.dp),
+            title = {
+                Text(
+                    "Recording quality",
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(
+                        "Higher quality = clearer audio, bigger files.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    AudioQuality.entries.forEach { q ->
+                        val isSelected = q == currentQuality
+                        Surface(
+                            onClick = {
+                                audioQuality.value = q
+                                AudioQualitySettings.set(context, q)
+                                showQualityDialog.value = false
+                            },
+                            shape = RoundedCornerShape(16.dp),
+                            color = if (isSelected) CurioColors.CoralBlush.copy(alpha = 0.12f)
+                            else Color.Transparent,
+                            border = if (isSelected)
+                                androidx.compose.foundation.BorderStroke(1.5.dp, CurioColors.CoralBlush.copy(alpha = 0.5f))
+                            else
+                                androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(14.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                RadioButton(
+                                    selected = isSelected,
+                                    onClick = null,
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = CurioColors.CoralBlush
+                                    )
+                                )
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        q.label,
+                                        style = MaterialTheme.typography.bodyLarge.copy(
+                                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                                        ),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        q.description,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showQualityDialog.value = false }) {
+                    Text(
+                        "Close",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                    )
+                }
+            }
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -213,10 +294,7 @@ fun ProfileScreen(navController: NavController) {
                         AppPreferences.setThemeMode(context, it)
                     },
                     audioQuality = audioQuality.value,
-                    onAudioQualityChange = {
-                        audioQuality.value = it
-                        AudioQualitySettings.set(context, it)
-                    },
+                    onAudioQualityClick = { showQualityDialog.value = true },
                     reminderEnabled = reminderEnabled.value,
                     onReminderToggle = {
                         reminderEnabled.value = it
@@ -543,7 +621,7 @@ private fun PreferencesCard(
     themeMode: String,
     onThemeChange: (String) -> Unit,
     audioQuality: AudioQuality,
-    onAudioQualityChange: (AudioQuality) -> Unit,
+    onAudioQualityClick: () -> Unit,
     reminderEnabled: Boolean,
     onReminderToggle: (Boolean) -> Unit,
     onManageCategories: () -> Unit
@@ -624,15 +702,8 @@ private fun PreferencesCard(
             SettingRow(
                 icon = CurioIcons.Mic,
                 title = "Audio quality",
-                supporting = audioQuality.label,
-                onClick = {
-                    val next = when (audioQuality) {
-                        AudioQuality.LOW -> AudioQuality.MEDIUM
-                        AudioQuality.MEDIUM -> AudioQuality.HIGH
-                        AudioQuality.HIGH -> AudioQuality.LOW
-                    }
-                    onAudioQualityChange(next)
-                }
+                supporting = audioQuality.label + " · " + audioQuality.description,
+                onClick = onAudioQualityClick
             )
             ThinDivider()
 
