@@ -216,11 +216,7 @@ private fun TileContent(category: CurioCategory) {
                 ),
                 color = Color.White
             )
-            Text(
-                text = "Spin this lane",
-                style = MaterialTheme.typography.labelMedium,
-                color = Color.White.copy(alpha = 0.78f)
-            )
+
         }
     }
 }
