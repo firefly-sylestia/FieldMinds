@@ -110,6 +110,8 @@ object TopicJsonLoader {
                 //    topics not already covered by the category files.
                 runCatching {
                     parseAsset("$ASSET_DIR/${CategoryId.WILDCARD.routeSlug}.json", CategoryId.WILDCARD)
+                }.onFailure {
+                    android.util.Log.w("TopicJsonLoader", "wildcard.json skipped: ${it.message}")
                 }.getOrNull()?.forEach { t ->
                     if (seenIds.add(t.id)) merged.add(t)
                 }
@@ -167,7 +169,7 @@ object TopicJsonLoader {
     private fun cleanText(raw: String): String =
         raw.replace('\u2014', '-')   // em dash → hyphen
            .replace('\u2013', '-')   // en dash → hyphen
-           .replace("--", "-")
+           .replace(Regex("-{2,}"), "-")
            .trim()
 
     private fun parseAsset(path: String, id: CategoryId): List<CurioTopic> {
