@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,9 +14,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -27,13 +30,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
@@ -41,13 +46,19 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.curio.app.data.CaptureData
 import com.curio.app.features.capture.AudioRecorder
+import com.curio.app.ui.components.AudioTrimmer
 import com.curio.app.ui.components.LiveWaveform
+import com.curio.app.ui.components.TrimWaveform
+import com.curio.app.ui.components.WaveformExtractor
 import com.curio.app.ui.components.formatRecordingTime
 import com.curio.app.ui.components.rememberPulseScale
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Sound Bite format body — CURIO_SPEC §8.1 (Music / Artists).
@@ -56,9 +67,11 @@ import kotlinx.coroutines.delay
  * - IDLE: big mic button to start, requests RECORD_AUDIO permission if needed
  * - RECORDING / PAUSED: pulsing ring + live waveform + mm:ss timer +
  *   Pause/Stop/Discard controls — driven by real [AudioRecorder] (MediaRecorder)
- * - STOPPED: shows "Recording saved (m:ss)" + Record over reset
+ * - STOPPED: shows trim waveform with draggable handles, plus title field
+ *   and Record-over button. User can trim the audio before saving.
  *
- * Uses real [AudioRecorder] (MediaRecorder) for actual voice capture.
+ * Uses real [AudioRecorder] (MediaRecorder) for actual voice capture,
+ * and [AudioTrimmer] to trim the recorded file after recording stops.
  * The audio file path is stored in [CaptureData.SoundBite.audioFilePath].
  *
  * Runtime permission (RECORD_AUDIO) is requested on first tap of the mic button.
@@ -71,6 +84,7 @@ fun SoundBiteFormat(
     onDataChanged: (CaptureData?) -> Unit = {}
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val recorder = remember(context) { AudioRecorder(context) }
     var recordingState by remember { mutableStateOf(AudioRecorder.State.IDLE) }
     var recordingSeconds by remember { mutableIntStateOf(0) }
@@ -78,7 +92,13 @@ fun SoundBiteFormat(
     var savedFilePath by remember { mutableStateOf<String?>(null) }
     var permissionDenied by remember { mutableStateOf(false) }
 
-    // ── Runtime permission launcher ──────────────────────────────────────
+    // ── Trim state ───────────────────────────────────────────────────────
+    var showTrimmer by remember { mutableStateOf(false) }
+    var startTrim by remember { mutableFloatStateOf(0f) }
+    var endTrim by remember { mutableFloatStateOf(1f) }
+    var trimInProgress by remember { mutableStateOf(false) }
+
+    // Runtime permission launcher
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -88,8 +108,7 @@ fun SoundBiteFormat(
                 recordingState = recorder.state
                 recordingSeconds = 0
                 permissionDenied = false
-            } catch (e: Exception) {
-                // Start failed — silently return to IDLE
+            } catch (_: Exception) {
                 recordingState = AudioRecorder.State.IDLE
             }
         } else {
@@ -107,6 +126,27 @@ fun SoundBiteFormat(
         }
     }
 
+    // ── Extract waveform when entering STOPPED with a valid file ─────────
+    val waveformSamples by produceState<FloatArray>(
+        initialValue = FloatArray(120),
+        key1 = savedFilePath
+    ) {
+        if (savedFilePath != null) {
+            value = withContext(Dispatchers.Default) {
+                WaveformExtractor.extract(savedFilePath!!, barCount = 120)
+            } ?: FloatArray(120) { kotlin.random.Random.nextFloat() * 0.6f + 0.2f }
+        }
+    }
+
+    // ── Show trimmer when first entering STOPPED ─────────────────────────
+    LaunchedEffect(recordingState, savedFilePath) {
+        if (recordingState == AudioRecorder.State.STOPPED && savedFilePath != null) {
+            showTrimmer = true
+            startTrim = 0f
+            endTrim = 1f
+        }
+    }
+
     // ── Clean up recorder on dispose ─────────────────────────────────────
     DisposableEffect(Unit) {
         onDispose { recorder.release() }
@@ -115,7 +155,8 @@ fun SoundBiteFormat(
     // ── Report can-save + capture data ───────────────────────────────────
     val canSave = recordingState == AudioRecorder.State.STOPPED &&
                   recordingSeconds > 0 &&
-                  savedFilePath != null
+                  savedFilePath != null &&
+                  !trimInProgress
     LaunchedEffect(canSave, savedFilePath, title) {
         onCanSaveChange(canSave)
         onDataChanged(
@@ -189,17 +230,62 @@ fun SoundBiteFormat(
                     savedFilePath = null
                 }
             )
-            AudioRecorder.State.STOPPED -> StoppedControls(
-                accent = accent,
-                tint = tint,
-                seconds = recordingSeconds,
-                onReRecord = {
-                    recorder.release()
-                    recordingState = recorder.state
-                    recordingSeconds = 0
-                    savedFilePath = null
+            AudioRecorder.State.STOPPED -> {
+                // ── Trim mode (before trimming or after) ─────────────────
+                if (showTrimmer && savedFilePath != null) {
+                    TrimSection(
+                        accent = accent,
+                        tint = tint,
+                        seconds = recordingSeconds,
+                        waveformSamples = waveformSamples,
+                        startTrim = startTrim,
+                        endTrim = endTrim,
+                        trimInProgress = trimInProgress,
+                        onStartTrimChange = { startTrim = it },
+                        onEndTrimChange = { endTrim = it },
+                        onApplyTrim = {
+                            trimInProgress = true
+                            scope.launch {
+                                try {
+                                    val trimmedPath = withContext(Dispatchers.Default) {
+                                        AudioTrimmer.trim(
+                                            outputDir = context.cacheDir,
+                                            inputPath = savedFilePath!!,
+                                            startMs = (startTrim * recordingSeconds * 1000).toLong(),
+                                            endMs = (endTrim * recordingSeconds * 1000).toLong()
+                                        )
+                                    }
+                                    if (trimmedPath != null) {
+                                        // Update the file path and duration
+                                        savedFilePath = trimmedPath
+                                        recordingSeconds = ((endTrim - startTrim) * recordingSeconds).toInt()
+                                    }
+                                } catch (_: Exception) { /* keep original file */ }
+                                trimInProgress = false
+                                showTrimmer = false
+                            }
+                        },
+                        onKeepFull = {
+                            showTrimmer = false
+                        }
+                    )
+                } else {
+                    StoppedControls(
+                        accent = accent,
+                        tint = tint,
+                        seconds = recordingSeconds,
+                        onReRecord = {
+                            recorder.release()
+                            recordingState = recorder.state
+                            recordingSeconds = 0
+                            savedFilePath = null
+                            showTrimmer = false
+                            startTrim = 0f
+                            endTrim = 1f
+                        }
+                    )
                 }
-            )
+            }
         }
 
         // ── Permission denied hint ───────────────────────────────────────
@@ -212,16 +298,114 @@ fun SoundBiteFormat(
             )
         }
 
-        // ── Optional title field (CURIO_SPEC §8.1) ───────────────────────
+        // ── Optional title field — show always, disabled during trim ─────
         OutlinedTextField(
             value = title,
             onValueChange = { title = it },
             label = { Text("Add a quick title (optional)") },
             singleLine = true,
+            enabled = recordingState != AudioRecorder.State.RECORDING,
             shape = RoundedCornerShape(16.dp),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Trim section — shown when recording is stopped and trim UI is active
+// ═══════════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun TrimSection(
+    accent: Color,
+    tint: Color,
+    seconds: Int,
+    waveformSamples: FloatArray,
+    startTrim: Float,
+    endTrim: Float,
+    trimInProgress: Boolean,
+    onStartTrimChange: (Float) -> Unit,
+    onEndTrimChange: (Float) -> Unit,
+    onApplyTrim: () -> Unit,
+    onKeepFull: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // Saved indicator
+        Text(
+            text = "✓ Recording saved (${formatRecordingTime(seconds)})",
+            style = MaterialTheme.typography.titleSmall,
+            color = accent
+        )
+
+        // Waveform with trim handles
+        TrimWaveform(
+            samples = waveformSamples,
+            startTrim = startTrim,
+            endTrim = endTrim,
+            accent = accent,
+            tint = tint,
+            totalSeconds = seconds,
+            onTrimChange = { start, end ->
+                onStartTrimChange(start)
+                onEndTrimChange(end)
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Action buttons
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Keep Full — dismiss trim UI
+            Surface(
+                onClick = onKeepFull,
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = "Keep full",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
+            }
+
+            // Apply Trim — enabled when range is narrower than full
+            val hasTrim = startTrim > 0.01f || endTrim < 0.99f
+            Button(
+                onClick = onApplyTrim,
+                enabled = hasTrim && !trimInProgress,
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = accent,
+                    contentColor = CurioColors.DeepPlum,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(vertical = 12.dp)
+            ) {
+                if (trimInProgress) {
+                    CircularProgressIndicator(
+                        color = CurioColors.DeepPlum,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                }
+                Text(
+                    text = if (trimInProgress) "Trimming…" else "Apply trim",
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+        }
     }
 }
 
@@ -385,10 +569,7 @@ private fun StoppedControls(
             onClick = onReRecord,
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
         ) {
-            Text(
-                text = "Record over",
-                color = accent
-            )
+            Text(text = "Record over", color = accent)
         }
     }
 }
