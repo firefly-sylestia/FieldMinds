@@ -1,6 +1,7 @@
 package com.curio.app.features.home
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -312,7 +313,7 @@ fun HomeScreen(navController: NavController) {
                                             size = 16.dp
                                         )
                                         Text(
-                                            text = if (isWildcard) "Shuffle" else "Spin ${chosen!!.displayName}",
+                                            text = "Spin",
                                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                                             color = Color.White
                                         )
@@ -575,11 +576,21 @@ private fun CategoryChip(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            CurioIcon(
-                glyph, null,
-                tint = if (selected) Color.White else accent,
-                size = 18.dp
-            )
+            // Glassy icon container
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                color = Color.White.copy(alpha = 0.18f),
+                border = BorderStroke(0.5.dp, Color.White.copy(alpha = 0.25f)),
+                modifier = Modifier.size(34.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    CurioIcon(
+                        glyph, null,
+                        tint = if (selected) Color.White else accent,
+                        size = 18.dp
+                    )
+                }
+            }
             Text(
                 text = name,
                 style = MaterialTheme.typography.labelLarge.copy(
