@@ -201,7 +201,6 @@ fun HomeScreen(navController: NavController) {
                         }
                     }
                 }
-            }
 
             // ═══════════════════════════════════════════════════════════
             // 2. Welcome Section

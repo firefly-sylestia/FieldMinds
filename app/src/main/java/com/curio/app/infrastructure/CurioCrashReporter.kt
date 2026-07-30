@@ -1,11 +1,10 @@
 package com.curio.app.infrastructure
 
 import android.content.Context
-import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Process
 import android.util.Log
-import com.curio.app.BuildConfig
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -28,6 +27,8 @@ object CurioCrashReporter {
     private val handlingCrash = AtomicBoolean(false)
     private var previousHandler: Thread.UncaughtExceptionHandler? = null
     private var appContext: Context? = null
+
+}
 
     @Volatile var lastCrashLog: String? = null
         private set
@@ -69,7 +70,11 @@ object CurioCrashReporter {
         appendLine("Exception: ${throwable::class.java.name}")
         appendLine("Message: ${throwable.message ?: "—"}")
         runCatching {
-            appendLine("App: ${BuildConfig.APPLICATION_ID} ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+            val ctx = appContext ?: return@runCatching
+            val pi = ctx.packageManager.getPackageInfo(ctx.packageName, 0)
+            @Suppress("DEPRECATION")
+            val vc = pi.versionCode
+            appendLine("App: ${ctx.packageName} ${pi.versionName} ($vc)")
         }
         appendLine("Device: ${Build.MANUFACTURER} ${Build.MODEL}")
         appendLine("Android: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})")
