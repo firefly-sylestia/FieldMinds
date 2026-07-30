@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -49,6 +50,7 @@ import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.CurioTopic
+import com.curio.app.data.StreakTracker
 import com.curio.app.data.TopicCatalog
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.features.capture.formats.FieldNotesFormat
@@ -84,6 +86,7 @@ fun SaveCaptureScreen(
     topicName: String,
     navController: NavController
 ) {
+    val context = LocalContext.current
     val cat = remember(categorySlug) {
         CurioCategories.byRouteSlug(categorySlug)
             ?: CurioCategories.byId(CategoryId.WILDCARD)
@@ -123,6 +126,7 @@ fun SaveCaptureScreen(
             )
             repo.save(entry)
             savedEntryId = entry.id
+            StreakTracker.recordActivity(context)
             delay(400)
             confettiTrigger++
             emberTrigger++

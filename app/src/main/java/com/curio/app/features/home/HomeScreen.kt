@@ -47,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,6 +58,7 @@ import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
+import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioStreakPill
 import com.curio.app.ui.components.MorphEntrance
@@ -82,8 +84,9 @@ import java.util.Calendar
  */
 @Composable
 fun HomeScreen(navController: NavController) {
+    val context = LocalContext.current
     var selectedCategory by remember { mutableStateOf<CurioCategory?>(null) }
-    val streakDays = 0 // TODO: wire from shared prefs
+    val streakDays = StreakTracker.getStreak(context)
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 

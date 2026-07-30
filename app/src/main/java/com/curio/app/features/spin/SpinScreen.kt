@@ -56,6 +56,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -67,6 +68,7 @@ import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioTopic
+import com.curio.app.data.StreakTracker
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.ConfettiBurst
@@ -106,6 +108,7 @@ import kotlin.random.Random
  */
 @Composable
 fun SpinScreen(categorySlug: String?, navController: NavController) {
+    val context = LocalContext.current
     val cat = remember(categorySlug) {
         val resolved = categorySlug?.let { CurioCategories.byRouteSlug(it) }
             ?: CurioCategories.byId(CategoryId.WILDCARD)
@@ -201,6 +204,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         confettiTrigger++
         sparkleTrigger++
         cyclerJob.cancel()
+        if (finalPick != null) {
+            StreakTracker.recordActivity(context)
+        }
     }
 
     LaunchedEffect(confettiTrigger) {
