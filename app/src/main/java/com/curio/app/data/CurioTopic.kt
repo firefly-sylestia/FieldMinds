@@ -84,11 +84,21 @@ data class ExploreAction(
 data class CurioEntry(
     val id: String,
     val topic: CurioTopic,
-    val capturedAtDaysAgo: Int,
     val format: CaptureFormat,
-    val bodyPreview: String,
-    val bodyContent: String
-)
+    val captureData: CaptureData,
+    val title: String? = null,
+    val capturedAtMillis: Long = System.currentTimeMillis()
+) {
+    /** One-line preview for Cabinet cards. */
+    val bodyPreview: String get() = captureData.toPreview()
+    /** Full multi-line content for EntryDetail. */
+    val bodyContent: String get() = captureData.toFullContent()
+    /** Days since capture (for display). */
+    val capturedAtDaysAgo: Int get() {
+        val diff = System.currentTimeMillis() - capturedAtMillis
+        return (diff / (1000 * 60 * 60 * 24)).toInt().coerceAtLeast(0)
+    }
+}
 
 /**
  * The six capture formats from CURIO_SPEC.md section 8.

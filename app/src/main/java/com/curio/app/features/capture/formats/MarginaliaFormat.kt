@@ -1,5 +1,6 @@
 package com.curio.app.features.capture.formats
 
+import com.curio.app.data.CaptureData
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,7 +53,8 @@ import com.curio.app.ui.theme.CurioIcons
 fun MarginaliaFormat(
     accent: Color,
     tint: Color,
-    onCanSaveChange: (Boolean) -> Unit
+    onCanSaveChange: (Boolean) -> Unit,
+    onDataChanged: (CaptureData?) -> Unit = {}
 ) {
     var journalText by remember { mutableStateOf("") }
     val quotes = remember { mutableStateListOf<String>() }
@@ -61,6 +63,10 @@ fun MarginaliaFormat(
                   quotes.any { it.isNotBlank() }
     LaunchedEffect(canSave) {
         onCanSaveChange(canSave)
+        onDataChanged(
+            if (canSave) CaptureData.Marginalia(journalText, quotes.toList())
+            else null
+        )
     }
 
     Column(

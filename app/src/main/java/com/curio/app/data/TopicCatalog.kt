@@ -118,9 +118,6 @@ object TopicCatalog {
         // Ensure the topic pools are loaded.
         TopicJsonLoader.preloadAll()
 
-        val now = System.currentTimeMillis()
-        val oneDay = 24L * 60 * 60 * 1000
-
         listOfNotNull(
             sampleFor("artist-bowie",     daysAgo = 1,  format = CaptureFormat.SoundBite),
             sampleFor("album-ziggy",      daysAgo = 2,  format = CaptureFormat.ReelNotes),
@@ -137,13 +134,42 @@ object TopicCatalog {
         format: CaptureFormat
     ): CurioEntry? {
         val topic = findByNameAcrossAll(topicId) ?: return null
+        val now = System.currentTimeMillis()
+        val oneDay = 24L * 60 * 60 * 1000
+        val capturedAt = now - (daysAgo * oneDay)
         return CurioEntry(
             id = "sample-${topicId}",
             topic = topic,
-            capturedAtDaysAgo = daysAgo,
             format = format,
-            bodyPreview = topic.teaser.take(80),
-            bodyContent = topic.teaser
+            captureData = when (format) {
+                CaptureFormat.SoundBite -> CaptureData.SoundBite(
+                    durationSeconds = 45,
+                    title = topic.name
+                )
+                CaptureFormat.ReelNotes -> CaptureData.ReelNotes(
+                    rating = 4,
+                    reviewText = "A fascinating exploration of ${topic.name}. Highly recommend diving into this one.",
+                    imageCount = 1
+                )
+                CaptureFormat.Marginalia -> CaptureData.Marginalia(
+                    journalText = "Spent some time reflecting on ${topic.name} today. There's so much depth here.",
+                    quotes = listOf("\"Every moment is a fresh beginning.\" — T.S. Eliot")
+                )
+                CaptureFormat.GalleryWall -> CaptureData.GalleryWall(
+                    imageCount = 3,
+                    caption = "A visual journey through ${topic.name}"
+                )
+                CaptureFormat.FieldNotes -> CaptureData.FieldNotes(
+                    observed = "Noticed the intricate patterns in ${topic.name}'s work.",
+                    surprised = "Was surprised by the emotional depth.",
+                    learnNext = "Want to explore more from this era."
+                )
+                CaptureFormat.OpenNotebook -> CaptureData.OpenNotebook(
+                    subFormat = CaptureFormat.ReelNotes,
+                    subData = CaptureData.ReelNotes(3, "Quick notebook entry about ${topic.name}", 0)
+                )
+            },
+            capturedAtMillis = capturedAt
         )
     }
 }

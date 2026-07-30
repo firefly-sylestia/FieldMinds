@@ -1,5 +1,7 @@
 package com.curio.app.features.capture.formats
 
+import com.curio.app.data.CaptureData
+import com.curio.app.data.CaptureFormat
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -51,9 +53,21 @@ import com.curio.app.ui.theme.CurioIcons
 fun OpenNotebookFormat(
     accent: Color,
     tint: Color,
-    onCanSaveChange: (Boolean) -> Unit
+    onCanSaveChange: (Boolean) -> Unit,
+    onDataChanged: (CaptureData?) -> Unit = {}
 ) {
     var selectedFormat by remember { mutableStateOf(NotebookChoice.VOICE) }
+    var subCanSave by remember { mutableStateOf(false) }
+    var subData by remember { mutableStateOf<CaptureData?>(null) }
+
+    LaunchedEffect(subCanSave, subData, selectedFormat) {
+        onCanSaveChange(subCanSave)
+        onDataChanged(
+            if (subCanSave && subData != null)
+                CaptureData.OpenNotebook(notebookToCaptureFormat(selectedFormat), subData!!)
+            else null
+        )
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -88,19 +102,19 @@ fun OpenNotebookFormat(
         ) { choice ->
             when (choice) {
                 NotebookChoice.VOICE -> SoundBiteFormat(
-                    accent, tint, onCanSaveChange
+                    accent, tint, { subCanSave = it }, { subData = it }
                 )
                 NotebookChoice.REVIEW -> ReelNotesFormat(
-                    accent, tint, onCanSaveChange
+                    accent, tint, { subCanSave = it }, { subData = it }
                 )
                 NotebookChoice.JOURNAL -> MarginaliaFormat(
-                    accent, tint, onCanSaveChange
+                    accent, tint, { subCanSave = it }, { subData = it }
                 )
                 NotebookChoice.MOODBOARD -> GalleryWallFormat(
-                    accent, tint, onCanSaveChange
+                    accent, tint, { subCanSave = it }, { subData = it }
                 )
                 NotebookChoice.FIELD -> FieldNotesFormat(
-                    accent, tint, onCanSaveChange
+                    accent, tint, { subCanSave = it }, { subData = it }
                 )
             }
         }

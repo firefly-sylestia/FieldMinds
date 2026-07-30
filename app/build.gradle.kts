@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 // ── Release signing wiring ───────────────────────────────────────────────────
@@ -123,6 +124,11 @@ dependencies {
     // intentionally absent. Re-add only if a screen needs an M2 vector icon.
     implementation(libs.androidx.compose.animation)
     implementation(libs.org.jetbrains.kotlinx.coroutines.android)
+
+    // Room database
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     debugImplementation(libs.androidx.ui.tooling)

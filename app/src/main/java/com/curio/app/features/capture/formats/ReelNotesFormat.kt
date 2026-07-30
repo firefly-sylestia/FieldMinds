@@ -1,5 +1,6 @@
 package com.curio.app.features.capture.formats
 
+import com.curio.app.data.CaptureData
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,7 +42,8 @@ import androidx.compose.ui.unit.dp
 fun ReelNotesFormat(
     accent: Color,
     tint: Color,
-    onCanSaveChange: (Boolean) -> Unit
+    onCanSaveChange: (Boolean) -> Unit,
+    onDataChanged: (CaptureData?) -> Unit = {}
 ) {
     var rating by remember { mutableStateOf(0) }
     var reviewText by remember { mutableStateOf("") }
@@ -50,6 +52,10 @@ fun ReelNotesFormat(
     val canSave = reviewText.isNotBlank()
     LaunchedEffect(canSave) {
         onCanSaveChange(canSave)
+        onDataChanged(
+            if (canSave) CaptureData.ReelNotes(rating, reviewText, attachedImages.size)
+            else null
+        )
     }
 
     Column(

@@ -1,5 +1,6 @@
 package com.curio.app.features.capture.formats
 
+import com.curio.app.data.CaptureData
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -62,7 +63,8 @@ import com.curio.app.ui.theme.CurioIcons
 fun GalleryWallFormat(
     accent: Color,
     tint: Color,
-    onCanSaveChange: (Boolean) -> Unit
+    onCanSaveChange: (Boolean) -> Unit,
+    onDataChanged: (CaptureData?) -> Unit = {}
 ) {
     val tiles = remember { mutableStateListOf<TileData>() }
     var caption by remember { mutableStateOf("") }
@@ -70,6 +72,10 @@ fun GalleryWallFormat(
     val canSave = tiles.isNotEmpty()
     LaunchedEffect(canSave) {
         onCanSaveChange(canSave)
+        onDataChanged(
+            if (canSave) CaptureData.GalleryWall(tiles.size, caption)
+            else null
+        )
     }
 
     Column(

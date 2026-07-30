@@ -1,5 +1,6 @@
 package com.curio.app.features.capture.formats
 
+import com.curio.app.data.CaptureData
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -53,7 +54,8 @@ import androidx.compose.ui.unit.dp
 fun FieldNotesFormat(
     accent: Color,
     tint: Color,
-    onCanSaveChange: (Boolean) -> Unit
+    onCanSaveChange: (Boolean) -> Unit,
+    onDataChanged: (CaptureData?) -> Unit = {}
 ) {
     var observed by remember { mutableStateOf("") }
     var surprised by remember { mutableStateOf("") }
@@ -68,6 +70,10 @@ fun FieldNotesFormat(
                   learnNext.isNotBlank()
     LaunchedEffect(canSave) {
         onCanSaveChange(canSave)
+        onDataChanged(
+            if (canSave) CaptureData.FieldNotes(observed, surprised, learnNext)
+            else null
+        )
     }
 
     Column(

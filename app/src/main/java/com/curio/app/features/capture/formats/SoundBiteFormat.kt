@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.curio.app.data.CaptureData
 import com.curio.app.ui.components.LiveWaveform
 import com.curio.app.ui.components.formatRecordingTime
 import com.curio.app.ui.components.rememberPulseScale
@@ -58,7 +59,8 @@ import kotlinx.coroutines.delay
 fun SoundBiteFormat(
     accent: Color,
     tint: Color,
-    onCanSaveChange: (Boolean) -> Unit
+    onCanSaveChange: (Boolean) -> Unit,
+    onDataChanged: (CaptureData?) -> Unit = {}
 ) {
     var recordingState by remember { mutableStateOf(RecordingState.IDLE) }
     var recordingSeconds by remember { mutableIntStateOf(0) }
@@ -78,6 +80,10 @@ fun SoundBiteFormat(
                   recordingState == RecordingState.STOPPED
     LaunchedEffect(canSave) {
         onCanSaveChange(canSave)
+        onDataChanged(
+            if (canSave) CaptureData.SoundBite(recordingSeconds, title)
+            else null
+        )
     }
 
     Column(

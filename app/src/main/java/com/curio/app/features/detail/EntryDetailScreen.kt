@@ -27,20 +27,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.data.CurioEntry
+import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
@@ -50,29 +54,33 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import kotlinx.coroutines.launch
 
 /**
  * Entry Detail — see CURIO_SPEC.md §10. Framed presentation of a saved capture.
  *
  * Upgraded with:
- *  - MorphEntrance for the hero image area
- *  - StaggeredEntrance for metadata + body sections
+ *  - Room database persistence (loads from CaptureRepository)
+ *  - Structured CaptureData rendering per format
+ *  - MorphEntrance for hero image + StaggeredEntrance for metadata
+ *  - Delete functionality with Room
  */
 @Composable
 fun EntryDetailScreen(entryId: String, navController: NavController) {
+    val scope = rememberCoroutineScope()
     val entry by produceState<CurioEntry?>(initialValue = null, entryId) {
-        value = TopicCatalog.sampleEntries().find { it.id == entryId }
+        value = CurioRepositoryHolder.repo.getById(entryId)
+            ?: TopicCatalog.sampleEntries().find { it.id == entryId }
     }
 
     LaunchedEffect(entry) {
         if (entry == null) {
-            kotlinx.coroutines.delay(300)
+            kotlinx.coroutines.delay(400)
             if (entry == null) navController.popBackStack()
         }
     }
 
     val resolvedEntry = entry ?: return
-
     val cat = CurioCategories.byId(resolvedEntry.topic.categoryId)
     var menuExpanded by remember { mutableStateOf(false) }
     var deleteDialogVisible by remember { mutableStateOf(false) }
@@ -83,7 +91,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
     ) {
-        // ── Hero image placeholder ──────────────────────────────────────────
+        // ── Hero image placeholder ──────────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -142,16 +150,6 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                         onDismissRequest = { menuExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Edit") },
-                            onClick = {
-                                menuExpanded = false
-                                navController.navigate(
-                                    CurioRoutes.captureFor(cat.id.routeSlug, resolvedEntry.topic.name)
-                                )
-                            },
-                            leadingIcon = { CurioIcon(name = CurioIcons.Edit, contentDescription = null, size = 20.dp) }
-                        )
-                        DropdownMenuItem(
                             text = { Text("Share") },
                             onClick = { menuExpanded = false },
                             leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, size = 20.dp) }
@@ -171,7 +169,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             }
         }
 
-        // ── Topic meta (staggered entrance) ─────────────────────────────────
+        // ── Topic meta ─────────────────────────────────────────────────
         MorphEntrance {
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
@@ -190,20 +188,30 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                             Text(text = cat.displayName, style = MaterialTheme.typography.labelMedium, color = cat.accent)
                         }
                     }
-                    Text(
-                        text = when (resolvedEntry.capturedAtDaysAgo) {
-                            0 -> "Captured today"
-                            1 -> "Captured yesterday"
-                            else -> "Captured ${resolvedEntry.capturedAtDaysAgo}d ago"
-                        },
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    if (resolvedEntry.title != null) {
+                        Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
+                            Text(
+                                text = resolvedEntry.title!!,
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                            )
+                        }
+                    }
                 }
+                Text(
+                    text = when (resolvedEntry.capturedAtDaysAgo) {
+                        0 -> "Captured today"
+                        1 -> "Captured yesterday"
+                        else -> "Captured ${resolvedEntry.capturedAtDaysAgo}d ago"
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
 
-        // ── Format body (staggered entrance) ────────────────────────────────
+        // ── Format body ────────────────────────────────────────────────
         StaggeredEntrance {
             StaggeredItem(index = 0) {
                 Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
@@ -223,7 +231,10 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
             confirmButton = {
                 TextButton(onClick = {
                     deleteDialogVisible = false
-                    navController.popBackStack()
+                    scope.launch {
+                        CurioRepositoryHolder.repo.deleteById(resolvedEntry.id)
+                        navController.popBackStack()
+                    }
                 }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
             },
             dismissButton = {
@@ -236,7 +247,7 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
 @Composable
 private fun FormatBody(entry: CurioEntry, category: CurioCategory) {
     when (entry.format) {
-        CaptureFormat.SoundBite -> SoundBitePlayback(entry, category)
+        CaptureFormat.SoundBite -> SoundBiteRender(entry, category)
         CaptureFormat.ReelNotes -> ReelNotesRender(entry, category)
         CaptureFormat.Marginalia -> MarginaliaRender(entry, category)
         CaptureFormat.GalleryWall -> GalleryWallRender(entry, category)
@@ -245,73 +256,128 @@ private fun FormatBody(entry: CurioEntry, category: CurioCategory) {
     }
 }
 
+// ── Per-format render composables ─────────────────────────────────────
+
 @Composable
-private fun SoundBitePlayback(entry: CurioEntry, category: CurioCategory) {
+private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
+    val data = entry.captureData as? CaptureData.SoundBite ?: return
     Surface(shape = RoundedCornerShape(20.dp), color = category.tint, modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Surface(onClick = { /* TODO Phase 4 */ }, shape = RoundedCornerShape(50), color = category.accent) {
+                Surface(shape = RoundedCornerShape(50), color = category.accent) {
                     CurioIcon(name = CurioIcons.PlayArrow, contentDescription = "Play", tint = CurioColors.DeepPlum, size = 32.dp, modifier = Modifier.padding(8.dp))
                 }
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(text = "Voice note", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
-                    Text(text = entry.bodyPreview, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("Voice note · ${data.durationSeconds}s", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
+                    if (data.title.isNotBlank()) Text(data.title, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-            Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
 
 @Composable
 private fun ReelNotesRender(entry: CurioEntry, category: CurioCategory) {
+    val data = entry.captureData as? CaptureData.ReelNotes ?: return
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            repeat(4) { CurioIcon(name = CurioIcons.Star, contentDescription = null, tint = category.accent, size = 20.dp) }
-            CurioIcon(name = CurioIcons.StarOutline, contentDescription = null, tint = MaterialTheme.colorScheme.outline, size = 20.dp)
+        if (data.rating > 0) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                repeat(data.rating) { CurioIcon(CurioIcons.Star, null, tint = category.accent, size = 22.dp) }
+                repeat(5 - data.rating) { CurioIcon(CurioIcons.StarOutline, null, tint = MaterialTheme.colorScheme.outline, size = 22.dp) }
+            }
         }
-        Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+        if (data.imageCount > 0) {
+            Text("${data.imageCount} image${if (data.imageCount != 1) "s" else ""} attached", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        if (data.reviewText.isNotBlank()) {
+            Text(data.reviewText, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+        }
     }
 }
 
 @Composable
 private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
+    val data = entry.captureData as? CaptureData.Marginalia ?: return
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Surface(shape = RoundedCornerShape(20.dp), color = category.tint, modifier = Modifier.fillMaxWidth().padding(start = 12.dp)) {
-            Column(modifier = Modifier.padding(20.dp)) {
-                Text(text = "From the entry", style = MaterialTheme.typography.labelMedium, color = category.accent)
-                Spacer(Modifier.height(8.dp))
-                Text(text = entry.bodyPreview, style = MaterialTheme.typography.titleMedium.copy(fontStyle = FontStyle.Italic), color = MaterialTheme.colorScheme.onSurface)
+        if (data.journalText.isNotBlank()) {
+            Surface(shape = RoundedCornerShape(20.dp), color = category.tint, modifier = Modifier.fillMaxWidth()) {
+                Text(data.journalText, modifier = Modifier.padding(20.dp), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             }
         }
-        Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+        data.quotes.filter { it.isNotBlank() }.forEach { quote ->
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = category.tint,
+                modifier = Modifier.fillMaxWidth().rotate(if (data.quotes.indexOf(quote) % 2 == 0) 1.5f else -1.5f)
+            ) {
+                Text("\"$quote\"", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic), color = MaterialTheme.colorScheme.onSurface)
+            }
+        }
     }
 }
 
 @Composable
 private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
+    val data = entry.captureData as? CaptureData.GalleryWall ?: return
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Box(modifier = Modifier.weight(1f).height(120.dp).background(category.accent, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
-                CurioIcon(name = CurioIcons.Image, contentDescription = null, tint = Color.White, size = 32.dp)
+        if (data.imageCount > 0) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                Box(modifier = Modifier.weight(1f).height(120.dp).background(category.accent, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
+                    CurioIcon(CurioIcons.Image, null, tint = Color.White, size = 36.dp)
+                }
+                if (data.imageCount > 1) {
+                    Box(modifier = Modifier.weight(1f).height(120.dp).background(category.tint, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
+                        CurioIcon(CurioIcons.Image, null, tint = category.accent, size = 36.dp)
+                    }
+                }
             }
-            Box(modifier = Modifier.weight(1f).height(120.dp).background(category.tint, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
-                CurioIcon(name = CurioIcons.Image, contentDescription = null, tint = category.accent, size = 32.dp)
+            if (data.imageCount > 2) {
+                Text("+${data.imageCount - 2} more", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
-        Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+        if (data.caption.isNotBlank()) {
+            Text(data.caption, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+        }
     }
 }
 
 @Composable
 private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text(text = "Observations", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
-        Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+    val data = entry.captureData as? CaptureData.FieldNotes ?: return
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        data.observed.takeIf { it.isNotBlank() }?.let { text ->
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text("🔍 Observed", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+                Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+            }
+        }
+        data.surprised.takeIf { it.isNotBlank() }?.let { text ->
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text("✨ Surprised me", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+                Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+            }
+        }
+        data.learnNext.takeIf { it.isNotBlank() }?.let { text ->
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text("📖 Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
+                Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+            }
+        }
     }
 }
 
 @Composable
 private fun OpenNotebookRender(entry: CurioEntry, category: CurioCategory) {
-    Text(text = entry.bodyContent, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+    val data = entry.captureData as? CaptureData.OpenNotebook ?: return
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text("Format: ${data.subFormat.name}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        // Recursively render the sub-data
+        val subEntry = CurioEntry(
+            id = entry.id,
+            topic = entry.topic,
+            format = data.subFormat,
+            captureData = data.subData
+        )
+        FormatBody(entry = subEntry, category = category)
+    }
 }

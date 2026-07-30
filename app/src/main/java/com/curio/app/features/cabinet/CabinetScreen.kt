@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
+import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioEmptyState
@@ -59,7 +60,7 @@ fun CabinetScreen(navController: NavController) {
     var selectedFilter by remember { mutableStateOf<CategoryId?>(null) }
 
     val entries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
-        value = TopicCatalog.sampleEntries()
+        value = try { CurioRepositoryHolder.repo.getAll() } catch (_: Exception) { emptyList() }
     }
 
     val visibleEntries = remember(entries, selectedFilter) {
