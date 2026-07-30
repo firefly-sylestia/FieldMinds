@@ -1,16 +1,20 @@
 package com.curio.app.features.capture.formats
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -30,9 +35,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.curio.app.data.CaptureData
+import com.curio.app.features.capture.AudioRecorder
 import com.curio.app.ui.components.LiveWaveform
 import com.curio.app.ui.components.formatRecordingTime
 import com.curio.app.ui.components.rememberPulseScale
@@ -45,15 +53,15 @@ import kotlinx.coroutines.delay
  * Sound Bite format body — CURIO_SPEC §8.1 (Music / Artists).
  *
  * 4-state machine: IDLE / RECORDING / PAUSED / STOPPED.
- * - IDLE: big mic button to start, "Tap to record your take" helper
+ * - IDLE: big mic button to start, requests RECORD_AUDIO permission if needed
  * - RECORDING / PAUSED: pulsing ring + live waveform + mm:ss timer +
- *   Pause/Stop/Discard controls
+ *   Pause/Stop/Discard controls — driven by real [AudioRecorder] (MediaRecorder)
  * - STOPPED: shows "Recording saved (m:ss)" + Record over reset
  *
- * Owns its own recording state internally. Notifies parent via
- * [onCanSaveChange] when state is STOPPED AND seconds > 0.
+ * Uses real [AudioRecorder] (MediaRecorder) for actual voice capture.
+ * The audio file path is stored in [CaptureData.SoundBite.audioFilePath].
  *
- * Also owns the optional one-line title field per spec §8.1.
+ * Runtime permission (RECORD_AUDIO) is requested on first tap of the mic button.
  */
 @Composable
 fun SoundBiteFormat(
@@ -62,28 +70,68 @@ fun SoundBiteFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {}
 ) {
-    var recordingState by remember { mutableStateOf(RecordingState.IDLE) }
+    val context = LocalContext.current
+    val recorder = remember(context) { AudioRecorder(context) }
+    var recordingState by remember { mutableStateOf(AudioRecorder.State.IDLE) }
     var recordingSeconds by remember { mutableIntStateOf(0) }
     var title by remember { mutableStateOf("") }
+    var savedFilePath by remember { mutableStateOf<String?>(null) }
+    var permissionDenied by remember { mutableStateOf(false) }
 
-    // Tick the recording timer every second while RECORDING.
+    // ── Runtime permission launcher ──────────────────────────────────────
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            try {
+                recorder.start()
+                recordingState = recorder.state
+                recordingSeconds = 0
+                permissionDenied = false
+            } catch (e: Exception) {
+                // Start failed — silently return to IDLE
+                recordingState = AudioRecorder.State.IDLE
+            }
+        } else {
+            permissionDenied = true
+        }
+    }
+
+    // ── Tick the recording timer every second while RECORDING ────────────
     LaunchedEffect(recordingState) {
-        if (recordingState == RecordingState.RECORDING) {
-            while (recordingState == RecordingState.RECORDING) {
+        if (recordingState == AudioRecorder.State.RECORDING) {
+            while (recordingState == AudioRecorder.State.RECORDING) {
                 delay(1000)
-                recordingSeconds++
+                recordingSeconds = recorder.elapsedSeconds
             }
         }
     }
 
-    val canSave = recordingSeconds > 0 &&
-                  recordingState == RecordingState.STOPPED
-    LaunchedEffect(canSave) {
+    // ── Clean up recorder on dispose ─────────────────────────────────────
+    DisposableEffect(Unit) {
+        onDispose { recorder.release() }
+    }
+
+    // ── Report can-save + capture data ───────────────────────────────────
+    val canSave = recordingState == AudioRecorder.State.STOPPED &&
+                  recordingSeconds > 0 &&
+                  savedFilePath != null
+    LaunchedEffect(canSave, savedFilePath, title) {
         onCanSaveChange(canSave)
         onDataChanged(
-            if (canSave) CaptureData.SoundBite(recordingSeconds, title)
+            if (canSave) CaptureData.SoundBite(
+                durationSeconds = recordingSeconds,
+                title = title,
+                audioFilePath = savedFilePath
+            )
             else null
         )
+    }
+
+    // ── Check initial permission state ───────────────────────────────────
+    val hasPermission = remember {
+        ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
+        PackageManager.PERMISSION_GRANTED
     }
 
     Column(
@@ -91,42 +139,80 @@ fun SoundBiteFormat(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // ── Format body (state-dependent) ──────────────────────────────────
+        // ── Format body (state-dependent) ────────────────────────────────
         when (recordingState) {
-            RecordingState.IDLE -> IdleControls(accent = accent, onRecord = {
-                recordingState = RecordingState.RECORDING
-                recordingSeconds = 0
-            })
-            RecordingState.RECORDING,
-            RecordingState.PAUSED -> LiveControls(
+            AudioRecorder.State.IDLE -> IdleControls(
                 accent = accent,
-                tint = tint,
-                state = recordingState,
-                seconds = recordingSeconds,
-                onPauseResume = {
-                    recordingState =
-                        if (recordingState == RecordingState.RECORDING)
-                            RecordingState.PAUSED
-                        else RecordingState.RECORDING
-                },
-                onStop = { recordingState = RecordingState.STOPPED },
-                onDiscard = {
-                    recordingState = RecordingState.IDLE
-                    recordingSeconds = 0
+                hasPermission = hasPermission,
+                permissionDenied = permissionDenied,
+                onRecord = {
+                    if (hasPermission) {
+                        try {
+                            recorder.start()
+                            recordingState = recorder.state
+                            recordingSeconds = 0
+                        } catch (_: Exception) {
+                            recordingState = AudioRecorder.State.IDLE
+                        }
+                    } else {
+                        permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                    }
                 }
             )
-            RecordingState.STOPPED -> StoppedControls(
+            AudioRecorder.State.RECORDING,
+            AudioRecorder.State.PAUSED -> LiveControls(
+                accent = accent,
+                tint = tint,
+                isPaused = recordingState == AudioRecorder.State.PAUSED,
+                seconds = recordingSeconds,
+                onPauseResume = {
+                    if (recordingState == AudioRecorder.State.RECORDING) {
+                        recorder.pause()
+                    } else {
+                        recorder.resume()
+                    }
+                    recordingState = recorder.state
+                },
+                onStop = {
+                    try {
+                        savedFilePath = recorder.stop()
+                    } catch (_: Exception) {
+                        savedFilePath = null
+                    }
+                    recordingState = recorder.state
+                    recordingSeconds = recorder.elapsedSeconds
+                },
+                onDiscard = {
+                    recorder.discard()
+                    recordingState = recorder.state
+                    recordingSeconds = 0
+                    savedFilePath = null
+                }
+            )
+            AudioRecorder.State.STOPPED -> StoppedControls(
                 accent = accent,
                 tint = tint,
                 seconds = recordingSeconds,
                 onReRecord = {
-                    recordingState = RecordingState.IDLE
+                    recorder.release()
+                    recordingState = recorder.state
                     recordingSeconds = 0
+                    savedFilePath = null
                 }
             )
         }
 
-        // ── Optional title field (CURIO_SPEC §8.1) ─────────────────────────
+        // ── Permission denied hint ───────────────────────────────────────
+        if (permissionDenied) {
+            Text(
+                text = "Microphone access is needed to record. Grant permission in Settings.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
+
+        // ── Optional title field (CURIO_SPEC §8.1) ───────────────────────
         OutlinedTextField(
             value = title,
             onValueChange = { title = it },
@@ -139,11 +225,17 @@ fun SoundBiteFormat(
     }
 }
 
-/** Internal state machine — package-private since this file is the only consumer. */
-internal enum class RecordingState { IDLE, RECORDING, PAUSED, STOPPED }
+// ═══════════════════════════════════════════════════════════════════════════
+// Private sub-composables
+// ═══════════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun IdleControls(accent: Color, onRecord: () -> Unit) {
+private fun IdleControls(
+    accent: Color,
+    hasPermission: Boolean,
+    permissionDenied: Boolean,
+    onRecord: () -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -164,7 +256,8 @@ private fun IdleControls(accent: Color, onRecord: () -> Unit) {
             }
         }
         Text(
-            text = "Tap to record your take",
+            text = if (!hasPermission && !permissionDenied) "Tap to grant mic access & record"
+                   else "Tap to record your take",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -175,13 +268,13 @@ private fun IdleControls(accent: Color, onRecord: () -> Unit) {
 private fun LiveControls(
     accent: Color,
     tint: Color,
-    state: RecordingState,
+    isPaused: Boolean,
     seconds: Int,
     onPauseResume: () -> Unit,
     onStop: () -> Unit,
     onDiscard: () -> Unit
 ) {
-    val pulseScale = rememberPulseScale(active = state == RecordingState.RECORDING)
+    val pulseScale = rememberPulseScale(active = !isPaused)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -206,9 +299,7 @@ private fun LiveControls(
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     CurioIcon(
-                        name = if (state == RecordingState.PAUSED)
-                            CurioIcons.MicNone
-                        else CurioIcons.Mic,
+                        name = if (isPaused) CurioIcons.MicNone else CurioIcons.Mic,
                         contentDescription = null,
                         tint = CurioColors.DeepPlum,
                         size = 48.dp
@@ -220,7 +311,7 @@ private fun LiveControls(
         // Live waveform
         LiveWaveform(
             color = accent,
-            active = state == RecordingState.RECORDING,
+            active = !isPaused,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
@@ -239,10 +330,8 @@ private fun LiveControls(
             verticalAlignment = Alignment.CenterVertically
         ) {
             ControlButton(
-                icon = if (state == RecordingState.PAUSED)
-                    CurioIcons.PlayArrow
-                else CurioIcons.Pause,
-                label = if (state == RecordingState.PAUSED) "Resume" else "Pause",
+                icon = if (isPaused) CurioIcons.PlayArrow else CurioIcons.Pause,
+                label = if (isPaused) "Resume" else "Pause",
                 tint = accent,
                 onClick = onPauseResume
             )

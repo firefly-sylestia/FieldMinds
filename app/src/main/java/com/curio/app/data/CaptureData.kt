@@ -11,10 +11,11 @@ import com.curio.app.data.CaptureFormat
  */
 sealed class CaptureData {
 
-    /** Sound Bite (§8.1): voice recording with optional title. */
+    /** Sound Bite (§8.1): voice recording with optional title and audio file path. */
     data class SoundBite(
         val durationSeconds: Int,
-        val title: String
+        val title: String,
+        val audioFilePath: String? = null
     ) : CaptureData()
 
     /** Reel Notes (§8.2): review with rating, text, and image count. */

@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -18,12 +20,17 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -34,9 +41,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
 import com.curio.app.data.CaptureData
 import com.curio.app.data.CaptureFormat
@@ -261,19 +272,178 @@ private fun FormatBody(entry: CurioEntry, category: CurioCategory) {
 @Composable
 private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
     val data = entry.captureData as? CaptureData.SoundBite ?: return
-    Surface(shape = RoundedCornerShape(20.dp), color = category.tint, modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Surface(shape = RoundedCornerShape(50), color = category.accent) {
-                    CurioIcon(name = CurioIcons.PlayArrow, contentDescription = "Play", tint = CurioColors.DeepPlum, size = 32.dp, modifier = Modifier.padding(8.dp))
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        color = category.tint,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = category.accent
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.PlayArrow,
+                        contentDescription = "Play",
+                        tint = CurioColors.DeepPlum,
+                        size = 32.dp,
+                        modifier = Modifier.padding(8.dp)
+                    )
                 }
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Voice note · ${data.durationSeconds}s", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
-                    if (data.title.isNotBlank()) Text(data.title, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        "Voice note · ${data.durationSeconds}s",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    if (data.title.isNotBlank()) {
+                        Text(
+                            data.title,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
+            }
+
+            // ── Real audio player (when file path is available) ─────────
+            if (!data.audioFilePath.isNullOrBlank()) {
+                AudioPlayerBar(
+                    audioFilePath = data.audioFilePath!!,
+                    accent = category.accent,
+                    tint = category.tint
+                )
             }
         }
     }
+}
+
+/**
+ * Compact ExoPlayer-based audio playback bar with play/pause + seek slider.
+ * Handles player lifecycle automatically via [DisposableEffect].
+ */
+@Composable
+private fun AudioPlayerBar(
+    audioFilePath: String,
+    accent: Color,
+    tint: Color
+) {
+    val context = LocalContext.current
+    var isPlaying by remember { mutableStateOf(false) }
+    var currentPosition by remember { mutableLongStateOf(0L) }
+    var duration by remember { mutableLongStateOf(0L) }
+    var sliderPosition by remember { mutableFloatStateOf(0f) }
+
+    val player = remember {
+        ExoPlayer.Builder(context.applicationContext).build().apply {
+            setMediaItem(MediaItem.fromUri(audioFilePath))
+            prepare()
+            playWhenReady = false
+        }
+    }
+
+    // ── Observe player state ────────────────────────────────────────────
+    DisposableEffect(player) {
+        val listener = object : Player.Listener {
+            override fun onIsPlayingChanged(playing: Boolean) {
+                isPlaying = playing
+            }
+            override fun onPlaybackStateChanged(state: Int) {
+                when (state) {
+                    Player.STATE_READY -> {
+                        duration = player.duration.coerceAtLeast(0)
+                    }
+                    Player.STATE_ENDED -> {
+                        isPlaying = false
+                        currentPosition = 0L
+                        sliderPosition = 0f
+                    }
+                }
+            }
+        }
+        player.addListener(listener)
+        onDispose {
+            player.removeListener(listener)
+            player.release()
+        }
+    }
+
+    // ── Poll position while playing ─────────────────────────────────────
+    LaunchedEffect(isPlaying) {
+        while (isPlaying) {
+            currentPosition = player.currentPosition.coerceAtLeast(0)
+            sliderPosition = if (duration > 0) currentPosition.toFloat() / duration.toFloat() else 0f
+            kotlinx.coroutines.delay(200)
+        }
+    }
+
+    // ── Seek slider + play/pause ────────────────────────────────────────
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Slider(
+            value = sliderPosition,
+            onValueChange = { fraction ->
+                sliderPosition = fraction
+                val seekMs = (fraction * duration).toLong()
+                player.seekTo(seekMs)
+                currentPosition = seekMs
+            },
+            colors = SliderDefaults.colors(
+                thumbColor = accent,
+                activeTrackColor = accent,
+                inactiveTrackColor = tint
+            ),
+            modifier = Modifier.fillMaxWidth().height(24.dp)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Surface(
+                    onClick = {
+                        if (isPlaying) player.pause() else player.play()
+                    },
+                    shape = RoundedCornerShape(50),
+                    color = accent
+                ) {
+                    CurioIcon(
+                        name = if (isPlaying) CurioIcons.Pause else CurioIcons.PlayArrow,
+                        contentDescription = if (isPlaying) "Pause" else "Play",
+                        tint = CurioColors.DeepPlum,
+                        size = 28.dp,
+                        modifier = Modifier.padding(6.dp)
+                    )
+                }
+            }
+
+            // Time readout
+            Text(
+                text = "${formatMs(currentPosition)} / ${formatMs(duration)}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+/** Format milliseconds to mm:ss */
+private fun formatMs(ms: Long): String {
+    val totalSecs = (ms / 1000).coerceAtLeast(0)
+    val mins = totalSecs / 60
+    val secs = totalSecs % 60
+    return "%d:%02d".format(mins, secs)
 }
 
 @Composable
