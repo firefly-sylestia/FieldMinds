@@ -131,7 +131,8 @@ fun GalleryWallFormat(
             if (canSave) CaptureData.GalleryWall(
                 imageCount = tiles.size,
                 caption = caption,
-                imageUris = tiles.map { it.uri }
+                imageUris = tiles.map { it.uri },
+                tileLayouts = tiles.map { CaptureData.TileLayout(it.uri, it.offsetXPx, it.offsetYPx, it.rotationDeg, it.widthPx, it.heightPx) }
             )
             else null
         )

@@ -7,12 +7,14 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -48,12 +50,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.zIndex
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.components.WaveformExtractor
 import kotlinx.coroutines.Dispatchers
@@ -80,6 +85,7 @@ import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import coil.compose.rememberAsyncImagePainter
 import com.curio.app.ui.theme.CurioIcons
+import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
 /**
@@ -627,33 +633,86 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
 @Composable
 private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
+    val density = androidx.compose.ui.platform.LocalDensity.current
+
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        if (data.imageUris.isNotEmpty()) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                data.imageUris.take(2).forEach { uri ->
-                    Image(
-                        painter = rememberAsyncImagePainter(uri),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(120.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                    )
-                }
-            }
-            if (data.imageUris.size > 2) {
-                Text("+${data.imageUris.size - 2} more", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        } else if (data.imageCount > 0) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                Box(modifier = Modifier.weight(1f).height(120.dp).background(category.accent, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
-                    CurioIcon(CurioIcons.Image, null, tint = Color.White, size = 36.dp)
+        // ── Mood board canvas with tile positions ──────────────────────
+        Surface(
+            shape = RoundedCornerShape(24.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+            tonalElevation = 1.dp,
+            modifier = Modifier.fillMaxWidth().height(320.dp)
+        ) {
+            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                val canvasW = with(density) { maxWidth.toPx() }
+                val canvasH = with(density) { 320.dp.toPx() }
+
+                if (data.tileLayouts.isNotEmpty()) {
+                    data.tileLayouts.forEachIndexed { i, tile ->
+                        Box(
+                            modifier = Modifier
+                                .offset {
+                                    IntOffset(
+                                        tile.offsetXPx.roundToInt().coerceIn(0, canvasW.roundToInt()),
+                                        tile.offsetYPx.roundToInt().coerceIn(0, canvasH.roundToInt())
+                                    )
+                                }
+                                .zIndex(i.toFloat())
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(14.dp),
+                                color = Color.White,
+                                shadowElevation = 4.dp,
+                                modifier = Modifier
+                                    .size(
+                                        width = with(density) { tile.widthPx.toDp() },
+                                        height = with(density) { tile.heightPx.toDp() }
+                                    )
+                                    .rotate(tile.rotationDeg)
+                            ) {
+                                Image(
+                                    painter = rememberAsyncImagePainter(tile.uri),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clip(RoundedCornerShape(14.dp))
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    // Fallback: show images in a grid if no tile data
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        CurioIcon(CurioIcons.Image, null, tint = category.accent.copy(alpha = 0.3f), size = 48.dp)
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            "${data.imageCount} image${if (data.imageCount != 1) "s" else ""}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
+
         if (data.caption.isNotBlank()) {
-            Text(data.caption, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = category.accent.copy(alpha = 0.08f),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    data.caption,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
     }
 }

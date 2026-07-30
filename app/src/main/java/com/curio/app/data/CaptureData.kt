@@ -34,11 +34,22 @@ sealed class CaptureData {
         val quotes: List<String>
     ) : CaptureData()
 
-    /** Gallery Wall (§8.4): moodboard collage with caption. */
+    /** A single tile's layout on the mood board canvas. */
+    data class TileLayout(
+        val uri: String,
+        val offsetXPx: Float,
+        val offsetYPx: Float,
+        val rotationDeg: Float,
+        val widthPx: Float,
+        val heightPx: Float
+    )
+
+    /** Gallery Wall (§8.4): moodboard collage with caption and tile positions. */
     data class GalleryWall(
         val imageCount: Int,
         val caption: String,
-        val imageUris: List<String> = emptyList()
+        val imageUris: List<String> = emptyList(),
+        val tileLayouts: List<TileLayout> = emptyList()
     ) : CaptureData()
 
     /** Field Notes (§8.5): three-section observation journal. */

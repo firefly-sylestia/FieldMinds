@@ -509,7 +509,7 @@ private fun CardFace(
                         Text(
                             name,
                             style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold, lineHeight = 32.sp),
-                            color = CurioColors.DeepPlum,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Center,
                             maxLines = 3, overflow = TextOverflow.Ellipsis
                         )
@@ -518,7 +518,7 @@ private fun CardFace(
                     Text(
                         topic.name,
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold, lineHeight = 32.sp),
-                        color = CurioColors.DeepPlum,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
                         maxLines = 3, overflow = TextOverflow.Ellipsis
                     )
