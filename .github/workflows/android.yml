@@ -74,11 +74,11 @@ jobs:
 
       - name: Verify installable APK outputs (unsigned APKs are treated as a build failure)
         run: |
-          set -uo pipefail
+          set -euo pipefail
           echo "=== APK outputs ==="
           find app/build/outputs/apk -type f -name '*.apk' -print || true
-          debug_apk=$(find app/build/outputs/apk/debug   -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
-          release_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
+          debug_apk=$(find app/build/outputs/apk/debug -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1) || true
+          release_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1) || true
           if [ -z "$debug_apk" ] && [ -z "$release_apk" ]; then
             unsigned_found=$(find app/build/outputs/apk -type f -name '*-unsigned.apk' 2>/dev/null | head -1 || true)
             if [ -n "$unsigned_found" ]; then
@@ -90,8 +90,6 @@ jobs:
           fi
           if [ -n "$debug_apk" ]; then echo "✅ Debug APK: $debug_apk"; fi
           if [ -n "$release_apk" ]; then echo "✅ Release APK: $release_apk"; fi
-          # When release secrets aren't configured, only the debug APK is expected.
-          # Having just the debug APK is a valid pass — no error needed.
           if [ -z "$release_apk" ]; then
             echo "ℹ️  No release APK found (keystore secrets not configured — expected for fork PRs). Debug-only build passed."
           fi
