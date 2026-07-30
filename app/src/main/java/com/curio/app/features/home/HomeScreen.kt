@@ -157,7 +157,7 @@ fun HomeScreen(navController: NavController) {
             }
 
             // ── 2. Welcome ───────────────────────────────────────────
-            Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 4.dp)) {
+            Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 8.dp)) {
                 MorphEntrance(delayMs = 80) {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(
@@ -172,7 +172,7 @@ fun HomeScreen(navController: NavController) {
                             CurioStreakPill(days = streakDays)
                             if (streakDays <= 0) {
                                 Text(
-                                    "Discover something new today ✦",
+                                    "Discover something new today",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -195,7 +195,7 @@ fun HomeScreen(navController: NavController) {
                 }
             }
 
-            Spacer(Modifier.height(14.dp))
+            Spacer(Modifier.height(16.dp))
 
             // ── 3. Compact Hero Banner ───────────────────────────────
             MorphEntrance(delayMs = 100) {
@@ -344,7 +344,7 @@ fun HomeScreen(navController: NavController) {
                                         color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center
                                     )
                                     Text(
-                                        "Spin the wheel to discover your first topic — then capture what you find ✦",
+                                        "Spin the wheel to discover your first topic — then capture what you find",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center
                                     )
@@ -484,8 +484,8 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
-            Text("Curio v1.0.0", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
-            Text("Made with curiosity ✦", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+            Text("v1.0.0", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+            Text("Made with curiosity", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
         }
     }
 }

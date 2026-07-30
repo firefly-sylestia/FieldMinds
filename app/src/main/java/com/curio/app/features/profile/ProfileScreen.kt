@@ -129,7 +129,7 @@ fun ProfileScreen(navController: NavController) {
                                     CurioIcon(CurioIcons.Edit, "Edit name", tint = CurioColors.CoralBlush, size = 16.dp, modifier = Modifier.padding(4.dp))
                                 }
                             }
-                            Text("Stay curious ✦", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Stay curious", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -261,7 +261,7 @@ fun ProfileScreen(navController: NavController) {
                         navController.navigate(CurioRoutes.ONBOARDING)
                     }
                 }
-                item { SettingsRow(CurioIcons.Info, "Version", "0.1.0-curio") {} }
+                item { SettingsRow(CurioIcons.Info, "Version", "1.0.0") {} }
                 item { Spacer(Modifier.height(16.dp)) }
             }
         }
