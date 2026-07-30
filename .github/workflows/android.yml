@@ -2,7 +2,6 @@ name: Android CI
 
 on:
   push:
-    branches: [ "main", "revamp" ]
   pull_request:
     branches: [ "main" ]
 
