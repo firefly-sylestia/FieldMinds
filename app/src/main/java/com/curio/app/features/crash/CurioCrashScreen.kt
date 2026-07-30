@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import android.content.Intent
 import androidx.navigation.NavController
+import com.curio.app.navigation.CurioRoutes
 import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
@@ -124,7 +125,7 @@ fun CurioCrashScreen(navController: NavController) {
                 Button(
                     onClick = {
                         CurioCrashReporter.clearCrashHistory(context)
-                        navController.navigate("home") {
+                        navController.navigate(CurioRoutes.HOME) {
                             popUpTo(0) { inclusive = true }
                         }
                     },
