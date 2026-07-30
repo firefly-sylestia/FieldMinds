@@ -16,20 +16,20 @@ enum class AudioQuality(
 ) {
     LOW(
         label = "Low",
-        samplingRate = 22050,
-        bitRate = 32000,
-        description = "Smaller files, decent for voice"
+        samplingRate = 44100,
+        bitRate = 64000,
+        description = "Smaller files, clear voice"
     ),
     MEDIUM(
         label = "Medium",
         samplingRate = 44100,
-        bitRate = 96000,
+        bitRate = 128000,
         description = "Balanced quality & size"
     ),
     HIGH(
         label = "High",
         samplingRate = 48000,
-        bitRate = 192000,
+        bitRate = 256000,
         description = "Best quality, larger files"
     )
 }

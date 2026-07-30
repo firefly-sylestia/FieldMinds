@@ -84,6 +84,12 @@ object CurioIcons {
     const val MenuBook    = "menu_book"
     const val Palette     = "palette"
     const val ScienceGlyph = "science"
+
+    // ── Status / report glyphs
+    const val ErrorOutline = "error_outline"
+    const val BugReport     = "bug_report"
+    const val Warning       = "warning"
+    const val Notifications = "notifications"
 }
 
 /**

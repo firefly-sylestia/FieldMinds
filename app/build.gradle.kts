@@ -32,16 +32,6 @@ val hasReleaseSigningMaterial: Boolean =
     keyAlias != null &&
     keyPassword != null
 
-if (!hasReleaseSigningMaterial) {
-    logger.warn(
-        "Curio release signing material not configured " +
-        "(KEYSTORE_PATH / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD). " +
-        "Falling back to debug signing for this build. For a properly-" +
-        "signed release APK, populate the 4 secrets in repo Settings > " +
-        "Secrets and variables > Actions."
-    )
-}
-
 android {
     namespace = "com.curio.app"
     compileSdk = 37
@@ -50,8 +40,8 @@ android {
         applicationId = "com.curio.app"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1.0-curio"
+        versionCode = 20260730
+        versionName = "1.0.0"
 
         // Only include English locale — saves ~5-8 MB of APK size.
         // Curio ships as a single-language app. Add others as needed.
@@ -77,9 +67,18 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            // Use release signing only if all secrets are configured; otherwise use debug
-            if (hasReleaseSigningMaterial) {
-                signingConfig = signingConfigs.getByName("release")
+            signingConfig = if (hasReleaseSigningMaterial) {
+                logger.lifecycle("✓ Release APK signed with custom keystore (${keyStorePath})")
+                signingConfigs.getByName("release")
+            } else {
+                logger.warn(
+                    "Curio release signing material not configured " +
+                    "(KEYSTORE_PATH / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD). " +
+                    "Release APK signed with debug keystore — installable but not for " +
+                    "distribution. For a properly-signed release APK, populate the " +
+                    "4 secrets in repo Settings > Secrets and variables > Actions."
+                )
+                signingConfigs.getByName("debug")
             }
         }
         debug {

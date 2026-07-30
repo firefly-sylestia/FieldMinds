@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,7 +40,6 @@ import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -72,7 +69,7 @@ fun CategoryPickerScreen(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = 0.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -153,12 +150,10 @@ private fun CategoryTile(
     )
 
     val isWildcard = category.id == CategoryId.WILDCARD
-    val cardBrush = if (isWildcard) {
-        Brush.linearGradient(CurioGradients.WildcardGradientStops)
+    val cardColor = if (isWildcard) {
+        CurioColors.CoralBlush.copy(alpha = 0.85f)
     } else {
-        Brush.verticalGradient(
-            listOf(category.accent, category.accent.copy(alpha = 0.78f))
-        )
+        category.accent
     }
 
     Surface(
@@ -167,10 +162,9 @@ private fun CategoryTile(
             onClick()
         },
         shape = RoundedCornerShape(28.dp),
-        color = Color.Transparent,
+        color = cardColor,
         shadowElevation = 8.dp,
         tonalElevation = 4.dp,
-        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.45f)),
         modifier = Modifier
             .fillMaxWidth()
             .height(156.dp)
@@ -179,7 +173,6 @@ private fun CategoryTile(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(cardBrush)
         ) {
             CurioIcon(
                 name = category.iconGlyph,
@@ -223,11 +216,7 @@ private fun TileContent(category: CurioCategory) {
                 ),
                 color = Color.White
             )
-            Text(
-                text = "Spin this lane",
-                style = MaterialTheme.typography.labelMedium,
-                color = Color.White.copy(alpha = 0.78f)
-            )
+
         }
     }
 }

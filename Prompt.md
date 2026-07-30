@@ -1,27 +1,40 @@
-# Curio interaction and capture redesign — Completion Summary
+# Spin / Topic Reveal / Home UI polish — completion summary
 
 ## Task
-User requested a broader redesign pass across category cards, status-bar edge-to-edge polish, save persistence, image capture for moodboards/field notes, voice-note notes, topic/category flow wiring, intro startup wiring, and Spin shuffle/card visual improvements.
+
+User asked to refine the Spin page (dialogs, shuffle cards, transparent/red topic issues), fix the topic view red color, reduce top-bar vertical space across all pages, and fix Home explore-category pill clipping + recently-explored overlap.
 
 ## What changed
-- Category Picker cards now use full-card category-color fills, larger 2-column hero-style cards, white icon badges, oversized background glyphs, and roomier spacing.
-- Edge-to-edge system bars are transparent with explicit light/dark icon handling to avoid the awkward status-bar gradient band.
-- Splash now checks persisted onboarding state and routes first launches into onboarding; onboarding completion is stored in SharedPreferences and replay/reset flows clear it properly.
-- Cabinet now observes the capture repository flow so saved entries appear without requiring a one-shot reload.
-- Saved capture data now carries voice-note notes plus image URI lists for Gallery Wall and Field Notes.
-- Sound Bite capture adds a longer optional note field.
-- Gallery Wall now launches the Android image picker and renders selected images in the collage tiles.
-- Field Notes now launches the Android image picker and renders/removes attached photo thumbnails.
-- Spin now has an in-screen category row, so changing category updates the Spin topic pool without leaving the page; topic routes now URL-encode names and lightbox URLs.
-- Coil Compose was added for rendering selected local image URIs.
-- Store changelog for versionCode 1 was added.
+
+### `app/src/main/java/com/curio/app/ui/theme/CurioTheme.kt`
+- Added the five Material 3 surface-container color roles (`surfaceContainerLowest` through `surfaceContainerHighest`) to both light and dark schemes so the new solid-card surfaces match the warm Curio palette instead of falling back to Material baseline tones.
+
+### `app/src/main/java/com/curio/app/features/spin/SpinScreen.kt`
+- Top bar: `vertical = 0.dp`.
+- Category `DropdownMenu`: switched background to `surfaceContainerLow`, title uses `titleSmall`, cleaner menu items.
+- Replaced the empty/transparent right-side badge with a compact `filtered / total` count pill.
+- Filter `ModalBottomSheet`: added `BottomSheetDefaults.DragHandle()`, `surfaceContainerLow` container, 32.dp top corners, headline title, expressive chip styling.
+- Shuffle carousel cards are now solid (`surfaceContainerHighest` center, `surfaceContainer` sides) with subtle accent border, higher elevation, and `AnimatedContent` slot-machine transitions when topics shuffle.
+- Topic title uses `MaterialTheme.colorScheme.onSurface` instead of the reddish deep plum.
+
+### `app/src/main/java/com/curio/app/features/reveal/TopicRevealScreen.kt`
+- Top bar: `vertical = 0.dp`.
+- Topic name now renders in `MaterialTheme.colorScheme.onSurface` (neutral, not red).
+- Hero card background switched from `accent.copy(alpha=0.16f)` to solid `surfaceContainerHigh` with a subtle accent border.
+
+### `app/src/main/java/com/curio/app/features/home/HomeScreen.kt`
+- Top bar: `vertical = 0.dp`, removed the 4.dp spacer below it.
+- "Explore categories" `LazyRow` no longer uses parent horizontal padding; it uses `contentPadding = PaddingValues(horizontal = 16.dp)` so the selected chip scale no longer clips.
+- Moved the extra bottom `Spacer` inside the `StaggeredEntrance` (wrapped in `StaggeredItem`) and increased the final bottom spacer to prevent overlap with the bottom/reminder card.
+
+### Top-bar compact pass across the app
+- `ProfileScreen`, `CabinetScreen`, `CategoryPickerScreen`, `SettingsScreen`, `ManageCategoriesScreen`, `TopicHistoryScreen`, `BugReportScreen`, `SaveCaptureScreen`, `LightboxScreen`: all top-bar `Row`s now use `vertical = 0.dp` for a tighter, consistent look.
 
 ## Verification
-- Did not run Gradle build/test/lint/assemble/check commands because the root DOX explicitly forbids them in this environment.
-- Ran static repository checks with ripgrep and a Python brace-balance script on Kotlin files.
 
-## Reviewer follow-up fixes
-- Switched image picking to `OpenMultipleDocuments()` and persistable read URI grants so saved image URIs can survive app restarts.
-- Rendered saved Gallery Wall and Field Notes images in Entry Detail.
-- Guarded Spin shuffling against empty filtered topic pools and disabled shuffle when a selected filter has no topics.
-- Replaced placeholder Topic History samples with real saved-capture history grouped by day and using capture-format glyphs.
+- No Gradle builds run per project `AGENTS.md` rules.
+- Searched for duplicate imports and unresolved references: `BorderStroke`, `AnimatedContent`, `togetherWith`, `BottomSheetDefaults` imports are present and correct.
+- Verified `surfaceContainerLow`/`surfaceContainerHigh`/`surfaceContainerHighest` now have custom definitions in `CurioTheme.kt`.
+- Verified `StaggeredItem` usages in `HomeScreen.kt` are inside the parent `StaggeredEntrance`.
+- Code-reviewer-kimi review requested.
+

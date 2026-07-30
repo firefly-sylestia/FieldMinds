@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.curio.app.data.AppPreferences
 import com.curio.app.data.CaptureRepository
 import com.curio.app.data.CurioDatabase
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicJsonLoader
+import com.curio.app.infrastructure.CurioCrashReporter
 import com.curio.app.navigation.CurioNavHost
 import com.curio.app.ui.theme.CurioTheme
 
@@ -34,10 +36,14 @@ class MainActivity : ComponentActivity() {
         // composition, before the splash coroutine has a chance to run.
         TopicJsonLoader.install(this)
 
+        // Initialize crash reporter before anything else
+        CurioCrashReporter.init(this)
+
         // Initialize Room database and repository singleton
         val db = CurioDatabase.getInstance(this)
         CurioRepositoryHolder.init(db.captureDao())
 
+        AppPreferences.initThemeMode(this)
         setContent {
             CurioTheme {
                 CurioNavHost()

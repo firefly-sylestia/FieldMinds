@@ -25,6 +25,7 @@ abstract class CurioDatabase : RoomDatabase() {
                     CurioDatabase::class.java,
                     "curio_database"
                 )
+                    .setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
                     .fallbackToDestructiveMigration(false)
                     .build()
                     .also { INSTANCE = it }

@@ -89,7 +89,36 @@ object TopicJsonLoader {
             cache[id]?.let { return it }
         }
         val parsed = withContext(Dispatchers.IO) {
-            parseAsset("$ASSET_DIR/${id.routeSlug}.json", id)
+            if (id == CategoryId.WILDCARD) {
+                // Wildcard = merge ALL categories into one big pool.
+                // Use cache for already-loaded categories, parse + cache
+                // the rest so subsequent per-category loads are free.
+                val merged = mutableListOf<CurioTopic>()
+                val seenIds = mutableSetOf<String>()
+                // 1. Collect from every non-wildcard category.
+                CategoryId.values()
+                    .filter { it != CategoryId.WILDCARD }
+                    .forEach { otherId ->
+                        val topics = cache[otherId]
+                            ?: parseAsset("$ASSET_DIR/${otherId.routeSlug}.json", otherId)
+                                .also { cache[otherId] = it }
+                        topics.forEach { t ->
+                            if (seenIds.add(t.id)) merged.add(t)
+                        }
+                    }
+                // 2. Also pull in wildcard.json for any hand-curated
+                //    topics not already covered by the category files.
+                runCatching {
+                    parseAsset("$ASSET_DIR/${CategoryId.WILDCARD.routeSlug}.json", CategoryId.WILDCARD)
+                }.onFailure {
+                    android.util.Log.w("TopicJsonLoader", "wildcard.json skipped: ${it.message}")
+                }.getOrNull()?.forEach { t ->
+                    if (seenIds.add(t.id)) merged.add(t)
+                }
+                merged
+            } else {
+                parseAsset("$ASSET_DIR/${id.routeSlug}.json", id)
+            }
         }
         cacheMutex.withLock { cache[id] = parsed }
         return parsed
@@ -132,6 +161,17 @@ object TopicJsonLoader {
 
     // ── Internal ───────────────────────────────────────────────────────────
 
+    /**
+     * Strips em dashes (U+2014) and en dashes (U+2013) from display text,
+     * replacing them with a standard hyphen. Also collapses any resulting
+     * double-hyphens or leading/trailing whitespace.
+     */
+    private fun cleanText(raw: String): String =
+        raw.replace('\u2014', '-')   // em dash → hyphen
+           .replace('\u2013', '-')   // en dash → hyphen
+           .replace(Regex("-{2,}"), "-")
+           .trim()
+
     private fun parseAsset(path: String, id: CategoryId): List<CurioTopic> {
         val am = assets
             ?: throw TopicLoadException(path, id, "TopicJsonLoader.install(context) not called")
@@ -162,15 +202,15 @@ object TopicJsonLoader {
                 )
             }
         val subtype = obj.optString("subtype", "")
-        val name = obj.getString("name")
-        val teaser = obj.getString("teaser")
+        val name = cleanText(obj.getString("name"))
+        val teaser = cleanText(obj.getString("teaser"))
         val imageUrl = obj.optString("imageUrl", "")
         val eaObj = obj.getJSONObject("exploreAction")
         val exploreAction = ExploreAction(
             verb            = eaObj.getString("verb"),
-            targetName      = eaObj.getString("targetName"),
+            targetName      = cleanText(eaObj.getString("targetName")),
             durationMinutes = eaObj.optInt("durationMinutes", 30),
-            instruction     = eaObj.getString("instruction")
+            instruction     = cleanText(eaObj.getString("instruction"))
         )
         val tagsArr = obj.optJSONArray("tags")
         val tags: List<String> = if (tagsArr != null) {

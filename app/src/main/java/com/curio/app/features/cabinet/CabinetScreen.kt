@@ -1,6 +1,5 @@
 package com.curio.app.features.cabinet
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,7 +36,6 @@ import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
-import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.CurioEntryCard
@@ -82,7 +80,7 @@ fun CabinetScreen(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 0.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -149,7 +147,8 @@ fun CabinetScreen(navController: NavController) {
                         onCtaClick = { navController.navigate(CurioRoutes.SPIN) }
                     )
                 } else {
-                    val cat = CurioCategories.byId(selectedFilter!!)
+                    val filterId = selectedFilter ?: CategoryId.WILDCARD
+                    val cat = CurioCategories.byId(filterId)
                     CurioEmptyState(
                         glyph = CurioIcons.SearchOff,
                         headline = "No ${cat.displayName} captures yet",
@@ -199,13 +198,8 @@ private fun FilterChipLite(
 ) {
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
-        color = if (selected) tint else MaterialTheme.colorScheme.surface,
-        border = BorderStroke(
-            width = 1.dp,
-            color = if (selected) Color.Transparent
-                    else MaterialTheme.colorScheme.outline
-        )
+        shape = RoundedCornerShape(50),
+        color = if (selected) tint else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
     ) {
         Text(
             text = label,

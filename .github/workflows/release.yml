@@ -41,13 +41,53 @@ jobs:
       # app/build.gradle.kts reads these env vars at build time and signs the
       # release APK with them when all four are present; otherwise falls back
       # to debug signing.
+      #
+      # Release builds MUST be signed with the official keystore. If any secret
+      # is missing, this workflow FAILS rather than silently falling back to
+      # debug signing (which produces a different signature on every runner).
+
+      - name: Verify signing secrets are configured
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          missing=()
+          if [ -z "$KEYSTORE_BASE64" ]; then missing+=("KEYSTORE_BASE64"); fi
+          if [ -z "$KEYSTORE_PASSWORD" ]; then missing+=("KEYSTORE_PASSWORD"); fi
+          if [ -z "$KEY_ALIAS" ]; then missing+=("KEY_ALIAS"); fi
+          if [ -z "$KEY_PASSWORD" ]; then missing+=("KEY_PASSWORD"); fi
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Missing signing secrets: ${missing[*]}"
+            echo ""
+            echo "Release APKs must be signed with the official keystore."
+            echo "Configure all 4 secrets in repo Settings > Secrets and variables > Actions:"
+            echo "  - KEYSTORE_BASE64   (base64-encoded .jks / .keystore file)"
+            echo "  - KEYSTORE_PASSWORD  (keystore password)"
+            echo "  - KEY_ALIAS          (key alias inside the keystore)"
+            echo "  - KEY_PASSWORD       (key password)"
+            echo ""
+            echo "To encode your keystore: base64 -w 0 your-release-key.jks | pbcopy"
+            exit 1
+          fi
+          echo "✅ All 4 signing secrets are configured"
 
       - name: Decode keystore from secrets
         run: |
+          set -euo pipefail
           # Strip whitespace before base64-decode in case the secret was
           # pasted with line breaks — base64 ignores whitespace but some
           # implementations refuse mid-pipeline newlines.
           echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '[:space:]' | base64 -d > release.keystore
+          # Verify the decoded file is a valid keystore (non-empty, > 100 bytes)
+          file_size=$(wc -c < release.keystore)
+          if [ "$file_size" -lt 100 ]; then
+            echo "::error::Decoded keystore is only $file_size bytes — likely corrupt or empty. Re-encode your .jks file with: base64 -w 0 your-release-key.jks"
+            exit 1
+          fi
+          echo "✅ Keystore decoded ($file_size bytes)"
 
       - name: Build release universal APK
         env:
@@ -57,9 +97,10 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease --stacktrace
 
-      - name: Verify APK outputs (unsigned APKs are treated as a build failure)
+      - name: Verify APK outputs and signature
         run: |
-          set -uo pipefail
+          set -euo pipefail
+          ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
           echo "=== APK outputs ==="
           find app/build/outputs/apk -type f -name '*.apk' -print || true
           release_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' ! -name '*-unsigned.apk' 2>/dev/null | head -1)
@@ -73,6 +114,22 @@ jobs:
             exit 1
           fi
           echo "✅ Release APK: $release_apk"
+          # Verify the APK is signed (apksigner is bundled with Android SDK build-tools)
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name 'apksigner' -type f 2>/dev/null | sort -V | tail -1)
+          if [ -n "$APKSIGNER" ]; then
+            echo ""
+            echo "=== APK signature verification ==="
+            "$APKSIGNER" verify --print-certs "$release_apk"
+            # Check it's NOT signed with the Android debug key (CN=Android Debug)
+            if "$APKSIGNER" verify --print-certs "$release_apk" 2>&1 | grep -q "CN=Android Debug"; then
+              echo "::error::APK is signed with the DEBUG key (CN=Android Debug). This means the release keystore was NOT used. Check that all 4 signing secrets are correctly configured."
+              exit 1
+            fi
+            echo ""
+            echo "✅ APK is signed with the release keystore (not debug)"
+          else
+            echo "⚠️  apksigner not found — skipping signature verification"
+          fi
 
       - name: Set prerelease flag
         id: prerelease
