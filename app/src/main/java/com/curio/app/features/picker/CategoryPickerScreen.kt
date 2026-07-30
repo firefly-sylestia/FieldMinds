@@ -38,6 +38,7 @@ import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
