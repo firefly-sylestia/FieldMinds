@@ -8661,5 +8661,963 @@
       "1990s"
     ],
     "tier": 2
+  },
+  {
+    "id": "album-glenn-gould-goldberg-variations-1981",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Goldberg Variations (1981 Recording)",
+    "teaser": "Glenn Gould 1981 — a re-recording of the work that made him famous in 1955. The 1955 version was 38 minutes of breathtaking speed. This one is 51 minutes, with tempos so slow that individual notes hang in the air.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Goldberg Variations (1981) — Aria and first 5 variations",
+      "durationMinutes": 20,
+      "instruction": "Listen to the Aria — Gould plays it 40% slower than in 1955. The silence between notes is as important as the notes. Then compare variation 25, the 'black pearl' — Gould called it the saddest piece of music ever written."
+    },
+    "tags": [
+      "Classical",
+      "Piano",
+      "Baroque",
+      "Canadian",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-maria-callas-la-divina",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Maria Callas: La Divina",
+    "teaser": "Maria Callas 1992 — a compilation of the Greek-American soprano who redefined opera in the 1950s by insisting that acting mattered as much as singing.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "La Divina — selections",
+      "durationMinutes": 45,
+      "instruction": "Listen to 'Casta Diva' from Bellini's Norma — Callas holds the opening note for 12 seconds without vibrato. Then 'Vissi d'arte' from Tosca — she sang this at her final concert in 1974."
+    },
+    "tags": [
+      "Classical",
+      "Opera",
+      "Greek-American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-igor-stravinsky-the-rite-of-spring",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Rite of Spring",
+    "teaser": "Igor Stravinsky 1913 — the ballet that caused a riot at its Paris premiere. The dissonant chords and irregular rhythms depicting pagan sacrifice so enraged the audience that dancers couldn't hear the orchestra over the shouting. Stravinsky escaped through a backstage window.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Rite of Spring (1913) end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Listen to 'The Augurs of Spring' — the famous chord that opens the second section repeats 128 times with shifting accents. Then 'Sacrificial Dance' — the chosen victim dances herself to death. The meter changes 47 times in the final movement."
+    },
+    "tags": [
+      "Classical",
+      "Modern Classical",
+      "Russian-French",
+      "1910s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-arvo-part-tabula-rasa",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Tabula Rasa",
+    "teaser": "Arvo Pärt 1984 — the album that introduced the Estonian composer's 'tintinnabuli' style to the world: two notes ringing against each other like bells.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tabula Rasa (1984) end-to-end",
+      "durationMinutes": 55,
+      "instruction": "Listen to 'Fratres' — written for violin and piano, though Pärt never specified the instruments. The piece is built from a simple mathematical formula: a melody that expands and contracts over a drone. Then the title track — two violins, prepared piano, and chamber orchestra."
+    },
+    "tags": [
+      "Classical",
+      "Minimalism",
+      "Contemporary Classical",
+      "Estonian",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-philip-glass-einstein-on-the-beach",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Einstein on the Beach",
+    "teaser": "Philip Glass 1979 — a 4-hour opera with no plot, no intermission, and no characters except Einstein (who appears as a violinist). Numbers are sung instead of words. The audience was invited to enter and leave as they pleased.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Einstein on the Beach (1979) — first hour",
+      "durationMinutes": 60,
+      "instruction": "Listen to 'Knee Play 1' — the opera opens with an actress reading numbers over an electric organ playing two chords. This continues for 3 minutes. The point isn't the words — it's the rhythm of counting."
+    },
+    "tags": [
+      "Classical",
+      "Minimalism",
+      "Opera",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-steve-reich-music-for-18-musicians",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Music for 18 Musicians",
+    "teaser": "Steve Reich 1978 — an hour-long pulse-based composition for violin, cello, clarinets, pianos, marimbas, xylophones, metallophone, and women's voices. The piece is built on 11 chords that cycle and transform over time.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Music for 18 Musicians (1978) end-to-end",
+      "durationMinutes": 56,
+      "instruction": "Listen to the opening — a pulse emerges from silence, then the voices enter on a single syllable. Each chord cycle lasts about 5 minutes. The transition from Section V to Section VI at ~25:00 is where everything you've been hearing suddenly makes sense."
+    },
+    "tags": [
+      "Classical",
+      "Minimalism",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-max-richter-the-blue-notebooks",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Blue Notebooks",
+    "teaser": "Max Richter 2004 — an album composed as a protest against the Iraq War, though you'd never guess it from the music. Fragile piano melodies, string quartets, and typewriter sounds are interspersed with Tilda Swinton reading Kafka.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Blue Notebooks (2004) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'On the Nature of Daylight' — a 6-minute string piece built on a single descending bassline. The viola enters at 2:00 and the piece never resolves."
+    },
+    "tags": [
+      "Classical",
+      "Contemporary Classical",
+      "British-German",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-claude-debussy-la-mer",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "La Mer",
+    "teaser": "Claude Debussy 1905 — three symphonic sketches of the sea, written entirely from memory because Debussy hated boats and composed them in a landlocked French village. The music doesn't describe the ocean — it becomes the ocean.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "La Mer (1905) end-to-end",
+      "durationMinutes": 24,
+      "instruction": "Listen to 'From Dawn to Noon on the Sea' — the opening harp and muted strings create the sensation of light appearing over water. Then 'Dialogue of the Wind and the Sea' — the final movement where two themes collide like waves."
+    },
+    "tags": [
+      "Classical",
+      "Modern Classical",
+      "French",
+      "1900s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-shostakovich-symphony-no-5",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Symphony No. 5 in D minor",
+    "teaser": "Dmitri Shostakovich 1937 — written after Stalin's regime had publicly condemned his previous opera and his friends were being disappeared. Shostakovich subtitled it 'A Soviet Artist's Response to Just Criticism' — a phrase that might be sincere or might be bitter sarcasm.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Symphony No. 5 (1937) end-to-end",
+      "durationMinutes": 45,
+      "instruction": "Listen to the third movement, Largo — the strings weep for 15 minutes without relief. Then the finale — the triumphant brass at the end sounds like forced celebration."
+    },
+    "tags": [
+      "Classical",
+      "Symphony",
+      "Russian",
+      "1930s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-john-coltrane-ascension",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Ascension",
+    "teaser": "John Coltrane 1966 — a 40-minute free-jazz collective improvisation by an 11-piece band including Pharoah Sanders, Archie Shepp, Freddie Hubbard, and McCoy Tyner.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Ascension (1966) — Edition II",
+      "durationMinutes": 40,
+      "instruction": "Listen to the opening — the band enters together on a single chord and sustains it for nearly a minute before anyone moves. Then the collective improvisation begins, with 11 musicians creating independent melodic lines that somehow cohere."
+    },
+    "tags": [
+      "Jazz",
+      "Free Jazz",
+      "Avant-Garde",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-max-roach-we-insist-freedom-now",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "We Insist! Freedom Now Suite",
+    "teaser": "Max Roach 1960 — a jazz album about the Civil Rights movement, written with lyricist Oscar Brown Jr. and featuring Abbey Lincoln's searing vocals. The album traces Black history from slavery to the sit-ins of the 1960s.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "We Insist! (1960) end-to-end",
+      "durationMinutes": 37,
+      "instruction": "Listen to 'Triptych: Prayer / Protest / Peace' — the middle section is Abbey Lincoln screaming wordlessly for 3 minutes while Roach's drums build a storm around her. No lyrics were written for this section because Brown said words couldn't capture the emotion."
+    },
+    "tags": [
+      "Jazz",
+      "Avant-Garde Jazz",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-pierre-schaeffer-etude-aux-chemins-de-fer",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Cinq Études de Bruits",
+    "teaser": "Pierre Schaeffer 1948 — the first musique concrète compositions, made entirely from recorded sounds: trains, pots, spinning tops, and a piano played 'prepared' with objects wedged between the strings.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Cinq Études de Bruits (1948) end-to-end",
+      "durationMinutes": 15,
+      "instruction": "Listen to 'Étude aux Chemins de Fer' — it's made entirely from train sounds: whistles, steam, wheels on tracks, all recorded at a Paris train depot. Then 'Étude Pathétique' — made from the sounds of saucepans, a harmonica, and a boat horn."
+    },
+    "tags": [
+      "Experimental",
+      "Musique Concrète",
+      "French",
+      "1940s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-john-cage-433",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "4'33''",
+    "teaser": "John Cage 1952 — a piece in three movements where the performer plays nothing. The 'music' is the ambient sound of the environment: coughing, rain, traffic, the HVAC system.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "4'33'' (1952) — find a live recording",
+      "durationMinutes": 5,
+      "instruction": "Listen to a live recording — the first movement is the sound of an audience realizing nothing is happening. People cough, shift in seats, whisper. The second movement: someone laughs nervously. The third movement: most have accepted it."
+    },
+    "tags": [
+      "Experimental",
+      "Avant-Garde",
+      "American",
+      "1950s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-brian-eno-discreet-music",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Discreet Music",
+    "teaser": "Brian Eno 1975 — the album that launched ambient music as a concept. The 30-minute title track was created by feeding two synthesizer melodies through a tape-delay system with such long echoes that the music seemed to generate itself.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Discreet Music (1975) end-to-end",
+      "durationMinutes": 54,
+      "instruction": "Listen to the title track — the two melodies enter 3 minutes apart and the delay system repeats them at slightly different intervals, creating patterns that shift without human intervention. Eno called it 'generative music' before the term existed."
+    },
+    "tags": [
+      "Ambient",
+      "Experimental",
+      "British",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-scott-walker-the-drift",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Drift",
+    "teaser": "Scott Walker 2006 — the former 1960s pop idol's final masterpiece, recorded over 5 years in a London studio. Walker used a 100-piece orchestra not for beauty but for terror: strings scrape, brass blares, percussionists punch slabs of raw meat.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Drift (2006) end-to-end",
+      "durationMinutes": 69,
+      "instruction": "Listen to 'Clara' — a song about Mussolini's mistress being executed, set to strings that sound like air-raid sirens. The percussionist was instructed to punch a side of raw pork to create the sound of a fist hitting flesh."
+    },
+    "tags": [
+      "Experimental",
+      "Avant-Garde",
+      "American-British",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-meredith-monk-dolmen-music",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Dolmen Music",
+    "teaser": "Meredith Monk 1981 — a composition for 6 voices, cello, and percussion that sounds like it was unearthed from a prehistoric ritual. Monk invented her own vocal techniques: ululation, overtone singing, percussive breath patterns.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Dolmen Music (1981) end-to-end",
+      "durationMinutes": 24,
+      "instruction": "Listen to the opening — a single voice keens over a drone, then other voices join, each one entering at a slightly different pitch. Monk has said she was trying to recreate the feeling of being inside a Neolithic stone circle."
+    },
+    "tags": [
+      "Experimental",
+      "Avant-Garde",
+      "Contemporary Classical",
+      "American",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-la-monte-young-the-well-tuned-piano",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Well-Tuned Piano",
+    "teaser": "La Monte Young 1987 — a 5-hour solo piano piece in just intonation (a tuning system with intervals that aren't equal, unlike the equal temperament of Western music). Young's piano is tuned to a system of his own invention, and the piece is improvised within that system.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Well-Tuned Piano (1987) — first hour",
+      "durationMinutes": 60,
+      "instruction": "Listen to the opening — a single chord is held for over a minute. The intervals are 'pure' in a mathematical sense, creating overtones that shimmer. The piano has been tuned for days before each performance."
+    },
+    "tags": [
+      "Experimental",
+      "Minimalism",
+      "Avant-Garde",
+      "American",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-burning-spear-marcus-garvey",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Marcus Garvey",
+    "teaser": "Burning Spear 1975 — Winston Rodney's debut, named after the Jamaican Black nationalist leader. Recorded with the Black Disciples, a band of former studio musicians from Studio One.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Marcus Garvey (1975) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to the title track — Rodney's voice carries the weight of a sermon. The horn arrangement was written by a 21-year-old musician who'd never written for horns before."
+    },
+    "tags": [
+      "Reggae",
+      "Roots Reggae",
+      "Jamaican",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-toots-and-the-maytals-funky-kingston",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Funky Kingston",
+    "teaser": "Toots and the Maytals 1973 — the album where Frederick 'Toots' Hibbert fused reggae with Memphis soul, recording partly in Kingston and partly in Muscle Shoals, Alabama. The title track was a response to critics who said reggae couldn't be funky.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Funky Kingston (1973) end-to-end",
+      "durationMinutes": 36,
+      "instruction": "Listen to 'Pressure Drop' — Toots' voice sounds like Otis Redding transported to Kingston. The song is about karma catching up with you. Then the title track — a cover of an Isaac Hayes-style funk song that the Maytals transformed into a reggae anthem."
+    },
+    "tags": [
+      "Reggae",
+      "Ska",
+      "Rocksteady",
+      "Jamaican",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-jimmy-cliff-the-harder-they-come",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Harder They Come (Soundtrack)",
+    "teaser": "Various Artists 1972 — the soundtrack to the film that introduced reggae to the world. Starring Jimmy Cliff as a country boy turned outlaw, the movie and its soundtrack brought Jamaican music to international audiences for the first time.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Harder They Come (1972) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to the title track — Jimmy Cliff wrote it in 20 minutes after watching a rough cut of the film. Then 'Many Rivers to Cross' — Cliff was 24 when he recorded it, a gospel-influenced ballad about exhaustion and perseverance."
+    },
+    "tags": [
+      "Reggae",
+      "Rocksteady",
+      "Ska",
+      "Jamaican",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-culture-two-sevens-clash",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Two Sevens Clash",
+    "teaser": "Culture 1977 — named after a prophecy by Marcus Garvey that chaos would erupt on July 7, 1977 (when the sevens clashed). The album was so eagerly anticipated in Jamaica that stores sold out within hours. Joseph Hill's voice is a preacher's instrument.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Two Sevens Clash (1977) end-to-end",
+      "durationMinutes": 34,
+      "instruction": "Listen to the title track — Hill sings 'Two sevens clash / And I don't know what's gonna happen to the human race' over a one-drop rhythm that never varies."
+    },
+    "tags": [
+      "Reggae",
+      "Roots Reggae",
+      "Jamaican",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-scientist-rids-the-world-of-the-evil-curse-of-the-vampires",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Scientist Rids the World of the Evil Curse of the Vampires",
+    "teaser": "Scientist 1981 — a dub album with the best title in recorded music history. Scientist (born Hopeton Brown) was King Tubby's teenage protégé, and at 21 he created this album in a single overnight session at Channel One studio.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Scientist Rids the World... (1981) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'The Voodoo Curse' — a bassline drops out mid-phrase and returns 4 bars later, as if the mixing board is possessed. Then 'Dance of the Vampires' — Scientist feeds the drums through a phaser pedal and the horns through a spring reverb so deep the notes seem to come from"
+    },
+    "tags": [
+      "Dub",
+      "Reggae",
+      "Jamaican",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-peter-tosh-legalize-it",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Legalize It",
+    "teaser": "Peter Tosh 1976 — the former Wailer's solo debut, released after he left Bob Marley's shadow. The title track was banned in Jamaica for advocating cannabis legalization. Tosh was a militant Rastafarian who taught himself guitar by watching a neighbor's hands through a window.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Legalize It (1976) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to the title track — the chorus is just the phrase 'legalize it' repeated, but Tosh's voice makes it a demand, not a request. Then 'Equal Rights' — a song that directly addresses apartheid in South Africa."
+    },
+    "tags": [
+      "Reggae",
+      "Roots Reggae",
+      "Jamaican",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-black-uhuru-red",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Red",
+    "teaser": "Black Uhuru 1981 — the first reggae album to win a Grammy. Produced by Sly and Robbie, the rhythm section that defined modern reggae. Michael Rose's voice is a weapon: part street chant, part wail, part gospel testimony.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Red (1981) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'Sponji Reggae' — Sly Dunbar's drum pattern is a digital one-drop programmed on a drum machine, one of the first uses of electronic drums in reggae. Then 'Youth of Eglington' — a song about the gang violence in Kingston's Eglinton district."
+    },
+    "tags": [
+      "Reggae",
+      "Dancehall",
+      "Jamaican",
+      "1980s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-augustus-pablo-east-of-the-river-nile",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "East of the River Nile",
+    "teaser": "Augustus Pablo 1977 — an instrumental dub album where the melody is carried entirely by Pablo's melodica, a child's keyboard instrument that he turned into a mystical voice.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "East of the River Nile (1977) end-to-end",
+      "durationMinutes": 37,
+      "instruction": "Listen to the title track — Pablo's melodica floats over a one-drop rhythm that sounds like it's being played underwater. Then 'Chant to King Selassie I' — the bassline descends chromatically while the melodica plays a single note for 4 bars."
+    },
+    "tags": [
+      "Dub",
+      "Reggae",
+      "Jamaican",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-desmond-dekker-the-israelites",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "007 (Shanty Town)",
+    "teaser": "Desmond Dekker 1967 — the first Jamaican artist to have a UK #1 hit with 'Israelites.' His voice was a desperate falsetto that made songs about poverty and rude boys sound like they were floating. The album introduced ska and rocksteady to British mods and skinheads.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "007 (Shanty Town) (1967) end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Listen to '007 (Shanty Town)' — the song is about the Kingston neighborhood of Trenchtown, where the 'rude boys' (young gangsters) controlled the streets. Then 'Israelites' — Dekker wrote it after hearing an argument between a Jamaican couple about money."
+    },
+    "tags": [
+      "Ska",
+      "Rocksteady",
+      "Reggae",
+      "Jamaican",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-the-abyssinians-satta-massagana",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Satta Massagana",
+    "teaser": "The Abyssinians 1976 — the holiest of Rastafarian harmony trios, named after the ancient name for Ethiopia. The title track is sung partly in Amharic, the language of the Ethiopian Orthodox Church.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Satta Massagana (1976) end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Listen to the title track — the harmony on 'Satta Massagana' is three men singing in a language none of them spoke fluently, learned phonetically from a Rastafarian elder."
+    },
+    "tags": [
+      "Roots Reggae",
+      "Reggae",
+      "Jamaican",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-abba-gold",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "ABBA Gold: Greatest Hits",
+    "teaser": "ABBA 1992 — the compilation that turned a divorced Swedish quartet into one of the best-selling acts of all time. Recorded between 1973 and 1981, these songs are engineering marvels: Benny Andersson and Björn Ulvaeus layered so many keyboard and vocal tracks that some songs use",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "ABBA Gold (1992) end-to-end",
+      "durationMinutes": 76,
+      "instruction": "Listen to 'Dancing Queen' — the opening glissando was played on a grand piano miked from 20 feet away. The song was recorded in a summer cottage on an island near Stockholm."
+    },
+    "tags": [
+      "Pop",
+      "Disco",
+      "Swedish",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-beatles-revolver",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Revolver",
+    "teaser": "The Beatles 1966 — the album where they stopped being a touring band and became a studio band. Recorded over 3 months at Abbey Road with producer George Martin and engineer Geoff Emerick, who invented new recording techniques daily.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Revolver (1966) end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Listen to 'Tomorrow Never Knows' — John Lennon told Martin he wanted to sound like 'a thousand Tibetan monks chanting from a mountaintop.' Emerick put Lennon's voice through a Leslie speaker (normally used for organs) to create the swirling effect."
+    },
+    "tags": [
+      "Pop",
+      "Rock",
+      "Psychedelic",
+      "British",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-elton-john-goodbye-yellow-brick-road",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Goodbye Yellow Brick Road",
+    "teaser": "Elton John 1973 — a double album recorded in 2 weeks at the Château d'Hérouville in France, a 16th-century castle turned recording studio. Bernie Taupin wrote all the lyrics in 2.5 weeks, sitting in a field behind the château. Elton wrote the music in 3 days.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Goodbye Yellow Brick Road (1973) end-to-end",
+      "durationMinutes": 76,
+      "instruction": "Listen to the title track — Elton said the melody came to him fully formed while he was driving to the studio. Then 'Funeral for a Friend/Love Lies Bleeding' — the 11-minute opener where Elton's keyboardist David Hentschel created a synthesized storm on an ARP 2600 synthesizer."
+    },
+    "tags": [
+      "Pop",
+      "Rock",
+      "British",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-stevie-wonder-songs-in-the-key-of-life",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Songs in the Key of Life",
+    "teaser": "Stevie Wonder 1976 — a double album plus a bonus EP, released on Stevie's 26th birthday. He played most of the instruments himself, including drums, bass, keyboards, and harmonica. The album took over a year to record and nearly bankrupted Motown.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Songs in the Key of Life (1976) — disc 1",
+      "durationMinutes": 50,
+      "instruction": "Listen to 'Sir Duke' — the horn arrangement took 3 days to perfect. Stevie wrote it as a tribute to Duke Ellington, who had just died. Then 'As' — the song's chord progression never fully resolves, creating a sense of perpetual motion that matches the lyric about eternal love."
+    },
+    "tags": [
+      "Soul",
+      "Pop",
+      "Funk",
+      "R&B",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-david-bowie-blackstar",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Blackstar",
+    "teaser": "David Bowie 2016 — released on his 69th birthday, two days before his death from liver cancer. Bowie knew he was dying when he recorded it; only his closest collaborators knew.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Blackstar (2016) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to the title track — the band (a New York jazz quartet) played without knowing the songs were about death. The saxophone solo by Donny McCaslin was recorded in one take and sounds like a soul leaving a body."
+    },
+    "tags": [
+      "Art Pop",
+      "Jazz",
+      "British",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-charli-xcx-brat",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "BRAT",
+    "teaser": "Charli XCX 2024 — an album that makes being a mess sound aspirational. Recorded over two years primarily with producer A. G. Cook in London and LA.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "BRAT (2024) end-to-end",
+      "durationMinutes": 42,
+      "instruction": "Listen to '360' — the beat sounds like a ringtone played through a broken speaker, but the hook is undeniable. Then 'So I' — a song about Sophie, Charli's late collaborator, that addresses grief without ever becoming a slow ballad."
+    },
+    "tags": [
+      "Pop",
+      "Hyperpop",
+      "British",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-carly-rae-jepsen-emotion",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "E•MO•TION",
+    "teaser": "Carly Rae Jepsen 2015 — the 'Call Me Maybe' singer's pivot to critically adored synth-pop, recorded with a cast of indie producers including Dev Hynes, Rostam Batmanglij, and Ariel Rechtshaid.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "E•MO•TION (2015) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to 'Run Away with Me' — the opening saxophone blast was played by a session musician who'd worked on early Whitney Houston records. Then 'Your Type' — Jepsen sings about being in love with someone who only sees her as a friend, over a beat that sounds like it was ripped"
+    },
+    "tags": [
+      "Pop",
+      "Synth-Pop",
+      "Canadian",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-robyn-body-talk",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Body Talk",
+    "teaser": "Robyn 2010 — released as three EPs and compiled into one album. After being dropped by her major label, the Swedish singer started her own label and made the album she wanted: sad songs you can dance to.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Body Talk (2010) end-to-end",
+      "durationMinutes": 59,
+      "instruction": "Listen to 'Dancing on My Own' — Robyn sings about watching her ex with someone new at a club, over a beat that makes you want to dance. The contradiction is the point."
+    },
+    "tags": [
+      "Pop",
+      "Synth-Pop",
+      "Swedish",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-fleetwood-mac-tusk",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Tusk",
+    "teaser": "Fleetwood Mac 1979 — the most expensive album ever made at the time ($1 million). After the perfect pop of Rumours, Lindsey Buckingham insisted on making the follow-up deliberately strange.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tusk (1979) end-to-end",
+      "durationMinutes": 74,
+      "instruction": "Listen to the title track — the drum part was recorded in Buckingham's bathroom, then the USC marching band was overdubbed in a stadium. Then 'Sara' — Stevie Nicks wrote a 16-minute version and the band cut it to 6."
+    },
+    "tags": [
+      "Rock",
+      "Pop",
+      "American-British",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-blondie-parallel-lines",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Parallel Lines",
+    "teaser": "Blondie 1978 — the New York punk band's pivot to pop, produced by Mike Chapman (a bubblegum pop producer who'd never worked with a rock band). Chapman made them re-record songs dozens of times until every note was perfect. Debbie Harry's voice is both cool and vulnerable.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Parallel Lines (1978) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'Heart of Glass' — the disco beat was the band's idea, but Chapman made them layer it with a Roland drum machine. The song's first iteration was a slow reggae number called 'The Disco Song.' Then 'Hanging on the Telephone' — a cover of a song by an obscure LA band The"
+    },
+    "tags": [
+      "Pop",
+      "New Wave",
+      "American",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-paul-simon-graceland",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Graceland",
+    "teaser": "Paul Simon 1986 — an album that went from bankruptcy court to the Grammys. Simon's previous album flopped, his marriage to Carrie Fisher was collapsing, and he was nearly broke.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Graceland (1986) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to the title track — Simon sings about a road trip to Elvis's Graceland mansion with his young son. Then 'Diamonds on the Soles of Her Shoes' — recorded with Ladysmith Black Mambazo, a South African a cappella group."
+    },
+    "tags": [
+      "Pop",
+      "World",
+      "American",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-neu-neu-75",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Neu! 75",
+    "teaser": "Michael Rother and Klaus Dinger 1975 — the third album from the band that invented the 'motorik' beat (a relentless 4/4 pulse that sounds like driving on an infinite highway).",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Neu! 75 (1975) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'Isi' — the opening track floats between ambient and krautrock, with Rother's guitar buried in reverb. Then 'Hero' — Dinger's proto-punk anthem, with his voice sounding like Johnny Rotten 2 years before the Sex Pistols existed."
+    },
+    "tags": [
+      "Experimental",
+      "Krautrock",
+      "German",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-can-tago-mago",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Tago Mago",
+    "teaser": "Can 1971 — a double album recorded in a converted castle outside Cologne, with Japanese busker Damo Suzuki as vocalist. Suzuki's lyrics were improvised in a mixture of Japanese, English, and made-up words. The band recorded hours of jams and edited the best 73 minutes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Tago Mago (1971) — first LP",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'Halleluhwah' — 18 minutes of the same drum beat and bassline while Suzuki chants and the guitars melt. Then 'Aumgn' — a 17-minute track that sounds like a séance recorded in a cave."
+    },
+    "tags": [
+      "Experimental",
+      "Krautrock",
+      "German",
+      "1970s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-charles-mingus-the-black-saint-and-the-sinner-lady",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Black Saint and the Sinner Lady",
+    "teaser": "Charles Mingus 1963 — a ballet scored for an 11-piece band, written as a single continuous suite in 6 movements. Mingus composed it on piano with his therapist present, using music as psychoanalysis. The album's liner notes were written by Mingus's own therapist.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Black Saint and the Sinner Lady (1963) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'Track A — Solo Dancer' — the composition starts as a Spanish-tinged ballad and becomes a cacophony of competing horn lines. Then 'Track C — Group Dancers' — the band plays as if in a dream, with instruments seeming to ignore each other and then suddenly synchronize."
+    },
+    "tags": [
+      "Jazz",
+      "Avant-Garde Jazz",
+      "American",
+      "1960s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-laurie-anderson-big-science",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Big Science",
+    "teaser": "Laurie Anderson 1982 — the debut album from the performance artist who used a violin with a tape head instead of strings, a vocoder pitched to sound male, and spoken-word narratives about technology, alienation, and America. 'O Superman' became a surprise #2 hit in the UK.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Big Science (1982) end-to-end",
+      "durationMinutes": 41,
+      "instruction": "Listen to 'O Superman' — 8 minutes of a single looped 'ha' syllable, with Anderson's vocoder-distorted voice reciting a letter to an absent mother-figure who might be Mom, America, or technology."
+    },
+    "tags": [
+      "Experimental",
+      "Avant-Garde",
+      "Art Pop",
+      "American",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-joy-division-closer",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Closer",
+    "teaser": "Joy Division 1980 — released two months after Ian Curtis's suicide at 23. The album was already recorded, and the cover art (a photograph of a tomb in Genoa's Staglieno Cemetery) was chosen before Curtis died. Martin Hannett's production is cavernous and claustrophobic.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Closer (1980) end-to-end",
+      "durationMinutes": 44,
+      "instruction": "Listen to 'Atrocity Exhibition' — named after the J.G. Ballard novel, the opening track features Stephen Morris's drums sounding like gunshots echoing in an empty warehouse."
+    },
+    "tags": [
+      "Post-Punk",
+      "Alternative",
+      "British",
+      "1980s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-the-beach-boys-surf-s-up",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Surf's Up",
+    "teaser": "The Beach Boys 1971 — released after years of Brian Wilson retreating from the band. The title track was written in 1966 for the abandoned SMiLE album, and its resurrection became the album's centerpiece.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Surf's Up (1971) end-to-end",
+      "durationMinutes": 34,
+      "instruction": "Listen to the title track — Brian Wilson wrote it in a sandbox he'd installed in his living room to overcome writer's block. The song's imagery is by Van Dyke Parks, who wrote the lyrics as a surreal meditation on the death of innocence."
+    },
+    "tags": [
+      "Pop",
+      "Rock",
+      "American",
+      "1970s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-wilco-yankee-hotel-foxtrot",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Yankee Hotel Foxtrot",
+    "teaser": "Wilco 2002 — the album their label refused to release, calling it 'career suicide.' Wilco bought back the masters for $50,000 and streamed it for free; 200,000 people listened before it was officially released.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Yankee Hotel Foxtrot (2002) end-to-end",
+      "durationMinutes": 52,
+      "instruction": "Listen to 'I Am Trying to Break Your Heart' — the song dissolves into noise for a full minute before the verse begins. Jeff Tweedy sang the lyric looking at a photograph of his wife."
+    },
+    "tags": [
+      "Alternative",
+      "Americana",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
   }
 ]
