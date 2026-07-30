@@ -27,6 +27,7 @@ object CurioRoutes {
     const val CAPTURE = "capture/{categorySlug}/{topicName}"
 
     // ── Push destinations (no bottom nav)
+    const val PROFILE = "profile"
     const val ENTRY_DETAIL = "detail/{entryId}"
     const val SETTINGS = "settings"
     const val MANAGE_CATEGORIES = "manage-categories"

@@ -2,6 +2,7 @@ package com.curio.app.features.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,24 +11,36 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
@@ -42,9 +55,11 @@ import com.curio.app.ui.components.CurioWildcardChip
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.StaggeredEntrance
 import com.curio.app.ui.components.StaggeredItem
+import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 /**
@@ -69,45 +84,71 @@ import java.util.Calendar
 fun HomeScreen(navController: NavController) {
     var selectedCategory by remember { mutableStateOf<CurioCategory?>(null) }
     val streakDays = 0
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-            .padding(bottom = 16.dp)
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            HomeDrawerContent(
+                onNavigate = { route ->
+                    scope.launch { drawerState.close() }
+                    navController.navigate(route)
+                }
+            )
+        },
+        // Disable swipe-to-open when closed to prevent conflicts with
+        // the vertical scrollable home content. Drawer opens via ☰ icon only.
+        gesturesEnabled = drawerState.isOpen || drawerState.isAnimationRunning
     ) {
-        // ── Top bar ──────────────────────────────────────────────────────────
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 16.dp)
         ) {
-            CurioIcon(
-                name = CurioIcons.Menu,
-                contentDescription = "Open navigation",
-                tint = MaterialTheme.colorScheme.onSurface,
-                size = 28.dp
-            )
-            Text(
-                text = "Curio",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            CurioIcon(
-                name = CurioIcons.Person,
-                contentDescription = "Profile",
-                tint = MaterialTheme.colorScheme.onSurface,
-                size = 28.dp,
+            // ── Top bar ──────────────────────────────────────────────────────
+            Row(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(50))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(6.dp)
-            )
-        }
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Surface(
+                    onClick = { scope.launch { drawerState.open() } },
+                    shape = RoundedCornerShape(12.dp),
+                    color = Color.Transparent
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.Menu,
+                        contentDescription = "Open navigation menu",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        size = 28.dp,
+                        modifier = Modifier.padding(4.dp)
+                    )
+                }
+                Text(
+                    text = "Curio",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Surface(
+                    onClick = { navController.navigate(CurioRoutes.PROFILE) },
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.surfaceVariant
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.Person,
+                        contentDescription = "Profile",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        size = 22.dp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+            }
 
         // ── Greeting + streak pill ───────────────────────────────────────────
         Column(
@@ -222,38 +263,161 @@ fun HomeScreen(navController: NavController) {
             }
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(32.dp))
+    }
+    }
+}
 
-        // ── Settings shortcut ────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// Navigation drawer content
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * The slide-in navigation drawer accessible from the ☰ hamburger icon.
+ *
+ * Sections:
+ *   - Header: Curio brand + greeting
+ *   - Navigation items: Profile, Topic History, Manage Categories
+ *   - Bottom: About / version info
+ */
+@Composable
+private fun HomeDrawerContent(
+    onNavigate: (String) -> Unit
+) {
+    ModalDrawerSheet(
+        modifier = Modifier.width(300.dp),
+        drawerContainerColor = MaterialTheme.colorScheme.surface,
+        drawerContentColor = MaterialTheme.colorScheme.onSurface
+    ) {
+        // ── Drawer header ────────────────────────────────────────────────
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            CurioColors.CoralBlush.copy(alpha = 0.15f),
+                            MaterialTheme.colorScheme.surface
+                        )
+                    )
+                )
+                .padding(horizontal = 20.dp, vertical = 24.dp)
+        ) {
+            Column {
+                CurioIcon(
+                    name = CurioIcons.AutoAwesome,
+                    contentDescription = null,
+                    tint = CurioColors.CoralBlush,
+                    size = 32.dp
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "Curio",
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "Stay curious",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        Spacer(Modifier.height(8.dp))
+
+        // ── Navigation items ─────────────────────────────────────────────
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            item {
+                DrawerNavItem(
+                    icon = CurioIcons.Person,
+                    label = "Profile & Settings",
+                    onClick = { onNavigate(CurioRoutes.PROFILE) }
+                )
+            }
+            item {
+                DrawerNavItem(
+                    icon = CurioIcons.History,
+                    label = "Topic History",
+                    onClick = { onNavigate(CurioRoutes.TOPIC_HISTORY) }
+                )
+            }
+            item {
+                DrawerNavItem(
+                    icon = CurioIcons.DragHandle,
+                    label = "Manage Categories",
+                    onClick = { onNavigate(CurioRoutes.MANAGE_CATEGORIES) }
+                )
+            }
+            item {
+                DrawerNavItem(
+                    icon = CurioIcons.Replay,
+                    label = "Replay Intro",
+                    onClick = {
+                        com.curio.app.features.onboarding.CurioOnboardingState.isComplete = false
+                        onNavigate(CurioRoutes.ONBOARDING)
+                    }
+                )
+            }
+        }
+
+        // ── Bottom section ───────────────────────────────────────────────
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        Column(
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+        ) {
+            Text(
+                text = "Curio v1.0.0",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+            )
+            Text(
+                text = "Made with curiosity ✦",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun DrawerNavItem(
+    icon: String,
+    label: String,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(14.dp),
+        color = Color.Transparent,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.End
+                .padding(horizontal = 12.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Surface(
-                onClick = { navController.navigate(CurioRoutes.SETTINGS) },
-                shape = RoundedCornerShape(20.dp),
-                color = Color.Transparent
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    CurioIcon(
-                        name = CurioIcons.Settings,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        size = 18.dp
-                    )
-                    Text(
-                        text = "Settings",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
+            CurioIcon(
+                name = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                size = 22.dp
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

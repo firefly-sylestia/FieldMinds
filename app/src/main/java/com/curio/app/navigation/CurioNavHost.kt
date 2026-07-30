@@ -25,6 +25,7 @@ import androidx.navigation.navArgument
 import com.curio.app.features.lightbox.LightboxScreen
 import com.curio.app.features.managecategories.ManageCategoriesScreen
 import com.curio.app.features.onboarding.OnboardingScreen
+import com.curio.app.features.profile.ProfileScreen
 import com.curio.app.features.settings.SettingsScreen
 import com.curio.app.features.topichistory.TopicHistoryScreen
 import com.curio.app.features.cabinet.CabinetScreen
@@ -201,6 +202,9 @@ fun CurioNavHost(
                     entryId = entry.arguments?.getString("entryId").orEmpty(),
                     navController = navController
                 )
+            }
+            composable(CurioRoutes.PROFILE) {
+                ProfileScreen(navController = navController)
             }
             composable(CurioRoutes.SETTINGS) {
                 SettingsScreen(navController = navController)
