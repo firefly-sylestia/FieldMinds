@@ -318,15 +318,14 @@ fun HomeScreen(navController: NavController) {
                         Spacer(Modifier.height(14.dp))
                     }
                     StaggeredItem(index = 1) {
-                        // Fixed 5-column grid — Adaptive would need bounded
-                        // height which doesn't play well with verticalScroll.
+                        // Fixed 4-column grid — 3 rows for 11 items (4+4+3).
                         LazyVerticalGrid(
-                            columns = GridCells.Fixed(5),
+                            columns = GridCells.Fixed(4),
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp),
                             userScrollEnabled = false,
                             modifier = Modifier
-                                .height(180.dp)
+                                .height(176.dp)
                                 .fillMaxWidth()
                         ) {
                             item("wildcard") {
