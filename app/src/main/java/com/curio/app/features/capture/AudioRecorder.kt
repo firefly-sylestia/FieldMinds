@@ -3,6 +3,8 @@ package com.curio.app.features.capture
 import android.content.Context
 import android.media.MediaRecorder
 import android.os.Build
+import com.curio.app.data.AudioQuality
+import com.curio.app.data.AudioQualitySettings
 import java.io.File
 import java.io.IOException
 
@@ -13,6 +15,9 @@ import java.io.IOException
  *
  * Audio is recorded to a temporary .m4a file in the app's cache directory.
  * The file persists until [release] is called or the app process ends.
+ *
+ * Recording quality is read from [AudioQualitySettings] on each [start] call
+ * so that changes made in ProfileScreen take effect immediately.
  *
  * Usage:
  *   val recorder = AudioRecorder(context)
@@ -66,11 +71,13 @@ class AudioRecorder(private val context: Context) {
             MediaRecorder()
         }
 
+        val quality = AudioQualitySettings.get(context)
+
         mediaRecorder!!.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            setAudioSamplingRate(44100)
+            setAudioSamplingRate(quality.samplingRate)
             setOutputFile(outputFile!!.absolutePath)
 
             prepare()

@@ -39,10 +39,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.curio.app.data.AudioQuality
+import com.curio.app.data.AudioQualitySettings
 import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.CurioBackButton
@@ -84,8 +87,10 @@ private data class ActivityEntry(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavController) {
+    val context = LocalContext.current
     var userName by remember { mutableStateOf("Curious Explorer") }
     var themeMode by remember { mutableStateOf(CurioThemeMode.SYSTEM) }
+    var audioQuality by remember { mutableStateOf(AudioQualitySettings.get(context)) }
     var dailyReminderEnabled by remember { mutableStateOf(false) }
     val versionName = "1.0.0"
 
@@ -263,6 +268,51 @@ fun ProfileScreen(navController: NavController) {
                 }
                 if (dailyReminderEnabled) {
                     item { CurioTimePickerRow() }
+                }
+
+                // ── Settings: Recording ──────────────────────────────────
+                item { CurioSectionLabel("Recording") }
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    ) {
+                        Text(
+                            text = "Audio quality",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        Text(
+                            text = audioQuality.description,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(bottom = 10.dp)
+                        )
+                        SingleChoiceSegmentedButtonRow(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            AudioQuality.entries.forEachIndexed { index, quality ->
+                                SegmentedButton(
+                                    selected = audioQuality == quality,
+                                    onClick = {
+                                        audioQuality = quality
+                                        AudioQualitySettings.set(context, quality)
+                                    },
+                                    shape = SegmentedButtonDefaults.itemShape(
+                                        index = index,
+                                        count = AudioQuality.entries.size
+                                    )
+                                ) {
+                                    Text(
+                                        text = quality.label,
+                                        style = MaterialTheme.typography.labelMedium
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
 
                 // ── Settings: About ────────────────────────────────────────
