@@ -84,7 +84,7 @@ import java.util.Calendar
  * Home — see CURIO_SPEC.md §3. Premium redesign.
  *
  * Layout (top to bottom):
- *   1. Glass-morphism top bar: ☰ Curio ✦  👤
+ *   1. Top bar: ☰ Curio ✦  👤
  *   2. Welcome section: greeting + streak badge + quick stats
  *   3. Hero card: category-responsive gradient, glowing ring, floating sparkle
  *   4. Category quick-jump grid: icon-only color pills
