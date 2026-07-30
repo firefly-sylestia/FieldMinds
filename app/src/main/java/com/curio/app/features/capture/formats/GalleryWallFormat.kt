@@ -5,7 +5,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,23 +27,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import coil.compose.rememberAsyncImagePainter
+import kotlin.math.roundToInt
 
 /**
  * Gallery Wall format body — CURIO_SPEC §8.4 (Visual Art / Painters).
@@ -180,15 +183,29 @@ fun GalleryWallFormat(
                     tiles.forEachIndexed { i, tile ->
                         Box(
                             modifier = Modifier
-                                .offset(tile.offsetXDp.dp, tile.offsetYDp.dp)
+                                .offset { IntOffset(tile.offsetXDp.roundToInt(), tile.offsetYDp.roundToInt()) }
                                 .rotate(tile.rotationDeg)
                                 .size(tile.sizeDp.dp)
                                 .zIndex(i.toFloat())
-                                .clickable {
-                                    // Bring to front: move to end of list
-                                    if (i != tiles.lastIndex) {
-                                        val moved = tiles.removeAt(i)
-                                        tiles.add(moved)
+                                .pointerInput(Unit) {
+                                    detectTapGestures {
+                                        // Bring to front: move to end of list
+                                        if (i < tiles.size && i != tiles.lastIndex) {
+                                            val moved = tiles.removeAt(i)
+                                            tiles.add(moved)
+                                        }
+                                    }
+                                }
+                                .pointerInput(Unit) {
+                                    detectDragGestures { change, dragAmount ->
+                                        change.consume()
+                                        val idx = tiles.indexOfFirst { it === tile }
+                                        if (idx >= 0) {
+                                            tiles[idx] = tile.copy(
+                                                offsetXDp = (tile.offsetXDp + dragAmount.x).coerceIn(0f, 240f),
+                                                offsetYDp = (tile.offsetYDp + dragAmount.y).coerceIn(0f, 260f)
+                                            )
+                                        }
                                     }
                                 }
                         ) {

@@ -45,29 +45,47 @@ class CaptureConverters {
     fun fromCaptureData(data: CaptureData): String = gson.toJson(data)
 
     @TypeConverter
-    fun toCaptureData(json: String): CaptureData {
-        // First deserialize as a generic map to find the type discriminator
-        @Suppress("UNCHECKED_CAST")
-        val map = gson.fromJson(json, Map::class.java) as Map<String, Any?>
-        return when (map["subFormat"]) {
-            // OpenNotebook has a nested format
-            null -> {
-                // Determine type from fields present
-                when {
-                    map.containsKey("durationSeconds") ->
-                        gson.fromJson(json, CaptureData.SoundBite::class.java)
-                    map.containsKey("rating") ->
-                        gson.fromJson(json, CaptureData.ReelNotes::class.java)
-                    map.containsKey("quotes") ->
-                        gson.fromJson(json, CaptureData.Marginalia::class.java)
-                    map.containsKey("caption") ->
-                        gson.fromJson(json, CaptureData.GalleryWall::class.java)
-                    map.containsKey("learnNext") ->
-                        gson.fromJson(json, CaptureData.FieldNotes::class.java)
-                    else -> throw IllegalArgumentException("Unknown CaptureData type: $json")
+    fun toCaptureData(json: String): CaptureData = deserializeCaptureData(json)
+
+    companion object {
+        /**
+         * Shared deserializer for [CaptureData] from JSON.
+         *
+         * Uses field-based detection to determine the concrete subclass,
+         * then delegates to Gson for the final deserialization.
+         * OpenNotebook's nested [CaptureData.subData] is handled by
+         * recursively calling this function on the sub-object.
+         */
+        fun deserializeCaptureData(json: String): CaptureData {
+            val gson = Gson()
+            @Suppress("UNCHECKED_CAST")
+            val map = gson.fromJson(json, Map::class.java) as Map<String, Any?>
+            return when (map["subFormat"]) {
+                null -> {
+                    when {
+                        map.containsKey("durationSeconds") ->
+                            gson.fromJson(json, CaptureData.SoundBite::class.java)
+                        map.containsKey("rating") ->
+                            gson.fromJson(json, CaptureData.ReelNotes::class.java)
+                        map.containsKey("quotes") ->
+                            gson.fromJson(json, CaptureData.Marginalia::class.java)
+                        map.containsKey("caption") ->
+                            gson.fromJson(json, CaptureData.GalleryWall::class.java)
+                        map.containsKey("learnNext") ->
+                            gson.fromJson(json, CaptureData.FieldNotes::class.java)
+                        else -> throw IllegalArgumentException("Unknown CaptureData type: $json")
+                    }
+                }
+                else -> {
+                    // OpenNotebook: manually reconstruct to handle nested CaptureData
+                    val subFormat = CaptureFormat.valueOf(map["subFormat"] as String)
+                    @Suppress("UNCHECKED_CAST")
+                    val subDataMap = map["subData"] as Map<String, Any?>
+                    val subDataJson = gson.toJson(subDataMap)
+                    val subData = deserializeCaptureData(subDataJson)
+                    CaptureData.OpenNotebook(subFormat, subData)
                 }
             }
-            else -> gson.fromJson(json, CaptureData.OpenNotebook::class.java)
         }
     }
 }
@@ -104,10 +122,7 @@ fun CaptureEntity.toEntry(): CurioEntry {
         imageUrl = "",
         exploreAction = ExploreAction("explore", topicName, 15, "Revisit this topic")
     )
-    // Use the type-aware deserialization from CaptureConverters (field-based
-    // detection) since Gson can't instantiate sealed Classes directly.
-    val converters = CaptureConverters()
-    val captureData = converters.toCaptureData(formatDataJson)
+    val captureData = CaptureConverters.deserializeCaptureData(formatDataJson)
     return CurioEntry(
         id = id,
         topic = topic,
