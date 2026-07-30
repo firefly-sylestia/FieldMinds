@@ -35,7 +35,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -43,7 +42,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -118,6 +116,12 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var visibleTopicIndex by remember(shuffleCount) { mutableStateOf(0) }
     val cardProgress = remember(shuffleCount) { Animatable(0f) }
     val cat = activeCategory
+
+    // ── Reset state when category changes ──────────────────────────────
+    LaunchedEffect(activeCategory.id) {
+        landedTopic = null
+        shuffling = false
+    }
 
     // ── Shuffle logic ────────────────────────────────────────────────────
     LaunchedEffect(shuffleCount) {
@@ -281,8 +285,8 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 landedTopic = landedTopic,
                 displayTopic = displayPool.getOrNull(visibleTopicIndex),
                 poolEmpty = filteredPool.isEmpty(),
+                poolHasTopics = pool.isNotEmpty() && filteredPool.isEmpty(),
                 popScale = popScale,
-                activeTag = activeTag,
                 onClick = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ }
             )
         }
@@ -349,8 +353,8 @@ private fun CardStack(
     landedTopic: CurioTopic?,
     displayTopic: CurioTopic?,
     poolEmpty: Boolean,
+    poolHasTopics: Boolean = false,
     popScale: Float,
-    activeTag: String?,
     onClick: () -> Unit
 ) {
     val deckSize = 3
@@ -392,7 +396,8 @@ private fun CardStack(
                     else -> null
                 },
                 shuffling = shuffling,
-                poolEmpty = poolEmpty
+                poolEmpty = poolEmpty,
+                poolHasTopics = poolHasTopics
             )
         }
 
@@ -510,7 +515,8 @@ private fun CardFace(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    if (poolEmpty) "Topics are on the way" else "Discover something new",
+                    if (poolHasTopics) "No matches for this filter"
+                else if (poolEmpty) "Topics are on the way" else "Discover something new",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
