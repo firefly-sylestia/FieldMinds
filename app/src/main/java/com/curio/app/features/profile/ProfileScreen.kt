@@ -21,7 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.curio.app.data.AppPreferences
+import com.curio.app.data.CategoryId
 import com.curio.app.data.AudioQuality
+import com.curio.app.data.CategoryId
 import com.curio.app.data.AudioQualitySettings
 import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory

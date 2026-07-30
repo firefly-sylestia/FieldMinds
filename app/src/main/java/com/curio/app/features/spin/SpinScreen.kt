@@ -1,6 +1,11 @@
 package com.curio.app.features.spin
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -1139,7 +1144,7 @@ private fun OrbitRing(active: Boolean, color: Color, modifier: Modifier = Modifi
         val radius = (size.minDimension / 2f) - 8f.dp.toPx()
         val dotR = 3f.dp.toPx()
         val n = 8
-        rotate(rotation = rot, pivot = Offset(cx, cy)) {
+        rotate(degrees = rot, pivot = Offset(cx, cy)) {
             for (i in 0 until n) {
                 val a = (i.toFloat() / n) * (2f * Math.PI.toFloat())
                 val dx = cos(a) * radius
@@ -1196,7 +1201,7 @@ private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
         val radius = (size.minDimension / 2f) * 0.55f
         val cx = size.width / 2f
         val cy = size.height / 2f
-        rotate(rotation = angle, pivot = Offset(cx, cy)) {
+        rotate(degrees = angle, pivot = Offset(cx, cy)) {
             for (i in 0 until 6) {
                 val a = (i.toFloat() / 6) * (2f * Math.PI.toFloat())
                 drawCircle(
