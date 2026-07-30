@@ -2645,6 +2645,663 @@
     "tier": 1
   },
   {
+    "id": "album-eminem-marshall-mathers-lp",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Marshall Mathers LP",
+    "teaser": "Eminem 2000 — the fastest-selling rap album in history at release (1.76 million first week). Recorded in a Detroit studio while Em was fighting a custody battle and a lawsuit from his mother. Dr. Dre produced the singles; Eminem himself produced much of the rest.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Marshall Mathers LP (2000) end-to-end",
+      "durationMinutes": 72,
+      "instruction": "Listen to 'Stan' — the Dido sample was lifted from her debut album, which Dre heard playing in a car at a stoplight. The song's epistolary structure (letters back and forth) was Eminem's idea."
+    },
+    "tags": [
+      "Hip-Hop",
+      "East Coast",
+      "Hardcore Hip-Hop",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-eminem-slim-shady-lp",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Slim Shady LP",
+    "teaser": "Eminem 1999 — his major-label debut, recorded after Dr. Dre heard Em's demo at Interscope and said 'Find him. I don't care where he is.' Dre produced three tracks in one night at Em's Detroit trailer.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Slim Shady LP (1999) end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Listen to 'My Name Is' — the sample is Labi Siffre's 'I Got The…', used with the condition that Siffre's openly gay status wasn't mocked. Dre built the beat in 20 minutes."
+    },
+    "tags": [
+      "Hip-Hop",
+      "East Coast",
+      "Horrorcore",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-eminem-the-eminem-show",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Eminem Show",
+    "teaser": "Eminem 2002 — the album where he became the biggest artist in the world. Self-produced almost entirely (Dre stepped back). Recorded during a period when Em was fighting for custody of his daughter Hailie and facing felony gun charges.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Eminem Show (2002) end-to-end",
+      "durationMinutes": 78,
+      "instruction": "Listen to 'Sing for the Moment' — the Aerosmith sample is from 'Dream On', and Steven Tyler recorded new vocals for the chorus. The third verse addresses the Columbine shooting. Then 'Cleaning Out My Closet' — Em's vocal is a single continuous take, no punch-ins."
+    },
+    "tags": [
+      "Hip-Hop",
+      "East Coast",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-kanye-college-dropout",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The College Dropout",
+    "teaser": "Kanye West 2004 — the producer's debut that changed hip-hop's sound from hard-edged to soulful. Kanye recorded much of it while his jaw was wired shut after a near-fatal car crash. The chipmunk-soul samples were a deliberate rebellion against gangsta rap's dominance.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The College Dropout (2004) end-to-end",
+      "durationMinutes": 76,
+      "instruction": "Listen to 'Jesus Walks' — Kanye wrote it as a gospel-rap song at a time when labels said Christian rap didn't sell. The opening chain-gang chant is actually a sample of a 1950s prison recording."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Conscious Rap",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-kanye-late-registration",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Late Registration",
+    "teaser": "Kanye West 2005 — the album where he spent $2 million on production and brought in film composer Jon Brion to arrange live strings. The result was baroque hip-hop: 20-piece orchestras over sample-based beats.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Late Registration (2005) end-to-end",
+      "durationMinutes": 70,
+      "instruction": "Listen to 'Gone' — the song has five verses by five different MCs, each one trying to out-rap the last. Cam'ron's verse was written in the studio in 15 minutes while Kanye laughed at every line."
+    },
+    "tags": [
+      "Hip-Hop",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-kanye-graduation",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Graduation",
+    "teaser": "Kanye West 2007 — the third in the dropout trilogy, recorded partially in a Hawaiian mansion. Kanye deliberately moved away from soul samples toward stadium-sized electronic production inspired by Daft Punk and U2.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Graduation (2007) end-to-end",
+      "durationMinutes": 51,
+      "instruction": "Listen to 'Stronger' — the Daft Punk sample was cleared only after Kanye flew to Paris and played them the track in person. Then 'Flashing Lights' — the synth arrangement by DJ Toomp was inspired by 80s cop-show themes."
+    },
+    "tags": [
+      "Hip-Hop",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-drake-take-care",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Take Care",
+    "teaser": "Drake 2011 — the album that merged hip-hop with late-night R&B confessions and made vulnerability a commercial strategy. Recorded mostly in Toronto with Noah '40' Shebib, who recorded Drake's vocals in a room literally filled with candles.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Take Care (2011) end-to-end",
+      "durationMinutes": 80,
+      "instruction": "Listen to 'Marvins Room' — Drake recorded the vocal lying on a studio floor at 4 AM, drunk-dialing his ex on the song itself. The phone call at the end is real. Then 'The Motto' — the 'YOLO' hook was added as a last-minute bonus track and became a global catchphrase."
+    },
+    "tags": [
+      "Hip-Hop",
+      "R&B",
+      "Canadian",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-drake-nothing-was-the-same",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Nothing Was the Same",
+    "teaser": "Drake 2013 — the album where he stopped apologizing for being both a rapper and a singer. 40's production is aqueous and claustrophobic, trapping Drake's confessions in reverb.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Nothing Was the Same (2013) end-to-end",
+      "durationMinutes": 60,
+      "instruction": "Listen to 'Tuscan Leather' — a six-minute track with no hook, three beat switches, and a sample from Whitney Houston that repeats 'I have nothing.' Then 'Hold On, We're Going Home' — originally written for a female singer; Drake kept it and turned it into a new-wave-reggae"
+    },
+    "tags": [
+      "Hip-Hop",
+      "R&B",
+      "Canadian",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-drake-if-youre-reading-this",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "If You're Reading This It's Too Late",
+    "teaser": "Drake 2015 — released as a surprise mixtape/album to fulfill his contractual obligation to Cash Money Records. Recorded mostly in a Toronto forest cabin. The album is leaner than 'Take Care': fewer features, darker production, more paranoia.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "If You're Reading This (2015) end-to-end",
+      "durationMinutes": 69,
+      "instruction": "Listen to 'Energy' — the beat is built from a single vocal sample slowed to a growl. Then 'Jungle' — a song about a friendship ending, with the line 'these days, I'm letting God handle all things above me.' Drake's pen game here is sharper than anything he'd written before:"
+    },
+    "tags": [
+      "Hip-Hop",
+      "Canadian",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-mf-doom-madvillainy",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Madvillainy",
+    "teaser": "MF DOOM and Madlib 2004 — two reclusive geniuses who never met in person during the album's creation. Madlib sent DOOM beat CDs from Los Angeles; DOOM recorded verses in a Brazilian hotel room and mailed them back.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Madvillainy (2004) end-to-end",
+      "durationMinutes": 46,
+      "instruction": "Listen to 'Accordion' — Madlib's beat is just an accordion sample, a bass note, and a snare. DOOM packs 18 different rhyme sounds into 16 bars. Then 'All Caps' — Madlib sampled the same note from a 1970s cartoon theme and built an entire song around it."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "American",
+      "2000s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-mf-doom-operation-doomsday",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Operation: Doomsday",
+    "teaser": "MF DOOM 1999 — his debut under the metal-masked villain persona, recorded after his brother and KMD partner Subroc was killed by a car. DOOM retreated from music for five years, sleeping on park benches, then re-emerged in a mask based on Doctor Doom.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Operation: Doomsday (1999) end-to-end",
+      "durationMinutes": 58,
+      "instruction": "Listen to 'Doomsday' — the beat is a looped Sade sample pitched to sound underwater. DOOM's rhyme scheme is so dense that deciphering one verse takes multiple listens. Then 'Rhymes Like Dimes' — DOOM recorded his verses in a single night while wearing the mask."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "East Coast",
+      "American",
+      "1990s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-mf-doom-mm-food",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Mm..Food",
+    "teaser": "MF DOOM 2004 — a concept album where every track is named after food, but every metaphor is about the music industry consuming artists. DOOM produced all but two tracks himself, sampling cartoons, cooking shows, and obscure jazz records.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Mm..Food (2004) end-to-end",
+      "durationMinutes": 49,
+      "instruction": "Listen to 'Rapp Snitch Knishes' — the beat is three notes from a David Matthews funk record, and DOOM and guest Mr. Fantastik trade verses about not cooperating with investigations."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "East Coast",
+      "American",
+      "2000s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-tyler-the-creator-flower-boy",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Flower Boy",
+    "teaser": "Tyler, the Creator 2017 — the album where the enfant terrible of Odd Future grew up. Recorded in Tyler's own studio with production entirely self-handled. The album's cover — Tyler in a field of sunflowers surrounded by bees — was painted by artist Eric White.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Flower Boy (2017) end-to-end",
+      "durationMinutes": 46,
+      "instruction": "Listen to 'See You Again' — Kali Uchis sings a chorus that Tyler wrote in 10 minutes while driving. Then 'Garden Shed' — the verse where Tyler comes out is embedded so deeply in the mix that most listeners missed it on first play."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-tyler-the-creator-igor",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "IGOR",
+    "teaser": "Tyler, the Creator 2019 — a breakup album told through a character named Igor, a mad-scientist archetype with a low hairline and a broken heart. Tyler sings more than he raps, processing his voice through a chorus of pitched-up and slowed-down selves.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "IGOR (2019) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'EARFQUAKE' — the beat was originally written for Justin Bieber, who didn't respond. Playboi Carti's verse was recorded in one take while Carti was on FaceTime with his girlfriend."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-tyler-the-creator-call-me-if-you-get-lost",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Call Me If You Get Lost",
+    "teaser": "Tyler, the Creator 2021 — framed as a mixtape hosted by DJ Drama, reviving the Gangsta Grillz format. Tyler raps over beats that sample everything from Ghanaian highlife to Japanese city pop.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Call Me If You Get Lost (2021) end-to-end",
+      "durationMinutes": 53,
+      "instruction": "Listen to 'WUSYANAME' — the sample is from H-Town's 90s R&B, layered with a bassline Tyler played himself. Then 'SWEET / I THOUGHT YOU WANTED TO DANCE' — the song switches genres three times in 10 minutes: rap, then reggae, then bossa nova."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-danny-brown-atrocity-exhibition",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Atrocity Exhibition",
+    "teaser": "Danny Brown 2016 — named after a JG Ballard novel about psychological fragmentation. Recorded while Brown was drinking heavily and barely sleeping. The beats — by Paul White, Evian Christ, and others — sound like industrial machinery breaking down.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Atrocity Exhibition (2016) end-to-end",
+      "durationMinutes": 47,
+      "instruction": "Listen to 'Ain't It Funny' — the beat is a distorted brass sample that sounds like a marching band falling down stairs. Brown raps about using drugs to cope with depression. Then 'Really Doe' — Kendrick, Ab-Soul, and Earl Sweatshirt all deliver career-best guest verses."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "Midwest",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-danny-brown-xxx",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "XXX",
+    "teaser": "Danny Brown 2011 — a mixtape/album recorded in Detroit basements after Brown turned 30 and decided his window was closing. The beats are split between classic boom-bap and experimental electronic.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "XXX (2011) end-to-end",
+      "durationMinutes": 52,
+      "instruction": "Listen to '30' — the opening track where Brown confronts his age over a beat that samples This Heat's '24 Track Loop'. Then 'DNA' — produced by Frank Dukes, who built the beat from a 0.3-second sample of an obscure 70s jazz record."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "Midwest",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-rtj-run-the-jewels-2",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Run the Jewels 2",
+    "teaser": "Killer Mike and El-P 2014 — the second collaboration between the Atlanta rapper and the Brooklyn producer, released as a free download. Recorded in 3 intense months in El-P's Brooklyn apartment.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Run the Jewels 2 (2014) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'Close Your Eyes (And Count to Fuck)' — Zack de la Rocha's guest verse was his first recording in 6 years. He tracked it at 1 AM after driving to El-P's apartment from a Rage Against the Machine rehearsal."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Hardcore Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-rtj-run-the-jewels-3",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Run the Jewels 3",
+    "teaser": "Killer Mike and El-P 2016 — released on Christmas Day as a gift to fans, just weeks after Trump's election. The album's paranoia and anger feel like a document of a specific historical moment.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Run the Jewels 3 (2016) end-to-end",
+      "durationMinutes": 52,
+      "instruction": "Listen to 'Legend Has It' — the 'RTJ' chant was recorded by Mike and El screaming into the same microphone until their voices clipped. The beat is built from a single piano sample pitched into three different keys."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Hardcore Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-rtj-run-the-jewels-4",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "RTJ4",
+    "teaser": "Run the Jewels 2020 — released two days early amid global protests after George Floyd's murder. The album opens with Killer Mike's pre-recorded speech at a Bernie Sanders rally. El-P's production incorporates punk, industrial, and trap.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "RTJ4 (2020) end-to-end",
+      "durationMinutes": 39,
+      "instruction": "Listen to 'walking in the snow' — Killer Mike's verse about police brutality was recorded in 2019, but its description of a man being choked to death was eerily predictive."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Hardcore Hip-Hop",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-giggs-landlord",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Landlord",
+    "teaser": "Giggs 2016 — the Peckham rapper's major-label breakthrough after a decade of mixtapes and a prison sentence. Giggs's voice is a glacier-slow baritone that makes every bar feel physically heavy.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Landlord (2016) end-to-end",
+      "durationMinutes": 56,
+      "instruction": "Listen to 'Whippin Excursion' — the beat is 808-heavy trap, but Giggs's flow sits behind it, not on it. Then 'Lock Doh' — the song that introduced Giggs to American audiences when Drake remixed it."
+    },
+    "tags": [
+      "Hip-Hop",
+      "UK Rap",
+      "British",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-kendrick-gkmc",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "good kid, m.A.A.d city",
+    "teaser": "Kendrick Lamar 2012 — a cinematic concept album about a single day in Compton. Each track is a scene; the skits are a prayer circle that bookends the story. Dr. Dre's presence is minimal, which was deliberate: Kendrick wanted to prove he didn't need a co-sign.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "good kid, m.A.A.d city (2012) end-to-end",
+      "durationMinutes": 68,
+      "instruction": "Listen to 'Sing About Me, I'm Dying of Thirst' — two characters speaking from beyond the grave over a 12-minute track. Then 'm.A.A.d city' — the beat was produced by Sounwave on an MPC in a hotel room. MC Eiht's verse was recorded in a single take."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Conscious Rap",
+      "West Coast",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-j-cole-forest-hills-drive",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "2014 Forest Hills Drive",
+    "teaser": "J. Cole 2014 — named after his childhood home address in Fayetteville, North Carolina. No features, no singles released ahead of time, no promotion. Cole produced most of the album himself. It went double platinum anyway.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "2014 Forest Hills Drive (2014) end-to-end",
+      "durationMinutes": 65,
+      "instruction": "Listen to 'Wet Dreamz' — the first verse was written when Cole was 19, found in an old notebook. The second verse was written at 29, responding to his younger self. Then 'Love Yourz' — recorded in a single take at 2 AM in Cole's home studio."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Conscious Rap",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-mac-miller-swimming",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Swimming",
+    "teaser": "Mac Miller 2018 — his final album released in his lifetime, completed just a month before his accidental overdose. Recorded after a breakup with Ariana Grande and a DUI arrest. Jon Brion (who worked on Kanye's Late Registration) produced many tracks.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Swimming (2018) end-to-end",
+      "durationMinutes": 58,
+      "instruction": "Listen to 'Self Care' — the music video features Mac literally buried alive, breaking out of a coffin. The beat switch at 1:35 was Mac's idea: he wanted the song to feel like a panic attack that resolves into calm."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-mac-miller-circles",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Circles",
+    "teaser": "Mac Miller 2020 — released posthumously, the companion to 'Swimming' that Mac was finishing when he died. Jon Brion completed the album from Mac's notes.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Circles (2020) end-to-end",
+      "durationMinutes": 48,
+      "instruction": "Listen to 'Good News' — the opening line 'I spent the whole day in my head' was one of the last things Mac recorded. Then 'Hand Me Downs' — the bar featuring Mac's brother rapping about family addiction cycles hits devastatingly hard in retrospect."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Alternative Hip-Hop",
+      "American",
+      "2020s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-asap-rocky-live-love-asap",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Live.Love.A$AP",
+    "teaser": "A$AP Rocky 2011 — the mixtape that made Harlem cool again. Recorded for $2,000 in a Bronx basement. Rocky rapped over cloud-rap beats (Clams Casino's hazy samples) and Houston screw music simultaneously, creating a sound that was half New York, half Texas, fully hypnotic.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Live.Love.A$AP (2011) end-to-end",
+      "durationMinutes": 53,
+      "instruction": "Listen to 'Peso' — the beat is Clams Casino sampling a Sia B-side pitched to sound like a ghost. Rocky's verse was freestyled in one take while sitting on a studio couch. Then 'Purple Swag' — the song that made 'trill' a national term for white teenagers."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Cloud Rap",
+      "East Coast",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-vince-staples-summertime-06",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Summertime '06",
+    "teaser": "Vince Staples 2015 — a double album named after the summer of 2006 in Long Beach, when Vince was 13 and several friends were killed. Produced almost entirely by No I.D.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Summertime '06 (2015) end-to-end",
+      "durationMinutes": 59,
+      "instruction": "Listen to 'Norf Norf' — the beat is a single piano loop that sounds like a funeral march. The video was filmed in black and white in Vince's actual neighborhood."
+    },
+    "tags": [
+      "Hip-Hop",
+      "West Coast",
+      "American",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "album-jid-the-never-story",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "The Never Story",
+    "teaser": "JID 2017 — the Atlanta rapper's debut, signed to J. Cole's Dreamville after Cole heard a demo and flew him to North Carolina the next day. JID's flow is impossibly fast without sacrificing clarity; his verses pack internal rhyme stacks that take three listens to decode.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "The Never Story (2017) end-to-end",
+      "durationMinutes": 40,
+      "instruction": "Listen to 'Never' — the opening track where JID raps over a beat that changes tempo three times in under four minutes. Then 'Lauder' — the song's structure mirrors a trauma spiral: calm reflection, eruption, exhaustion, calm."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Southern Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-denzel-curry-ta13oo",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "TA13OO",
+    "teaser": "Denzel Curry 2018 — a three-act concept album structured as Light, Gray, and Dark, tracking a descent from upbeat pop-rap into psychological horror. Curry was 23, processing the murder of his brother and the online abuse he received after a friend's death.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "TA13OO (2018) end-to-end",
+      "durationMinutes": 43,
+      "instruction": "Listen to 'CLOUT COBAIN | CLOUT CO13A1N' — the beat switches mid-track from trap to industrial noise, and Curry's voice pitches from melodic to demonic. Then 'BLACK BALLOONS | 13LACK 13ALLOONZ' — GoldLink's verse is a single breathless run."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Southern Hip-Hop",
+      "American",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-slowthai-nothing-great-about-britain",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "Nothing Great About Britain",
+    "teaser": "slowthai 2019 — a Northampton council-estate kid's debut that became a political document of post-Brexit Britain. The album title is literal: slowthai's Britain is food banks, xenophobia, class warfare, and a Queen on the currency.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "Nothing Great About Britain (2019) end-to-end",
+      "durationMinutes": 37,
+      "instruction": "Listen to 'Doorman' — the beat was produced by Mura Masa, who built it from a single distorted guitar riff and a 2-step drum pattern. Then 'Gorgeous' — the song is a love letter to a woman while detailing every reason the country treats her terribly."
+    },
+    "tags": [
+      "Hip-Hop",
+      "Grime",
+      "UK Rap",
+      "British",
+      "2010s"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "album-little-simz-grey-area",
+    "categoryId": "ALBUMS",
+    "subtype": "Album",
+    "name": "GREY Area",
+    "teaser": "Little Simz 2019 — a London rapper's third album, written and recorded after a breakup with her long-term manager. The production is live instrumentation (bass, drums, strings) played by Simz's touring band; no samples.",
+    "imageUrl": "",
+    "exploreAction": {
+      "verb": "Listen",
+      "targetName": "GREY Area (2019) end-to-end",
+      "durationMinutes": 35,
+      "instruction": "Listen to 'Offence' — the beat is a single bass riff played by her bassist. Simz's verse references Jay-Z, Biggie, and Big L while sounding like none of them. Then '101 FM' — a song about her childhood watching her Nigerian mother work double shifts."
+    },
+    "tags": [
+      "Hip-Hop",
+      "UK Rap",
+      "British",
+      "2010s"
+    ],
+    "tier": 1
+  },
+  {
     "id": "album-miles-davis-kind-of-blue",
     "categoryId": "ALBUMS",
     "subtype": "Album",
