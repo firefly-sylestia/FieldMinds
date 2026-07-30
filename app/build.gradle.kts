@@ -77,9 +77,12 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            // Use release signing only if all secrets are configured; otherwise use debug
-            if (hasReleaseSigningMaterial) {
-                signingConfig = signingConfigs.getByName("release")
+            signingConfig = if (hasReleaseSigningMaterial) {
+                logger.lifecycle("✓ Release APK signed with custom keystore (${keyStorePath})")
+                signingConfigs.getByName("release")
+            } else {
+                logger.warn("⚠ Release APK signed with debug keystore — installable but not for distribution")
+                signingConfigs.getByName("debug")
             }
         }
         debug {

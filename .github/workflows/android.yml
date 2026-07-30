@@ -59,6 +59,9 @@ jobs:
         run: |
           if [ -n "$KEYSTORE_BASE64" ]; then
             echo "$KEYSTORE_BASE64" | tr -d '[:space:]' | base64 -d > release.keystore
+            echo "✅ Keystore decoded ($(wc -c < release.keystore) bytes)"
+          else
+            echo "ℹ️  KEYSTORE_BASE64 not set — release will use debug signing"
           fi
 
       - name: Build debug and release APKs
