@@ -2,23 +2,23 @@ package com.curio.app.features.spin
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,11 +36,11 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -91,35 +91,24 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 /**
- * The Spin — see CURIO_SPEC.md §5 (v3 redesign).
+ * The Spin — see CURIO_SPEC.md §5 (v3 redesign, further polished v4).
  *
- * Three changes from the previous Card-Fan design:
- *  1. **Compact vertical carousel** — three stacked cards (top / center /
- *     bottom) replace the 5-card fanned layout. The center card stays
- *     fully expanded; the top + bottom slots are scaled down + faded so
- *     the user feels the depth of "more topics below / above" without
- *     burning 200dp of empty space above the dial.
- *  2. **Proper Category Menu** — a top-bar Surface chip (accent dot +
- *     category name + caret) opens a `DropdownMenu` grouped by family
- *     (Music / Movies / Books / Visual Art / Science / Wildcard). Each
- *     menu item shows family accent dot, category glyph + label, and a
- *     live topic-count badge.
- *  3. **Genre Filter Dialog** — a single "Filter" chip opens a
- *     `ModalBottomSheet` with a wrap-grid of all tags + subtypes from
- *     the active category. Multi-select with "Clear all" + "Apply".
- *
- *  Also fixed: top-bar paddings are tight (vertical 4dp instead of
- *  6dp + extra LazyRow padding), and the carousel area uses measured
- *  height instead of `weight(1f)` so the layout reads as one tight
- *  stack rather than "screen / card / big empty bottom".
- *
- * Layout (top → bottom on a 360×800 dp phone):
- *   24-44 dp   statusBarsPadding()
- *    40 dp     TopBar (Back · CategoryMenu · topic count)
- *     8 dp     Filter row
- *   ~430 dp    Carousel (3 stacked vertical cards)
- *    ~72 dp    Center spin button + status label
- *    ~72 dp    Bottom CTA (Shuffle / Explore this topic)
+ * Improvements over v3:
+ *  1. **Tighter top spacing** — top bar uses statusBarsPadding directly on
+ *     the row with zero extra vertical padding so menu + profile sit higher.
+ *  2. **Rounded corners on animated cards** — explicit .clip() before
+ *     .graphicsLayer() so scaled/translated cards keep their corner radius.
+ *  3. **Interactive shuffle cards** — tapping any card in the carousel
+ *     triggers a spin (same as the button).
+ *  4. **Beautiful category bottom sheet** — replaces the cramped DropdownMenu
+ *     with a full ModalBottomSheet grouped by family, each with accent-color
+ *     cards, checkmark for current selection, and a "Browse all" link.
+ *  5. **Multi-select filters** — both genres/tags and subtypes now support
+ *     selecting MULTIPLE chips. Filtering uses OR logic (match any selected).
+ *  6. **Redesigned filter sheet** — multi-select chip grid, active count
+ *     in header, clear-all button, better visual hierarchy.
+ *  7. **Smoother spin animation** — improved deceleration curve with a
+ *     sinusoidal ease-out for more natural settling.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -135,20 +124,29 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         value = TopicJsonLoader.load(activeCategory.id)
     }
 
-    // ── Filter state ────────────────────────────────────────────────
-    var activeFilter by remember(activeCategory.id, pool) { mutableStateOf<String?>(null) }
-    var activeSubtype by remember(activeCategory.id, pool) { mutableStateOf<String?>(null) }
+    // ── Multi-select filter state ─────────────────────────────────────
+    var activeFilters by remember(activeCategory.id, pool) { mutableStateOf(setOf<String>()) }
+    var activeSubtypes by remember(activeCategory.id, pool) { mutableStateOf(setOf<String>()) }
     var showFilters by remember { mutableStateOf(false) }
-    val filteredPool = remember(pool, activeFilter, activeSubtype) {
+    var showCategoryPicker by remember { mutableStateOf(false) }
+
+    // Broader OR-based filtering: a topic matches if it has ANY of the
+    // selected tags AND its subtype is in the selected subtypes (or no
+    // subtype filter is active).
+    val filteredPool = remember(pool, activeFilters, activeSubtypes) {
         var r = pool
-        if (activeFilter != null) r = r.filter { activeFilter in it.tags }
-        if (activeSubtype != null) r = r.filter { it.subtype == activeSubtype }
+        if (activeFilters.isNotEmpty()) {
+            r = r.filter { topic -> topic.tags.any { tag -> tag in activeFilters } }
+        }
+        if (activeSubtypes.isNotEmpty()) {
+            r = r.filter { it.subtype in activeSubtypes }
+        }
         r
     }
     val allSubtypes = remember(pool) { pool.map { it.subtype }.distinct().sorted() }
     val allTags = remember(pool) { pool.flatMap { it.tags }.distinct().sorted() }
 
-    // ── Spin state ──────────────────────────────────────────────────
+    // ── Spin state ────────────────────────────────────────────────────
     var shuffling by remember { mutableStateOf(false) }
     var shuffleCount by remember { mutableIntStateOf(0) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
@@ -159,7 +157,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         if (filteredPool.isEmpty()) emptyList()
         else {
             val s = filteredPool.shuffled()
-            if (s.size >= 6) s.take(6) else s  // keep carousel fast
+            if (s.size >= 6) s.take(6) else s
         }
     }
     var cycleIndex by remember(shuffleCount) { mutableIntStateOf(0) }
@@ -168,26 +166,26 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     LaunchedEffect(activeCategory.id) {
         landedTopic = null
         shuffling = false
-        activeFilter = null
-        activeSubtype = null
+        activeFilters = emptySet()
+        activeSubtypes = emptySet()
     }
 
-    // ── Shuffle logic — ease-out deceleration ───────────────────────
+    // ── Improved shuffle logic — sinusoidal ease-out deceleration ─────
     LaunchedEffect(shuffleCount) {
         if (shuffleCount == 0 || filteredPool.isEmpty()) return@LaunchedEffect
         shuffling = true
         landedTopic = null
-        val durationMs = 2200L
+        val durationMs = 2800L
         val start = System.currentTimeMillis()
-        // Single ease-out loop: per-tick interval grows cubically so the
-        // cadence genuinely decelerates instead of stopping abruptly.
         var tick = 0
         while (true) {
             val elapsed = System.currentTimeMillis() - start
             if (elapsed >= durationMs) break
             val progress = (elapsed.toFloat() / durationMs).coerceIn(0f, 1f)
-            val eased = 1f - (1f - progress) * (1f - progress) * (1f - progress)
-            val interval = (60L + (300L * eased).toLong()).coerceAtMost(380L)
+            // Sinusoidal ease-out: slows down with a natural curve, not
+            // an abrupt cubic halt.
+            val eased = sin((1f - progress) * Math.PI.toFloat() / 2f)
+            val interval = (40L + (360L * eased).toLong()).coerceAtMost(400L)
             cycleIndex = ++tick
             delay(interval)
             if (System.currentTimeMillis() - start >= durationMs) break
@@ -197,8 +195,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         val pick = pickFrom(filteredPool, recentTopicIds)
         landedTopic = pick
         if (pick != null) {
-            // Make the carousel's final cycleIndex point at the pick so the
-            // centermost card locks on it.
             val idx = displayPool.indexOfFirst { it.id == pick.id }
             if (idx >= 0) cycleIndex = idx
             recentTopicIds = (recentTopicIds + pick.id).toList().takeLast(20).toSet()
@@ -214,7 +210,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, topic.name))
     }
 
-    // ── Animations ──────────────────────────────────────────────────
+    // ── Animations ────────────────────────────────────────────────────
     val landScale by animateFloatAsState(
         targetValue = if (landedTopic != null) 1.04f else 1f,
         animationSpec = CurioMotion.Springs.Elastic,
@@ -226,42 +222,55 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         label = "buttonPulse"
     )
 
+    // ── Overall layout ─────────────────────────────────────────────────
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding()
     ) {
-        // ── 1. Top bar — Back · CategoryMenu · CountBadge ──────────────
+        // ── 1. Top bar — back, category chip, topic count ───────────
         TopBar(
             cat = cat,
             poolCount = pool.size,
             filteredCount = filteredPool.size,
+            modifier = Modifier.statusBarsPadding(),
             onBack = { navController.popBackStack() },
-            onCategoryChange = { activeCategory = it },
-            onPickCategory = { navController.navigate(CurioRoutes.PICKER) }
+            onOpenCategoryPicker = { showCategoryPicker = true }
         )
 
-        // ── 2. Filter row ──────────────────────────────────────────────
+        // ── 2. Filter row ──────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp),
+                .padding(horizontal = 16.dp, vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             FilterTrigger(
                 accent = cat.accent,
-                activeCount = (if (activeFilter != null) 1 else 0) +
-                              (if (activeSubtype != null) 1 else 0),
+                activeCount = activeFilters.size + activeSubtypes.size,
                 onClick = { showFilters = true }
             )
+            if (activeFilters.isNotEmpty() || activeSubtypes.isNotEmpty()) {
+                TextButton(
+                    onClick = {
+                        activeFilters = emptySet()
+                        activeSubtypes = emptySet()
+                    },
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        "Clear",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
             Spacer(Modifier.weight(1f))
             if (cat.id != CategoryId.WILDCARD && filteredPool.isNotEmpty()) {
                 Surface(
                     shape = RoundedCornerShape(50),
-                    color = cat.accent.copy(alpha = 0.12f),
-                    modifier = Modifier
+                    color = cat.accent.copy(alpha = 0.12f)
                 ) {
                     Text(
                         text = "${filteredPool.size} ${if (filteredPool.size == 1) "topic" else "topics"}",
@@ -273,7 +282,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             }
         }
 
-        // ── 3. Carousel area (3 stacked vertical cards) ─────────────────
+        // ── 3. Carousel (interactive cards) ─────────────────────────
         Carousel(
             cat = cat,
             displayPool = displayPool,
@@ -281,16 +290,20 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             shuffling = shuffling,
             landedTopic = landedTopic,
             landScale = landScale,
+            enabled = filteredPool.isNotEmpty() && !shuffling,
+            onCardTap = {
+                if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 2.dp, bottom = 2.dp)
         )
 
-        // ── 4. Center spin button (with optional orbit ring) ──────────
+        // ── 4. Center spin button ───────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 6.dp),
+                .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
             SpinButton(
@@ -303,7 +316,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             )
         }
 
-        // ── 5. Bottom CTA ──────────────────────────────────────────────
+        // ── 5. Bottom CTA ───────────────────────────────────────────
         BottomCta(
             cat = cat,
             landedTopic = landedTopic,
@@ -317,18 +330,34 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         )
     }
 
-    // ── ModalBottomSheet — filter dialog ───────────────────────────────
+    // ── Category picker bottom sheet ──────────────────────────────────
+    if (showCategoryPicker) {
+        CategoryPickerSheet(
+            currentCat = cat,
+            onDismiss = { showCategoryPicker = false },
+            onCategoryChange = { c ->
+                activeCategory = c
+                showCategoryPicker = false
+            },
+            onBrowseAll = {
+                showCategoryPicker = false
+                navController.navigate(CurioRoutes.PICKER)
+            }
+        )
+    }
+
+    // ── ModalBottomSheet — multi-select filter dialog ─────────────────
     if (showFilters) {
         FilterSheet(
             cat = cat,
             subtypes = allSubtypes,
             tags = allTags,
-            initialSubtype = activeSubtype,
-            initialFilter = activeFilter,
+            initialSubtypes = activeSubtypes,
+            initialFilters = activeFilters,
             onDismiss = { showFilters = false },
-            onApply = { tag, subtype ->
-                activeFilter = tag
-                activeSubtype = subtype
+            onApply = { tags, subtypes ->
+                activeFilters = tags
+                activeSubtypes = subtypes
                 showFilters = false
             }
         )
@@ -355,141 +384,52 @@ private fun TopBar(
     cat: CurioCategory,
     poolCount: Int,
     filteredCount: Int,
+    modifier: Modifier = Modifier,
     onBack: () -> Unit,
-    onCategoryChange: (CurioCategory) -> Unit,
-    onPickCategory: () -> Unit
+    onOpenCategoryPicker: () -> Unit
 ) {
-    var menuOpen by remember { mutableStateOf(false) }
-    val groups = remember {
-        CategoryFamily.values().map { fam ->
-            fam to CurioCategories.byFamily(fam)
-        }
-    }
-
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 0.dp),
+            .padding(horizontal = 16.dp, vertical = 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CurioBackButton(onClick = onBack)
 
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(10.dp))
 
         // ── CategoryMenu trigger chip ─────────────────────────────────
-        Box {
-            Surface(
-                onClick = { menuOpen = true },
-                shape = RoundedCornerShape(50),
-                color = cat.accent.copy(alpha = 0.15f),
-                modifier = Modifier
+        Surface(
+            onClick = onOpenCategoryPicker,
+            shape = RoundedCornerShape(50),
+            color = cat.accent.copy(alpha = 0.15f)
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    // Family-colored dot
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(cat.accent)
-                    )
-                    CurioIcon(
-                        cat.iconGlyph,
-                        null,
-                        tint = cat.accent,
-                        size = 16.dp
-                    )
-                    Text(
-                        text = cat.displayName,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = cat.accent,
-                        maxLines = 1
-                    )
-                    CurioIcon(
-                        CurioIcons.KeyboardArrowDown,
-                        null,
-                        tint = cat.accent,
-                        size = 18.dp
-                    )
-                }
-            }
-
-            DropdownMenu(
-                expanded = menuOpen,
-                onDismissRequest = { menuOpen = false },
-                modifier = Modifier
-                    .width(280.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surfaceContainerLow,
-                        RoundedCornerShape(20.dp)
-                    )
-            ) {
-                Text(
-                    text = "Choose a category",
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 8.dp)
-                )
-
-                groups.forEachIndexed { idx, (family, cats) ->
-                    if (idx > 0) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 4.dp)
-                                .height(1.dp)
-                                .background(MaterialTheme.colorScheme.outlineVariant)
-                        )
-                    }
-                    Text(
-                        text = familyDisplayName(family),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 2.dp)
-                    )
-                    cats.forEach { c ->
-                        CategoryMenuItem(
-                            cat = c,
-                            isSelected = c.id == cat.id,
-                            onClick = {
-                                menuOpen = false
-                                if (c.id != cat.id) onCategoryChange(c)
-                            }
-                        )
-                    }
-                }
-
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 6.dp)
-                        .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outlineVariant)
+                        .size(8.dp)
+                        .clip(CircleShape)
+                        .background(cat.accent)
                 )
-
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            "Browse all categories",
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
-                        )
-                    },
-                    onClick = {
-                        menuOpen = false
-                        onPickCategory()
-                    },
-                    leadingIcon = {
-                        CurioIcon(
-                            CurioIcons.ArrowForward,
-                            null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            size = 18.dp
-                        )
-                    }
+                CurioIcon(
+                    cat.iconGlyph, null,
+                    tint = cat.accent,
+                    size = 16.dp
+                )
+                Text(
+                    text = cat.displayName,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = cat.accent,
+                    maxLines = 1
+                )
+                CurioIcon(
+                    CurioIcons.KeyboardArrowDown, null,
+                    tint = cat.accent,
+                    size = 18.dp
                 )
             }
         }
@@ -513,40 +453,220 @@ private fun TopBar(
     }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// Category picker — beautiful ModalBottomSheet grouped by family
+// ═══════════════════════════════════════════════════════════════════════════
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CategoryMenuItem(
-    cat: CurioCategory,
-    isSelected: Boolean,
-    onClick: () -> Unit
+private fun CategoryPickerSheet(
+    currentCat: CurioCategory,
+    onDismiss: () -> Unit,
+    onCategoryChange: (CurioCategory) -> Unit,
+    onBrowseAll: () -> Unit
 ) {
-    DropdownMenuItem(
-        text = {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val groups = remember {
+        CategoryFamily.values().map { fam ->
+            fam to CurioCategories.byFamily(fam)
+        }
+    }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp)
+        ) {
+            // ── Header ────────────────────────────────────────────────
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(cat.accent)
-                )
-                Text(
-                    text = cat.displayName,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.weight(1f)
-                )
-                if (isSelected) {
-                    CurioIcon(CurioIcons.Check, null, tint = cat.accent, size = 16.dp)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Choose a category",
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "What are you curious about today?",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
-        },
-        onClick = onClick,
-        modifier = Modifier
+
+            Spacer(Modifier.height(12.dp))
+
+            // ── Category cards by family ──────────────────────────────
+            groups.forEach { (family, cats) ->
+                // Family header
+                Text(
+                    text = familyDisplayName(family),
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp
+                    ),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+                )
+
+                // Family row of cards
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    cats.forEach { c ->
+                        val isSelected = c.id == currentCat.id
+                        val cardMod = if (cats.size == 1) Modifier.fillMaxWidth() else Modifier.weight(1f)
+                        CategoryPickerCard(
+                            cat = c,
+                            isSelected = isSelected,
+                            onClick = { onCategoryChange(c) },
+                            modifier = cardMod
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(12.dp))
+            }
+
+            // ── Divider ────────────────────────────────────────────────
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
+
+            // ── Browse all link ────────────────────────────────────────
+            Surface(
+                onClick = onBrowseAll,
+                shape = RoundedCornerShape(24.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Surface(
+                            shape = RoundedCornerShape(14.dp),
+                            color = CurioColors.CoralBlush.copy(alpha = 0.15f)
+                        ) {
+                            CurioIcon(
+                                CurioIcons.Palette, null,
+                                tint = CurioColors.CoralBlush,
+                                size = 20.dp,
+                                modifier = Modifier.padding(8.dp)
+                            )
+                        }
+                        Text(
+                            "Browse all categories",
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    CurioIcon(
+                        CurioIcons.ArrowForward, null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        size = 20.dp
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CategoryPickerCard(
+    cat: CurioCategory,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val scale by animateFloatAsState(
+        targetValue = if (isSelected) 1.03f else 1f,
+        animationSpec = CurioMotion.Springs.Snappy,
+        label = "catCardScale"
     )
+
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(24.dp),
+        color = if (isSelected) cat.accent else cat.accent.copy(alpha = 0.18f),
+        shadowElevation = if (isSelected) 6.dp else 2.dp,
+        tonalElevation = if (isSelected) 3.dp else 0.dp,
+        border = if (isSelected) BorderStroke(2.dp, cat.accent)
+        else BorderStroke(1.dp, cat.accent.copy(alpha = 0.15f)),
+        modifier = modifier
+            .height(100.dp)
+            .scale(scale)
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Watermark glyph
+            CurioIcon(
+                cat.iconGlyph, null,
+                tint = if (isSelected) Color.White.copy(alpha = 0.2f)
+                else cat.accent.copy(alpha = 0.2f),
+                size = 72.dp,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 8.dp, bottom = 4.dp)
+            )
+            // Content
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(14.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    CurioIcon(
+                        cat.iconGlyph, null,
+                        tint = if (isSelected) Color.White else cat.accent,
+                        size = 20.dp
+                    )
+                    if (isSelected) {
+                        CurioIcon(
+                            CurioIcons.Check, null,
+                            tint = Color.White,
+                            size = 16.dp
+                        )
+                    }
+                }
+                Text(
+                    text = cat.displayName,
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Bold
+                    ),
+                    color = if (isSelected) Color.White else cat.accent,
+                    maxLines = 1
+                )
+            }
+        }
+    }
 }
 
 private fun familyDisplayName(family: CategoryFamily): String = when (family) {
@@ -559,7 +679,7 @@ private fun familyDisplayName(family: CategoryFamily): String = when (family) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Filter trigger chip + ModalBottomSheet filter dialog
+// Filter trigger chip + ModalBottomSheet filter dialog (multi-select)
 // ═══════════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -568,12 +688,12 @@ private fun FilterTrigger(
     activeCount: Int,
     onClick: () -> Unit
 ) {
-    val label = if (activeCount == 0) "Filter" else "Filter · $activeCount"
+    val label = if (activeCount == 0) "Filter" else "Filter ($activeCount)"
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = if (activeCount > 0) accent.copy(alpha = 0.18f)
-                else MaterialTheme.colorScheme.surfaceVariant
+        else MaterialTheme.colorScheme.surfaceVariant
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
@@ -594,8 +714,7 @@ private fun FilterTrigger(
                 color = if (activeCount > 0) accent else MaterialTheme.colorScheme.onSurfaceVariant
             )
             CurioIcon(
-                CurioIcons.KeyboardArrowDown,
-                null,
+                CurioIcons.KeyboardArrowDown, null,
                 tint = if (activeCount > 0) accent else MaterialTheme.colorScheme.onSurfaceVariant,
                 size = 14.dp
             )
@@ -609,14 +728,16 @@ private fun FilterSheet(
     cat: CurioCategory,
     subtypes: List<String>,
     tags: List<String>,
-    initialSubtype: String?,
-    initialFilter: String?,
+    initialSubtypes: Set<String>,
+    initialFilters: Set<String>,
     onDismiss: () -> Unit,
-    onApply: (tag: String?, subtype: String?) -> Unit
+    onApply: (tags: Set<String>, subtypes: Set<String>) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var draftFilter by remember(initialFilter) { mutableStateOf(initialFilter) }
-    var draftSubtype by remember(initialSubtype) { mutableStateOf(initialSubtype) }
+    var draftFilters by remember(initialFilters) { mutableStateOf(initialFilters) }
+    var draftSubtypes by remember(initialSubtypes) { mutableStateOf(initialSubtypes) }
+
+    val activeCount = draftFilters.size + draftSubtypes.size
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -625,7 +746,11 @@ private fun FilterSheet(
         dragHandle = { BottomSheetDefaults.DragHandle() },
         shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 28.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp)
+        ) {
             // ── Header ────────────────────────────────────────────────
             Row(
                 modifier = Modifier
@@ -634,26 +759,42 @@ private fun FilterSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = "Filter ${cat.displayName}",
+                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        if (activeCount > 0) {
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = cat.accent
+                            ) {
+                                Text(
+                                    text = "$activeCount",
+                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
+                                    color = Color.White,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                    }
                     Text(
-                        text = "Filter ${cat.displayName}",
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = if (cat.id == CategoryId.WILDCARD)
-                            "Refine by genre or time period"
-                        else "${tags.size} genres · ${subtypes.size} ${if (subtypes.size == 1) "type" else "types"}",
+                        text = "${tags.size} genres · ${subtypes.size} ${if (subtypes.size == 1) "type" else "types"} — select as many as you like",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                if (draftFilter != null || draftSubtype != null) {
+                if (activeCount > 0) {
                     TextButton(onClick = {
-                        draftFilter = null
-                        draftSubtype = null
+                        draftFilters = emptySet()
+                        draftSubtypes = emptySet()
                     }) {
                         Text(
-                            "Clear",
+                            "Clear all",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -675,17 +816,23 @@ private fun FilterSheet(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     subtypes.forEach { st ->
-                        FilterChoiceChip(
+                        MultiSelectChip(
                             label = st,
-                            selected = st == draftSubtype,
+                            selected = st in draftSubtypes,
                             accent = cat.accent,
-                            onClick = { draftSubtype = if (st == draftSubtype) null else st }
+                            onClick = {
+                                draftSubtypes = if (st in draftSubtypes)
+                                    draftSubtypes - st
+                                else
+                                    draftSubtypes + st
+                            }
                         )
                     }
                 }
                 Spacer(Modifier.height(20.dp))
             }
 
+            // ── Tags section ───────────────────────────────────────────
             if (tags.isNotEmpty()) {
                 SectionLabel("Genres & tags", Modifier.padding(horizontal = 24.dp))
                 Spacer(Modifier.height(10.dp))
@@ -697,11 +844,16 @@ private fun FilterSheet(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     tags.forEach { tag ->
-                        FilterChoiceChip(
+                        MultiSelectChip(
                             label = tag,
-                            selected = tag == draftFilter,
+                            selected = tag in draftFilters,
                             accent = cat.accent,
-                            onClick = { draftFilter = if (tag == draftFilter) null else tag }
+                            onClick = {
+                                draftFilters = if (tag in draftFilters)
+                                    draftFilters - tag
+                                else
+                                    draftFilters + tag
+                            }
                         )
                     }
                 }
@@ -724,7 +876,7 @@ private fun FilterSheet(
 
             // ── Apply button ──────────────────────────────────────────
             Button(
-                onClick = { onApply(draftFilter, draftSubtype) },
+                onClick = { onApply(draftFilters, draftSubtypes) },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = cat.accent,
@@ -740,13 +892,15 @@ private fun FilterSheet(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     CurioIcon(
-                        CurioIcons.AutoAwesome,
-                        null,
+                        CurioIcons.AutoAwesome, null,
                         tint = Color.White,
                         size = 18.dp
                     )
                     Text(
-                        text = "Apply filters",
+                        text = if (activeCount > 0)
+                            "Apply $activeCount filter${if (activeCount > 1) "s" else ""}"
+                        else
+                            "Show all topics",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
                     )
                 }
@@ -759,27 +913,36 @@ private fun FilterSheet(
 private fun SectionLabel(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+        style = MaterialTheme.typography.labelLarge.copy(
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 0.3.sp
+        ),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier
     )
 }
 
 @Composable
-private fun FilterChoiceChip(
+private fun MultiSelectChip(
     label: String,
     selected: Boolean,
     accent: Color,
     onClick: () -> Unit
 ) {
+    val scale by animateFloatAsState(
+        targetValue = if (selected) 1.05f else 1f,
+        animationSpec = CurioMotion.Springs.Snappy,
+        label = "msChipScale"
+    )
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = if (selected) accent
-                else MaterialTheme.colorScheme.surfaceContainerHigh,
+        else MaterialTheme.colorScheme.surfaceContainerHigh,
         border = if (!selected)
             BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-        else null
+        else null,
+        modifier = Modifier.scale(scale)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
@@ -801,7 +964,7 @@ private fun FilterChoiceChip(
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 3-card vertical carousel — replaces the previous card-fan
+// 3-card vertical carousel with interactive cards + proper clipping
 // ═══════════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -812,6 +975,8 @@ private fun Carousel(
     shuffling: Boolean,
     landedTopic: CurioTopic?,
     landScale: Float,
+    enabled: Boolean,
+    onCardTap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val poolSize = displayPool.size
@@ -822,7 +987,6 @@ private fun Carousel(
         if (poolSize == 0) {
             EmptyPoolHint(cat)
         } else {
-            // Three slots: -1 (top, small), 0 (center, big), +1 (bottom, small)
             val slots = listOf(-1, 0, 1)
             slots.forEach { slot ->
                 val topic = resolveTopicForSlot(
@@ -839,7 +1003,9 @@ private fun Carousel(
                     topic = topic,
                     landedTopic = landedTopic,
                     landScale = landScale,
-                    cat = cat
+                    cat = cat,
+                    enabled = enabled,
+                    onTap = onCardTap
                 )
             }
         }
@@ -896,7 +1062,9 @@ private fun CarouselCard(
     topic: CurioTopic?,
     landedTopic: CurioTopic?,
     landScale: Float,
-    cat: CurioCategory
+    cat: CurioCategory,
+    enabled: Boolean,
+    onTap: () -> Unit
 ) {
     val isCenter = slot == 0
     val w = if (isCenter) 250.dp else 210.dp
@@ -911,8 +1079,11 @@ private fun CarouselCard(
     val corner = if (isCenter) 28.dp else 22.dp
     val isLanded = landedTopic != null && isCenter
 
+    // Explicit clip before graphicsLayer so scaled cards keep rounded corners.
     Box(
         modifier = Modifier
+            .size(w, h)
+            .clip(RoundedCornerShape(corner))
             .graphicsLayer {
                 scaleX = if (isLanded) landScale else s
                 scaleY = if (isLanded) landScale else s
@@ -920,6 +1091,13 @@ private fun CarouselCard(
                 translationY = yOff.dp.toPx()
             }
             .zIndex(if (isCenter) 10f else 5f)
+            .then(
+                if (enabled || isCenter) Modifier.clickable(
+                    indication = null,
+                    interactionSource = null,
+                    onClick = onTap
+                ) else Modifier
+            )
     ) {
         AnimatedContent(
             targetState = topic,
@@ -943,7 +1121,7 @@ private fun CarouselCard(
                 } else null,
                 shadowElevation = if (isCenter) 8.dp else 2.dp,
                 tonalElevation = if (isCenter) 2.dp else 0.dp,
-                modifier = Modifier.size(w, h)
+                modifier = Modifier.fillMaxSize()
             ) {
                 if (currentTopic != null) {
                     CarouselCardContent(
@@ -995,7 +1173,7 @@ private fun CarouselCardContent(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Header: type + family accent stripe
+            // Header: type + accent stripe
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -1015,7 +1193,7 @@ private fun CarouselCardContent(
                     color = accent
                 )
             }
-            // Middle: topic name — onSurface for a clean, non-red read
+            // Middle: topic name
             Text(
                 text = topic.name,
                 style = if (isCenter)
@@ -1086,7 +1264,7 @@ private fun CarouselCardContent(
 
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Center spin button (with optional orbit ring during shuffle)
+// Center spin button (with optional orbit ring)
 // ═══════════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -1103,11 +1281,8 @@ private fun SpinButton(
         modifier = Modifier.size(120.dp),
         contentAlignment = Alignment.Center
     ) {
-        // ── Orbit ring of small dots (active during shuffle) ──────────
         OrbitRing(active = isShuffling, color = tint, modifier = Modifier.fillMaxSize())
-        // ── Breathing halo when idle to invite the tap ─────────────────
         IdleHalo(active = enabled && !isShuffling && landedTopic == null, color = tint)
-        // ── Main button ───────────────────────────────────────────────
         Surface(
             onClick = onClick,
             enabled = enabled,
@@ -1143,19 +1318,17 @@ private fun SpinButton(
 }
 
 /**
- * A rotating ring of 8 small dots drawn around the spin button during
- * shuffle — gives a "slot machine" / "swept dial" feel without polluting
- * the carousel area with extra UI.
+ * Rotating ring of 8 small dots around the spin button during shuffle.
  */
 @Composable
 private fun OrbitRing(active: Boolean, color: Color, modifier: Modifier = Modifier) {
     if (!active) return
-    val infinite = androidx.compose.animation.core.rememberInfiniteTransition(label = "orbit")
+    val infinite = rememberInfiniteTransition(label = "orbit")
     val rot by infinite.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
-        animationSpec = androidx.compose.animation.core.infiniteRepeatable(
-            animation = androidx.compose.animation.core.tween(1400, easing = androidx.compose.animation.core.LinearEasing)
+        animationSpec = infiniteRepeatable(
+            animation = tween(1400, easing = LinearEasing)
         ),
         label = "orbitRot"
     )
@@ -1183,13 +1356,13 @@ private fun OrbitRing(active: Boolean, color: Color, modifier: Modifier = Modifi
 @Composable
 private fun IdleHalo(active: Boolean, color: Color) {
     if (!active) return
-    val infinite = androidx.compose.animation.core.rememberInfiniteTransition(label = "halo")
+    val infinite = rememberInfiniteTransition(label = "halo")
     val pulse by infinite.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = androidx.compose.animation.core.infiniteRepeatable(
-            animation = androidx.compose.animation.core.tween(1400, easing = androidx.compose.animation.core.FastOutSlowInEasing),
-            repeatMode = androidx.compose.animation.core.RepeatMode.Restart
+        animationSpec = infiniteRepeatable(
+            animation = tween(1400, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Restart
         ),
         label = "haloPulse"
     )
@@ -1206,15 +1379,14 @@ private fun IdleHalo(active: Boolean, color: Color) {
     )
 }
 
-/** A tiny inline pseudo-icon used during shuffle — three rotating dots. */
 @Composable
 private fun ShuffleGlyph(tint: Color, modifier: Modifier = Modifier) {
-    val infinite = androidx.compose.animation.core.rememberInfiniteTransition(label = "shuffleGlyph")
+    val infinite = rememberInfiniteTransition(label = "shuffleGlyph")
     val angle by infinite.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
-        animationSpec = androidx.compose.animation.core.infiniteRepeatable(
-            animation = androidx.compose.animation.core.tween(700, easing = androidx.compose.animation.core.LinearEasing)
+        animationSpec = infiniteRepeatable(
+            animation = tween(700, easing = LinearEasing)
         ),
         label = "shuffleAngle"
     )
@@ -1341,8 +1513,7 @@ private fun resolveTopicForSlot(
 
 /**
  * Weighted picker — favours tier 1 (human-curated marquee), then tier 2,
- * then tier 3, while excluding any topics in [recentIds] so the user
- * doesn't see the same pick twice in a stretch.
+ * then tier 3, while excluding any topics in [recentIds].
  */
 private fun pickFrom(pool: List<CurioTopic>, recentIds: Set<String>): CurioTopic? {
     if (pool.isEmpty()) return null
