@@ -57,6 +57,8 @@ fun ProfileScreen(navController: NavController) {
             val entries = CurioRepositoryHolder.repo.getAll()
             totalSaved = entries.size
             recentEntries = entries.take(5)
+        }.onFailure {
+            android.util.Log.e("ProfileScreen", "Failed to load entries", it)
         }
         crashCount = CurioCrashReporter.getCrashHistory(context).size
     }
@@ -418,7 +420,7 @@ private fun SettingsRow(
                 )
             }
             CurioIcon(
-                CurioIcons.ChevronRight, null,
+                CurioIcons.ArrowForward, null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
                 size = 18.dp
             )
