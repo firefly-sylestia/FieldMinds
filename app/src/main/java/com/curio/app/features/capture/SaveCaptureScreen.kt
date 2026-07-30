@@ -123,10 +123,13 @@ fun SaveCaptureScreen(
 
             // Persist audio file from cache to internal storage before saving
             val persistedData = if (data is CaptureData.SoundBite && !data.audioFilePath.isNullOrBlank()) {
-                val persistentPath = AudioStorageManager.persistAudio(
+                val result = AudioStorageManager.persistAudio(
                     context, data.audioFilePath!!, entryId
                 )
-                data.copy(audioFilePath = persistentPath)
+                data.copy(
+                    audioFilePath = result.persistentPath,
+                    fileSizeBytes = result.fileSizeBytes
+                )
             } else {
                 data
             }

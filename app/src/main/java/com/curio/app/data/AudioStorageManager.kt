@@ -14,27 +14,33 @@ object AudioStorageManager {
 
     private const val AUDIO_DIR = "audio"
 
+    /** Result of persisting an audio file: the destination path and file size. */
+    data class PersistResult(
+        val persistentPath: String,
+        val fileSizeBytes: Long
+    )
+
     /**
      * Copy an audio file from a cache path to persistent internal storage.
      *
      * @param context       Android context for accessing filesDir.
      * @param cacheFilePath Absolute path to the temp cache file.
      * @param entryId       The capture entry ID (used as the persistent filename).
-     * @return The absolute path of the persisted file, or the original cache
-     *         path if the copy fails (graceful degradation).
+     * @return [PersistResult] with the persisted path and file size in bytes,
+     *         or a result with the original cache path and 0 if the copy fails.
      */
-    fun persistAudio(context: Context, cacheFilePath: String, entryId: String): String {
+    fun persistAudio(context: Context, cacheFilePath: String, entryId: String): PersistResult {
         val cacheFile = File(cacheFilePath)
-        if (!cacheFile.exists()) return cacheFilePath
+        if (!cacheFile.exists()) return PersistResult(cacheFilePath, 0L)
 
         val audioDir = File(context.filesDir, AUDIO_DIR).apply { mkdirs() }
         val destFile = File(audioDir, "${entryId}.m4a")
 
         return try {
             cacheFile.copyTo(destFile, overwrite = true)
-            destFile.absolutePath
+            PersistResult(destFile.absolutePath, destFile.length())
         } catch (_: Exception) {
-            cacheFilePath // fallback to original cache path
+            PersistResult(cacheFilePath, 0L) // fallback to original cache path
         }
     }
 

@@ -324,16 +324,36 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
                 }
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        "Voice note · ${data.durationSeconds}s",
+                        buildString {
+                            append("Voice note · ${data.durationSeconds}s")
+                            if (data.fileSizeBytes > 0) {
+                                append(" · ${formatFileSize(data.fileSizeBytes)}")
+                            }
+                        },
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
-                    if (data.title.isNotBlank()) {
-                        Text(
-                            data.title,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (data.title.isNotBlank()) {
+                            Text(
+                                data.title,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        if (data.fileSizeBytes > 0) {
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = category.accent.copy(alpha = 0.12f)
+                            ) {
+                                Text(
+                                    text = data.encodingFormat,
+                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
+                                    color = category.accent,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -555,6 +575,15 @@ private fun formatMs(ms: Long): String {
     val mins = totalSecs / 60
     val secs = totalSecs % 60
     return "%d:%02d".format(mins, secs)
+}
+
+/** Format bytes to a human-readable size string (e.g. "1.2 MB"). */
+private fun formatFileSize(bytes: Long): String {
+    return when {
+        bytes < 1024 -> "$bytes B"
+        bytes < 1024 * 1024 -> "${bytes / 1024} KB"
+        else -> "%.1f MB".format(bytes.toDouble() / (1024 * 1024))
+    }
 }
 
 @Composable
