@@ -756,6 +756,290 @@ ALBUMS = [
     ),
 
     # ═══════════════════════════════════════════════════════════════════════
+    # HIP-HOP BATCH 3 — West Coast, Southern, Trap, Conscious, UK, Deep Cuts
+    # ═══════════════════════════════════════════════════════════════════════
+    (
+        "album-dr-dre-the-chronic", "Album",
+        "The Chronic",
+        "Dr. Dre 1992 — the album that invented G-funk and made the West Coast the center of hip-hop. Recorded at Death Row Studios with a young Snoop Doggy Dogg writing most of the lyrics. Dre used a live band to replay Parliament-Funkadelic samples, creating a sun-drenched, low-rider sound that dominated the 90s.",
+        "The Chronic (1992) end-to-end", 63,
+        "Listen to 'Nuthin' but a G Thang' — the synthesizer whine was played on a Minimoog by Dre himself. Then 'Let Me Ride' — the chorus samples a Parliament track at half-speed. Dre's secret was the low-end: he mixed the bass frequencies higher than anyone else at the time, making the album literally shake car speakers.",
+        ["Hip-Hop", "G-Funk", "West Coast", "American", "1990s"], 1
+    ),
+    (
+        "album-snoop-dogg-doggystyle", "Album",
+        "Doggystyle",
+        "Snoop Doggy Dogg 1993 — the fastest-selling debut album in hip-hop history at the time. Recorded while Snoop was on trial for murder (he was acquitted). Dr. Dre's production is G-funk at its silkiest. The album was recorded almost entirely at night because the studio's daytime clients were intimidated by Death Row's reputation.",
+        "Doggystyle (1993) end-to-end", 53,
+        "Listen to 'Gin and Juice' — Snoop wrote the chorus in 10 minutes. The laid-back delivery was not an act; Snoop recorded most of his vocals while high, and Dre liked the looseness. Then 'Murder Was the Case' — Snoop narrates his own fictional death, which became eerily prescient given his legal situation at the time.",
+        ["Hip-Hop", "G-Funk", "West Coast", "American", "1990s"], 1
+    ),
+    (
+        "album-tupac-all-eyez-on-me", "Album",
+        "All Eyez on Me",
+        "2Pac 1996 — the first double album in hip-hop history. Recorded in just 2 weeks after Suge Knight bailed Pac out of prison. Pac was living at the studio, writing and recording 3-4 songs a day. The album documents his transformation from political poet to thug icon in real time. He was dead 7 months after its release.",
+        "All Eyez on Me (1996) — disc 1", 70,
+        "Listen to 'California Love' — Dr. Dre produced it; the talkbox hook is Roger Troutman of Zapp. Then 'Ambitionz Az a Ridah' — Pac recorded it at 4 AM on his first night out of prison. The album's 27 tracks capture a man who knew he was running out of time and was determined to say everything.",
+        ["Hip-Hop", "West Coast", "American", "1990s"], 1
+    ),
+    (
+        "album-tupac-me-against-the-world", "Album",
+        "Me Against the World",
+        "2Pac 1995 — released while Pac was in prison serving a sentence for sexual assault. It debuted at #1, making him the first artist to have a #1 album while incarcerated. The album's introspection and vulnerability set it apart from the gangsta rap dominating the charts.",
+        "Me Against the World (1995) end-to-end", 66,
+        "Listen to 'Dear Mama' — a tribute to his mother Afeni Shakur, a Black Panther who was pregnant with Pac while defending herself in court. Then 'So Many Tears' — Pac wrote it on his 23rd birthday after being shot 5 times in a robbery attempt. The album reads like a suicide note from someone who survived.",
+        ["Hip-Hop", "West Coast", "Conscious Rap", "American", "1990s"], 1
+    ),
+    (
+        "album-ice-cube-amerikkkas-most-wanted", "Album",
+        "AmeriKKKa's Most Wanted",
+        "Ice Cube 1990 — his solo debut after leaving N.W.A. over a financial dispute. Recorded in New York with Public Enemy's production team The Bomb Squad, creating a West Coast/East Coast fusion that shouldn't have worked but became iconic. Cube was 21 and angrier than any rapper had ever been on record.",
+        "AmeriKKKa's Most Wanted (1990) end-to-end", 50,
+        "Listen to the title track — Cube narrates America from the perspective of its most wanted citizen. Then 'The Nigga Ya Love to Hate' — the chorus sarcastically thanks the listener for their voyeurism. Cube wrote the whole album in 3 weeks and recorded it in 6.",
+        ["Hip-Hop", "West Coast", "Political Rap", "American", "1990s"], 1
+    ),
+    (
+        "album-nwa-straight-outta-compton", "Album",
+        "Straight Outta Compton",
+        "N.W.A. 1988 — the album that put gangsta rap on the map and got the FBI to send a warning letter to the record label. Recorded for $12,000 in a small Torrance studio. The group's lyrics about police brutality, drug dealing, and life in Compton were so controversial that radio stations refused to play them and they still went platinum.",
+        "Straight Outta Compton (1988) end-to-end", 60,
+        "Listen to 'Fuck tha Police' — the song that prompted the FBI letter. Dr. Dre built the beat from a single drum loop and a siren sound. Then 'Express Yourself' — a track Dre produced as a counterpoint, sampling Charles Wright. The album's impact went beyond music: it forced America to confront what police were doing in Black neighborhoods.",
+        ["Hip-Hop", "Gangsta Rap", "West Coast", "American", "1980s"], 1
+    ),
+    (
+        "album-public-enemy-it-takes-a-nation", "Album",
+        "It Takes a Nation of Millions to Hold Us Back",
+        "Public Enemy 1988 — the album that turned hip-hop into a revolutionary force. The Bomb Squad's production was unlike anything before: layers of sirens, speeches, funk samples, and noise compressed into a sonic assault. Chuck D called rap 'the Black CNN.' The album made the case.",
+        "It Takes a Nation of Millions (1988) end-to-end", 58,
+        "Listen to 'Bring the Noise' — the opening siren is a recording from an actual police car. Then 'Rebel Without a Pause' — the squealing horn sample was pitched up so high it sounds like a fire alarm. Chuck D's baritone was a deliberate contrast to the high-pitched production, anchoring the chaos.",
+        ["Hip-Hop", "East Coast", "Political Rap", "American", "1980s"], 1
+    ),
+    (
+        "album-public-enemy-fear-of-a-black-planet", "Album",
+        "Fear of a Black Planet",
+        "Public Enemy 1990 — recorded during the controversy over Professor Griff's antisemitic remarks, which nearly destroyed the band. The album's denser, darker production reflected the internal chaos. 'Fight the Power' had premiered in Spike Lee's Do the Right Thing a year earlier and became an anthem.",
+        "Fear of a Black Planet (1990) end-to-end", 52,
+        "Listen to 'Fight the Power' — the song references Elvis, John Wayne, and the entire white power structure in under 5 minutes. Then '911 Is a Joke' — Flavor Flav's solo track about ambulance response times in Black neighborhoods. The Bomb Squad reportedly used 150 different samples across the album.",
+        ["Hip-Hop", "East Coast", "Political Rap", "American", "1990s"], 1
+    ),
+    (
+        "album-eric-b-and-rakim-paid-in-full", "Album",
+        "Paid in Full",
+        "Eric B. & Rakim 1987 — the album that changed how rappers rapped. Before Rakim, hip-hop flow was relatively simple; after Rakim, internal rhyme schemes, multi-syllabic patterns, and relaxed delivery became the standard. Eric B.'s production was built from James Brown samples slowed to a crawl.",
+        "Paid in Full (1987) end-to-end", 45,
+        "Listen to 'I Ain't No Joke' — Rakim's opening verse contains 16 bars with 14 internal rhymes. Then 'Eric B. Is President' — recorded in one take in Marley Marl's living room. Rakim was 18. The album cost $5,000 to make and became the blueprint for every rapper who followed.",
+        ["Hip-Hop", "East Coast", "American", "1980s"], 1
+    ),
+    (
+        "album-mobb-deep-the-infamous", "Album",
+        "The Infamous",
+        "Mobb Deep 1995 — recorded in a Queensbridge apartment by two teenagers, Havoc and Prodigy. Havoc, who had never produced before, taught himself on an Akai MPC and a cheap keyboard. The album's sound — minor-key piano loops, sparse drums, whispered threats — defined East Coast hardcore hip-hop.",
+        "The Infamous (1995) end-to-end", 67,
+        "Listen to 'Shook Ones, Pt. II' — Havoc found the piano sample on a Herbie Hancock record and slowed it down until it sounded haunted. Then 'Survival of the Fittest' — the beat is two notes and a snare. Prodigy was 19 when he wrote 'I'm only 19 but my mind is old.' The album made Queensbridge the most famous housing project in music.",
+        ["Hip-Hop", "East Coast", "Hardcore Hip-Hop", "American", "1990s"], 1
+    ),
+    (
+        "album-jay-z-reasonable-doubt", "Album",
+        "Reasonable Doubt",
+        "Jay-Z 1996 — recorded when no label would sign him, so he started Roc-A-Fella Records with Damon Dash and Kareem Burke. The album was recorded in various New York studios, often at night after other sessions had finished. Jay-Z was 26, a former drug dealer who'd decided rap was his way out.",
+        "Reasonable Doubt (1996) end-to-end", 55,
+        "Listen to 'Can't Knock the Hustle' — Mary J. Blige sings the hook. Jay-Z's flow is so relaxed it sounds like a conversation. Then 'Dead Presidents II' — the Nas sample was a deliberate homage to Illmatic. The album's mafioso-rap style — all Italian suits, Cuban cigars, and champagne — created Jay-Z's persona as hip-hop's CEO.",
+        ["Hip-Hop", "East Coast", "Mafioso Rap", "American", "1990s"], 1
+    ),
+    (
+        "album-jay-z-the-blueprint", "Album",
+        "The Blueprint",
+        "Jay-Z 2001 — released on September 11, 2001. Despite the attacks, it debuted at #1 and sold 427,000 copies in its first week. Recorded in just 30 days with producers Kanye West (then unknown) and Just Blaze. Jay-Z was simultaneously preparing for a trial on assault charges; he recorded vocals during court recesses.",
+        "The Blueprint (2001) end-to-end", 63,
+        "Listen to 'Izzo (H.O.T.A.)' — Kanye built the beat from a Jackson 5 sample pitched up to chipmunk speed, a technique that would define 2000s hip-hop. Then 'Song Cry' — Jay-Z's vulnerability here was unprecedented for a rapper at his commercial peak. The album's soul-sample production was Kanye's audition for his own career.",
+        ["Hip-Hop", "East Coast", "American", "2000s"], 1
+    ),
+    (
+        "album-outkast-aquemini", "Album",
+        "Aquemini",
+        "OutKast 1998 — the album where André 3000 and Big Boi proved the South could make art as ambitious as anyone. The title combines their zodiac signs (Aquarius and Gemini). Recorded in Atlanta with live instrumentation when most hip-hop relied on samples. George Clinton called it 'the funkiest album I've heard in years.'",
+        "Aquemini (1998) end-to-end", 74,
+        "Listen to 'Rosa Parks' — the song's energy is so infectious that Rosa Parks herself sued for using her name (the case was eventually settled). Then 'SpottieOttieDopaliscious' — a 7-minute track with no chorus, just horn stabs and spoken-word verses about Atlanta nightlife. André's verse about the club shooting is one of the most vivid stories in hip-hop.",
+        ["Hip-Hop", "Southern Hip-Hop", "American", "1990s"], 1
+    ),
+    (
+        "album-outkast-stankonia", "Album",
+        "Stankonia",
+        "OutKast 2000 — recorded in a converted Atlanta warehouse they called Stankonia Studios. The album broke every rule: funk, psychedelia, drum & bass, gospel, and Prince-influenced freak-outs. 'B.O.B.' was recorded at 165 BPM when most rap was under 100. It became their commercial breakthrough.",
+        "Stankonia (2000) end-to-end", 73,
+        "Listen to 'B.O.B. (Bombs Over Baghdad)' — the drum programming by André 3000 was inspired by UK jungle music. The guitar solo was played through a wah-wah pedal by a session guitarist who'd never heard OutKast before. Then 'Ms. Jackson' — André wrote it as an apology to Erykah Badu's mother after their breakup.",
+        ["Hip-Hop", "Southern Hip-Hop", "Funk", "American", "2000s"], 1
+    ),
+    (
+        "album-ugk-ridin-dirty", "Album",
+        "Ridin' Dirty",
+        "UGK 1996 — Bun B and Pimp C's masterpiece. Pimp C, incarcerated at the time of release, produced most of the album from prison using a cassette recorder to sketch ideas. The album's title refers to driving with illegal substances or weapons, a constant reality for the Port Arthur, Texas duo.",
+        "Ridin' Dirty (1996) end-to-end", 65,
+        "Listen to 'One Day' — Pimp C's production layers a Gospel sample over a slow-rolling bassline. Then 'Murder' — Bun B's verse is a masterclass in Southern storytelling, delivered with the authority of someone who saw everything he describes. The album defined Southern hip-hop's independent spirit before the mainstream caught on.",
+        ["Hip-Hop", "Southern Hip-Hop", "American", "1990s"], 1
+    ),
+    (
+        "album-scarface-the-diary", "Album",
+        "The Diary",
+        "Scarface 1994 — the Geto Boys member's third solo album, recorded during a period of severe depression. Scarface's storytelling — about poverty, mental illness, and survival — brought literary depth to gangsta rap. The album's production by N.O. Joe and Mike Dean created the template for Southern hip-hop's dark, soulful sound.",
+        "The Diary (1994) end-to-end", 50,
+        "Listen to 'I Seen a Man Die' — Scarface narrates a death from three perspectives: the victim, the shooter, and God. Then 'Mind Playin' Tricks on Me' (originally a Geto Boys track) — Scarface's verse about paranoia and hallucinations is based on his own experiences with depression. He later checked himself into a psychiatric hospital.",
+        ["Hip-Hop", "Southern Hip-Hop", "American", "1990s"], 1
+    ),
+    (
+        "album-lil-wayne-tha-carter-iii", "Album",
+        "Tha Carter III",
+        "Lil Wayne 2008 — recorded during what Wayne called his 'mixtape era', when he was releasing a new track almost daily. The album sold 1 million copies in its first week, the last hip-hop album to do so for nearly a decade. Wayne's wordplay — puns, metaphors, free association — rewired what rap lyrics could be.",
+        "Tha Carter III (2008) end-to-end", 77,
+        "Listen to 'A Milli' — the beat is a single vocal sample repeated for 3 minutes. Wayne recorded his verse in 20 minutes without writing anything down. Then 'Lollipop' — the Auto-Tuned hook was Wayne's first experiment with singing, which would define the next decade of hip-hop. Static Major, who co-wrote the hook, died a week before the album's release.",
+        ["Hip-Hop", "Southern Hip-Hop", "American", "2000s"], 1
+    ),
+    (
+        "album-ti-king", "Album",
+        "King",
+        "T.I. 2006 — the album that crowned him 'King of the South.' Recorded in Atlanta with a roster of producers including Just Blaze, Toomp, and Swizz Beatz. T.I.'s cocky, conversational flow — half-rapping, half-talking — bridged the gap between Southern trap and mainstream hip-hop.",
+        "King (2006) end-to-end", 64,
+        "Listen to 'What You Know' — the synth line was played by DJ Toomp on a Roland Juno-106. T.I.'s opening line 'Don't you know I got the key by me?' is delivered with the confidence of someone who doesn't need to raise his voice. Then 'Why You Wanna' — the song samples a Crystal Waters house track, proving Southern hip-hop could make dance records too.",
+        ["Hip-Hop", "Southern Hip-Hop", "Trap", "American", "2000s"], 1
+    ),
+    (
+        "album-young-jeezy-thug-motivation-101", "Album",
+        "Let's Get It: Thug Motivation 101",
+        "Young Jeezy 2005 — the album that made trap music a national phenomenon. Recorded in Atlanta with Shawty Redd's minimalist production: 808 drums, church bells, and synth strings. Jeezy's ad-libs ('yeahhh', 'that's riiight') became as quotable as his verses.",
+        "Thug Motivation 101 (2005) end-to-end", 65,
+        "Listen to 'Soul Survivor' — Akon sings the hook about surviving the streets. Jeezy's verse is a checklist of everything he overcame. Then 'Go Crazy' — the beat is an 808 kick and a single synth note. Jay-Z's guest verse was recorded in 15 minutes in a hotel room. The album's snowman logo became a cultural symbol.",
+        ["Hip-Hop", "Southern Hip-Hop", "Trap", "American", "2000s"], 1
+    ),
+    (
+        "album-gucci-mane-the-state-vs-radric-davis", "Album",
+        "The State vs. Radric Davis",
+        "Gucci Mane 2009 — his major-label debut, named after his ongoing legal case. Gucci's stream-of-consciousness delivery and unpredictable punchlines made him a cult hero. The album was recorded between jail stints. The cover is a literal mugshot.",
+        "The State vs. Radric Davis (2009) end-to-end", 60,
+        "Listen to 'Wasted' — featuring Plies, the chorus about getting drunk became a college anthem. Then 'Lemonade' — the beat sounds like a carnival ride breaking down. Gucci's influence on the next decade of hip-hop — from Migos to 21 Savage — is hard to overstate.",
+        ["Hip-Hop", "Southern Hip-Hop", "Trap", "American", "2000s"], 1
+    ),
+    (
+        "album-future-ds2", "Album",
+        "DS2 (Dirty Sprite 2)",
+        "Future 2015 — the album that perfected the sound of narcotic melancholy. Recorded with Metro Boomin, Southside, and Zaytoven in Atlanta. Future's Auto-Tuned voice, half-sung and half-cried, captured a specific kind of post-success emptiness. The album's influence is audible in almost every rap record made since.",
+        "DS2 (2015) end-to-end", 53,
+        "Listen to 'Thought It Was a Drought' — Future mumbles the chorus through a fog of cough syrup, and somehow it's a hit. Then 'Where Ya At' — Drake's guest verse was recorded via email. The album's production is built almost entirely from 808s, hi-hats, and atmospheric synths — the definitive trap sound.",
+        ["Hip-Hop", "Trap", "Southern Hip-Hop", "American", "2010s"], 1
+    ),
+    (
+        "album-migos-culture", "Album",
+        "Culture",
+        "Migos 2017 — the album that turned the triplet flow into a global phenomenon. Recorded in Atlanta and Los Angeles over a year. The trio — Quavo, Offset, and Takeoff — traded verses with a chemistry that felt telepathic. 'Bad and Boujee' became a meme, a #1 single, and the cultural moment when trap officially conquered pop.",
+        "Culture (2017) end-to-end", 58,
+        "Listen to 'Bad and Boujee' — Lil Uzi Vert's ad-libbed verse was recorded in 10 minutes. The 'raindrop, drop-top' opening couplet became one of the most-quoted lyrics of the decade. Then 'T-Shirt' — the triplet flow on the verses turns the English language into pure rhythm. Offset's verse on 'Deadz' was widely considered the best rap verse of 2017.",
+        ["Hip-Hop", "Trap", "Southern Hip-Hop", "American", "2010s"], 1
+    ),
+    (
+        "album-travis-scott-astroworld", "Album",
+        "Astroworld",
+        "Travis Scott 2018 — named after the demolished Houston amusement park, an album-length nostalgia trip. Recorded over two years with dozens of producers. Scott's production philosophy — maximalist, atmospheric, deliberately disorienting — made the album feel like a theme park ride itself.",
+        "Astroworld (2018) end-to-end", 59,
+        "Listen to 'Sicko Mode' — the song has three distinct beat switches, each produced by a different team. Drake's verse appears at a seemingly random moment. Then 'Stop Trying to Be God' — Stevie Wonder plays harmonica and James Blake sings the bridge. Scott's genius is making chaos feel like inevitability.",
+        ["Hip-Hop", "Trap", "Southern Hip-Hop", "American", "2010s"], 1
+    ),
+    (
+        "album-common-resurrection", "Album",
+        "Resurrection",
+        "Common 1994 — recorded when he was 22, still called Common Sense (he later dropped 'Sense' after a lawsuit from a reggae band). The album's production by No I.D. (then unknown, later Kanye's mentor) established the soul-sampling Chicago sound. Common's battle-rap skills and social consciousness made him the Midwest's answer to Nas.",
+        "Resurrection (1994) end-to-end", 54,
+        "Listen to 'I Used to Love H.E.R.' — the 'her' in question is hip-hop itself, personified as a woman who's lost her way. The extended metaphor runs for the entire song. Then 'Resurrection' — the title track's opening bars are a direct response to Ice Cube dissing him. No I.D. built the beat from a single Ahmad Jamal piano loop.",
+        ["Hip-Hop", "Conscious Rap", "Midwest", "American", "1990s"], 1
+    ),
+    (
+        "album-mos-def-black-on-both-sides", "Album",
+        "Black on Both Sides",
+        "Mos Def 1999 — a solo debut that ranges from Afrocentric poetry to jazz-inflected rap to straight-up rock. Recorded in New York with a live band on several tracks. Mos Def sang and played drums, bass, and keyboards himself. The album is a deliberate argument that hip-hop could be as musically sophisticated as any genre.",
+        "Black on Both Sides (1999) end-to-end", 71,
+        "Listen to 'Mathematics' — DJ Premier's beat is built from a single 2-bar loop. Mos Def packs references to statistics, history, and street mathematics into every verse. Then 'Umi Says' — the wordless chorus was improvised in the studio. Mos Def later said the album was his attempt to 'make hip-hop that my mother could listen to.'",
+        ["Hip-Hop", "Conscious Rap", "East Coast", "American", "1990s"], 1
+    ),
+    (
+        "album-talib-kweli-quality", "Album",
+        "Quality",
+        "Talib Kweli 2002 — the Brooklyn rapper's most fully realized solo album. Produced primarily by Kanye West (pre-fame) and Hi-Tek. Kweli's lyrical density — five-syllable internal rhymes packed into every bar — made the album a Rosetta Stone for aspiring MCs.",
+        "Quality (2002) end-to-end", 64,
+        "Listen to 'Get By' — Kanye's beat samples Nina Simone's 'Sinnerman' pitched to a frantic tempo. Kweli's three verses each describe different paths to survival: hustling, education, and faith. Then 'The Proud' — produced by Ayatollah, the song is a roll call of Black pride references woven into a love song.",
+        ["Hip-Hop", "Conscious Rap", "East Coast", "American", "2000s"], 1
+    ),
+    (
+        "album-dead-prez-lets-get-free", "Album",
+        "Let's Get Free",
+        "dead prez 2000 — recorded in New York by stic.man and M-1, two activists who met at a Black Panther event. The album's revolutionary politics — veganism, Black nationalism, anti-capitalism — were so far left of mainstream hip-hop that they made Public Enemy sound moderate. The production, dark and minimal, matched the urgency.",
+        "Let's Get Free (2000) end-to-end", 58,
+        "Listen to 'Hip-Hop' — the chorus is a single repeated phrase: 'It's bigger than hip-hop.' The song became an activist anthem. Then 'Mind Sex' — a love song about intellectual and emotional intimacy as political resistance. The album was produced by Lord Jamar of Brand Nubian, who gave it a gritty East Coast foundation.",
+        ["Hip-Hop", "Conscious Rap", "Political Rap", "American", "2000s"], 1
+    ),
+    (
+        "album-dizzee-rascal-boy-in-da-corner", "Album",
+        "Boy in da Corner",
+        "Dizzee Rascal 2003 — the album that invented grime. Recorded in a bedroom in Bow, East London, on a PlayStation and a cheap PC. Dizzee was 18, processing knife crime, teenage pregnancy, and inner-city London life into something entirely new. The beats — built from video game sounds, ringtones, and distorted bass — sounded like nothing else.",
+        "Boy in da Corner (2003) end-to-end", 57,
+        "Listen to 'I Luv U' — the beat is a single distorted bass note and a snare. The call-and-response between Dizzee and the female vocalist narrates a teenage pregnancy argument. Then 'Fix Up, Look Sharp' — the Billy Squier sample was Dizzee's idea after hearing it in a Nike commercial. The album won the Mercury Prize; Dizzee was 19.",
+        ["Hip-Hop", "Grime", "UK", "British", "2000s"], 1
+    ),
+    (
+        "album-wiley-treddin-on-thin-ice", "Album",
+        "Treddin' on Thin Ice",
+        "Wiley 2004 — the godfather of grime's debut album. Recorded in Bow, East London, the same neighborhood as Dizzee Rascal. Wiley's production — sparse, cold, built from video game soundtracks and pirate radio static — created the sonic template for grime. The album was released on XL Recordings after a bidding war.",
+        "Treddin' on Thin Ice (2004) end-to-end", 45,
+        "Listen to 'Wot Do U Call It?' — Wiley addresses the question everyone was asking: what is this music? The answer: 'It's not garage, it's not hip-hop, it's just... this.' Then 'Eskimo' — the instrumental track that became the foundation of grime production. Wiley's Eskibeat sound — cold synth lines over 140 BPM drums — influenced Skepta, Stormzy, and an entire scene.",
+        ["Hip-Hop", "Grime", "UK", "British", "2000s"], 1
+    ),
+    (
+        "album-skepta-konnichiwa", "Album",
+        "Konnichiwa",
+        "Skepta 2016 — the album that brought grime to the global mainstream. Recorded in London and Tokyo. Skepta produced most of the album himself on a laptop. The album won the Mercury Prize. Drake and Kanye West both publicly championed it, but Skepta refused to dilute the sound for American audiences.",
+        "Konnichiwa (2016) end-to-end", 50,
+        "Listen to 'Shutdown' — the opening line 'truss me daddy' became a catchphrase. The video, shot on a London estate, was banned from some platforms for being 'too provocative.' Then 'Man (Gang)' — the beat is a single bass note and an air horn. Skepta's delivery makes 'I said real gangsters don't flex' sound like a universal truth.",
+        ["Hip-Hop", "Grime", "UK", "British", "2010s"], 1
+    ),
+    (
+        "album-stormzy-gang-signs-and-prayer", "Album",
+        "Gang Signs & Prayer",
+        "Stormzy 2017 — the first grime album to debut at #1 on the UK charts. Recorded over two years in London. Stormzy's range — from gospel-choir choruses to hard-edged grime bars — showed that British rap could be commercially massive without compromise. The album cover is Stormzy in a suit, holding a Bible.",
+        "Gang Signs & Prayer (2017) end-to-end", 59,
+        "Listen to 'Blinded by Your Grace, Pt. 2' — the song is a gospel hymn featuring a full choir, and it became a festival singalong. Then 'Big for Your Boots' — a straight grime track produced by Sir Spyro. The album's title is literal: it alternates between street narratives and spiritual searching.",
+        ["Hip-Hop", "Grime", "UK", "British", "2010s"], 1
+    ),
+    (
+        "album-the-streets-original-pirate-material", "Album",
+        "Original Pirate Material",
+        "Mike Skinner (The Streets) 2002 — the album that proved British rap didn't need to sound American. Recorded in a Brixton bedroom on a laptop. Skinner narrated the mundane details of British working-class life — kebabs, minicabs, PlayStation, cheap lager — over garage-influenced beats. His Birmingham accent was so thick Americans needed subtitles.",
+        "Original Pirate Material (2002) end-to-end", 47,
+        "Listen to 'Has It Come to This?' — Skinner's deadpan delivery of observations about pub life, Nokia phones, and Channel 4. Then 'Weak Become Heroes' — a 5-minute story about a night out at a club, taking ecstasy, and the sunrise after. The piano sample is from a 1970s library music record Skinner found at a car boot sale.",
+        ["Hip-Hop", "UK Hip-Hop", "UK Garage", "British", "2000s"], 1
+    ),
+    (
+        "album-dave-psychodrama", "Album",
+        "Psychodrama",
+        "Dave 2019 — the album that won the Mercury Prize and made British rap feel like literature. Recorded over a year in London and Los Angeles. Dave plays piano on nearly every track. The album is structured as a therapy session, which is literal: Dave's brother is serving a life sentence, and the album processes that trauma.",
+        "Psychodrama (2019) end-to-end", 51,
+        "Listen to 'Black' — Dave lists the experience of being Black in Britain in a single verse that runs for 3 minutes without a chorus. Then 'Lesley' — an 11-minute narrative about an abusive relationship, told from the perspective of a concerned friend. The album's therapy-session framing gives it a structure no other rap album has attempted.",
+        ["Hip-Hop", "UK Rap", "Conscious Rap", "British", "2010s"], 1
+    ),
+    (
+        "album-chief-keef-finally-rich", "Album",
+        "Finally Rich",
+        "Chief Keef 2012 — the album that invented drill music. Recorded in Chicago when Keef was 16 and already a legend on the South Side. The production by Young Chop — sparse, menacing, built from 808s and horror-movie synths — created a new sonic language. Keef's delivery, which sounded half-asleep, was actually a refusal to perform emotion.",
+        "Finally Rich (2012) end-to-end", 45,
+        "Listen to 'I Don't Like' — the song that got Kanye West's attention, leading to a remix that introduced drill to the world. Then 'Love Sosa' — the call-and-response chorus was recorded at 3 AM after Keef had been up for two days. The album's influence on modern hip-hop — from the ad-libs to the production style — is impossible to overstate.",
+        ["Hip-Hop", "Drill", "Midwest", "American", "2010s"], 1
+    ),
+    (
+        "album-pop-smoke-shoot-for-the-stars", "Album",
+        "Shoot for the Stars, Aim for the Moon",
+        "Pop Smoke 2020 — released posthumously after the 20-year-old was murdered in a home invasion. The album bridges Brooklyn drill with mainstream hip-hop. 50 Cent executive-produced it. Pop Smoke's gravelly voice — he sounded at least a decade older than he was — made drill radio-friendly without losing its edge.",
+        "Shoot for the Stars (2020) end-to-end", 56,
+        "Listen to 'Dior' — the song that became a global anthem after Pop Smoke's death. The 808 pattern was created by producer 808Melo in 15 minutes. Then 'What You Know Bout Love' — a pop-rap love song that samples a UK garage track, proving drill could be tender. The album debuted at #1; Pop Smoke never lived to see it.",
+        ["Hip-Hop", "Drill", "East Coast", "American", "2020s"], 1
+    ),
+
+    # ═══════════════════════════════════════════════════════════════════════
     # JAZZ — Modal, Hard Bop, Fusion, Free, Latin
     # ═══════════════════════════════════════════════════════════════════════
     (
