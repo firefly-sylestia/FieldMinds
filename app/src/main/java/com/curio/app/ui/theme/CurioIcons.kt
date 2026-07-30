@@ -84,12 +84,15 @@ object CurioIcons {
     const val MenuBook    = "menu_book"
     const val Palette     = "palette"
     const val ScienceGlyph = "science"
+    const val LocalFireDepartment = "local_fire_department"  // flame icon for streak
 
     // ── Status / report glyphs
     const val ErrorOutline = "error_outline"
     const val BugReport     = "bug_report"
     const val Warning       = "warning"
     const val Notifications = "notifications"
+    const val Filter        = "filter_list"     // filter icon (unfilled)
+    const val FilterFilled  = "filter_list_filled"  // filter icon (filled)
 }
 
 /**

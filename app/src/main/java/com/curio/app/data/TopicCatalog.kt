@@ -67,14 +67,30 @@ object TopicCatalog {
     }
 
     /**
-     * Looks up a topic by exact name across all categories.
+     * Looks up a topic by exact name in a specific category (sync).
+     * Searches the already-loaded pool for [categoryId]; returns null
+     * if the pool hasn't been loaded or name not found.
+     *
+     * Used by CaptureEntity.toEntry() to safely reconstruct topics
+     * without cross-category name collisions.
+     */
+    fun findByName(name: String, categoryId: CategoryId): CurioTopic? {
+        val pool = TopicJsonLoader.cached(categoryId) ?: return null
+        return pool.firstOrNull { it.name == name }
+    }
+
+    /**
+     * Looks up a topic by exact name across all categories (legacy).
      * Searches the already-loaded pools; returns null if no pool
      * with [name] has been loaded yet.
      *
      * Use [findByNameAcrossAll] for a guaranteed exhaustive search
      * (suspends to load every category).
+     *
+     * WARNING: Can return wrong topic if name appears in multiple
+     * categories. Prefer [findByName] with explicit categoryId.
      */
-    fun findByName(name: String): CurioTopic? {
+    fun findByNameAnyCategory(name: String): CurioTopic? {
         CategoryId.values().forEach { id ->
             TopicJsonLoader.cached(id)?.firstOrNull { it.name == name }
                 ?.let { return it }

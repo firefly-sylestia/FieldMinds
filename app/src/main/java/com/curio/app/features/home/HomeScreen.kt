@@ -63,6 +63,7 @@ import com.curio.app.data.CurioEntry
 import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.StreakTracker
 import com.curio.app.navigation.CurioRoutes
+import com.curio.app.ui.components.CompactInsets
 import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.StaggeredEntrance
 import com.curio.app.ui.components.StaggeredItem
@@ -152,8 +153,8 @@ fun HomeScreen(navController: NavController) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 0.dp),
+                    .padding(CompactInsets.statusBarOnly())
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -337,20 +338,23 @@ fun HomeScreen(navController: NavController) {
             ) {
                 StatPill(
                     modifier = Modifier.weight(1f),
-                    glyph = "local_fire_department",
+                    glyph = CurioIcons.LocalFireDepartment,
                     value = "$streakDays",
+                    label = "Streak",
                     tint = CurioColors.CoralBlush
                 )
                 StatPill(
                     modifier = Modifier.weight(1f),
                     glyph = CurioIcons.Inventory2,
                     value = "$totalSaved",
+                    label = "Saved",
                     tint = CurioColors.Sage
                 )
                 StatPill(
                     modifier = Modifier.weight(1f),
                     glyph = CurioIcons.History,
                     value = "${recentEntries.size}",
+                    label = "Recent",
                     tint = CurioColors.Lilac
                 )
             }
@@ -498,13 +502,14 @@ fun HomeScreen(navController: NavController) {
 
 // ═══════════════════════════════════════════════════════════════════════
 // Stat pill (compact)
-// ═══════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════��═══════════════════════════
 
 @Composable
 private fun StatPill(
     modifier: Modifier = Modifier,
     glyph: String,
     value: String,
+    label: String,
     tint: Color
 ) {
     Surface(
@@ -512,20 +517,24 @@ private fun StatPill(
         shape = RoundedCornerShape(18.dp),
         color = tint.copy(alpha = 0.10f)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+                .padding(horizontal = 12.dp, vertical = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            CurioIcon(glyph, null, tint = tint, size = 16.dp)
-            Spacer(Modifier.width(8.dp))
+            CurioIcon(glyph, null, tint = tint, size = 18.dp)
             Text(
                 value,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
                 color = tint,
                 maxLines = 1
+            )
+            Text(
+                label,
+                style = MaterialTheme.typography.labelSmall,
+                color = tint.copy(alpha = 0.75f)
             )
         }
     }
@@ -825,16 +834,16 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
             item("profile") {
-                DrawerNavItem(CurioIcons.Person, "Profile & Settings") { onNavigate(CurioRoutes.PROFILE) }
+                DrawerNavItem(CurioIcons.Person, "Profile") { onNavigate(CurioRoutes.PROFILE) }
             }
             item("history") {
-                DrawerNavItem(CurioIcons.History, "Topic History") { onNavigate(CurioRoutes.TOPIC_HISTORY) }
+                DrawerNavItem(CurioIcons.History, "View History") { onNavigate(CurioRoutes.TOPIC_HISTORY) }
             }
             item("manage") {
-                DrawerNavItem(CurioIcons.DragHandle, "Manage Categories") { onNavigate(CurioRoutes.MANAGE_CATEGORIES) }
+                DrawerNavItem(CurioIcons.DragHandle, "Customize") { onNavigate(CurioRoutes.MANAGE_CATEGORIES) }
             }
             item("replay") {
                 DrawerNavItem(CurioIcons.Replay, "Replay Intro") {
@@ -880,7 +889,7 @@ private fun DrawerNavItem(icon: String, label: String, onClick: () -> Unit) {
     }
 }
 
-// ═══════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════���══════════════════
 // Greeting helpers
 // ═══════════════════════════════════════════════════════════════════════
 

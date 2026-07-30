@@ -108,14 +108,17 @@ fun CurioEntry.toEntity(): CaptureEntity = CaptureEntity(
 
 /**
  * Reconstruct [CurioEntry] from a [CaptureEntity] stored in Room.
+ *
+ * Uses category-scoped lookup to avoid cross-category name collisions
+ * (e.g., Films spun from Wildcard incorrectly resolving to another category).
  */
 fun CaptureEntity.toEntry(): CurioEntry {
-    val topicData = TopicJsonLoader.cached(
-        CategoryId.valueOf(categoryId)
-    )?.find { it.name == topicName }
+    val catId = CategoryId.valueOf(categoryId)
+    // Use category-scoped lookup to avoid collisions
+    val topicData = TopicCatalog.findByName(topicName, catId)
     val topic = topicData ?: CurioTopic(
         id = topicId,
-        categoryId = CategoryId.valueOf(categoryId),
+        categoryId = catId,
         subtype = topicSubtype,
         name = topicName,
         teaser = topicTeaser,
