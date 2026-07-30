@@ -926,11 +926,13 @@ private fun CarouselCard(
     val corner = if (isCenter) 28.dp else 22.dp
     val isLanded = landedTopic != null && isCenter
 
-    // Explicit clip before graphicsLayer so scaled cards keep rounded corners.
+    // Box is padded 12dp beyond card size so the shadow elevates outside
+    // the clipped shape — gives the center card real depth instead of cut-off shadow.
+    val boxW = w + if (isCenter) 24.dp else 0.dp
+    val boxH = h + if (isCenter) 24.dp else 0.dp
     Box(
         modifier = Modifier
-            .size(w, h)
-            .clip(RoundedCornerShape(corner))
+            .size(boxW, boxH)
             .graphicsLayer {
                 scaleX = if (isLanded) landScale else s
                 scaleY = if (isLanded) landScale else s
@@ -964,13 +966,13 @@ private fun CarouselCard(
                     MaterialTheme.colorScheme.surfaceContainer
                 },
                 border = if (isCenter) {
-                    BorderStroke(1.dp, accent.copy(alpha = 0.35f))
+                    BorderStroke(1.5.dp, accent.copy(alpha = 0.45f))
                 } else {
                     // Subtle border on side cards for definition in both modes.
                     BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 },
                 shadowElevation = if (isCenter) 12.dp else 2.dp,
-                tonalElevation = if (isCenter) 2.dp else 0.dp,
+                tonalElevation = if (isCenter) 4.dp else 0.dp,
                 modifier = Modifier.fillMaxSize()
             ) {
                 if (currentTopic != null) {
