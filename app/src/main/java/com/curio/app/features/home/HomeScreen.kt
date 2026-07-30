@@ -313,7 +313,7 @@ fun HomeScreen(navController: NavController) {
                                             size = 16.dp
                                         )
                                         Text(
-                                            text = "Spin",
+                                            text = if (isWildcard) "Shuffle" else "Spin",
                                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                                             color = Color.White
                                         )
