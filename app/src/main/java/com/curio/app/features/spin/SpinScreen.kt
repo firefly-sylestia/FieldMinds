@@ -19,6 +19,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -1073,6 +1074,7 @@ private fun CarouselCard(
     enabled: Boolean,
     onTap: () -> Unit
 ) {
+    val isDark = isSystemInDarkTheme()
     val isCenter = slot == 0
     val w = if (isCenter) 250.dp else 210.dp
     val h = if (isCenter) 230.dp else 140.dp
@@ -1082,7 +1084,8 @@ private fun CarouselCard(
         else -> 120f
     }
     val s = if (isCenter) 1f else 0.78f
-    val alpha = if (isCenter) 1f else 0.55f
+    // Side cards: 0.55 in light, 0.68 in dark — keeps them visible against dark backgrounds.
+    val alpha = if (isCenter) 1f else if (isDark) 0.68f else 0.55f
     val corner = if (isCenter) 28.dp else 22.dp
     val isLanded = landedTopic != null && isCenter
 
@@ -1124,8 +1127,11 @@ private fun CarouselCard(
                     MaterialTheme.colorScheme.surfaceContainer
                 },
                 border = if (isCenter) {
-                    BorderStroke(1.dp, accent.copy(alpha = 0.25f))
-                } else null,
+                    BorderStroke(1.dp, accent.copy(alpha = 0.35f))
+                } else {
+                    // Subtle border on side cards for definition in both modes.
+                    BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                },
                 shadowElevation = if (isCenter) 8.dp else 2.dp,
                 tonalElevation = if (isCenter) 2.dp else 0.dp,
                 modifier = Modifier.fillMaxSize()
