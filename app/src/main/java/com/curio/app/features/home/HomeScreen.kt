@@ -2,7 +2,6 @@ package com.curio.app.features.home
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateValueAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -496,12 +495,28 @@ private fun PremiumHeroCard(
         selectedCategory != null -> selectedCategory.accent
         else -> CurioColors.CoralBlush
     }
-    val activeAccent by animateValueAsState(
-        targetValue = targetAccent,
-        typeConverter = Color.VectorConverter,
+    // ── Smooth color interpolation via per-channel animation ─────────────
+    val animatedRed by animateFloatAsState(
+        targetValue = targetAccent.red,
         animationSpec = tween(durationMillis = 500),
-        label = "heroAccent"
+        label = "heroRed"
     )
+    val animatedGreen by animateFloatAsState(
+        targetValue = targetAccent.green,
+        animationSpec = tween(durationMillis = 500),
+        label = "heroGreen"
+    )
+    val animatedBlue by animateFloatAsState(
+        targetValue = targetAccent.blue,
+        animationSpec = tween(durationMillis = 500),
+        label = "heroBlue"
+    )
+    val animatedAlpha by animateFloatAsState(
+        targetValue = targetAccent.alpha,
+        animationSpec = tween(durationMillis = 500),
+        label = "heroAlpha"
+    )
+    val activeAccent = Color(animatedRed, animatedGreen, animatedBlue, animatedAlpha)
 
     // Sparkle rotation: spins when a category is selected
     val sparkleTarget = if (selectedCategory != null) 1f else 0f
