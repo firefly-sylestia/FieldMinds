@@ -89,7 +89,18 @@ object TopicJsonLoader {
             cache[id]?.let { return it }
         }
         val parsed = withContext(Dispatchers.IO) {
-            parseAsset("$ASSET_DIR/${id.routeSlug}.json", id)
+            if (id == CategoryId.WILDCARD) {
+                // Wildcard = merge ALL categories into one big pool.
+                // Use cache for already-loaded categories, parse the rest.
+                CategoryId.values()
+                    .filter { it != CategoryId.WILDCARD }
+                    .flatMap { otherId ->
+                        cache[otherId]
+                            ?: parseAsset("$ASSET_DIR/${otherId.routeSlug}.json", otherId)
+                    }
+            } else {
+                parseAsset("$ASSET_DIR/${id.routeSlug}.json", id)
+            }
         }
         cacheMutex.withLock { cache[id] = parsed }
         return parsed
