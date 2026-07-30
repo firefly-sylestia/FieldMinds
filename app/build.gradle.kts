@@ -69,10 +69,10 @@ android {
         // local `gradlew assembleRelease` still works for testing.
         if (hasReleaseSigningMaterial) {
             create("release") {
-                storeFile = file(keyStorePath ?: "")
-                storePassword = keyStorePassword
-                this.keyAlias = keyAlias
-                this.keyPassword = keyPassword
+                storeFile = file(keyStorePath!!)
+                storePassword = keyStorePassword!!
+                this.keyAlias = keyAlias!!
+                this.keyPassword = keyPassword!!
             }
         }
     }
@@ -80,10 +80,9 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            signingConfig = if (hasReleaseSigningMaterial) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
+            // Use release signing only if all secrets are configured; otherwise use debug
+            if (hasReleaseSigningMaterial) {
+                signingConfig = signingConfigs.getByName("release")
             }
         }
         debug {
