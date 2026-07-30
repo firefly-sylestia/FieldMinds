@@ -89,6 +89,7 @@ object CurioIcons {
     const val ErrorOutline = "error_outline"
     const val BugReport     = "bug_report"
     const val Warning       = "warning"
+    const val Notifications = "notifications"
 }
 
 /**
