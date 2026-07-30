@@ -1,5 +1,7 @@
 package com.curio.app.features.capture.formats
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -8,6 +10,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -57,9 +61,24 @@ fun FieldNotesFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {}
 ) {
+    val context = LocalContext.current
     var observed by remember { mutableStateOf("") }
     var surprised by remember { mutableStateOf("") }
     var learnNext by remember { mutableStateOf("") }
+    var imageUris by remember { mutableStateOf<List<String>>(emptyList()) }
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenMultipleDocuments()
+    ) { uris ->
+        uris.forEach { uri ->
+            runCatching {
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+        }
+        imageUris = (imageUris + uris.map { it.toString() }).take(6)
+    }
 
     var observedExpanded by remember { mutableStateOf(true) }
     var surprisedExpanded by remember { mutableStateOf(true) }
@@ -67,11 +86,12 @@ fun FieldNotesFormat(
 
     val canSave = observed.isNotBlank() ||
                   surprised.isNotBlank() ||
-                  learnNext.isNotBlank()
-    LaunchedEffect(canSave) {
+                  learnNext.isNotBlank() ||
+                  imageUris.isNotEmpty()
+    LaunchedEffect(canSave, observed, surprised, learnNext, imageUris) {
         onCanSaveChange(canSave)
         onDataChanged(
-            if (canSave) CaptureData.FieldNotes(observed, surprised, learnNext)
+            if (canSave) CaptureData.FieldNotes(observed, surprised, learnNext, imageUris)
             else null
         )
     }
@@ -182,13 +202,24 @@ fun FieldNotesFormat(
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            ImageThumb(
-                index = 1,
-                accent = accent,
-                tint = tint,
-                onClick = { /* TODO Phase 4: open lightbox */ },
-                onRemove = { /* TODO Phase 4: actual remove */ }
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                imageUris.forEachIndexed { index, uri ->
+                    ImageThumb(
+                        index = index + 1,
+                        accent = accent,
+                        tint = tint,
+                        imageUri = uri,
+                        onClick = { },
+                        onRemove = { imageUris = imageUris.filterIndexed { i, _ -> i != index } }
+                    )
+                }
+                AddImageButton(
+                    accent = accent,
+                    tint = tint,
+                    label = "Add",
+                    onClick = { imagePicker.launch(arrayOf("image/*")) }
+                )
+            }
         }
     }
 }

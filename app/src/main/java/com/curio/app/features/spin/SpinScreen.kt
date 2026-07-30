@@ -109,10 +109,11 @@ import kotlin.random.Random
 @Composable
 fun SpinScreen(categorySlug: String?, navController: NavController) {
     val context = LocalContext.current
-    val cat = remember(categorySlug) {
-        val resolved = categorySlug?.let { CurioCategories.byRouteSlug(it) }
-            ?: CurioCategories.byId(CategoryId.WILDCARD)
-        resolved
+    var cat by remember(categorySlug) {
+        mutableStateOf(
+            categorySlug?.let { CurioCategories.byRouteSlug(it) }
+                ?: CurioCategories.byId(CategoryId.WILDCARD)
+        )
     }
 
     val pool by produceState<List<CurioTopic>>(initialValue = emptyList(), cat.id) {
@@ -151,7 +152,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 
     LaunchedEffect(shuffleCount) {
         if (shuffleCount == 0) return@LaunchedEffect
-        if (pool.isEmpty()) return@LaunchedEffect
+        if (filteredPool.isEmpty()) return@LaunchedEffect
         shuffling = true
         landedTopic = null
 
@@ -176,7 +177,9 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 val tickDuration = (startMs * (1.0f + progress * 0.4f)).toLong()
                 cyclerProgress.snapTo(progress)
                 tick++
-                visibleTopicIndex = tick % displayPool.size
+                if (displayPool.isNotEmpty()) {
+                    visibleTopicIndex = tick % displayPool.size
+                }
                 delay(tickDuration.coerceAtLeast(200))
             }
             visibleTopicIndex = (displayPool.size - 1).coerceAtLeast(0)
@@ -241,6 +244,17 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
                 color = MaterialTheme.colorScheme.onBackground
             )
         }
+
+        SpinCategoryRow(
+            selected = cat.id,
+            onSelect = { newCategory ->
+                if (!shuffling) {
+                    cat = newCategory
+                    selectedTag = null
+                    landedTopic = null
+                }
+            }
+        )
 
         if (tags.isNotEmpty()) {
             TagChipRow(
@@ -329,7 +343,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 
                 Button(
                     onClick = { if (!shuffling) shuffleCount++ },
-                    enabled = !shuffling && pool.isNotEmpty(),
+                    enabled = !shuffling && filteredPool.isNotEmpty(),
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = cat.accent,
@@ -1174,8 +1188,30 @@ private fun LandedCard(
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Tag chips
+// Category and tag chips
 // ═══════════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun SpinCategoryRow(
+    selected: CategoryId,
+    onSelect: (com.curio.app.data.CurioCategory) -> Unit
+) {
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(CurioCategories.visible) { category ->
+            TagChip(
+                label = category.displayName,
+                glyph = category.iconGlyph,
+                accent = category.accent,
+                selected = selected == category.id,
+                onClick = { onSelect(category) }
+            )
+        }
+    }
+}
 
 @Composable
 private fun TagChipRow(

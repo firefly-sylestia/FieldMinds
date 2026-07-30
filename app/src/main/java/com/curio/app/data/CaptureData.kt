@@ -15,6 +15,7 @@ sealed class CaptureData {
     data class SoundBite(
         val durationSeconds: Int,
         val title: String,
+        val note: String = "",
         val audioFilePath: String? = null,
         val fileSizeBytes: Long = 0,
         val encodingFormat: String = "AAC"
@@ -36,14 +37,16 @@ sealed class CaptureData {
     /** Gallery Wall (§8.4): moodboard collage with caption. */
     data class GalleryWall(
         val imageCount: Int,
-        val caption: String
+        val caption: String,
+        val imageUris: List<String> = emptyList()
     ) : CaptureData()
 
     /** Field Notes (§8.5): three-section observation journal. */
     data class FieldNotes(
         val observed: String,
         val surprised: String,
-        val learnNext: String
+        val learnNext: String,
+        val imageUris: List<String> = emptyList()
     ) : CaptureData()
 
     /**
@@ -86,6 +89,7 @@ sealed class CaptureData {
         is SoundBite -> buildString {
             appendLine("🎙 Voice note · ${durationSeconds}s")
             if (title.isNotBlank()) appendLine("\"$title\"")
+            if (note.isNotBlank()) appendLine(note)
         }
         is ReelNotes -> buildString {
             if (rating > 0) appendLine("★".repeat(rating))
@@ -103,6 +107,7 @@ sealed class CaptureData {
         is GalleryWall -> buildString {
             appendLine("Moodboard · $imageCount image${if (imageCount != 1) "s" else ""}")
             if (caption.isNotBlank()) appendLine(caption)
+            imageUris.forEach { appendLine(it) }
         }
         is FieldNotes -> buildString {
             if (observed.isNotBlank()) {
@@ -118,6 +123,11 @@ sealed class CaptureData {
                 if (observed.isNotBlank() || surprised.isNotBlank()) appendLine()
                 appendLine("📖 Want to learn next:")
                 appendLine(learnNext)
+            }
+            if (imageUris.isNotEmpty()) {
+                if (observed.isNotBlank() || surprised.isNotBlank() || learnNext.isNotBlank()) appendLine()
+                appendLine("Attached images:")
+                imageUris.forEach { appendLine(it) }
             }
         }
         is OpenNotebook -> buildString {

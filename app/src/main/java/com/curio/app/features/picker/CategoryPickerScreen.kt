@@ -1,13 +1,13 @@
 package com.curio.app.features.picker
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -41,9 +40,8 @@ import com.curio.app.data.CurioCategories
 import com.curio.app.data.CurioCategory
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.components.StaggeredEntrance
 import com.curio.app.ui.components.StaggeredItem
-import com.curio.app.ui.components.rememberBreathingScale
+import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
@@ -62,9 +60,6 @@ import com.curio.app.ui.theme.CurioMotion
 @Composable
 fun CategoryPickerScreen(navController: NavController) {
     val categories = remember { CurioCategories.visible }
-
-    // Wildcard gradient animation
-    val wildcardShift = rememberBreathingScale(active = true, amplitude = 0.02f)
 
     Column(
         modifier = Modifier
@@ -106,17 +101,16 @@ fun CategoryPickerScreen(navController: NavController) {
         // ── Tile grid (staggered entrance) ──────────────────────────────────
         MorphEntrance {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
+                columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.weight(1f)
             ) {
                 itemsIndexed(categories) { index, cat ->
                     StaggeredItem(index = index, staggerDelayMs = CurioMotion.Stagger.Fast) {
                         CategoryTile(
                             category = cat,
-                            wildcardShift = wildcardShift,
                             onClick = {
                                 navController.navigate(
                                     CurioRoutes.spinWithCategory(cat.id.routeSlug)
@@ -149,7 +143,6 @@ fun CategoryPickerScreen(navController: NavController) {
 @Composable
 private fun CategoryTile(
     category: CurioCategory,
-    wildcardShift: Float,
     onClick: () -> Unit
 ) {
     var pressed by remember { mutableStateOf(false) }
@@ -160,62 +153,81 @@ private fun CategoryTile(
     )
 
     val isWildcard = category.id == CategoryId.WILDCARD
-    val contentColor = if (isWildcard) Color.White else category.accent
+    val cardBrush = if (isWildcard) {
+        Brush.linearGradient(CurioGradients.WildcardGradientStops)
+    } else {
+        Brush.verticalGradient(
+            listOf(category.accent, category.accent.copy(alpha = 0.78f))
+        )
+    }
 
     Surface(
         onClick = {
             pressed = true
             onClick()
         },
-        shape = RoundedCornerShape(24.dp),
-        color = if (isWildcard) Color.Transparent else category.tint,
+        shape = RoundedCornerShape(28.dp),
+        color = Color.Transparent,
+        shadowElevation = 8.dp,
+        tonalElevation = 4.dp,
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.45f)),
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(156.dp)
             .scale(scale)
     ) {
-        if (isWildcard) {
-            Box(
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(cardBrush)
+        ) {
+            CurioIcon(
+                name = category.iconGlyph,
+                contentDescription = null,
+                tint = Color.White.copy(alpha = 0.16f),
+                size = 104.dp,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer {
-                        scaleX = 1f + wildcardShift * 0.3f
-                        scaleY = 1f + wildcardShift * 0.3f
-                    }
-                    .background(
-                        Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
-                    )
-            ) {
-                TileContent(category = category, contentColor = contentColor)
-            }
-        } else {
-            Box(modifier = Modifier.fillMaxSize()) {
-                TileContent(category = category, contentColor = contentColor)
-            }
+                    .align(Alignment.TopEnd)
+                    .padding(top = 8.dp, end = 4.dp)
+            )
+            TileContent(category = category)
         }
     }
 }
 
 @Composable
-private fun TileContent(category: CurioCategory, contentColor: Color) {
+private fun TileContent(category: CurioCategory) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(18.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        CurioIcon(
-            name = category.iconGlyph,
-            contentDescription = null,
-            tint = contentColor,
-            size = 40.dp
-        )
-        Text(
-            text = category.displayName,
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = contentColor
-        )
+        Surface(
+            shape = RoundedCornerShape(18.dp),
+            color = CurioColors.CreamWhite.copy(alpha = 0.22f)
+        ) {
+            CurioIcon(
+                name = category.iconGlyph,
+                contentDescription = null,
+                tint = Color.White,
+                size = 34.dp,
+                modifier = Modifier.padding(10.dp)
+            )
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                text = category.displayName,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.ExtraBold
+                ),
+                color = Color.White
+            )
+            Text(
+                text = "Spin this lane",
+                style = MaterialTheme.typography.labelMedium,
+                color = Color.White.copy(alpha = 0.78f)
+            )
+        }
     }
 }

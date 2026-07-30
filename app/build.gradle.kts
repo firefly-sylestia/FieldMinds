@@ -123,6 +123,7 @@ dependencies {
     // the bundled M2 vector set, so androidx.compose.material.icons.core is
     // intentionally absent. Re-add only if a screen needs an M2 vector icon.
     implementation(libs.androidx.compose.animation)
+    implementation(libs.io.coil.kt.coil.compose)
     implementation(libs.org.jetbrains.kotlinx.coroutines.android)
 
     // Room database
