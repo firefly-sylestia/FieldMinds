@@ -51,7 +51,7 @@ import com.curio.app.ui.theme.CurioIcons
  */
 @Composable
 fun TopicHistoryScreen(navController: NavController) {
-    val entries by produceState<List<HistoryEntry>>(initialValue = emptyList()) {
+    val entriesState = produceState<List<HistoryEntry>>(initialValue = emptyList()) {
         try {
             CurioRepositoryHolder.repo.observeAll().collect { savedEntries ->
                 value = savedEntries.map { it.toHistoryEntry() }
@@ -60,6 +60,7 @@ fun TopicHistoryScreen(navController: NavController) {
             value = emptyList()
         }
     }
+    val entries = entriesState.value
     val grouped = remember(entries) { entries.groupBy { it.dayLabel } }
 
     Column(
@@ -105,7 +106,7 @@ fun TopicHistoryScreen(navController: NavController) {
                 ),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                grouped.forEach { (dayLabel, dayEntries) ->
+                grouped.forEach { (dayLabel: String, dayEntries: List<HistoryEntry>) ->
                     item(key = "header_$dayLabel") {
                         Text(
                             text = dayLabel,
@@ -116,7 +117,7 @@ fun TopicHistoryScreen(navController: NavController) {
                             modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
                         )
                     }
-                    items(dayEntries, key = { it.id }) { entry ->
+                    items(dayEntries, key = { historyEntry: HistoryEntry -> historyEntry.id }) { entry ->
                         HistoryRow(
                             entry = entry,
                             onClick = {
