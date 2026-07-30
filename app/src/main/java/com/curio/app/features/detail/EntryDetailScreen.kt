@@ -1,6 +1,9 @@
 package com.curio.app.features.detail
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,8 +23,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,9 +39,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +54,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.curio.app.ui.components.WaveformExtractor
+import kotlinx.coroutines.Dispatchers
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -340,8 +348,10 @@ private fun SoundBiteRender(entry: CurioEntry, category: CurioCategory) {
 }
 
 /**
- * Compact ExoPlayer-based audio playback bar with play/pause + seek slider.
- * Handles player lifecycle automatically via [DisposableEffect].
+ * Compact ExoPlayer-based audio playback bar with real waveform + play/pause.
+ * The waveform is extracted from the audio file using [WaveformExtractor]
+ * and rendered as vertical amplitude bars. Played region shows in [accent],
+ * unplayed in [tint]. Tap or drag on the waveform to seek.
  */
 @Composable
 private fun AudioPlayerBar(
@@ -354,6 +364,16 @@ private fun AudioPlayerBar(
     var currentPosition by remember { mutableLongStateOf(0L) }
     var duration by remember { mutableLongStateOf(0L) }
     var sliderPosition by remember { mutableFloatStateOf(0f) }
+
+    // Extract waveform samples off the main thread
+    val waveformSamples by produceState<FloatArray>(
+        initialValue = FloatArray(120),
+        key1 = audioFilePath
+    ) {
+        value = withContext(kotlinx.coroutines.Dispatchers.Default) {
+            WaveformExtractor.extract(audioFilePath, barCount = 120)
+        } ?: FloatArray(120) { kotlin.random.Random.nextFloat() * 0.6f + 0.2f }
+    }
 
     val player = remember {
         ExoPlayer.Builder(context.applicationContext).build().apply {
@@ -398,22 +418,23 @@ private fun AudioPlayerBar(
         }
     }
 
-    // ── Seek slider + play/pause ────────────────────────────────────────
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Slider(
-            value = sliderPosition,
-            onValueChange = { fraction ->
-                sliderPosition = fraction
+    // ── Waveform + play/pause ───────────────────────────────────────────
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        WaveformCanvas(
+            samples = waveformSamples,
+            progress = sliderPosition,
+            accent = accent,
+            tint = tint,
+            onSeek = { fraction ->
+                sliderPosition = fraction.coerceIn(0f, 1f)
                 val seekMs = (fraction * duration).toLong()
                 player.seekTo(seekMs)
                 currentPosition = seekMs
             },
-            colors = SliderDefaults.colors(
-                thumbColor = accent,
-                activeTrackColor = accent,
-                inactiveTrackColor = tint
-            ),
-            modifier = Modifier.fillMaxWidth().height(24.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .clip(RoundedCornerShape(12.dp))
         )
 
         Row(
@@ -442,7 +463,6 @@ private fun AudioPlayerBar(
                 }
             }
 
-            // Time readout
             Text(
                 text = "${formatMs(currentPosition)} / ${formatMs(duration)}",
                 style = MaterialTheme.typography.labelSmall,
@@ -452,7 +472,81 @@ private fun AudioPlayerBar(
     }
 }
 
-/** Format milliseconds to mm:ss */
+/**
+ * Renders waveform amplitude bars with a progress overlay and seek support.
+ *
+ * @param samples  Normalized amplitude values (0.0–1.0) from [WaveformExtractor].
+ * @param progress Playback progress fraction (0.0–1.0).
+ * @param accent   Color for the played portion of the waveform.
+ * @param tint     Color for the unplayed portion.
+ * @param onSeek   Called with fraction (0.0–1.0) when the user taps or drags.
+ */
+@Composable
+private fun WaveformCanvas(
+    samples: FloatArray,
+    progress: Float,
+    accent: Color,
+    tint: Color,
+    onSeek: (Float) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var dragFraction by remember { mutableFloatStateOf(-1f) }
+
+    Canvas(
+        modifier = modifier
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectTapGestures { offset ->
+                    onSeek((offset.x / size.width).coerceIn(0f, 1f))
+                }
+            }
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onDragStart = { offset ->
+                        dragFraction = (offset.x / size.width).coerceIn(0f, 1f)
+                        onSeek(dragFraction)
+                    },
+                    onDrag = { _, dragAmount ->
+                        dragFraction = (dragFraction + dragAmount / size.width).coerceIn(0f, 1f)
+                        onSeek(dragFraction)
+                    },
+                    onDragEnd = { dragFraction = -1f }
+                )
+            }
+    ) {
+        if (samples.isEmpty()) return@Canvas
+
+        val barCount = samples.size
+        val gap = 2.dp.toPx()
+        val totalGap = gap * (barCount - 1)
+        val barWidth = ((size.width - totalGap) / barCount).coerceAtLeast(1f)
+        val playedIndex = (progress * barCount).toInt().coerceIn(0, barCount)
+
+        // Draw each bar
+        for (i in 0 until barCount) {
+            val barHeight = samples[i] * size.height * 0.9f
+            val x = i * (barWidth + gap)
+            val y = (size.height - barHeight) / 2f
+            val color = if (i <= playedIndex) accent else tint
+
+            drawRoundRect(
+                color = color.copy(alpha = if (i <= playedIndex) 0.9f else 0.45f),
+                topLeft = Offset(x, y),
+                size = Size(barWidth, barHeight.coerceAtLeast(2.dp.toPx())),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(barWidth / 3f)
+            )
+        }
+
+        // Position indicator line
+        val indicatorX = progress * size.width
+        drawLine(
+            color = accent,
+            start = Offset(indicatorX, 0f),
+            end = Offset(indicatorX, size.height),
+            strokeWidth = 2.dp.toPx()
+        )
+    }
+}
 private fun formatMs(ms: Long): String {
     val totalSecs = (ms / 1000).coerceAtLeast(0)
     val mins = totalSecs / 60
