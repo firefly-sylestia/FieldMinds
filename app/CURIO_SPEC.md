@@ -12,6 +12,7 @@ Style system: Material Design 3, customized with a pastel + playful skin.
 |---|---|---|
 | v1 | (user's original paste) | Initial spec with Category Picker as bottom sheet + Exploration Hub in the Spin→Capture flow + emoji-based category totem icons. |
 | **v2** | today | **Category Picker → full-screen page** (own back-stack entry). **Exploration Hub removed** from the flow (Topic Reveal goes straight to Record/Capture; scratchpad state preserved for future). **No emoji anywhere** — Material Symbols (inherited from `app-legacy/`) for category glyphs, `geom.ttf` (inherited from `app-legacy/`) for display/headline typography. "Recently explored" carousel confirmed on Home + Cabinet stays as separate bottom-nav tab. New §13 (Missing/Additional Screens) + §14 (Open Decisions). |
+| **v3** | 2026-07-30 | Category Picker cards use full-accent hero-card styling with 2-column spacing. The Spin screen includes an in-screen category rail so category changes retarget the current topic pool. First launch routes Splash → Onboarding until the intro is completed. Capture formats support saved voice-note context plus image attachments for Gallery Wall and Field Notes. |
 
 Working name for the app: **CURIO**
 Working name for the roulette feature: **THE SPIN**
@@ -158,7 +159,7 @@ INTERACTIONS
   - "Skip" jumps straight to Home from any slide.
   - On slide 3, "Next" becomes "Let's go" (primary filled M3 button, pill-shaped, coral).
   - Page dots are tappable — jumping to any dot navigates directly there.
-  - This whole flow never reappears after first completion (persisted flag), but is reachable again from Settings ("Replay intro" → §11 → §13.4).
+  - This whole flow never reappears after first completion (persisted flag), but is reachable again from Settings ("Replay intro" → §11 → §13.4). Splash must route first-time installs here before Home.
 
 ---
 

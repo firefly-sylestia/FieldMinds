@@ -21,14 +21,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.curio.app.data.CaptureFormat
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
+import com.curio.app.data.CurioEntry
+import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.ui.components.CurioBackButton
 import com.curio.app.ui.components.CurioEmptyState
 import com.curio.app.ui.components.ScreenEntrance
@@ -42,13 +46,21 @@ import com.curio.app.ui.theme.CurioIcons
  * "Yesterday" / "Last week" headers). Each row shows the topic name +
  * the category accent + a small format glyph + relative time.
  *
- * In the placeholder phase, [mockHistoryProvider] supplies 6 sample
- * entries so the UI is fully renderable. Real persistence (Room) lands
- * alongside the data layer phase.
+ * Backed by saved capture persistence so the history reflects real topics
+ * the user has captured instead of placeholder samples.
  */
 @Composable
 fun TopicHistoryScreen(navController: NavController) {
-    val entries = remember { mockHistoryProvider() }
+    val entriesState = produceState<List<HistoryEntry>>(initialValue = emptyList()) {
+        try {
+            CurioRepositoryHolder.repo.observeAll().collect { savedEntries ->
+                value = savedEntries.map { it.toHistoryEntry() }
+            }
+        } catch (_: Exception) {
+            value = emptyList()
+        }
+    }
+    val entries = entriesState.value
     val grouped = remember(entries) { entries.groupBy { it.dayLabel } }
 
     Column(
@@ -94,7 +106,7 @@ fun TopicHistoryScreen(navController: NavController) {
                 ),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                grouped.forEach { (dayLabel, dayEntries) ->
+                grouped.forEach { (dayLabel: String, dayEntries: List<HistoryEntry>) ->
                     item(key = "header_$dayLabel") {
                         Text(
                             text = dayLabel,
@@ -105,7 +117,7 @@ fun TopicHistoryScreen(navController: NavController) {
                             modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
                         )
                     }
-                    items(dayEntries, key = { it.id }) { entry ->
+                    items(dayEntries, key = { historyEntry: HistoryEntry -> historyEntry.id }) { entry ->
                         HistoryRow(
                             entry = entry,
                             onClick = {
@@ -183,7 +195,7 @@ private fun HistoryRow(entry: HistoryEntry, onClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 CurioIcon(
-                    name = CurioIcons.Mic,  // placeholder format glyph for now
+                    name = entry.formatGlyph,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     size = 16.dp,
@@ -201,14 +213,46 @@ private data class HistoryEntry(
     val topicName: String,
     val categoryId: CategoryId,
     val relativeTime: String,
-    val dayLabel: String
+    val dayLabel: String,
+    val formatGlyph: String
 )
 
-private fun mockHistoryProvider(): List<HistoryEntry> = listOf(
-    HistoryEntry("h1", "Frida Kahlo",        CategoryId.PAINTERS,    "20 min ago", "Today"),
-    HistoryEntry("h2", "Tame Impala",        CategoryId.ALBUMS,      "2 hr ago",   "Today"),
-    HistoryEntry("h3", "Hikaru Utada",       CategoryId.ARTISTS,     "yesterday",  "Yesterday"),
-    HistoryEntry("h4", "Akira Kurosawa",     CategoryId.DIRECTORS,   "yesterday",  "Yesterday"),
-    HistoryEntry("h5", "Ursula K. Le Guin",  CategoryId.AUTHORS,     "3 days ago", "This week"),
-    HistoryEntry("h6", "Black Holes",        CategoryId.DISCOVERIES, "5 days ago", "This week")
+private fun CurioEntry.toHistoryEntry(): HistoryEntry = HistoryEntry(
+    id = id,
+    topicName = topic.name,
+    categoryId = topic.categoryId,
+    relativeTime = relativeTime(capturedAtMillis),
+    dayLabel = dayLabel(capturedAtMillis),
+    formatGlyph = format.toGlyph()
 )
+
+private fun CaptureFormat.toGlyph(): String = when (this) {
+    CaptureFormat.SoundBite -> CurioIcons.Mic
+    CaptureFormat.ReelNotes -> CurioIcons.Movie
+    CaptureFormat.Marginalia -> CurioIcons.MenuBook
+    CaptureFormat.GalleryWall -> CurioIcons.Image
+    CaptureFormat.FieldNotes -> CurioIcons.Science
+    CaptureFormat.OpenNotebook -> CurioIcons.Edit
+}
+
+private fun dayLabel(timestamp: Long): String {
+    val elapsed = (System.currentTimeMillis() - timestamp).coerceAtLeast(0L)
+    val days = elapsed / (24L * 60L * 60L * 1000L)
+    return when (days) {
+        0L -> "Today"
+        1L -> "Yesterday"
+        in 2L..6L -> "This week"
+        else -> "Earlier"
+    }
+}
+
+private fun relativeTime(timestamp: Long): String {
+    val elapsedMinutes = ((System.currentTimeMillis() - timestamp).coerceAtLeast(0L) / 60_000L)
+    return when {
+        elapsedMinutes < 1L -> "just now"
+        elapsedMinutes < 60L -> "${elapsedMinutes} min ago"
+        elapsedMinutes < 24L * 60L -> "${elapsedMinutes / 60L} hr ago"
+        elapsedMinutes < 48L * 60L -> "yesterday"
+        else -> "${elapsedMinutes / (24L * 60L)} days ago"
+    }
+}

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.background
@@ -34,10 +33,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.curio.app.data.TopicJsonLoader
+import com.curio.app.features.onboarding.CurioOnboardingState
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
@@ -69,6 +68,7 @@ import kotlinx.coroutines.delay
  */
 @Composable
 fun SplashScreen(navController: NavHostController) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     var pulseIndex by remember { mutableStateOf(0) }
     var entranceReady by remember { mutableStateOf(false) }
 
@@ -114,7 +114,12 @@ fun SplashScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         TopicJsonLoader.preloadAll()
         delay(800)
-        navController.navigate(CurioRoutes.HOME) {
+        val destination = if (CurioOnboardingState.isComplete(context)) {
+            CurioRoutes.HOME
+        } else {
+            CurioRoutes.ONBOARDING
+        }
+        navController.navigate(destination) {
             popUpTo(CurioRoutes.SPLASH) { inclusive = true }
         }
     }

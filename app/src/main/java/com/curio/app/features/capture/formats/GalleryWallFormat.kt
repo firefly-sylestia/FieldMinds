@@ -1,6 +1,9 @@
 package com.curio.app.features.capture.formats
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.curio.app.data.CaptureData
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +31,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
@@ -37,6 +42,7 @@ import androidx.compose.ui.zIndex
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import coil.compose.rememberAsyncImagePainter
 
 /**
  * Gallery Wall format body — CURIO_SPEC §8.4 (Visual Art / Painters).
@@ -66,14 +72,42 @@ fun GalleryWallFormat(
     onCanSaveChange: (Boolean) -> Unit,
     onDataChanged: (CaptureData?) -> Unit = {}
 ) {
+    val context = LocalContext.current
     val tiles = remember { mutableStateListOf<TileData>() }
     var caption by remember { mutableStateOf("") }
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenMultipleDocuments()
+    ) { uris ->
+        uris.forEach { uri ->
+            runCatching {
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+        }
+        uris.forEach { uri ->
+            tiles.add(
+                TileData(
+                    uri = uri.toString(),
+                    offsetXDp = (10..120).random().toFloat(),
+                    offsetYDp = (10..160).random().toFloat(),
+                    rotationDeg = (-10..10).random().toFloat(),
+                    sizeDp = (90..140).random().toFloat()
+                )
+            )
+        }
+    }
 
     val canSave = tiles.isNotEmpty()
-    LaunchedEffect(canSave) {
+    LaunchedEffect(canSave, caption, tiles.size) {
         onCanSaveChange(canSave)
         onDataChanged(
-            if (canSave) CaptureData.GalleryWall(tiles.size, caption)
+            if (canSave) CaptureData.GalleryWall(
+                imageCount = tiles.size,
+                caption = caption,
+                imageUris = tiles.map { it.uri }
+            )
             else null
         )
     }
@@ -168,11 +202,11 @@ fun GalleryWallFormat(
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier.fillMaxSize()
                                 ) {
-                                    CurioIcon(
-                                        name = CurioIcons.Image,
+                                    Image(
+                                        painter = rememberAsyncImagePainter(tile.uri),
                                         contentDescription = null,
-                                        tint = Color.White.copy(alpha = 0.85f),
-                                        size = 32.dp
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier.fillMaxSize()
                                     )
                                 }
                             }
@@ -202,14 +236,7 @@ fun GalleryWallFormat(
                 // ── Floating "+ Add" button (bottom-right) ───────────────────
                 Surface(
                     onClick = {
-                        tiles.add(
-                            TileData(
-                                offsetXDp = (10..120).random().toFloat(),
-                                offsetYDp = (10..160).random().toFloat(),
-                                rotationDeg = (-10..10).random().toFloat(),
-                                sizeDp = (90..140).random().toFloat()
-                            )
-                        )
+                        imagePicker.launch(arrayOf("image/*"))
                     },
                     shape = CircleShape,
                     color = accent,
@@ -256,6 +283,7 @@ fun GalleryWallFormat(
 
 /** Per-tile positioning + size metadata. */
 private data class TileData(
+    val uri: String,
     val offsetXDp: Float,
     val offsetYDp: Float,
     val rotationDeg: Float,

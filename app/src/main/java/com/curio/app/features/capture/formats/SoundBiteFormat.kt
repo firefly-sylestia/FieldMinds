@@ -90,6 +90,7 @@ fun SoundBiteFormat(
     var recordingState by remember { mutableStateOf(AudioRecorder.State.IDLE) }
     var recordingSeconds by remember { mutableIntStateOf(0) }
     var title by remember { mutableStateOf("") }
+    var note by remember { mutableStateOf("") }
     var savedFilePath by remember { mutableStateOf<String?>(null) }
     var permissionDenied by remember { mutableStateOf(false) }
 
@@ -158,12 +159,13 @@ fun SoundBiteFormat(
                   recordingSeconds > 0 &&
                   savedFilePath != null &&
                   !trimInProgress
-    LaunchedEffect(canSave, savedFilePath, title) {
+    LaunchedEffect(canSave, savedFilePath, title, note) {
         onCanSaveChange(canSave)
         onDataChanged(
             if (canSave) CaptureData.SoundBite(
                 durationSeconds = recordingSeconds,
                 title = title,
+                note = note,
                 audioFilePath = savedFilePath
             )
             else null
@@ -307,8 +309,21 @@ fun SoundBiteFormat(
             singleLine = true,
             enabled = recordingState != AudioRecorder.State.RECORDING,
             shape = RoundedCornerShape(16.dp),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = note,
+            onValueChange = { note = it },
+            label = { Text("Add notes or context (optional)") },
+            placeholder = { Text("What did this recording capture?") },
+            enabled = recordingState != AudioRecorder.State.RECORDING,
+            shape = RoundedCornerShape(16.dp),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Default),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp)
         )
     }
 }
