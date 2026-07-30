@@ -1294,11 +1294,11 @@ private fun CategoryPickerSheet(
             visible = visible,
             enter = slideInVertically(
                 initialOffsetY = { it },
-                animationSpec = CurioMotion.Springs.Snappy
+                animationSpec = tween(350, easing = FastOutSlowInEasing)
             ) + fadeIn(animationSpec = tween(280)),
             exit = slideOutVertically(
                 targetOffsetY = { it },
-                animationSpec = tween(240)
+                animationSpec = tween(240, easing = FastOutSlowInEasing)
             ) + fadeOut(animationSpec = tween(180))
         ) {
             Surface(
