@@ -115,6 +115,9 @@ import kotlin.random.Random
  *     in header, clear-all button, better visual hierarchy.
  *  7. **Smoother spin animation** — improved deceleration curve with a
  *     sinusoidal ease-out for more natural settling.
+ *  8. **Tighter top spacing** — negative -6dp offset pulls the bar
+ *     further into the status bar area.
+ *  9. **Premium carousel** — 12dp shadow on center card, deeper depth.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -237,7 +240,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             cat = cat,
             poolCount = pool.size,
             filteredCount = filteredPool.size,
-            modifier = Modifier.statusBarsPadding().offset(y = (-2).dp),
+            modifier = Modifier.statusBarsPadding().offset(y = (-6).dp),
             onBack = { navController.popBackStack() },
             onCategoryChange = { activeCategory = it },
             onBrowseAll = { navController.navigate(CurioRoutes.PICKER) }
@@ -966,7 +969,7 @@ private fun CarouselCard(
                     // Subtle border on side cards for definition in both modes.
                     BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 },
-                shadowElevation = if (isCenter) 8.dp else 2.dp,
+                shadowElevation = if (isCenter) 12.dp else 2.dp,
                 tonalElevation = if (isCenter) 2.dp else 0.dp,
                 modifier = Modifier.fillMaxSize()
             ) {
