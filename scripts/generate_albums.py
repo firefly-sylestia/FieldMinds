@@ -2076,6 +2076,178 @@ ALBUMS = [
     ),
 
     # ═══════════════════════════════════════════════════════════════════════
+    # WORLD/METAL/COUNTRY/FOLK BATCH 6
+    # ═══════════════════════════════════════════════════════════════════════
+    (
+        "album-ali-farka-toure-talking-timbuktu", "Album",
+        "Talking Timbuktu",
+        "Ali Farka Touré and Ry Cooder 1994 — the album that introduced Malian blues to the world. Touré, a farmer and guitarist from northern Mali, played a style so close to American Delta blues that musicologists debated whether the blues traveled from Africa to America or back. The answer is both, and this album is the proof.",
+        "Talking Timbuktu (1994) end-to-end", 55,
+        "Listen to 'Diaraby' — Touré's guitar mimics the kora, a West African harp. Then 'Ai Du' — Cooder's slide guitar and Touré's fingerpicking interlock as if they'd played together for decades (they'd met 3 days before). The album won a Grammy and was recorded in a makeshift studio in a Bamako hotel room.",
+        ["World", "Malian Blues", "African", "1990s"], 1
+    ),
+    (
+        "album-miriam-makeba-pata-pata", "Album",
+        "Pata Pata",
+        "Miriam Makeba 1967 — the South African singer's global breakthrough, recorded while in exile from apartheid. The title track, based on a Johannesburg township dance, became a worldwide hit. Makeba's voice carried the weight of exile — she wouldn't return to South Africa for 30 years. She testified against apartheid at the UN; her music was banned in her homeland.",
+        "Pata Pata (1967) end-to-end", 33,
+        "Listen to 'Pata Pata' — the click consonants of Xhosa create a percussive texture no other language can produce. Then 'Malayisha' — the groove is based on marabi, the township jazz that evolved under apartheid. Makeba testified at the UN in 1963; South Africa revoked her citizenship. She returned only after Mandela's release.",
+        ["World", "South African", "African", "1960s"], 1
+    ),
+    (
+        "album-youssou-ndour-egypt", "Album",
+        "Egypt",
+        "Youssou N'Dour 2004 — the Senegalese singer's Grammy-winning tribute to Islam, recorded with an Egyptian orchestra. N'Dour's voice sings devotional lyrics in Wolof over Arabic orchestration. The album was initially controversial among Senegalese Muslims for blending sacred texts with secular music.",
+        "Egypt (2004) end-to-end", 55,
+        "Listen to 'Allah' — N'Dour's voice rises from a whisper to a full-throated call over oud and strings. Then 'Touba — Daru Salaam' — the track references the holy city of the Mouride brotherhood, N'Dour's Sufi order. The album bridged West African mbalax with Egyptian classical music.",
+        ["World", "Senegalese", "African", "2000s"], 1
+    ),
+    (
+        "album-caetano-veloso-transa", "Album",
+        "Transa",
+        "Caetano Veloso 1972 — recorded in London while exiled from Brazil's military dictatorship. The album mixes bossa nova, samba, folk, and psychedelic rock, all sung in Portuguese with the urgency of separation from home. Veloso and Gilberto Gil were arrested, imprisoned, and exiled by the junta for 'subversive' music.",
+        "Transa (1972) end-to-end", 37,
+        "Listen to 'You Don't Know Me' — Veloso sings in English for the first time, to hosts who couldn't understand what he'd lost. Then 'Nostalgia (That's What Rock'n Roll Is)' — homesickness disguised as a rock song. Veloso's exile lasted 3 years; Gil later became Brazil's Minister of Culture.",
+        ["World", "Brazilian", "Tropicália", "1970s"], 1
+    ),
+    (
+        "album-ravishankar-at-monterey", "Album",
+        "Live at the Monterey International Pop Festival",
+        "Ravi Shankar 1967 — the performance that introduced Indian classical music to the Western counterculture. Shankar played a 20-minute raga to thousands of hippies who'd never heard a sitar. He gently taught the audience when to clap, treating the festival as a teaching moment. Alla Rakha's tabla playing is a masterclass.",
+        "Live at Monterey (1967)", 55,
+        "Listen to 'Dhun' — Shankar closes his eyes and doesn't open them for 20 minutes. The audience doesn't clap between movements because Shankar asked them not to. His influence runs through The Beatles, Coltrane, and Philip Glass.",
+        ["World", "Indian Classical", "Indian", "1960s"], 1
+    ),
+    (
+        "album-mulatu-astatke-ethiopiques-4", "Album",
+        "Éthiopiques Vol. 4: Ethio Jazz",
+        "Mulatu Astatke 1969-1974 (compiled 1998) — the godfather of Ethio-jazz, fusing traditional Ethiopian scales with American jazz and Latin rhythms. Astatke studied at Berklee. The music was nearly lost during the Derg regime; master tapes were hidden by a radio station archivist and rescued decades later.",
+        "Éthiopiques Vol. 4 (compilation, ~55 min)", 55,
+        "Listen to 'Yèkèrmo Sèw' — the vibraphone melody is based on a 5-note Ethiopian scale. Then 'Yègellé Tezeta' — the horns could be from a 1940s Harlem ballroom. The Éthiopiques series introduced Ethiopian music to the world.",
+        ["World", "Ethio-Jazz", "Ethiopian", "1960s"], 1
+    ),
+    (
+        "album-cesaria-evora-miss-perfumado", "Album",
+        "Miss Perfumado",
+        "Cesária Évora 1992 — the Cape Verdean singer's international debut at age 51. She sang barefoot on stage in a style called morna — songs of longing, separation, and the sea. Her voice carried decades of singing in bars for drinks. The album made her a star across Europe and Africa.",
+        "Miss Perfumado (1992) end-to-end", 50,
+        "Listen to 'Sodade' — the word means deep, existential longing for something lost, and Évora's voice makes you feel it. Then 'Angola' — about Cape Verdean men who emigrated for work. Évora was 51 when this album made her a star.",
+        ["World", "Morna", "Cape Verdean", "1990s"], 1
+    ),
+    (
+        "album-nusrat-fateh-ali-khan-mustt-mustt", "Album",
+        "Mustt Mustt",
+        "Nusrat Fateh Ali Khan 1990 — the Pakistani qawwali master's crossover album, produced by Michael Brook at Peter Gabriel's Real World Studios. Khan's voice could hold a single note for over a minute while improvising elaborate variations. He could sing for 10 hours without stopping; his marathon shrine performances attracted hundreds of thousands.",
+        "Mustt Mustt (1990) end-to-end", 52,
+        "Listen to the title track — Khan's voice rises from a rumble to an ecstatic wail over a harmonium drone. Then 'Nothing Without You' — subtle electronic production added to traditional qawwali. Khan's collaboration with Western artists introduced Sufi devotional music to new audiences.",
+        ["World", "Qawwali", "Pakistani", "1990s"], 1
+    ),
+    (
+        "album-slayer-reign-in-blood", "Album",
+        "Reign in Blood",
+        "Slayer 1986 — 28 minutes of relentless thrash metal, produced by Rick Rubin. The album's 10 tracks average under 3 minutes. 'Angel of Death', about Nazi doctor Josef Mengele, was so controversial that Columbia refused to distribute it. Drummer Dave Lombardo's double-bass patterns hit 240 BPM without triggers.",
+        "Reign in Blood (1986) end-to-end", 28,
+        "Listen to 'Raining Blood' — the opening thunderstorm leads into one of metal's most famous riffs. Then 'Angel of Death' — the tempo shifts are so abrupt they sound like tape skipping. Rubin's production is dry and close, making the band sound like they're in the room with you.",
+        ["Thrash Metal", "American", "1980s"], 1
+    ),
+    (
+        "album-death-symbolic", "Album",
+        "Symbolic",
+        "Death 1995 — Chuck Schuldiner's masterpiece of technical death metal. Schuldiner had evolved from primitive death metal into progressive territory while losing none of the intensity. The lyrics addressed philosophy and human nature. He died of brain cancer at 34, leaving behind a legacy as the father of death metal.",
+        "Symbolic (1995) end-to-end", 51,
+        "Listen to the title track — the opening riff shifts time signatures every 4 bars. Then 'Crystal Mountain' — closer to progressive rock than metal, with a guitar solo quoting classical themes. Schuldiner was 28 when he recorded this.",
+        ["Death Metal", "Progressive Metal", "American", "1990s"], 1
+    ),
+    (
+        "album-burzum-filosofem", "Album",
+        "Filosofem",
+        "Burzum 1996 — Varg Vikernes's fourth album, recorded in prison while serving a sentence for murder. The only instrument he was allowed was a synthesizer. The lo-fi production — a headset microphone through a cheap amplifier — became the defining sound of atmospheric black metal.",
+        "Filosofem (1996) end-to-end", 64,
+        "Listen to 'Dunkelheit' — the synth drone lasts 2 minutes before the guitars enter, and the distortion turns riffs into texture. Then 'Rundgang' — a 25-minute ambient track from a single repeating melody. Vikernes recorded the guitar through his prison roommate's stereo.",
+        ["Black Metal", "Norwegian", "1990s"], 1
+    ),
+    (
+        "album-emperor-in-the-nightside-eclipse", "Album",
+        "In the Nightside Eclipse",
+        "Emperor 1994 — recorded in Norway's Grieg Hall, home of the Bergen Philharmonic. Ihsahn's compositions layered distorted guitars, blast-beat drums, and keyboards into a sound both beautiful and terrifying. The album defined symphonic black metal.",
+        "In the Nightside Eclipse (1994) end-to-end", 49,
+        "Listen to 'I Am the Black Wizards' — the keyboard melody sounds like a corrupted church organ. Then 'Inno a Satana' — the title is Italian for 'Hymn to Satan'. Emperor's members were teenagers. The production is deliberately murky, keyboards mixed high to overwhelm the guitars.",
+        ["Black Metal", "Norwegian", "1990s"], 1
+    ),
+    (
+        "album-meshuggah-destroy-erase-improve", "Album",
+        "Destroy Erase Improve",
+        "Meshuggah 1995 — invented the 'djent' sound a decade before the term existed. Guitarists used detuned 8-string guitars and polymetric riffs — guitars in one time signature, drums in another. The title is a manifesto: destroy conventions, erase boundaries, improve the form.",
+        "Destroy Erase Improve (1995) end-to-end", 46,
+        "Listen to 'Future Breed Machine' — the opening riff cycles through a pattern of 17 before repeating, while drums stay in 4/4. Then 'Soul Burn' — a guitar solo played through a breath controller, normally used by saxophonists. Meshuggah rewired how metal thinks about rhythm.",
+        ["Progressive Metal", "Swedish", "1990s"], 1
+    ),
+    (
+        "album-opeth-blackwater-park", "Album",
+        "Blackwater Park",
+        "Opeth 2001 — produced by Steven Wilson of Porcupine Tree. Mikael Åkerfeldt's songwriting combined death metal aggression with 70s progressive dynamics, shifting from guttural growls to clean falsetto within a song. The 10-minute title track is a masterclass in dynamics.",
+        "Blackwater Park (2001) end-to-end", 67,
+        "Listen to the title track — the acoustic interlude at 4:30 arrives like sunlight through a storm. Then 'The Drapery Falls' — a fingerpicked acoustic pattern returns as a distorted riff 5 minutes later. Wilson's production gave the album clarity that made the heavy sections heavier.",
+        ["Progressive Death Metal", "Swedish", "2000s"], 1
+    ),
+    (
+        "album-mastodon-leviathan", "Album",
+        "Leviathan",
+        "Mastodon 2004 — a concept album about Moby-Dick. The band's three vocalists trade off like characters in a play. Drummer Brann Dailor, influenced by jazz as much as metal, propels songs that shift time signatures like whales changing depth.",
+        "Leviathan (2004) end-to-end", 51,
+        "Listen to 'Blood and Thunder' — the opening riff sounds like a ship being dragged under. Then 'Hearts Alive' — a 13-minute epic following the Pequod's final pursuit. The band read Moby-Dick together before writing. The lyrics use direct Melville quotes.",
+        ["Progressive Metal", "Sludge Metal", "American", "2000s"], 1
+    ),
+    (
+        "album-merle-haggard-mama-tried", "Album",
+        "Mama Tried",
+        "Merle Haggard 1968 — an ex-convict's apology to his mother for a life of crime. Haggard had spent 3 years in San Quentin (where he saw Johnny Cash perform). His Bakersfield sound — raw, Telecaster-driven, stripped of Nashville strings — was a rebuke to country-pop crossover.",
+        "Mama Tried (1968) end-to-end", 32,
+        "Listen to the title track — Haggard's vocal carries the weight of someone who'd actually done time. Then 'I'm a Lonesome Fugitive' — a song about life on the run that Haggard understood firsthand. The album was recorded in Bakersfield with his touring band, not Nashville session players.",
+        ["Country", "Bakersfield Sound", "American", "1960s"], 1
+    ),
+    (
+        "album-willie-nelson-red-headed-stranger", "Album",
+        "Red Headed Stranger",
+        "Willie Nelson 1975 — a concept album about a preacher on the run after killing his wife. Columbia thought it was an unfinished demo and refused to release it. Nelson recorded it with just his guitar, his sister Bobbie on piano, and minimal accompaniment. It became the cornerstone of outlaw country.",
+        "Red Headed Stranger (1975) end-to-end", 34,
+        "Listen to 'Blue Eyes Crying in the Rain' — Nelson's vocal is so sparse the silence between phrases carries as much weight as the words. Then the title track — the album's narrative unfolds across 15 tracks with Nelson's guitar as narrator. Recorded in 5 days for $4,000. Nelson refused to add strings.",
+        ["Country", "Outlaw Country", "American", "1970s"], 1
+    ),
+    (
+        "album-dolly-parton-jolene", "Album",
+        "Jolene",
+        "Dolly Parton 1974 — the title track, written in a single afternoon, is a plea to another woman not to take her man. It became the most-covered country song by non-country artists. The album proved Parton was more than a country singer — she was one of America's great songwriters.",
+        "Jolene (1974) end-to-end", 37,
+        "Listen to the title track — the fingerpicking by guitarist Chip Young was improvised in the studio. Then 'I Will Always Love You' — Parton wrote it as a farewell to mentor Porter Wagoner. Whitney Houston's version sold 20 million, but Parton's original, with just voice and guitar, is definitive.",
+        ["Country", "American", "1970s"], 1
+    ),
+    (
+        "album-hank-williams-40-greatest-hits", "Album",
+        "40 Greatest Hits",
+        "Hank Williams 1978 compilation — the essential collection from country music's first mythic figure. Williams recorded all his hits between 1947 and 1952; he died at 29 from heart failure caused by alcohol and morphine. His songs established the emotional vocabulary of country music.",
+        "40 Greatest Hits (compilation)", 45,
+        "Listen to 'I'm So Lonesome I Could Cry' — the line 'the moon just went behind a cloud to hide its face and cry' is one of the most perfect couplets in American song. Then 'Your Cheatin' Heart' — written in the back of a car, dictated to his future wife. Williams never used headphones; he sang to the musicians in the room.",
+        ["Country", "Honky-Tonk", "American", "1940s"], 1
+    ),
+    (
+        "album-leonard-cohen-songs-of-leonard-cohen", "Album",
+        "Songs of Leonard Cohen",
+        "Leonard Cohen 1967 — the 33-year-old Canadian poet's debut, after 4 books of poetry and 2 novels. Cohen couldn't really sing, but his songs — 'Suzanne', 'So Long, Marianne' — needed a poet, not a vocalist. The production is so sparse you can hear his fingers sliding on the guitar strings.",
+        "Songs of Leonard Cohen (1967) end-to-end", 41,
+        "Listen to 'Suzanne' — the song began as a poem about dancer Suzanne Verdal. Then 'So Long, Marianne' — written for Marianne Ihlen on the Greek island of Hydra. Cohen described his voice as 'a basso profundo born without a larynx.'",
+        ["Folk", "Singer-Songwriter", "Canadian", "1960s"], 1
+    ),
+    (
+        "album-cat-stevens-tea-for-the-tillerman", "Album",
+        "Tea for the Tillerman",
+        "Cat Stevens 1970 — recorded after near-death from tuberculosis. The songs — about fathers and sons, spiritual searching, finding peace — were written on a single acoustic guitar while Stevens recovered in a London hospital. He converted to Islam in 1977 and wouldn't release secular music for 28 years.",
+        "Tea for the Tillerman (1970) end-to-end", 36,
+        "Listen to 'Father and Son' — Stevens sings both roles: the father in a low register, the son higher. Then 'Wild World' — a farewell written for Patti D'Arbanville. The album's warmth comes from producer Paul Samwell-Smith's restraint: nothing is added that doesn't need to be there.",
+        ["Folk", "Singer-Songwriter", "British", "1970s"], 1
+    ),
+
+    # ═══════════════════════════════════════════════════════════════════════
     # EXPERIMENTAL / AVANT-GARDE
     # ═══════════════════════════════════════════════════════════════════════
     (
