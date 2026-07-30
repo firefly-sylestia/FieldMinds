@@ -926,8 +926,8 @@ private fun CarouselCard(
     val corner = if (isCenter) 28.dp else 22.dp
     val isLanded = landedTopic != null && isCenter
 
-    // Outer Box padded 12dp beyond card so shadow renders outside the clip.
-    // Inner Box with clip keeps rounded corners during animation.
+    // Outer Box padded 12dp beyond card for shadow breathing room.
+    // Inner Box clipped to rounded corners preserves edges during animation.
     val boxW = w + if (isCenter) 24.dp else 0.dp
     val boxH = h + if (isCenter) 24.dp else 0.dp
     Box(
@@ -948,10 +948,11 @@ private fun CarouselCard(
                 ) else Modifier
             )
     ) {
-        // Inner clip layer — prevents sharp edges during graphicsLayer scale
+        // Inner clip layer centered in outer box — prevents sharp edges during scale
         Box(
             modifier = Modifier
                 .size(w, h)
+                .align(Alignment.Center)
                 .clip(RoundedCornerShape(corner))
         ) {
             AnimatedContent(
