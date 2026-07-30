@@ -3,7 +3,6 @@ package com.curio.app.features.spin
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -42,12 +41,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.curio.app.data.CategoryId
 import com.curio.app.data.CurioCategories
@@ -66,13 +66,14 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 /**
- * The Shuffle — clean single-card design.
+ * The Shuffle — immersive full-screen spin experience.
  *
- * The user has already picked a category from Home. Here they see:
- *   1. Top bar: back + category name
- *   2. A single premium card that cycles through topics
- *   3. One elegant shuffle button
- *   4. Confetti celebration on landing
+ * No cards, no clutter. Just:
+ *   1. Compact top bar with category name
+ *   2. Large category icon as the visual anchor
+ *   3. Big cycling topic name in center
+ *   4. One dramatic CTA button
+ *   5. Full-screen confetti on landing
  */
 @Composable
 fun SpinScreen(categorySlug: String?, navController: NavController) {
@@ -92,7 +93,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var landedTopic by remember { mutableStateOf<CurioTopic?>(null) }
     var recentTopicIds by remember { mutableStateOf(setOf<String>()) }
 
-    // Display pool for the cycling animation
     val displayPool = remember(pool) {
         if (pool.size <= 25) pool.toList()
         else pool.shuffled().take(25)
@@ -116,7 +116,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             CurioMotion.Durations.SpinMax + 1
         )
 
-        // Cycle topic names on the card
         val cyclerJob = launch {
             val totalTicks = (cycles * 7f).toInt()
             repeat(totalTicks) { tick ->
@@ -158,93 +157,216 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, topic.name))
     }
 
+    // ── Landing pop animation ────────────────────────────────────────────
+    val popScale by animateFloatAsState(
+        targetValue = if (landedTopic != null) 1f else 0.96f,
+        animationSpec = CurioMotion.Springs.Elastic,
+        label = "landScale"
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // ── Top bar ──────────────────────────────────────────────────────
+        // ── Compact top bar ──────────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             CurioBackButton(onClick = { navController.popBackStack() })
-            Column {
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = cat.displayName,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(Modifier.weight(1f))
+            // Pool count badge
+            if (pool.isNotEmpty()) {
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = cat.accent.copy(alpha = 0.12f)
+                ) {
+                    Text(
+                        text = "${pool.size} topics",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = cat.accent,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                    )
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════
+        // Main content — centered, immersive
+        // ═══════════════════════════════════════════════════════════════════
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Large category icon as visual anchor
+            Surface(
+                shape = RoundedCornerShape(28.dp),
+                color = cat.accent.copy(alpha = 0.10f),
+                modifier = Modifier.size(120.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    CurioIcon(
+                        name = cat.iconGlyph,
+                        contentDescription = null,
+                        tint = cat.accent,
+                        size = 64.dp
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(32.dp))
+
+            // ── Cycling topic name or landed result ──────────────────────
+            if (landedTopic != null) {
+                // Landed state
+                val topic = landedTopic!!
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.scale(popScale)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        CurioIcon(CurioIcons.AutoAwesome, null, tint = cat.accent, size = 20.dp)
+                        Text(
+                            text = "Your pick",
+                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                            color = cat.accent
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = topic.name,
+                        style = MaterialTheme.typography.headlineLarge.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            lineHeight = 40.sp
+                        ),
+                        color = CurioColors.DeepPlum,
+                        textAlign = TextAlign.Center,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = topic.subtype,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = cat.accent
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    // Accent bar
+                    Box(
+                        modifier = Modifier
+                            .width(48.dp)
+                            .height(4.dp)
+                            .background(cat.accent, RoundedCornerShape(2.dp))
+                    )
+                }
+            } else if (shuffling && displayPool.isNotEmpty()) {
+                // Cycling state — animated topic names
+                AnimatedContent(
+                    targetState = displayPool.getOrNull(visibleTopicIndex)?.name ?: "",
+                    transitionSpec = {
+                        (slideInVertically(initialOffsetY = { it / 3 }) + fadeIn(tween(200))) togetherWith
+                        (slideOutVertically(targetOffsetY = { -it / 3 }) + fadeOut(tween(150)))
+                    },
+                    label = "topicCycle"
+                ) { topicName ->
+                    Text(
+                        text = topicName,
+                        style = MaterialTheme.typography.headlineLarge.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            lineHeight = 44.sp
+                        ),
+                        color = if (landedTopic != null) CurioColors.DeepPlum
+                                else CurioColors.DeepPlum.copy(alpha = 0.35f),
+                        textAlign = TextAlign.Center,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            } else {
+                // Idle state
                 Text(
-                    text = cat.displayName,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onBackground
+                    text = "Tap shuffle to discover",
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
                 )
+                Spacer(Modifier.height(6.dp))
                 Text(
-                    text = "Shuffle to discover",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = if (pool.isEmpty()) "Topics are on the way"
+                           else "You'll get a random topic from this category",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    textAlign = TextAlign.Center
                 )
             }
         }
 
-        // ── Card area ────────────────────────────────────────────────────
+        // ═══════════════════════════════════════════════════════════════════
+        // Bottom CTA
+        // ═══════════════════════════════════════════════════════════════════
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .padding(horizontal = 24.dp, vertical = 20.dp),
             contentAlignment = Alignment.Center
         ) {
-            PremiumSpinCard(
-                accent = cat.accent,
-                tint = cat.tint,
-                glyph = cat.iconGlyph,
-                shuffling = shuffling,
-                landedTopic = landedTopic,
-                displayTopic = displayPool.getOrNull(visibleTopicIndex),
-                poolEmpty = pool.isEmpty(),
-                onClick = { if (!shuffling && pool.isNotEmpty()) shuffleCount++ }
-            )
-        }
-
-        // ── Bottom CTA ───────────────────────────────────────────────────
-        Column(
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = when {
-                    pool.isEmpty() -> "No topics in this category yet"
-                    shuffling -> "Shuffling…"
-                    landedTopic != null -> "Here's your pick"
-                    else -> "Tap to discover"
-                },
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(Modifier.height(12.dp))
             Button(
                 onClick = { if (!shuffling && pool.isNotEmpty()) shuffleCount++ },
                 enabled = !shuffling && pool.isNotEmpty(),
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = cat.accent,
-                    contentColor = CurioColors.DeepPlum,
+                    contentColor = if (landedTopic != null) Color.White else CurioColors.DeepPlum,
                     disabledContainerColor = cat.tint,
                     disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.4f)
                 ),
-                contentPadding = PaddingValues(horizontal = 56.dp, vertical = 16.dp),
-                modifier = Modifier.fillMaxWidth()
+                contentPadding = PaddingValues(horizontal = 64.dp, vertical = 18.dp)
             ) {
-                Text(
-                    text = if (landedTopic != null) "Shuffle again" else "SHUFFLE",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if (!shuffling) {
+                        CurioIcon(
+                            name = if (landedTopic != null) CurioIcons.Refresh else CurioIcons.Casino,
+                            contentDescription = null,
+                            tint = if (landedTopic != null) Color.White else CurioColors.DeepPlum,
+                            size = 22.dp
+                        )
+                    }
+                    Text(
+                        text = when {
+                            shuffling -> "Shuffling…"
+                            landedTopic != null -> "Shuffle again"
+                            else -> "SHUFFLE"
+                        },
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = if (landedTopic == null) 2.sp else 0.sp
+                        )
+                    )
+                }
             }
-            Spacer(Modifier.height(8.dp))
         }
     }
 
-    // ── Confetti ─────────────────────────────────────────────────────────
+    // ── Full-screen confetti ─────────────────────────────────────────────
     if (confettiTrigger > 0) {
         ConfettiBurst(
             colors = listOf(cat.accent, cat.tint, CurioColors.ButterYellow),
@@ -253,268 +375,6 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             modifier = Modifier.fillMaxSize(),
             onComplete = {}
         )
-    }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// Premium single spin card
-// ═══════════════════════════════════════════════════════════════════════════
-
-@Composable
-private fun PremiumSpinCard(
-    accent: Color,
-    tint: Color,
-    glyph: String,
-    shuffling: Boolean,
-    landedTopic: CurioTopic?,
-    displayTopic: CurioTopic?,
-    poolEmpty: Boolean,
-    onClick: () -> Unit
-) {
-    // ── Landing pop ──────────────────────────────────────────────────────
-    var justLanded by remember { mutableStateOf(false) }
-    LaunchedEffect(landedTopic) {
-        if (landedTopic != null) {
-            justLanded = true
-            delay(100)
-            justLanded = false
-        }
-    }
-    val popScale by animateFloatAsState(
-        targetValue = if (justLanded) 1.05f else 1f,
-        animationSpec = CurioMotion.Springs.Elastic,
-        label = "popScale"
-    )
-
-    // ── Glow pulse during shuffle ────────────────────────────────────────
-    val glowAlpha by animateFloatAsState(
-        targetValue = if (shuffling) 0.18f else 0f,
-        animationSpec = CurioMotion.Springs.Snappy,
-        label = "glowAlpha"
-    )
-
-    Box(
-        modifier = Modifier.size(width = 280.dp, height = 360.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        // ── Radial glow behind card ──────────────────────────────────────
-        if (glowAlpha > 0.01f) {
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(
-                        brush = Brush.radialGradient(
-                            colors = listOf(
-                                accent.copy(alpha = glowAlpha),
-                                accent.copy(alpha = glowAlpha * 0.3f),
-                                Color.Transparent
-                            ),
-                            radius = 280f
-                        ),
-                        shape = RoundedCornerShape(32.dp)
-                    )
-            )
-        }
-
-        // ── The card itself ──────────────────────────────────────────────
-        Surface(
-            onClick = onClick,
-            enabled = !shuffling && !poolEmpty,
-            shape = RoundedCornerShape(32.dp),
-            color = CurioColors.CreamWhite,
-            shadowElevation = if (landedTopic != null) 12.dp else 6.dp,
-            tonalElevation = if (landedTopic != null) 4.dp else 2.dp,
-            modifier = Modifier
-                .fillMaxSize()
-                .scale(popScale)
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = if (landedTopic != null) {
-                                listOf(accent.copy(alpha = 0.08f), Color.Transparent)
-                            } else {
-                                listOf(Color.White.copy(alpha = 0.20f), Color.Transparent, tint.copy(alpha = 0.05f))
-                            }
-                        ),
-                        shape = RoundedCornerShape(32.dp)
-                    )
-                    .padding(24.dp)
-            ) {
-                when {
-                    landedTopic != null -> LandedContent(accent, glyph, landedTopic)
-                    shuffling && displayTopic != null -> CyclingContent(accent, glyph, displayTopic)
-                    else -> IdleContent(accent, tint, glyph, poolEmpty)
-                }
-            }
-        }
-    }
-}
-
-// ── Idle: show category icon ─────────────────────────────────────────────
-
-@Composable
-private fun IdleContent(accent: Color, tint: Color, glyph: String, poolEmpty: Boolean) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Surface(
-            shape = RoundedCornerShape(24.dp),
-            color = accent.copy(alpha = 0.12f),
-            modifier = Modifier.size(100.dp)
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                CurioIcon(
-                    name = glyph,
-                    contentDescription = null,
-                    tint = accent,
-                    size = 52.dp
-                )
-            }
-        }
-        Spacer(Modifier.height(24.dp))
-        Text(
-            text = if (poolEmpty) "Coming soon" else "Tap to shuffle",
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = if (poolEmpty) MaterialTheme.colorScheme.onSurfaceVariant else accent
-        )
-        Spacer(Modifier.height(6.dp))
-        Text(
-            text = if (poolEmpty) "Topics are on the way"
-                   else "Discover something new",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-// ── Cycling: animated topic names during shuffle ─────────────────────────
-
-@Composable
-private fun CyclingContent(accent: Color, glyph: String, topic: CurioTopic) {
-    AnimatedContent(
-        targetState = topic.name,
-        transitionSpec = {
-            (slideInVertically(initialOffsetY = { it / 3 }) + fadeIn(tween(200))) togetherWith
-            (slideOutVertically(targetOffsetY = { -it / 3 }) + fadeOut(tween(150)))
-        },
-        label = "topicCycle"
-    ) { topicName ->
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            // Small icon badge
-            Surface(
-                shape = RoundedCornerShape(14.dp),
-                color = accent.copy(alpha = 0.15f)
-            ) {
-                CurioIcon(glyph, null, tint = accent, size = 28.dp, modifier = Modifier.padding(10.dp))
-            }
-            Spacer(Modifier.height(20.dp))
-            // Accent bar
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(4.dp)
-                    .background(color = accent, shape = RoundedCornerShape(2.dp))
-            )
-            Spacer(Modifier.height(12.dp))
-            Text(
-                text = topicName,
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
-                color = CurioColors.DeepPlum,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = topic.subtype,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-// ── Landed: full topic card ──────────────────────────────────────────────
-
-@Composable
-private fun LandedContent(accent: Color, glyph: String, topic: CurioTopic) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        // Top: sparkle badge
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = accent.copy(alpha = 0.15f)
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    CurioIcon(CurioIcons.AutoAwesome, null, tint = accent, size = 14.dp)
-                    Text("Match!", style = MaterialTheme.typography.labelSmall, color = accent)
-                }
-            }
-        }
-
-        Spacer(Modifier.weight(1f))
-
-        // Center: topic details
-        Column {
-            // Thick accent bar
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.4f)
-                    .height(6.dp)
-                    .background(color = accent, shape = RoundedCornerShape(3.dp))
-            )
-            Spacer(Modifier.height(16.dp))
-            Text(
-                text = topic.name,
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
-                color = CurioColors.DeepPlum,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(Modifier.height(6.dp))
-            Text(
-                text = topic.subtype,
-                style = MaterialTheme.typography.bodyLarge,
-                color = accent
-            )
-            Spacer(Modifier.height(10.dp))
-            Text(
-                text = topic.teaser,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        Spacer(Modifier.weight(1f))
-
-        // Bottom: large watermark icon
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            CurioIcon(
-                name = glyph,
-                contentDescription = null,
-                tint = accent.copy(alpha = 0.12f),
-                size = 80.dp
-            )
-        }
     }
 }
 
