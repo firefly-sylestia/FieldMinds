@@ -81,7 +81,7 @@ fun TrimWaveform(
             verticalAlignment = Alignment.CenterVertically
         ) {
             CurioIcon(
-                name = CurioIcons.ContentCut,
+                name = CurioIcons.Edit,
                 contentDescription = null,
                 tint = accent,
                 size = 16.dp
