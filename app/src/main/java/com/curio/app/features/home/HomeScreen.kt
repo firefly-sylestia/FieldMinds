@@ -67,7 +67,6 @@ import com.curio.app.ui.components.MorphEntrance
 import com.curio.app.ui.components.StaggeredEntrance
 import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
