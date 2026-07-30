@@ -47,7 +47,7 @@ ALBUMS = [
         "Led Zeppelin IV",
         "1971 — never officially titled. The band were so annoyed by critics after Led Zeppelin III that they refused to put their name on the cover. Has 'Stairway to Heaven', the most-played rock song in FM radio history.",
         "Led Zeppelin IV (1971) end-to-end", 43,
-        "Listen to 'Stairway' three times. The famous opening — Plant improvised the lyrics live, Page edited them. The song is three movements: acoustic intro, electric interlude, hard-rock climax. Then listen to 'When the Levee Breaks' — Bonham recorded his drums in a stairwell at Headley Grange.",
+        "Listen to 'Stairway' three times. The famous opening — Plant improvised the lyrics, Page edited them. Three movements: acoustic intro, electric interlude, hard-rock climax. Then 'When the Levee Breaks' — Bonham recorded his drums in a stairwell at Headley Grange.",
         ["Hard Rock", "British", "1970s"], 1
     ),
     (
@@ -1728,6 +1728,28 @@ ALBUMS = [
 # JSON generation
 # ═══════════════════════════════════════════════════════════════════════════
 
+MAX_CHARS = 280
+
+def _trim(text, field_name, entry_id):
+    """Trim text to MAX_CHARS at the last sentence boundary."""
+    if len(text) <= MAX_CHARS:
+        return text
+    trimmed = text[:MAX_CHARS]
+    # Cut at last period, exclamation, or question mark
+    for punct in (". ", "! ", "? "):
+        last = trimmed.rfind(punct)
+        if last > MAX_CHARS // 2:
+            trimmed = trimmed[:last + 1]
+            break
+    else:
+        # No good break point — cut at last space
+        last_space = trimmed.rfind(" ")
+        if last_space > MAX_CHARS // 2:
+            trimmed = trimmed[:last_space]
+    print(f"  ⚠ {entry_id} {field_name}: {len(text)} → {len(trimmed)} chars")
+    return trimmed
+
+
 def build_albums():
     entries = []
     seen_ids = set()
@@ -1739,6 +1761,9 @@ def build_albums():
             print(f"WARNING: duplicate id '{id_}'")
             continue
         seen_ids.add(id_)
+
+        teaser = _trim(teaser, "teaser", id_)
+        instruction = _trim(instruction, "instruction", id_)
 
         entry = {
             "id": id_,
