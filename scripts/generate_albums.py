@@ -1724,6 +1724,218 @@ ALBUMS = [
     ),
 
     # ═══════════════════════════════════════════════════════════════════════
+    # JAZZ/SOUL/FUNK BATCH 5b — More Jazz, Motown, Philly, Boogie, Deep Soul
+    # ═══════════════════════════════════════════════════════════════════════
+    (
+        "album-miles-davis-sketches-of-spain", "Album",
+        "Sketches of Spain",
+        "Miles Davis and Gil Evans 1960 — Davis's third collaboration with arranger Gil Evans, recorded with a 16-piece orchestra. The album is built around Spanish folk melodies, particularly the 'Concierto de Aranjuez' by Joaquín Rodrigo. Davis's muted trumpet and Evans's impressionistic arrangements created a sound that was orchestral jazz at its most cinematic.",
+        "Sketches of Spain (1960) end-to-end", 41,
+        "Listen to the opening of 'Concierto de Aranjuez' — Davis enters 3 minutes in and plays only 12 notes in his first phrase. Then 'Saeta' — based on a Spanish religious procession, Davis's trumpet mimics a flamenco singer. Evans's arrangements use harp, bassoon, and French horn in combinations no jazz album had attempted.",
+        ["Jazz", "Cool Jazz", "American", "1960s"], 1
+    ),
+    (
+        "album-john-coltrane-blue-train", "Album",
+        "Blue Train",
+        "John Coltrane 1958 — his only album as leader for Blue Note. Recorded after Coltrane had kicked heroin and was playing with Thelonious Monk. The band — Lee Morgan, Curtis Fuller, Kenny Drew, Paul Chambers, Philly Joe Jones — was a hard bop supergroup. The album's title track is a blues that Coltrane transforms into something transcendent.",
+        "Blue Train (1958) end-to-end", 42,
+        "Listen to the title track — Coltrane's solo starts with short, declarative phrases and builds to torrents of 16th notes without losing melodic coherence. Then 'Moment's Notice' — the chord changes move through three keys in the first 8 bars. Coltrane wrote all the material in a single week before the session.",
+        ["Jazz", "Hard Bop", "American", "1950s"], 1
+    ),
+    (
+        "album-herbie-hancock-maiden-voyage", "Album",
+        "Maiden Voyage",
+        "Herbie Hancock 1965 — a concept album about the sea, recorded when Hancock was 25 and already a member of Miles Davis's Second Great Quintet. The band — Freddie Hubbard, George Coleman, Ron Carter, Tony Williams — plays with the telepathy of musicians who'd been touring together for years. Every track evokes water without a single wave sound effect.",
+        "Maiden Voyage (1965) end-to-end", 42,
+        "Listen to the title track — the opening piano chords are so sparse you can hear the studio's air conditioning. Then 'Dolphin Dance' — Hancock's solo builds from single notes to cascading runs. The album's secret: Hancock restricts himself to a handful of chords per track, forcing himself to find infinite variation within narrow constraints.",
+        ["Jazz", "Modal Jazz", "American", "1960s"], 1
+    ),
+    (
+        "album-keith-jarrett-koln-concert", "Album",
+        "The Köln Concert",
+        "Keith Jarrett 1975 — an entirely improvised solo piano concert recorded at the Cologne Opera House. Jarrett had slept only a few hours, the wrong piano had been delivered (a rehearsal instrument with a broken sustain pedal), and he nearly cancelled. Instead, he played for 66 minutes and created the best-selling solo piano album in history.",
+        "The Köln Concert (1975) end-to-end", 66,
+        "Listen to Part I — Jarrett establishes a two-chord vamp in A minor that he sustains for 26 minutes without ever repeating himself. The broken piano forced him to play in the middle register and avoid the tinny high notes. The result sounds deliberate, not compromised. Jarrett's audible humming and foot-stomping are part of the recording.",
+        ["Jazz", "Solo Piano", "American", "1970s"], 1
+    ),
+    (
+        "album-charles-mingus-black-saint", "Album",
+        "The Black Saint and the Sinner Lady",
+        "Charles Mingus 1963 — a six-part ballet for an 11-piece band, recorded as a single continuous take (then split into tracks for the LP). Mingus wrote the album after being released from Bellevue psychiatric hospital. His therapist encouraged him to write music as therapy. The album's liner notes are written by Mingus's therapist.",
+        "The Black Saint and the Sinner Lady (1963) end-to-end", 40,
+        "Listen to 'Track A — Solo Dancer' — the opening is a single held saxophone note over frantic percussion. Then 'Track C — Group Dancers' — the horns play a melody that sounds like Duke Ellington arranged by a madman. Mingus overdubbed himself playing piano and bass simultaneously. The album was meant to be heard as one continuous piece.",
+        ["Jazz", "Avant-Garde Jazz", "American", "1960s"], 1
+    ),
+    (
+        "album-alice-coltrane-journey-in-satchidananda", "Album",
+        "Journey in Satchidananda",
+        "Alice Coltrane 1971 — recorded after John Coltrane's death, this album represents Alice's turn toward Hindu spirituality. The title references her guru Swami Satchidananda. Pharoah Sanders plays soprano saxophone; Cecil McBee and Charlie Haden both play bass. The album sounds like a temple ceremony drifting through space.",
+        "Journey in Satchidananda (1971) end-to-end", 37,
+        "Listen to the title track — Alice's harp enters 3 minutes in, and the effect is like sunlight breaking through water. Then 'Shiva-Loka' — the tambura drone was played by Tulsi, a monk from the Vedanta Center. Alice replaced John in his own band, then transformed it into something entirely her own.",
+        ["Jazz", "Spiritual Jazz", "American", "1970s"], 1
+    ),
+    (
+        "album-don-cherry-brown-rice", "Album",
+        "Brown Rice",
+        "Don Cherry 1975 — a fusion of free jazz, Indian raga, African rhythm, and funk that sounds like nothing else. Cherry plays trumpet through a wah-wah pedal and sings in a language of his own invention. The album was recorded in New York and Stockholm with musicians from four continents.",
+        "Brown Rice (1975) end-to-end", 40,
+        "Listen to the title track — Cherry's trumpet is processed through a Mutron envelope filter, the same pedal that created the funk guitar sound. Then 'Malkauns' — based on an Indian raga, with Cherry playing pocket trumpet (a smaller, higher instrument) alongside tambura. The album was decades ahead of its time.",
+        ["Jazz", "World Fusion", "American", "1970s"], 1
+    ),
+    (
+        "album-mahavishnu-orchestra-inner-mounting-flame", "Album",
+        "The Inner Mounting Flame",
+        "Mahavishnu Orchestra 1971 — John McLaughlin's jazz-rock fusion quintet turned volume, speed, and Eastern spirituality into a new genre. The band played complex compositions in odd time signatures at high volume. McLaughlin's double-neck guitar and Billy Cobham's drumming set new standards for instrumental virtuosity.",
+        "The Inner Mounting Flame (1971) end-to-end", 46,
+        "Listen to 'Meeting of the Spirits' — the opening guitar riff is in 18/8 time. Then 'The Dance of Maya' — the song shifts between 10/8, 20/8, and 4/4. Cobham's bass drum patterns are so fast they sound like a machine gun. McLaughlin played through a 100-watt Marshall stack, the same amplifier Jimi Hendrix used.",
+        ["Jazz Fusion", "Progressive Rock", "British-American", "1970s"], 1
+    ),
+    (
+        "album-weather-report-heavy-weather", "Album",
+        "Heavy Weather",
+        "Weather Report 1977 — the album that made jazz fusion commercially viable without compromising artistry. Joe Zawinul and Wayne Shorter, both Miles Davis alumni, led a band that included the 25-year-old Jaco Pastorius, whose fretless electric bass playing redefined the instrument. 'Birdland' became a jazz standard.",
+        "Heavy Weather (1977) end-to-end", 38,
+        "Listen to 'Birdland' — Zawinul wrote it on a plane and recorded the synthesizer parts himself. Then 'Teen Town' — Pastorius's bass is the lead instrument, playing a melody at high speed on a fretless bass. His technique — harmonics, rapid-fire 16th notes, percussive slaps — was unprecedented. Pastorius would be dead within a decade.",
+        ["Jazz Fusion", "American", "1970s"], 1
+    ),
+    (
+        "album-ray-charles-modern-sounds", "Album",
+        "Modern Sounds in Country and Western Music",
+        "Ray Charles 1962 — the album where a Black rhythm-and-blues singer from Georgia covered white country songs with a full orchestra and a big band. The result was so radical that ABC-Paramount refused to release it at first. It became one of the best-selling albums of the 60s and redefined what American music could be.",
+        "Modern Sounds (1962) end-to-end", 40,
+        "Listen to 'I Can't Stop Loving You' — Charles transforms Don Gibson's country ballad into a slow-burning soul anthem with a choir. Then 'You Don't Know Me' — the string arrangement by Marty Paich wraps Charles's voice in a velvet fog. The album proved that genre boundaries were imaginary.",
+        ["Soul", "Country Soul", "American", "1960s"], 1
+    ),
+    (
+        "album-etta-james-at-last", "Album",
+        "At Last!",
+        "Etta James 1960 — her debut album for Chess Records, recorded in Chicago with a full string orchestra. James was 22 and had already been a professional singer for 8 years. The title track became her signature song, but the entire album showed a vocalist who could move from jazz to blues to R&B in a single phrase.",
+        "At Last! (1960) end-to-end", 30,
+        "Listen to 'At Last' — the string arrangement by Riley Hampton was recorded in a single afternoon. Then 'I Just Want to Make Love to You' — James transforms Willie Dixon's blues into a declaration of desire. Her voice has been described as 'church and juke joint in the same breath.' The album was recorded in just 4 days.",
+        ["Soul", "Blues", "American", "1960s"], 1
+    ),
+    (
+        "album-the-temptations-cloud-nine", "Album",
+        "Cloud Nine",
+        "The Temptations 1969 — the album where Motown's smoothest vocal group went psychedelic. Producer Norman Whitfield pushed the group into socially conscious lyrics and funky, wah-wah-guitar-driven production inspired by Sly Stone. David Ruffin had just been fired; Dennis Edwards replaced him and brought a grittier edge.",
+        "Cloud Nine (1969) end-to-end", 32,
+        "Listen to the title track — the opening guitar riff, played by Dennis Coffey through a wah-wah pedal, was Motown's first use of the effect. Then 'Run Away Child, Running Wild' — a 9-minute suite about a runaway, complete with sound effects. The album won Motown its first Grammy.",
+        ["Soul", "Psychedelic Soul", "American", "1960s"], 1
+    ),
+    (
+        "album-stevie-wonder-talking-book", "Album",
+        "Talking Book",
+        "Stevie Wonder 1972 — recorded mostly alone, playing nearly every instrument. The album opens with 'You Are the Sunshine of My Life' and closes with 'Superstition', both written within weeks of each other. The synthesizer work — using TONTO, a massive custom modular synth — was groundbreaking for R&B.",
+        "Talking Book (1972) end-to-end", 44,
+        "Listen to 'Superstition' — Stevie wrote it for Jeff Beck, but Motown insisted he release it himself. The clavinet riff was played through a Mu-Tron III envelope filter, creating the squelchy sound. Then 'You Are the Sunshine of My Life' — the vocal was a first take. Stevie recorded the album while also working on 'Innervisions'.",
+        ["Soul", "Funk", "R&B", "American", "1970s"], 1
+    ),
+    (
+        "album-bill-withers-just-as-i-am", "Album",
+        "Just As I Am",
+        "Bill Withers 1971 — the 33-year-old former aircraft mechanic's debut album, recorded while he was still working at a factory making toilet seats. Withers showed up to the studio in his work boots. Booker T. Jones produced the album; Stephen Stills played guitar. The songs were so direct they felt less like compositions than conversations set to music.",
+        "Just As I Am (1971) end-to-end", 35,
+        "Listen to 'Ain't No Sunshine' — Withers wrote it after watching the film 'Days of Wine and Roses'. The 'I know' section repeated 26 times was a placeholder that Withers intended to replace with lyrics. They kept it. Then 'Grandma's Hands' — a song about his grandmother's hands that is 2 minutes long and contains a novel's worth of detail.",
+        ["Soul", "Singer-Songwriter", "American", "1970s"], 1
+    ),
+    (
+        "album-diana-ross-diana", "Album",
+        "Diana",
+        "Diana Ross 1980 — produced by Nile Rodgers and Bernard Edwards of Chic, the album that reinvented Ross for the 80s. Rodgers and Edwards wrote and produced every track, including 'I'm Coming Out' (built around a drum break inspired by a night out at a gay club) and 'Upside Down' (which Ross initially hated and tried to remix herself).",
+        "Diana (1980) end-to-end", 35,
+        "Listen to 'I'm Coming Out' — the trombone riff was played by Meco Monardo and arranged in 10 minutes. Then 'Upside Down' — Ross remixed the song without Rodgers's permission after the first release. The version we know is a compromise between her mix and his. The album made Ross a disco icon and a pop star simultaneously.",
+        ["Disco", "R&B", "Soul", "American", "1980s"], 1
+    ),
+    (
+        "album-michael-jackson-off-the-wall", "Album",
+        "Off the Wall",
+        "Michael Jackson 1979 — his first adult album, produced by Quincy Jones. Jackson was 21 and determined to be taken seriously. The album bridged disco and pop with songs by Stevie Wonder, Paul McCartney, and Rod Temperton. It was the first solo album to generate four top-10 singles.",
+        "Off the Wall (1979) end-to-end", 42,
+        "Listen to 'Don't Stop 'Til You Get Enough' — Jackson wrote the entire song, including the string arrangement, which he sang note-for-note to the arranger. Then 'Rock with You' — the vocal was a single take. The album's production is so pristine that every instrument sounds like it's been polished. Jackson won his first Grammy for Best R&B Vocal Performance.",
+        ["R&B", "Disco", "Pop", "American", "1970s"], 1
+    ),
+    (
+        "album-michael-jackson-thriller", "Album",
+        "Thriller",
+        "Michael Jackson 1982 — the best-selling album of all time (over 70 million copies). Recorded over 8 months with Quincy Jones. Jackson was obsessed with making an album where every track could be a single — nine tracks, seven became top-10 hits. The title track's video, directed by John Landis, changed what music videos could be.",
+        "Thriller (1982) end-to-end", 42,
+        "Listen to 'Billie Jean' — Jackson recorded the vocal in a single take while singing into a cardboard tube for a specific sound. Then 'Beat It' — Eddie Van Halen's guitar solo was recorded for free as a favor; he did it in one take and thought no one would notice. The album spent 37 weeks at #1.",
+        ["Pop", "R&B", "Funk", "American", "1980s"], 1
+    ),
+    (
+        "album-prince-sign-o-the-times", "Album",
+        "Sign o' the Times",
+        "Prince 1987 — a double album recorded almost entirely alone at his Paisley Park studio. Originally planned as a triple album, Warner Bros. forced him to cut it down. The album is a one-man tour through funk, rock, soul, gospel, and experimental pop. Prince played every instrument on most tracks.",
+        "Sign o' the Times (1987) end-to-end", 80,
+        "Listen to the title track — nothing but a drum machine, a synth bass, and Prince's voice reporting the news of 1987: AIDS, gang violence, drug addiction. Then 'If I Was Your Girlfriend' — Prince sings in a sped-up voice as his alter ego Camille, asking what intimacy would look like if he were female. The album is a complete universe.",
+        ["Funk", "Pop", "R&B", "Soul", "American", "1980s"], 1
+    ),
+    (
+        "album-janet-jackson-rhythm-nation", "Album",
+        "Janet Jackson's Rhythm Nation 1814",
+        "Janet Jackson 1989 — the album that proved Janet was not just Michael's sister. Produced by Jimmy Jam and Terry Lewis at Flyte Tyme Studios in Minneapolis. Every track uses the same drum sound: a Roland TR-808 programmed with a swing that became the template for 90s R&B. The album spawned seven top-5 singles, a record.",
+        "Rhythm Nation 1814 (1989) end-to-end", 64,
+        "Listen to the title track — the industrial clang-and-clatter production was inspired by Janet watching CNN and wanting to make music that sounded like the news. Then 'Love Will Never Do (Without You)' — the song was originally written for a duet but Janet sang both parts, pitched at different registers. The video launched Antonio Sabàto Jr.'s career.",
+        ["R&B", "Pop", "New Jack Swing", "American", "1980s"], 1
+    ),
+    (
+        "album-alicia-keys-songs-in-a-minor", "Album",
+        "Songs in A Minor",
+        "Alicia Keys 2001 — her debut at age 20, recorded over 3 years. Keys wrote, arranged, and produced most of the album herself, playing piano on every track. The album won 5 Grammys, including Best New Artist and Song of the Year for 'Fallin'. It sold 12 million copies and redefined what a young Black female artist could do in the 2000s.",
+        "Songs in A Minor (2001) end-to-end", 63,
+        "Listen to 'Fallin' — Keys wrote it at 18. The song is built on a single descending chord progression she improvised in her Harlem apartment. Then 'A Woman's Worth' — the song samples Isaac Hayes but the lyric is entirely Keys's. She recorded the album while maintaining a 4.0 GPA at Columbia University.",
+        ["R&B", "Neo-Soul", "American", "2000s"], 1
+    ),
+    (
+        "album-the-weeknd-house-of-balloons", "Album",
+        "House of Balloons",
+        "The Weeknd (Abel Tesfaye) 2011 — released as a free download with no promotion and no artist photos. The album's haunted R&B — samples of Siouxsie and the Banshees, lyrics about drugs and empty sex, Tesfaye's voice floating through digital reverb — created a new subgenre. Nobody knew what The Weeknd looked like for a full year.",
+        "House of Balloons (2011) end-to-end", 49,
+        "Listen to 'High for This' — the opening line ('you don't know what's in store') delivered in a near-whisper, sets the tone. Then 'House of Balloons / Glass Table Girls' — the beat switches from a Siouxsie sample to a trap drum pattern. Tesfaye recorded the vocals in a single night in a Toronto apartment, deliberately keeping the room cold.",
+        ["R&B", "Alternative R&B", "Canadian", "2010s"], 1
+    ),
+    (
+        "album-tower-of-power-back-to-oakland", "Album",
+        "Back to Oakland",
+        "Tower of Power 1974 — the definitive album from the Oakland-based band that combined James Brown's funk with big-band horn arrangements. The five-piece horn section could shift from staccato punches to lush harmonies in a single bar. The album's 'What Is Hip?' became a question that defined the entire funk era.",
+        "Back to Oakland (1974) end-to-end", 41,
+        "Listen to 'What Is Hip?' — the bassline by Francis Rocco Prestia was played fingerstyle with such precision that bassists still study it. Then 'Don't Change Horses (In the Middle of a Stream)' — the horn arrangement by Greg Adams uses all five horns as a single instrument. The band recorded live in the studio with minimal overdubs.",
+        ["Funk", "Soul", "American", "1970s"], 1
+    ),
+    (
+        "album-the-ojays-ship-ahoy", "Album",
+        "Ship Ahoy",
+        "The O'Jays 1973 — the album that made Philly soul a national force. Produced by Kenny Gamble and Leon Huff at Philadelphia's Sigma Sound Studios with MFSB, the house band that defined the 'Philly sound': lush strings, tight drums, and a groove that never quits. The album's artwork was a fold-out depicting a slave ship.",
+        "Ship Ahoy (1973) end-to-end", 39,
+        "Listen to 'For the Love of Money' — the bassline was played by Anthony Jackson on a Fender Precision through a flanger pedal, creating the sinister, liquid sound that defined the track. Then 'Now That We Found Love' — the song rides a single chord for 4 minutes, powered entirely by the rhythm section. The album addressed race in America without ever sounding preachy.",
+        ["Soul", "Philly Soul", "American", "1970s"], 1
+    ),
+    (
+        "album-kool-and-the-gang-wild-and-peaceful", "Album",
+        "Wild and Peaceful",
+        "Kool & the Gang 1973 — the Jersey City band's breakthrough, built on three anthems: 'Jungle Boogie', 'Hollywood Swinging', and 'Funky Stuff'. The horn section, led by Ronald Bell, played riffs so tight they sounded like one instrument. The album turned a struggling jazz-funk band into one of the biggest groups of the 70s.",
+        "Wild and Peaceful (1973) end-to-end", 40,
+        "Listen to 'Jungle Boogie' — the opening 'get down, get down' vocal was improvised by a roadie they pulled into the booth. Then 'Hollywood Swinging' — the horn riff came to Bell in a dream. The band recorded the album in 3 days at a converted church in Jersey City. The studio's natural reverb gave the horns their cathedral-like sound.",
+        ["Funk", "Soul", "American", "1970s"], 1
+    ),
+    (
+        "album-barry-white-cant-get-enough", "Album",
+        "Can't Get Enough",
+        "Barry White 1974 — the album that perfected the 'love man' persona. White's impossibly deep baritone, the Love Unlimited Orchestra's 40-piece string section, and arrangements that turned 3-minute songs into 7-minute suites made every track feel like a seduction. The album's centerpiece 'Can't Get Enough of Your Love, Babe' was written in 20 minutes.",
+        "Can't Get Enough (1974) end-to-end", 36,
+        "Listen to the title track — the opening harp glissando announces the arrival of something serious. Then 'You're the First, the Last, My Everything' — White wrote it as a country song, then transformed it into disco-funk. The string section was the LA Philharmonic moonlighting for session pay. White conducted them himself despite having no formal training.",
+        ["Soul", "Disco", "American", "1970s"], 1
+    ),
+    (
+        "album-gloria-gaynor-never-can-say-goodbye", "Album",
+        "Never Can Say Goodbye",
+        "Gloria Gaynor 1975 — the first album to present disco as a continuous mix, with three songs on side A joined by seamless transitions. Gaynor's church-trained voice brought gospel power to disco. The title track (a Clifton Davis cover) and 'Honey Bee' established the template for the disco diva.",
+        "Never Can Say Goodbye (1975) end-to-end", 33,
+        "Listen to the side A medley — the three tracks flow into each other with no breaks, creating a 19-minute dance suite. Then 'Honey Bee' — the instrumental break features a conga solo by Carlos Martin. The album's production by Tom Moulton, who essentially invented the 12-inch single, defined how disco albums would be structured for the next 5 years.",
+        ["Disco", "Soul", "American", "1970s"], 1
+    ),
+
+    # ═══════════════════════════════════════════════════════════════════════
     # FOLK / SINGER-SONGWRITER
     # ═══════════════════════════════════════════════════════════════════════
     (
