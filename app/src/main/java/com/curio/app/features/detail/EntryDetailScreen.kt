@@ -44,6 +44,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -59,6 +62,7 @@ import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicCatalog
 import com.curio.app.navigation.CurioRoutes
 import com.curio.app.ui.components.MorphEntrance
+import com.curio.app.ui.components.shareComposableCard
 import com.curio.app.ui.components.StaggeredEntrance
 import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
@@ -79,6 +83,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun EntryDetailScreen(entryId: String, navController: NavController) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val authority = remember { "${context.packageName}.fileprovider" }
     val entry by produceState<CurioEntry?>(initialValue = null, entryId) {
         value = CurioRepositoryHolder.repo.getById(entryId)
             ?: TopicCatalog.sampleEntries().find { it.id == entryId }
@@ -162,7 +168,15 @@ fun EntryDetailScreen(entryId: String, navController: NavController) {
                     ) {
                         DropdownMenuItem(
                             text = { Text("Share") },
-                            onClick = { menuExpanded = false },
+                            onClick = {
+                                menuExpanded = false
+                                shareComposableCard(
+                                    context = context,
+                                    cardSize = DpSize(400.dp, 400.dp),
+                                    authority = authority,
+                                    card = { CurioShareCard(entry = resolvedEntry, category = cat) }
+                                )
+                            },
                             leadingIcon = { CurioIcon(name = CurioIcons.Share, contentDescription = null, size = 20.dp) }
                         )
                         DropdownMenuItem(
@@ -549,5 +563,192 @@ private fun OpenNotebookRender(entry: CurioEntry, category: CurioCategory) {
             captureData = data.subData
         )
         FormatBody(entry = subEntry, category = category)
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Share Card — rendered off-screen, captured as PNG, shared via Intent.ACTION_SEND
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Self-contained share card composable designed for bitmap capture.
+ *
+ * Rendered off-screen by [shareComposableCard] at 400×400 dp, captured
+ * as a PNG, and shared via [Intent.ACTION_SEND] + [FileProvider].
+ *
+ * Layout (top to bottom):
+ *   - Category gradient background (full-bleed, rounded corners)
+ *   - Large category icon watermark (centered, low alpha)
+ *   - Topic name (large, bold, white)
+ *   - Category chip
+ *   - Teaser text (3 lines max)
+ *   - Format badge
+ *   - "Curio ✦" branding footer
+ */
+@Composable
+private fun CurioShareCard(
+    entry: CurioEntry,
+    category: CurioCategory
+) {
+    val isWildcard = category.id == CategoryId.WILDCARD
+    val bgBrush = if (isWildcard)
+        Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
+    else
+        Brush.verticalGradient(listOf(category.accent, category.tint))
+
+    val daysAgoText = when (entry.capturedAtDaysAgo) {
+        0 -> "Captured today"
+        1 -> "Captured yesterday"
+        else -> "Captured ${entry.capturedAtDaysAgo}d ago"
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(bgBrush, RoundedCornerShape(28.dp))
+    ) {
+        // ── Watermark icon ────────────────────────────────────────────
+        CurioIcon(
+            name = category.iconGlyph,
+            contentDescription = null,
+            tint = Color.White.copy(alpha = 0.08f),
+            size = 200.dp,
+            modifier = Modifier.align(Alignment.Center)
+        )
+
+        // ── Content ───────────────────────────────────────────────────
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Top: category chip + sparkle
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(14.dp),
+                    color = Color.White.copy(alpha = 0.2f)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        CurioIcon(
+                            name = category.iconGlyph,
+                            contentDescription = null,
+                            tint = Color.White,
+                            size = 14.dp
+                        )
+                        Text(
+                            text = category.displayName,
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Color.White
+                        )
+                    }
+                }
+                CurioIcon(
+                    name = CurioIcons.AutoAwesome,
+                    contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.5f),
+                    size = 20.dp
+                )
+            }
+
+            // Middle: topic name + teaser
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = entry.topic.name,
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    ),
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = entry.topic.teaser,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.White.copy(alpha = 0.85f),
+                    textAlign = TextAlign.Center,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            // Bottom: format badge + branding
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // Format + date row
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = Color.White.copy(alpha = 0.15f)
+                    ) {
+                        Text(
+                            text = entry.format.name.replace(Regex("([a-z])([A-Z])"), "$1 $2"),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = Color.White.copy(alpha = 0.15f)
+                    ) {
+                        Text(
+                            text = daysAgoText,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color.White.copy(alpha = 0.8f),
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+
+                // Branding
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.AutoAwesome,
+                        contentDescription = null,
+                        tint = Color.White.copy(alpha = 0.6f),
+                        size = 18.dp
+                    )
+                    Text(
+                        text = "Curio",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.ExtraBold
+                        ),
+                        color = Color.White.copy(alpha = 0.9f)
+                    )
+                }
+                Text(
+                    text = "Stay curious ✦",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color.White.copy(alpha = 0.5f)
+                )
+            }
+        }
     }
 }
