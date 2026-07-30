@@ -1,12 +1,5 @@
 package com.curio.app.features.reveal
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,15 +28,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -55,13 +45,11 @@ import com.curio.app.data.CurioTopic
 import com.curio.app.data.TopicCatalog
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioRoutes
-import com.curio.app.ui.components.CurioSparkle
+import com.curio.app.ui.components.ConfettiBurst
 import com.curio.app.ui.components.MorphEntrance
-import com.curio.app.ui.components.ScreenEntrance
 import com.curio.app.ui.components.StaggeredEntrance
 import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
-import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
@@ -69,20 +57,21 @@ import com.curio.app.ui.theme.CurioMotion
 /**
  * Topic Reveal — see CURIO_SPEC.md §6. The payoff screen.
  *
- * Upgraded with:
- *  - Morph entrance: content scales up from 0.85 with elastic spring
- *  - Staggered reveal: sparkle → image → name → chips → teaser → CTA
- *  - Enhanced sparkle motif: rotating + pulsing auto_awesome glyph
- *  - Sparkle ring burst when the screen first appears
+ * Redesigned to match the Spin card aesthetic:
+ *  - Flat accent colors (no gradients)
+ *  - Card-based layout with 28dp corners
+ *  - Smart-cast topic reference (no forced-non-nulls)
+ *  - Static sparkle icon (cleaner than rotating/pulsing)
+ *  - Confetti burst on first appearance
  *
  * Layout (top to bottom):
  *   - ✕ close (top-right) → discards topic, exits all the way to Home
- *   - Slowly-rotating sparkle motif (decorative accent in category color)
- *   - Topic image placeholder (~280dp tall, category gradient)
+ *   - Sparkle icon (static, accent-colored)
+ *   - Topic image card (~200dp, flat accent + category glyph)
  *   - Topic name (geom, displaySmall)
  *   - Category chip + subtype chip
- *   - "One quirky fact to get you curious..." teaser (1-2 sentences)
- *   - Action prompt card (the "what to do" reminder)
+ *   - Teaser card ("One quirky fact…")
+ *   - Action prompt card (verb + target + instruction)
  *   - "Start exploring →" primary filled button → Save/Capture (§8)
  *   - "Spin again instead" text button → back to Spin
  */
@@ -107,12 +96,14 @@ fun TopicRevealScreen(
         value = pool.firstOrNull { it.name == topicName } ?: pool.firstOrNull()
     }
 
-    // Sparkle ring trigger on first appearance (fires after morph entrance)
-    var sparkleTrigger by remember { mutableIntStateOf(0) }
+    var confettiTrigger by remember { mutableIntStateOf(0) }
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(400)
-        sparkleTrigger++
+        kotlinx.coroutines.delay(300)
+        confettiTrigger++
     }
+
+    // Smart-cast safe reference
+    val resolved = topic
 
     Column(
         modifier = Modifier
@@ -120,7 +111,7 @@ fun TopicRevealScreen(
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
     ) {
-        // ── Top bar — close (✕) only ────────────────────────────────────────
+        // ── 1. Top bar — close (✕) only ──────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -155,43 +146,50 @@ fun TopicRevealScreen(
                     .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // ── Compact sparkle motif ───────────────────────────────────
-                EnhancedSparkleMotif(color = cat.accent, trigger = sparkleTrigger)
+                // ── 2. Sparkle icon ──────────────────────────────────────────
+                Box(
+                    modifier = Modifier.size(56.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CurioIcon(
+                        name = CurioIcons.AutoAwesome,
+                        contentDescription = null,
+                        tint = cat.accent,
+                        size = 48.dp
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
 
-                Spacer(Modifier.height(12.dp))
-
-                // ── Staggered content ──────────────────────────────────────────
+                // ── 3. Staggered content ─────────────────────────────────────
                 StaggeredEntrance {
-                    // ── Topic image placeholder ────────────────────────────────
+                    // ── Topic image card ──────────────────────────────────────
                     StaggeredItem(index = 0) {
-                        Box(
+                        Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(220.dp)
-                                .background(
-                                    brush = if (cat.id == CategoryId.WILDCARD)
-                                        Brush.horizontalGradient(CurioGradients.WildcardGradientStops)
-                                    else Brush.verticalGradient(listOf(cat.accent, cat.tint)),
-                                    shape = RoundedCornerShape(28.dp)
-                                ),
-                            contentAlignment = Alignment.Center
+                                .height(200.dp),
+                            shape = RoundedCornerShape(28.dp),
+                            color = cat.accent.copy(alpha = 0.12f)
                         ) {
-                            CurioIcon(
-                                name = cat.iconGlyph,
-                                contentDescription = null,
-                                tint = Color.White.copy(alpha = 0.9f),
-                                size = 120.dp
-                            )
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                CurioIcon(
+                                    name = cat.iconGlyph,
+                                    contentDescription = null,
+                                    tint = cat.accent.copy(alpha = 0.35f),
+                                    size = 100.dp
+                                )
+                            }
                         }
                     }
                     Spacer(Modifier.height(24.dp))
 
-                    // ── Topic name ────────────────────────────────────────────
+                    // ── Topic name ───────────────────────────────────────────
                     StaggeredItem(index = 1) {
                         Text(
-                            text = topic?.name ?: cat.displayName,
+                            text = resolved?.name ?: cat.displayName,
                             style = MaterialTheme.typography.displaySmall,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = CurioColors.DeepPlum,
                             textAlign = TextAlign.Center,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
@@ -200,7 +198,7 @@ fun TopicRevealScreen(
                     }
                     Spacer(Modifier.height(8.dp))
 
-                    // ── Category chip + subtype chip ──────────────────────────
+                    // ── Category + subtype chips ─────────────────────────────
                     StaggeredItem(index = 2) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -208,7 +206,7 @@ fun TopicRevealScreen(
                         ) {
                             Surface(
                                 shape = RoundedCornerShape(12.dp),
-                                color = cat.tint
+                                color = cat.accent.copy(alpha = 0.15f)
                             ) {
                                 Row(
                                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -219,13 +217,13 @@ fun TopicRevealScreen(
                                     Text(text = cat.displayName, style = MaterialTheme.typography.labelMedium, color = cat.accent)
                                 }
                             }
-                            if (topic?.subtype?.isNotBlank() == true) {
+                            if (resolved?.subtype?.isNotBlank() == true) {
                                 Surface(
                                     shape = RoundedCornerShape(12.dp),
                                     color = MaterialTheme.colorScheme.surfaceVariant
                                 ) {
                                     Text(
-                                        text = topic!!.subtype,
+                                        text = resolved.subtype,
                                         style = MaterialTheme.typography.labelMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
@@ -236,25 +234,34 @@ fun TopicRevealScreen(
                     }
                     Spacer(Modifier.height(20.dp))
 
-                    // ── Teaser ────────────────────────────────────────────────
+                    // ── Teaser card ──────────────────────────────────────────
                     StaggeredItem(index = 3) {
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
-                            color = cat.tint,
+                            shape = RoundedCornerShape(24.dp),
+                            color = MaterialTheme.colorScheme.surface,
+                            shadowElevation = 2.dp,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
+                            Column(modifier = Modifier.padding(20.dp)) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                ) {
+                                    Box(
+                                        Modifier
+                                            .width(3.dp)
+                                            .height(18.dp)
+                                            .background(cat.accent, RoundedCornerShape(2.dp))
+                                    )
+                                    Text(
+                                        text = "One quirky fact to get you curious",
+                                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                                        color = cat.accent
+                                    )
+                                }
+                                Spacer(Modifier.height(10.dp))
                                 Text(
-                                    text = "One quirky fact to get you curious...",
-                                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                                    color = cat.accent,
-                                    maxLines = 2,
-                                    softWrap = true,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                Spacer(Modifier.height(8.dp))
-                                Text(
-                                    text = topic?.teaser ?: "Loading topic…",
+                                    text = resolved?.teaser ?: "Loading topic…",
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 5,
@@ -264,14 +271,16 @@ fun TopicRevealScreen(
                             }
                         }
                     }
-                    Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(16.dp))
 
                     // ── Action prompt card ────────────────────────────────────
                     StaggeredItem(index = 4) {
-                        if (topic != null) {
+                        if (resolved != null) {
+                            val action = resolved.exploreAction
                             Surface(
-                                shape = RoundedCornerShape(20.dp),
-                                color = MaterialTheme.colorScheme.surfaceVariant
+                                shape = RoundedCornerShape(24.dp),
+                                color = cat.accent.copy(alpha = 0.06f),
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 Column(modifier = Modifier.padding(16.dp)) {
                                     Row(
@@ -280,9 +289,9 @@ fun TopicRevealScreen(
                                     ) {
                                         CurioIcon(name = CurioIcons.AutoAwesome, contentDescription = null, tint = cat.accent, size = 18.dp)
                                         Text(
-                                            text = "${topic!!.exploreAction.verb} ${topic!!.exploreAction.targetName}",
-                                            style = MaterialTheme.typography.titleSmall,
-                                            color = MaterialTheme.colorScheme.onSurface,
+                                            text = "${action.verb} ${action.targetName}",
+                                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                                            color = cat.accent,
                                             maxLines = 2,
                                             softWrap = true,
                                             overflow = TextOverflow.Ellipsis
@@ -290,7 +299,7 @@ fun TopicRevealScreen(
                                     }
                                     Spacer(Modifier.height(6.dp))
                                     Text(
-                                        text = topic!!.exploreAction.instruction,
+                                        text = action.instruction,
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         maxLines = 3,
@@ -307,22 +316,30 @@ fun TopicRevealScreen(
                     StaggeredItem(index = 5) {
                         Button(
                             onClick = {
-                                val topicNameResolved = topic?.name ?: return@Button
-                                navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, topicNameResolved))
+                                val name = resolved?.name ?: return@Button
+                                navController.navigate(CurioRoutes.captureFor(cat.id.routeSlug, name))
                             },
-                            enabled = topic != null,
-                            shape = RoundedCornerShape(28.dp),
+                            enabled = resolved != null,
+                            shape = RoundedCornerShape(50),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = cat.accent,
-                                contentColor = CurioColors.DeepPlum
+                                contentColor = Color.White,
+                                disabledContainerColor = cat.tint,
+                                disabledContentColor = CurioColors.DeepPlum.copy(alpha = 0.4f)
                             ),
-                            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp),
+                            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 18.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(
-                                text = "Start exploring  \u2192",
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 20.dp)
+                                Text(
+                                    text = "Start exploring",
+                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
+                                )
+                            }
                         }
                     }
                     Spacer(Modifier.height(8.dp))
@@ -344,57 +361,15 @@ fun TopicRevealScreen(
             }
         }
     }
-}
 
-/**
- * Enhanced decorative accent — slow rotation + pulsing + sparkle ring
- * on initial appearance.
- */
-@Composable
-private fun EnhancedSparkleMotif(color: Color, trigger: Int) {
-    val transition = rememberInfiniteTransition(label = "sparkle")
-    val rotation by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 12000, easing = LinearEasing)
-        ),
-        label = "sparkleRot"
-    )
-    val pulse by transition.animateFloat(
-        initialValue = 0.85f,
-        targetValue = 1.10f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1800, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "sparklePulse"
-    )
-
-    Box(
-        modifier = Modifier.size(48.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        // Sparkle ring background
-        CurioSparkle(
-            color = color.copy(alpha = 0.3f),
-            trigger = trigger,
-            size = 48.dp,
-            ringCount = 2
+    // ── Confetti on entrance ────────────────────────────────────────────────
+    if (confettiTrigger > 0) {
+        ConfettiBurst(
+            colors = listOf(cat.accent, cat.tint, CurioColors.ButterYellow),
+            trigger = confettiTrigger,
+            particleCount = CurioMotion.ConfettiParticleCountLarge,
+            modifier = Modifier.fillMaxSize(),
+            onComplete = {}
         )
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .scale(pulse)
-                .rotate(rotation),
-            contentAlignment = Alignment.Center
-        ) {
-            CurioIcon(
-                name = CurioIcons.AutoAwesome,
-                contentDescription = null,
-                tint = color,
-                size = 36.dp
-            )
-        }
     }
 }
