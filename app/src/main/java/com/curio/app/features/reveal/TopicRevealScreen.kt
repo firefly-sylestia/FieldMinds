@@ -238,24 +238,33 @@ fun TopicRevealScreen(
 
                     // ── Teaser ────────────────────────────────────────────────
                     StaggeredItem(index = 3) {
-                        Text(
-                            text = "One quirky fact to get you curious...",
-                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                            color = cat.accent,
+                        Surface(
+                            shape = RoundedCornerShape(16.dp),
+                            color = cat.tint,
                             modifier = Modifier.fillMaxWidth()
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            text = topic?.teaser ?: "Loading topic…",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            textAlign = TextAlign.Center,
-                            maxLines = 4,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    text = "One quirky fact to get you curious...",
+                                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                                    color = cat.accent,
+                                    maxLines = 2,
+                                    softWrap = true,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Spacer(Modifier.height(8.dp))
+                                Text(
+                                    text = topic?.teaser ?: "Loading topic…",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    maxLines = 5,
+                                    softWrap = true,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
                     }
-                    Spacer(Modifier.height(32.dp))
+                    Spacer(Modifier.height(24.dp))
 
                     // ── Action prompt card ────────────────────────────────────
                     StaggeredItem(index = 4) {
@@ -273,20 +282,26 @@ fun TopicRevealScreen(
                                         Text(
                                             text = "${topic!!.exploreAction.verb} ${topic!!.exploreAction.targetName}",
                                             style = MaterialTheme.typography.titleSmall,
-                                            color = MaterialTheme.colorScheme.onSurface
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            maxLines = 2,
+                                            softWrap = true,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     }
                                     Spacer(Modifier.height(6.dp))
                                     Text(
                                         text = topic!!.exploreAction.instruction,
                                         style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 3,
+                                        softWrap = true,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
                             }
                         }
                     }
-                    Spacer(Modifier.height(32.dp))
+                    Spacer(Modifier.height(24.dp))
 
                     // ── Primary CTA ───────────────────────────────────────────
                     StaggeredItem(index = 5) {

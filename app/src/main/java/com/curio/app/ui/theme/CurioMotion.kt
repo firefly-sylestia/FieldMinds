@@ -119,9 +119,9 @@ object CurioMotion {
         /** Dramatic reveal moments (splash → home, topic landing). */
         const val Reveal: Int = 900
 
-        /** The Spin rotation window (per section 5: 2.5 to 3.5 seconds). */
-        const val SpinMin: Int = 2500
-        const val SpinMax: Int = 3500
+        /** The Spin rotation window — deliberate, premium feel. */
+        const val SpinMin: Int = 3500
+        const val SpinMax: Int = 4800
 
         /** Confetti / sparkle burst lifetime (per section 0.5: ~600ms total). */
         const val Confetti: Int = 600

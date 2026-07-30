@@ -161,22 +161,21 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             CurioMotion.Durations.SpinMax + 1
         )
 
-        // Run the cycler faster — it cycles through ~10x more "ticks"
+        // Run the cycler slower — smooth deceleration through topics
         val cyclerJob = launch {
-            // Decelerating speed: start at 1.0 (fast), end at 0.08 (slow)
             cyclerProgress.snapTo(0f)
-            val totalCyclerTicks = (cycles * 14f).toInt()
+            val totalCyclerTicks = (cycles * 7f).toInt()
             var tick = 0
             val startMs = durationMillis.toFloat() / totalCyclerTicks
             while (tick < totalCyclerTicks && shuffling) {
                 val progress = tick.toFloat() / totalCyclerTicks
-                val tickDuration = (startMs * (1.0f + progress * 0.8f)).toLong()
+                // Gentler deceleration for smoother feel
+                val tickDuration = (startMs * (1.0f + progress * 0.4f)).toLong()
                 cyclerProgress.snapTo(progress)
                 tick++
                 visibleTopicIndex = tick % displayPool.size
-                delay(tickDuration.coerceAtLeast(8))
+                delay(tickDuration.coerceAtLeast(200))
             }
-            // Force final state
             visibleTopicIndex = (displayPool.size - 1).coerceAtLeast(0)
         }
 
@@ -184,7 +183,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             targetValue = cycles,
             animationSpec = tween(
                 durationMillis = durationMillis,
-                easing = CubicBezierEasing(0.15f, 0.85f, 0.2f, 1f)
+                easing = CubicBezierEasing(0.10f, 0.70f, 0.25f, 1f)
             )
         )
 
@@ -426,9 +425,9 @@ private fun ShuffleStack(
             modifier = Modifier
                 .size(width = 240.dp, height = 300.dp)
                 .graphicsLayer {
-                    translationY = 60.dp.toPx() + sin(progress * 6f) * 8f
-                    translationX = -16.dp.toPx() + cos(progress * 5f) * 4f
-                    rotationZ = -6f + sin(progress * 4f) * 2f
+                    translationY = 60.dp.toPx() + sin(progress * 3.5f) * 10f
+                    translationX = -16.dp.toPx() + cos(progress * 3.0f) * 6f
+                    rotationZ = -6f + sin(progress * 2.5f) * 3f
                     scaleX = 0.84f
                     scaleY = 0.84f
                     alpha = 0.65f
@@ -447,9 +446,9 @@ private fun ShuffleStack(
             modifier = Modifier
                 .size(width = 240.dp, height = 300.dp)
                 .graphicsLayer {
-                    translationY = 28.dp.toPx() + sin(progress * 6f + 1.2f) * 8f
-                    translationX = sin(progress * 5f + 0.8f) * 4f
-                    rotationZ = 3f + cos(progress * 4f + 0.5f) * 2f
+                    translationY = 28.dp.toPx() + sin(progress * 3.5f + 1.2f) * 10f
+                    translationX = sin(progress * 3.0f + 0.8f) * 6f
+                    rotationZ = 3f + cos(progress * 2.5f + 0.5f) * 3f
                     scaleX = 0.92f
                     scaleY = 0.92f
                     alpha = 0.80f
@@ -468,8 +467,8 @@ private fun ShuffleStack(
             modifier = Modifier
                 .size(width = 240.dp, height = 300.dp)
                 .graphicsLayer {
-                    translationY = sin(progress * 6f + 2.4f) * 5f
-                    rotationZ = sin(progress * 4f + 1.0f) * 1f
+                    translationY = sin(progress * 3.5f + 2.4f) * 6f
+                    rotationZ = sin(progress * 2.5f + 1.0f) * 1.5f
                     scaleX = slamScale
                     scaleY = slamScale
                     alpha = 1f
@@ -549,13 +548,13 @@ private fun CyclingTopicCard(
         targetState = topic.name,
         transitionSpec = {
             (slideInVertically(
-                initialOffsetY = { h -> h / 3 },
-                animationSpec = tween(120, easing = FastOutSlowInEasing)
-            ) + fadeIn(tween(80))) togetherWith
+                initialOffsetY = { h -> h / 4 },
+                animationSpec = tween(280, easing = CubicBezierEasing(0.2f, 0.8f, 0.3f, 1f))
+            ) + fadeIn(tween(200, easing = FastOutSlowInEasing))) togetherWith
             (slideOutVertically(
-                targetOffsetY = { h -> -h / 3 },
-                animationSpec = tween(100, easing = FastOutSlowInEasing)
-            ) + fadeOut(tween(60)))
+                targetOffsetY = { h -> -h / 4 },
+                animationSpec = tween(240, easing = CubicBezierEasing(0.2f, 0.8f, 0.3f, 1f))
+            ) + fadeOut(tween(150, easing = FastOutSlowInEasing)))
         },
         label = "topicCycle"
     ) { _ ->            Surface(
@@ -655,19 +654,19 @@ private fun ShuffleGlowHalo(
 ) {
     val transition = rememberInfiniteTransition(label = "glow")
     val pulse by transition.animateFloat(
-        initialValue = 0.85f,
-        targetValue = 1.15f,
+        initialValue = 0.88f,
+        targetValue = 1.12f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1400, easing = FastOutSlowInEasing),
+            animation = tween(2200, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "glowPulse"
     )
 
-    val alphaTarget = if (shuffling) 0.22f else 0.06f
+    val alphaTarget = if (shuffling) 0.25f else 0.05f
     val glowAlpha by animateFloatAsState(
         targetValue = alphaTarget * pulse,
-        animationSpec = CurioMotion.Springs.Bouncy,
+        animationSpec = CurioMotion.Springs.Deliberate,
         label = "glowAlpha"
     )
 
@@ -803,7 +802,7 @@ private fun CategoryIntensityMotif(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1200, easing = LinearEasing)
+            animation = tween(1800, easing = LinearEasing)
         ),
         label = "motifPhase"
     )
