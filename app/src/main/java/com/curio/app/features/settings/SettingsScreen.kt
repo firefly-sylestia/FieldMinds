@@ -59,7 +59,7 @@ fun SettingsScreen(navController: NavController) {
     var nameInput by remember(displayName) { mutableStateOf(displayName) }
     val versionName = "0.1.0-curio"
 
-    val themes = listOf("light", "dark", "system")
+    val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
     val currentThemeIndex = themes.indexOf(themeMode).coerceAtLeast(0)
 
     if (showNameDialog) {

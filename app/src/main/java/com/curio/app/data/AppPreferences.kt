@@ -30,7 +30,7 @@ object AppPreferences {
 
     // ── Theme ────────────────────────────────────────────────────────
     fun getThemeMode(context: Context): String =
-        prefs(context).getString(KEY_THEME_MODE, THEME_SYSTEM)!!
+        prefs(context).getString(KEY_THEME_MODE, THEME_SYSTEM) ?: THEME_SYSTEM
 
     fun setThemeMode(context: Context, mode: String) =
         prefs(context).edit().putString(KEY_THEME_MODE, mode).apply()

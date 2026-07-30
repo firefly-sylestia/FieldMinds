@@ -177,7 +177,7 @@ fun ProfileScreen(navController: NavController) {
                     SettingsRow(CurioIcons.Person, "Display name", displayName) { showNameDialog = true; nameInput = displayName }
                 }
                 item {
-                    val themes = listOf("light", "dark", "system")
+                    val themes = listOf(AppPreferences.THEME_LIGHT, AppPreferences.THEME_DARK, AppPreferences.THEME_SYSTEM)
                     val themeLabels = listOf("Light", "Dark", "System")
                     val idx = themes.indexOf(themeMode).coerceAtLeast(0)
                     SettingsRow(CurioIcons.Settings, "Theme", themeLabels[idx]) {
