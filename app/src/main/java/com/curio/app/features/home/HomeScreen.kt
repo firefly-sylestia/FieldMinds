@@ -101,7 +101,10 @@ fun HomeScreen(navController: NavController) {
 
     // Load recent captures from Room
     val recentEntries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
-        value = try { CurioRepositoryHolder.repo.getAll().take(4) } catch (_: Exception) { emptyList() }
+        value = try { CurioRepositoryHolder.repo.getAll().take(4) } catch (e: Exception) {
+            android.util.Log.e("HomeScreen", "Failed to load recent entries", e)
+            emptyList()
+        }
     }
 
     ModalNavigationDrawer(
@@ -315,12 +318,16 @@ fun HomeScreen(navController: NavController) {
                         Spacer(Modifier.height(14.dp))
                     }
                     StaggeredItem(index = 1) {
+                        // Fixed 5-column grid — Adaptive would need bounded
+                        // height which doesn't play well with verticalScroll.
                         LazyVerticalGrid(
-                            columns = GridCells.Adaptive(minSize = 56.dp),
+                            columns = GridCells.Fixed(5),
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp),
                             userScrollEnabled = false,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .height(180.dp)
+                                .fillMaxWidth()
                         ) {
                             item("wildcard") {
                                 CategoryPill(
