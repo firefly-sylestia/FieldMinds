@@ -28,8 +28,6 @@ object CurioCrashReporter {
     private var previousHandler: Thread.UncaughtExceptionHandler? = null
     private var appContext: Context? = null
 
-}
-
     @Volatile var lastCrashLog: String? = null
         private set
 
@@ -49,7 +47,6 @@ object CurioCrashReporter {
 
             persistCrash(context.applicationContext, crashLog)
 
-            // Give the launcher a moment to start the crash activity
             try { Thread.sleep(300) } catch (_: InterruptedException) {}
             previousHandler?.uncaughtException(thread, throwable)
                 ?: Process.killProcess(Process.myPid())

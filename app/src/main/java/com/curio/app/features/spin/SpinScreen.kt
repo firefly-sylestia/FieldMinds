@@ -363,7 +363,7 @@ private fun CardStack(
         // Back cards (static, provide depth illusion)
         if (!poolEmpty) {
             for (i in (deckSize - 1) downTo 1) {
-                val offsetPx = (deckSize - i) * 8.dp
+                val offsetPx = ((deckSize - i) * 8).dp
                 val alpha = 1f - i * 0.25f
                 val rot = (i - 2) * 3f
                 Box(

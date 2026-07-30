@@ -225,7 +225,8 @@ fun HomeScreen(navController: NavController) {
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
-                        }                            Surface(
+                        }
+                        Surface(
                             onClick = {
                                 if (chosen == null) navController.navigate(CurioRoutes.PICKER)
                                 else navController.navigate(CurioRoutes.spinWithCategory(chosen.id.routeSlug))
