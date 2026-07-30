@@ -1480,6 +1480,250 @@ ALBUMS = [
     ),
 
     # ═══════════════════════════════════════════════════════════════════════
+    # JAZZ/SOUL/FUNK BATCH 5 — Bebop, Free, Latin, Neo-Soul, Funk, Disco
+    # ═══════════════════════════════════════════════════════════════════════
+    (
+        "album-bill-evans-sunday-at-the-village-vanguard", "Album",
+        "Sunday at the Village Vanguard",
+        "Bill Evans Trio 1961 — recorded live at the Village Vanguard on June 25, 1961, just 10 days before bassist Scott LaFaro died in a car accident at age 25. The trio's telepathic interplay, particularly between Evans and LaFaro, redefined the piano trio format from rhythm-section-plus-soloist to three equal voices.",
+        "Sunday at the Village Vanguard (1961) end-to-end", 42,
+        "Listen to 'Gloria's Step' — LaFaro's bass solo is the lead voice while Evans comps behind him. Then 'Alice in Wonderland' — Evans plays the melody so quietly you lean in to hear it. The album captures the last performance of one of jazz's greatest trios; LaFaro would be dead within two weeks.",
+        ["Jazz", "Piano Jazz", "American", "1960s"], 1
+    ),
+    (
+        "album-thelonious-monk-brilliant-corners", "Album",
+        "Brilliant Corners",
+        "Thelonious Monk 1957 — an album so difficult the title track had to be assembled from 25 separate takes because the band couldn't play it all the way through. Monk's compositions use dissonant chords and angular melodies that sound wrong until they suddenly sound inevitable. The album took 3 sessions to record, nearly unprecedented for jazz at the time.",
+        "Brilliant Corners (1957) end-to-end", 42,
+        "Listen to the title track — the tempo changes three times, and the saxophone solo by Sonny Rollins had to be spliced from multiple takes because the chord changes were so unusual. Then 'Pannonica' — a ballad named for Baroness Pannonica de Koenigswarter, Monk's patron and friend, played on the celeste.",
+        ["Jazz", "Bebop", "American", "1950s"], 1
+    ),
+    (
+        "album-sonny-rollins-saxophone-colossus", "Album",
+        "Saxophone Colossus",
+        "Sonny Rollins 1956 — recorded in a single day at Rudy Van Gelder's studio. Rollins was 25 and already a master. The album's centerpiece 'Blue 7' is an 11-minute blues that jazz critics have analyzed bar-by-bar as an example of 'thematic improvisation' — Rollins develops a single motif across the entire solo.",
+        "Saxophone Colossus (1956) end-to-end", 40,
+        "Listen to 'St. Thomas' — Rollins adapted a Caribbean folk melody his mother sang to him as a child. The calypso rhythm was radical for jazz in 1956. Then 'Blue 7' — track Rollins's opening 4-note motif as it transforms across 11 minutes. He plays the entire solo without ever repeating himself.",
+        ["Jazz", "Hard Bop", "American", "1950s"], 1
+    ),
+    (
+        "album-eric-dolphy-out-to-lunch", "Album",
+        "Out to Lunch!",
+        "Eric Dolphy 1964 — his only album for Blue Note, recorded just months before he died of undiagnosed diabetes at 36. Dolphy's compositions use intervals so wide they sound like the melody is falling down stairs. The album features a teenage Tony Williams on drums and Freddie Hubbard on trumpet.",
+        "Out to Lunch! (1964) end-to-end", 42,
+        "Listen to 'Hat and Beard' — the title refers to Thelonious Monk. The rhythm section plays in 5/4 while Dolphy's bass clarinet solo floats free of any time signature. Then 'Something Sweet, Something Tender' — Dolphy plays the entire melody on bass clarinet in its highest register, making it sound like a completely different instrument.",
+        ["Jazz", "Avant-Garde Jazz", "American", "1960s"], 1
+    ),
+    (
+        "album-ornette-coleman-shape-of-jazz", "Album",
+        "The Shape of Jazz to Come",
+        "Ornette Coleman 1959 — the album that launched free jazz and divided the jazz world. Coleman abandoned chord changes entirely, playing melodies that followed their own logic. Miles Davis said Coleman was 'all screwed up inside'; others heard liberation. The album's title was a manifesto.",
+        "The Shape of Jazz to Come (1959) end-to-end", 38,
+        "Listen to 'Lonely Woman' — the opening is a single held drum cymbal and a bowed bass note while Coleman and Don Cherry play a melody that sounds like crying. Then 'Congeniality' — Coleman's plastic alto saxophone (he played a white plastic Grafton) produces a sound no metal saxophone can make. The album's rules are: there are no rules.",
+        ["Jazz", "Free Jazz", "American", "1950s"], 1
+    ),
+    (
+        "album-albert-ayler-spiritual-unity", "Album",
+        "Spiritual Unity",
+        "Albert Ayler 1965 — 29 minutes that sound like a saxophone being exorcised. Recorded in a single afternoon for $350. Ayler's sound — wide vibrato, upper-register screams, folk-like melodies buried in chaos — divided listeners violently. But his influence on later avant-garde and free jazz is incalculable.",
+        "Spiritual Unity (1965) end-to-end", 29,
+        "Listen to 'Ghosts: First Variation' — the melody sounds like a nursery rhyme played through a megaphone at a funeral. Then 'Spirits' — Ayler's sound has been described as 'a saxophone trying to talk.' Gary Peacock's bass and Sunny Murray's drums don't keep time; they create texture. The album is 29 minutes; it feels like both more and less.",
+        ["Jazz", "Free Jazz", "American", "1960s"], 1
+    ),
+    (
+        "album-sun-ra-space-is-the-place", "Album",
+        "Space Is the Place",
+        "Sun Ra 1973 — the Arkestra's afrofuturist manifesto, recorded in Chicago with a 20-piece big band playing free jazz, swing, funk, and chants about Saturn. Sun Ra claimed he was from outer space and used the album to outline his philosophy: Black people must leave Earth and colonize a new planet.",
+        "Space Is the Place (1973) end-to-end", 45,
+        "Listen to the title track — it's 21 minutes, opening with a chant declaring that outer space is the only escape from earthly oppression. Then 'Images' — a composition for flute, bells, and voice that sounds like ancient Egyptian music beamed through a wormhole. Sun Ra's keyboard solo uses a Moog synthesizer in ways Bob Moog never intended.",
+        ["Jazz", "Avant-Garde Jazz", "Afrofuturism", "American", "1970s"], 1
+    ),
+    (
+        "album-art-blakey-moanin", "Album",
+        "Moanin'",
+        "Art Blakey and the Jazz Messengers 1959 — the definitive hard bop album. Blakey's Jazz Messengers was a finishing school for jazz talent; alumni include Wayne Shorter, Lee Morgan, Freddie Hubbard, and Wynton Marsalis. The title track's call-and-response between piano and horns became a jazz standard.",
+        "Moanin' (1959) end-to-end", 41,
+        "Listen to the title track — Benny Golson wrote it specifically for Blakey's drumming style. The piano riff by Bobby Timmons is 8 bars of pure blues. Then 'Along Came Betty' — Golson's composition is a masterclass in arranging for a 5-piece band. Blakey's press rolls on the snare are so precise they sound like a single sustained note.",
+        ["Jazz", "Hard Bop", "American", "1950s"], 1
+    ),
+    (
+        "album-cannonball-adderley-something-else", "Album",
+        "Somethin' Else",
+        "Cannonball Adderley 1958 — the only Blue Note album where Miles Davis appears as a sideman. Davis chose the material and effectively led the session. The album's 10-minute version of 'Autumn Leaves' is studied by jazz students as the definitive small-group performance of a standard.",
+        "Somethin' Else (1958) end-to-end", 44,
+        "Listen to 'Autumn Leaves' — Miles Davis's muted trumpet solo is 2 choruses that say more with silence than notes. Then 'Love for Sale' — Adderley's alto sax solo quotes no less than 5 other standards in passing. The album's rhythm section — Hank Jones, Sam Jones, Art Blakey — recorded these tracks in a single afternoon.",
+        ["Jazz", "Hard Bop", "American", "1950s"], 1
+    ),
+    (
+        "album-wayne-shorter-speak-no-evil", "Album",
+        "Speak No Evil",
+        "Wayne Shorter 1966 — his third Blue Note album as leader, recorded with Herbie Hancock, Ron Carter, Elvin Jones, and Freddie Hubbard. Shorter's compositions blur the line between hard bop and the modal freedom that would define his work with Miles Davis. Every track has a mystery at its center.",
+        "Speak No Evil (1966) end-to-end", 42,
+        "Listen to the title track — the melody sounds like a question that never gets answered. Then 'Infant Eyes' — a ballad Shorter wrote for his daughter, played with such tenderness by Hubbard that it feels like a lullaby. Hancock's piano comping is so sparse he sometimes plays only one chord per bar.",
+        ["Jazz", "Hard Bop", "Modal Jazz", "American", "1960s"], 1
+    ),
+    (
+        "album-pharoah-sanders-karma", "Album",
+        "Karma",
+        "Pharoah Sanders 1969 — a 32-minute track on side A called 'The Creator Has a Master Plan', the definitive spiritual jazz anthem. Sanders had been John Coltrane's protégé; after Coltrane's death, Sanders carried forward the spiritual dimension of his mentor's music. Leon Thomas's yodeling vocal was unlike anything in jazz.",
+        "Karma (1969) end-to-end", 38,
+        "Listen to 'The Creator Has a Master Plan' — Sanders's tenor saxophone sounds like it's praying. Leon Thomas's yodel was learned from Central African pygmy singers he'd studied. The bassline by Reggie Workman repeats a two-note figure for the entire 32 minutes, becoming a meditation.",
+        ["Jazz", "Spiritual Jazz", "American", "1960s"], 1
+    ),
+    (
+        "album-stan-getz-joao-gilberto-getz-gilberto", "Album",
+        "Getz/Gilberto",
+        "Stan Getz and João Gilberto 1964 — the album that launched bossa nova globally. Recorded in New York over two days. Astrud Gilberto had never sung professionally; she was at the session to translate for her husband João. When they needed an English vocal on 'The Girl from Ipanema', she volunteered. The take they used was her first public performance.",
+        "Getz/Gilberto (1964) end-to-end", 34,
+        "Listen to 'The Girl from Ipanema' — Astrud's untrained, breathy vocal was considered a weakness at the time; it became the defining bossa nova vocal sound. Then 'Corcovado' — João Gilberto's guitar playing uses a rhythm so subtle it's almost subliminal. The album won Album of the Year at the Grammys, the first jazz album to do so.",
+        ["Jazz", "Bossa Nova", "Latin Jazz", "Brazilian-American", "1960s"], 1
+    ),
+    (
+        "album-jobim-wave", "Album",
+        "Wave",
+        "Antônio Carlos Jobim 1967 — the bossa nova composer's most fully realized solo album. Jobim wrote nearly every classic bossa nova standard; this album collects his instrumental versions, played with a restraint that makes the melodies feel inevitable. Claus Ogerman's string arrangements wrap the songs in late-60s sophistication.",
+        "Wave (1967) end-to-end", 32,
+        "Listen to the title track — Jobim's piano is so understated it barely exists. Then 'Triste' — the melody is 16 bars that feel like they've always existed. Jobim's genius was writing songs that sounded like they were discovered, not composed. The album was recorded in Rudy Van Gelder's studio with a full orchestra in a single day.",
+        ["Jazz", "Bossa Nova", "Latin Jazz", "Brazilian", "1960s"], 1
+    ),
+    (
+        "album-oscar-peterson-night-train", "Album",
+        "Night Train",
+        "Oscar Peterson Trio 1963 — recorded in a single evening session. The album's laid-back, blues-inflected swing made it one of the best-selling jazz albums of the 60s. Peterson's technique — his right hand could play faster than most pianists could think — is on full display, but it's the tastefulness that impresses.",
+        "Night Train (1963) end-to-end", 45,
+        "Listen to the title track — the bassline by Ray Brown walks with the authority of a freight train. Then 'C Jam Blues' — Peterson quotes no less than 8 other songs in his solo, a game of musical spot-the-reference. The album was recorded so fast that the band didn't realize they'd made a classic until they heard the playback.",
+        ["Jazz", "Swing", "Canadian", "1960s"], 1
+    ),
+    (
+        "album-aretha-franklin-i-never-loved-a-man", "Album",
+        "I Never Loved a Man the Way I Love You",
+        "Aretha Franklin 1967 — her Atlantic Records debut and the album that crowned her the Queen of Soul. Recorded at FAME Studios in Muscle Shoals, Alabama with the legendary Muscle Shoals Rhythm Section. The first single 'I Never Loved a Man' was recorded at 3 AM after a fight between Aretha's husband and the studio owner shut down the session.",
+        "I Never Loved a Man (1967) end-to-end", 33,
+        "Listen to 'Respect' — the song was Otis Redding's, but Aretha's version (with her own added 'sock it to me' bridge and sister backing vocals) completely reclaimed it. Then 'Do Right Woman, Do Right Man' — Aretha plays piano herself, a fact often forgotten. The album was recorded in just 9 days.",
+        ["Soul", "American", "1960s"], 1
+    ),
+    (
+        "album-otis-redding-otis-blue", "Album",
+        "Otis Blue: Otis Redding Sings Soul",
+        "Otis Redding 1965 — recorded in a 24-hour marathon session at Stax Studios in Memphis. Redding's voice — rough, pleading, erupting into screams that never lost the melody — defined Southern soul. The album covers Sam Cooke, the Temptations, and the Rolling Stones and makes each song feel like it was written for Otis.",
+        "Otis Blue (1965) end-to-end", 33,
+        "Listen to 'I've Been Loving You Too Long' — recorded in a single take. Redding's vocal starts as a whisper and builds to a scream that sounds like it cost him something. Then 'Respect' — the original version, before Aretha transformed it. Stax's house band Booker T. & the M.G.'s played on every track; their groove is the album's secret weapon.",
+        ["Soul", "Southern Soul", "American", "1960s"], 1
+    ),
+    (
+        "album-al-green-call-me", "Album",
+        "Call Me",
+        "Al Green 1973 — recorded at Royal Studios in Memphis with producer Willie Mitchell. Green's falsetto floats over Hi Records' signature sound: tight drums, warm organ, and the Memphis Horns. The album made Green a star while he was secretly struggling with his faith, eventually becoming an ordained pastor.",
+        "Call Me (1973) end-to-end", 35,
+        "Listen to 'Call Me (Come Back Home)' — the bassline by Leroy Hodges is two notes for the entire song. Then 'Here I Am (Come and Take Me)' — Green's falsetto sounds effortless, but the yearning underneath is real. Mitchell's production secret: record everything quietly, then turn it up. The intimacy is in the headroom.",
+        ["Soul", "American", "1970s"], 1
+    ),
+    (
+        "album-sam-cooke-live-at-the-harlem-square-club", "Album",
+        "Live at the Harlem Square Club, 1963",
+        "Sam Cooke 1963 — recorded at a sweaty Miami club before a mostly Black audience. RCA shelved it for 22 years because Cooke sounded too raw, too Black, too much like a gospel preacher instead of a pop crooner. Released posthumously in 1985, it's now recognized as one of the greatest live albums ever.",
+        "Live at the Harlem Square Club (1963)", 37,
+        "Listen to 'Chain Gang' — Cooke transforms a pop single into a call-and-response with the audience that builds for 5 minutes. Then 'Bring It On Home to Me' — the audience sings the chorus unprompted. Cooke's band, led by King Curtis on sax, plays with the energy of a gospel revival. The album was recorded on a single microphone suspended from the ceiling.",
+        ["Soul", "Live", "American", "1960s"], 1
+    ),
+    (
+        "album-erykah-badu-baduizm", "Album",
+        "Baduizm",
+        "Erykah Badu 1997 — the album that launched neo-soul. Recorded in New York and Philadelphia over a year. Badu's voice — jazzy, conversational, floating between singing and speech — was unlike anything in 90s R&B. The album's organic sound, built on live instrumentation and Fender Rhodes, rejected the synth-heavy production dominating the era.",
+        "Baduizm (1997) end-to-end", 58,
+        "Listen to 'On & On' — Badu wrote it in 15 minutes while waiting for a bus. The lyrics are a stream of cosmic consciousness. Then 'Next Lifetime' — a love song told from the perspective of someone who believes in reincarnation. The album's production by the Roots' Questlove and others used vintage analog equipment to achieve its warm, timeless sound.",
+        ["Neo-Soul", "R&B", "American", "1990s"], 1
+    ),
+    (
+        "album-dangelo-voodoo", "Album",
+        "Voodoo",
+        "D'Angelo 2000 — recorded over 5 years at Electric Lady Studios, the same studio built for Jimi Hendrix. D'Angelo and his band (the Soulquarians — Questlove, J Dilla, Pino Palladino, Roy Hargrove) recorded hundreds of hours of jam sessions, then edited the best moments into songs. The album sounds like a séance captured on tape.",
+        "Voodoo (2000) end-to-end", 79,
+        "Listen to 'Untitled (How Does It Feel)' — the falsetto was inspired by Prince, but D'Angelo's vocal sounds like it's being pulled out of him against his will. Then 'The Root' — the bassline by Pino Palladino was played on a fretless bass and never repeats exactly. Questlove's drumming is intentionally behind the beat, creating a tension that never resolves.",
+        ["Neo-Soul", "R&B", "American", "2000s"], 1
+    ),
+    (
+        "album-lauren-hill-miseducation", "Album",
+        "The Miseducation of Lauryn Hill",
+        "Already in catalog — see Hip-Hop section.",
+        "", 0,
+        "",
+        [], 1
+    ),
+    (
+        "album-maxwell-urban-hang-suite", "Album",
+        "Maxwell's Urban Hang Suite",
+        "Maxwell 1996 — the album that defined the softer side of neo-soul. Recorded over 3 years with producer Stuart Matthewman (Sade's guitarist). Maxwell's falsetto and the album's concept — a single night of romance from flirtation to morning — made it both critically acclaimed and commercially successful.",
+        "Maxwell's Urban Hang Suite (1996) end-to-end", 62,
+        "Listen to 'Ascension (Don't Ever Wonder)' — the bassline by Matthewman was played on a fretless bass through a vintage tube preamp. Then 'Whenever Wherever Whatever' — Maxwell recorded the vocal in complete darkness. The album's narrative arc was inspired by Marvin Gaye's 'I Want You', a suite of songs about a single relationship.",
+        ["Neo-Soul", "R&B", "American", "1990s"], 1
+    ),
+    (
+        "album-sade-love-deluxe", "Album",
+        "Love Deluxe",
+        "Sade 1992 — recorded over two years at Studio Condulmer in Venice, Italy. The band's perfectionism was legendary: they'd spend weeks on a single snare sound. Sade Adu's voice — cool, controlled, impossibly elegant — delivers lyrics about heartbreak with the poise of someone who's already survived it.",
+        "Love Deluxe (1992) end-to-end", 46,
+        "Listen to 'No Ordinary Love' — the bassline by Paul Denman was recorded in a concrete stairwell for natural reverb. Then 'Cherish the Day' — Sade's vocal was the first take. The band recorded everything to analog tape and refused to use digital effects. The album took 2 years to make; it sounds like it took 2 years.",
+        ["R&B", "Sophisti-Pop", "British-Nigerian", "1990s"], 1
+    ),
+    (
+        "album-sly-and-the-family-stone-theres-a-riot", "Album",
+        "There's a Riot Goin' On",
+        "Sly and the Family Stone 1971 — recorded almost entirely by Sly Stone alone in a drug-fueled haze at the Record Plant in Los Angeles. The album is a deliberate deconstruction of the optimistic funk of 'Dance to the Music'. In place of joy: paranoia, exhaustion, and a drum machine that sounds like a dying heartbeat.",
+        "There's a Riot Goin' On (1971) end-to-end", 48,
+        "Listen to 'Family Affair' — the drum machine was Sly's new Maestro Rhythm King, the first time a drum machine had driven a #1 hit. Then 'Runnin' Away' — the horns are so buried in the mix they sound like they're playing from another room. The album was recorded and re-recorded so many times the master tape nearly disintegrated.",
+        ["Funk", "Soul", "American", "1970s"], 1
+    ),
+    (
+        "album-curtis-mayfield-superfly", "Album",
+        "Super Fly",
+        "Curtis Mayfield 1972 — the soundtrack to a blaxploitation film about a cocaine dealer trying to leave the game. Mayfield's lyrics, sung in his impossibly smooth falsetto, critique the very lifestyle the film glamorizes. The album outgrossed the movie and became a landmark of socially conscious funk.",
+        "Super Fly (1972) end-to-end", 37,
+        "Listen to 'Pusherman' — Mayfield's vocal makes a drug dealer sound like a tragic hero. Then 'Freddie's Dead' — the chorus is a funeral dirge set to a wah-wah guitar riff. Mayfield played nearly every instrument on the album himself. The album's message — that drugs destroy Black communities — was delivered with such beauty that the message slipped in unnoticed.",
+        ["Funk", "Soul", "Soundtrack", "American", "1970s"], 1
+    ),
+    (
+        "album-isaac-hayes-hot-buttered-soul", "Album",
+        "Hot Buttered Soul",
+        "Isaac Hayes 1969 — the album that made Stax Records relevant again after losing their Atlantic catalog. Hayes took lounge-soul and stretched it to orchestral proportions: 4 songs, 45 minutes, with lengthy spoken introductions that predate rap. The album invented the 'Black Moses' persona that would define Hayes's career.",
+        "Hot Buttered Soul (1969) end-to-end", 45,
+        "Listen to 'Walk On By' — Hayes transforms Burt Bacharach's 3-minute pop song into a 12-minute orchestral epic with a 4-minute spoken intro. Then 'By the Time I Get to Phoenix' — an 18-minute version where the spoken introduction is actually longer than the original song. Hayes's baritone was so deep it made the studio monitors vibrate.",
+        ["Soul", "Funk", "American", "1960s"], 1
+    ),
+    (
+        "album-funkadelic-maggot-brain", "Album",
+        "Maggot Brain",
+        "Funkadelic 1971 — the album that proved funk could be psychedelic, political, and transcendent. The 10-minute title track is a guitar solo by Eddie Hazel that George Clinton instructed him to play as if he'd just learned his mother had died. Hazel recorded it in one take, weeping through parts of the solo.",
+        "Maggot Brain (1971) end-to-end", 37,
+        "Listen to the title track — close your eyes. Hazel's guitar sounds like it's mourning, raging, and praying simultaneously. The solo was recorded with no overdubs: one guitar, one amp, one take. Then 'Can You Get to That' — a gospel-influenced track about karma that the Rolling Stones would later cover. The album's eclecticism defined the P-Funk aesthetic.",
+        ["Funk", "Psychedelic Soul", "American", "1970s"], 1
+    ),
+    (
+        "album-chic-risque", "Album",
+        "Risqué",
+        "Chic 1979 — the peak of Nile Rodgers and Bernard Edwards's disco empire. Rodgers's 'chucking' guitar style — playing 16th-note rhythms on muted strings — became the rhythmic DNA of dance music for the next 40 years. The album's biggest hit 'Good Times' was directly sampled for 'Rapper's Delight', birthing hip-hop's first commercial success.",
+        "Risqué (1979) end-to-end", 35,
+        "Listen to 'Good Times' — the bassline by Bernard Edwards is 2 bars long, repeated for 8 minutes, and never gets boring. Then 'My Feet Keep Dancing' — Rodgers's guitar part uses a chord voicing that music theorists call 'the Chic chord'. The album's production is so precise that every instrument occupies its own frequency space without ever crowding.",
+        ["Disco", "Funk", "American", "1970s"], 1
+    ),
+    (
+        "album-earth-wind-and-fire-thats-the-way", "Album",
+        "That's the Way of the World",
+        "Earth, Wind & Fire 1975 — the album that perfected the intersection of funk, soul, jazz, and spirituality. Recorded at Caribou Ranch in Colorado, where the band could see mountains from the studio window. Maurice White's vision — a band that combined the precision of James Brown with the ambition of a symphony orchestra — reached its peak here.",
+        "That's the Way of the World (1975) end-to-end", 39,
+        "Listen to 'Shining Star' — the opening synth riff was played on a Moog by Larry Dunn. Then 'Reasons' — Philip Bailey's falsetto hits notes that shouldn't be physically possible. The horn section, the Phenix Horns, were recorded in a single day. The album was originally intended as a soundtrack but became their commercial breakthrough instead.",
+        ["Funk", "Soul", "R&B", "American", "1970s"], 1
+    ),
+    (
+        "album-rick-james-street-songs", "Album",
+        "Street Songs",
+        "Rick James 1981 — the album that bridged funk and the emerging sound of 80s R&B. James's 'punk-funk' — raw, aggressive, built on synthesizers and drum machines — created the template that Prince would refine. The album's biggest hit 'Super Freak' was written in a single night and became one of the most-sampled songs in history.",
+        "Street Songs (1981) end-to-end", 44,
+        "Listen to 'Super Freak' — the bassline was played on a Minimoog synthesizer, not a bass guitar. Then 'Give It to Me Baby' — the song's groove was inspired by the punk bands James was listening to at the time. James produced the entire album himself, playing many of the instruments, and mixed it for maximum impact on car stereos.",
+        ["Funk", "R&B", "American", "1980s"], 1
+    ),
+
+    # ═══════════════════════════════════════════════════════════════════════
     # FOLK / SINGER-SONGWRITER
     # ═══════════════════════════════════════════════════════════════════════
     (
