@@ -155,6 +155,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
     var shuffleCount by remember { mutableIntStateOf(0) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
     var landedTopic by remember { mutableStateOf<CurioTopic?>(null) }
+    var landedCandidates by remember(activeCategory.id) { mutableStateOf<List<CurioTopic>>(emptyList()) }
     var recentTopicIds by remember(activeCategory.id) { mutableStateOf(setOf<String>()) }
 
     val displayPool = remember(filteredPool) {
@@ -169,6 +170,7 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
 
     LaunchedEffect(activeCategory.id) {
         landedTopic = null
+        landedCandidates = emptyList()
         shuffling = false
         activeFilters = emptySet()
         activeSubtypes = emptySet()
@@ -200,22 +202,18 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
         }
         shuffling = false
 
-        val pick = pickFrom(filteredPool, recentTopicIds)
-        landedTopic = pick
-        if (pick != null) {
-            val idx = displayPool.indexOfFirst { it.id == pick.id }
+        // Pick 3 candidates — user will choose one
+        val candidates = pickMultiple(filteredPool, recentTopicIds, 3)
+        landedCandidates = candidates
+        val primary = candidates.firstOrNull()
+        landedTopic = primary
+        if (primary != null) {
+            val idx = displayPool.indexOfFirst { it.id == primary.id }
             if (idx >= 0) cycleIndex = idx
-            recentTopicIds = (recentTopicIds + pick.id).toList().takeLast(20).toSet()
+            recentTopicIds = (recentTopicIds + candidates.map { it.id }).toList().takeLast(20).toSet()
             StreakTracker.recordActivity(context)
         }
         confettiTrigger++
-    }
-
-    LaunchedEffect(confettiTrigger) {
-        if (confettiTrigger == 0) return@LaunchedEffect
-        delay(CurioMotion.Durations.RevealHold.toLong())
-        val topic = landedTopic ?: pickFrom(filteredPool, recentTopicIds) ?: return@LaunchedEffect
-        navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, topic.name))
     }
 
     // ── Animations ────────────────────────────────────────────────────
@@ -324,18 +322,35 @@ fun SpinScreen(categorySlug: String?, navController: NavController) {
             )
         }
 
-        // ── 5. Bottom CTA ───────────────────────────────────────────
-        BottomCta(
-            cat = cat,
-            landedTopic = landedTopic,
-            shuffling = shuffling,
-            canSpin = filteredPool.isNotEmpty(),
-            onSpin = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
-            onExplore = {
-                val name = landedTopic?.name ?: return@BottomCta
-                navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, name))
-            }
-        )
+        // ── 5. Topic picker (when candidates available after spin) ────
+        if (landedCandidates.isNotEmpty() && !shuffling) {
+            var selectedIndex by remember(landedCandidates) { mutableIntStateOf(0) }
+            TopicPicker(
+                candidates = landedCandidates,
+                selectedIndex = selectedIndex,
+                accent = cat.accent,
+                onSelect = { selectedIndex = it },
+                onExplore = {
+                    val topic = landedCandidates.getOrNull(selectedIndex) ?: return@TopicPicker
+                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, topic.name))
+                },
+                onRespin = { shuffleCount++ },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+            )
+        } else {
+            // ── 5. Bottom CTA ───────────────────────────────────────────
+            BottomCta(
+                cat = cat,
+                landedTopic = landedTopic,
+                shuffling = shuffling,
+                canSpin = filteredPool.isNotEmpty(),
+                onSpin = { if (!shuffling && filteredPool.isNotEmpty()) shuffleCount++ },
+                onExplore = {
+                    val name = landedTopic?.name ?: return@BottomCta
+                    navController.navigate(CurioRoutes.revealFor(cat.id.routeSlug, name))
+                }
+            )
+        }
     }
 
     // ── Category picker bottom sheet ──────────────────────────────────
@@ -620,59 +635,34 @@ private fun CategoryPickerCard(
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        color = if (isSelected) cat.accent else cat.accent.copy(alpha = 0.18f),
-        shadowElevation = if (isSelected) 6.dp else 2.dp,
+        color = if (isSelected) cat.accent else MaterialTheme.colorScheme.surfaceContainerHigh,
+        shadowElevation = if (isSelected) 6.dp else 1.dp,
         tonalElevation = if (isSelected) 3.dp else 0.dp,
         border = if (isSelected) BorderStroke(2.dp, cat.accent)
-        else BorderStroke(1.dp, cat.accent.copy(alpha = 0.15f)),
+        else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = modifier
             .height(100.dp)
             .scale(scale)
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            // Watermark glyph
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             CurioIcon(
                 cat.iconGlyph, null,
-                tint = if (isSelected) Color.White.copy(alpha = 0.2f)
-                else cat.accent.copy(alpha = 0.2f),
-                size = 72.dp,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 8.dp, bottom = 4.dp)
+                tint = if (isSelected) Color.White else cat.accent,
+                size = 24.dp
             )
-            // Content
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(14.dp),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    CurioIcon(
-                        cat.iconGlyph, null,
-                        tint = if (isSelected) Color.White else cat.accent,
-                        size = 20.dp
-                    )
-                    if (isSelected) {
-                        CurioIcon(
-                            CurioIcons.Check, null,
-                            tint = Color.White,
-                            size = 16.dp
-                        )
-                    }
-                }
-                Text(
-                    text = cat.displayName,
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Bold
-                    ),
-                    color = if (isSelected) Color.White else cat.accent,
-                    maxLines = 1
-                )
-            }
+            Text(
+                text = cat.displayName,
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Bold
+                ),
+                color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface,
+                maxLines = 1
+            )
         }
     }
 }
@@ -938,7 +928,7 @@ private fun MultiSelectChip(
     onClick: () -> Unit
 ) {
     val scale by animateFloatAsState(
-        targetValue = if (selected) 1.05f else 1f,
+        targetValue = if (selected) 1.04f else 1f,
         animationSpec = CurioMotion.Springs.Snappy,
         label = "msChipScale"
     )
@@ -947,27 +937,18 @@ private fun MultiSelectChip(
         shape = RoundedCornerShape(50),
         color = if (selected) accent
         else MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = if (!selected)
-            BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-        else null,
+        border = if (selected) null
+        else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.scale(scale)
     ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            if (selected) {
-                CurioIcon(CurioIcons.Check, null, tint = Color.White, size = 14.dp)
-            }
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium.copy(
-                    fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
-                ),
-                color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface
-            )
-        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium.copy(
+                fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Medium
+            ),
+            color = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
+        )
     }
 }
 
@@ -1181,100 +1162,199 @@ private fun CarouselCardContent(
     isCenter: Boolean,
     landed: Boolean
 ) {
-    Box(modifier = Modifier.fillMaxSize().padding(20.dp)) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
+    Column(
+        modifier = Modifier.fillMaxSize().padding(if (isCenter) 22.dp else 14.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        // Small accent dot + subtype badge
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Header: type + accent stripe
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(3.dp)
-                        .height(if (isCenter) 18.dp else 12.dp)
-                        .background(accent, RoundedCornerShape(2.dp))
-                )
-                Text(
-                    text = if (isCenter) "Curated pick" else "Up next",
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        letterSpacing = 0.6.sp
-                    ),
-                    color = accent
-                )
-            }
-            // Middle: topic name
+            Box(
+                modifier = Modifier
+                    .size(6.dp)
+                    .clip(CircleShape)
+                    .background(accent)
+            )
             Text(
-                text = topic.name,
-                style = if (isCenter)
-                    MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold)
-                else
-                    MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = if (isCenter) 3 else 1,
+                text = topic.subtype,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.4.sp
+                ),
+                color = accent
+            )
+        }
+        Spacer(Modifier.height(if (isCenter) 12.dp else 4.dp))
+        // Topic name — large and bold
+        Text(
+            text = topic.name,
+            style = if (isCenter)
+                MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    lineHeight = 28.sp
+                )
+            else
+                MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = if (isCenter) 3 else 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        // Tags row below name
+        if (isCenter && topic.tags.isNotEmpty()) {
+            Spacer(Modifier.height(10.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                topic.tags.take(2).forEach { tag ->
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = accent.copy(alpha = 0.12f)
+                    ) {
+                        Text(
+                            text = tag,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = accent,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+            }
+        }
+        if (landed && isCenter) {
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = topic.teaser,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-            // Footer
-            if (isCenter) {
-                Column {
-                    if (landed) {
+        }
+    }
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Topic picker — 3 candidate cards after shuffle lands
+// ═══════════════════════════════════════════════════════════════════════════
+
+@Composable
+private fun TopicPicker(
+    candidates: List<CurioTopic>,
+    selectedIndex: Int,
+    accent: Color,
+    onSelect: (Int) -> Unit,
+    onExplore: () -> Unit,
+    onRespin: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = "Your picks — tap one",
+            style = MaterialTheme.typography.labelLarge.copy(
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.4.sp
+            ),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        // 3 cards in a row
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            candidates.forEachIndexed { idx, topic ->
+                val isSelected = idx == selectedIndex
+                Surface(
+                    onClick = { onSelect(idx) },
+                    shape = RoundedCornerShape(20.dp),
+                    color = if (isSelected) accent.copy(alpha = 0.18f)
+                    else MaterialTheme.colorScheme.surfaceContainer,
+                    border = if (isSelected) BorderStroke(2.dp, accent)
+                    else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    shadowElevation = if (isSelected) 4.dp else 0.dp,
+                    modifier = Modifier.weight(1f).height(130.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(12.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
                         Text(
-                            text = topic.teaser,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            text = topic.name,
+                            style = MaterialTheme.typography.labelLarge.copy(
+                                fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.SemiBold
+                            ),
+                            color = if (isSelected) accent
+                            else MaterialTheme.colorScheme.onSurface,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis
                         )
-                        Spacer(Modifier.height(8.dp))
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            Surface(
-                                shape = RoundedCornerShape(50),
-                                color = accent.copy(alpha = 0.15f)
-                            ) {
-                                Text(
-                                    text = topic.subtype,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = accent,
-                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                                )
-                            }
-                            if (topic.tags.isNotEmpty()) {
-                                Text(
-                                    text = topic.tags.first(),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                    } else {
-                        Text(
-                            text = topic.subtype,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = accent
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        if (topic.tags.isNotEmpty()) {
-                            Row {
-                                Text(
-                                    text = topic.tags.take(3).joinToString(" · "),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
+                            Box(
+                                modifier = Modifier
+                                    .size(5.dp)
+                                    .clip(CircleShape)
+                                    .background(accent.copy(alpha = 0.7f))
+                            )
+                            Text(
+                                text = topic.subtype,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = accent.copy(alpha = 0.8f),
+                                maxLines = 1
+                            )
                         }
                     }
                 }
             }
         }
+        Spacer(Modifier.height(10.dp))
+        // Action buttons
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(
+                onClick = onExplore,
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = accent,
+                    contentColor = Color.White
+                ),
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 14.dp),
+                modifier = Modifier.weight(1f)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    CurioIcon(CurioIcons.AutoAwesome, null, tint = Color.White, size = 16.dp)
+                    Text(
+                        "Explore this",
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold)
+                    )
+                }
+            }
+            TextButton(
+                onClick = onRespin,
+                shape = RoundedCornerShape(50),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+            ) {
+                CurioIcon(CurioIcons.Refresh, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 16.dp)
+                Spacer(Modifier.width(4.dp))
+                Text(
+                    "Respin",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
 }
-
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Center spin button (with optional orbit ring)
@@ -1545,4 +1625,19 @@ private fun pickFrom(pool: List<CurioTopic>, recentIds: Set<String>): CurioTopic
         if (target < 0) return topic
     }
     return candidates.random()
+}
+
+/** Pick [count] unique weighted topics, excluding [recentIds]. */
+private fun pickMultiple(pool: List<CurioTopic>, recentIds: Set<String>, count: Int): List<CurioTopic> {
+    if (pool.isEmpty()) return emptyList()
+    val result = mutableListOf<CurioTopic>()
+    val exclude = recentIds.toMutableSet()
+    repeat(count) {
+        val pick = pickFrom(pool.filter { it.id !in exclude }, exclude)
+        if (pick != null) {
+            result.add(pick)
+            exclude.add(pick.id)
+        }
+    }
+    return result
 }
