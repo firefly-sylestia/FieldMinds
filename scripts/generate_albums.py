@@ -2601,6 +2601,554 @@ ALBUMS = [
         "Listen to 'exile' — Bon Iver's Justin Vernon wrote his verse in character as a ghost. Then 'august' — the bridge was recorded in a single take with Swift's voice cracking at the end; they kept it because the imperfection was the point. The album is a triptych of fictional love triangles told from different perspectives.",
         ["Indie Folk", "Alternative", "American", "2020s"], 1
     ),
+
+    # ═══════════════════════════════════════════════════════════════════════
+    # MEGA-BATCH 7 — Pop, R&B, Electronic deep, Jazz/Soul/Funk, Metal, World, Country/Folk
+    # ═══════════════════════════════════════════════════════════════════════
+    (
+        "album-prince-purple-rain", "Album",
+        "Purple Rain",
+        "Prince 1984 — the soundtrack to a semi-autobiographical film that Prince starred in and largely wrote. Recorded mostly live at a benefit concert at First Avenue in Minneapolis. The title track was captured in a single take with the Revolution, and Prince refused to overdub anything. The album spent 24 weeks at #1.",
+        "Purple Rain (1984) end-to-end", 44,
+        "Listen to 'When Doves Cry' — there's no bassline, which was radical for a dance-pop song in 1984. Prince removed the bass track at the last minute because he wanted the song to feel 'unbalanced.' Then the title track — the guitar solo at the end was recorded at the live show; what you're hearing is Prince playing to 1,500 people who had no idea they were witnessing history.",
+        ["Pop", "R&B", "Funk", "American", "1980s"], 1
+    ),
+    (
+        "album-michael-jackson-thriller", "Album",
+        "Thriller",
+        "Michael Jackson 1982 — the best-selling album of all time (70+ million). Quincy Jones produced it over 2 months at Westlake Studio in LA. The title track's Vincent Price rap was written by Rod Temperton in a taxi on the way to the studio, then spliced from two takes edited together. Eddie Van Halen's guitar solo on 'Beat It' was a freebie — he thought the call was a prank.",
+        "Thriller (1982) end-to-end", 42,
+        "Listen to 'Billie Jean' — the bassline was played on a Yamaha CS-80 synthesizer, not a bass guitar. Jackson recorded his vocal in one take while dancing in the booth. Then 'Human Nature' — the song was written by Steve Porcaro of Toto about his daughter's first day of school. It was the last song added to the album, replacing a track Quincy Jones hated.",
+        ["Pop", "R&B", "American", "1980s"], 1
+    ),
+    (
+        "album-madonna-like-a-prayer", "Album",
+        "Like a Prayer",
+        "Madonna 1989 — recorded with Patrick Leonard and Stephen Bray while Madonna's marriage to Sean Penn was collapsing. Prince played guitar on three tracks uncredited. The title track used a gospel choir and Catholic imagery that got the Vatican to issue a condemnation. Pepsi cancelled a $5M endorsement deal over the music video.",
+        "Like a Prayer (1989) end-to-end", 51,
+        "Listen to 'Like a Prayer' — the opening guitar riff was played by Prince, who walked into the studio, recorded his parts, and left without saying goodbye. Then 'Promise to Try' — Madonna's tribute to her mother who died when Madonna was 5. The song has almost no percussion; the entire rhythm is carried by the piano.",
+        ["Pop", "American", "1980s"], 1
+    ),
+    (
+        "album-beyonce-lemonade", "Album",
+        "Lemonade",
+        "Beyoncé 2016 — a visual album exploring Black womanhood, infidelity, and Southern heritage. Features from Jack White, Kendrick Lamar, the Weeknd, and James Blake. The album samples everything from Led Zeppelin to Animal Collective to Malcolm X speeches. It was released exclusively on Tidal, with each song getting a film chapter on HBO.",
+        "Lemonade (2016) end-to-end", 46,
+        "Listen to 'Don't Hurt Yourself' — Jack White's distorted vocal sample under Beyoncé's scream was recorded at his Third Man Records studio in Nashville. Then 'Freedom' — Kendrick Lamar's verse was written in 30 minutes while Beyoncé watched from the control room. The album's structure mimics the Kübler-Ross stages of grief.",
+        ["Pop", "R&B", "American", "2010s"], 1
+    ),
+    (
+        "album-rihanna-anti", "Album",
+        "ANTI",
+        "Rihanna 2016 — recorded over 18 months in 4 countries after Rihanna fired her previous management and took full creative control. The album's sound — sparse, paranoid, hypnotic — was influenced by Tame Impala and vintage dub. The opening track 'Consideration' features SZA, who Rihanna discovered on SoundCloud.",
+        "ANTI (2016) end-to-end", 44,
+        "Listen to 'Work' — the patois-heavy verses were written by Drake and Rihanna in a Toronto studio at 3 AM, trading lines back and forth. Then 'Love on the Brain' — the doo-wop throwback was recorded with a live band in a single 4-hour session. Rihanna's vocal cracks in the final chorus were left in because they proved it was live.",
+        ["Pop", "R&B", "Barbadian-American", "2010s"], 1
+    ),
+    (
+        "album-weeknd-after-hours", "Album",
+        "After Hours",
+        "The Weeknd 2020 — a concept album about a single night in Las Vegas that spirals from hedonism to self-destruction. Abel Tesfaye wrote the script before writing the songs. The album cover shows him bloodied and bandaged, a character he maintained for the entire promotional cycle including his SNL performance and the Super Bowl halftime show.",
+        "After Hours (2020) end-to-end", 56,
+        "Listen to 'Blinding Lights' — the synth riff was inspired by A-ha's 'Take On Me' and was recorded on a vintage Roland Juno-60. Then 'Faith' — the song transitions from a synth-pop verse to a gospel breakdown at 2:30 without warning. The album's narrative arc is mapped on the back cover: each song is a time-stamp on a clock counting down to dawn.",
+        ["Pop", "R&B", "Synth-Pop", "Canadian", "2020s"], 1
+    ),
+    (
+        "album-sza-ctrl", "Album",
+        "CTRL",
+        "SZA 2017 — the debut that took 4 years to finish because SZA kept re-recording it. She tried to delete the entire album in 2016; her label refused. The album's title refers to the illusion of having control over your life. Features from Travis Scott, Kendrick Lamar, and Isaiah Rashad feel secondary to SZA's confessional songwriting.",
+        "CTRL (2017) end-to-end", 49,
+        "Listen to 'Drew Barrymore' — named after the actress because SZA felt the song's vulnerability matched Barrymore's on-screen persona. Then 'The Weekend' — written in 15 minutes after SZA found out her boyfriend had another girlfriend. The album's interludes are voicemails from SZA's grandmother, recorded without her grandmother knowing.",
+        ["Alternative R&B", "Neo-Soul", "American", "2010s"], 1
+    ),
+    (
+        "album-solange-a-seat-at-the-table", "Album",
+        "A Seat at the Table",
+        "Solange 2016 — a meditation on Black identity, exhaustion, and resilience. Recorded over 4 years in Louisiana, New Iberia, and New Orleans. Features from Lil Wayne, Q-Tip, Kelly Rowland, and Master P. The album's interludes are interviews with Solange's parents about their experiences of racism in 1960s Texas.",
+        "A Seat at the Table (2016) end-to-end", 51,
+        "Listen to 'Cranes in the Sky' — the strings were arranged by Raphael Saadiq and recorded at Abbey Road. Solange wrote the song in 2008 but waited 8 years because she didn't feel ready to sing it. Then 'Don't Touch My Hair' — the Sampha feature was recorded at 6 AM after an all-night session. Solange's pitch rises as her anger builds.",
+        ["R&B", "Neo-Soul", "American", "2010s"], 1
+    ),
+    (
+        "album-janelle-monae-archandroid", "Album",
+        "The ArchAndroid",
+        "Janelle Monáe 2010 — a sci-fi concept album about an android messiah in the city of Metropolis. Recorded with a 22-piece orchestra and a horn section from Outkast's touring band. Monáe wrote a 28-page manifesto explaining the narrative. Big Boi executive-produced it after hearing Monáe sing at an Atlanta open mic.",
+        "The ArchAndroid (2010) end-to-end", 68,
+        "Listen to 'Tightrope' — Big Boi's verse was recorded in a separate session and spliced in. The James Brown-style horn arrangement was played by the Wondaland ArchOrchestra, a group of Berklee students Monáe recruited. Then 'Cold War' — the music video is a single continuous take of Monáe crying while lip-syncing. She didn't plan to cry.",
+        ["R&B", "Funk", "Psychedelic Soul", "American", "2010s"], 1
+    ),
+    (
+        "album-billie-eilish-when-we-all-fall-asleep", "Album",
+        "WHEN WE ALL FALL ASLEEP, WHERE DO WE GO?",
+        "Billie Eilish 2019 — recorded in her brother Finneas's bedroom in Highland Park, LA, with a laptop, a $80 microphone, and a mattress against the wall for soundproofing. Finneas, 21, produced and co-wrote every track. The album made Billie, at 17, the youngest artist ever to sweep the four major Grammy categories.",
+        "WHEN WE ALL FALL ASLEEP (2019) end-to-end", 43,
+        "Listen to 'bad guy' — the bassline is a distorted sample of an Australian pedestrian crossing signal recorded on Billie's phone. The 'duh' was a mistake; Billie said it while the mic was hot and Finneas kept it. Then 'bury a friend' — the dental drill sound was recorded at Billie's actual dentist appointment. She asked the dentist to let her record it.",
+        ["Pop", "Alternative", "American", "2010s"], 1
+    ),
+    (
+        "album-adele-21", "Album",
+        "21",
+        "Adele 2011 — named after her age when she wrote it, following a devastating breakup. Recorded in London and Malibu with Rick Rubin, Paul Epworth, and Ryan Tedder. The album sold 31 million copies and won 6 Grammys. Adele recorded the vocals for 'Rolling in the Deep' in one take, then went home because she had a cold.",
+        "21 (2011) end-to-end", 48,
+        "Listen to 'Someone Like You' — co-written with Dan Wilson of Semisonic in one afternoon at his piano. Adele's vocal was recorded as a demo; Wilson told her it was perfect and refused to let her re-record it. Then 'Rumour Has It' — the stomps in the intro are Adele and the band stamping on the floor of the tracking room because they couldn't find a kick drum sound they liked.",
+        ["Pop", "Soul", "British", "2010s"], 1
+    ),
+    (
+        "album-amy-winehouse-back-to-black", "Album",
+        "Back to Black",
+        "Amy Winehouse 2006 — recorded mostly in Mark Ronson's New York studio with the Dap-Kings, a Brooklyn soul band. Winehouse wrote the lyrics in 3 hours after a breakup. The album's 1960s girl-group sound was Ronson's idea to give Winehouse's confessional lyrics a vintage frame. Winehouse never intended to make a retro album.",
+        "Back to Black (2006) end-to-end", 35,
+        "Listen to 'Rehab' — Ronson built the beat from a sample of a 1968 soul record. Winehouse wrote the lyric about her actual refusal to go to rehab, which her management had suggested. Then 'Back to Black' — the song's descending chord progression was inspired by Shangri-Las records. Winehouse recorded the vocal at 2 AM, chain-smoking between takes.",
+        ["Soul", "R&B", "British", "2000s"], 1
+    ),
+    (
+        "album-lorde-pure-heroine", "Album",
+        "Pure Heroine",
+        "Lorde 2013 — recorded in 2 months in a small Auckland studio while Lorde was 16 and still in high school. Produced by Joel Little, who had never made a pop album before. The album's lyrics catalog adolescence with anthropological detachment: parties, small towns, and the boredom of growing up in the internet age.",
+        "Pure Heroine (2013) end-to-end", 37,
+        "Listen to 'Royals' — Lorde wrote the lyrics in 30 minutes after seeing a photo of a baseball player signing an endorsement deal. She'd never been to the kinds of parties she's describing. Then 'Ribs' — the song captures the exact moment of realizing you're growing up and can't stop it. The synth swell at 2:45 was played on a $100 keyboard.",
+        ["Pop", "Art Pop", "New Zealand", "2010s"], 1
+    ),
+    (
+        "album-aphex-twin-selected-ambient-works-ii", "Album",
+        "Selected Ambient Works Volume II",
+        "Aphex Twin 1994 — a double album of beatless ambient music inspired by lucid dreaming. Richard D. James composed much of it by manipulating sounds while half-asleep. None of the 24 tracks have proper names — just photographs in the liner notes. James said some of the sounds 'actually hurt to listen to' and apologized in advance.",
+        "Selected Ambient Works Vol II (1994) — at least first 10 tracks", 60,
+        "Listen to track 3 ('Rhubarb') — a 7-minute piece built from three overlapping synth pads. James recorded it in one take while watching snow fall outside his window in Cornwall. Then track 20 ('Lichen') — the melody was generated by feeding random sine waves through a reverb unit. James later admitted he doesn't remember recording half the album.",
+        ["Ambient", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-burial-untrue", "Album",
+        "Untrue",
+        "Burial 2007 — a concept album about walking home alone through South London at 5 AM after clubs have closed. William Bevan recorded it entirely in his bedroom with SoundForge, a basic audio editor not designed for music production. The album has no official remixes and no live performances; Burial has never revealed his face.",
+        "Untrue (2007) end-to-end", 50,
+        "Listen on headphones while walking at night. The crackle isn't vinyl hiss — it's the sound of a lighter being sparked next to a microphone. The vocal samples are from YouTube covers and video game soundtracks. Then 'Archangel' — the pitched-up vocal is actually a sample of Ray J singing, slowed down 200%. Burial said the emotion in the sample survived the manipulation.",
+        ["Electronic", "Dubstep", "UK Garage", "British", "2000s"], 1
+    ),
+    (
+        "album-flylo-cosmogramma", "Album",
+        "Cosmogramma",
+        "Flying Lotus 2010 — an album that sounds like jazz, hip-hop, and electronic music melting into each other. Recorded at his aunt Alice Coltrane's house in Los Angeles, using her harp and mixing board. Thom Yorke and Thundercat appear on multiple tracks. The album is named after a Carl Sagan-inspired synthesis of cosmic order.",
+        "Cosmogramma (2010) end-to-end", 45,
+        "Listen to 'Zodiac Shit' — the beat was built from a sample FlyLo found on an obscure 1970s library record. The drum programming shifts time signatures 4 times. Then 'Computer Face // Pure Being' — the arpeggiated synth line was played on Alice Coltrane's actual synthesizer. FlyLo said recording at his aunt's house felt like channeling her spirit.",
+        ["Electronic", "IDM", "American", "2010s"], 1
+    ),
+    (
+        "album-sophie-oil-of-every-pearls", "Album",
+        "OIL OF EVERY PEARL'S UN-INSIDES",
+        "SOPHIE 2018 — the only studio album from the Scottish producer who reshaped pop music's relationship with synthesized sound. Recorded between Los Angeles and Berlin. The songs use industrial noise, bubblegum hyperpop, and ambient drift to explore identity, transformation, and the body. SOPHIE died in 2021 at age 34.",
+        "OIL OF EVERY PEARL'S UN-INSIDES (2018) end-to-end", 40,
+        "Listen to 'Faceshopping' — the synth bass sounds like skin stretching. The video was shot in a mirrored room with SOPHIE's face projected onto a morphing sculpture. Then 'It's Okay to Cry' — the first song where SOPHIE used her own unaltered voice. The song is a ballad over a single piano chord, and it's the most radical thing on the album.",
+        ["Electronic", "Hyperpop", "British", "2010s"], 1
+    ),
+    (
+        "album-pan-sonic-kesto", "Album",
+        "Kesto",
+        "Pan Sonic 2004 — a 4-disc, 4-hour set of Finnish minimal electronic music. Mika Vainio and Ilpo Väisänen built their own instruments from salvaged radio parts and oscillators. The album is divided into four movements of increasing abstraction. Vainio described it as 'music for the nerves.'",
+        "Kesto (2004) — disc 1", 55,
+        "Listen to 'Keskiyön Arvoitus' — the title means 'Midnight's Mystery' in Finnish. The track is 8 minutes of a single oscillator tone slowly shifting frequency. Do not turn it up. Then disc 4 — the album becomes a meditation on silence interrupted by industrial bursts. Pan Sonic's equipment was literally unstable; some of the sounds were accidents they captured.",
+        ["Electronic", "Minimal", "Industrial", "Finnish", "2000s"], 2
+    ),
+    (
+        "album-miles-davis-in-a-silent-way", "Album",
+        "In a Silent Way",
+        "Miles Davis 1969 — the album where he abandoned jazz structure entirely, recorded with three keyboardists (including a 22-year-old Herbie Hancock) and edited into continuous 18-minute sides by producer Teo Macero. The album is considered the birthplace of ambient jazz and directly influenced Brian Eno's ambient series.",
+        "In a Silent Way (1969) end-to-end", 38,
+        "Listen to 'Shhh / Peaceful' — the title is literally the entire musical instruction Davis gave the band. The track was assembled from several hours of improvisation. Then the title track — Macero spliced together three separate sessions recorded on different days into a single piece. The musicians didn't know their sessions would be combined.",
+        ["Jazz", "Jazz Fusion", "Ambient", "American", "1960s"], 1
+    ),
+    (
+        "album-bill-evans-sunday-at-the-village-vanguard", "Album",
+        "Sunday at the Village Vanguard",
+        "Bill Evans Trio 1961 — recorded live on a single Sunday afternoon at the legendary Greenwich Village club. The trio (Evans, Scott LaFaro on bass, Paul Motian on drums) had been playing together for only 18 months. LaFaro died in a car crash 10 days after this recording. The album captures a perfect moment that could never be repeated.",
+        "Sunday at the Village Vanguard (1961) end-to-end", 43,
+        "Listen to 'Gloria's Step' — LaFaro's bass solo at 2:30 was revolutionary: the bass wasn't the rhythm instrument anymore, it was a second voice. Then 'Alice in Wonderland' — the tempo drifts imperceptibly slower over 8 minutes. Put it on in a quiet room at dusk. This is the sound of three musicians listening to each other so deeply they breathe together.",
+        ["Jazz", "Piano Jazz", "American", "1960s"], 1
+    ),
+    (
+        "album-herbie-hancock-head-hunters", "Album",
+        "Head Hunters",
+        "Herbie Hancock 1973 — the best-selling jazz album of all time when it was released. Recorded with a new band built around funk rhythms and synthesizers. Hancock played a Fender Rhodes through a wah-wah pedal and a ring modulator, creating sounds no pianist had made before. Miles Davis told him he was crazy to make a funk album.",
+        "Head Hunters (1973) end-to-end", 42,
+        "Listen to 'Chameleon' — the 15-minute opening track is built on a two-note bassline that never changes. Hancock's synth solo at 9:00 was improvised using an ARP Odyssey he'd bought that morning. Then 'Watermelon Man' — the opening percussion was played by Bill Summers blowing into a beer bottle. The original was Hancock's first composition as a teenager.",
+        ["Jazz", "Jazz Fusion", "Funk", "American", "1970s"], 1
+    ),
+    (
+        "album-nina-simone-pastel-blues", "Album",
+        "Pastel Blues",
+        "Nina Simone 1965 — recorded in a single day at a New York studio with a small jazz ensemble. The album opens with five short songs and closes with a 10-minute transformation of the traditional 'Sinnerman' into a spiritual that builds like a storm. Simone's piano playing on the album is almost as expressive as her voice.",
+        "Pastel Blues (1965) end-to-end", 36,
+        "Listen to 'Sinnerman' — based on an old African-American spiritual Simone first heard at a revival meeting as a child. The 10-minute track has no verse or chorus, just waves of intensity. Then 'Strange Fruit' — her version of the Billie Holiday anti-lynching song strips away the strings and leaves only Simone's voice and a single piano. It's more terrifying without the orchestration.",
+        ["Jazz", "Soul", "American", "1960s"], 1
+    ),
+    (
+        "album-sun-ra-space-is-the-place", "Album",
+        "Space Is the Place",
+        "Sun Ra 1973 — the intergalactic bandleader's Afrofuturist manifesto. Recorded in Chicago with a 20-piece Arkestra. Sun Ra claimed he was from Saturn and the album was a transmission from another galaxy. The title track is 21 minutes of free jazz that periodically resolves into something resembling a big-band swing tune, as if the music itself is time-traveling.",
+        "Space Is the Place (1973) end-to-end", 43,
+        "Listen to the title track — the chanted refrain 'space is the place' was Sun Ra's genuine philosophy: outer space as a metaphor for Black liberation from Earth's racism. Then 'Sea of Sounds' — the Arkestra plays as if every instrument is underwater. Sun Ra's synthesizer (a rare Moog Minimoog) was one of the first ever used in jazz.",
+        ["Jazz", "Afrofuturism", "Avant-Garde Jazz", "American", "1970s"], 1
+    ),
+    (
+        "album-chet-baker-sings", "Album",
+        "Chet Baker Sings",
+        "Chet Baker 1956 — the West Coast trumpeter's first vocal album, recorded at 26 when he had never sung professionally. His voice is untrained, fragile, occasionally off-key, and absolutely devastating. The album established the template for every jazz vocalist who prioritized intimacy over technical perfection. Baker hated his own singing voice.",
+        "Chet Baker Sings (1956) end-to-end", 44,
+        "Listen to 'My Funny Valentine' — Baker's trumpet solo and vocal take were recorded on the same mic, facing each other, with no overdubs. Then 'I Fall in Love Too Easily' — the song is 3 minutes long and Baker sounds like he's about to stop singing at any moment. He was addicted to heroin during the recording; you can hear a tremor in his voice at 1:45.",
+        ["Jazz", "Cool Jazz", "American", "1950s"], 1
+    ),
+    (
+        "album-stan-getz-joao-gilberto-getz-gilberto", "Album",
+        "Getz/Gilberto",
+        "Stan Getz & João Gilberto 1964 — the album that introduced bossa nova to the world. Recorded in New York over two days with Antonio Carlos Jobim on piano. The sessions were plagued by tension: Getz wanted to be the star, Gilberto barely spoke English, and Astrud Gilberto (João's wife) had never sung professionally. She was brought in at the last minute to sing 'The Girl from Ipanema.'",
+        "Getz/Gilberto (1964) end-to-end", 34,
+        "Listen to 'The Girl from Ipanema' — Astrud Gilberto's vocal was the first take. She had no professional experience and was paid $120. Her slight Portuguese accent on the English lyrics became the defining sound of bossa nova internationally. Then 'Corcovado' — recorded with the lights dimmed at João's request. Jobim's piano solo is only 16 bars.",
+        ["Jazz", "Bossa Nova", "Latin Jazz", "Brazilian-American", "1960s"], 1
+    ),
+    (
+        "album-marvin-gaye-lets-get-it-on", "Album",
+        "Let's Get It On",
+        "Marvin Gaye 1973 — recorded in Los Angeles and Detroit with the Funk Brothers after the political intensity of 'What's Going On.' Gaye wanted to make an album purely about love and sex. The title track was written in 20 minutes; Gaye recorded his vocal while lying on the studio floor because he wanted to sound relaxed.",
+        "Let's Get It On (1973) end-to-end", 32,
+        "Listen to the title track — the opening guitar riff was played by session guitarist Melvin Ragin on a Fender Telecaster through a Leslie speaker. Gaye's vocal was triple-tracked with himself singing different harmonies. Then 'Distant Lover' — recorded live at a concert where Gaye had a panic attack and walked off stage immediately after.",
+        ["Soul", "R&B", "American", "1970s"], 1
+    ),
+    (
+        "album-al-green-call-me", "Album",
+        "Call Me",
+        "Al Green 1973 — recorded at Hi Records in Memphis with Willie Mitchell's house band. Green was 27 and at the peak of his powers. The album's title track was a cover of a country standard that Green transformed into a soul meditation. The album was released 6 months before Green's girlfriend threw a pot of boiling grits on him, after which he became a reverend.",
+        "Call Me (1973) end-to-end", 35,
+        "Listen to 'Call Me (Come Back Home)' — the song is about a breakup, but Green sings it like a prayer. The horn arrangement was recorded in a single take. Then 'Here I Am (Come and Take Me)' — the rhythm section is so tight that the snare drum is a half-second behind the beat for the entire song, creating a push-pull tension.",
+        ["Soul", "American", "1970s"], 1
+    ),
+    (
+        "album-dangelo-voodoo", "Album",
+        "Voodoo",
+        "D'Angelo 2000 — the album that made neo-soul a religion. Recorded at Electric Lady Studios over 5 years with the Soulquarians collective (Questlove, J Dilla, Roy Hargrove, Pino Palladino). The album's time is loose in a way that was nearly impossible to achieve with digital recording; Questlove described it as 'the sound of music that's leaning back.'",
+        "Voodoo (2000) end-to-end", 79,
+        "Listen to 'Untitled (How Does It Feel)' — the song has no title because D'Angelo couldn't think of one. The music video, which is just him shirtless singing to camera, made him so uncomfortable with his sexualized image that he didn't release new music for 14 years. Then 'The Root' — Questlove's drums are deliberately behind the beat for the entire track.",
+        ["Neo-Soul", "R&B", "American", "2000s"], 1
+    ),
+    (
+        "album-erykah-badu-mamas-gun", "Album",
+        "Mama's Gun",
+        "Erykah Badu 2000 — recorded at Electric Lady with the Soulquarians. The album expands on Baduizm's jazzy neo-soul with psychedelic rock and hip-hop influences. Questlove's drumming is at its most inventive. The album's cover, inspired by a Fela Kuti album, shows Badu as a mythical warrior queen.",
+        "Mama's Gun (2000) end-to-end", 72,
+        "Listen to 'Didn't Cha Know' — the beat was built from a sample of Tarika Blue's 'Dreamflower,' which J Dilla found on a dollar-bin record. Badu wrote the lyric about not knowing which direction to take in life. Then 'Green Eyes' — a 10-minute song that changes style three times. The string section was arranged by the late Roy Hargrove.",
+        ["Neo-Soul", "R&B", "American", "2000s"], 1
+    ),
+    (
+        "album-james-brown-live-at-the-apollo", "Album",
+        "Live at the Apollo",
+        "James Brown 1963 — the album his label refused to finance. Brown paid for the recording himself. It became a #2 pop album and stayed on the charts for 66 weeks. The album captures Brown's band at their tightest, with Brown screaming, dancing, and collapsing on stage, only to be revived by his cape man. No overdubs. No studio fixes.",
+        "Live at the Apollo (1963) end-to-end", 32,
+        "Listen to the opening — the MC's introduction builds for 90 seconds before Brown explodes on stage. Then 'Lost Someone' — an 11-minute ballad where Brown stretches a single word into a 30-second moan. The audience can be heard crying. Brown's band had rehearsed this set every day for 3 years; they didn't need to look at each other for cues.",
+        ["Funk", "Soul", "American", "1960s"], 1
+    ),
+    (
+        "album-parliament-mothership-connection", "Album",
+        "Mothership Connection",
+        "George Clinton's Parliament 1975 — a sci-fi P-Funk concept album narrated by a cosmic DJ broadcasting from the mothership. Features Bootsy Collins, Bernie Worrell, and a horn section of former James Brown sidemen. The album's mythology — aliens bringing funk to Earth — was performed live with an actual spaceship that descended onto the stage.",
+        "Mothership Connection (1975) end-to-end", 38,
+        "Listen to 'Give Up the Funk (Tear the Roof off the Sucker)' — the chant was improvised in the studio while the band was waiting for George Clinton to arrive. Then the title track — the opening monologue by the 'Star Child' was recorded with Clinton in a metallic helmet. Bernie Worrell's synth bass predates and arguably invents the sound of G-funk.",
+        ["Funk", "P-Funk", "American", "1970s"], 1
+    ),
+    (
+        "album-sly-and-the-family-stone-theres-a-riot-goin-on", "Album",
+        "There's a Riot Goin' On",
+        "Sly and the Family Stone 1971 — the darkest funk album ever made. Sly Stone recorded it at home on a four-track, layering instruments and vocals at all hours while sinking into cocaine addiction. The album's sound is muddy, paranoid, and deliberately out of tune. The title was a response to Marvin Gaye's 'What's Going On.' There was no riot — just Sly, alone, unravelling.",
+        "There's a Riot Goin' On (1971) end-to-end", 48,
+        "Listen to 'Family Affair' — the drum machine was a Maestro Rhythm King MRK-2, one of the first drum machines on a hit record. Sly programmed it himself at half-speed. Then 'Thank You for Talkin' to Me Africa' — a 7-minute noise jam built from tape loops and feedback. The song is Sly and his drug dealer yelling at each other.",
+        ["Funk", "Soul", "American", "1970s"], 1
+    ),
+    (
+        "album-fela-kuti-zombie", "Album",
+        "Zombie",
+        "Fela Kuti 1976 — the album that nearly killed him. 'Zombie' is a direct attack on the Nigerian military, calling soldiers mindless zombies who follow orders without thinking. The Nigerian government responded by sending 1,000 soldiers to burn Fela's Kalakuta Republic commune, beat him nearly to death, and throw his 78-year-old mother from a window. She died from her injuries.",
+        "Zombie (1976) end-to-end", 26,
+        "Listen to the title track — the 12-minute groove is built on a single two-bar bassline that never changes. The horns enter one at a time, each one answering Fela's saxophone. Then Fela begins chanting 'zombie' and the song becomes a protest. The second side is 'Mr. Follow Follow,' a more explicit attack on government functionaries.",
+        ["Afrobeat", "Funk", "Nigerian", "1970s"], 1
+    ),
+    (
+        "album-bob-marley-exodus", "Album",
+        "Exodus",
+        "Bob Marley and the Wailers 1977 — recorded in London after Marley survived an assassination attempt in Jamaica. A gunman shot him and his wife Rita in their home; Marley played a concert two days later with the bullet still lodged in his arm. The album was named Album of the Century by Time Magazine in 1999.",
+        "Exodus (1977) end-to-end", 37,
+        "Listen to 'Jamming' — the rhythm was based on a traditional Nyabinghi drum pattern, a Rastafarian ceremonial rhythm. Then 'Three Little Birds' — the lyric came from actual birds that gathered outside Marley's London window. Marley told his band the birds were messengers. The album's recording was interrupted when Marley discovered the cancer in his toe.",
+        ["Reggae", "Jamaican", "1970s"], 1
+    ),
+    (
+        "album-bob-marley-legend", "Album",
+        "Legend",
+        "Bob Marley and the Wailers 1984 — the greatest-hits compilation released 3 years after Marley's death from cancer at 36. It's the best-selling reggae album of all time. Every song on it was written, performed, and recorded before Marley turned 33. The album has never left the Billboard 200 — over 800 weeks and counting.",
+        "Legend (1984) end-to-end", 50,
+        "Listen to 'Redemption Song' — recorded with just Marley's voice and an acoustic guitar. It was the last song he recorded before his death. The line 'emancipate yourselves from mental slavery' was taken from a speech by Marcus Garvey. Then 'No Woman, No Cry' — the live version is from the Lyceum Theatre in London, 1975. The crowd joins the chorus unprompted.",
+        ["Reggae", "Jamaican", "1980s"], 1
+    ),
+    (
+        "album-king-tubby-meets-rockers-uptown", "Album",
+        "King Tubby Meets Rockers Uptown",
+        "Augustus Pablo 1976 — a dub album where the mixing board became the lead instrument. Recorded at King Tubby's tiny studio in the Waterhouse district of Kingston, Jamaica. Tubby's dub technique — dropping instruments in and out, adding reverb, phasing, and delay — invented remix culture. The album has almost no vocals; the melodies are carried by Pablo's melodica.",
+        "King Tubby Meets Rockers Uptown (1976) end-to-end", 35,
+        "Listen to 'King Tubby Meets Rockers Uptown' — the track is a dub of a Jacob Miller song, but Tubby stripped the vocal and added so much reverb that the bass becomes the melody. Then 'Keep on Dubbing' — you can hear the mixing board squeak at 2:15 because Tubby's equipment was held together with tape. The imperfections are the art.",
+        ["Reggae", "Dub", "Jamaican", "1970s"], 2
+    ),
+    (
+        "album-ali-farka-toure-talking-timbuktu", "Album",
+        "Talking Timbuktu",
+        "Ali Farka Touré 1994 — a collaboration between the Malian guitarist and American producer Ry Cooder. Recorded in a makeshift studio in an abandoned schoolhouse in Niafunké, Mali, powered by a generator. Touré sang in 6 different Malian languages. The album won the Grammy for Best World Music Album.",
+        "Talking Timbuktu (1994) end-to-end", 59,
+        "Listen to 'Ai Du' — the opening guitar riff is a traditional Malian melody that Touré learned from his mother as a child. Cooder's slide guitar enters 3 minutes in, answering Touré's lines. Then 'Diaraby' — Touré's vocal was recorded at dawn with the generator sputtering. The album's recording was delayed twice by sandstorms.",
+        ["World", "Malian Blues", "Malian-American", "1990s"], 1
+    ),
+    (
+        "album-ravishankar-three-ragas", "Album",
+        "Three Ragas",
+        "Ravi Shankar 1956 — the album that introduced Indian classical music to the West. Recorded in London and produced by George Martin (who would later produce the Beatles). Shankar plays sitar with Alla Rakha on tabla. The ragas are organized by time of day; each one is meant to be heard at a specific hour.",
+        "Three Ragas (1956) — one complete raga", 30,
+        "Listen to 'Raga Jog' — it's an evening raga that unfolds in three movements: the alap (slow, unmetered exploration), the jor (rhythm enters), and the gat (the tabla joins and the tempo accelerates). Shankar's fingers move so fast during the gat that individual notes blur into a single continuous sound.",
+        ["Indian Classical", "World", "Indian", "1950s"], 1
+    ),
+    (
+        "album-caetano-veloso-transa", "Album",
+        "Transa",
+        "Caetano Veloso 1972 — recorded in London while the Brazilian songwriter was in exile, forcibly removed by the military dictatorship for 'subversive' music. He was only allowed back to Brazil in 1972. The album mixes samba, bossa nova, and English-language folk-rock. Veloso sings in both Portuguese and English; the bilingualism is the voice of displacement.",
+        "Transa (1972) end-to-end", 37,
+        "Listen to 'Negenoma de Você' — the song shifts from Portuguese to English mid-verse without warning. Then 'It's a Long Way' — a 6-minute song built on a single guitar arpeggio, with Veloso whispering lyrics about homesickness. The album was recorded in a single week. Veloso said he made it to stay sane during exile.",
+        ["Tropicália", "World", "Brazilian", "1970s"], 2
+    ),
+    (
+        "album-ossibisa-woyaya", "Album",
+        "Woyaya",
+        "Osibisa 1971 — a Ghanaian-British band that fused highlife, rock, and funk into a sound that anticipated afrobeats by decades. Recorded at AIR Studios in London. The title means 'we are going' in Ga. The album was produced by Tony Visconti, who was simultaneously producing David Bowie. The cover art by Roger Dean is pure 1970s fantasy.",
+        "Woyaya (1971) end-to-end", 40,
+        "Listen to 'Woyaya' — the dual percussionists create a polyrhythm that never repeats exactly. The horn section sounds like a Ghanaian funeral brass band. Then 'Beautiful Seven' — a 7-minute instrumental that starts as highlife and ends as psychedelic rock, with saxophone and guitar soloing simultaneously in different keys.",
+        ["World", "Afrobeat", "Ghanaian-British", "1970s"], 2
+    ),
+    (
+        "album-metallica-master-of-puppets", "Album",
+        "Master of Puppets",
+        "Metallica 1986 — the last album with bassist Cliff Burton, who died in a bus crash during the European tour a few months after release. Recorded in Copenhagen with producer Flemming Rasmussen. The album is a thrash metal landmark: 8 songs, 54 minutes, no ballads. Burton's bass solo on 'Orion' is one of metal's definitive instrumental passages.",
+        "Master of Puppets (1986) end-to-end", 55,
+        "Listen to the title track — the acoustic intro was James Hetfield's idea to make the thrash that follows sound even heavier. The song's time signature changes 6 times. Then 'Welcome Home (Sanitarium)' — based on 'One Flew Over the Cuckoo's Nest.' The song starts as a ballad and morphs into thrash, mirroring the narrator's descent into madness.",
+        ["Thrash Metal", "Metal", "American", "1980s"], 1
+    ),
+    (
+        "album-opeth-blackwater-park", "Album",
+        "Blackwater Park",
+        "Opeth 2001 — the Swedish band's breakthrough, recorded in Studio Fredman in Gothenburg with Steven Wilson of Porcupine Tree producing. The album shifts between death metal growls, clean acoustic passages, and progressive rock in the space of a single song. Mikael Åkerfeldt wrote the lyrics as a single narrative about the decay of a relationship.",
+        "Blackwater Park (2001) end-to-end", 67,
+        "Listen to 'Bleak' — at 3:12, the death metal section collapses into an acoustic interlude sung by Wilson. Then 'The Drapery Falls' — the song begins as a fingerpicked acoustic lament and ends as a double-bass-drum assault. Åkerfeldt's growls are so precise that you can understand the lyrics even without reading them.",
+        ["Progressive Metal", "Death Metal", "Swedish", "2000s"], 1
+    ),
+    (
+        "album-slayer-reign-in-blood", "Album",
+        "Reign in Blood",
+        "Slayer 1986 — 10 songs in 28 minutes, produced by Rick Rubin. The album's centerpiece is 'Angel of Death,' a song about Nazi doctor Josef Mengele. The album was distributed by Def Jam, a hip-hop label. Tom Araya's vocals are the sound of a man possessed; the band recorded live in the studio with almost no overdubs.",
+        "Reign in Blood (1986) end-to-end", 29,
+        "Listen to 'Raining Blood' — the opening thunderstorm was recorded by Rubin in his backyard during an actual storm. The riff that enters at 0:34 is one note played in three octaves. Then 'Angel of Death' — the song's final scream was Araya's last vocal on the album; he had no voice left. 29 minutes and it's over.",
+        ["Thrash Metal", "Metal", "American", "1980s"], 1
+    ),
+    (
+        "album-meshuggah-obzen", "Album",
+        "obZen",
+        "Meshuggah 2008 — the Swedish band that treats time signatures like a physics experiment. The album's opener 'Combustion' is Meshuggah's only song in 4/4, and it feels wrong because everything else is polyrhythmic. The album's drumming was performed by Tomas Haake, who programmed the patterns on a computer first to confirm they were humanly possible.",
+        "obZen (2008) end-to-end", 53,
+        "Listen to 'Bleed' — the kick drum pattern is four hits, but the pattern shifts over a 4/4 pulse so that the accent lands on a different beat every bar. Haake described playing it as 'meditation through physical pain.' Then 'Dancers to a Discordant System' — the song's riff repeats but never in the same time signature twice.",
+        ["Progressive Metal", "Metal", "Swedish", "2000s"], 1
+    ),
+    (
+        "album-gojira-from-mars-to-sirius", "Album",
+        "From Mars to Sirius",
+        "Gojira 2005 — a metal album about environmental collapse, whales, and interstellar travel. The French band recorded it in their own studio in a Basque farmhouse. Joe Duplantier's guitar tone makes the riffs sound like they're being played by the ocean itself. The album's environmental themes predate the mainstream climate conversation by a decade.",
+        "From Mars to Sirius (2005) end-to-end", 67,
+        "Listen to 'Flying Whales' — the song literally musically depicts whales breaching. The riff at 2:40 sounds like a pod of whales communicating through sonar. Then 'The Heaviest Matter of the Universe' — the verse riff is played entirely on one string at 220 BPM with palm muting so tight the guitar sounds like a jackhammer.",
+        ["Death Metal", "Progressive Metal", "French", "2000s"], 2
+    ),
+    (
+        "album-iron-maiden-number-of-the-beast", "Album",
+        "The Number of the Beast",
+        "Iron Maiden 1982 — the first album with vocalist Bruce Dickinson, recorded over 5 weeks in London. The band was accused of being Satanists due to the artwork and title track. The album's galloping basslines (played by Steve Harris with three fingers, not a pick) became the band's sonic signature.",
+        "The Number of the Beast (1982) end-to-end", 40,
+        "Listen to 'Hallowed Be Thy Name' — the 7-minute closer was written in 15 minutes by Steve Harris. The song has 5 distinct sections and Bruce Dickinson's vocal reaches a high B at the climax. Then 'Run to the Hills' — the song is about the genocide of Native Americans, written from both the colonizer's and the colonized's perspectives.",
+        ["Heavy Metal", "Metal", "British", "1980s"], 1
+    ),
+    (
+        "album-tool-lateralus", "Album",
+        "Lateralus",
+        "Tool 2001 — an album structured around the Fibonacci sequence. The title track's time signatures follow the sequence (1-1-2-3-5-8-13) and the syllables in the verses match it. The album was recorded in singer Maynard James Keenan's home studio over a year of obsessive refinement. The album art by Alex Grey depicts layers of the human body dissolving into energy.",
+        "Lateralus (2001) end-to-end", 79,
+        "Listen to 'Schism' — the bassline by Justin Chancellor alternates between bars of 5/8 and 7/8, creating a constant sense of shifting ground. Then 'Parabol' into 'Parabola' — the quiet intro is exactly the same chords as the explosive song that follows, slowed to 1/4 speed. Keenan said the album was designed to be listened to in one sitting in darkness.",
+        ["Progressive Metal", "Metal", "American", "2000s"], 1
+    ),
+    (
+        "album-johnny-cash-american-recordings", "Album",
+        "American Recordings",
+        "Johnny Cash 1994 — a 62-year-old man with a failing career recording acoustic covers in Rick Rubin's living room. No band, no overdubs. Cash sings songs by Tom Waits, Leonard Cohen, Glenn Danzig, and his own 'Delia's Gone.' Rubin had to convince Cash's label that one man and a guitar was a commercial proposition.",
+        "American Recordings (1994) end-to-end", 42,
+        "Listen to 'Delia's Gone' — Cash begins 'Delia, oh Delia, Delia all my life / If I hadn't shot poor Delia, I'd have had her for my wife.' There is no apology in his voice. Then 'The Beast in Me' — written by Nick Lowe about his own alcoholism. Cash had been sober for 6 years when he recorded it; he chose it because he recognized the monster.",
+        ["Country", "Americana", "American", "1990s"], 1
+    ),
+    (
+        "album-dolly-parton-jolene", "Album",
+        "Jolene",
+        "Dolly Parton 1974 — her 13th solo album, recorded in Nashville with the Porter Wagoner band. The title track was inspired by a redheaded bank teller who flirted with Parton's husband. Parton wrote 'I Will Always Love You' on the same day — it was a farewell to her mentor Porter Wagoner. Elvis wanted to record it but demanded half the publishing; Parton refused.",
+        "Jolene (1974) end-to-end", 25,
+        "Listen to 'Jolene' — the fingerpicked guitar part was played by Parton herself, based on a pattern she learned from her mother. Then 'I Will Always Love You' — written at 4 AM after Parton decided to leave Wagoner's TV show to launch her solo career. She drove to his office and sang it to him in person. He cried.",
+        ["Country", "American", "1970s"], 1
+    ),
+    (
+        "album-willie-nelson-red-headed-stranger", "Album",
+        "Red Headed Stranger",
+        "Willie Nelson 1975 — a concept album about a preacher on the run after killing his wife and her lover. Recorded in a converted church in Garland, Texas with Nelson's touring band. The label hated it, calling it a 'demo.' Nelson refused to change a note. The album went double platinum and created the outlaw country movement.",
+        "Red Headed Stranger (1975) end-to-end", 34,
+        "Listen to 'Blue Eyes Crying in the Rain' — the arrangement is just Nelson's voice, his guitar, his sister Bobbie on piano, and a single bass note. It was the last song added to the album. Then the title track — Nelson's guitar, Trigger, sounds like it's playing from another room. The entire album uses no drums.",
+        ["Outlaw Country", "Country", "American", "1970s"], 1
+    ),
+    (
+        "album-hank-williams-moanin-the-blues", "Album",
+        "Moanin' the Blues",
+        "Hank Williams 1952 — recordings from the last year of his life, compiled after his death at 29. Williams wrote or co-wrote most of the songs in hotel rooms while touring between shows. His voice sounds decades older than a man in his 20s; the pain isn't performance. 'Cold, Cold Heart' was inspired by his wife Audrey, who'd recently left him.",
+        "Moanin' the Blues (1952) end-to-end", 28,
+        "Listen to 'Cold, Cold Heart' — the song was written in 30 minutes in a Nashville hotel room after Williams saw his wife at a party with another man. Then 'I'm So Lonesome I Could Cry' — the lyric 'the silence of a falling star lights up a purple sky' was Williams's favorite line he ever wrote. The yodel in the bridge was his mother's technique.",
+        ["Country", "Honky-Tonk", "American", "1950s"], 1
+    ),
+    (
+        "album-kacey-musgraves-golden-hour", "Album",
+        "Golden Hour",
+        "Kacey Musgraves 2018 — a country album that sounds like a sunrise in slow motion. Recorded in Nashville with producers Ian Fitchuk and Daniel Tashian, who had never made a country album before. The production incorporates vocoders, drum machines, and disco strings. Musgraves wrote the album while falling in love with her then-husband.",
+        "Golden Hour (2018) end-to-end", 46,
+        "Listen to 'Slow Burn' — the song begins with only Musgraves's voice and one acoustic guitar, then a banjo enters at 1:15 that sounds like a synthesizer. Then 'High Horse' — a disco-country hybrid with a Bee Gees-style falsetto chorus. Musgraves's label told her it was 'not a country song' and she released it anyway.",
+        ["Country", "Pop", "American", "2010s"], 1
+    ),
+    (
+        "album-bob-dylan-blood-on-the-tracks", "Album",
+        "Blood on the Tracks",
+        "Bob Dylan 1975 — a divorce album recorded mostly in New York with a group of session musicians Dylan had never met. Five of the tracks were re-recorded in Minneapolis with his brother's band because Dylan decided the originals were 'too cold.' The album's songs follow a dissolving marriage from multiple angles.",
+        "Blood on the Tracks (1975) end-to-end", 52,
+        "Listen to 'Tangled Up in Blue' — Dylan later claimed he wrote it after spending an afternoon studying Cubist painting and applied the same approach to time in lyrics. Then 'Idiot Wind' — the New York version was angry; the Minneapolis version is sad. Dylan re-recorded it because he thought the first version was too cruel to the subject.",
+        ["Folk", "Singer-Songwriter", "American", "1970s"], 1
+    ),
+    (
+        "album-joni-mitchell-blue", "Album",
+        "Blue",
+        "Joni Mitchell 1971 — recorded in four months at A&M Studios in LA with almost no other musicians. Mitchell plays guitar, piano, and Appalachian dulcimer. Every song is a confession: she sings about giving up a daughter for adoption, ending relationships with Graham Nash and James Taylor, and traveling alone through Europe.",
+        "Blue (1971) end-to-end", 36,
+        "Listen to 'A Case of You' — the opening line was inspired by a conversation with Leonard Cohen. Mitchell recorded the vocal and dulcimer simultaneously; the slight wobble in her voice at 'I could drink a case of you' is real emotion, not a production choice. Then 'River' — the Jingle Bells interpolation was meant to evoke the loneliness of Christmas away from home.",
+        ["Folk", "Singer-Songwriter", "Canadian", "1970s"], 1
+    ),
+    (
+        "album-leonard-cohen-songs-of-love-and-hate", "Album",
+        "Songs of Love and Hate",
+        "Leonard Cohen 1971 — recorded in a converted barn in Tennessee with a children's choir and a producer who'd never made a folk album. The album's 8 songs are arranged like a therapy session: confession, anger, bargaining, acceptance. Cohen was 36 and considered himself a failed novelist making a last attempt at music.",
+        "Songs of Love and Hate (1971) end-to-end", 44,
+        "Listen to 'Famous Blue Raincoat' — the song is a letter to a man who slept with Cohen's wife, written in the voice of a husband who can't bring himself to be angry. Cohen later said he never liked the song because 'the lyric was never finished.' Then 'Joan of Arc' — a dialogue between Joan and the fire, where the fire is a lover.",
+        ["Folk", "Singer-Songwriter", "Canadian", "1970s"], 1
+    ),
+    (
+        "album-nick-drake-pink-moon", "Album",
+        "Pink Moon",
+        "Nick Drake 1972 — recorded in two midnight sessions over two nights at Sound Techniques in London. Just Drake's voice, his acoustic guitar, and a single piano overdub. The album runs 28 minutes. Drake walked into the studio alone, recorded the album, and left. He died of an antidepressant overdose two years later at 26. The album sold fewer than 5,000 copies in his lifetime.",
+        "Pink Moon (1972) end-to-end", 28,
+        "Listen to the title track — the song is two minutes long and the lyrics are fewer than 50 words. Drake's guitar is tuned to an open chord that makes the strings feel like they're dissolving. Then 'From the Morning' — the last song on the last album Drake completed. The lyric 'now we rise and we are everywhere' is on Drake's gravestone.",
+        ["Folk", "Singer-Songwriter", "British", "1970s"], 1
+    ),
+    (
+        "album-csny-deja-vu", "Album",
+        "Déjà Vu",
+        "Crosby, Stills, Nash & Young 1970 — the first album where all four members of the supergroup recorded together. Sessions were famously tense: each member recorded their songs separately, the mixing took 800 hours, and the final cost was astronomical for 1970. The album's cover photo was the first album cover to use a brown-toned sepia effect.",
+        "Déjà Vu (1970) end-to-end", 36,
+        "Listen to 'Helpless' — Neil Young's vocal was recorded at a different studio from the backing track because he refused to be in the same room as the others. Then 'Woodstock' — Joni Mitchell wrote it from her hotel room while watching the festival on TV; CSNY recorded it before Mitchell released her version. Stephen Stills's guitar solo swallowed 50 tracks of tape.",
+        ["Folk Rock", "Rock", "American-Canadian", "1970s"], 1
+    ),
+    (
+        "album-simon-and-garfunkel-bridge-over-troubled-water", "Album",
+        "Bridge Over Troubled Water",
+        "Simon and Garfunkel 1970 — their final studio album, recorded while their partnership was disintegrating. Art Garfunkel was simultaneously filming Catch-22 in Mexico; Paul Simon wrote most of the songs alone. The title track's arrangement by Larry Knechtel built from a single piano to a full orchestra and choir, echoing Phil Spector.",
+        "Bridge Over Troubled Water (1970) end-to-end", 37,
+        "Listen to the title track — Garfunkel's vocal was recorded in a single take, piano-only. The orchestra and choir were added later without Garfunkel's knowledge. Then 'The Boxer' — the 'lie-la-lie' refrain was Paul Simon's placeholder lyric that he never replaced. The snare drum explosion at 3:15 was a real gunshot, recorded in a church lobby.",
+        ["Folk Rock", "Pop", "American", "1970s"], 1
+    ),
+    (
+        "album-tracy-chapman-debut", "Album",
+        "Tracy Chapman",
+        "Tracy Chapman 1988 — a debut album of ten political folk songs recorded in 8 weeks. The album reached #1 in 7 countries. Chapman performed 'Fast Car' at Nelson Mandela's 70th birthday concert at Wembley, and the song climbed the charts globally on the strength of that one TV appearance. The album's simplicity — mostly voice and acoustic guitar — was a rebuke to the excess of 80s production.",
+        "Tracy Chapman (1988) end-to-end", 36,
+        "Listen to 'Fast Car' — Chapman wrote it at 22 while busking in Harvard Square. The song's narrative arc — hope, escape, disappointment, resignation — unfolds over 5 minutes without a chorus. Then 'Talkin' 'Bout a Revolution' — the song became an anthem of the anti-apartheid movement. The guitar is tuned a half-step down to match Chapman's vocal range.",
+        ["Folk", "Singer-Songwriter", "American", "1980s"], 1
+    ),
+    (
+        "album-carole-king-tapestry", "Album",
+        "Tapestry",
+        "Carole King 1971 — recorded in three weeks at A&M Studios with James Taylor's backing band. King had spent the 1960s writing hits for other artists in the Brill Building; this was her declaring herself as a performer. The album won four Grammys and spent 15 weeks at #1, a record for a female artist that stood for 25 years.",
+        "Tapestry (1971) end-to-end", 44,
+        "Listen to 'It's Too Late' — the electric piano riff was improvised by King in the studio during the first take. Then 'You've Got a Friend' — King and James Taylor recorded their versions simultaneously in different studios. King's version is quieter; Taylor's became the hit. King later said she preferred Taylor's because 'his was happier.'",
+        ["Folk", "Singer-Songwriter", "Pop", "American", "1970s"], 1
+    ),
+    (
+        "album-kate-bush-hounds-of-love", "Album",
+        "Hounds of Love",
+        "Kate Bush 1985 — recorded in her own 48-track studio in a converted barn in Kent, which she built specifically to avoid record-label pressure. The album's first side is five standalone pop songs; the second side is 'The Ninth Wave,' a seven-song suite about a woman drifting alone at sea. Bush programmed the Fairlight CMI sampler herself.",
+        "Hounds of Love (1985) end-to-end", 48,
+        "Listen to 'Running Up That Hill' — the drum machine pattern was played by Bush on a LinnDrum and then reversed. Then 'Cloudbusting' — inspired by Peter Reich's memoir about his father Wilhelm Reich, who built a 'cloudbuster' machine to make it rain. The string arrangement quotes the final movement of a Brahms symphony.",
+        ["Pop", "Art Pop", "British", "1980s"], 1
+    ),
+    (
+        "album-massive-attack-mezzanine", "Album",
+        "Mezzanine",
+        "Massive Attack 1998 — recorded in a Bristol basement over two years of near-constant fighting. The sessions were so fractious that the band members recorded separately and refused to be in the same room. The album's sound — dark, claustrophobic, layered — reflects the tension. The cover art of a black beetle was chosen because the band couldn't agree on anything else.",
+        "Mezzanine (1998) end-to-end", 64,
+        "Listen to 'Teardrop' — Elizabeth Fraser of Cocteau Twins recorded her vocal in a single take while thinking about her friend Jeff Buckley, who had recently drowned. The harpsichord-like sample is actually a piano recorded backwards. Then 'Angel' — Horace Andy's vocal was recorded in Jamaica and sent back to Bristol. The bassline is so low it shakes car windows.",
+        ["Trip-Hop", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-portishead-dummy", "Album",
+        "Dummy",
+        "Portishead 1994 — recorded in a disused basement in Bristol on an 8-track. Geoff Barrow sampled snippets of film scores and spy-movie soundtracks from charity-shop vinyl; Beth Gibbons wrote lyrics that read like noir film scripts. The album's sound is so cohesive that bands are still trying to replicate it 30 years later.",
+        "Dummy (1994) end-to-end", 49,
+        "Listen to 'Glory Box' — the Isaac Hayes sample was cleared only after the album's release, narrowly avoiding a lawsuit. Gibbons's vocal wavers on the word 'tired' at 3:22 because she was actually exhausted from recording all night. Then 'Sour Times' — the sample is from Lalo Schifrin's 'Danube Incident,' a song from a 1960s spy movie.",
+        ["Trip-Hop", "Electronic", "British", "1990s"], 1
+    ),
+    (
+        "album-four-tet-rounds", "Album",
+        "Rounds",
+        "Kieran Hebden as Four Tet 2003 — an album built entirely from samples of obscure records, computer noises, and field recordings made in Hebden's London flat. No guest musicians, no studio — just a desktop computer and a pair of headphones. The album's centerpiece, 'Unspoken,' stitches 37 samples into a single 9-minute track.",
+        "Rounds (2003) end-to-end", 46,
+        "Listen to 'She Moves She' — the sampled kalimba melody was lifted from a rare 1970s library record that Hebden found in a charity shop. He looped it for 4 minutes, adding layers of percussion until it becomes a dance track. Then 'My Angel Rocks Back and Forth' — the harp-like sample is actually a slowed-down music-box recording.",
+        ["Electronic", "Folktronica", "British", "2000s"], 1
+    ),
+    (
+        "album-cannibal-ox-the-cold-vein", "Album",
+        "The Cold Vein",
+        "Cannibal Ox 2001 — a defining album of underground hip-hop, produced entirely by El-P before Run the Jewels. Recorded in a Brooklyn basement over 6 months. Vast Aire and Vordul Mega trade verses about poverty, surveillance, and survival in New York City over El-P's industrial-symphonic beats. The album sounds like the subway at 3 AM.",
+        "The Cold Vein (2001) end-to-end", 74,
+        "Listen to 'Iron Galaxy' — El-P built the beat from a sample of a 1970s sci-fi movie score with distorted synth bass underneath. Vast Aire's opening line 'You were a stillborn baby / Mother didn't want you but you were still born' is one of the most quoted bars in underground hip-hop. Then 'Pigeon' — the song is about watching a pigeon and seeing yourself.",
+        ["Hip-Hop", "Alternative Hip-Hop", "East Coast", "American", "2000s"], 2
+    ),
+    (
+        "album-earth-wind-and-fire-thats-the-way-of-the-world", "Album",
+        "That's the Way of the World",
+        "Earth, Wind & Fire 1975 — conceived as the soundtrack to a film of the same name (which flopped; the album became a classic). Recorded in Denver and Los Angeles with a 10-piece horn section. The album's philosophy of cosmic positivity is embedded in every horn line and vocal harmony. Maurice White had been a session drummer for Chess Records before forming the band.",
+        "That's the Way of the World (1975) end-to-end", 39,
+        "Listen to 'Shining Star' — the song was written in 15 minutes during a soundcheck. Then 'Reasons' — Philip Bailey's falsetto reaches a high C at 4:05, a note most operatic tenors struggle with. The live version is even higher. Bailey had never taken a voice lesson.",
+        ["Funk", "R&B", "Soul", "American", "1970s"], 1
+    ),
+    (
+        "album-talk-talk-spirit-of-eden", "Album",
+        "Spirit of Eden",
+        "Talk Talk 1988 — recorded in a converted church over a year of near-total darkness. The band improvised for hours, and producer Tim Friese-Greene stitched the results into six tracks. EMI demanded a commercial album; Talk Talk delivered this — 41 minutes of free-form art-rock with jazz and ambient passages. EMI sued them.",
+        "Spirit of Eden (1988) end-to-end", 41,
+        "Listen to 'The Rainbow' — the harmonica solo by Mark Feltham was recorded in a cathedral with 17 seconds of natural reverb. Then 'I Believe in You' — Mark Hollis's vocal was recorded at 3 AM in total darkness. The choir enters one voice at a time. EMI lost the lawsuit but dropped the band. Hollis later retired from music entirely.",
+        ["Post-Rock", "Art Rock", "British", "1980s"], 2
+    ),
+    (
+        "album-sigur-ros-takk", "Album",
+        "Takk...",
+        "Sigur Rós 2005 — the Icelandic band's most accessible album, recorded in their converted swimming-pool studio outside Reykjavík. Jónsi Birgisson sings in a mixture of Icelandic and 'Hopelandic,' a made-up language of nonsense syllables. The album is bookended by a countdown and a countup, framing the listening experience as a single journey.",
+        "Takk... (2005) end-to-end", 66,
+        "Listen to 'Hoppípolla' — the title means 'jumping in puddles' in Icelandic. The strings were recorded by a youth orchestra in a Reykjavík school hall. Then 'Sæglópur' — the song sounds like drowning — a slow piano intro, then a massive distorted bass drop at 4:00 that changes the song's language from Hopelandic to actual Icelandic.",
+        ["Post-Rock", "Ambient", "Icelandic", "2000s"], 2
+    ),
 ]
 
 # ═══════════════════════════════════════════════════════════════════════════
