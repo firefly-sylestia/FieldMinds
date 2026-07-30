@@ -13,7 +13,6 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.ViewTreeLifecycleOwner
 import java.io.File
 import java.io.FileOutputStream
 
@@ -53,8 +52,6 @@ fun shareComposableCard(
     val lifecycleOwner = SyntheticLifecycleOwner()
 
     val composeView = ComposeView(context).apply {
-        // Provide lifecycle before setting content — required for composition.
-        ViewTreeLifecycleOwner.set(this, lifecycleOwner)
         lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
 
         setContent { card() }

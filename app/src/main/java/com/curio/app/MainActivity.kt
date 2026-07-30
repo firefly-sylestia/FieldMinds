@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.curio.app.data.CaptureRepository
 import com.curio.app.data.CurioDatabase
+import com.curio.app.data.CurioRepositoryHolder
 import com.curio.app.data.TopicJsonLoader
 import com.curio.app.navigation.CurioNavHost
 import com.curio.app.ui.theme.CurioTheme

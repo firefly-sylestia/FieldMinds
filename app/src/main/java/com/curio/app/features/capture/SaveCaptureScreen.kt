@@ -4,6 +4,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -116,37 +117,39 @@ fun SaveCaptureScreen(
 
     // ── Handle save ─────────────────────────────────────────────────────
     val performSave: () -> Unit = {
-        val data = currentCaptureData ?: return@Unit
-        saveInProgress = true
-        scope.launch {
-            val entryId = CaptureRepository.createId()
+        val data = currentCaptureData
+        if (data != null) {
+            saveInProgress = true
+            scope.launch {
+                val entryId = CaptureRepository.createId()
 
-            // Persist audio file from cache to internal storage before saving
-            val persistedData = if (data is CaptureData.SoundBite && !data.audioFilePath.isNullOrBlank()) {
-                val result = AudioStorageManager.persistAudio(
-                    context, data.audioFilePath!!, entryId
+                // Persist audio file from cache to internal storage before saving
+                val persistedData = if (data is CaptureData.SoundBite && !data.audioFilePath.isNullOrBlank()) {
+                    val result = AudioStorageManager.persistAudio(
+                        context, data.audioFilePath!!, entryId
+                    )
+                    data.copy(
+                        audioFilePath = result.persistentPath,
+                        fileSizeBytes = result.fileSizeBytes
+                    )
+                } else {
+                    data
+                }
+
+                val entry = CurioEntry(
+                    id = entryId,
+                    topic = topic ?: return@launch,
+                    format = cat.defaultFormat,
+                    captureData = persistedData
                 )
-                data.copy(
-                    audioFilePath = result.persistentPath,
-                    fileSizeBytes = result.fileSizeBytes
-                )
-            } else {
-                data
+                repo.save(entry)
+                savedEntryId = entry.id
+                StreakTracker.recordActivity(context)
+                delay(400)
+                confettiTrigger++
+                emberTrigger++
+                saveInProgress = false
             }
-
-            val entry = CurioEntry(
-                id = entryId,
-                topic = topic ?: return@launch,
-                format = cat.defaultFormat,
-                captureData = persistedData
-            )
-            repo.save(entry)
-            savedEntryId = entry.id
-            StreakTracker.recordActivity(context)
-            delay(400)
-            confettiTrigger++
-            emberTrigger++
-            saveInProgress = false
         }
     }
 

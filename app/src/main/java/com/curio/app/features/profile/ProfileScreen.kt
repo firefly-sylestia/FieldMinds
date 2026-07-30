@@ -59,6 +59,14 @@ import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
 import com.curio.app.ui.theme.CurioMotion
 
+/** Holds placeholder data for a single activity-log row. */
+private data class ActivityEntry(
+    val topicName: String,
+    val category: String,
+    val time: String,
+    val tint: Color
+)
+
 /**
  * Unified Profile + Settings screen.
  *

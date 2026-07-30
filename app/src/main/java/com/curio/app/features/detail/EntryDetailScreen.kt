@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.components.WaveformExtractor
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -529,7 +530,7 @@ private fun WaveformCanvas(
                         dragFraction = (offset.x / size.width).coerceIn(0f, 1f)
                         onSeek(dragFraction)
                     },
-                    onDrag = { _, dragAmount ->
+                    onHorizontalDrag = { _, dragAmount ->
                         dragFraction = (dragFraction + dragAmount / size.width).coerceIn(0f, 1f)
                         onSeek(dragFraction)
                     },

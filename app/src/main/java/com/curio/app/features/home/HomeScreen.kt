@@ -1,7 +1,8 @@
 package com.curio.app.features.home
 
-import androidx.compose.animation.core.animateColorAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateValueAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -495,8 +496,9 @@ private fun PremiumHeroCard(
         selectedCategory != null -> selectedCategory.accent
         else -> CurioColors.CoralBlush
     }
-    val activeAccent by animateColorAsState(
+    val activeAccent by animateValueAsState(
         targetValue = targetAccent,
+        typeConverter = Color.VectorConverter,
         animationSpec = tween(durationMillis = 500),
         label = "heroAccent"
     )
