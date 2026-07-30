@@ -1,6 +1,7 @@
 package com.curio.app.features.capture.formats
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,10 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.curio.app.ui.theme.CurioIcon
 import com.curio.app.ui.theme.CurioIcons
+import coil.compose.rememberAsyncImagePainter
 
 /**
  * Shared composable components used by the 6 capture format bodies.
@@ -78,7 +81,8 @@ fun ImageThumb(
     tint: Color,
     onClick: () -> Unit,
     onRemove: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    imageUri: String? = null
 ) {
     Box(modifier = modifier) {
         Box(
@@ -89,12 +93,21 @@ fun ImageThumb(
                 .clickable(onClick = onClick),
             contentAlignment = Alignment.Center
         ) {
-            CurioIcon(
-                name = CurioIcons.Image,
-                contentDescription = "Attached image $index",
-                tint = accent,
-                size = 28.dp
-            )
+            if (imageUri != null) {
+                Image(
+                    painter = rememberAsyncImagePainter(imageUri),
+                    contentDescription = "Attached image $index",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.matchParentSize()
+                )
+            } else {
+                CurioIcon(
+                    name = CurioIcons.Image,
+                    contentDescription = "Attached image $index",
+                    tint = accent,
+                    size = 28.dp
+                )
+            }
         }
     }
 }

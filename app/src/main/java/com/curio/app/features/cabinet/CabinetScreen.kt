@@ -60,7 +60,11 @@ fun CabinetScreen(navController: NavController) {
     var selectedFilter by remember { mutableStateOf<CategoryId?>(null) }
 
     val entries by produceState<List<CurioEntry>>(initialValue = emptyList()) {
-        value = try { CurioRepositoryHolder.repo.getAll() } catch (_: Exception) { emptyList() }
+        try {
+            CurioRepositoryHolder.repo.observeAll().collect { value = it }
+        } catch (_: Exception) {
+            value = emptyList()
+        }
     }
 
     val visibleEntries = remember(entries, selectedFilter) {

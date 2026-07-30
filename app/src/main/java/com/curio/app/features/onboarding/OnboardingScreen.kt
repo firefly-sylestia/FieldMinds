@@ -24,8 +24,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -55,6 +57,7 @@ import kotlinx.coroutines.launch
 fun OnboardingScreen(navController: NavController) {
     val pagerState = rememberPagerState(pageCount = { OnboardingSlides.size })
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val isLastSlide = pagerState.currentPage == OnboardingSlides.lastIndex
 
     Column(
@@ -103,7 +106,7 @@ fun OnboardingScreen(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            TextButton(onClick = { finishOnboarding(navController) }) {
+            TextButton(onClick = { finishOnboarding(context, navController) }) {
                 Text(
                     text = "Skip",
                     style = MaterialTheme.typography.labelLarge,
@@ -113,7 +116,7 @@ fun OnboardingScreen(navController: NavController) {
             Button(
                 onClick = {
                     if (isLastSlide) {
-                        finishOnboarding(navController)
+                        finishOnboarding(context, navController)
                     } else {
                         scope.launch {
                             pagerState.animateScrollToPage(pagerState.currentPage + 1)
@@ -206,8 +209,8 @@ private fun PageDot(selected: Boolean, onClick: () -> Unit) {
     )
 }
 
-private fun finishOnboarding(navController: NavController) {
-    CurioOnboardingState.markComplete()
+private fun finishOnboarding(context: Context, navController: NavController) {
+    CurioOnboardingState.markComplete(context)
     navController.navigate(CurioRoutes.HOME) {
         popUpTo(CurioRoutes.ONBOARDING) { inclusive = true }
     }
@@ -238,6 +241,24 @@ private val OnboardingSlides = listOf(
 )
 
 object CurioOnboardingState {
-    var isComplete: Boolean = false
-    fun markComplete() { isComplete = true }
+    private const val PREFS = "curio_onboarding"
+    private const val KEY_COMPLETE = "complete"
+
+    fun isComplete(context: Context): Boolean =
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .getBoolean(KEY_COMPLETE, false)
+
+    fun markComplete(context: Context) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit()
+            .putBoolean(KEY_COMPLETE, true)
+            .apply()
+    }
+
+    fun reset(context: Context) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit()
+            .putBoolean(KEY_COMPLETE, false)
+            .apply()
+    }
 }

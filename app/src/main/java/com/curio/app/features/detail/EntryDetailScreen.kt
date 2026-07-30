@@ -1,6 +1,7 @@
 package com.curio.app.features.detail
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -47,6 +48,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -78,6 +80,7 @@ import com.curio.app.ui.components.StaggeredItem
 import com.curio.app.ui.theme.CurioColors
 import com.curio.app.ui.theme.CurioGradients
 import com.curio.app.ui.theme.CurioIcon
+import coil.compose.rememberAsyncImagePainter
 import com.curio.app.ui.theme.CurioIcons
 import kotlinx.coroutines.launch
 
@@ -631,19 +634,28 @@ private fun MarginaliaRender(entry: CurioEntry, category: CurioCategory) {
 private fun GalleryWallRender(entry: CurioEntry, category: CurioCategory) {
     val data = entry.captureData as? CaptureData.GalleryWall ?: return
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        if (data.imageCount > 0) {
+        if (data.imageUris.isNotEmpty()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                data.imageUris.take(2).forEach { uri ->
+                    Image(
+                        painter = rememberAsyncImagePainter(uri),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(120.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                    )
+                }
+            }
+            if (data.imageUris.size > 2) {
+                Text("+${data.imageUris.size - 2} more", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        } else if (data.imageCount > 0) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                 Box(modifier = Modifier.weight(1f).height(120.dp).background(category.accent, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
                     CurioIcon(CurioIcons.Image, null, tint = Color.White, size = 36.dp)
                 }
-                if (data.imageCount > 1) {
-                    Box(modifier = Modifier.weight(1f).height(120.dp).background(category.tint, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
-                        CurioIcon(CurioIcons.Image, null, tint = category.accent, size = 36.dp)
-                    }
-                }
-            }
-            if (data.imageCount > 2) {
-                Text("+${data.imageCount - 2} more", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         if (data.caption.isNotBlank()) {
@@ -672,6 +684,21 @@ private fun FieldNotesRender(entry: CurioEntry, category: CurioCategory) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("📖 Want to learn next", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold), color = category.accent)
                 Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+            }
+        }
+        if (data.imageUris.isNotEmpty()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                data.imageUris.take(3).forEach { uri ->
+                    Image(
+                        painter = rememberAsyncImagePainter(uri),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(96.dp)
+                            .clip(RoundedCornerShape(14.dp))
+                    )
+                }
             }
         }
     }

@@ -322,7 +322,7 @@ fun ProfileScreen(navController: NavController) {
                         title = "Replay intro",
                         subtitle = "See the 3-slide welcome again",
                         onClick = {
-                            CurioOnboardingState.isComplete = false
+                            CurioOnboardingState.reset(context)
                             navController.navigate(CurioRoutes.ONBOARDING)
                         }
                     )

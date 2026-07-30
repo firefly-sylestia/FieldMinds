@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.curio.app.features.onboarding.CurioOnboardingState
@@ -58,6 +59,7 @@ fun SettingsScreen(navController: NavController) {
     var themeMode by remember { mutableStateOf(CurioThemeMode.SYSTEM) }
     var dailyReminderEnabled by remember { mutableStateOf(false) }
     val versionName = "1.0.0"
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -165,7 +167,7 @@ fun SettingsScreen(navController: NavController) {
                         title = "Replay intro",
                         subtitle = "See the 3-slide welcome again",
                         onClick = {
-                            CurioOnboardingState.isComplete = false
+                            CurioOnboardingState.reset(context)
                             navController.navigate(CurioRoutes.ONBOARDING)
                         }
                     )

@@ -974,6 +974,7 @@ private fun RecentEmptyState(
 
 @Composable
 private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
+    val context = LocalContext.current
     ModalDrawerSheet(
         modifier = Modifier.width(300.dp),
         drawerContainerColor = MaterialTheme.colorScheme.surface,
@@ -1007,7 +1008,7 @@ private fun HomeDrawerContent(onNavigate: (String) -> Unit) {
             item { DrawerNavItem(CurioIcons.DragHandle, "Manage Categories") { onNavigate(CurioRoutes.MANAGE_CATEGORIES) } }
             item {
                 DrawerNavItem(CurioIcons.Replay, "Replay Intro") {
-                    com.curio.app.features.onboarding.CurioOnboardingState.isComplete = false
+                    com.curio.app.features.onboarding.CurioOnboardingState.reset(context)
                     onNavigate(CurioRoutes.ONBOARDING)
                 }
             }

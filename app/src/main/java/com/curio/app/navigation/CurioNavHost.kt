@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import android.net.Uri
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -175,7 +176,7 @@ fun CurioNavHost(
             ) { entry ->
                 TopicRevealScreen(
                     categorySlug = entry.arguments?.getString("categorySlug").orEmpty(),
-                    topicName    = entry.arguments?.getString("topicName").orEmpty(),
+                    topicName    = Uri.decode(entry.arguments?.getString("topicName").orEmpty()),
                     navController = navController
                 )
             }
@@ -188,7 +189,7 @@ fun CurioNavHost(
             ) { entry ->
                 SaveCaptureScreen(
                     categorySlug = entry.arguments?.getString("categorySlug").orEmpty(),
-                    topicName    = entry.arguments?.getString("topicName").orEmpty(),
+                    topicName    = Uri.decode(entry.arguments?.getString("topicName").orEmpty()),
                     navController = navController
                 )
             }
@@ -220,7 +221,7 @@ fun CurioNavHost(
                 arguments = listOf(navArgument("imageUrl") { type = NavType.StringType })
             ) { entry ->
                 LightboxScreen(
-                    imageUrl = entry.arguments?.getString("imageUrl").orEmpty(),
+                    imageUrl = Uri.decode(entry.arguments?.getString("imageUrl").orEmpty()),
                     navController = navController
                 )
             }

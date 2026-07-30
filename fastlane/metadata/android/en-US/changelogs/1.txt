@@ -1,0 +1,1 @@
+Redesigned category picker cards, smoother Spin category controls, first-launch intro persistence, reactive Cabinet saves, and richer capture formats with voice notes plus image attachments for moodboards and field notes.

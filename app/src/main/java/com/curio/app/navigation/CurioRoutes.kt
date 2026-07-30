@@ -1,5 +1,7 @@
 package com.curio.app.navigation
 
+import android.net.Uri
+
 /**
  * Centralized route names for the Curio NavHost — see CURIO_SPEC.md §1.
  *
@@ -37,11 +39,11 @@ object CurioRoutes {
     // ── Route builders ──────────────────────────────────────────────────────
     fun spinWithCategory(slug: String) = "spin/$slug"
     fun revealFor(categorySlug: String, topicName: String) =
-        "reveal/$categorySlug/$topicName"
+        "reveal/$categorySlug/${Uri.encode(topicName)}"
     fun captureFor(categorySlug: String, topicName: String) =
-        "capture/$categorySlug/$topicName"
+        "capture/$categorySlug/${Uri.encode(topicName)}"
     fun entryDetail(entryId: String) = "detail/$entryId"
-    fun lightbox(imageUrl: String) = "lightbox/$imageUrl"
+    fun lightbox(imageUrl: String) = "lightbox/${Uri.encode(imageUrl)}"
 
     /** Routes where the bottom navigation bar should be visible. */
     val bottomNavRoutes: Set<String> = setOf(HOME, SPIN, CABINET)
