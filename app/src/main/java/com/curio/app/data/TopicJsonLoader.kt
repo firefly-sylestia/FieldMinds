@@ -91,12 +91,14 @@ object TopicJsonLoader {
         val parsed = withContext(Dispatchers.IO) {
             if (id == CategoryId.WILDCARD) {
                 // Wildcard = merge ALL categories into one big pool.
-                // Use cache for already-loaded categories, parse the rest.
+                // Use cache for already-loaded categories, parse + cache
+                // the rest so subsequent per-category loads are free.
                 CategoryId.values()
                     .filter { it != CategoryId.WILDCARD }
                     .flatMap { otherId ->
                         cache[otherId]
                             ?: parseAsset("$ASSET_DIR/${otherId.routeSlug}.json", otherId)
+                                .also { cache[otherId] = it }
                     }
             } else {
                 parseAsset("$ASSET_DIR/${id.routeSlug}.json", id)
