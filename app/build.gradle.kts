@@ -69,10 +69,10 @@ android {
         // local `gradlew assembleRelease` still works for testing.
         if (hasReleaseSigningMaterial) {
             create("release") {
-                storeFile = file(keyStorePath!!)
-                storePassword = keyStorePassword!!
-                this.keyAlias = keyAlias!!
-                this.keyPassword = keyPassword!!
+                storeFile = file(keyStorePath ?: "")
+                storePassword = keyStorePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
             }
         }
     }
